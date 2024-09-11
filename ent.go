@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -96,6 +97,7 @@ func checkColumn(table, column string) error {
 			sessions.Table:        sessions.ValidColumn,
 			share.Table:           share.ValidColumn,
 			systemupdate.Table:    systemupdate.ValidColumn,
+			user.Table:            user.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

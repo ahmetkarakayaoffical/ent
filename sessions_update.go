@@ -29,20 +29,6 @@ func (su *SessionsUpdate) Where(ps ...predicate.Sessions) *SessionsUpdate {
 	return su
 }
 
-// SetToken sets the "token" field.
-func (su *SessionsUpdate) SetToken(s string) *SessionsUpdate {
-	su.mutation.SetToken(s)
-	return su
-}
-
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (su *SessionsUpdate) SetNillableToken(s *string) *SessionsUpdate {
-	if s != nil {
-		su.SetToken(*s)
-	}
-	return su
-}
-
 // SetData sets the "data" field.
 func (su *SessionsUpdate) SetData(b []byte) *SessionsUpdate {
 	su.mutation.SetData(b)
@@ -97,11 +83,6 @@ func (su *SessionsUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *SessionsUpdate) check() error {
-	if v, ok := su.mutation.Token(); ok {
-		if err := sessions.TokenValidator(v); err != nil {
-			return &ValidationError{Name: "token", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.token": %w`, err)}
-		}
-	}
 	if v, ok := su.mutation.Data(); ok {
 		if err := sessions.DataValidator(v); err != nil {
 			return &ValidationError{Name: "data", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.data": %w`, err)}
@@ -120,16 +101,13 @@ func (su *SessionsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := su.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := su.mutation.Token(); ok {
-		_spec.SetField(sessions.FieldToken, field.TypeString, value)
 	}
 	if value, ok := su.mutation.Data(); ok {
 		_spec.SetField(sessions.FieldData, field.TypeBytes, value)
@@ -157,20 +135,6 @@ type SessionsUpdateOne struct {
 	hooks     []Hook
 	mutation  *SessionsMutation
 	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetToken sets the "token" field.
-func (suo *SessionsUpdateOne) SetToken(s string) *SessionsUpdateOne {
-	suo.mutation.SetToken(s)
-	return suo
-}
-
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (suo *SessionsUpdateOne) SetNillableToken(s *string) *SessionsUpdateOne {
-	if s != nil {
-		suo.SetToken(*s)
-	}
-	return suo
 }
 
 // SetData sets the "data" field.
@@ -240,11 +204,6 @@ func (suo *SessionsUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *SessionsUpdateOne) check() error {
-	if v, ok := suo.mutation.Token(); ok {
-		if err := sessions.TokenValidator(v); err != nil {
-			return &ValidationError{Name: "token", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.token": %w`, err)}
-		}
-	}
 	if v, ok := suo.mutation.Data(); ok {
 		if err := sessions.DataValidator(v); err != nil {
 			return &ValidationError{Name: "data", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.data": %w`, err)}
@@ -263,7 +222,7 @@ func (suo *SessionsUpdateOne) sqlSave(ctx context.Context) (_node *Sessions, err
 	if err := suo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString))
 	id, ok := suo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`openuem_ent: missing "Sessions.id" for update`)}
@@ -287,9 +246,6 @@ func (suo *SessionsUpdateOne) sqlSave(ctx context.Context) (_node *Sessions, err
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := suo.mutation.Token(); ok {
-		_spec.SetField(sessions.FieldToken, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.Data(); ok {
 		_spec.SetField(sessions.FieldData, field.TypeBytes, value)

@@ -83,8 +83,8 @@ func (sq *SessionsQuery) FirstX(ctx context.Context) *Sessions {
 
 // FirstID returns the first Sessions ID from the query.
 // Returns a *NotFoundError when no Sessions ID was found.
-func (sq *SessionsQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (sq *SessionsQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (sq *SessionsQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sq *SessionsQuery) FirstIDX(ctx context.Context) int {
+func (sq *SessionsQuery) FirstIDX(ctx context.Context) string {
 	id, err := sq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (sq *SessionsQuery) OnlyX(ctx context.Context) *Sessions {
 // OnlyID is like Only, but returns the only Sessions ID in the query.
 // Returns a *NotSingularError when more than one Sessions ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sq *SessionsQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (sq *SessionsQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (sq *SessionsQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sq *SessionsQuery) OnlyIDX(ctx context.Context) int {
+func (sq *SessionsQuery) OnlyIDX(ctx context.Context) string {
 	id, err := sq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -179,7 +179,7 @@ func (sq *SessionsQuery) AllX(ctx context.Context) []*Sessions {
 }
 
 // IDs executes the query and returns a list of Sessions IDs.
-func (sq *SessionsQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (sq *SessionsQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if sq.ctx.Unique == nil && sq.path != nil {
 		sq.Unique(true)
 	}
@@ -191,7 +191,7 @@ func (sq *SessionsQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sq *SessionsQuery) IDsX(ctx context.Context) []int {
+func (sq *SessionsQuery) IDsX(ctx context.Context) []string {
 	ids, err := sq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -264,12 +264,12 @@ func (sq *SessionsQuery) Clone() *SessionsQuery {
 // Example:
 //
 //	var v []struct {
-//		Token string `json:"token,omitempty"`
+//		Data []byte `json:"data,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Sessions.Query().
-//		GroupBy(sessions.FieldToken).
+//		GroupBy(sessions.FieldData).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (sq *SessionsQuery) GroupBy(field string, fields ...string) *SessionsGroupBy {
@@ -287,11 +287,11 @@ func (sq *SessionsQuery) GroupBy(field string, fields ...string) *SessionsGroupB
 // Example:
 //
 //	var v []struct {
-//		Token string `json:"token,omitempty"`
+//		Data []byte `json:"data,omitempty"`
 //	}
 //
 //	client.Sessions.Query().
-//		Select(sessions.FieldToken).
+//		Select(sessions.FieldData).
 //		Scan(ctx, &v)
 func (sq *SessionsQuery) Select(fields ...string) *SessionsSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
@@ -373,7 +373,7 @@ func (sq *SessionsQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (sq *SessionsQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(sessions.Table, sessions.Columns, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString))
 	_spec.From = sq.sql
 	if unique := sq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

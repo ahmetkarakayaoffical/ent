@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -22,12 +23,6 @@ type SessionsCreate struct {
 	conflict []sql.ConflictOption
 }
 
-// SetToken sets the "token" field.
-func (sc *SessionsCreate) SetToken(s string) *SessionsCreate {
-	sc.mutation.SetToken(s)
-	return sc
-}
-
 // SetData sets the "data" field.
 func (sc *SessionsCreate) SetData(b []byte) *SessionsCreate {
 	sc.mutation.SetData(b)
@@ -37,6 +32,12 @@ func (sc *SessionsCreate) SetData(b []byte) *SessionsCreate {
 // SetExpiry sets the "expiry" field.
 func (sc *SessionsCreate) SetExpiry(t time.Time) *SessionsCreate {
 	sc.mutation.SetExpiry(t)
+	return sc
+}
+
+// SetID sets the "id" field.
+func (sc *SessionsCreate) SetID(s string) *SessionsCreate {
+	sc.mutation.SetID(s)
 	return sc
 }
 
@@ -74,14 +75,6 @@ func (sc *SessionsCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SessionsCreate) check() error {
-	if _, ok := sc.mutation.Token(); !ok {
-		return &ValidationError{Name: "token", err: errors.New(`openuem_ent: missing required field "Sessions.token"`)}
-	}
-	if v, ok := sc.mutation.Token(); ok {
-		if err := sessions.TokenValidator(v); err != nil {
-			return &ValidationError{Name: "token", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.token": %w`, err)}
-		}
-	}
 	if _, ok := sc.mutation.Data(); !ok {
 		return &ValidationError{Name: "data", err: errors.New(`openuem_ent: missing required field "Sessions.data"`)}
 	}
@@ -92,6 +85,11 @@ func (sc *SessionsCreate) check() error {
 	}
 	if _, ok := sc.mutation.Expiry(); !ok {
 		return &ValidationError{Name: "expiry", err: errors.New(`openuem_ent: missing required field "Sessions.expiry"`)}
+	}
+	if v, ok := sc.mutation.ID(); ok {
+		if err := sessions.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Sessions.id": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -107,8 +105,13 @@ func (sc *SessionsCreate) sqlSave(ctx context.Context) (*Sessions, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected Sessions.ID type: %T", _spec.ID.Value)
+		}
+	}
 	sc.mutation.id = &_node.ID
 	sc.mutation.done = true
 	return _node, nil
@@ -117,12 +120,12 @@ func (sc *SessionsCreate) sqlSave(ctx context.Context) (*Sessions, error) {
 func (sc *SessionsCreate) createSpec() (*Sessions, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Sessions{config: sc.config}
-		_spec = sqlgraph.NewCreateSpec(sessions.Table, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(sessions.Table, sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString))
 	)
 	_spec.OnConflict = sc.conflict
-	if value, ok := sc.mutation.Token(); ok {
-		_spec.SetField(sessions.FieldToken, field.TypeString, value)
-		_node.Token = value
+	if id, ok := sc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
 	}
 	if value, ok := sc.mutation.Data(); ok {
 		_spec.SetField(sessions.FieldData, field.TypeBytes, value)
@@ -139,7 +142,7 @@ func (sc *SessionsCreate) createSpec() (*Sessions, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Sessions.Create().
-//		SetToken(v).
+//		SetData(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -148,7 +151,7 @@ func (sc *SessionsCreate) createSpec() (*Sessions, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.SessionsUpsert) {
-//			SetToken(v+v).
+//			SetData(v+v).
 //		}).
 //		Exec(ctx)
 func (sc *SessionsCreate) OnConflict(opts ...sql.ConflictOption) *SessionsUpsertOne {
@@ -184,18 +187,6 @@ type (
 	}
 )
 
-// SetToken sets the "token" field.
-func (u *SessionsUpsert) SetToken(v string) *SessionsUpsert {
-	u.Set(sessions.FieldToken, v)
-	return u
-}
-
-// UpdateToken sets the "token" field to the value that was provided on create.
-func (u *SessionsUpsert) UpdateToken() *SessionsUpsert {
-	u.SetExcluded(sessions.FieldToken)
-	return u
-}
-
 // SetData sets the "data" field.
 func (u *SessionsUpsert) SetData(v []byte) *SessionsUpsert {
 	u.Set(sessions.FieldData, v)
@@ -220,16 +211,24 @@ func (u *SessionsUpsert) UpdateExpiry() *SessionsUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Sessions.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(sessions.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *SessionsUpsertOne) UpdateNewValues() *SessionsUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(sessions.FieldID)
+		}
+	}))
 	return u
 }
 
@@ -258,20 +257,6 @@ func (u *SessionsUpsertOne) Update(set func(*SessionsUpsert)) *SessionsUpsertOne
 		set(&SessionsUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetToken sets the "token" field.
-func (u *SessionsUpsertOne) SetToken(v string) *SessionsUpsertOne {
-	return u.Update(func(s *SessionsUpsert) {
-		s.SetToken(v)
-	})
-}
-
-// UpdateToken sets the "token" field to the value that was provided on create.
-func (u *SessionsUpsertOne) UpdateToken() *SessionsUpsertOne {
-	return u.Update(func(s *SessionsUpsert) {
-		s.UpdateToken()
-	})
 }
 
 // SetData sets the "data" field.
@@ -318,7 +303,12 @@ func (u *SessionsUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *SessionsUpsertOne) ID(ctx context.Context) (id int, err error) {
+func (u *SessionsUpsertOne) ID(ctx context.Context) (id string, err error) {
+	if u.create.driver.Dialect() == dialect.MySQL {
+		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
+		// fields from the database since MySQL does not support the RETURNING clause.
+		return id, errors.New("openuem_ent: SessionsUpsertOne.ID is not supported by MySQL driver. Use SessionsUpsertOne.Exec instead")
+	}
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -327,7 +317,7 @@ func (u *SessionsUpsertOne) ID(ctx context.Context) (id int, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *SessionsUpsertOne) IDX(ctx context.Context) int {
+func (u *SessionsUpsertOne) IDX(ctx context.Context) string {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -381,10 +371,6 @@ func (scb *SessionsCreateBulk) Save(ctx context.Context) ([]*Sessions, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})
@@ -436,7 +422,7 @@ func (scb *SessionsCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.SessionsUpsert) {
-//			SetToken(v+v).
+//			SetData(v+v).
 //		}).
 //		Exec(ctx)
 func (scb *SessionsCreateBulk) OnConflict(opts ...sql.ConflictOption) *SessionsUpsertBulk {
@@ -471,10 +457,20 @@ type SessionsUpsertBulk struct {
 //	client.Sessions.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(sessions.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *SessionsUpsertBulk) UpdateNewValues() *SessionsUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(sessions.FieldID)
+			}
+		}
+	}))
 	return u
 }
 
@@ -503,20 +499,6 @@ func (u *SessionsUpsertBulk) Update(set func(*SessionsUpsert)) *SessionsUpsertBu
 		set(&SessionsUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetToken sets the "token" field.
-func (u *SessionsUpsertBulk) SetToken(v string) *SessionsUpsertBulk {
-	return u.Update(func(s *SessionsUpsert) {
-		s.SetToken(v)
-	})
-}
-
-// UpdateToken sets the "token" field to the value that was provided on create.
-func (u *SessionsUpsertBulk) UpdateToken() *SessionsUpsertBulk {
-	return u.Update(func(s *SessionsUpsert) {
-		s.UpdateToken()
-	})
 }
 
 // SetData sets the "data" field.

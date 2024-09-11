@@ -3,10 +3,13 @@
 package openuem_ent
 
 import (
+	"time"
+
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -47,12 +50,22 @@ func init() {
 	logicaldisk.DefaultUsage = logicaldiskDescUsage.Default.(int8)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
-	// sessionsDescToken is the schema descriptor for token field.
-	sessionsDescToken := sessionsFields[0].Descriptor()
-	// sessions.TokenValidator is a validator for the "token" field. It is called by the builders before save.
-	sessions.TokenValidator = sessionsDescToken.Validators[0].(func(string) error)
 	// sessionsDescData is the schema descriptor for data field.
 	sessionsDescData := sessionsFields[1].Descriptor()
 	// sessions.DataValidator is a validator for the "data" field. It is called by the builders before save.
 	sessions.DataValidator = sessionsDescData.Validators[0].(func([]byte) error)
+	// sessionsDescID is the schema descriptor for id field.
+	sessionsDescID := sessionsFields[0].Descriptor()
+	// sessions.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescCreated is the schema descriptor for created field.
+	userDescCreated := userFields[4].Descriptor()
+	// user.DefaultCreated holds the default value on creation for the created field.
+	user.DefaultCreated = userDescCreated.Default.(time.Time)
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	user.IDValidator = userDescID.Validators[0].(func(string) error)
 }

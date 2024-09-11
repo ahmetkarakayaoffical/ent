@@ -10,9 +10,7 @@ const (
 	// Label holds the string label denoting the sessions type in the database.
 	Label = "sessions"
 	// FieldID holds the string denoting the id field in the database.
-	FieldID = "id"
-	// FieldToken holds the string denoting the token field in the database.
-	FieldToken = "token"
+	FieldID = "token"
 	// FieldData holds the string denoting the data field in the database.
 	FieldData = "data"
 	// FieldExpiry holds the string denoting the expiry field in the database.
@@ -24,7 +22,6 @@ const (
 // Columns holds all SQL columns for sessions fields.
 var Columns = []string{
 	FieldID,
-	FieldToken,
 	FieldData,
 	FieldExpiry,
 }
@@ -40,10 +37,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// TokenValidator is a validator for the "token" field. It is called by the builders before save.
-	TokenValidator func(string) error
 	// DataValidator is a validator for the "data" field. It is called by the builders before save.
 	DataValidator func([]byte) error
+	// IDValidator is a validator for the "id" field. It is called by the builders before save.
+	IDValidator func(string) error
 )
 
 // OrderOption defines the ordering options for the Sessions queries.
@@ -52,11 +49,6 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
-}
-
-// ByToken orders the results by the token field.
-func ByToken(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldToken, opts...).ToFunc()
 }
 
 // ByExpiry orders the results by the expiry field.

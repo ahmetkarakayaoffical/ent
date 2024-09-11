@@ -6,15 +6,15 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Sessions holds the schema definition for the Agent entity.
+// Sessions holds the schema definition for the Sessions entity.
 type Sessions struct {
 	ent.Schema
 }
 
-// Fields of the Agent.
+// Fields of the Sessions.
 func (Sessions) Fields() []ent.Field {
 	return []ent.Field{
-		field.Text("token").NotEmpty().Unique(),
+		field.Text("id").NotEmpty().Unique().StorageKey("token"),
 		field.Bytes("data").NotEmpty(),
 		field.Time("expiry"),
 	}
@@ -22,7 +22,6 @@ func (Sessions) Fields() []ent.Field {
 
 func (Sessions) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("token"),
 		index.Fields("expiry").StorageKey("sessions_expiry_idx"),
 	}
 }
