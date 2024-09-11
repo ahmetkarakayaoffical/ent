@@ -17,9 +17,9 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").NotEmpty().Unique().StorageKey("uid"),
 		field.String("name"),
-		field.String("email"),
-		field.String("phone"),
+		field.String("email").Optional(),
+		field.String("phone").Optional(),
 		field.Time("created").Optional().Default(time.Now()),
-		field.Time("modified"),
+		field.Time("modified").Optional(),
 	}
 }

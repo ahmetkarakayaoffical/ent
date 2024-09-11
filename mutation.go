@@ -9016,9 +9016,22 @@ func (m *UserMutation) OldEmail(ctx context.Context) (v string, err error) {
 	return oldValue.Email, nil
 }
 
+// ClearEmail clears the value of the "email" field.
+func (m *UserMutation) ClearEmail() {
+	m.email = nil
+	m.clearedFields[user.FieldEmail] = struct{}{}
+}
+
+// EmailCleared returns if the "email" field was cleared in this mutation.
+func (m *UserMutation) EmailCleared() bool {
+	_, ok := m.clearedFields[user.FieldEmail]
+	return ok
+}
+
 // ResetEmail resets all changes to the "email" field.
 func (m *UserMutation) ResetEmail() {
 	m.email = nil
+	delete(m.clearedFields, user.FieldEmail)
 }
 
 // SetPhone sets the "phone" field.
@@ -9052,9 +9065,22 @@ func (m *UserMutation) OldPhone(ctx context.Context) (v string, err error) {
 	return oldValue.Phone, nil
 }
 
+// ClearPhone clears the value of the "phone" field.
+func (m *UserMutation) ClearPhone() {
+	m.phone = nil
+	m.clearedFields[user.FieldPhone] = struct{}{}
+}
+
+// PhoneCleared returns if the "phone" field was cleared in this mutation.
+func (m *UserMutation) PhoneCleared() bool {
+	_, ok := m.clearedFields[user.FieldPhone]
+	return ok
+}
+
 // ResetPhone resets all changes to the "phone" field.
 func (m *UserMutation) ResetPhone() {
 	m.phone = nil
+	delete(m.clearedFields, user.FieldPhone)
 }
 
 // SetCreated sets the "created" field.
@@ -9137,9 +9163,22 @@ func (m *UserMutation) OldModified(ctx context.Context) (v time.Time, err error)
 	return oldValue.Modified, nil
 }
 
+// ClearModified clears the value of the "modified" field.
+func (m *UserMutation) ClearModified() {
+	m.modified = nil
+	m.clearedFields[user.FieldModified] = struct{}{}
+}
+
+// ModifiedCleared returns if the "modified" field was cleared in this mutation.
+func (m *UserMutation) ModifiedCleared() bool {
+	_, ok := m.clearedFields[user.FieldModified]
+	return ok
+}
+
 // ResetModified resets all changes to the "modified" field.
 func (m *UserMutation) ResetModified() {
 	m.modified = nil
+	delete(m.clearedFields, user.FieldModified)
 }
 
 // Where appends a list predicates to the UserMutation builder.
@@ -9303,8 +9342,17 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(user.FieldEmail) {
+		fields = append(fields, user.FieldEmail)
+	}
+	if m.FieldCleared(user.FieldPhone) {
+		fields = append(fields, user.FieldPhone)
+	}
 	if m.FieldCleared(user.FieldCreated) {
 		fields = append(fields, user.FieldCreated)
+	}
+	if m.FieldCleared(user.FieldModified) {
+		fields = append(fields, user.FieldModified)
 	}
 	return fields
 }
@@ -9320,8 +9368,17 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
 	switch name {
+	case user.FieldEmail:
+		m.ClearEmail()
+		return nil
+	case user.FieldPhone:
+		m.ClearPhone()
+		return nil
 	case user.FieldCreated:
 		m.ClearCreated()
+		return nil
+	case user.FieldModified:
+		m.ClearModified()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)

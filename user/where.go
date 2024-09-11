@@ -209,6 +209,16 @@ func EmailHasSuffix(v string) predicate.User {
 	return predicate.User(sql.FieldHasSuffix(FieldEmail, v))
 }
 
+// EmailIsNil applies the IsNil predicate on the "email" field.
+func EmailIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldEmail))
+}
+
+// EmailNotNil applies the NotNil predicate on the "email" field.
+func EmailNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldEmail))
+}
+
 // EmailEqualFold applies the EqualFold predicate on the "email" field.
 func EmailEqualFold(v string) predicate.User {
 	return predicate.User(sql.FieldEqualFold(FieldEmail, v))
@@ -272,6 +282,16 @@ func PhoneHasPrefix(v string) predicate.User {
 // PhoneHasSuffix applies the HasSuffix predicate on the "phone" field.
 func PhoneHasSuffix(v string) predicate.User {
 	return predicate.User(sql.FieldHasSuffix(FieldPhone, v))
+}
+
+// PhoneIsNil applies the IsNil predicate on the "phone" field.
+func PhoneIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldPhone))
+}
+
+// PhoneNotNil applies the NotNil predicate on the "phone" field.
+func PhoneNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldPhone))
 }
 
 // PhoneEqualFold applies the EqualFold predicate on the "phone" field.
@@ -372,6 +392,16 @@ func ModifiedLT(v time.Time) predicate.User {
 // ModifiedLTE applies the LTE predicate on the "modified" field.
 func ModifiedLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldModified, v))
+}
+
+// ModifiedIsNil applies the IsNil predicate on the "modified" field.
+func ModifiedIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldModified))
+}
+
+// ModifiedNotNil applies the NotNil predicate on the "modified" field.
+func ModifiedNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldModified))
 }
 
 // And groups predicates with the AND operator between them.

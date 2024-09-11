@@ -35,9 +35,25 @@ func (uc *UserCreate) SetEmail(s string) *UserCreate {
 	return uc
 }
 
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (uc *UserCreate) SetNillableEmail(s *string) *UserCreate {
+	if s != nil {
+		uc.SetEmail(*s)
+	}
+	return uc
+}
+
 // SetPhone sets the "phone" field.
 func (uc *UserCreate) SetPhone(s string) *UserCreate {
 	uc.mutation.SetPhone(s)
+	return uc
+}
+
+// SetNillablePhone sets the "phone" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePhone(s *string) *UserCreate {
+	if s != nil {
+		uc.SetPhone(*s)
+	}
 	return uc
 }
 
@@ -58,6 +74,14 @@ func (uc *UserCreate) SetNillableCreated(t *time.Time) *UserCreate {
 // SetModified sets the "modified" field.
 func (uc *UserCreate) SetModified(t time.Time) *UserCreate {
 	uc.mutation.SetModified(t)
+	return uc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (uc *UserCreate) SetNillableModified(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetModified(*t)
+	}
 	return uc
 }
 
@@ -112,15 +136,6 @@ func (uc *UserCreate) defaults() {
 func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`openuem_ent: missing required field "User.name"`)}
-	}
-	if _, ok := uc.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`openuem_ent: missing required field "User.email"`)}
-	}
-	if _, ok := uc.mutation.Phone(); !ok {
-		return &ValidationError{Name: "phone", err: errors.New(`openuem_ent: missing required field "User.phone"`)}
-	}
-	if _, ok := uc.mutation.Modified(); !ok {
-		return &ValidationError{Name: "modified", err: errors.New(`openuem_ent: missing required field "User.modified"`)}
 	}
 	if v, ok := uc.mutation.ID(); ok {
 		if err := user.IDValidator(v); err != nil {
@@ -259,6 +274,12 @@ func (u *UserUpsert) UpdateEmail() *UserUpsert {
 	return u
 }
 
+// ClearEmail clears the value of the "email" field.
+func (u *UserUpsert) ClearEmail() *UserUpsert {
+	u.SetNull(user.FieldEmail)
+	return u
+}
+
 // SetPhone sets the "phone" field.
 func (u *UserUpsert) SetPhone(v string) *UserUpsert {
 	u.Set(user.FieldPhone, v)
@@ -268,6 +289,12 @@ func (u *UserUpsert) SetPhone(v string) *UserUpsert {
 // UpdatePhone sets the "phone" field to the value that was provided on create.
 func (u *UserUpsert) UpdatePhone() *UserUpsert {
 	u.SetExcluded(user.FieldPhone)
+	return u
+}
+
+// ClearPhone clears the value of the "phone" field.
+func (u *UserUpsert) ClearPhone() *UserUpsert {
+	u.SetNull(user.FieldPhone)
 	return u
 }
 
@@ -298,6 +325,12 @@ func (u *UserUpsert) SetModified(v time.Time) *UserUpsert {
 // UpdateModified sets the "modified" field to the value that was provided on create.
 func (u *UserUpsert) UpdateModified() *UserUpsert {
 	u.SetExcluded(user.FieldModified)
+	return u
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *UserUpsert) ClearModified() *UserUpsert {
+	u.SetNull(user.FieldModified)
 	return u
 }
 
@@ -377,6 +410,13 @@ func (u *UserUpsertOne) UpdateEmail() *UserUpsertOne {
 	})
 }
 
+// ClearEmail clears the value of the "email" field.
+func (u *UserUpsertOne) ClearEmail() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearEmail()
+	})
+}
+
 // SetPhone sets the "phone" field.
 func (u *UserUpsertOne) SetPhone(v string) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
@@ -388,6 +428,13 @@ func (u *UserUpsertOne) SetPhone(v string) *UserUpsertOne {
 func (u *UserUpsertOne) UpdatePhone() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdatePhone()
+	})
+}
+
+// ClearPhone clears the value of the "phone" field.
+func (u *UserUpsertOne) ClearPhone() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearPhone()
 	})
 }
 
@@ -423,6 +470,13 @@ func (u *UserUpsertOne) SetModified(v time.Time) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateModified() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *UserUpsertOne) ClearModified() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearModified()
 	})
 }
 
@@ -669,6 +723,13 @@ func (u *UserUpsertBulk) UpdateEmail() *UserUpsertBulk {
 	})
 }
 
+// ClearEmail clears the value of the "email" field.
+func (u *UserUpsertBulk) ClearEmail() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearEmail()
+	})
+}
+
 // SetPhone sets the "phone" field.
 func (u *UserUpsertBulk) SetPhone(v string) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
@@ -680,6 +741,13 @@ func (u *UserUpsertBulk) SetPhone(v string) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdatePhone() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdatePhone()
+	})
+}
+
+// ClearPhone clears the value of the "phone" field.
+func (u *UserUpsertBulk) ClearPhone() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearPhone()
 	})
 }
 
@@ -715,6 +783,13 @@ func (u *UserUpsertBulk) SetModified(v time.Time) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateModified() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *UserUpsertBulk) ClearModified() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearModified()
 	})
 }
 
