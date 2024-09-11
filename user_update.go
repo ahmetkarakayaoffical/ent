@@ -85,6 +85,12 @@ func (uu *UserUpdate) SetNillableCreated(t *time.Time) *UserUpdate {
 	return uu
 }
 
+// ClearCreated clears the value of the "created" field.
+func (uu *UserUpdate) ClearCreated() *UserUpdate {
+	uu.mutation.ClearCreated()
+	return uu
+}
+
 // SetModified sets the "modified" field.
 func (uu *UserUpdate) SetModified(t time.Time) *UserUpdate {
 	uu.mutation.SetModified(t)
@@ -157,6 +163,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
+	}
+	if uu.mutation.CreatedCleared() {
+		_spec.ClearField(user.FieldCreated, field.TypeTime)
 	}
 	if value, ok := uu.mutation.Modified(); ok {
 		_spec.SetField(user.FieldModified, field.TypeTime, value)
@@ -236,6 +245,12 @@ func (uuo *UserUpdateOne) SetNillableCreated(t *time.Time) *UserUpdateOne {
 	if t != nil {
 		uuo.SetCreated(*t)
 	}
+	return uuo
+}
+
+// ClearCreated clears the value of the "created" field.
+func (uuo *UserUpdateOne) ClearCreated() *UserUpdateOne {
+	uuo.mutation.ClearCreated()
 	return uuo
 }
 
@@ -341,6 +356,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
+	}
+	if uuo.mutation.CreatedCleared() {
+		_spec.ClearField(user.FieldCreated, field.TypeTime)
 	}
 	if value, ok := uuo.mutation.Modified(); ok {
 		_spec.SetField(user.FieldModified, field.TypeTime, value)

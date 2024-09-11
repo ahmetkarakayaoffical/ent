@@ -9088,9 +9088,22 @@ func (m *UserMutation) OldCreated(ctx context.Context) (v time.Time, err error) 
 	return oldValue.Created, nil
 }
 
+// ClearCreated clears the value of the "created" field.
+func (m *UserMutation) ClearCreated() {
+	m.created = nil
+	m.clearedFields[user.FieldCreated] = struct{}{}
+}
+
+// CreatedCleared returns if the "created" field was cleared in this mutation.
+func (m *UserMutation) CreatedCleared() bool {
+	_, ok := m.clearedFields[user.FieldCreated]
+	return ok
+}
+
 // ResetCreated resets all changes to the "created" field.
 func (m *UserMutation) ResetCreated() {
 	m.created = nil
+	delete(m.clearedFields, user.FieldCreated)
 }
 
 // SetModified sets the "modified" field.
@@ -9289,7 +9302,11 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(user.FieldCreated) {
+		fields = append(fields, user.FieldCreated)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -9302,6 +9319,11 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
+	switch name {
+	case user.FieldCreated:
+		m.ClearCreated()
+		return nil
+	}
 	return fmt.Errorf("unknown User nullable field %s", name)
 }
 

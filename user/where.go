@@ -324,6 +324,16 @@ func CreatedLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldCreated, v))
 }
 
+// CreatedIsNil applies the IsNil predicate on the "created" field.
+func CreatedIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCreated))
+}
+
+// CreatedNotNil applies the NotNil predicate on the "created" field.
+func CreatedNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCreated))
+}
+
 // ModifiedEQ applies the EQ predicate on the "modified" field.
 func ModifiedEQ(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldModified, v))

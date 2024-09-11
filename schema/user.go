@@ -19,7 +19,7 @@ func (User) Fields() []ent.Field {
 		field.String("name"),
 		field.String("email"),
 		field.String("phone"),
-		field.Time("created").Default(time.Now()),
+		field.Time("created").Optional().Default(time.Now()),
 		field.Time("modified"),
 	}
 }

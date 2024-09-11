@@ -119,9 +119,6 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Phone(); !ok {
 		return &ValidationError{Name: "phone", err: errors.New(`openuem_ent: missing required field "User.phone"`)}
 	}
-	if _, ok := uc.mutation.Created(); !ok {
-		return &ValidationError{Name: "created", err: errors.New(`openuem_ent: missing required field "User.created"`)}
-	}
 	if _, ok := uc.mutation.Modified(); !ok {
 		return &ValidationError{Name: "modified", err: errors.New(`openuem_ent: missing required field "User.modified"`)}
 	}
@@ -286,6 +283,12 @@ func (u *UserUpsert) UpdateCreated() *UserUpsert {
 	return u
 }
 
+// ClearCreated clears the value of the "created" field.
+func (u *UserUpsert) ClearCreated() *UserUpsert {
+	u.SetNull(user.FieldCreated)
+	return u
+}
+
 // SetModified sets the "modified" field.
 func (u *UserUpsert) SetModified(v time.Time) *UserUpsert {
 	u.Set(user.FieldModified, v)
@@ -399,6 +402,13 @@ func (u *UserUpsertOne) SetCreated(v time.Time) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateCreated() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *UserUpsertOne) ClearCreated() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCreated()
 	})
 }
 
@@ -684,6 +694,13 @@ func (u *UserUpsertBulk) SetCreated(v time.Time) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateCreated() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *UserUpsertBulk) ClearCreated() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCreated()
 	})
 }
 
