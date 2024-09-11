@@ -3,9 +3,9 @@
 package openuem_ent
 
 import (
-	"github.com/doncicuto/openuem-ent/schema"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code
