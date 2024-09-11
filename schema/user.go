@@ -20,6 +20,6 @@ func (User) Fields() []ent.Field {
 		field.String("email"),
 		field.String("phone"),
 		field.Time("created").Default(time.Now()),
-		field.Time("modififed"),
+		field.Time("modified"),
 	}
 }
