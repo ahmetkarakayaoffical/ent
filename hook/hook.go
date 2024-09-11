@@ -6,147 +6,147 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doncicuto/openuem-ent/ent"
+	"github.com/doncicuto/openuem_ent"
 )
 
 // The AgentFunc type is an adapter to allow the use of ordinary
 // function as Agent mutator.
-type AgentFunc func(context.Context, *ent.AgentMutation) (ent.Value, error)
+type AgentFunc func(context.Context, *openuem_ent.AgentMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AgentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AgentMutation); ok {
+func (f AgentFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.AgentMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AgentMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.AgentMutation", m)
 }
 
 // The AntivirusFunc type is an adapter to allow the use of ordinary
 // function as Antivirus mutator.
-type AntivirusFunc func(context.Context, *ent.AntivirusMutation) (ent.Value, error)
+type AntivirusFunc func(context.Context, *openuem_ent.AntivirusMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AntivirusFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AntivirusMutation); ok {
+func (f AntivirusFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.AntivirusMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AntivirusMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.AntivirusMutation", m)
 }
 
 // The AppFunc type is an adapter to allow the use of ordinary
 // function as App mutator.
-type AppFunc func(context.Context, *ent.AppMutation) (ent.Value, error)
+type AppFunc func(context.Context, *openuem_ent.AppMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AppFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AppMutation); ok {
+func (f AppFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.AppMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.AppMutation", m)
 }
 
 // The ComputerFunc type is an adapter to allow the use of ordinary
 // function as Computer mutator.
-type ComputerFunc func(context.Context, *ent.ComputerMutation) (ent.Value, error)
+type ComputerFunc func(context.Context, *openuem_ent.ComputerMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f ComputerFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ComputerMutation); ok {
+func (f ComputerFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.ComputerMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputerMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ComputerMutation", m)
 }
 
 // The LogicalDiskFunc type is an adapter to allow the use of ordinary
 // function as LogicalDisk mutator.
-type LogicalDiskFunc func(context.Context, *ent.LogicalDiskMutation) (ent.Value, error)
+type LogicalDiskFunc func(context.Context, *openuem_ent.LogicalDiskMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f LogicalDiskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.LogicalDiskMutation); ok {
+func (f LogicalDiskFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.LogicalDiskMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogicalDiskMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.LogicalDiskMutation", m)
 }
 
 // The MonitorFunc type is an adapter to allow the use of ordinary
 // function as Monitor mutator.
-type MonitorFunc func(context.Context, *ent.MonitorMutation) (ent.Value, error)
+type MonitorFunc func(context.Context, *openuem_ent.MonitorMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f MonitorFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.MonitorMutation); ok {
+func (f MonitorFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.MonitorMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MonitorMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.MonitorMutation", m)
 }
 
 // The NetworkAdapterFunc type is an adapter to allow the use of ordinary
 // function as NetworkAdapter mutator.
-type NetworkAdapterFunc func(context.Context, *ent.NetworkAdapterMutation) (ent.Value, error)
+type NetworkAdapterFunc func(context.Context, *openuem_ent.NetworkAdapterMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f NetworkAdapterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.NetworkAdapterMutation); ok {
+func (f NetworkAdapterFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.NetworkAdapterMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NetworkAdapterMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.NetworkAdapterMutation", m)
 }
 
 // The OperatingSystemFunc type is an adapter to allow the use of ordinary
 // function as OperatingSystem mutator.
-type OperatingSystemFunc func(context.Context, *ent.OperatingSystemMutation) (ent.Value, error)
+type OperatingSystemFunc func(context.Context, *openuem_ent.OperatingSystemMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f OperatingSystemFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.OperatingSystemMutation); ok {
+func (f OperatingSystemFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.OperatingSystemMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OperatingSystemMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.OperatingSystemMutation", m)
 }
 
 // The PrinterFunc type is an adapter to allow the use of ordinary
 // function as Printer mutator.
-type PrinterFunc func(context.Context, *ent.PrinterMutation) (ent.Value, error)
+type PrinterFunc func(context.Context, *openuem_ent.PrinterMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f PrinterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.PrinterMutation); ok {
+func (f PrinterFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.PrinterMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PrinterMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.PrinterMutation", m)
 }
 
 // The ShareFunc type is an adapter to allow the use of ordinary
 // function as Share mutator.
-type ShareFunc func(context.Context, *ent.ShareMutation) (ent.Value, error)
+type ShareFunc func(context.Context, *openuem_ent.ShareMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f ShareFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ShareMutation); ok {
+func (f ShareFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.ShareMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ShareMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ShareMutation", m)
 }
 
 // The SystemUpdateFunc type is an adapter to allow the use of ordinary
 // function as SystemUpdate mutator.
-type SystemUpdateFunc func(context.Context, *ent.SystemUpdateMutation) (ent.Value, error)
+type SystemUpdateFunc func(context.Context, *openuem_ent.SystemUpdateMutation) (openuem_ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f SystemUpdateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.SystemUpdateMutation); ok {
+func (f SystemUpdateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.SystemUpdateMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SystemUpdateMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SystemUpdateMutation", m)
 }
 
 // Condition is a hook condition function.
-type Condition func(context.Context, ent.Mutation) bool
+type Condition func(context.Context, openuem_ent.Mutation) bool
 
 // And groups conditions with the AND operator.
 func And(first, second Condition, rest ...Condition) Condition {
-	return func(ctx context.Context, m ent.Mutation) bool {
+	return func(ctx context.Context, m openuem_ent.Mutation) bool {
 		if !first(ctx, m) || !second(ctx, m) {
 			return false
 		}
@@ -161,7 +161,7 @@ func And(first, second Condition, rest ...Condition) Condition {
 
 // Or groups conditions with the OR operator.
 func Or(first, second Condition, rest ...Condition) Condition {
-	return func(ctx context.Context, m ent.Mutation) bool {
+	return func(ctx context.Context, m openuem_ent.Mutation) bool {
 		if first(ctx, m) || second(ctx, m) {
 			return true
 		}
@@ -176,21 +176,21 @@ func Or(first, second Condition, rest ...Condition) Condition {
 
 // Not negates a given condition.
 func Not(cond Condition) Condition {
-	return func(ctx context.Context, m ent.Mutation) bool {
+	return func(ctx context.Context, m openuem_ent.Mutation) bool {
 		return !cond(ctx, m)
 	}
 }
 
 // HasOp is a condition testing mutation operation.
-func HasOp(op ent.Op) Condition {
-	return func(_ context.Context, m ent.Mutation) bool {
+func HasOp(op openuem_ent.Op) Condition {
+	return func(_ context.Context, m openuem_ent.Mutation) bool {
 		return m.Op().Is(op)
 	}
 }
 
 // HasAddedFields is a condition validating `.AddedField` on fields.
 func HasAddedFields(field string, fields ...string) Condition {
-	return func(_ context.Context, m ent.Mutation) bool {
+	return func(_ context.Context, m openuem_ent.Mutation) bool {
 		if _, exists := m.AddedField(field); !exists {
 			return false
 		}
@@ -205,7 +205,7 @@ func HasAddedFields(field string, fields ...string) Condition {
 
 // HasClearedFields is a condition validating `.FieldCleared` on fields.
 func HasClearedFields(field string, fields ...string) Condition {
-	return func(_ context.Context, m ent.Mutation) bool {
+	return func(_ context.Context, m openuem_ent.Mutation) bool {
 		if exists := m.FieldCleared(field); !exists {
 			return false
 		}
@@ -220,7 +220,7 @@ func HasClearedFields(field string, fields ...string) Condition {
 
 // HasFields is a condition validating `.Field` on fields.
 func HasFields(field string, fields ...string) Condition {
-	return func(_ context.Context, m ent.Mutation) bool {
+	return func(_ context.Context, m openuem_ent.Mutation) bool {
 		if _, exists := m.Field(field); !exists {
 			return false
 		}
@@ -236,9 +236,9 @@ func HasFields(field string, fields ...string) Condition {
 // If executes the given hook under condition.
 //
 //	hook.If(ComputeAverage, And(HasFields(...), HasAddedFields(...)))
-func If(hk ent.Hook, cond Condition) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func If(hk openuem_ent.Hook, cond Condition) openuem_ent.Hook {
+	return func(next openuem_ent.Mutator) openuem_ent.Mutator {
+		return openuem_ent.MutateFunc(func(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
 			if cond(ctx, m) {
 				return hk(next).Mutate(ctx, m)
 			}
@@ -249,22 +249,22 @@ func If(hk ent.Hook, cond Condition) ent.Hook {
 
 // On executes the given hook only for the given operation.
 //
-//	hook.On(Log, ent.Delete|ent.Create)
-func On(hk ent.Hook, op ent.Op) ent.Hook {
+//	hook.On(Log, openuem_ent.Delete|openuem_ent.Create)
+func On(hk openuem_ent.Hook, op openuem_ent.Op) openuem_ent.Hook {
 	return If(hk, HasOp(op))
 }
 
 // Unless skips the given hook only for the given operation.
 //
-//	hook.Unless(Log, ent.Update|ent.UpdateOne)
-func Unless(hk ent.Hook, op ent.Op) ent.Hook {
+//	hook.Unless(Log, openuem_ent.Update|openuem_ent.UpdateOne)
+func Unless(hk openuem_ent.Hook, op openuem_ent.Op) openuem_ent.Hook {
 	return If(hk, Not(HasOp(op)))
 }
 
 // FixedError is a hook returning a fixed error.
-func FixedError(err error) ent.Hook {
-	return func(ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(context.Context, ent.Mutation) (ent.Value, error) {
+func FixedError(err error) openuem_ent.Hook {
+	return func(openuem_ent.Mutator) openuem_ent.Mutator {
+		return openuem_ent.MutateFunc(func(context.Context, openuem_ent.Mutation) (openuem_ent.Value, error) {
 			return nil, err
 		})
 	}
@@ -272,12 +272,12 @@ func FixedError(err error) ent.Hook {
 
 // Reject returns a hook that rejects all operations that match op.
 //
-//	func (T) Hooks() []ent.Hook {
-//		return []ent.Hook{
-//			Reject(ent.Delete|ent.Update),
+//	func (T) Hooks() []openuem_ent.Hook {
+//		return []openuem_ent.Hook{
+//			Reject(openuem_ent.Delete|openuem_ent.Update),
 //		}
 //	}
-func Reject(op ent.Op) ent.Hook {
+func Reject(op openuem_ent.Op) openuem_ent.Hook {
 	hk := FixedError(fmt.Errorf("%s operation is not allowed", op))
 	return On(hk, op)
 }
@@ -285,17 +285,17 @@ func Reject(op ent.Op) ent.Hook {
 // Chain acts as a list of hooks and is effectively immutable.
 // Once created, it will always hold the same set of hooks in the same order.
 type Chain struct {
-	hooks []ent.Hook
+	hooks []openuem_ent.Hook
 }
 
 // NewChain creates a new chain of hooks.
-func NewChain(hooks ...ent.Hook) Chain {
-	return Chain{append([]ent.Hook(nil), hooks...)}
+func NewChain(hooks ...openuem_ent.Hook) Chain {
+	return Chain{append([]openuem_ent.Hook(nil), hooks...)}
 }
 
 // Hook chains the list of hooks and returns the final hook.
-func (c Chain) Hook() ent.Hook {
-	return func(mutator ent.Mutator) ent.Mutator {
+func (c Chain) Hook() openuem_ent.Hook {
+	return func(mutator openuem_ent.Mutator) openuem_ent.Mutator {
 		for i := len(c.hooks) - 1; i >= 0; i-- {
 			mutator = c.hooks[i](mutator)
 		}
@@ -305,8 +305,8 @@ func (c Chain) Hook() ent.Hook {
 
 // Append extends a chain, adding the specified hook
 // as the last ones in the mutation flow.
-func (c Chain) Append(hooks ...ent.Hook) Chain {
-	newHooks := make([]ent.Hook, 0, len(c.hooks)+len(hooks))
+func (c Chain) Append(hooks ...openuem_ent.Hook) Chain {
+	newHooks := make([]openuem_ent.Hook, 0, len(c.hooks)+len(hooks))
 	newHooks = append(newHooks, c.hooks...)
 	newHooks = append(newHooks, hooks...)
 	return Chain{newHooks}
