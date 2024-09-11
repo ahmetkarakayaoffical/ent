@@ -33,6 +33,9 @@ type OperatingSystem func(*sql.Selector)
 // Printer is the predicate function for printer builders.
 type Printer func(*sql.Selector)
 
+// Sessions is the predicate function for sessions builders.
+type Sessions func(*sql.Selector)
+
 // Share is the predicate function for share builders.
 type Share func(*sql.Selector)
 

@@ -30,6 +30,8 @@ type Tx struct {
 	OperatingSystem *OperatingSystemClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Sessions is the client for interacting with the Sessions builders.
+	Sessions *SessionsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
@@ -174,6 +176,7 @@ func (tx *Tx) init() {
 	tx.NetworkAdapter = NewNetworkAdapterClient(tx.config)
 	tx.OperatingSystem = NewOperatingSystemClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
+	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
 }

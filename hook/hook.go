@@ -117,6 +117,18 @@ func (f PrinterFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openue
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.PrinterMutation", m)
 }
 
+// The SessionsFunc type is an adapter to allow the use of ordinary
+// function as Sessions mutator.
+type SessionsFunc func(context.Context, *openuem_ent.SessionsMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SessionsFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.SessionsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SessionsMutation", m)
+}
+
 // The ShareFunc type is an adapter to allow the use of ordinary
 // function as Share mutator.
 type ShareFunc func(context.Context, *openuem_ent.ShareMutation) (openuem_ent.Value, error)

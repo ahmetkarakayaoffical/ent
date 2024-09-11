@@ -6,6 +6,7 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/schema"
+	"github.com/doncicuto/openuem_ent/sessions"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -44,4 +45,14 @@ func init() {
 	logicaldiskDescUsage := logicaldiskFields[2].Descriptor()
 	// logicaldisk.DefaultUsage holds the default value on creation for the usage field.
 	logicaldisk.DefaultUsage = logicaldiskDescUsage.Default.(int8)
+	sessionsFields := schema.Sessions{}.Fields()
+	_ = sessionsFields
+	// sessionsDescToken is the schema descriptor for token field.
+	sessionsDescToken := sessionsFields[0].Descriptor()
+	// sessions.TokenValidator is a validator for the "token" field. It is called by the builders before save.
+	sessions.TokenValidator = sessionsDescToken.Validators[0].(func(string) error)
+	// sessionsDescData is the schema descriptor for data field.
+	sessionsDescData := sessionsFields[1].Descriptor()
+	// sessions.DataValidator is a validator for the "data" field. It is called by the builders before save.
+	sessions.DataValidator = sessionsDescData.Validators[0].(func([]byte) error)
 }
