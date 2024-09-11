@@ -8838,7 +8838,7 @@ type UserMutation struct {
 	email         *string
 	phone         *string
 	created       *time.Time
-	modififed     *time.Time
+	modified      *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -9093,40 +9093,40 @@ func (m *UserMutation) ResetCreated() {
 	m.created = nil
 }
 
-// SetModififed sets the "modififed" field.
-func (m *UserMutation) SetModififed(t time.Time) {
-	m.modififed = &t
+// SetModified sets the "modified" field.
+func (m *UserMutation) SetModified(t time.Time) {
+	m.modified = &t
 }
 
-// Modififed returns the value of the "modififed" field in the mutation.
-func (m *UserMutation) Modififed() (r time.Time, exists bool) {
-	v := m.modififed
+// Modified returns the value of the "modified" field in the mutation.
+func (m *UserMutation) Modified() (r time.Time, exists bool) {
+	v := m.modified
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldModififed returns the old "modififed" field's value of the User entity.
+// OldModified returns the old "modified" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldModififed(ctx context.Context) (v time.Time, err error) {
+func (m *UserMutation) OldModified(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldModififed is only allowed on UpdateOne operations")
+		return v, errors.New("OldModified is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldModififed requires an ID field in the mutation")
+		return v, errors.New("OldModified requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldModififed: %w", err)
+		return v, fmt.Errorf("querying old value for OldModified: %w", err)
 	}
-	return oldValue.Modififed, nil
+	return oldValue.Modified, nil
 }
 
-// ResetModififed resets all changes to the "modififed" field.
-func (m *UserMutation) ResetModififed() {
-	m.modififed = nil
+// ResetModified resets all changes to the "modified" field.
+func (m *UserMutation) ResetModified() {
+	m.modified = nil
 }
 
 // Where appends a list predicates to the UserMutation builder.
@@ -9176,8 +9176,8 @@ func (m *UserMutation) Fields() []string {
 	if m.created != nil {
 		fields = append(fields, user.FieldCreated)
 	}
-	if m.modififed != nil {
-		fields = append(fields, user.FieldModififed)
+	if m.modified != nil {
+		fields = append(fields, user.FieldModified)
 	}
 	return fields
 }
@@ -9195,8 +9195,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Phone()
 	case user.FieldCreated:
 		return m.Created()
-	case user.FieldModififed:
-		return m.Modififed()
+	case user.FieldModified:
+		return m.Modified()
 	}
 	return nil, false
 }
@@ -9214,8 +9214,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldPhone(ctx)
 	case user.FieldCreated:
 		return m.OldCreated(ctx)
-	case user.FieldModififed:
-		return m.OldModififed(ctx)
+	case user.FieldModified:
+		return m.OldModified(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -9253,12 +9253,12 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCreated(v)
 		return nil
-	case user.FieldModififed:
+	case user.FieldModified:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetModififed(v)
+		m.SetModified(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -9321,8 +9321,8 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldCreated:
 		m.ResetCreated()
 		return nil
-	case user.FieldModififed:
-		m.ResetModififed()
+	case user.FieldModified:
+		m.ResetModified()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

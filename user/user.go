@@ -21,8 +21,8 @@ const (
 	FieldPhone = "phone"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
-	// FieldModififed holds the string denoting the modififed field in the database.
-	FieldModififed = "modififed"
+	// FieldModified holds the string denoting the modified field in the database.
+	FieldModified = "modified"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -34,7 +34,7 @@ var Columns = []string{
 	FieldEmail,
 	FieldPhone,
 	FieldCreated,
-	FieldModififed,
+	FieldModified,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -82,7 +82,7 @@ func ByCreated(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreated, opts...).ToFunc()
 }
 
-// ByModififed orders the results by the modififed field.
-func ByModififed(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldModififed, opts...).ToFunc()
+// ByModified orders the results by the modified field.
+func ByModified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldModified, opts...).ToFunc()
 }

@@ -85,16 +85,16 @@ func (uu *UserUpdate) SetNillableCreated(t *time.Time) *UserUpdate {
 	return uu
 }
 
-// SetModififed sets the "modififed" field.
-func (uu *UserUpdate) SetModififed(t time.Time) *UserUpdate {
-	uu.mutation.SetModififed(t)
+// SetModified sets the "modified" field.
+func (uu *UserUpdate) SetModified(t time.Time) *UserUpdate {
+	uu.mutation.SetModified(t)
 	return uu
 }
 
-// SetNillableModififed sets the "modififed" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableModififed(t *time.Time) *UserUpdate {
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableModified(t *time.Time) *UserUpdate {
 	if t != nil {
-		uu.SetModififed(*t)
+		uu.SetModified(*t)
 	}
 	return uu
 }
@@ -158,8 +158,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 	}
-	if value, ok := uu.mutation.Modififed(); ok {
-		_spec.SetField(user.FieldModififed, field.TypeTime, value)
+	if value, ok := uu.mutation.Modified(); ok {
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
 	}
 	_spec.AddModifiers(uu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
@@ -239,16 +239,16 @@ func (uuo *UserUpdateOne) SetNillableCreated(t *time.Time) *UserUpdateOne {
 	return uuo
 }
 
-// SetModififed sets the "modififed" field.
-func (uuo *UserUpdateOne) SetModififed(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetModififed(t)
+// SetModified sets the "modified" field.
+func (uuo *UserUpdateOne) SetModified(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetModified(t)
 	return uuo
 }
 
-// SetNillableModififed sets the "modififed" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableModififed(t *time.Time) *UserUpdateOne {
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableModified(t *time.Time) *UserUpdateOne {
 	if t != nil {
-		uuo.SetModififed(*t)
+		uuo.SetModified(*t)
 	}
 	return uuo
 }
@@ -342,8 +342,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 	}
-	if value, ok := uuo.mutation.Modififed(); ok {
-		_spec.SetField(user.FieldModififed, field.TypeTime, value)
+	if value, ok := uuo.mutation.Modified(); ok {
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
 	}
 	_spec.AddModifiers(uuo.modifiers...)
 	_node = &User{config: uuo.config}

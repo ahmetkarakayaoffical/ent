@@ -294,7 +294,7 @@ var (
 		{Name: "email", Type: field.TypeString},
 		{Name: "phone", Type: field.TypeString},
 		{Name: "created", Type: field.TypeTime},
-		{Name: "modififed", Type: field.TypeTime},
+		{Name: "modified", Type: field.TypeTime},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{

@@ -55,9 +55,9 @@ func (uc *UserCreate) SetNillableCreated(t *time.Time) *UserCreate {
 	return uc
 }
 
-// SetModififed sets the "modififed" field.
-func (uc *UserCreate) SetModififed(t time.Time) *UserCreate {
-	uc.mutation.SetModififed(t)
+// SetModified sets the "modified" field.
+func (uc *UserCreate) SetModified(t time.Time) *UserCreate {
+	uc.mutation.SetModified(t)
 	return uc
 }
 
@@ -122,8 +122,8 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`openuem_ent: missing required field "User.created"`)}
 	}
-	if _, ok := uc.mutation.Modififed(); !ok {
-		return &ValidationError{Name: "modififed", err: errors.New(`openuem_ent: missing required field "User.modififed"`)}
+	if _, ok := uc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`openuem_ent: missing required field "User.modified"`)}
 	}
 	if v, ok := uc.mutation.ID(); ok {
 		if err := user.IDValidator(v); err != nil {
@@ -182,9 +182,9 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
-	if value, ok := uc.mutation.Modififed(); ok {
-		_spec.SetField(user.FieldModififed, field.TypeTime, value)
-		_node.Modififed = value
+	if value, ok := uc.mutation.Modified(); ok {
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
+		_node.Modified = value
 	}
 	return _node, _spec
 }
@@ -286,15 +286,15 @@ func (u *UserUpsert) UpdateCreated() *UserUpsert {
 	return u
 }
 
-// SetModififed sets the "modififed" field.
-func (u *UserUpsert) SetModififed(v time.Time) *UserUpsert {
-	u.Set(user.FieldModififed, v)
+// SetModified sets the "modified" field.
+func (u *UserUpsert) SetModified(v time.Time) *UserUpsert {
+	u.Set(user.FieldModified, v)
 	return u
 }
 
-// UpdateModififed sets the "modififed" field to the value that was provided on create.
-func (u *UserUpsert) UpdateModififed() *UserUpsert {
-	u.SetExcluded(user.FieldModififed)
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *UserUpsert) UpdateModified() *UserUpsert {
+	u.SetExcluded(user.FieldModified)
 	return u
 }
 
@@ -402,17 +402,17 @@ func (u *UserUpsertOne) UpdateCreated() *UserUpsertOne {
 	})
 }
 
-// SetModififed sets the "modififed" field.
-func (u *UserUpsertOne) SetModififed(v time.Time) *UserUpsertOne {
+// SetModified sets the "modified" field.
+func (u *UserUpsertOne) SetModified(v time.Time) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.SetModififed(v)
+		s.SetModified(v)
 	})
 }
 
-// UpdateModififed sets the "modififed" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateModififed() *UserUpsertOne {
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateModified() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateModififed()
+		s.UpdateModified()
 	})
 }
 
@@ -687,17 +687,17 @@ func (u *UserUpsertBulk) UpdateCreated() *UserUpsertBulk {
 	})
 }
 
-// SetModififed sets the "modififed" field.
-func (u *UserUpsertBulk) SetModififed(v time.Time) *UserUpsertBulk {
+// SetModified sets the "modified" field.
+func (u *UserUpsertBulk) SetModified(v time.Time) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.SetModififed(v)
+		s.SetModified(v)
 	})
 }
 
-// UpdateModififed sets the "modififed" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateModififed() *UserUpsertBulk {
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateModified() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateModififed()
+		s.UpdateModified()
 	})
 }
 

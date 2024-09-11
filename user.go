@@ -25,8 +25,8 @@ type User struct {
 	Phone string `json:"phone,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
-	// Modififed holds the value of the "modififed" field.
-	Modififed    time.Time `json:"modififed,omitempty"`
+	// Modified holds the value of the "modified" field.
+	Modified     time.Time `json:"modified,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -37,7 +37,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone:
 			values[i] = new(sql.NullString)
-		case user.FieldCreated, user.FieldModififed:
+		case user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -84,11 +84,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Created = value.Time
 			}
-		case user.FieldModififed:
+		case user.FieldModified:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field modififed", values[i])
+				return fmt.Errorf("unexpected type %T for field modified", values[i])
 			} else if value.Valid {
-				u.Modififed = value.Time
+				u.Modified = value.Time
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -138,8 +138,8 @@ func (u *User) String() string {
 	builder.WriteString("created=")
 	builder.WriteString(u.Created.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("modififed=")
-	builder.WriteString(u.Modififed.Format(time.ANSIC))
+	builder.WriteString("modified=")
+	builder.WriteString(u.Modified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

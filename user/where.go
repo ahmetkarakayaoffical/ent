@@ -84,9 +84,9 @@ func Created(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCreated, v))
 }
 
-// Modififed applies equality check predicate on the "modififed" field. It's identical to ModififedEQ.
-func Modififed(v time.Time) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldModififed, v))
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldModified, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -324,44 +324,44 @@ func CreatedLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldCreated, v))
 }
 
-// ModififedEQ applies the EQ predicate on the "modififed" field.
-func ModififedEQ(v time.Time) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldModififed, v))
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldModified, v))
 }
 
-// ModififedNEQ applies the NEQ predicate on the "modififed" field.
-func ModififedNEQ(v time.Time) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldModififed, v))
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldModified, v))
 }
 
-// ModififedIn applies the In predicate on the "modififed" field.
-func ModififedIn(vs ...time.Time) predicate.User {
-	return predicate.User(sql.FieldIn(FieldModififed, vs...))
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldModified, vs...))
 }
 
-// ModififedNotIn applies the NotIn predicate on the "modififed" field.
-func ModififedNotIn(vs ...time.Time) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldModififed, vs...))
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldModified, vs...))
 }
 
-// ModififedGT applies the GT predicate on the "modififed" field.
-func ModififedGT(v time.Time) predicate.User {
-	return predicate.User(sql.FieldGT(FieldModififed, v))
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldModified, v))
 }
 
-// ModififedGTE applies the GTE predicate on the "modififed" field.
-func ModififedGTE(v time.Time) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldModififed, v))
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldModified, v))
 }
 
-// ModififedLT applies the LT predicate on the "modififed" field.
-func ModififedLT(v time.Time) predicate.User {
-	return predicate.User(sql.FieldLT(FieldModififed, v))
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldModified, v))
 }
 
-// ModififedLTE applies the LTE predicate on the "modififed" field.
-func ModififedLTE(v time.Time) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldModififed, v))
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldModified, v))
 }
 
 // And groups predicates with the AND operator between them.
