@@ -1898,6 +1898,22 @@ func (c *SessionsClient) GetX(ctx context.Context, id string) *Sessions {
 	return obj
 }
 
+// QueryOwner queries the owner edge of a Sessions.
+func (c *SessionsClient) QueryOwner(s *Sessions) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sessions.Table, sessions.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sessions.OwnerTable, sessions.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SessionsClient) Hooks() []Hook {
 	return c.hooks.Sessions
@@ -2327,6 +2343,22 @@ func (c *UserClient) GetX(ctx context.Context, id string) *User {
 		panic(err)
 	}
 	return obj
+}
+
+// QuerySessions queries the sessions edge of a User.
+func (c *UserClient) QuerySessions(u *User) *SessionsQuery {
+	query := (&SessionsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(sessions.Table, sessions.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.SessionsTable, user.SessionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // SessionsQuery is the builder for querying Sessions entities.
@@ -22,6 +23,8 @@ type SessionsQuery struct {
 	order      []sessions.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Sessions
+	withOwner  *UserQuery
+	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -57,6 +60,28 @@ func (sq *SessionsQuery) Unique(unique bool) *SessionsQuery {
 func (sq *SessionsQuery) Order(o ...sessions.OrderOption) *SessionsQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (sq *SessionsQuery) QueryOwner() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sessions.Table, sessions.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sessions.OwnerTable, sessions.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Sessions entity from the query.
@@ -251,11 +276,23 @@ func (sq *SessionsQuery) Clone() *SessionsQuery {
 		order:      append([]sessions.OrderOption{}, sq.order...),
 		inters:     append([]Interceptor{}, sq.inters...),
 		predicates: append([]predicate.Sessions{}, sq.predicates...),
+		withOwner:  sq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
 		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SessionsQuery) WithOwner(opts ...func(*UserQuery)) *SessionsQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withOwner = query
+	return sq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -334,15 +371,26 @@ func (sq *SessionsQuery) prepareQuery(ctx context.Context) error {
 
 func (sq *SessionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sessions, error) {
 	var (
-		nodes = []*Sessions{}
-		_spec = sq.querySpec()
+		nodes       = []*Sessions{}
+		withFKs     = sq.withFKs
+		_spec       = sq.querySpec()
+		loadedTypes = [1]bool{
+			sq.withOwner != nil,
+		}
 	)
+	if sq.withOwner != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, sessions.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Sessions).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Sessions{config: sq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(sq.modifiers) > 0 {
@@ -357,7 +405,46 @@ func (sq *SessionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ses
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := sq.withOwner; query != nil {
+		if err := sq.loadOwner(ctx, query, nodes, nil,
+			func(n *Sessions, e *User) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (sq *SessionsQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Sessions, init func(*Sessions), assign func(*Sessions, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Sessions)
+	for i := range nodes {
+		if nodes[i].user_sessions == nil {
+			continue
+		}
+		fk := *nodes[i].user_sessions
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_sessions" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (sq *SessionsQuery) sqlCount(ctx context.Context) (int, error) {

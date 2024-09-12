@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // SessionsCreate is the builder for creating a Sessions entity.
@@ -39,6 +40,25 @@ func (sc *SessionsCreate) SetExpiry(t time.Time) *SessionsCreate {
 func (sc *SessionsCreate) SetID(s string) *SessionsCreate {
 	sc.mutation.SetID(s)
 	return sc
+}
+
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (sc *SessionsCreate) SetOwnerID(id string) *SessionsCreate {
+	sc.mutation.SetOwnerID(id)
+	return sc
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (sc *SessionsCreate) SetNillableOwnerID(id *string) *SessionsCreate {
+	if id != nil {
+		sc = sc.SetOwnerID(*id)
+	}
+	return sc
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (sc *SessionsCreate) SetOwner(u *User) *SessionsCreate {
+	return sc.SetOwnerID(u.ID)
 }
 
 // Mutation returns the SessionsMutation object of the builder.
@@ -134,6 +154,23 @@ func (sc *SessionsCreate) createSpec() (*Sessions, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Expiry(); ok {
 		_spec.SetField(sessions.FieldExpiry, field.TypeTime, value)
 		_node.Expiry = value
+	}
+	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sessions.OwnerTable,
+			Columns: []string{sessions.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_sessions = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

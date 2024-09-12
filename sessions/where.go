@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
 
@@ -152,6 +153,29 @@ func ExpiryLT(v time.Time) predicate.Sessions {
 // ExpiryLTE applies the LTE predicate on the "expiry" field.
 func ExpiryLTE(v time.Time) predicate.Sessions {
 	return predicate.Sessions(sql.FieldLTE(FieldExpiry, v))
+}
+
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.Sessions {
+	return predicate.Sessions(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.User) predicate.Sessions {
+	return predicate.Sessions(func(s *sql.Selector) {
+		step := newOwnerStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

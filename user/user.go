@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -23,8 +24,19 @@ const (
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
 	FieldModified = "modified"
+	// EdgeSessions holds the string denoting the sessions edge name in mutations.
+	EdgeSessions = "sessions"
+	// SessionsFieldID holds the string denoting the ID field of the Sessions.
+	SessionsFieldID = "token"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// SessionsTable is the table that holds the sessions relation/edge.
+	SessionsTable = "sessions"
+	// SessionsInverseTable is the table name for the Sessions entity.
+	// It exists in this package in order to avoid circular dependency with the "sessions" package.
+	SessionsInverseTable = "sessions"
+	// SessionsColumn is the table column denoting the sessions relation/edge.
+	SessionsColumn = "user_sessions"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -85,4 +97,25 @@ func ByCreated(opts ...sql.OrderTermOption) OrderOption {
 // ByModified orders the results by the modified field.
 func ByModified(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldModified, opts...).ToFunc()
+}
+
+// BySessionsCount orders the results by sessions count.
+func BySessionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSessionsStep(), opts...)
+	}
+}
+
+// BySessions orders the results by sessions terms.
+func BySessions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSessionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newSessionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SessionsInverseTable, SessionsFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SessionsTable, SessionsColumn),
+	)
 }

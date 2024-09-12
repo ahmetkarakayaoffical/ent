@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // Sessions is the model entity for the Sessions schema.
@@ -20,8 +21,32 @@ type Sessions struct {
 	// Data holds the value of the "data" field.
 	Data []byte `json:"data,omitempty"`
 	// Expiry holds the value of the "expiry" field.
-	Expiry       time.Time `json:"expiry,omitempty"`
-	selectValues sql.SelectValues
+	Expiry time.Time `json:"expiry,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SessionsQuery when eager-loading is set.
+	Edges         SessionsEdges `json:"edges"`
+	user_sessions *string
+	selectValues  sql.SelectValues
+}
+
+// SessionsEdges holds the relations/edges for other nodes in the graph.
+type SessionsEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *User `json:"owner,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SessionsEdges) OwnerOrErr() (*User, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -35,6 +60,8 @@ func (*Sessions) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case sessions.FieldExpiry:
 			values[i] = new(sql.NullTime)
+		case sessions.ForeignKeys[0]: // user_sessions
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -68,6 +95,13 @@ func (s *Sessions) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Expiry = value.Time
 			}
+		case sessions.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field user_sessions", values[i])
+			} else if value.Valid {
+				s.user_sessions = new(string)
+				*s.user_sessions = value.String
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -79,6 +113,11 @@ func (s *Sessions) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Sessions) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the Sessions entity.
+func (s *Sessions) QueryOwner() *UserQuery {
+	return NewSessionsClient(s.config).QueryOwner(s)
 }
 
 // Update returns a builder for updating this Sessions.

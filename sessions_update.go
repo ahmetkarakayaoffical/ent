@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/user"
 )
 
 // SessionsUpdate is the builder for updating Sessions entities.
@@ -49,9 +50,34 @@ func (su *SessionsUpdate) SetNillableExpiry(t *time.Time) *SessionsUpdate {
 	return su
 }
 
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (su *SessionsUpdate) SetOwnerID(id string) *SessionsUpdate {
+	su.mutation.SetOwnerID(id)
+	return su
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (su *SessionsUpdate) SetNillableOwnerID(id *string) *SessionsUpdate {
+	if id != nil {
+		su = su.SetOwnerID(*id)
+	}
+	return su
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (su *SessionsUpdate) SetOwner(u *User) *SessionsUpdate {
+	return su.SetOwnerID(u.ID)
+}
+
 // Mutation returns the SessionsMutation object of the builder.
 func (su *SessionsUpdate) Mutation() *SessionsMutation {
 	return su.mutation
+}
+
+// ClearOwner clears the "owner" edge to the User entity.
+func (su *SessionsUpdate) ClearOwner() *SessionsUpdate {
+	su.mutation.ClearOwner()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -115,6 +141,35 @@ func (su *SessionsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.Expiry(); ok {
 		_spec.SetField(sessions.FieldExpiry, field.TypeTime, value)
 	}
+	if su.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sessions.OwnerTable,
+			Columns: []string{sessions.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sessions.OwnerTable,
+			Columns: []string{sessions.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -157,9 +212,34 @@ func (suo *SessionsUpdateOne) SetNillableExpiry(t *time.Time) *SessionsUpdateOne
 	return suo
 }
 
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (suo *SessionsUpdateOne) SetOwnerID(id string) *SessionsUpdateOne {
+	suo.mutation.SetOwnerID(id)
+	return suo
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (suo *SessionsUpdateOne) SetNillableOwnerID(id *string) *SessionsUpdateOne {
+	if id != nil {
+		suo = suo.SetOwnerID(*id)
+	}
+	return suo
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (suo *SessionsUpdateOne) SetOwner(u *User) *SessionsUpdateOne {
+	return suo.SetOwnerID(u.ID)
+}
+
 // Mutation returns the SessionsMutation object of the builder.
 func (suo *SessionsUpdateOne) Mutation() *SessionsMutation {
 	return suo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the User entity.
+func (suo *SessionsUpdateOne) ClearOwner() *SessionsUpdateOne {
+	suo.mutation.ClearOwner()
+	return suo
 }
 
 // Where appends a list predicates to the SessionsUpdate builder.
@@ -252,6 +332,35 @@ func (suo *SessionsUpdateOne) sqlSave(ctx context.Context) (_node *Sessions, err
 	}
 	if value, ok := suo.mutation.Expiry(); ok {
 		_spec.SetField(sessions.FieldExpiry, field.TypeTime, value)
+	}
+	if suo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sessions.OwnerTable,
+			Columns: []string{sessions.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sessions.OwnerTable,
+			Columns: []string{sessions.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Sessions{config: suo.config}

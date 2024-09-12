@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/predicate"
+	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/user"
 )
 
@@ -123,9 +124,45 @@ func (uu *UserUpdate) ClearModified() *UserUpdate {
 	return uu
 }
 
+// AddSessionIDs adds the "sessions" edge to the Sessions entity by IDs.
+func (uu *UserUpdate) AddSessionIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddSessionIDs(ids...)
+	return uu
+}
+
+// AddSessions adds the "sessions" edges to the Sessions entity.
+func (uu *UserUpdate) AddSessions(s ...*Sessions) *UserUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uu.AddSessionIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearSessions clears all "sessions" edges to the Sessions entity.
+func (uu *UserUpdate) ClearSessions() *UserUpdate {
+	uu.mutation.ClearSessions()
+	return uu
+}
+
+// RemoveSessionIDs removes the "sessions" edge to Sessions entities by IDs.
+func (uu *UserUpdate) RemoveSessionIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveSessionIDs(ids...)
+	return uu
+}
+
+// RemoveSessions removes "sessions" edges to Sessions entities.
+func (uu *UserUpdate) RemoveSessions(s ...*Sessions) *UserUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uu.RemoveSessionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -196,6 +233,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
+	}
+	if uu.mutation.SessionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedSessionsIDs(); len(nodes) > 0 && !uu.mutation.SessionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.SessionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(uu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
@@ -313,9 +395,45 @@ func (uuo *UserUpdateOne) ClearModified() *UserUpdateOne {
 	return uuo
 }
 
+// AddSessionIDs adds the "sessions" edge to the Sessions entity by IDs.
+func (uuo *UserUpdateOne) AddSessionIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddSessionIDs(ids...)
+	return uuo
+}
+
+// AddSessions adds the "sessions" edges to the Sessions entity.
+func (uuo *UserUpdateOne) AddSessions(s ...*Sessions) *UserUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uuo.AddSessionIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearSessions clears all "sessions" edges to the Sessions entity.
+func (uuo *UserUpdateOne) ClearSessions() *UserUpdateOne {
+	uuo.mutation.ClearSessions()
+	return uuo
+}
+
+// RemoveSessionIDs removes the "sessions" edge to Sessions entities by IDs.
+func (uuo *UserUpdateOne) RemoveSessionIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveSessionIDs(ids...)
+	return uuo
+}
+
+// RemoveSessions removes "sessions" edges to Sessions entities.
+func (uuo *UserUpdateOne) RemoveSessions(s ...*Sessions) *UserUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return uuo.RemoveSessionIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -416,6 +534,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
+	}
+	if uuo.mutation.SessionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedSessionsIDs(); len(nodes) > 0 && !uuo.mutation.SessionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.SessionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SessionsTable,
+			Columns: []string{user.SessionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sessions.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(uuo.modifiers...)
 	_node = &User{config: uuo.config}

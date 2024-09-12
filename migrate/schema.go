@@ -228,12 +228,21 @@ var (
 		{Name: "token", Type: field.TypeString, Unique: true, Size: 2147483647},
 		{Name: "data", Type: field.TypeBytes},
 		{Name: "expiry", Type: field.TypeTime},
+		{Name: "user_sessions", Type: field.TypeString, Nullable: true},
 	}
 	// SessionsTable holds the schema information for the "sessions" table.
 	SessionsTable = &schema.Table{
 		Name:       "sessions",
 		Columns:    SessionsColumns,
 		PrimaryKey: []*schema.Column{SessionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sessions_users_sessions",
+				Columns:    []*schema.Column{SessionsColumns[3]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "sessions_expiry_idx",
@@ -329,6 +338,7 @@ func init() {
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
+	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 }

@@ -26,8 +26,29 @@ type User struct {
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
-	Modified     time.Time `json:"modified,omitempty"`
+	Modified time.Time `json:"modified,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// Sessions holds the value of the sessions edge.
+	Sessions []*Sessions `json:"sessions,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// SessionsOrErr returns the Sessions value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) SessionsOrErr() ([]*Sessions, error) {
+	if e.loadedTypes[0] {
+		return e.Sessions, nil
+	}
+	return nil, &NotLoadedError{edge: "sessions"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -101,6 +122,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
+}
+
+// QuerySessions queries the "sessions" edge of the User entity.
+func (u *User) QuerySessions() *SessionsQuery {
+	return NewUserClient(u.config).QuerySessions(u)
 }
 
 // Update returns a builder for updating this User.
