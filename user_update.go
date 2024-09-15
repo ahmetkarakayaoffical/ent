@@ -110,14 +110,6 @@ func (uu *UserUpdate) SetModified(t time.Time) *UserUpdate {
 	return uu
 }
 
-// SetNillableModified sets the "modified" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableModified(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetModified(*t)
-	}
-	return uu
-}
-
 // ClearModified clears the value of the "modified" field.
 func (uu *UserUpdate) ClearModified() *UserUpdate {
 	uu.mutation.ClearModified()
@@ -167,6 +159,7 @@ func (uu *UserUpdate) RemoveSessions(s ...*Sessions) *UserUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
+	uu.defaults()
 	return withHooks(ctx, uu.sqlSave, uu.mutation, uu.hooks)
 }
 
@@ -189,6 +182,14 @@ func (uu *UserUpdate) Exec(ctx context.Context) error {
 func (uu *UserUpdate) ExecX(ctx context.Context) {
 	if err := uu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (uu *UserUpdate) defaults() {
+	if _, ok := uu.mutation.Modified(); !ok && !uu.mutation.ModifiedCleared() {
+		v := user.UpdateDefaultModified()
+		uu.mutation.SetModified(v)
 	}
 }
 
@@ -381,14 +382,6 @@ func (uuo *UserUpdateOne) SetModified(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
-// SetNillableModified sets the "modified" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableModified(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetModified(*t)
-	}
-	return uuo
-}
-
 // ClearModified clears the value of the "modified" field.
 func (uuo *UserUpdateOne) ClearModified() *UserUpdateOne {
 	uuo.mutation.ClearModified()
@@ -451,6 +444,7 @@ func (uuo *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne 
 
 // Save executes the query and returns the updated User entity.
 func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
+	uuo.defaults()
 	return withHooks(ctx, uuo.sqlSave, uuo.mutation, uuo.hooks)
 }
 
@@ -473,6 +467,14 @@ func (uuo *UserUpdateOne) Exec(ctx context.Context) error {
 func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 	if err := uuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (uuo *UserUpdateOne) defaults() {
+	if _, ok := uuo.mutation.Modified(); !ok && !uuo.mutation.ModifiedCleared() {
+		v := user.UpdateDefaultModified()
+		uuo.mutation.SetModified(v)
 	}
 }
 

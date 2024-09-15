@@ -7,6 +7,7 @@ import (
 
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/user"
@@ -48,6 +49,12 @@ func init() {
 	logicaldiskDescUsage := logicaldiskFields[2].Descriptor()
 	// logicaldisk.DefaultUsage holds the default value on creation for the usage field.
 	logicaldisk.DefaultUsage = logicaldiskDescUsage.Default.(int8)
+	revocationFields := schema.Revocation{}.Fields()
+	_ = revocationFields
+	// revocationDescRevoked is the schema descriptor for revoked field.
+	revocationDescRevoked := revocationFields[2].Descriptor()
+	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
+	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
 	// sessionsDescData is the schema descriptor for data field.
@@ -63,7 +70,13 @@ func init() {
 	// userDescCreated is the schema descriptor for created field.
 	userDescCreated := userFields[4].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
-	user.DefaultCreated = userDescCreated.Default.(time.Time)
+	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
+	// userDescModified is the schema descriptor for modified field.
+	userDescModified := userFields[5].Descriptor()
+	// user.DefaultModified holds the default value on creation for the modified field.
+	user.DefaultModified = userDescModified.Default.(func() time.Time)
+	// user.UpdateDefaultModified holds the default value on update for the modified field.
+	user.UpdateDefaultModified = userDescModified.UpdateDefault.(func() time.Time)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.

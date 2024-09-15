@@ -21,6 +21,7 @@ import (
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
@@ -94,6 +95,7 @@ func checkColumn(table, column string) error {
 			networkadapter.Table:  networkadapter.ValidColumn,
 			operatingsystem.Table: operatingsystem.ValidColumn,
 			printer.Table:         printer.ValidColumn,
+			revocation.Table:      revocation.ValidColumn,
 			sessions.Table:        sessions.ValidColumn,
 			share.Table:           share.ValidColumn,
 			systemupdate.Table:    systemupdate.ValidColumn,

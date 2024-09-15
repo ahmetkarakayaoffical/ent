@@ -223,6 +223,18 @@ var (
 			},
 		},
 	}
+	// RevocationsColumns holds the columns for the "revocations" table.
+	RevocationsColumns = []*schema.Column{
+		{Name: "serial", Type: field.TypeInt64, Increment: true},
+		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "revoked", Type: field.TypeTime},
+	}
+	// RevocationsTable holds the schema information for the "revocations" table.
+	RevocationsTable = &schema.Table{
+		Name:       "revocations",
+		Columns:    RevocationsColumns,
+		PrimaryKey: []*schema.Column{RevocationsColumns[0]},
+	}
 	// SessionsColumns holds the columns for the "sessions" table.
 	SessionsColumns = []*schema.Column{
 		{Name: "token", Type: field.TypeString, Unique: true, Size: 2147483647},
@@ -322,6 +334,7 @@ var (
 		NetworkAdaptersTable,
 		OperatingSystemsTable,
 		PrintersTable,
+		RevocationsTable,
 		SessionsTable,
 		SharesTable,
 		SystemUpdatesTable,

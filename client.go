@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
@@ -53,6 +54,8 @@ type Client struct {
 	OperatingSystem *OperatingSystemClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Revocation is the client for interacting with the Revocation builders.
+	Revocation *RevocationClient
 	// Sessions is the client for interacting with the Sessions builders.
 	Sessions *SessionsClient
 	// Share is the client for interacting with the Share builders.
@@ -81,6 +84,7 @@ func (c *Client) init() {
 	c.NetworkAdapter = NewNetworkAdapterClient(c.config)
 	c.OperatingSystem = NewOperatingSystemClient(c.config)
 	c.Printer = NewPrinterClient(c.config)
+	c.Revocation = NewRevocationClient(c.config)
 	c.Sessions = NewSessionsClient(c.config)
 	c.Share = NewShareClient(c.config)
 	c.SystemUpdate = NewSystemUpdateClient(c.config)
@@ -186,6 +190,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
 		OperatingSystem: NewOperatingSystemClient(cfg),
 		Printer:         NewPrinterClient(cfg),
+		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Share:           NewShareClient(cfg),
 		SystemUpdate:    NewSystemUpdateClient(cfg),
@@ -218,6 +223,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
 		OperatingSystem: NewOperatingSystemClient(cfg),
 		Printer:         NewPrinterClient(cfg),
+		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Share:           NewShareClient(cfg),
 		SystemUpdate:    NewSystemUpdateClient(cfg),
@@ -252,8 +258,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Computer, c.LogicalDisk, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Sessions, c.Share,
-		c.SystemUpdate, c.User,
+		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation, c.Sessions,
+		c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -264,8 +270,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Computer, c.LogicalDisk, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Sessions, c.Share,
-		c.SystemUpdate, c.User,
+		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation, c.Sessions,
+		c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -292,6 +298,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OperatingSystem.mutate(ctx, m)
 	case *PrinterMutation:
 		return c.Printer.mutate(ctx, m)
+	case *RevocationMutation:
+		return c.Revocation.mutate(ctx, m)
 	case *SessionsMutation:
 		return c.Sessions.mutate(ctx, m)
 	case *ShareMutation:
@@ -1790,6 +1798,139 @@ func (c *PrinterClient) mutate(ctx context.Context, m *PrinterMutation) (Value, 
 	}
 }
 
+// RevocationClient is a client for the Revocation schema.
+type RevocationClient struct {
+	config
+}
+
+// NewRevocationClient returns a client for the Revocation from the given config.
+func NewRevocationClient(c config) *RevocationClient {
+	return &RevocationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `revocation.Hooks(f(g(h())))`.
+func (c *RevocationClient) Use(hooks ...Hook) {
+	c.hooks.Revocation = append(c.hooks.Revocation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `revocation.Intercept(f(g(h())))`.
+func (c *RevocationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Revocation = append(c.inters.Revocation, interceptors...)
+}
+
+// Create returns a builder for creating a Revocation entity.
+func (c *RevocationClient) Create() *RevocationCreate {
+	mutation := newRevocationMutation(c.config, OpCreate)
+	return &RevocationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Revocation entities.
+func (c *RevocationClient) CreateBulk(builders ...*RevocationCreate) *RevocationCreateBulk {
+	return &RevocationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *RevocationClient) MapCreateBulk(slice any, setFunc func(*RevocationCreate, int)) *RevocationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &RevocationCreateBulk{err: fmt.Errorf("calling to RevocationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*RevocationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &RevocationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Revocation.
+func (c *RevocationClient) Update() *RevocationUpdate {
+	mutation := newRevocationMutation(c.config, OpUpdate)
+	return &RevocationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RevocationClient) UpdateOne(r *Revocation) *RevocationUpdateOne {
+	mutation := newRevocationMutation(c.config, OpUpdateOne, withRevocation(r))
+	return &RevocationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RevocationClient) UpdateOneID(id int64) *RevocationUpdateOne {
+	mutation := newRevocationMutation(c.config, OpUpdateOne, withRevocationID(id))
+	return &RevocationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Revocation.
+func (c *RevocationClient) Delete() *RevocationDelete {
+	mutation := newRevocationMutation(c.config, OpDelete)
+	return &RevocationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RevocationClient) DeleteOne(r *Revocation) *RevocationDeleteOne {
+	return c.DeleteOneID(r.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RevocationClient) DeleteOneID(id int64) *RevocationDeleteOne {
+	builder := c.Delete().Where(revocation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RevocationDeleteOne{builder}
+}
+
+// Query returns a query builder for Revocation.
+func (c *RevocationClient) Query() *RevocationQuery {
+	return &RevocationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRevocation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Revocation entity by its id.
+func (c *RevocationClient) Get(ctx context.Context, id int64) (*Revocation, error) {
+	return c.Query().Where(revocation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RevocationClient) GetX(ctx context.Context, id int64) *Revocation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *RevocationClient) Hooks() []Hook {
+	return c.hooks.Revocation
+}
+
+// Interceptors returns the client interceptors.
+func (c *RevocationClient) Interceptors() []Interceptor {
+	return c.inters.Revocation
+}
+
+func (c *RevocationClient) mutate(ctx context.Context, m *RevocationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RevocationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RevocationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RevocationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RevocationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Revocation mutation op: %q", m.Op())
+	}
+}
+
 // SessionsClient is a client for the Sessions schema.
 type SessionsClient struct {
 	config
@@ -2390,10 +2531,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		Agent, Antivirus, App, Computer, LogicalDisk, Monitor, NetworkAdapter,
-		OperatingSystem, Printer, Sessions, Share, SystemUpdate, User []ent.Hook
+		OperatingSystem, Printer, Revocation, Sessions, Share, SystemUpdate,
+		User []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Computer, LogicalDisk, Monitor, NetworkAdapter,
-		OperatingSystem, Printer, Sessions, Share, SystemUpdate, User []ent.Interceptor
+		OperatingSystem, Printer, Revocation, Sessions, Share, SystemUpdate,
+		User []ent.Interceptor
 	}
 )

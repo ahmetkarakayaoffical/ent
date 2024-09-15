@@ -21,8 +21,8 @@ func (User) Fields() []ent.Field {
 		field.String("name"),
 		field.String("email").Optional(),
 		field.String("phone").Optional(),
-		field.Time("created").Optional().Default(time.Now()),
-		field.Time("modified").Optional(),
+		field.Time("created").Optional().Default(time.Now),
+		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}
 }
 

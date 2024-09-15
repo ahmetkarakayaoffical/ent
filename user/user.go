@@ -61,7 +61,11 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultCreated holds the default value on creation for the "created" field.
-	DefaultCreated time.Time
+	DefaultCreated func() time.Time
+	// DefaultModified holds the default value on creation for the "modified" field.
+	DefaultModified func() time.Time
+	// UpdateDefaultModified holds the default value on update for the "modified" field.
+	UpdateDefaultModified func() time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
