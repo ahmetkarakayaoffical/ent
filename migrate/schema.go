@@ -226,7 +226,8 @@ var (
 	// RevocationsColumns holds the columns for the "revocations" table.
 	RevocationsColumns = []*schema.Column{
 		{Name: "serial", Type: field.TypeInt64, Increment: true},
-		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "reason", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "info", Type: field.TypeString, Nullable: true},
 		{Name: "revoked", Type: field.TypeTime},
 	}
 	// RevocationsTable holds the schema information for the "revocations" table.

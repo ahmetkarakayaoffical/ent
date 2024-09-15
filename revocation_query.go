@@ -264,7 +264,7 @@ func (rq *RevocationQuery) Clone() *RevocationQuery {
 // Example:
 //
 //	var v []struct {
-//		Reason string `json:"reason,omitempty"`
+//		Reason int `json:"reason,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -287,7 +287,7 @@ func (rq *RevocationQuery) GroupBy(field string, fields ...string) *RevocationGr
 // Example:
 //
 //	var v []struct {
-//		Reason string `json:"reason,omitempty"`
+//		Reason int `json:"reason,omitempty"`
 //	}
 //
 //	client.Revocation.Query().

@@ -51,8 +51,12 @@ func init() {
 	logicaldisk.DefaultUsage = logicaldiskDescUsage.Default.(int8)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
+	// revocationDescReason is the schema descriptor for reason field.
+	revocationDescReason := revocationFields[1].Descriptor()
+	// revocation.DefaultReason holds the default value on creation for the reason field.
+	revocation.DefaultReason = revocationDescReason.Default.(int)
 	// revocationDescRevoked is the schema descriptor for revoked field.
-	revocationDescRevoked := revocationFields[2].Descriptor()
+	revocationDescRevoked := revocationFields[3].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
 	sessionsFields := schema.Sessions{}.Fields()

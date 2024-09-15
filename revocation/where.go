@@ -55,8 +55,13 @@ func IDLTE(id int64) predicate.Revocation {
 }
 
 // Reason applies equality check predicate on the "reason" field. It's identical to ReasonEQ.
-func Reason(v string) predicate.Revocation {
+func Reason(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldEQ(FieldReason, v))
+}
+
+// Info applies equality check predicate on the "info" field. It's identical to InfoEQ.
+func Info(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldEQ(FieldInfo, v))
 }
 
 // Revoked applies equality check predicate on the "revoked" field. It's identical to RevokedEQ.
@@ -65,58 +70,43 @@ func Revoked(v time.Time) predicate.Revocation {
 }
 
 // ReasonEQ applies the EQ predicate on the "reason" field.
-func ReasonEQ(v string) predicate.Revocation {
+func ReasonEQ(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldEQ(FieldReason, v))
 }
 
 // ReasonNEQ applies the NEQ predicate on the "reason" field.
-func ReasonNEQ(v string) predicate.Revocation {
+func ReasonNEQ(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldNEQ(FieldReason, v))
 }
 
 // ReasonIn applies the In predicate on the "reason" field.
-func ReasonIn(vs ...string) predicate.Revocation {
+func ReasonIn(vs ...int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldIn(FieldReason, vs...))
 }
 
 // ReasonNotIn applies the NotIn predicate on the "reason" field.
-func ReasonNotIn(vs ...string) predicate.Revocation {
+func ReasonNotIn(vs ...int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldNotIn(FieldReason, vs...))
 }
 
 // ReasonGT applies the GT predicate on the "reason" field.
-func ReasonGT(v string) predicate.Revocation {
+func ReasonGT(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldGT(FieldReason, v))
 }
 
 // ReasonGTE applies the GTE predicate on the "reason" field.
-func ReasonGTE(v string) predicate.Revocation {
+func ReasonGTE(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldGTE(FieldReason, v))
 }
 
 // ReasonLT applies the LT predicate on the "reason" field.
-func ReasonLT(v string) predicate.Revocation {
+func ReasonLT(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldLT(FieldReason, v))
 }
 
 // ReasonLTE applies the LTE predicate on the "reason" field.
-func ReasonLTE(v string) predicate.Revocation {
+func ReasonLTE(v int) predicate.Revocation {
 	return predicate.Revocation(sql.FieldLTE(FieldReason, v))
-}
-
-// ReasonContains applies the Contains predicate on the "reason" field.
-func ReasonContains(v string) predicate.Revocation {
-	return predicate.Revocation(sql.FieldContains(FieldReason, v))
-}
-
-// ReasonHasPrefix applies the HasPrefix predicate on the "reason" field.
-func ReasonHasPrefix(v string) predicate.Revocation {
-	return predicate.Revocation(sql.FieldHasPrefix(FieldReason, v))
-}
-
-// ReasonHasSuffix applies the HasSuffix predicate on the "reason" field.
-func ReasonHasSuffix(v string) predicate.Revocation {
-	return predicate.Revocation(sql.FieldHasSuffix(FieldReason, v))
 }
 
 // ReasonIsNil applies the IsNil predicate on the "reason" field.
@@ -129,14 +119,79 @@ func ReasonNotNil() predicate.Revocation {
 	return predicate.Revocation(sql.FieldNotNull(FieldReason))
 }
 
-// ReasonEqualFold applies the EqualFold predicate on the "reason" field.
-func ReasonEqualFold(v string) predicate.Revocation {
-	return predicate.Revocation(sql.FieldEqualFold(FieldReason, v))
+// InfoEQ applies the EQ predicate on the "info" field.
+func InfoEQ(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldEQ(FieldInfo, v))
 }
 
-// ReasonContainsFold applies the ContainsFold predicate on the "reason" field.
-func ReasonContainsFold(v string) predicate.Revocation {
-	return predicate.Revocation(sql.FieldContainsFold(FieldReason, v))
+// InfoNEQ applies the NEQ predicate on the "info" field.
+func InfoNEQ(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldNEQ(FieldInfo, v))
+}
+
+// InfoIn applies the In predicate on the "info" field.
+func InfoIn(vs ...string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldIn(FieldInfo, vs...))
+}
+
+// InfoNotIn applies the NotIn predicate on the "info" field.
+func InfoNotIn(vs ...string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldNotIn(FieldInfo, vs...))
+}
+
+// InfoGT applies the GT predicate on the "info" field.
+func InfoGT(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldGT(FieldInfo, v))
+}
+
+// InfoGTE applies the GTE predicate on the "info" field.
+func InfoGTE(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldGTE(FieldInfo, v))
+}
+
+// InfoLT applies the LT predicate on the "info" field.
+func InfoLT(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldLT(FieldInfo, v))
+}
+
+// InfoLTE applies the LTE predicate on the "info" field.
+func InfoLTE(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldLTE(FieldInfo, v))
+}
+
+// InfoContains applies the Contains predicate on the "info" field.
+func InfoContains(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldContains(FieldInfo, v))
+}
+
+// InfoHasPrefix applies the HasPrefix predicate on the "info" field.
+func InfoHasPrefix(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldHasPrefix(FieldInfo, v))
+}
+
+// InfoHasSuffix applies the HasSuffix predicate on the "info" field.
+func InfoHasSuffix(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldHasSuffix(FieldInfo, v))
+}
+
+// InfoIsNil applies the IsNil predicate on the "info" field.
+func InfoIsNil() predicate.Revocation {
+	return predicate.Revocation(sql.FieldIsNull(FieldInfo))
+}
+
+// InfoNotNil applies the NotNil predicate on the "info" field.
+func InfoNotNil() predicate.Revocation {
+	return predicate.Revocation(sql.FieldNotNull(FieldInfo))
+}
+
+// InfoEqualFold applies the EqualFold predicate on the "info" field.
+func InfoEqualFold(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldEqualFold(FieldInfo, v))
+}
+
+// InfoContainsFold applies the ContainsFold predicate on the "info" field.
+func InfoContainsFold(v string) predicate.Revocation {
+	return predicate.Revocation(sql.FieldContainsFold(FieldInfo, v))
 }
 
 // RevokedEQ applies the EQ predicate on the "revoked" field.

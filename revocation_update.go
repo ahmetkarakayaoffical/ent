@@ -30,22 +30,49 @@ func (ru *RevocationUpdate) Where(ps ...predicate.Revocation) *RevocationUpdate 
 }
 
 // SetReason sets the "reason" field.
-func (ru *RevocationUpdate) SetReason(s string) *RevocationUpdate {
-	ru.mutation.SetReason(s)
+func (ru *RevocationUpdate) SetReason(i int) *RevocationUpdate {
+	ru.mutation.ResetReason()
+	ru.mutation.SetReason(i)
 	return ru
 }
 
 // SetNillableReason sets the "reason" field if the given value is not nil.
-func (ru *RevocationUpdate) SetNillableReason(s *string) *RevocationUpdate {
-	if s != nil {
-		ru.SetReason(*s)
+func (ru *RevocationUpdate) SetNillableReason(i *int) *RevocationUpdate {
+	if i != nil {
+		ru.SetReason(*i)
 	}
+	return ru
+}
+
+// AddReason adds i to the "reason" field.
+func (ru *RevocationUpdate) AddReason(i int) *RevocationUpdate {
+	ru.mutation.AddReason(i)
 	return ru
 }
 
 // ClearReason clears the value of the "reason" field.
 func (ru *RevocationUpdate) ClearReason() *RevocationUpdate {
 	ru.mutation.ClearReason()
+	return ru
+}
+
+// SetInfo sets the "info" field.
+func (ru *RevocationUpdate) SetInfo(s string) *RevocationUpdate {
+	ru.mutation.SetInfo(s)
+	return ru
+}
+
+// SetNillableInfo sets the "info" field if the given value is not nil.
+func (ru *RevocationUpdate) SetNillableInfo(s *string) *RevocationUpdate {
+	if s != nil {
+		ru.SetInfo(*s)
+	}
+	return ru
+}
+
+// ClearInfo clears the value of the "info" field.
+func (ru *RevocationUpdate) ClearInfo() *RevocationUpdate {
+	ru.mutation.ClearInfo()
 	return ru
 }
 
@@ -111,10 +138,19 @@ func (ru *RevocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := ru.mutation.Reason(); ok {
-		_spec.SetField(revocation.FieldReason, field.TypeString, value)
+		_spec.SetField(revocation.FieldReason, field.TypeInt, value)
+	}
+	if value, ok := ru.mutation.AddedReason(); ok {
+		_spec.AddField(revocation.FieldReason, field.TypeInt, value)
 	}
 	if ru.mutation.ReasonCleared() {
-		_spec.ClearField(revocation.FieldReason, field.TypeString)
+		_spec.ClearField(revocation.FieldReason, field.TypeInt)
+	}
+	if value, ok := ru.mutation.Info(); ok {
+		_spec.SetField(revocation.FieldInfo, field.TypeString, value)
+	}
+	if ru.mutation.InfoCleared() {
+		_spec.ClearField(revocation.FieldInfo, field.TypeString)
 	}
 	if value, ok := ru.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)
@@ -142,22 +178,49 @@ type RevocationUpdateOne struct {
 }
 
 // SetReason sets the "reason" field.
-func (ruo *RevocationUpdateOne) SetReason(s string) *RevocationUpdateOne {
-	ruo.mutation.SetReason(s)
+func (ruo *RevocationUpdateOne) SetReason(i int) *RevocationUpdateOne {
+	ruo.mutation.ResetReason()
+	ruo.mutation.SetReason(i)
 	return ruo
 }
 
 // SetNillableReason sets the "reason" field if the given value is not nil.
-func (ruo *RevocationUpdateOne) SetNillableReason(s *string) *RevocationUpdateOne {
-	if s != nil {
-		ruo.SetReason(*s)
+func (ruo *RevocationUpdateOne) SetNillableReason(i *int) *RevocationUpdateOne {
+	if i != nil {
+		ruo.SetReason(*i)
 	}
+	return ruo
+}
+
+// AddReason adds i to the "reason" field.
+func (ruo *RevocationUpdateOne) AddReason(i int) *RevocationUpdateOne {
+	ruo.mutation.AddReason(i)
 	return ruo
 }
 
 // ClearReason clears the value of the "reason" field.
 func (ruo *RevocationUpdateOne) ClearReason() *RevocationUpdateOne {
 	ruo.mutation.ClearReason()
+	return ruo
+}
+
+// SetInfo sets the "info" field.
+func (ruo *RevocationUpdateOne) SetInfo(s string) *RevocationUpdateOne {
+	ruo.mutation.SetInfo(s)
+	return ruo
+}
+
+// SetNillableInfo sets the "info" field if the given value is not nil.
+func (ruo *RevocationUpdateOne) SetNillableInfo(s *string) *RevocationUpdateOne {
+	if s != nil {
+		ruo.SetInfo(*s)
+	}
+	return ruo
+}
+
+// ClearInfo clears the value of the "info" field.
+func (ruo *RevocationUpdateOne) ClearInfo() *RevocationUpdateOne {
+	ruo.mutation.ClearInfo()
 	return ruo
 }
 
@@ -253,10 +316,19 @@ func (ruo *RevocationUpdateOne) sqlSave(ctx context.Context) (_node *Revocation,
 		}
 	}
 	if value, ok := ruo.mutation.Reason(); ok {
-		_spec.SetField(revocation.FieldReason, field.TypeString, value)
+		_spec.SetField(revocation.FieldReason, field.TypeInt, value)
+	}
+	if value, ok := ruo.mutation.AddedReason(); ok {
+		_spec.AddField(revocation.FieldReason, field.TypeInt, value)
 	}
 	if ruo.mutation.ReasonCleared() {
-		_spec.ClearField(revocation.FieldReason, field.TypeString)
+		_spec.ClearField(revocation.FieldReason, field.TypeInt)
+	}
+	if value, ok := ruo.mutation.Info(); ok {
+		_spec.SetField(revocation.FieldInfo, field.TypeString, value)
+	}
+	if ruo.mutation.InfoCleared() {
+		_spec.ClearField(revocation.FieldInfo, field.TypeString)
 	}
 	if value, ok := ruo.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)

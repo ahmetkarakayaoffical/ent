@@ -7372,7 +7372,9 @@ type RevocationMutation struct {
 	op            Op
 	typ           string
 	id            *int64
-	reason        *string
+	reason        *int
+	addreason     *int
+	info          *string
 	revoked       *time.Time
 	clearedFields map[string]struct{}
 	done          bool
@@ -7485,12 +7487,13 @@ func (m *RevocationMutation) IDs(ctx context.Context) ([]int64, error) {
 }
 
 // SetReason sets the "reason" field.
-func (m *RevocationMutation) SetReason(s string) {
-	m.reason = &s
+func (m *RevocationMutation) SetReason(i int) {
+	m.reason = &i
+	m.addreason = nil
 }
 
 // Reason returns the value of the "reason" field in the mutation.
-func (m *RevocationMutation) Reason() (r string, exists bool) {
+func (m *RevocationMutation) Reason() (r int, exists bool) {
 	v := m.reason
 	if v == nil {
 		return
@@ -7501,7 +7504,7 @@ func (m *RevocationMutation) Reason() (r string, exists bool) {
 // OldReason returns the old "reason" field's value of the Revocation entity.
 // If the Revocation object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RevocationMutation) OldReason(ctx context.Context) (v string, err error) {
+func (m *RevocationMutation) OldReason(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldReason is only allowed on UpdateOne operations")
 	}
@@ -7515,9 +7518,28 @@ func (m *RevocationMutation) OldReason(ctx context.Context) (v string, err error
 	return oldValue.Reason, nil
 }
 
+// AddReason adds i to the "reason" field.
+func (m *RevocationMutation) AddReason(i int) {
+	if m.addreason != nil {
+		*m.addreason += i
+	} else {
+		m.addreason = &i
+	}
+}
+
+// AddedReason returns the value that was added to the "reason" field in this mutation.
+func (m *RevocationMutation) AddedReason() (r int, exists bool) {
+	v := m.addreason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ClearReason clears the value of the "reason" field.
 func (m *RevocationMutation) ClearReason() {
 	m.reason = nil
+	m.addreason = nil
 	m.clearedFields[revocation.FieldReason] = struct{}{}
 }
 
@@ -7530,7 +7552,57 @@ func (m *RevocationMutation) ReasonCleared() bool {
 // ResetReason resets all changes to the "reason" field.
 func (m *RevocationMutation) ResetReason() {
 	m.reason = nil
+	m.addreason = nil
 	delete(m.clearedFields, revocation.FieldReason)
+}
+
+// SetInfo sets the "info" field.
+func (m *RevocationMutation) SetInfo(s string) {
+	m.info = &s
+}
+
+// Info returns the value of the "info" field in the mutation.
+func (m *RevocationMutation) Info() (r string, exists bool) {
+	v := m.info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInfo returns the old "info" field's value of the Revocation entity.
+// If the Revocation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RevocationMutation) OldInfo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInfo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInfo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInfo: %w", err)
+	}
+	return oldValue.Info, nil
+}
+
+// ClearInfo clears the value of the "info" field.
+func (m *RevocationMutation) ClearInfo() {
+	m.info = nil
+	m.clearedFields[revocation.FieldInfo] = struct{}{}
+}
+
+// InfoCleared returns if the "info" field was cleared in this mutation.
+func (m *RevocationMutation) InfoCleared() bool {
+	_, ok := m.clearedFields[revocation.FieldInfo]
+	return ok
+}
+
+// ResetInfo resets all changes to the "info" field.
+func (m *RevocationMutation) ResetInfo() {
+	m.info = nil
+	delete(m.clearedFields, revocation.FieldInfo)
 }
 
 // SetRevoked sets the "revoked" field.
@@ -7603,9 +7675,12 @@ func (m *RevocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RevocationMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.reason != nil {
 		fields = append(fields, revocation.FieldReason)
+	}
+	if m.info != nil {
+		fields = append(fields, revocation.FieldInfo)
 	}
 	if m.revoked != nil {
 		fields = append(fields, revocation.FieldRevoked)
@@ -7620,6 +7695,8 @@ func (m *RevocationMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case revocation.FieldReason:
 		return m.Reason()
+	case revocation.FieldInfo:
+		return m.Info()
 	case revocation.FieldRevoked:
 		return m.Revoked()
 	}
@@ -7633,6 +7710,8 @@ func (m *RevocationMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case revocation.FieldReason:
 		return m.OldReason(ctx)
+	case revocation.FieldInfo:
+		return m.OldInfo(ctx)
 	case revocation.FieldRevoked:
 		return m.OldRevoked(ctx)
 	}
@@ -7645,11 +7724,18 @@ func (m *RevocationMutation) OldField(ctx context.Context, name string) (ent.Val
 func (m *RevocationMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case revocation.FieldReason:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetReason(v)
+		return nil
+	case revocation.FieldInfo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInfo(v)
 		return nil
 	case revocation.FieldRevoked:
 		v, ok := value.(time.Time)
@@ -7665,13 +7751,21 @@ func (m *RevocationMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *RevocationMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addreason != nil {
+		fields = append(fields, revocation.FieldReason)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *RevocationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case revocation.FieldReason:
+		return m.AddedReason()
+	}
 	return nil, false
 }
 
@@ -7680,6 +7774,13 @@ func (m *RevocationMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *RevocationMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case revocation.FieldReason:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddReason(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Revocation numeric field %s", name)
 }
@@ -7690,6 +7791,9 @@ func (m *RevocationMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(revocation.FieldReason) {
 		fields = append(fields, revocation.FieldReason)
+	}
+	if m.FieldCleared(revocation.FieldInfo) {
+		fields = append(fields, revocation.FieldInfo)
 	}
 	return fields
 }
@@ -7708,6 +7812,9 @@ func (m *RevocationMutation) ClearField(name string) error {
 	case revocation.FieldReason:
 		m.ClearReason()
 		return nil
+	case revocation.FieldInfo:
+		m.ClearInfo()
+		return nil
 	}
 	return fmt.Errorf("unknown Revocation nullable field %s", name)
 }
@@ -7718,6 +7825,9 @@ func (m *RevocationMutation) ResetField(name string) error {
 	switch name {
 	case revocation.FieldReason:
 		m.ResetReason()
+		return nil
+	case revocation.FieldInfo:
+		m.ResetInfo()
 		return nil
 	case revocation.FieldRevoked:
 		m.ResetRevoked()

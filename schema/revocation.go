@@ -16,7 +16,8 @@ type Revocation struct {
 func (Revocation) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Unique().StorageKey("serial"),
-		field.String("reason").Optional(),
+		field.Int("reason").Default(0).Optional(),
+		field.String("info").Optional(),
 		field.Time("revoked").Default(time.Now),
 	}
 }

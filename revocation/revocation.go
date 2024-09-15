@@ -15,6 +15,8 @@ const (
 	FieldID = "serial"
 	// FieldReason holds the string denoting the reason field in the database.
 	FieldReason = "reason"
+	// FieldInfo holds the string denoting the info field in the database.
+	FieldInfo = "info"
 	// FieldRevoked holds the string denoting the revoked field in the database.
 	FieldRevoked = "revoked"
 	// Table holds the table name of the revocation in the database.
@@ -25,6 +27,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldReason,
+	FieldInfo,
 	FieldRevoked,
 }
 
@@ -39,6 +42,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultReason holds the default value on creation for the "reason" field.
+	DefaultReason int
 	// DefaultRevoked holds the default value on creation for the "revoked" field.
 	DefaultRevoked func() time.Time
 )
@@ -54,6 +59,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByReason orders the results by the reason field.
 func ByReason(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReason, opts...).ToFunc()
+}
+
+// ByInfo orders the results by the info field.
+func ByInfo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInfo, opts...).ToFunc()
 }
 
 // ByRevoked orders the results by the revoked field.

@@ -23,15 +23,29 @@ type RevocationCreate struct {
 }
 
 // SetReason sets the "reason" field.
-func (rc *RevocationCreate) SetReason(s string) *RevocationCreate {
-	rc.mutation.SetReason(s)
+func (rc *RevocationCreate) SetReason(i int) *RevocationCreate {
+	rc.mutation.SetReason(i)
 	return rc
 }
 
 // SetNillableReason sets the "reason" field if the given value is not nil.
-func (rc *RevocationCreate) SetNillableReason(s *string) *RevocationCreate {
+func (rc *RevocationCreate) SetNillableReason(i *int) *RevocationCreate {
+	if i != nil {
+		rc.SetReason(*i)
+	}
+	return rc
+}
+
+// SetInfo sets the "info" field.
+func (rc *RevocationCreate) SetInfo(s string) *RevocationCreate {
+	rc.mutation.SetInfo(s)
+	return rc
+}
+
+// SetNillableInfo sets the "info" field if the given value is not nil.
+func (rc *RevocationCreate) SetNillableInfo(s *string) *RevocationCreate {
 	if s != nil {
-		rc.SetReason(*s)
+		rc.SetInfo(*s)
 	}
 	return rc
 }
@@ -91,6 +105,10 @@ func (rc *RevocationCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (rc *RevocationCreate) defaults() {
+	if _, ok := rc.mutation.Reason(); !ok {
+		v := revocation.DefaultReason
+		rc.mutation.SetReason(v)
+	}
 	if _, ok := rc.mutation.Revoked(); !ok {
 		v := revocation.DefaultRevoked()
 		rc.mutation.SetRevoked(v)
@@ -136,8 +154,12 @@ func (rc *RevocationCreate) createSpec() (*Revocation, *sqlgraph.CreateSpec) {
 		_spec.ID.Value = id
 	}
 	if value, ok := rc.mutation.Reason(); ok {
-		_spec.SetField(revocation.FieldReason, field.TypeString, value)
+		_spec.SetField(revocation.FieldReason, field.TypeInt, value)
 		_node.Reason = value
+	}
+	if value, ok := rc.mutation.Info(); ok {
+		_spec.SetField(revocation.FieldInfo, field.TypeString, value)
+		_node.Info = value
 	}
 	if value, ok := rc.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)
@@ -196,7 +218,7 @@ type (
 )
 
 // SetReason sets the "reason" field.
-func (u *RevocationUpsert) SetReason(v string) *RevocationUpsert {
+func (u *RevocationUpsert) SetReason(v int) *RevocationUpsert {
 	u.Set(revocation.FieldReason, v)
 	return u
 }
@@ -207,9 +229,33 @@ func (u *RevocationUpsert) UpdateReason() *RevocationUpsert {
 	return u
 }
 
+// AddReason adds v to the "reason" field.
+func (u *RevocationUpsert) AddReason(v int) *RevocationUpsert {
+	u.Add(revocation.FieldReason, v)
+	return u
+}
+
 // ClearReason clears the value of the "reason" field.
 func (u *RevocationUpsert) ClearReason() *RevocationUpsert {
 	u.SetNull(revocation.FieldReason)
+	return u
+}
+
+// SetInfo sets the "info" field.
+func (u *RevocationUpsert) SetInfo(v string) *RevocationUpsert {
+	u.Set(revocation.FieldInfo, v)
+	return u
+}
+
+// UpdateInfo sets the "info" field to the value that was provided on create.
+func (u *RevocationUpsert) UpdateInfo() *RevocationUpsert {
+	u.SetExcluded(revocation.FieldInfo)
+	return u
+}
+
+// ClearInfo clears the value of the "info" field.
+func (u *RevocationUpsert) ClearInfo() *RevocationUpsert {
+	u.SetNull(revocation.FieldInfo)
 	return u
 }
 
@@ -274,9 +320,16 @@ func (u *RevocationUpsertOne) Update(set func(*RevocationUpsert)) *RevocationUps
 }
 
 // SetReason sets the "reason" field.
-func (u *RevocationUpsertOne) SetReason(v string) *RevocationUpsertOne {
+func (u *RevocationUpsertOne) SetReason(v int) *RevocationUpsertOne {
 	return u.Update(func(s *RevocationUpsert) {
 		s.SetReason(v)
+	})
+}
+
+// AddReason adds v to the "reason" field.
+func (u *RevocationUpsertOne) AddReason(v int) *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.AddReason(v)
 	})
 }
 
@@ -291,6 +344,27 @@ func (u *RevocationUpsertOne) UpdateReason() *RevocationUpsertOne {
 func (u *RevocationUpsertOne) ClearReason() *RevocationUpsertOne {
 	return u.Update(func(s *RevocationUpsert) {
 		s.ClearReason()
+	})
+}
+
+// SetInfo sets the "info" field.
+func (u *RevocationUpsertOne) SetInfo(v string) *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.SetInfo(v)
+	})
+}
+
+// UpdateInfo sets the "info" field to the value that was provided on create.
+func (u *RevocationUpsertOne) UpdateInfo() *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.UpdateInfo()
+	})
+}
+
+// ClearInfo clears the value of the "info" field.
+func (u *RevocationUpsertOne) ClearInfo() *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.ClearInfo()
 	})
 }
 
@@ -523,9 +597,16 @@ func (u *RevocationUpsertBulk) Update(set func(*RevocationUpsert)) *RevocationUp
 }
 
 // SetReason sets the "reason" field.
-func (u *RevocationUpsertBulk) SetReason(v string) *RevocationUpsertBulk {
+func (u *RevocationUpsertBulk) SetReason(v int) *RevocationUpsertBulk {
 	return u.Update(func(s *RevocationUpsert) {
 		s.SetReason(v)
+	})
+}
+
+// AddReason adds v to the "reason" field.
+func (u *RevocationUpsertBulk) AddReason(v int) *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.AddReason(v)
 	})
 }
 
@@ -540,6 +621,27 @@ func (u *RevocationUpsertBulk) UpdateReason() *RevocationUpsertBulk {
 func (u *RevocationUpsertBulk) ClearReason() *RevocationUpsertBulk {
 	return u.Update(func(s *RevocationUpsert) {
 		s.ClearReason()
+	})
+}
+
+// SetInfo sets the "info" field.
+func (u *RevocationUpsertBulk) SetInfo(v string) *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.SetInfo(v)
+	})
+}
+
+// UpdateInfo sets the "info" field to the value that was provided on create.
+func (u *RevocationUpsertBulk) UpdateInfo() *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.UpdateInfo()
+	})
+}
+
+// ClearInfo clears the value of the "info" field.
+func (u *RevocationUpsertBulk) ClearInfo() *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.ClearInfo()
 	})
 }
 

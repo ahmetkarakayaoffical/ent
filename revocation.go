@@ -18,7 +18,9 @@ type Revocation struct {
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
 	// Reason holds the value of the "reason" field.
-	Reason string `json:"reason,omitempty"`
+	Reason int `json:"reason,omitempty"`
+	// Info holds the value of the "info" field.
+	Info string `json:"info,omitempty"`
 	// Revoked holds the value of the "revoked" field.
 	Revoked      time.Time `json:"revoked,omitempty"`
 	selectValues sql.SelectValues
@@ -29,9 +31,9 @@ func (*Revocation) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case revocation.FieldID:
+		case revocation.FieldID, revocation.FieldReason:
 			values[i] = new(sql.NullInt64)
-		case revocation.FieldReason:
+		case revocation.FieldInfo:
 			values[i] = new(sql.NullString)
 		case revocation.FieldRevoked:
 			values[i] = new(sql.NullTime)
@@ -57,10 +59,16 @@ func (r *Revocation) assignValues(columns []string, values []any) error {
 			}
 			r.ID = int64(value.Int64)
 		case revocation.FieldReason:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field reason", values[i])
 			} else if value.Valid {
-				r.Reason = value.String
+				r.Reason = int(value.Int64)
+			}
+		case revocation.FieldInfo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field info", values[i])
+			} else if value.Valid {
+				r.Info = value.String
 			}
 		case revocation.FieldRevoked:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -105,7 +113,10 @@ func (r *Revocation) String() string {
 	builder.WriteString("Revocation(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
 	builder.WriteString("reason=")
-	builder.WriteString(r.Reason)
+	builder.WriteString(fmt.Sprintf("%v", r.Reason))
+	builder.WriteString(", ")
+	builder.WriteString("info=")
+	builder.WriteString(r.Info)
 	builder.WriteString(", ")
 	builder.WriteString("revoked=")
 	builder.WriteString(r.Revoked.Format(time.ANSIC))
