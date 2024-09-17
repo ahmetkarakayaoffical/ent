@@ -21,6 +21,8 @@ type Revocation struct {
 	Reason int `json:"reason,omitempty"`
 	// Info holds the value of the "info" field.
 	Info string `json:"info,omitempty"`
+	// Expiry holds the value of the "expiry" field.
+	Expiry time.Time `json:"expiry,omitempty"`
 	// Revoked holds the value of the "revoked" field.
 	Revoked      time.Time `json:"revoked,omitempty"`
 	selectValues sql.SelectValues
@@ -35,7 +37,7 @@ func (*Revocation) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case revocation.FieldInfo:
 			values[i] = new(sql.NullString)
-		case revocation.FieldRevoked:
+		case revocation.FieldExpiry, revocation.FieldRevoked:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -69,6 +71,12 @@ func (r *Revocation) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field info", values[i])
 			} else if value.Valid {
 				r.Info = value.String
+			}
+		case revocation.FieldExpiry:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expiry", values[i])
+			} else if value.Valid {
+				r.Expiry = value.Time
 			}
 		case revocation.FieldRevoked:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -117,6 +125,9 @@ func (r *Revocation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info=")
 	builder.WriteString(r.Info)
+	builder.WriteString(", ")
+	builder.WriteString("expiry=")
+	builder.WriteString(r.Expiry.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("revoked=")
 	builder.WriteString(r.Revoked.Format(time.ANSIC))

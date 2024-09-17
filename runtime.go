@@ -56,7 +56,7 @@ func init() {
 	// revocation.DefaultReason holds the default value on creation for the reason field.
 	revocation.DefaultReason = revocationDescReason.Default.(int)
 	// revocationDescRevoked is the schema descriptor for revoked field.
-	revocationDescRevoked := revocationFields[3].Descriptor()
+	revocationDescRevoked := revocationFields[4].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
 	sessionsFields := schema.Sessions{}.Fields()
@@ -72,11 +72,11 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[4].Descriptor()
+	userDescCreated := userFields[7].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[5].Descriptor()
+	userDescModified := userFields[8].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

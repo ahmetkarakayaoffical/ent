@@ -64,6 +64,11 @@ func Info(v string) predicate.Revocation {
 	return predicate.Revocation(sql.FieldEQ(FieldInfo, v))
 }
 
+// Expiry applies equality check predicate on the "expiry" field. It's identical to ExpiryEQ.
+func Expiry(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldEQ(FieldExpiry, v))
+}
+
 // Revoked applies equality check predicate on the "revoked" field. It's identical to RevokedEQ.
 func Revoked(v time.Time) predicate.Revocation {
 	return predicate.Revocation(sql.FieldEQ(FieldRevoked, v))
@@ -192,6 +197,56 @@ func InfoEqualFold(v string) predicate.Revocation {
 // InfoContainsFold applies the ContainsFold predicate on the "info" field.
 func InfoContainsFold(v string) predicate.Revocation {
 	return predicate.Revocation(sql.FieldContainsFold(FieldInfo, v))
+}
+
+// ExpiryEQ applies the EQ predicate on the "expiry" field.
+func ExpiryEQ(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldEQ(FieldExpiry, v))
+}
+
+// ExpiryNEQ applies the NEQ predicate on the "expiry" field.
+func ExpiryNEQ(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldNEQ(FieldExpiry, v))
+}
+
+// ExpiryIn applies the In predicate on the "expiry" field.
+func ExpiryIn(vs ...time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldIn(FieldExpiry, vs...))
+}
+
+// ExpiryNotIn applies the NotIn predicate on the "expiry" field.
+func ExpiryNotIn(vs ...time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldNotIn(FieldExpiry, vs...))
+}
+
+// ExpiryGT applies the GT predicate on the "expiry" field.
+func ExpiryGT(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldGT(FieldExpiry, v))
+}
+
+// ExpiryGTE applies the GTE predicate on the "expiry" field.
+func ExpiryGTE(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldGTE(FieldExpiry, v))
+}
+
+// ExpiryLT applies the LT predicate on the "expiry" field.
+func ExpiryLT(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldLT(FieldExpiry, v))
+}
+
+// ExpiryLTE applies the LTE predicate on the "expiry" field.
+func ExpiryLTE(v time.Time) predicate.Revocation {
+	return predicate.Revocation(sql.FieldLTE(FieldExpiry, v))
+}
+
+// ExpiryIsNil applies the IsNil predicate on the "expiry" field.
+func ExpiryIsNil() predicate.Revocation {
+	return predicate.Revocation(sql.FieldIsNull(FieldExpiry))
+}
+
+// ExpiryNotNil applies the NotNil predicate on the "expiry" field.
+func ExpiryNotNil() predicate.Revocation {
+	return predicate.Revocation(sql.FieldNotNull(FieldExpiry))
 }
 
 // RevokedEQ applies the EQ predicate on the "revoked" field.

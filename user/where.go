@@ -80,6 +80,21 @@ func Phone(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPhone, v))
 }
 
+// Csr applies equality check predicate on the "csr" field. It's identical to CsrEQ.
+func Csr(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCsr, v))
+}
+
+// CertSerial applies equality check predicate on the "certSerial" field. It's identical to CertSerialEQ.
+func CertSerial(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
+}
+
+// Expiry applies equality check predicate on the "expiry" field. It's identical to ExpiryEQ.
+func Expiry(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldExpiry, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCreated, v))
@@ -303,6 +318,206 @@ func PhoneEqualFold(v string) predicate.User {
 // PhoneContainsFold applies the ContainsFold predicate on the "phone" field.
 func PhoneContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldPhone, v))
+}
+
+// CsrEQ applies the EQ predicate on the "csr" field.
+func CsrEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCsr, v))
+}
+
+// CsrNEQ applies the NEQ predicate on the "csr" field.
+func CsrNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldCsr, v))
+}
+
+// CsrIn applies the In predicate on the "csr" field.
+func CsrIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldCsr, vs...))
+}
+
+// CsrNotIn applies the NotIn predicate on the "csr" field.
+func CsrNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldCsr, vs...))
+}
+
+// CsrGT applies the GT predicate on the "csr" field.
+func CsrGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldCsr, v))
+}
+
+// CsrGTE applies the GTE predicate on the "csr" field.
+func CsrGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldCsr, v))
+}
+
+// CsrLT applies the LT predicate on the "csr" field.
+func CsrLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldCsr, v))
+}
+
+// CsrLTE applies the LTE predicate on the "csr" field.
+func CsrLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldCsr, v))
+}
+
+// CsrContains applies the Contains predicate on the "csr" field.
+func CsrContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldCsr, v))
+}
+
+// CsrHasPrefix applies the HasPrefix predicate on the "csr" field.
+func CsrHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldCsr, v))
+}
+
+// CsrHasSuffix applies the HasSuffix predicate on the "csr" field.
+func CsrHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldCsr, v))
+}
+
+// CsrIsNil applies the IsNil predicate on the "csr" field.
+func CsrIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCsr))
+}
+
+// CsrNotNil applies the NotNil predicate on the "csr" field.
+func CsrNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCsr))
+}
+
+// CsrEqualFold applies the EqualFold predicate on the "csr" field.
+func CsrEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldCsr, v))
+}
+
+// CsrContainsFold applies the ContainsFold predicate on the "csr" field.
+func CsrContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldCsr, v))
+}
+
+// CertSerialEQ applies the EQ predicate on the "certSerial" field.
+func CertSerialEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
+}
+
+// CertSerialNEQ applies the NEQ predicate on the "certSerial" field.
+func CertSerialNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldCertSerial, v))
+}
+
+// CertSerialIn applies the In predicate on the "certSerial" field.
+func CertSerialIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldCertSerial, vs...))
+}
+
+// CertSerialNotIn applies the NotIn predicate on the "certSerial" field.
+func CertSerialNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldCertSerial, vs...))
+}
+
+// CertSerialGT applies the GT predicate on the "certSerial" field.
+func CertSerialGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldCertSerial, v))
+}
+
+// CertSerialGTE applies the GTE predicate on the "certSerial" field.
+func CertSerialGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldCertSerial, v))
+}
+
+// CertSerialLT applies the LT predicate on the "certSerial" field.
+func CertSerialLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldCertSerial, v))
+}
+
+// CertSerialLTE applies the LTE predicate on the "certSerial" field.
+func CertSerialLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldCertSerial, v))
+}
+
+// CertSerialContains applies the Contains predicate on the "certSerial" field.
+func CertSerialContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldCertSerial, v))
+}
+
+// CertSerialHasPrefix applies the HasPrefix predicate on the "certSerial" field.
+func CertSerialHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldCertSerial, v))
+}
+
+// CertSerialHasSuffix applies the HasSuffix predicate on the "certSerial" field.
+func CertSerialHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldCertSerial, v))
+}
+
+// CertSerialIsNil applies the IsNil predicate on the "certSerial" field.
+func CertSerialIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCertSerial))
+}
+
+// CertSerialNotNil applies the NotNil predicate on the "certSerial" field.
+func CertSerialNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCertSerial))
+}
+
+// CertSerialEqualFold applies the EqualFold predicate on the "certSerial" field.
+func CertSerialEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldCertSerial, v))
+}
+
+// CertSerialContainsFold applies the ContainsFold predicate on the "certSerial" field.
+func CertSerialContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldCertSerial, v))
+}
+
+// ExpiryEQ applies the EQ predicate on the "expiry" field.
+func ExpiryEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldExpiry, v))
+}
+
+// ExpiryNEQ applies the NEQ predicate on the "expiry" field.
+func ExpiryNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldExpiry, v))
+}
+
+// ExpiryIn applies the In predicate on the "expiry" field.
+func ExpiryIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldExpiry, vs...))
+}
+
+// ExpiryNotIn applies the NotIn predicate on the "expiry" field.
+func ExpiryNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldExpiry, vs...))
+}
+
+// ExpiryGT applies the GT predicate on the "expiry" field.
+func ExpiryGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldExpiry, v))
+}
+
+// ExpiryGTE applies the GTE predicate on the "expiry" field.
+func ExpiryGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldExpiry, v))
+}
+
+// ExpiryLT applies the LT predicate on the "expiry" field.
+func ExpiryLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldExpiry, v))
+}
+
+// ExpiryLTE applies the LTE predicate on the "expiry" field.
+func ExpiryLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldExpiry, v))
+}
+
+// ExpiryIsNil applies the IsNil predicate on the "expiry" field.
+func ExpiryIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldExpiry))
+}
+
+// ExpiryNotNil applies the NotNil predicate on the "expiry" field.
+func ExpiryNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldExpiry))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

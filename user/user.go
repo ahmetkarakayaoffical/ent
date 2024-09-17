@@ -20,6 +20,12 @@ const (
 	FieldEmail = "email"
 	// FieldPhone holds the string denoting the phone field in the database.
 	FieldPhone = "phone"
+	// FieldCsr holds the string denoting the csr field in the database.
+	FieldCsr = "csr"
+	// FieldCertSerial holds the string denoting the certserial field in the database.
+	FieldCertSerial = "cert_serial"
+	// FieldExpiry holds the string denoting the expiry field in the database.
+	FieldExpiry = "expiry"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -45,6 +51,9 @@ var Columns = []string{
 	FieldName,
 	FieldEmail,
 	FieldPhone,
+	FieldCsr,
+	FieldCertSerial,
+	FieldExpiry,
 	FieldCreated,
 	FieldModified,
 }
@@ -91,6 +100,21 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByPhone orders the results by the phone field.
 func ByPhone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhone, opts...).ToFunc()
+}
+
+// ByCsr orders the results by the csr field.
+func ByCsr(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCsr, opts...).ToFunc()
+}
+
+// ByCertSerial orders the results by the certSerial field.
+func ByCertSerial(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCertSerial, opts...).ToFunc()
+}
+
+// ByExpiry orders the results by the expiry field.
+func ByExpiry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiry, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

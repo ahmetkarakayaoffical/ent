@@ -58,6 +58,48 @@ func (uc *UserCreate) SetNillablePhone(s *string) *UserCreate {
 	return uc
 }
 
+// SetCsr sets the "csr" field.
+func (uc *UserCreate) SetCsr(s string) *UserCreate {
+	uc.mutation.SetCsr(s)
+	return uc
+}
+
+// SetNillableCsr sets the "csr" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCsr(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCsr(*s)
+	}
+	return uc
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (uc *UserCreate) SetCertSerial(s string) *UserCreate {
+	uc.mutation.SetCertSerial(s)
+	return uc
+}
+
+// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCertSerial(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCertSerial(*s)
+	}
+	return uc
+}
+
+// SetExpiry sets the "expiry" field.
+func (uc *UserCreate) SetExpiry(t time.Time) *UserCreate {
+	uc.mutation.SetExpiry(t)
+	return uc
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (uc *UserCreate) SetNillableExpiry(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetExpiry(*t)
+	}
+	return uc
+}
+
 // SetCreated sets the "created" field.
 func (uc *UserCreate) SetCreated(t time.Time) *UserCreate {
 	uc.mutation.SetCreated(t)
@@ -210,6 +252,18 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldPhone, field.TypeString, value)
 		_node.Phone = value
 	}
+	if value, ok := uc.mutation.Csr(); ok {
+		_spec.SetField(user.FieldCsr, field.TypeString, value)
+		_node.Csr = value
+	}
+	if value, ok := uc.mutation.CertSerial(); ok {
+		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
+		_node.CertSerial = value
+	}
+	if value, ok := uc.mutation.Expiry(); ok {
+		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
+		_node.Expiry = value
+	}
 	if value, ok := uc.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 		_node.Created = value
@@ -331,6 +385,60 @@ func (u *UserUpsert) UpdatePhone() *UserUpsert {
 // ClearPhone clears the value of the "phone" field.
 func (u *UserUpsert) ClearPhone() *UserUpsert {
 	u.SetNull(user.FieldPhone)
+	return u
+}
+
+// SetCsr sets the "csr" field.
+func (u *UserUpsert) SetCsr(v string) *UserUpsert {
+	u.Set(user.FieldCsr, v)
+	return u
+}
+
+// UpdateCsr sets the "csr" field to the value that was provided on create.
+func (u *UserUpsert) UpdateCsr() *UserUpsert {
+	u.SetExcluded(user.FieldCsr)
+	return u
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (u *UserUpsert) ClearCsr() *UserUpsert {
+	u.SetNull(user.FieldCsr)
+	return u
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (u *UserUpsert) SetCertSerial(v string) *UserUpsert {
+	u.Set(user.FieldCertSerial, v)
+	return u
+}
+
+// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
+func (u *UserUpsert) UpdateCertSerial() *UserUpsert {
+	u.SetExcluded(user.FieldCertSerial)
+	return u
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (u *UserUpsert) ClearCertSerial() *UserUpsert {
+	u.SetNull(user.FieldCertSerial)
+	return u
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *UserUpsert) SetExpiry(v time.Time) *UserUpsert {
+	u.Set(user.FieldExpiry, v)
+	return u
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *UserUpsert) UpdateExpiry() *UserUpsert {
+	u.SetExcluded(user.FieldExpiry)
+	return u
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *UserUpsert) ClearExpiry() *UserUpsert {
+	u.SetNull(user.FieldExpiry)
 	return u
 }
 
@@ -471,6 +579,69 @@ func (u *UserUpsertOne) UpdatePhone() *UserUpsertOne {
 func (u *UserUpsertOne) ClearPhone() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearPhone()
+	})
+}
+
+// SetCsr sets the "csr" field.
+func (u *UserUpsertOne) SetCsr(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCsr(v)
+	})
+}
+
+// UpdateCsr sets the "csr" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateCsr() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCsr()
+	})
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (u *UserUpsertOne) ClearCsr() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCsr()
+	})
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (u *UserUpsertOne) SetCertSerial(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCertSerial(v)
+	})
+}
+
+// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateCertSerial() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCertSerial()
+	})
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (u *UserUpsertOne) ClearCertSerial() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCertSerial()
+	})
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *UserUpsertOne) SetExpiry(v time.Time) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetExpiry(v)
+	})
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateExpiry() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateExpiry()
+	})
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *UserUpsertOne) ClearExpiry() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearExpiry()
 	})
 }
 
@@ -784,6 +955,69 @@ func (u *UserUpsertBulk) UpdatePhone() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearPhone() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearPhone()
+	})
+}
+
+// SetCsr sets the "csr" field.
+func (u *UserUpsertBulk) SetCsr(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCsr(v)
+	})
+}
+
+// UpdateCsr sets the "csr" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateCsr() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCsr()
+	})
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (u *UserUpsertBulk) ClearCsr() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCsr()
+	})
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (u *UserUpsertBulk) SetCertSerial(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCertSerial(v)
+	})
+}
+
+// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateCertSerial() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCertSerial()
+	})
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (u *UserUpsertBulk) ClearCertSerial() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCertSerial()
+	})
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *UserUpsertBulk) SetExpiry(v time.Time) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetExpiry(v)
+	})
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateExpiry() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateExpiry()
+	})
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *UserUpsertBulk) ClearExpiry() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearExpiry()
 	})
 }
 

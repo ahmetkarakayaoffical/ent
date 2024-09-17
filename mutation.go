@@ -7375,6 +7375,7 @@ type RevocationMutation struct {
 	reason        *int
 	addreason     *int
 	info          *string
+	expiry        *time.Time
 	revoked       *time.Time
 	clearedFields map[string]struct{}
 	done          bool
@@ -7605,6 +7606,55 @@ func (m *RevocationMutation) ResetInfo() {
 	delete(m.clearedFields, revocation.FieldInfo)
 }
 
+// SetExpiry sets the "expiry" field.
+func (m *RevocationMutation) SetExpiry(t time.Time) {
+	m.expiry = &t
+}
+
+// Expiry returns the value of the "expiry" field in the mutation.
+func (m *RevocationMutation) Expiry() (r time.Time, exists bool) {
+	v := m.expiry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiry returns the old "expiry" field's value of the Revocation entity.
+// If the Revocation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RevocationMutation) OldExpiry(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiry: %w", err)
+	}
+	return oldValue.Expiry, nil
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (m *RevocationMutation) ClearExpiry() {
+	m.expiry = nil
+	m.clearedFields[revocation.FieldExpiry] = struct{}{}
+}
+
+// ExpiryCleared returns if the "expiry" field was cleared in this mutation.
+func (m *RevocationMutation) ExpiryCleared() bool {
+	_, ok := m.clearedFields[revocation.FieldExpiry]
+	return ok
+}
+
+// ResetExpiry resets all changes to the "expiry" field.
+func (m *RevocationMutation) ResetExpiry() {
+	m.expiry = nil
+	delete(m.clearedFields, revocation.FieldExpiry)
+}
+
 // SetRevoked sets the "revoked" field.
 func (m *RevocationMutation) SetRevoked(t time.Time) {
 	m.revoked = &t
@@ -7675,12 +7725,15 @@ func (m *RevocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RevocationMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.reason != nil {
 		fields = append(fields, revocation.FieldReason)
 	}
 	if m.info != nil {
 		fields = append(fields, revocation.FieldInfo)
+	}
+	if m.expiry != nil {
+		fields = append(fields, revocation.FieldExpiry)
 	}
 	if m.revoked != nil {
 		fields = append(fields, revocation.FieldRevoked)
@@ -7697,6 +7750,8 @@ func (m *RevocationMutation) Field(name string) (ent.Value, bool) {
 		return m.Reason()
 	case revocation.FieldInfo:
 		return m.Info()
+	case revocation.FieldExpiry:
+		return m.Expiry()
 	case revocation.FieldRevoked:
 		return m.Revoked()
 	}
@@ -7712,6 +7767,8 @@ func (m *RevocationMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldReason(ctx)
 	case revocation.FieldInfo:
 		return m.OldInfo(ctx)
+	case revocation.FieldExpiry:
+		return m.OldExpiry(ctx)
 	case revocation.FieldRevoked:
 		return m.OldRevoked(ctx)
 	}
@@ -7736,6 +7793,13 @@ func (m *RevocationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInfo(v)
+		return nil
+	case revocation.FieldExpiry:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiry(v)
 		return nil
 	case revocation.FieldRevoked:
 		v, ok := value.(time.Time)
@@ -7795,6 +7859,9 @@ func (m *RevocationMutation) ClearedFields() []string {
 	if m.FieldCleared(revocation.FieldInfo) {
 		fields = append(fields, revocation.FieldInfo)
 	}
+	if m.FieldCleared(revocation.FieldExpiry) {
+		fields = append(fields, revocation.FieldExpiry)
+	}
 	return fields
 }
 
@@ -7815,6 +7882,9 @@ func (m *RevocationMutation) ClearField(name string) error {
 	case revocation.FieldInfo:
 		m.ClearInfo()
 		return nil
+	case revocation.FieldExpiry:
+		m.ClearExpiry()
+		return nil
 	}
 	return fmt.Errorf("unknown Revocation nullable field %s", name)
 }
@@ -7828,6 +7898,9 @@ func (m *RevocationMutation) ResetField(name string) error {
 		return nil
 	case revocation.FieldInfo:
 		m.ResetInfo()
+		return nil
+	case revocation.FieldExpiry:
+		m.ResetExpiry()
 		return nil
 	case revocation.FieldRevoked:
 		m.ResetRevoked()
@@ -9424,6 +9497,9 @@ type UserMutation struct {
 	name            *string
 	email           *string
 	phone           *string
+	csr             *string
+	certSerial      *string
+	expiry          *time.Time
 	created         *time.Time
 	modified        *time.Time
 	clearedFields   map[string]struct{}
@@ -9673,6 +9749,153 @@ func (m *UserMutation) ResetPhone() {
 	delete(m.clearedFields, user.FieldPhone)
 }
 
+// SetCsr sets the "csr" field.
+func (m *UserMutation) SetCsr(s string) {
+	m.csr = &s
+}
+
+// Csr returns the value of the "csr" field in the mutation.
+func (m *UserMutation) Csr() (r string, exists bool) {
+	v := m.csr
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCsr returns the old "csr" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldCsr(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCsr is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCsr requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCsr: %w", err)
+	}
+	return oldValue.Csr, nil
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (m *UserMutation) ClearCsr() {
+	m.csr = nil
+	m.clearedFields[user.FieldCsr] = struct{}{}
+}
+
+// CsrCleared returns if the "csr" field was cleared in this mutation.
+func (m *UserMutation) CsrCleared() bool {
+	_, ok := m.clearedFields[user.FieldCsr]
+	return ok
+}
+
+// ResetCsr resets all changes to the "csr" field.
+func (m *UserMutation) ResetCsr() {
+	m.csr = nil
+	delete(m.clearedFields, user.FieldCsr)
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (m *UserMutation) SetCertSerial(s string) {
+	m.certSerial = &s
+}
+
+// CertSerial returns the value of the "certSerial" field in the mutation.
+func (m *UserMutation) CertSerial() (r string, exists bool) {
+	v := m.certSerial
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCertSerial returns the old "certSerial" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldCertSerial(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCertSerial is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCertSerial requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCertSerial: %w", err)
+	}
+	return oldValue.CertSerial, nil
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (m *UserMutation) ClearCertSerial() {
+	m.certSerial = nil
+	m.clearedFields[user.FieldCertSerial] = struct{}{}
+}
+
+// CertSerialCleared returns if the "certSerial" field was cleared in this mutation.
+func (m *UserMutation) CertSerialCleared() bool {
+	_, ok := m.clearedFields[user.FieldCertSerial]
+	return ok
+}
+
+// ResetCertSerial resets all changes to the "certSerial" field.
+func (m *UserMutation) ResetCertSerial() {
+	m.certSerial = nil
+	delete(m.clearedFields, user.FieldCertSerial)
+}
+
+// SetExpiry sets the "expiry" field.
+func (m *UserMutation) SetExpiry(t time.Time) {
+	m.expiry = &t
+}
+
+// Expiry returns the value of the "expiry" field in the mutation.
+func (m *UserMutation) Expiry() (r time.Time, exists bool) {
+	v := m.expiry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiry returns the old "expiry" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldExpiry(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiry: %w", err)
+	}
+	return oldValue.Expiry, nil
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (m *UserMutation) ClearExpiry() {
+	m.expiry = nil
+	m.clearedFields[user.FieldExpiry] = struct{}{}
+}
+
+// ExpiryCleared returns if the "expiry" field was cleared in this mutation.
+func (m *UserMutation) ExpiryCleared() bool {
+	_, ok := m.clearedFields[user.FieldExpiry]
+	return ok
+}
+
+// ResetExpiry resets all changes to the "expiry" field.
+func (m *UserMutation) ResetExpiry() {
+	m.expiry = nil
+	delete(m.clearedFields, user.FieldExpiry)
+}
+
 // SetCreated sets the "created" field.
 func (m *UserMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -9859,7 +10082,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 8)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -9868,6 +10091,15 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.phone != nil {
 		fields = append(fields, user.FieldPhone)
+	}
+	if m.csr != nil {
+		fields = append(fields, user.FieldCsr)
+	}
+	if m.certSerial != nil {
+		fields = append(fields, user.FieldCertSerial)
+	}
+	if m.expiry != nil {
+		fields = append(fields, user.FieldExpiry)
 	}
 	if m.created != nil {
 		fields = append(fields, user.FieldCreated)
@@ -9889,6 +10121,12 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Email()
 	case user.FieldPhone:
 		return m.Phone()
+	case user.FieldCsr:
+		return m.Csr()
+	case user.FieldCertSerial:
+		return m.CertSerial()
+	case user.FieldExpiry:
+		return m.Expiry()
 	case user.FieldCreated:
 		return m.Created()
 	case user.FieldModified:
@@ -9908,6 +10146,12 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldEmail(ctx)
 	case user.FieldPhone:
 		return m.OldPhone(ctx)
+	case user.FieldCsr:
+		return m.OldCsr(ctx)
+	case user.FieldCertSerial:
+		return m.OldCertSerial(ctx)
+	case user.FieldExpiry:
+		return m.OldExpiry(ctx)
 	case user.FieldCreated:
 		return m.OldCreated(ctx)
 	case user.FieldModified:
@@ -9941,6 +10185,27 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPhone(v)
+		return nil
+	case user.FieldCsr:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCsr(v)
+		return nil
+	case user.FieldCertSerial:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCertSerial(v)
+		return nil
+	case user.FieldExpiry:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiry(v)
 		return nil
 	case user.FieldCreated:
 		v, ok := value.(time.Time)
@@ -9992,6 +10257,15 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldPhone) {
 		fields = append(fields, user.FieldPhone)
 	}
+	if m.FieldCleared(user.FieldCsr) {
+		fields = append(fields, user.FieldCsr)
+	}
+	if m.FieldCleared(user.FieldCertSerial) {
+		fields = append(fields, user.FieldCertSerial)
+	}
+	if m.FieldCleared(user.FieldExpiry) {
+		fields = append(fields, user.FieldExpiry)
+	}
 	if m.FieldCleared(user.FieldCreated) {
 		fields = append(fields, user.FieldCreated)
 	}
@@ -10018,6 +10292,15 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldPhone:
 		m.ClearPhone()
 		return nil
+	case user.FieldCsr:
+		m.ClearCsr()
+		return nil
+	case user.FieldCertSerial:
+		m.ClearCertSerial()
+		return nil
+	case user.FieldExpiry:
+		m.ClearExpiry()
+		return nil
 	case user.FieldCreated:
 		m.ClearCreated()
 		return nil
@@ -10040,6 +10323,15 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldPhone:
 		m.ResetPhone()
+		return nil
+	case user.FieldCsr:
+		m.ResetCsr()
+		return nil
+	case user.FieldCertSerial:
+		m.ResetCertSerial()
+		return nil
+	case user.FieldExpiry:
+		m.ResetExpiry()
 		return nil
 	case user.FieldCreated:
 		m.ResetCreated()

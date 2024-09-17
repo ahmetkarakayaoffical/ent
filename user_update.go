@@ -84,6 +84,66 @@ func (uu *UserUpdate) ClearPhone() *UserUpdate {
 	return uu
 }
 
+// SetCsr sets the "csr" field.
+func (uu *UserUpdate) SetCsr(s string) *UserUpdate {
+	uu.mutation.SetCsr(s)
+	return uu
+}
+
+// SetNillableCsr sets the "csr" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCsr(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetCsr(*s)
+	}
+	return uu
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (uu *UserUpdate) ClearCsr() *UserUpdate {
+	uu.mutation.ClearCsr()
+	return uu
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (uu *UserUpdate) SetCertSerial(s string) *UserUpdate {
+	uu.mutation.SetCertSerial(s)
+	return uu
+}
+
+// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCertSerial(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetCertSerial(*s)
+	}
+	return uu
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (uu *UserUpdate) ClearCertSerial() *UserUpdate {
+	uu.mutation.ClearCertSerial()
+	return uu
+}
+
+// SetExpiry sets the "expiry" field.
+func (uu *UserUpdate) SetExpiry(t time.Time) *UserUpdate {
+	uu.mutation.SetExpiry(t)
+	return uu
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableExpiry(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetExpiry(*t)
+	}
+	return uu
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (uu *UserUpdate) ClearExpiry() *UserUpdate {
+	uu.mutation.ClearExpiry()
+	return uu
+}
+
 // SetCreated sets the "created" field.
 func (uu *UserUpdate) SetCreated(t time.Time) *UserUpdate {
 	uu.mutation.SetCreated(t)
@@ -223,6 +283,24 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.PhoneCleared() {
 		_spec.ClearField(user.FieldPhone, field.TypeString)
 	}
+	if value, ok := uu.mutation.Csr(); ok {
+		_spec.SetField(user.FieldCsr, field.TypeString, value)
+	}
+	if uu.mutation.CsrCleared() {
+		_spec.ClearField(user.FieldCsr, field.TypeString)
+	}
+	if value, ok := uu.mutation.CertSerial(); ok {
+		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
+	}
+	if uu.mutation.CertSerialCleared() {
+		_spec.ClearField(user.FieldCertSerial, field.TypeString)
+	}
+	if value, ok := uu.mutation.Expiry(); ok {
+		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
+	}
+	if uu.mutation.ExpiryCleared() {
+		_spec.ClearField(user.FieldExpiry, field.TypeTime)
+	}
 	if value, ok := uu.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 	}
@@ -353,6 +431,66 @@ func (uuo *UserUpdateOne) SetNillablePhone(s *string) *UserUpdateOne {
 // ClearPhone clears the value of the "phone" field.
 func (uuo *UserUpdateOne) ClearPhone() *UserUpdateOne {
 	uuo.mutation.ClearPhone()
+	return uuo
+}
+
+// SetCsr sets the "csr" field.
+func (uuo *UserUpdateOne) SetCsr(s string) *UserUpdateOne {
+	uuo.mutation.SetCsr(s)
+	return uuo
+}
+
+// SetNillableCsr sets the "csr" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCsr(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetCsr(*s)
+	}
+	return uuo
+}
+
+// ClearCsr clears the value of the "csr" field.
+func (uuo *UserUpdateOne) ClearCsr() *UserUpdateOne {
+	uuo.mutation.ClearCsr()
+	return uuo
+}
+
+// SetCertSerial sets the "certSerial" field.
+func (uuo *UserUpdateOne) SetCertSerial(s string) *UserUpdateOne {
+	uuo.mutation.SetCertSerial(s)
+	return uuo
+}
+
+// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCertSerial(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetCertSerial(*s)
+	}
+	return uuo
+}
+
+// ClearCertSerial clears the value of the "certSerial" field.
+func (uuo *UserUpdateOne) ClearCertSerial() *UserUpdateOne {
+	uuo.mutation.ClearCertSerial()
+	return uuo
+}
+
+// SetExpiry sets the "expiry" field.
+func (uuo *UserUpdateOne) SetExpiry(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetExpiry(t)
+	return uuo
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableExpiry(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetExpiry(*t)
+	}
+	return uuo
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (uuo *UserUpdateOne) ClearExpiry() *UserUpdateOne {
+	uuo.mutation.ClearExpiry()
 	return uuo
 }
 
@@ -524,6 +662,24 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.PhoneCleared() {
 		_spec.ClearField(user.FieldPhone, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Csr(); ok {
+		_spec.SetField(user.FieldCsr, field.TypeString, value)
+	}
+	if uuo.mutation.CsrCleared() {
+		_spec.ClearField(user.FieldCsr, field.TypeString)
+	}
+	if value, ok := uuo.mutation.CertSerial(); ok {
+		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
+	}
+	if uuo.mutation.CertSerialCleared() {
+		_spec.ClearField(user.FieldCertSerial, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Expiry(); ok {
+		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
+	}
+	if uuo.mutation.ExpiryCleared() {
+		_spec.ClearField(user.FieldExpiry, field.TypeTime)
 	}
 	if value, ok := uuo.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)

@@ -228,6 +228,7 @@ var (
 		{Name: "serial", Type: field.TypeInt64, Increment: true},
 		{Name: "reason", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "info", Type: field.TypeString, Nullable: true},
+		{Name: "expiry", Type: field.TypeTime, Nullable: true},
 		{Name: "revoked", Type: field.TypeTime},
 	}
 	// RevocationsTable holds the schema information for the "revocations" table.
@@ -315,6 +316,9 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "phone", Type: field.TypeString, Nullable: true},
+		{Name: "csr", Type: field.TypeString, Nullable: true},
+		{Name: "cert_serial", Type: field.TypeString, Nullable: true},
+		{Name: "expiry", Type: field.TypeTime, Nullable: true},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

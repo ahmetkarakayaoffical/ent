@@ -23,6 +23,12 @@ type User struct {
 	Email string `json:"email,omitempty"`
 	// Phone holds the value of the "phone" field.
 	Phone string `json:"phone,omitempty"`
+	// Csr holds the value of the "csr" field.
+	Csr string `json:"csr,omitempty"`
+	// CertSerial holds the value of the "certSerial" field.
+	CertSerial string `json:"certSerial,omitempty"`
+	// Expiry holds the value of the "expiry" field.
+	Expiry time.Time `json:"expiry,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -56,9 +62,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone:
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCsr, user.FieldCertSerial:
 			values[i] = new(sql.NullString)
-		case user.FieldCreated, user.FieldModified:
+		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -98,6 +104,24 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field phone", values[i])
 			} else if value.Valid {
 				u.Phone = value.String
+			}
+		case user.FieldCsr:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field csr", values[i])
+			} else if value.Valid {
+				u.Csr = value.String
+			}
+		case user.FieldCertSerial:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field certSerial", values[i])
+			} else if value.Valid {
+				u.CertSerial = value.String
+			}
+		case user.FieldExpiry:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expiry", values[i])
+			} else if value.Valid {
+				u.Expiry = value.Time
 			}
 		case user.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -160,6 +184,15 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("phone=")
 	builder.WriteString(u.Phone)
+	builder.WriteString(", ")
+	builder.WriteString("csr=")
+	builder.WriteString(u.Csr)
+	builder.WriteString(", ")
+	builder.WriteString("certSerial=")
+	builder.WriteString(u.CertSerial)
+	builder.WriteString(", ")
+	builder.WriteString("expiry=")
+	builder.WriteString(u.Expiry.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(u.Created.Format(time.ANSIC))

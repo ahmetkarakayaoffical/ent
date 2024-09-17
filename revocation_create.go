@@ -50,6 +50,20 @@ func (rc *RevocationCreate) SetNillableInfo(s *string) *RevocationCreate {
 	return rc
 }
 
+// SetExpiry sets the "expiry" field.
+func (rc *RevocationCreate) SetExpiry(t time.Time) *RevocationCreate {
+	rc.mutation.SetExpiry(t)
+	return rc
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (rc *RevocationCreate) SetNillableExpiry(t *time.Time) *RevocationCreate {
+	if t != nil {
+		rc.SetExpiry(*t)
+	}
+	return rc
+}
+
 // SetRevoked sets the "revoked" field.
 func (rc *RevocationCreate) SetRevoked(t time.Time) *RevocationCreate {
 	rc.mutation.SetRevoked(t)
@@ -161,6 +175,10 @@ func (rc *RevocationCreate) createSpec() (*Revocation, *sqlgraph.CreateSpec) {
 		_spec.SetField(revocation.FieldInfo, field.TypeString, value)
 		_node.Info = value
 	}
+	if value, ok := rc.mutation.Expiry(); ok {
+		_spec.SetField(revocation.FieldExpiry, field.TypeTime, value)
+		_node.Expiry = value
+	}
 	if value, ok := rc.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)
 		_node.Revoked = value
@@ -256,6 +274,24 @@ func (u *RevocationUpsert) UpdateInfo() *RevocationUpsert {
 // ClearInfo clears the value of the "info" field.
 func (u *RevocationUpsert) ClearInfo() *RevocationUpsert {
 	u.SetNull(revocation.FieldInfo)
+	return u
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *RevocationUpsert) SetExpiry(v time.Time) *RevocationUpsert {
+	u.Set(revocation.FieldExpiry, v)
+	return u
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *RevocationUpsert) UpdateExpiry() *RevocationUpsert {
+	u.SetExcluded(revocation.FieldExpiry)
+	return u
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *RevocationUpsert) ClearExpiry() *RevocationUpsert {
+	u.SetNull(revocation.FieldExpiry)
 	return u
 }
 
@@ -365,6 +401,27 @@ func (u *RevocationUpsertOne) UpdateInfo() *RevocationUpsertOne {
 func (u *RevocationUpsertOne) ClearInfo() *RevocationUpsertOne {
 	return u.Update(func(s *RevocationUpsert) {
 		s.ClearInfo()
+	})
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *RevocationUpsertOne) SetExpiry(v time.Time) *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.SetExpiry(v)
+	})
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *RevocationUpsertOne) UpdateExpiry() *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.UpdateExpiry()
+	})
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *RevocationUpsertOne) ClearExpiry() *RevocationUpsertOne {
+	return u.Update(func(s *RevocationUpsert) {
+		s.ClearExpiry()
 	})
 }
 
@@ -642,6 +699,27 @@ func (u *RevocationUpsertBulk) UpdateInfo() *RevocationUpsertBulk {
 func (u *RevocationUpsertBulk) ClearInfo() *RevocationUpsertBulk {
 	return u.Update(func(s *RevocationUpsert) {
 		s.ClearInfo()
+	})
+}
+
+// SetExpiry sets the "expiry" field.
+func (u *RevocationUpsertBulk) SetExpiry(v time.Time) *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.SetExpiry(v)
+	})
+}
+
+// UpdateExpiry sets the "expiry" field to the value that was provided on create.
+func (u *RevocationUpsertBulk) UpdateExpiry() *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.UpdateExpiry()
+	})
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (u *RevocationUpsertBulk) ClearExpiry() *RevocationUpsertBulk {
+	return u.Update(func(s *RevocationUpsert) {
+		s.ClearExpiry()
 	})
 }
 

@@ -18,6 +18,7 @@ func (Revocation) Fields() []ent.Field {
 		field.Int64("id").Unique().StorageKey("serial"),
 		field.Int("reason").Default(0).Optional(),
 		field.String("info").Optional(),
+		field.Time("expiry").Optional(),
 		field.Time("revoked").Default(time.Now),
 	}
 }

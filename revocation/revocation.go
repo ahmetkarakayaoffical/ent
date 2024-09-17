@@ -17,6 +17,8 @@ const (
 	FieldReason = "reason"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldExpiry holds the string denoting the expiry field in the database.
+	FieldExpiry = "expiry"
 	// FieldRevoked holds the string denoting the revoked field in the database.
 	FieldRevoked = "revoked"
 	// Table holds the table name of the revocation in the database.
@@ -28,6 +30,7 @@ var Columns = []string{
 	FieldID,
 	FieldReason,
 	FieldInfo,
+	FieldExpiry,
 	FieldRevoked,
 }
 
@@ -64,6 +67,11 @@ func ByReason(opts ...sql.OrderTermOption) OrderOption {
 // ByInfo orders the results by the info field.
 func ByInfo(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInfo, opts...).ToFunc()
+}
+
+// ByExpiry orders the results by the expiry field.
+func ByExpiry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiry, opts...).ToFunc()
 }
 
 // ByRevoked orders the results by the revoked field.

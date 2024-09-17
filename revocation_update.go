@@ -76,6 +76,26 @@ func (ru *RevocationUpdate) ClearInfo() *RevocationUpdate {
 	return ru
 }
 
+// SetExpiry sets the "expiry" field.
+func (ru *RevocationUpdate) SetExpiry(t time.Time) *RevocationUpdate {
+	ru.mutation.SetExpiry(t)
+	return ru
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (ru *RevocationUpdate) SetNillableExpiry(t *time.Time) *RevocationUpdate {
+	if t != nil {
+		ru.SetExpiry(*t)
+	}
+	return ru
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (ru *RevocationUpdate) ClearExpiry() *RevocationUpdate {
+	ru.mutation.ClearExpiry()
+	return ru
+}
+
 // SetRevoked sets the "revoked" field.
 func (ru *RevocationUpdate) SetRevoked(t time.Time) *RevocationUpdate {
 	ru.mutation.SetRevoked(t)
@@ -152,6 +172,12 @@ func (ru *RevocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.InfoCleared() {
 		_spec.ClearField(revocation.FieldInfo, field.TypeString)
 	}
+	if value, ok := ru.mutation.Expiry(); ok {
+		_spec.SetField(revocation.FieldExpiry, field.TypeTime, value)
+	}
+	if ru.mutation.ExpiryCleared() {
+		_spec.ClearField(revocation.FieldExpiry, field.TypeTime)
+	}
 	if value, ok := ru.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)
 	}
@@ -221,6 +247,26 @@ func (ruo *RevocationUpdateOne) SetNillableInfo(s *string) *RevocationUpdateOne 
 // ClearInfo clears the value of the "info" field.
 func (ruo *RevocationUpdateOne) ClearInfo() *RevocationUpdateOne {
 	ruo.mutation.ClearInfo()
+	return ruo
+}
+
+// SetExpiry sets the "expiry" field.
+func (ruo *RevocationUpdateOne) SetExpiry(t time.Time) *RevocationUpdateOne {
+	ruo.mutation.SetExpiry(t)
+	return ruo
+}
+
+// SetNillableExpiry sets the "expiry" field if the given value is not nil.
+func (ruo *RevocationUpdateOne) SetNillableExpiry(t *time.Time) *RevocationUpdateOne {
+	if t != nil {
+		ruo.SetExpiry(*t)
+	}
+	return ruo
+}
+
+// ClearExpiry clears the value of the "expiry" field.
+func (ruo *RevocationUpdateOne) ClearExpiry() *RevocationUpdateOne {
+	ruo.mutation.ClearExpiry()
 	return ruo
 }
 
@@ -329,6 +375,12 @@ func (ruo *RevocationUpdateOne) sqlSave(ctx context.Context) (_node *Revocation,
 	}
 	if ruo.mutation.InfoCleared() {
 		_spec.ClearField(revocation.FieldInfo, field.TypeString)
+	}
+	if value, ok := ruo.mutation.Expiry(); ok {
+		_spec.SetField(revocation.FieldExpiry, field.TypeTime, value)
+	}
+	if ruo.mutation.ExpiryCleared() {
+		_spec.ClearField(revocation.FieldExpiry, field.TypeTime)
 	}
 	if value, ok := ruo.mutation.Revoked(); ok {
 		_spec.SetField(revocation.FieldRevoked, field.TypeTime, value)
