@@ -24,6 +24,8 @@ const (
 	FieldCsr = "csr"
 	// FieldCertSerial holds the string denoting the certserial field in the database.
 	FieldCertSerial = "cert_serial"
+	// FieldRegister holds the string denoting the register field in the database.
+	FieldRegister = "register"
 	// FieldExpiry holds the string denoting the expiry field in the database.
 	FieldExpiry = "expiry"
 	// FieldCreated holds the string denoting the created field in the database.
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldPhone,
 	FieldCsr,
 	FieldCertSerial,
+	FieldRegister,
 	FieldExpiry,
 	FieldCreated,
 	FieldModified,
@@ -69,6 +72,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultRegister holds the default value on creation for the "register" field.
+	DefaultRegister string
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -110,6 +115,11 @@ func ByCsr(opts ...sql.OrderTermOption) OrderOption {
 // ByCertSerial orders the results by the certSerial field.
 func ByCertSerial(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCertSerial, opts...).ToFunc()
+}
+
+// ByRegister orders the results by the register field.
+func ByRegister(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegister, opts...).ToFunc()
 }
 
 // ByExpiry orders the results by the expiry field.

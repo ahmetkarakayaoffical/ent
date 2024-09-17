@@ -86,6 +86,20 @@ func (uc *UserCreate) SetNillableCertSerial(s *string) *UserCreate {
 	return uc
 }
 
+// SetRegister sets the "register" field.
+func (uc *UserCreate) SetRegister(s string) *UserCreate {
+	uc.mutation.SetRegister(s)
+	return uc
+}
+
+// SetNillableRegister sets the "register" field if the given value is not nil.
+func (uc *UserCreate) SetNillableRegister(s *string) *UserCreate {
+	if s != nil {
+		uc.SetRegister(*s)
+	}
+	return uc
+}
+
 // SetExpiry sets the "expiry" field.
 func (uc *UserCreate) SetExpiry(t time.Time) *UserCreate {
 	uc.mutation.SetExpiry(t)
@@ -184,6 +198,10 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.Register(); !ok {
+		v := user.DefaultRegister
+		uc.mutation.SetRegister(v)
+	}
 	if _, ok := uc.mutation.Created(); !ok {
 		v := user.DefaultCreated()
 		uc.mutation.SetCreated(v)
@@ -198,6 +216,9 @@ func (uc *UserCreate) defaults() {
 func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`openuem_ent: missing required field "User.name"`)}
+	}
+	if _, ok := uc.mutation.Register(); !ok {
+		return &ValidationError{Name: "register", err: errors.New(`openuem_ent: missing required field "User.register"`)}
 	}
 	if v, ok := uc.mutation.ID(); ok {
 		if err := user.IDValidator(v); err != nil {
@@ -259,6 +280,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.CertSerial(); ok {
 		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
 		_node.CertSerial = value
+	}
+	if value, ok := uc.mutation.Register(); ok {
+		_spec.SetField(user.FieldRegister, field.TypeString, value)
+		_node.Register = value
 	}
 	if value, ok := uc.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
@@ -421,6 +446,18 @@ func (u *UserUpsert) UpdateCertSerial() *UserUpsert {
 // ClearCertSerial clears the value of the "certSerial" field.
 func (u *UserUpsert) ClearCertSerial() *UserUpsert {
 	u.SetNull(user.FieldCertSerial)
+	return u
+}
+
+// SetRegister sets the "register" field.
+func (u *UserUpsert) SetRegister(v string) *UserUpsert {
+	u.Set(user.FieldRegister, v)
+	return u
+}
+
+// UpdateRegister sets the "register" field to the value that was provided on create.
+func (u *UserUpsert) UpdateRegister() *UserUpsert {
+	u.SetExcluded(user.FieldRegister)
 	return u
 }
 
@@ -621,6 +658,20 @@ func (u *UserUpsertOne) UpdateCertSerial() *UserUpsertOne {
 func (u *UserUpsertOne) ClearCertSerial() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearCertSerial()
+	})
+}
+
+// SetRegister sets the "register" field.
+func (u *UserUpsertOne) SetRegister(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetRegister(v)
+	})
+}
+
+// UpdateRegister sets the "register" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateRegister() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateRegister()
 	})
 }
 
@@ -997,6 +1048,20 @@ func (u *UserUpsertBulk) UpdateCertSerial() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearCertSerial() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearCertSerial()
+	})
+}
+
+// SetRegister sets the "register" field.
+func (u *UserUpsertBulk) SetRegister(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetRegister(v)
+	})
+}
+
+// UpdateRegister sets the "register" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateRegister() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateRegister()
 	})
 }
 

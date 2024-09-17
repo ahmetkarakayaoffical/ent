@@ -71,12 +71,16 @@ func init() {
 	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescRegister is the schema descriptor for register field.
+	userDescRegister := userFields[6].Descriptor()
+	// user.DefaultRegister holds the default value on creation for the register field.
+	user.DefaultRegister = userDescRegister.Default.(string)
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[7].Descriptor()
+	userDescCreated := userFields[8].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[8].Descriptor()
+	userDescModified := userFields[9].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

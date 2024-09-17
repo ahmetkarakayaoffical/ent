@@ -24,6 +24,7 @@ func (User) Fields() []ent.Field {
 		field.String("phone").Optional(),
 		field.String("csr").Optional(),
 		field.String("certSerial").Optional(),
+		field.String("register").Default("users.requested"),
 		field.Time("expiry").Optional(),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),

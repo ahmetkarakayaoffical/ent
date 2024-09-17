@@ -9499,6 +9499,7 @@ type UserMutation struct {
 	phone           *string
 	csr             *string
 	certSerial      *string
+	register        *string
 	expiry          *time.Time
 	created         *time.Time
 	modified        *time.Time
@@ -9847,6 +9848,42 @@ func (m *UserMutation) ResetCertSerial() {
 	delete(m.clearedFields, user.FieldCertSerial)
 }
 
+// SetRegister sets the "register" field.
+func (m *UserMutation) SetRegister(s string) {
+	m.register = &s
+}
+
+// Register returns the value of the "register" field in the mutation.
+func (m *UserMutation) Register() (r string, exists bool) {
+	v := m.register
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegister returns the old "register" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldRegister(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegister is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegister requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegister: %w", err)
+	}
+	return oldValue.Register, nil
+}
+
+// ResetRegister resets all changes to the "register" field.
+func (m *UserMutation) ResetRegister() {
+	m.register = nil
+}
+
 // SetExpiry sets the "expiry" field.
 func (m *UserMutation) SetExpiry(t time.Time) {
 	m.expiry = &t
@@ -10082,7 +10119,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -10097,6 +10134,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.certSerial != nil {
 		fields = append(fields, user.FieldCertSerial)
+	}
+	if m.register != nil {
+		fields = append(fields, user.FieldRegister)
 	}
 	if m.expiry != nil {
 		fields = append(fields, user.FieldExpiry)
@@ -10125,6 +10165,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Csr()
 	case user.FieldCertSerial:
 		return m.CertSerial()
+	case user.FieldRegister:
+		return m.Register()
 	case user.FieldExpiry:
 		return m.Expiry()
 	case user.FieldCreated:
@@ -10150,6 +10192,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCsr(ctx)
 	case user.FieldCertSerial:
 		return m.OldCertSerial(ctx)
+	case user.FieldRegister:
+		return m.OldRegister(ctx)
 	case user.FieldExpiry:
 		return m.OldExpiry(ctx)
 	case user.FieldCreated:
@@ -10199,6 +10243,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCertSerial(v)
+		return nil
+	case user.FieldRegister:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegister(v)
 		return nil
 	case user.FieldExpiry:
 		v, ok := value.(time.Time)
@@ -10329,6 +10380,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldCertSerial:
 		m.ResetCertSerial()
+		return nil
+	case user.FieldRegister:
+		m.ResetRegister()
 		return nil
 	case user.FieldExpiry:
 		m.ResetExpiry()

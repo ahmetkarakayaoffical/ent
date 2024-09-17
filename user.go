@@ -27,6 +27,8 @@ type User struct {
 	Csr string `json:"csr,omitempty"`
 	// CertSerial holds the value of the "certSerial" field.
 	CertSerial string `json:"certSerial,omitempty"`
+	// Register holds the value of the "register" field.
+	Register string `json:"register,omitempty"`
 	// Expiry holds the value of the "expiry" field.
 	Expiry time.Time `json:"expiry,omitempty"`
 	// Created holds the value of the "created" field.
@@ -62,7 +64,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCsr, user.FieldCertSerial:
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCsr, user.FieldCertSerial, user.FieldRegister:
 			values[i] = new(sql.NullString)
 		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -116,6 +118,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field certSerial", values[i])
 			} else if value.Valid {
 				u.CertSerial = value.String
+			}
+		case user.FieldRegister:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field register", values[i])
+			} else if value.Valid {
+				u.Register = value.String
 			}
 		case user.FieldExpiry:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -190,6 +198,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("certSerial=")
 	builder.WriteString(u.CertSerial)
+	builder.WriteString(", ")
+	builder.WriteString("register=")
+	builder.WriteString(u.Register)
 	builder.WriteString(", ")
 	builder.WriteString("expiry=")
 	builder.WriteString(u.Expiry.Format(time.ANSIC))

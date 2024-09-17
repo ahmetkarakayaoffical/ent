@@ -124,6 +124,20 @@ func (uu *UserUpdate) ClearCertSerial() *UserUpdate {
 	return uu
 }
 
+// SetRegister sets the "register" field.
+func (uu *UserUpdate) SetRegister(s string) *UserUpdate {
+	uu.mutation.SetRegister(s)
+	return uu
+}
+
+// SetNillableRegister sets the "register" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableRegister(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetRegister(*s)
+	}
+	return uu
+}
+
 // SetExpiry sets the "expiry" field.
 func (uu *UserUpdate) SetExpiry(t time.Time) *UserUpdate {
 	uu.mutation.SetExpiry(t)
@@ -294,6 +308,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.CertSerialCleared() {
 		_spec.ClearField(user.FieldCertSerial, field.TypeString)
+	}
+	if value, ok := uu.mutation.Register(); ok {
+		_spec.SetField(user.FieldRegister, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
@@ -471,6 +488,20 @@ func (uuo *UserUpdateOne) SetNillableCertSerial(s *string) *UserUpdateOne {
 // ClearCertSerial clears the value of the "certSerial" field.
 func (uuo *UserUpdateOne) ClearCertSerial() *UserUpdateOne {
 	uuo.mutation.ClearCertSerial()
+	return uuo
+}
+
+// SetRegister sets the "register" field.
+func (uuo *UserUpdateOne) SetRegister(s string) *UserUpdateOne {
+	uuo.mutation.SetRegister(s)
+	return uuo
+}
+
+// SetNillableRegister sets the "register" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableRegister(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetRegister(*s)
+	}
 	return uuo
 }
 
@@ -674,6 +705,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.CertSerialCleared() {
 		_spec.ClearField(user.FieldCertSerial, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Register(); ok {
+		_spec.SetField(user.FieldRegister, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)

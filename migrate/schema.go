@@ -318,6 +318,7 @@ var (
 		{Name: "phone", Type: field.TypeString, Nullable: true},
 		{Name: "csr", Type: field.TypeString, Nullable: true},
 		{Name: "cert_serial", Type: field.TypeString, Nullable: true},
+		{Name: "register", Type: field.TypeString, Default: "users.requested"},
 		{Name: "expiry", Type: field.TypeTime, Nullable: true},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},

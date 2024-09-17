@@ -90,6 +90,11 @@ func CertSerial(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
 }
 
+// Register applies equality check predicate on the "register" field. It's identical to RegisterEQ.
+func Register(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldRegister, v))
+}
+
 // Expiry applies equality check predicate on the "expiry" field. It's identical to ExpiryEQ.
 func Expiry(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldExpiry, v))
@@ -468,6 +473,71 @@ func CertSerialEqualFold(v string) predicate.User {
 // CertSerialContainsFold applies the ContainsFold predicate on the "certSerial" field.
 func CertSerialContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldCertSerial, v))
+}
+
+// RegisterEQ applies the EQ predicate on the "register" field.
+func RegisterEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldRegister, v))
+}
+
+// RegisterNEQ applies the NEQ predicate on the "register" field.
+func RegisterNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldRegister, v))
+}
+
+// RegisterIn applies the In predicate on the "register" field.
+func RegisterIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldRegister, vs...))
+}
+
+// RegisterNotIn applies the NotIn predicate on the "register" field.
+func RegisterNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldRegister, vs...))
+}
+
+// RegisterGT applies the GT predicate on the "register" field.
+func RegisterGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldRegister, v))
+}
+
+// RegisterGTE applies the GTE predicate on the "register" field.
+func RegisterGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldRegister, v))
+}
+
+// RegisterLT applies the LT predicate on the "register" field.
+func RegisterLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldRegister, v))
+}
+
+// RegisterLTE applies the LTE predicate on the "register" field.
+func RegisterLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldRegister, v))
+}
+
+// RegisterContains applies the Contains predicate on the "register" field.
+func RegisterContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldRegister, v))
+}
+
+// RegisterHasPrefix applies the HasPrefix predicate on the "register" field.
+func RegisterHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldRegister, v))
+}
+
+// RegisterHasSuffix applies the HasSuffix predicate on the "register" field.
+func RegisterHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldRegister, v))
+}
+
+// RegisterEqualFold applies the EqualFold predicate on the "register" field.
+func RegisterEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldRegister, v))
+}
+
+// RegisterContainsFold applies the ContainsFold predicate on the "register" field.
+func RegisterContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldRegister, v))
 }
 
 // ExpiryEQ applies the EQ predicate on the "expiry" field.
