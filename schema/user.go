@@ -22,7 +22,7 @@ func (User) Fields() []ent.Field {
 		field.String("name"),
 		field.String("email").Optional(),
 		field.String("phone").Optional(),
-		field.String("csr").Optional(),
+		field.String("country"),
 		field.String("certSerial").Optional(),
 		field.String("register").Default("users.requested"),
 		field.Time("expiry").Optional(),
