@@ -80,9 +80,9 @@ func Phone(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPhone, v))
 }
 
-// Csr applies equality check predicate on the "csr" field. It's identical to CsrEQ.
-func Csr(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCsr, v))
+// Country applies equality check predicate on the "country" field. It's identical to CountryEQ.
+func Country(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCountry, v))
 }
 
 // CertSerial applies equality check predicate on the "certSerial" field. It's identical to CertSerialEQ.
@@ -325,79 +325,69 @@ func PhoneContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldPhone, v))
 }
 
-// CsrEQ applies the EQ predicate on the "csr" field.
-func CsrEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCsr, v))
+// CountryEQ applies the EQ predicate on the "country" field.
+func CountryEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCountry, v))
 }
 
-// CsrNEQ applies the NEQ predicate on the "csr" field.
-func CsrNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldCsr, v))
+// CountryNEQ applies the NEQ predicate on the "country" field.
+func CountryNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldCountry, v))
 }
 
-// CsrIn applies the In predicate on the "csr" field.
-func CsrIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldCsr, vs...))
+// CountryIn applies the In predicate on the "country" field.
+func CountryIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldCountry, vs...))
 }
 
-// CsrNotIn applies the NotIn predicate on the "csr" field.
-func CsrNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldCsr, vs...))
+// CountryNotIn applies the NotIn predicate on the "country" field.
+func CountryNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldCountry, vs...))
 }
 
-// CsrGT applies the GT predicate on the "csr" field.
-func CsrGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldCsr, v))
+// CountryGT applies the GT predicate on the "country" field.
+func CountryGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldCountry, v))
 }
 
-// CsrGTE applies the GTE predicate on the "csr" field.
-func CsrGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldCsr, v))
+// CountryGTE applies the GTE predicate on the "country" field.
+func CountryGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldCountry, v))
 }
 
-// CsrLT applies the LT predicate on the "csr" field.
-func CsrLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldCsr, v))
+// CountryLT applies the LT predicate on the "country" field.
+func CountryLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldCountry, v))
 }
 
-// CsrLTE applies the LTE predicate on the "csr" field.
-func CsrLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldCsr, v))
+// CountryLTE applies the LTE predicate on the "country" field.
+func CountryLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldCountry, v))
 }
 
-// CsrContains applies the Contains predicate on the "csr" field.
-func CsrContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldCsr, v))
+// CountryContains applies the Contains predicate on the "country" field.
+func CountryContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldCountry, v))
 }
 
-// CsrHasPrefix applies the HasPrefix predicate on the "csr" field.
-func CsrHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldCsr, v))
+// CountryHasPrefix applies the HasPrefix predicate on the "country" field.
+func CountryHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldCountry, v))
 }
 
-// CsrHasSuffix applies the HasSuffix predicate on the "csr" field.
-func CsrHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldCsr, v))
+// CountryHasSuffix applies the HasSuffix predicate on the "country" field.
+func CountryHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldCountry, v))
 }
 
-// CsrIsNil applies the IsNil predicate on the "csr" field.
-func CsrIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldCsr))
+// CountryEqualFold applies the EqualFold predicate on the "country" field.
+func CountryEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldCountry, v))
 }
 
-// CsrNotNil applies the NotNil predicate on the "csr" field.
-func CsrNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldCsr))
-}
-
-// CsrEqualFold applies the EqualFold predicate on the "csr" field.
-func CsrEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldCsr, v))
-}
-
-// CsrContainsFold applies the ContainsFold predicate on the "csr" field.
-func CsrContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldCsr, v))
+// CountryContainsFold applies the ContainsFold predicate on the "country" field.
+func CountryContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldCountry, v))
 }
 
 // CertSerialEQ applies the EQ predicate on the "certSerial" field.

@@ -58,17 +58,9 @@ func (uc *UserCreate) SetNillablePhone(s *string) *UserCreate {
 	return uc
 }
 
-// SetCsr sets the "csr" field.
-func (uc *UserCreate) SetCsr(s string) *UserCreate {
-	uc.mutation.SetCsr(s)
-	return uc
-}
-
-// SetNillableCsr sets the "csr" field if the given value is not nil.
-func (uc *UserCreate) SetNillableCsr(s *string) *UserCreate {
-	if s != nil {
-		uc.SetCsr(*s)
-	}
+// SetCountry sets the "country" field.
+func (uc *UserCreate) SetCountry(s string) *UserCreate {
+	uc.mutation.SetCountry(s)
 	return uc
 }
 
@@ -217,6 +209,9 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`openuem_ent: missing required field "User.name"`)}
 	}
+	if _, ok := uc.mutation.Country(); !ok {
+		return &ValidationError{Name: "country", err: errors.New(`openuem_ent: missing required field "User.country"`)}
+	}
 	if _, ok := uc.mutation.Register(); !ok {
 		return &ValidationError{Name: "register", err: errors.New(`openuem_ent: missing required field "User.register"`)}
 	}
@@ -273,9 +268,9 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldPhone, field.TypeString, value)
 		_node.Phone = value
 	}
-	if value, ok := uc.mutation.Csr(); ok {
-		_spec.SetField(user.FieldCsr, field.TypeString, value)
-		_node.Csr = value
+	if value, ok := uc.mutation.Country(); ok {
+		_spec.SetField(user.FieldCountry, field.TypeString, value)
+		_node.Country = value
 	}
 	if value, ok := uc.mutation.CertSerial(); ok {
 		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
@@ -413,21 +408,15 @@ func (u *UserUpsert) ClearPhone() *UserUpsert {
 	return u
 }
 
-// SetCsr sets the "csr" field.
-func (u *UserUpsert) SetCsr(v string) *UserUpsert {
-	u.Set(user.FieldCsr, v)
+// SetCountry sets the "country" field.
+func (u *UserUpsert) SetCountry(v string) *UserUpsert {
+	u.Set(user.FieldCountry, v)
 	return u
 }
 
-// UpdateCsr sets the "csr" field to the value that was provided on create.
-func (u *UserUpsert) UpdateCsr() *UserUpsert {
-	u.SetExcluded(user.FieldCsr)
-	return u
-}
-
-// ClearCsr clears the value of the "csr" field.
-func (u *UserUpsert) ClearCsr() *UserUpsert {
-	u.SetNull(user.FieldCsr)
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *UserUpsert) UpdateCountry() *UserUpsert {
+	u.SetExcluded(user.FieldCountry)
 	return u
 }
 
@@ -619,24 +608,17 @@ func (u *UserUpsertOne) ClearPhone() *UserUpsertOne {
 	})
 }
 
-// SetCsr sets the "csr" field.
-func (u *UserUpsertOne) SetCsr(v string) *UserUpsertOne {
+// SetCountry sets the "country" field.
+func (u *UserUpsertOne) SetCountry(v string) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.SetCsr(v)
+		s.SetCountry(v)
 	})
 }
 
-// UpdateCsr sets the "csr" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateCsr() *UserUpsertOne {
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateCountry() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateCsr()
-	})
-}
-
-// ClearCsr clears the value of the "csr" field.
-func (u *UserUpsertOne) ClearCsr() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearCsr()
+		s.UpdateCountry()
 	})
 }
 
@@ -1009,24 +991,17 @@ func (u *UserUpsertBulk) ClearPhone() *UserUpsertBulk {
 	})
 }
 
-// SetCsr sets the "csr" field.
-func (u *UserUpsertBulk) SetCsr(v string) *UserUpsertBulk {
+// SetCountry sets the "country" field.
+func (u *UserUpsertBulk) SetCountry(v string) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.SetCsr(v)
+		s.SetCountry(v)
 	})
 }
 
-// UpdateCsr sets the "csr" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateCsr() *UserUpsertBulk {
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateCountry() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
-		s.UpdateCsr()
-	})
-}
-
-// ClearCsr clears the value of the "csr" field.
-func (u *UserUpsertBulk) ClearCsr() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearCsr()
+		s.UpdateCountry()
 	})
 }
 

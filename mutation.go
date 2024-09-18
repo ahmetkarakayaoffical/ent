@@ -9497,7 +9497,7 @@ type UserMutation struct {
 	name            *string
 	email           *string
 	phone           *string
-	csr             *string
+	country         *string
 	certSerial      *string
 	register        *string
 	expiry          *time.Time
@@ -9750,53 +9750,40 @@ func (m *UserMutation) ResetPhone() {
 	delete(m.clearedFields, user.FieldPhone)
 }
 
-// SetCsr sets the "csr" field.
-func (m *UserMutation) SetCsr(s string) {
-	m.csr = &s
+// SetCountry sets the "country" field.
+func (m *UserMutation) SetCountry(s string) {
+	m.country = &s
 }
 
-// Csr returns the value of the "csr" field in the mutation.
-func (m *UserMutation) Csr() (r string, exists bool) {
-	v := m.csr
+// Country returns the value of the "country" field in the mutation.
+func (m *UserMutation) Country() (r string, exists bool) {
+	v := m.country
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCsr returns the old "csr" field's value of the User entity.
+// OldCountry returns the old "country" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldCsr(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldCountry(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCsr is only allowed on UpdateOne operations")
+		return v, errors.New("OldCountry is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCsr requires an ID field in the mutation")
+		return v, errors.New("OldCountry requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCsr: %w", err)
+		return v, fmt.Errorf("querying old value for OldCountry: %w", err)
 	}
-	return oldValue.Csr, nil
+	return oldValue.Country, nil
 }
 
-// ClearCsr clears the value of the "csr" field.
-func (m *UserMutation) ClearCsr() {
-	m.csr = nil
-	m.clearedFields[user.FieldCsr] = struct{}{}
-}
-
-// CsrCleared returns if the "csr" field was cleared in this mutation.
-func (m *UserMutation) CsrCleared() bool {
-	_, ok := m.clearedFields[user.FieldCsr]
-	return ok
-}
-
-// ResetCsr resets all changes to the "csr" field.
-func (m *UserMutation) ResetCsr() {
-	m.csr = nil
-	delete(m.clearedFields, user.FieldCsr)
+// ResetCountry resets all changes to the "country" field.
+func (m *UserMutation) ResetCountry() {
+	m.country = nil
 }
 
 // SetCertSerial sets the "certSerial" field.
@@ -10129,8 +10116,8 @@ func (m *UserMutation) Fields() []string {
 	if m.phone != nil {
 		fields = append(fields, user.FieldPhone)
 	}
-	if m.csr != nil {
-		fields = append(fields, user.FieldCsr)
+	if m.country != nil {
+		fields = append(fields, user.FieldCountry)
 	}
 	if m.certSerial != nil {
 		fields = append(fields, user.FieldCertSerial)
@@ -10161,8 +10148,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Email()
 	case user.FieldPhone:
 		return m.Phone()
-	case user.FieldCsr:
-		return m.Csr()
+	case user.FieldCountry:
+		return m.Country()
 	case user.FieldCertSerial:
 		return m.CertSerial()
 	case user.FieldRegister:
@@ -10188,8 +10175,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldEmail(ctx)
 	case user.FieldPhone:
 		return m.OldPhone(ctx)
-	case user.FieldCsr:
-		return m.OldCsr(ctx)
+	case user.FieldCountry:
+		return m.OldCountry(ctx)
 	case user.FieldCertSerial:
 		return m.OldCertSerial(ctx)
 	case user.FieldRegister:
@@ -10230,12 +10217,12 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPhone(v)
 		return nil
-	case user.FieldCsr:
+	case user.FieldCountry:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCsr(v)
+		m.SetCountry(v)
 		return nil
 	case user.FieldCertSerial:
 		v, ok := value.(string)
@@ -10308,9 +10295,6 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldPhone) {
 		fields = append(fields, user.FieldPhone)
 	}
-	if m.FieldCleared(user.FieldCsr) {
-		fields = append(fields, user.FieldCsr)
-	}
 	if m.FieldCleared(user.FieldCertSerial) {
 		fields = append(fields, user.FieldCertSerial)
 	}
@@ -10343,9 +10327,6 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldPhone:
 		m.ClearPhone()
 		return nil
-	case user.FieldCsr:
-		m.ClearCsr()
-		return nil
 	case user.FieldCertSerial:
 		m.ClearCertSerial()
 		return nil
@@ -10375,8 +10356,8 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldPhone:
 		m.ResetPhone()
 		return nil
-	case user.FieldCsr:
-		m.ResetCsr()
+	case user.FieldCountry:
+		m.ResetCountry()
 		return nil
 	case user.FieldCertSerial:
 		m.ResetCertSerial()

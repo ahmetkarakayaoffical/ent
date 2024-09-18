@@ -20,8 +20,8 @@ const (
 	FieldEmail = "email"
 	// FieldPhone holds the string denoting the phone field in the database.
 	FieldPhone = "phone"
-	// FieldCsr holds the string denoting the csr field in the database.
-	FieldCsr = "csr"
+	// FieldCountry holds the string denoting the country field in the database.
+	FieldCountry = "country"
 	// FieldCertSerial holds the string denoting the certserial field in the database.
 	FieldCertSerial = "cert_serial"
 	// FieldRegister holds the string denoting the register field in the database.
@@ -53,7 +53,7 @@ var Columns = []string{
 	FieldName,
 	FieldEmail,
 	FieldPhone,
-	FieldCsr,
+	FieldCountry,
 	FieldCertSerial,
 	FieldRegister,
 	FieldExpiry,
@@ -107,9 +107,9 @@ func ByPhone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhone, opts...).ToFunc()
 }
 
-// ByCsr orders the results by the csr field.
-func ByCsr(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCsr, opts...).ToFunc()
+// ByCountry orders the results by the country field.
+func ByCountry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCountry, opts...).ToFunc()
 }
 
 // ByCertSerial orders the results by the certSerial field.

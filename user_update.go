@@ -84,23 +84,17 @@ func (uu *UserUpdate) ClearPhone() *UserUpdate {
 	return uu
 }
 
-// SetCsr sets the "csr" field.
-func (uu *UserUpdate) SetCsr(s string) *UserUpdate {
-	uu.mutation.SetCsr(s)
+// SetCountry sets the "country" field.
+func (uu *UserUpdate) SetCountry(s string) *UserUpdate {
+	uu.mutation.SetCountry(s)
 	return uu
 }
 
-// SetNillableCsr sets the "csr" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCsr(s *string) *UserUpdate {
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCountry(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetCsr(*s)
+		uu.SetCountry(*s)
 	}
-	return uu
-}
-
-// ClearCsr clears the value of the "csr" field.
-func (uu *UserUpdate) ClearCsr() *UserUpdate {
-	uu.mutation.ClearCsr()
 	return uu
 }
 
@@ -297,11 +291,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.PhoneCleared() {
 		_spec.ClearField(user.FieldPhone, field.TypeString)
 	}
-	if value, ok := uu.mutation.Csr(); ok {
-		_spec.SetField(user.FieldCsr, field.TypeString, value)
-	}
-	if uu.mutation.CsrCleared() {
-		_spec.ClearField(user.FieldCsr, field.TypeString)
+	if value, ok := uu.mutation.Country(); ok {
+		_spec.SetField(user.FieldCountry, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.CertSerial(); ok {
 		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
@@ -451,23 +442,17 @@ func (uuo *UserUpdateOne) ClearPhone() *UserUpdateOne {
 	return uuo
 }
 
-// SetCsr sets the "csr" field.
-func (uuo *UserUpdateOne) SetCsr(s string) *UserUpdateOne {
-	uuo.mutation.SetCsr(s)
+// SetCountry sets the "country" field.
+func (uuo *UserUpdateOne) SetCountry(s string) *UserUpdateOne {
+	uuo.mutation.SetCountry(s)
 	return uuo
 }
 
-// SetNillableCsr sets the "csr" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCsr(s *string) *UserUpdateOne {
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCountry(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetCsr(*s)
+		uuo.SetCountry(*s)
 	}
-	return uuo
-}
-
-// ClearCsr clears the value of the "csr" field.
-func (uuo *UserUpdateOne) ClearCsr() *UserUpdateOne {
-	uuo.mutation.ClearCsr()
 	return uuo
 }
 
@@ -694,11 +679,8 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.PhoneCleared() {
 		_spec.ClearField(user.FieldPhone, field.TypeString)
 	}
-	if value, ok := uuo.mutation.Csr(); ok {
-		_spec.SetField(user.FieldCsr, field.TypeString, value)
-	}
-	if uuo.mutation.CsrCleared() {
-		_spec.ClearField(user.FieldCsr, field.TypeString)
+	if value, ok := uuo.mutation.Country(); ok {
+		_spec.SetField(user.FieldCountry, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.CertSerial(); ok {
 		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
