@@ -72,16 +72,28 @@ func init() {
 	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
 	settingsFields := schema.Settings{}.Fields()
 	_ = settingsFields
+	// settingsDescSMTPPort is the schema descriptor for smtp_port field.
+	settingsDescSMTPPort := settingsFields[9].Descriptor()
+	// settings.DefaultSMTPPort holds the default value on creation for the smtp_port field.
+	settings.DefaultSMTPPort = settingsDescSMTPPort.Default.(int)
 	// settingsDescSMTPAuth is the schema descriptor for smtp_auth field.
 	settingsDescSMTPAuth := settingsFields[12].Descriptor()
 	// settings.DefaultSMTPAuth holds the default value on creation for the smtp_auth field.
 	settings.DefaultSMTPAuth = settingsDescSMTPAuth.Default.(string)
+	// settingsDescSMTPTLS is the schema descriptor for smtp_tls field.
+	settingsDescSMTPTLS := settingsFields[13].Descriptor()
+	// settings.DefaultSMTPTLS holds the default value on creation for the smtp_tls field.
+	settings.DefaultSMTPTLS = settingsDescSMTPTLS.Default.(bool)
+	// settingsDescSMTPStarttls is the schema descriptor for smtp_starttls field.
+	settingsDescSMTPStarttls := settingsFields[14].Descriptor()
+	// settings.DefaultSMTPStarttls holds the default value on creation for the smtp_starttls field.
+	settings.DefaultSMTPStarttls = settingsDescSMTPStarttls.Default.(bool)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[15].Descriptor()
+	settingsDescCreated := settingsFields[16].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[16].Descriptor()
+	settingsDescModified := settingsFields[17].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

@@ -336,6 +336,26 @@ func (su *SettingsUpdate) ClearSMTPStarttls() *SettingsUpdate {
 	return su
 }
 
+// SetMessageFrom sets the "message_from" field.
+func (su *SettingsUpdate) SetMessageFrom(s string) *SettingsUpdate {
+	su.mutation.SetMessageFrom(s)
+	return su
+}
+
+// SetNillableMessageFrom sets the "message_from" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableMessageFrom(s *string) *SettingsUpdate {
+	if s != nil {
+		su.SetMessageFrom(*s)
+	}
+	return su
+}
+
+// ClearMessageFrom clears the value of the "message_from" field.
+func (su *SettingsUpdate) ClearMessageFrom() *SettingsUpdate {
+	su.mutation.ClearMessageFrom()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SettingsUpdate) SetCreated(t time.Time) *SettingsUpdate {
 	su.mutation.SetCreated(t)
@@ -516,6 +536,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.SMTPStarttlsCleared() {
 		_spec.ClearField(settings.FieldSMTPStarttls, field.TypeBool)
+	}
+	if value, ok := su.mutation.MessageFrom(); ok {
+		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
+	}
+	if su.mutation.MessageFromCleared() {
+		_spec.ClearField(settings.FieldMessageFrom, field.TypeString)
 	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -858,6 +884,26 @@ func (suo *SettingsUpdateOne) ClearSMTPStarttls() *SettingsUpdateOne {
 	return suo
 }
 
+// SetMessageFrom sets the "message_from" field.
+func (suo *SettingsUpdateOne) SetMessageFrom(s string) *SettingsUpdateOne {
+	suo.mutation.SetMessageFrom(s)
+	return suo
+}
+
+// SetNillableMessageFrom sets the "message_from" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableMessageFrom(s *string) *SettingsUpdateOne {
+	if s != nil {
+		suo.SetMessageFrom(*s)
+	}
+	return suo
+}
+
+// ClearMessageFrom clears the value of the "message_from" field.
+func (suo *SettingsUpdateOne) ClearMessageFrom() *SettingsUpdateOne {
+	suo.mutation.ClearMessageFrom()
+	return suo
+}
+
 // SetCreated sets the "created" field.
 func (suo *SettingsUpdateOne) SetCreated(t time.Time) *SettingsUpdateOne {
 	suo.mutation.SetCreated(t)
@@ -1068,6 +1114,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.SMTPStarttlsCleared() {
 		_spec.ClearField(settings.FieldSMTPStarttls, field.TypeBool)
+	}
+	if value, ok := suo.mutation.MessageFrom(); ok {
+		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
+	}
+	if suo.mutation.MessageFromCleared() {
+		_spec.ClearField(settings.FieldMessageFrom, field.TypeString)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)

@@ -232,6 +232,20 @@ func (sc *SettingsCreate) SetNillableSMTPStarttls(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetMessageFrom sets the "message_from" field.
+func (sc *SettingsCreate) SetMessageFrom(s string) *SettingsCreate {
+	sc.mutation.SetMessageFrom(s)
+	return sc
+}
+
+// SetNillableMessageFrom sets the "message_from" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableMessageFrom(s *string) *SettingsCreate {
+	if s != nil {
+		sc.SetMessageFrom(*s)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SettingsCreate) SetCreated(t time.Time) *SettingsCreate {
 	sc.mutation.SetCreated(t)
@@ -295,9 +309,21 @@ func (sc *SettingsCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *SettingsCreate) defaults() {
+	if _, ok := sc.mutation.SMTPPort(); !ok {
+		v := settings.DefaultSMTPPort
+		sc.mutation.SetSMTPPort(v)
+	}
 	if _, ok := sc.mutation.SMTPAuth(); !ok {
 		v := settings.DefaultSMTPAuth
 		sc.mutation.SetSMTPAuth(v)
+	}
+	if _, ok := sc.mutation.SMTPTLS(); !ok {
+		v := settings.DefaultSMTPTLS
+		sc.mutation.SetSMTPTLS(v)
+	}
+	if _, ok := sc.mutation.SMTPStarttls(); !ok {
+		v := settings.DefaultSMTPStarttls
+		sc.mutation.SetSMTPStarttls(v)
 	}
 	if _, ok := sc.mutation.Created(); !ok {
 		v := settings.DefaultCreated()
@@ -397,6 +423,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.SMTPStarttls(); ok {
 		_spec.SetField(settings.FieldSMTPStarttls, field.TypeBool, value)
 		_node.SMTPStarttls = value
+	}
+	if value, ok := sc.mutation.MessageFrom(); ok {
+		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
+		_node.MessageFrom = value
 	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -731,6 +761,24 @@ func (u *SettingsUpsert) UpdateSMTPStarttls() *SettingsUpsert {
 // ClearSMTPStarttls clears the value of the "smtp_starttls" field.
 func (u *SettingsUpsert) ClearSMTPStarttls() *SettingsUpsert {
 	u.SetNull(settings.FieldSMTPStarttls)
+	return u
+}
+
+// SetMessageFrom sets the "message_from" field.
+func (u *SettingsUpsert) SetMessageFrom(v string) *SettingsUpsert {
+	u.Set(settings.FieldMessageFrom, v)
+	return u
+}
+
+// UpdateMessageFrom sets the "message_from" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateMessageFrom() *SettingsUpsert {
+	u.SetExcluded(settings.FieldMessageFrom)
+	return u
+}
+
+// ClearMessageFrom clears the value of the "message_from" field.
+func (u *SettingsUpsert) ClearMessageFrom() *SettingsUpsert {
+	u.SetNull(settings.FieldMessageFrom)
 	return u
 }
 
@@ -1129,6 +1177,27 @@ func (u *SettingsUpsertOne) UpdateSMTPStarttls() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearSMTPStarttls() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSMTPStarttls()
+	})
+}
+
+// SetMessageFrom sets the "message_from" field.
+func (u *SettingsUpsertOne) SetMessageFrom(v string) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetMessageFrom(v)
+	})
+}
+
+// UpdateMessageFrom sets the "message_from" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateMessageFrom() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateMessageFrom()
+	})
+}
+
+// ClearMessageFrom clears the value of the "message_from" field.
+func (u *SettingsUpsertOne) ClearMessageFrom() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearMessageFrom()
 	})
 }
 
@@ -1697,6 +1766,27 @@ func (u *SettingsUpsertBulk) UpdateSMTPStarttls() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearSMTPStarttls() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSMTPStarttls()
+	})
+}
+
+// SetMessageFrom sets the "message_from" field.
+func (u *SettingsUpsertBulk) SetMessageFrom(v string) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetMessageFrom(v)
+	})
+}
+
+// UpdateMessageFrom sets the "message_from" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateMessageFrom() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateMessageFrom()
+	})
+}
+
+// ClearMessageFrom clears the value of the "message_from" field.
+func (u *SettingsUpsertBulk) ClearMessageFrom() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearMessageFrom()
 	})
 }
 

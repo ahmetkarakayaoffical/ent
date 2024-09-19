@@ -129,6 +129,11 @@ func SMTPStarttls(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldSMTPStarttls, v))
 }
 
+// MessageFrom applies equality check predicate on the "message_from" field. It's identical to MessageFromEQ.
+func MessageFrom(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldMessageFrom, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1127,6 +1132,81 @@ func SMTPStarttlsIsNil() predicate.Settings {
 // SMTPStarttlsNotNil applies the NotNil predicate on the "smtp_starttls" field.
 func SMTPStarttlsNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldSMTPStarttls))
+}
+
+// MessageFromEQ applies the EQ predicate on the "message_from" field.
+func MessageFromEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldMessageFrom, v))
+}
+
+// MessageFromNEQ applies the NEQ predicate on the "message_from" field.
+func MessageFromNEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldMessageFrom, v))
+}
+
+// MessageFromIn applies the In predicate on the "message_from" field.
+func MessageFromIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldMessageFrom, vs...))
+}
+
+// MessageFromNotIn applies the NotIn predicate on the "message_from" field.
+func MessageFromNotIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldMessageFrom, vs...))
+}
+
+// MessageFromGT applies the GT predicate on the "message_from" field.
+func MessageFromGT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldMessageFrom, v))
+}
+
+// MessageFromGTE applies the GTE predicate on the "message_from" field.
+func MessageFromGTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldMessageFrom, v))
+}
+
+// MessageFromLT applies the LT predicate on the "message_from" field.
+func MessageFromLT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldMessageFrom, v))
+}
+
+// MessageFromLTE applies the LTE predicate on the "message_from" field.
+func MessageFromLTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldMessageFrom, v))
+}
+
+// MessageFromContains applies the Contains predicate on the "message_from" field.
+func MessageFromContains(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContains(FieldMessageFrom, v))
+}
+
+// MessageFromHasPrefix applies the HasPrefix predicate on the "message_from" field.
+func MessageFromHasPrefix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasPrefix(FieldMessageFrom, v))
+}
+
+// MessageFromHasSuffix applies the HasSuffix predicate on the "message_from" field.
+func MessageFromHasSuffix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasSuffix(FieldMessageFrom, v))
+}
+
+// MessageFromIsNil applies the IsNil predicate on the "message_from" field.
+func MessageFromIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldMessageFrom))
+}
+
+// MessageFromNotNil applies the NotNil predicate on the "message_from" field.
+func MessageFromNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldMessageFrom))
+}
+
+// MessageFromEqualFold applies the EqualFold predicate on the "message_from" field.
+func MessageFromEqualFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEqualFold(FieldMessageFrom, v))
+}
+
+// MessageFromContainsFold applies the ContainsFold predicate on the "message_from" field.
+func MessageFromContainsFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContainsFold(FieldMessageFrom, v))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.
