@@ -64,11 +64,6 @@ func Expiry(v time.Time) predicate.Certificate {
 	return predicate.Certificate(sql.FieldEQ(FieldExpiry, v))
 }
 
-// Revoked applies equality check predicate on the "revoked" field. It's identical to RevokedEQ.
-func Revoked(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldEQ(FieldRevoked, v))
-}
-
 // TypeEQ applies the EQ predicate on the "type" field.
 func TypeEQ(v Type) predicate.Certificate {
 	return predicate.Certificate(sql.FieldEQ(FieldType, v))
@@ -212,46 +207,6 @@ func ExpiryIsNil() predicate.Certificate {
 // ExpiryNotNil applies the NotNil predicate on the "expiry" field.
 func ExpiryNotNil() predicate.Certificate {
 	return predicate.Certificate(sql.FieldNotNull(FieldExpiry))
-}
-
-// RevokedEQ applies the EQ predicate on the "revoked" field.
-func RevokedEQ(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldEQ(FieldRevoked, v))
-}
-
-// RevokedNEQ applies the NEQ predicate on the "revoked" field.
-func RevokedNEQ(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldNEQ(FieldRevoked, v))
-}
-
-// RevokedIn applies the In predicate on the "revoked" field.
-func RevokedIn(vs ...time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldIn(FieldRevoked, vs...))
-}
-
-// RevokedNotIn applies the NotIn predicate on the "revoked" field.
-func RevokedNotIn(vs ...time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldNotIn(FieldRevoked, vs...))
-}
-
-// RevokedGT applies the GT predicate on the "revoked" field.
-func RevokedGT(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldGT(FieldRevoked, v))
-}
-
-// RevokedGTE applies the GTE predicate on the "revoked" field.
-func RevokedGTE(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldGTE(FieldRevoked, v))
-}
-
-// RevokedLT applies the LT predicate on the "revoked" field.
-func RevokedLT(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldLT(FieldRevoked, v))
-}
-
-// RevokedLTE applies the LTE predicate on the "revoked" field.
-func RevokedLTE(v time.Time) predicate.Certificate {
-	return predicate.Certificate(sql.FieldLTE(FieldRevoked, v))
 }
 
 // And groups predicates with the AND operator between them.

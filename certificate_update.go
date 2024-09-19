@@ -83,20 +83,6 @@ func (cu *CertificateUpdate) ClearExpiry() *CertificateUpdate {
 	return cu
 }
 
-// SetRevoked sets the "revoked" field.
-func (cu *CertificateUpdate) SetRevoked(t time.Time) *CertificateUpdate {
-	cu.mutation.SetRevoked(t)
-	return cu
-}
-
-// SetNillableRevoked sets the "revoked" field if the given value is not nil.
-func (cu *CertificateUpdate) SetNillableRevoked(t *time.Time) *CertificateUpdate {
-	if t != nil {
-		cu.SetRevoked(*t)
-	}
-	return cu
-}
-
 // Mutation returns the CertificateMutation object of the builder.
 func (cu *CertificateUpdate) Mutation() *CertificateMutation {
 	return cu.mutation
@@ -172,9 +158,6 @@ func (cu *CertificateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.ExpiryCleared() {
 		_spec.ClearField(certificate.FieldExpiry, field.TypeTime)
 	}
-	if value, ok := cu.mutation.Revoked(); ok {
-		_spec.SetField(certificate.FieldRevoked, field.TypeTime, value)
-	}
 	_spec.AddModifiers(cu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -248,20 +231,6 @@ func (cuo *CertificateUpdateOne) SetNillableExpiry(t *time.Time) *CertificateUpd
 // ClearExpiry clears the value of the "expiry" field.
 func (cuo *CertificateUpdateOne) ClearExpiry() *CertificateUpdateOne {
 	cuo.mutation.ClearExpiry()
-	return cuo
-}
-
-// SetRevoked sets the "revoked" field.
-func (cuo *CertificateUpdateOne) SetRevoked(t time.Time) *CertificateUpdateOne {
-	cuo.mutation.SetRevoked(t)
-	return cuo
-}
-
-// SetNillableRevoked sets the "revoked" field if the given value is not nil.
-func (cuo *CertificateUpdateOne) SetNillableRevoked(t *time.Time) *CertificateUpdateOne {
-	if t != nil {
-		cuo.SetRevoked(*t)
-	}
 	return cuo
 }
 
@@ -369,9 +338,6 @@ func (cuo *CertificateUpdateOne) sqlSave(ctx context.Context) (_node *Certificat
 	}
 	if cuo.mutation.ExpiryCleared() {
 		_spec.ClearField(certificate.FieldExpiry, field.TypeTime)
-	}
-	if value, ok := cuo.mutation.Revoked(); ok {
-		_spec.SetField(certificate.FieldRevoked, field.TypeTime, value)
 	}
 	_spec.AddModifiers(cuo.modifiers...)
 	_node = &Certificate{config: cuo.config}

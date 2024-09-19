@@ -22,9 +22,7 @@ type Certificate struct {
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Expiry holds the value of the "expiry" field.
-	Expiry time.Time `json:"expiry,omitempty"`
-	// Revoked holds the value of the "revoked" field.
-	Revoked      time.Time `json:"revoked,omitempty"`
+	Expiry       time.Time `json:"expiry,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -37,7 +35,7 @@ func (*Certificate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case certificate.FieldType, certificate.FieldDescription:
 			values[i] = new(sql.NullString)
-		case certificate.FieldExpiry, certificate.FieldRevoked:
+		case certificate.FieldExpiry:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -77,12 +75,6 @@ func (c *Certificate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field expiry", values[i])
 			} else if value.Valid {
 				c.Expiry = value.Time
-			}
-		case certificate.FieldRevoked:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field revoked", values[i])
-			} else if value.Valid {
-				c.Revoked = value.Time
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -128,9 +120,6 @@ func (c *Certificate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("expiry=")
 	builder.WriteString(c.Expiry.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("revoked=")
-	builder.WriteString(c.Revoked.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

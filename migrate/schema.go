@@ -76,7 +76,6 @@ var (
 		{Name: "type", Type: field.TypeEnum, Enums: []string{"console", "notification", "cert-manager", "agent", "user"}},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "expiry", Type: field.TypeTime, Nullable: true},
-		{Name: "revoked", Type: field.TypeTime},
 	}
 	// CertificatesTable holds the schema information for the "certificates" table.
 	CertificatesTable = &schema.Table{

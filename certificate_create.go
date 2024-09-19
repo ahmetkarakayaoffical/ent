@@ -56,20 +56,6 @@ func (cc *CertificateCreate) SetNillableExpiry(t *time.Time) *CertificateCreate 
 	return cc
 }
 
-// SetRevoked sets the "revoked" field.
-func (cc *CertificateCreate) SetRevoked(t time.Time) *CertificateCreate {
-	cc.mutation.SetRevoked(t)
-	return cc
-}
-
-// SetNillableRevoked sets the "revoked" field if the given value is not nil.
-func (cc *CertificateCreate) SetNillableRevoked(t *time.Time) *CertificateCreate {
-	if t != nil {
-		cc.SetRevoked(*t)
-	}
-	return cc
-}
-
 // SetID sets the "id" field.
 func (cc *CertificateCreate) SetID(i int64) *CertificateCreate {
 	cc.mutation.SetID(i)
@@ -83,7 +69,6 @@ func (cc *CertificateCreate) Mutation() *CertificateMutation {
 
 // Save creates the Certificate in the database.
 func (cc *CertificateCreate) Save(ctx context.Context) (*Certificate, error) {
-	cc.defaults()
 	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
@@ -109,14 +94,6 @@ func (cc *CertificateCreate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (cc *CertificateCreate) defaults() {
-	if _, ok := cc.mutation.Revoked(); !ok {
-		v := certificate.DefaultRevoked()
-		cc.mutation.SetRevoked(v)
-	}
-}
-
 // check runs all checks and user-defined validators on the builder.
 func (cc *CertificateCreate) check() error {
 	if _, ok := cc.mutation.GetType(); !ok {
@@ -126,9 +103,6 @@ func (cc *CertificateCreate) check() error {
 		if err := certificate.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`openuem_ent: validator failed for field "Certificate.type": %w`, err)}
 		}
-	}
-	if _, ok := cc.mutation.Revoked(); !ok {
-		return &ValidationError{Name: "revoked", err: errors.New(`openuem_ent: missing required field "Certificate.revoked"`)}
 	}
 	return nil
 }
@@ -174,10 +148,6 @@ func (cc *CertificateCreate) createSpec() (*Certificate, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Expiry(); ok {
 		_spec.SetField(certificate.FieldExpiry, field.TypeTime, value)
 		_node.Expiry = value
-	}
-	if value, ok := cc.mutation.Revoked(); ok {
-		_spec.SetField(certificate.FieldRevoked, field.TypeTime, value)
-		_node.Revoked = value
 	}
 	return _node, _spec
 }
@@ -276,18 +246,6 @@ func (u *CertificateUpsert) UpdateExpiry() *CertificateUpsert {
 // ClearExpiry clears the value of the "expiry" field.
 func (u *CertificateUpsert) ClearExpiry() *CertificateUpsert {
 	u.SetNull(certificate.FieldExpiry)
-	return u
-}
-
-// SetRevoked sets the "revoked" field.
-func (u *CertificateUpsert) SetRevoked(v time.Time) *CertificateUpsert {
-	u.Set(certificate.FieldRevoked, v)
-	return u
-}
-
-// UpdateRevoked sets the "revoked" field to the value that was provided on create.
-func (u *CertificateUpsert) UpdateRevoked() *CertificateUpsert {
-	u.SetExcluded(certificate.FieldRevoked)
 	return u
 }
 
@@ -395,20 +353,6 @@ func (u *CertificateUpsertOne) ClearExpiry() *CertificateUpsertOne {
 	})
 }
 
-// SetRevoked sets the "revoked" field.
-func (u *CertificateUpsertOne) SetRevoked(v time.Time) *CertificateUpsertOne {
-	return u.Update(func(s *CertificateUpsert) {
-		s.SetRevoked(v)
-	})
-}
-
-// UpdateRevoked sets the "revoked" field to the value that was provided on create.
-func (u *CertificateUpsertOne) UpdateRevoked() *CertificateUpsertOne {
-	return u.Update(func(s *CertificateUpsert) {
-		s.UpdateRevoked()
-	})
-}
-
 // Exec executes the query.
 func (u *CertificateUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -461,7 +405,6 @@ func (ccb *CertificateCreateBulk) Save(ctx context.Context) ([]*Certificate, err
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
-			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CertificateMutation)
 				if !ok {
@@ -676,20 +619,6 @@ func (u *CertificateUpsertBulk) UpdateExpiry() *CertificateUpsertBulk {
 func (u *CertificateUpsertBulk) ClearExpiry() *CertificateUpsertBulk {
 	return u.Update(func(s *CertificateUpsert) {
 		s.ClearExpiry()
-	})
-}
-
-// SetRevoked sets the "revoked" field.
-func (u *CertificateUpsertBulk) SetRevoked(v time.Time) *CertificateUpsertBulk {
-	return u.Update(func(s *CertificateUpsert) {
-		s.SetRevoked(v)
-	})
-}
-
-// UpdateRevoked sets the "revoked" field to the value that was provided on create.
-func (u *CertificateUpsertBulk) UpdateRevoked() *CertificateUpsertBulk {
-	return u.Update(func(s *CertificateUpsert) {
-		s.UpdateRevoked()
 	})
 }
 

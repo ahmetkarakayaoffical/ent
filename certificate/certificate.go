@@ -4,7 +4,6 @@ package certificate
 
 import (
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -20,8 +19,6 @@ const (
 	FieldDescription = "description"
 	// FieldExpiry holds the string denoting the expiry field in the database.
 	FieldExpiry = "expiry"
-	// FieldRevoked holds the string denoting the revoked field in the database.
-	FieldRevoked = "revoked"
 	// Table holds the table name of the certificate in the database.
 	Table = "certificates"
 )
@@ -32,7 +29,6 @@ var Columns = []string{
 	FieldType,
 	FieldDescription,
 	FieldExpiry,
-	FieldRevoked,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -44,11 +40,6 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
-
-var (
-	// DefaultRevoked holds the default value on creation for the "revoked" field.
-	DefaultRevoked func() time.Time
-)
 
 // Type defines the type for the "type" enum field.
 type Type string
@@ -97,9 +88,4 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExpiry orders the results by the expiry field.
 func ByExpiry(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiry, opts...).ToFunc()
-}
-
-// ByRevoked orders the results by the revoked field.
-func ByRevoked(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRevoked, opts...).ToFunc()
 }

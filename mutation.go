@@ -2563,7 +2563,6 @@ type CertificateMutation struct {
 	_type         *certificate.Type
 	description   *string
 	expiry        *time.Time
-	revoked       *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Certificate, error)
@@ -2808,42 +2807,6 @@ func (m *CertificateMutation) ResetExpiry() {
 	delete(m.clearedFields, certificate.FieldExpiry)
 }
 
-// SetRevoked sets the "revoked" field.
-func (m *CertificateMutation) SetRevoked(t time.Time) {
-	m.revoked = &t
-}
-
-// Revoked returns the value of the "revoked" field in the mutation.
-func (m *CertificateMutation) Revoked() (r time.Time, exists bool) {
-	v := m.revoked
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRevoked returns the old "revoked" field's value of the Certificate entity.
-// If the Certificate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CertificateMutation) OldRevoked(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRevoked is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRevoked requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRevoked: %w", err)
-	}
-	return oldValue.Revoked, nil
-}
-
-// ResetRevoked resets all changes to the "revoked" field.
-func (m *CertificateMutation) ResetRevoked() {
-	m.revoked = nil
-}
-
 // Where appends a list predicates to the CertificateMutation builder.
 func (m *CertificateMutation) Where(ps ...predicate.Certificate) {
 	m.predicates = append(m.predicates, ps...)
@@ -2878,7 +2841,7 @@ func (m *CertificateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CertificateMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 3)
 	if m._type != nil {
 		fields = append(fields, certificate.FieldType)
 	}
@@ -2887,9 +2850,6 @@ func (m *CertificateMutation) Fields() []string {
 	}
 	if m.expiry != nil {
 		fields = append(fields, certificate.FieldExpiry)
-	}
-	if m.revoked != nil {
-		fields = append(fields, certificate.FieldRevoked)
 	}
 	return fields
 }
@@ -2905,8 +2865,6 @@ func (m *CertificateMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case certificate.FieldExpiry:
 		return m.Expiry()
-	case certificate.FieldRevoked:
-		return m.Revoked()
 	}
 	return nil, false
 }
@@ -2922,8 +2880,6 @@ func (m *CertificateMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case certificate.FieldExpiry:
 		return m.OldExpiry(ctx)
-	case certificate.FieldRevoked:
-		return m.OldRevoked(ctx)
 	}
 	return nil, fmt.Errorf("unknown Certificate field %s", name)
 }
@@ -2953,13 +2909,6 @@ func (m *CertificateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExpiry(v)
-		return nil
-	case certificate.FieldRevoked:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRevoked(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Certificate field %s", name)
@@ -3033,9 +2982,6 @@ func (m *CertificateMutation) ResetField(name string) error {
 		return nil
 	case certificate.FieldExpiry:
 		m.ResetExpiry()
-		return nil
-	case certificate.FieldRevoked:
-		m.ResetRevoked()
 		return nil
 	}
 	return fmt.Errorf("unknown Certificate field %s", name)

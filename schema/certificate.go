@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 )
@@ -19,6 +17,5 @@ func (Certificate) Fields() []ent.Field {
 		field.Enum("type").Values("console", "notification", "cert-manager", "agent", "user"),
 		field.String("description").Optional(),
 		field.Time("expiry").Optional(),
-		field.Time("revoked").Default(time.Now),
 	}
 }
