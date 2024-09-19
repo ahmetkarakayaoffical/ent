@@ -34,6 +34,8 @@ type Tx struct {
 	Revocation *RevocationClient
 	// Sessions is the client for interacting with the Sessions builders.
 	Sessions *SessionsClient
+	// Settings is the client for interacting with the Settings builders.
+	Settings *SettingsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
@@ -182,6 +184,7 @@ func (tx *Tx) init() {
 	tx.Printer = NewPrinterClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
 	tx.Sessions = NewSessionsClient(tx.config)
+	tx.Settings = NewSettingsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
 	tx.User = NewUserClient(tx.config)

@@ -265,6 +265,32 @@ var (
 			},
 		},
 	}
+	// SettingsColumns holds the columns for the "settings" table.
+	SettingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "language", Type: field.TypeString, Nullable: true},
+		{Name: "organization", Type: field.TypeString, Nullable: true},
+		{Name: "postal_address", Type: field.TypeString, Nullable: true},
+		{Name: "postal_code", Type: field.TypeString, Nullable: true},
+		{Name: "locality", Type: field.TypeString, Nullable: true},
+		{Name: "province", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "country", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_server", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_port", Type: field.TypeInt, Nullable: true},
+		{Name: "smtp_user", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_password", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_auth", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_tls", Type: field.TypeBool, Nullable: true},
+		{Name: "created", Type: field.TypeTime, Nullable: true},
+		{Name: "modified", Type: field.TypeTime, Nullable: true},
+	}
+	// SettingsTable holds the schema information for the "settings" table.
+	SettingsTable = &schema.Table{
+		Name:       "settings",
+		Columns:    SettingsColumns,
+		PrimaryKey: []*schema.Column{SettingsColumns[0]},
+	}
 	// SharesColumns holds the columns for the "shares" table.
 	SharesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -349,6 +375,7 @@ var (
 		PrintersTable,
 		RevocationsTable,
 		SessionsTable,
+		SettingsTable,
 		SharesTable,
 		SystemUpdatesTable,
 		UsersTable,

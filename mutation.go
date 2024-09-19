@@ -23,6 +23,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 	"github.com/doncicuto/openuem_ent/user"
@@ -48,6 +49,7 @@ const (
 	TypePrinter         = "Printer"
 	TypeRevocation      = "Revocation"
 	TypeSessions        = "Sessions"
+	TypeSettings        = "Settings"
 	TypeShare           = "Share"
 	TypeSystemUpdate    = "SystemUpdate"
 	TypeUser            = "User"
@@ -8408,6 +8410,1486 @@ func (m *SessionsMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Sessions edge %s", name)
+}
+
+// SettingsMutation represents an operation that mutates the Settings nodes in the graph.
+type SettingsMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	language       *string
+	organization   *string
+	postal_address *string
+	postal_code    *string
+	locality       *string
+	province       *string
+	state          *string
+	country        *string
+	smtp_server    *string
+	smtp_port      *int
+	addsmtp_port   *int
+	smtp_user      *string
+	smtp_password  *string
+	smtp_auth      *string
+	smtp_tls       *bool
+	created        *time.Time
+	modified       *time.Time
+	clearedFields  map[string]struct{}
+	done           bool
+	oldValue       func(context.Context) (*Settings, error)
+	predicates     []predicate.Settings
+}
+
+var _ ent.Mutation = (*SettingsMutation)(nil)
+
+// settingsOption allows management of the mutation configuration using functional options.
+type settingsOption func(*SettingsMutation)
+
+// newSettingsMutation creates new mutation for the Settings entity.
+func newSettingsMutation(c config, op Op, opts ...settingsOption) *SettingsMutation {
+	m := &SettingsMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSettings,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSettingsID sets the ID field of the mutation.
+func withSettingsID(id int) settingsOption {
+	return func(m *SettingsMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Settings
+		)
+		m.oldValue = func(ctx context.Context) (*Settings, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Settings.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSettings sets the old Settings of the mutation.
+func withSettings(node *Settings) settingsOption {
+	return func(m *SettingsMutation) {
+		m.oldValue = func(context.Context) (*Settings, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SettingsMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SettingsMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SettingsMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SettingsMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Settings.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetLanguage sets the "language" field.
+func (m *SettingsMutation) SetLanguage(s string) {
+	m.language = &s
+}
+
+// Language returns the value of the "language" field in the mutation.
+func (m *SettingsMutation) Language() (r string, exists bool) {
+	v := m.language
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLanguage returns the old "language" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldLanguage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLanguage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLanguage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLanguage: %w", err)
+	}
+	return oldValue.Language, nil
+}
+
+// ClearLanguage clears the value of the "language" field.
+func (m *SettingsMutation) ClearLanguage() {
+	m.language = nil
+	m.clearedFields[settings.FieldLanguage] = struct{}{}
+}
+
+// LanguageCleared returns if the "language" field was cleared in this mutation.
+func (m *SettingsMutation) LanguageCleared() bool {
+	_, ok := m.clearedFields[settings.FieldLanguage]
+	return ok
+}
+
+// ResetLanguage resets all changes to the "language" field.
+func (m *SettingsMutation) ResetLanguage() {
+	m.language = nil
+	delete(m.clearedFields, settings.FieldLanguage)
+}
+
+// SetOrganization sets the "organization" field.
+func (m *SettingsMutation) SetOrganization(s string) {
+	m.organization = &s
+}
+
+// Organization returns the value of the "organization" field in the mutation.
+func (m *SettingsMutation) Organization() (r string, exists bool) {
+	v := m.organization
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganization returns the old "organization" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldOrganization(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganization is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganization requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganization: %w", err)
+	}
+	return oldValue.Organization, nil
+}
+
+// ClearOrganization clears the value of the "organization" field.
+func (m *SettingsMutation) ClearOrganization() {
+	m.organization = nil
+	m.clearedFields[settings.FieldOrganization] = struct{}{}
+}
+
+// OrganizationCleared returns if the "organization" field was cleared in this mutation.
+func (m *SettingsMutation) OrganizationCleared() bool {
+	_, ok := m.clearedFields[settings.FieldOrganization]
+	return ok
+}
+
+// ResetOrganization resets all changes to the "organization" field.
+func (m *SettingsMutation) ResetOrganization() {
+	m.organization = nil
+	delete(m.clearedFields, settings.FieldOrganization)
+}
+
+// SetPostalAddress sets the "postal_address" field.
+func (m *SettingsMutation) SetPostalAddress(s string) {
+	m.postal_address = &s
+}
+
+// PostalAddress returns the value of the "postal_address" field in the mutation.
+func (m *SettingsMutation) PostalAddress() (r string, exists bool) {
+	v := m.postal_address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalAddress returns the old "postal_address" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldPostalAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalAddress: %w", err)
+	}
+	return oldValue.PostalAddress, nil
+}
+
+// ClearPostalAddress clears the value of the "postal_address" field.
+func (m *SettingsMutation) ClearPostalAddress() {
+	m.postal_address = nil
+	m.clearedFields[settings.FieldPostalAddress] = struct{}{}
+}
+
+// PostalAddressCleared returns if the "postal_address" field was cleared in this mutation.
+func (m *SettingsMutation) PostalAddressCleared() bool {
+	_, ok := m.clearedFields[settings.FieldPostalAddress]
+	return ok
+}
+
+// ResetPostalAddress resets all changes to the "postal_address" field.
+func (m *SettingsMutation) ResetPostalAddress() {
+	m.postal_address = nil
+	delete(m.clearedFields, settings.FieldPostalAddress)
+}
+
+// SetPostalCode sets the "postal_code" field.
+func (m *SettingsMutation) SetPostalCode(s string) {
+	m.postal_code = &s
+}
+
+// PostalCode returns the value of the "postal_code" field in the mutation.
+func (m *SettingsMutation) PostalCode() (r string, exists bool) {
+	v := m.postal_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalCode returns the old "postal_code" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldPostalCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalCode: %w", err)
+	}
+	return oldValue.PostalCode, nil
+}
+
+// ClearPostalCode clears the value of the "postal_code" field.
+func (m *SettingsMutation) ClearPostalCode() {
+	m.postal_code = nil
+	m.clearedFields[settings.FieldPostalCode] = struct{}{}
+}
+
+// PostalCodeCleared returns if the "postal_code" field was cleared in this mutation.
+func (m *SettingsMutation) PostalCodeCleared() bool {
+	_, ok := m.clearedFields[settings.FieldPostalCode]
+	return ok
+}
+
+// ResetPostalCode resets all changes to the "postal_code" field.
+func (m *SettingsMutation) ResetPostalCode() {
+	m.postal_code = nil
+	delete(m.clearedFields, settings.FieldPostalCode)
+}
+
+// SetLocality sets the "locality" field.
+func (m *SettingsMutation) SetLocality(s string) {
+	m.locality = &s
+}
+
+// Locality returns the value of the "locality" field in the mutation.
+func (m *SettingsMutation) Locality() (r string, exists bool) {
+	v := m.locality
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocality returns the old "locality" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldLocality(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocality is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocality requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocality: %w", err)
+	}
+	return oldValue.Locality, nil
+}
+
+// ClearLocality clears the value of the "locality" field.
+func (m *SettingsMutation) ClearLocality() {
+	m.locality = nil
+	m.clearedFields[settings.FieldLocality] = struct{}{}
+}
+
+// LocalityCleared returns if the "locality" field was cleared in this mutation.
+func (m *SettingsMutation) LocalityCleared() bool {
+	_, ok := m.clearedFields[settings.FieldLocality]
+	return ok
+}
+
+// ResetLocality resets all changes to the "locality" field.
+func (m *SettingsMutation) ResetLocality() {
+	m.locality = nil
+	delete(m.clearedFields, settings.FieldLocality)
+}
+
+// SetProvince sets the "province" field.
+func (m *SettingsMutation) SetProvince(s string) {
+	m.province = &s
+}
+
+// Province returns the value of the "province" field in the mutation.
+func (m *SettingsMutation) Province() (r string, exists bool) {
+	v := m.province
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProvince returns the old "province" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldProvince(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProvince is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProvince requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProvince: %w", err)
+	}
+	return oldValue.Province, nil
+}
+
+// ClearProvince clears the value of the "province" field.
+func (m *SettingsMutation) ClearProvince() {
+	m.province = nil
+	m.clearedFields[settings.FieldProvince] = struct{}{}
+}
+
+// ProvinceCleared returns if the "province" field was cleared in this mutation.
+func (m *SettingsMutation) ProvinceCleared() bool {
+	_, ok := m.clearedFields[settings.FieldProvince]
+	return ok
+}
+
+// ResetProvince resets all changes to the "province" field.
+func (m *SettingsMutation) ResetProvince() {
+	m.province = nil
+	delete(m.clearedFields, settings.FieldProvince)
+}
+
+// SetState sets the "state" field.
+func (m *SettingsMutation) SetState(s string) {
+	m.state = &s
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *SettingsMutation) State() (r string, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldState(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// ClearState clears the value of the "state" field.
+func (m *SettingsMutation) ClearState() {
+	m.state = nil
+	m.clearedFields[settings.FieldState] = struct{}{}
+}
+
+// StateCleared returns if the "state" field was cleared in this mutation.
+func (m *SettingsMutation) StateCleared() bool {
+	_, ok := m.clearedFields[settings.FieldState]
+	return ok
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *SettingsMutation) ResetState() {
+	m.state = nil
+	delete(m.clearedFields, settings.FieldState)
+}
+
+// SetCountry sets the "country" field.
+func (m *SettingsMutation) SetCountry(s string) {
+	m.country = &s
+}
+
+// Country returns the value of the "country" field in the mutation.
+func (m *SettingsMutation) Country() (r string, exists bool) {
+	v := m.country
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCountry returns the old "country" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldCountry(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCountry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCountry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCountry: %w", err)
+	}
+	return oldValue.Country, nil
+}
+
+// ClearCountry clears the value of the "country" field.
+func (m *SettingsMutation) ClearCountry() {
+	m.country = nil
+	m.clearedFields[settings.FieldCountry] = struct{}{}
+}
+
+// CountryCleared returns if the "country" field was cleared in this mutation.
+func (m *SettingsMutation) CountryCleared() bool {
+	_, ok := m.clearedFields[settings.FieldCountry]
+	return ok
+}
+
+// ResetCountry resets all changes to the "country" field.
+func (m *SettingsMutation) ResetCountry() {
+	m.country = nil
+	delete(m.clearedFields, settings.FieldCountry)
+}
+
+// SetSMTPServer sets the "smtp_server" field.
+func (m *SettingsMutation) SetSMTPServer(s string) {
+	m.smtp_server = &s
+}
+
+// SMTPServer returns the value of the "smtp_server" field in the mutation.
+func (m *SettingsMutation) SMTPServer() (r string, exists bool) {
+	v := m.smtp_server
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPServer returns the old "smtp_server" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPServer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPServer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPServer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPServer: %w", err)
+	}
+	return oldValue.SMTPServer, nil
+}
+
+// ClearSMTPServer clears the value of the "smtp_server" field.
+func (m *SettingsMutation) ClearSMTPServer() {
+	m.smtp_server = nil
+	m.clearedFields[settings.FieldSMTPServer] = struct{}{}
+}
+
+// SMTPServerCleared returns if the "smtp_server" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPServerCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPServer]
+	return ok
+}
+
+// ResetSMTPServer resets all changes to the "smtp_server" field.
+func (m *SettingsMutation) ResetSMTPServer() {
+	m.smtp_server = nil
+	delete(m.clearedFields, settings.FieldSMTPServer)
+}
+
+// SetSMTPPort sets the "smtp_port" field.
+func (m *SettingsMutation) SetSMTPPort(i int) {
+	m.smtp_port = &i
+	m.addsmtp_port = nil
+}
+
+// SMTPPort returns the value of the "smtp_port" field in the mutation.
+func (m *SettingsMutation) SMTPPort() (r int, exists bool) {
+	v := m.smtp_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPPort returns the old "smtp_port" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPPort(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPPort: %w", err)
+	}
+	return oldValue.SMTPPort, nil
+}
+
+// AddSMTPPort adds i to the "smtp_port" field.
+func (m *SettingsMutation) AddSMTPPort(i int) {
+	if m.addsmtp_port != nil {
+		*m.addsmtp_port += i
+	} else {
+		m.addsmtp_port = &i
+	}
+}
+
+// AddedSMTPPort returns the value that was added to the "smtp_port" field in this mutation.
+func (m *SettingsMutation) AddedSMTPPort() (r int, exists bool) {
+	v := m.addsmtp_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearSMTPPort clears the value of the "smtp_port" field.
+func (m *SettingsMutation) ClearSMTPPort() {
+	m.smtp_port = nil
+	m.addsmtp_port = nil
+	m.clearedFields[settings.FieldSMTPPort] = struct{}{}
+}
+
+// SMTPPortCleared returns if the "smtp_port" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPPortCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPPort]
+	return ok
+}
+
+// ResetSMTPPort resets all changes to the "smtp_port" field.
+func (m *SettingsMutation) ResetSMTPPort() {
+	m.smtp_port = nil
+	m.addsmtp_port = nil
+	delete(m.clearedFields, settings.FieldSMTPPort)
+}
+
+// SetSMTPUser sets the "smtp_user" field.
+func (m *SettingsMutation) SetSMTPUser(s string) {
+	m.smtp_user = &s
+}
+
+// SMTPUser returns the value of the "smtp_user" field in the mutation.
+func (m *SettingsMutation) SMTPUser() (r string, exists bool) {
+	v := m.smtp_user
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPUser returns the old "smtp_user" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPUser(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPUser is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPUser requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPUser: %w", err)
+	}
+	return oldValue.SMTPUser, nil
+}
+
+// ClearSMTPUser clears the value of the "smtp_user" field.
+func (m *SettingsMutation) ClearSMTPUser() {
+	m.smtp_user = nil
+	m.clearedFields[settings.FieldSMTPUser] = struct{}{}
+}
+
+// SMTPUserCleared returns if the "smtp_user" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPUserCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPUser]
+	return ok
+}
+
+// ResetSMTPUser resets all changes to the "smtp_user" field.
+func (m *SettingsMutation) ResetSMTPUser() {
+	m.smtp_user = nil
+	delete(m.clearedFields, settings.FieldSMTPUser)
+}
+
+// SetSMTPPassword sets the "smtp_password" field.
+func (m *SettingsMutation) SetSMTPPassword(s string) {
+	m.smtp_password = &s
+}
+
+// SMTPPassword returns the value of the "smtp_password" field in the mutation.
+func (m *SettingsMutation) SMTPPassword() (r string, exists bool) {
+	v := m.smtp_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPPassword returns the old "smtp_password" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPPassword: %w", err)
+	}
+	return oldValue.SMTPPassword, nil
+}
+
+// ClearSMTPPassword clears the value of the "smtp_password" field.
+func (m *SettingsMutation) ClearSMTPPassword() {
+	m.smtp_password = nil
+	m.clearedFields[settings.FieldSMTPPassword] = struct{}{}
+}
+
+// SMTPPasswordCleared returns if the "smtp_password" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPPasswordCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPPassword]
+	return ok
+}
+
+// ResetSMTPPassword resets all changes to the "smtp_password" field.
+func (m *SettingsMutation) ResetSMTPPassword() {
+	m.smtp_password = nil
+	delete(m.clearedFields, settings.FieldSMTPPassword)
+}
+
+// SetSMTPAuth sets the "smtp_auth" field.
+func (m *SettingsMutation) SetSMTPAuth(s string) {
+	m.smtp_auth = &s
+}
+
+// SMTPAuth returns the value of the "smtp_auth" field in the mutation.
+func (m *SettingsMutation) SMTPAuth() (r string, exists bool) {
+	v := m.smtp_auth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPAuth returns the old "smtp_auth" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPAuth(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPAuth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPAuth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPAuth: %w", err)
+	}
+	return oldValue.SMTPAuth, nil
+}
+
+// ClearSMTPAuth clears the value of the "smtp_auth" field.
+func (m *SettingsMutation) ClearSMTPAuth() {
+	m.smtp_auth = nil
+	m.clearedFields[settings.FieldSMTPAuth] = struct{}{}
+}
+
+// SMTPAuthCleared returns if the "smtp_auth" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPAuthCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPAuth]
+	return ok
+}
+
+// ResetSMTPAuth resets all changes to the "smtp_auth" field.
+func (m *SettingsMutation) ResetSMTPAuth() {
+	m.smtp_auth = nil
+	delete(m.clearedFields, settings.FieldSMTPAuth)
+}
+
+// SetSMTPTLS sets the "smtp_tls" field.
+func (m *SettingsMutation) SetSMTPTLS(b bool) {
+	m.smtp_tls = &b
+}
+
+// SMTPTLS returns the value of the "smtp_tls" field in the mutation.
+func (m *SettingsMutation) SMTPTLS() (r bool, exists bool) {
+	v := m.smtp_tls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSMTPTLS returns the old "smtp_tls" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldSMTPTLS(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSMTPTLS is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSMTPTLS requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSMTPTLS: %w", err)
+	}
+	return oldValue.SMTPTLS, nil
+}
+
+// ClearSMTPTLS clears the value of the "smtp_tls" field.
+func (m *SettingsMutation) ClearSMTPTLS() {
+	m.smtp_tls = nil
+	m.clearedFields[settings.FieldSMTPTLS] = struct{}{}
+}
+
+// SMTPTLSCleared returns if the "smtp_tls" field was cleared in this mutation.
+func (m *SettingsMutation) SMTPTLSCleared() bool {
+	_, ok := m.clearedFields[settings.FieldSMTPTLS]
+	return ok
+}
+
+// ResetSMTPTLS resets all changes to the "smtp_tls" field.
+func (m *SettingsMutation) ResetSMTPTLS() {
+	m.smtp_tls = nil
+	delete(m.clearedFields, settings.FieldSMTPTLS)
+}
+
+// SetCreated sets the "created" field.
+func (m *SettingsMutation) SetCreated(t time.Time) {
+	m.created = &t
+}
+
+// Created returns the value of the "created" field in the mutation.
+func (m *SettingsMutation) Created() (r time.Time, exists bool) {
+	v := m.created
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreated returns the old "created" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldCreated(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreated is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreated requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreated: %w", err)
+	}
+	return oldValue.Created, nil
+}
+
+// ClearCreated clears the value of the "created" field.
+func (m *SettingsMutation) ClearCreated() {
+	m.created = nil
+	m.clearedFields[settings.FieldCreated] = struct{}{}
+}
+
+// CreatedCleared returns if the "created" field was cleared in this mutation.
+func (m *SettingsMutation) CreatedCleared() bool {
+	_, ok := m.clearedFields[settings.FieldCreated]
+	return ok
+}
+
+// ResetCreated resets all changes to the "created" field.
+func (m *SettingsMutation) ResetCreated() {
+	m.created = nil
+	delete(m.clearedFields, settings.FieldCreated)
+}
+
+// SetModified sets the "modified" field.
+func (m *SettingsMutation) SetModified(t time.Time) {
+	m.modified = &t
+}
+
+// Modified returns the value of the "modified" field in the mutation.
+func (m *SettingsMutation) Modified() (r time.Time, exists bool) {
+	v := m.modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModified returns the old "modified" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModified: %w", err)
+	}
+	return oldValue.Modified, nil
+}
+
+// ClearModified clears the value of the "modified" field.
+func (m *SettingsMutation) ClearModified() {
+	m.modified = nil
+	m.clearedFields[settings.FieldModified] = struct{}{}
+}
+
+// ModifiedCleared returns if the "modified" field was cleared in this mutation.
+func (m *SettingsMutation) ModifiedCleared() bool {
+	_, ok := m.clearedFields[settings.FieldModified]
+	return ok
+}
+
+// ResetModified resets all changes to the "modified" field.
+func (m *SettingsMutation) ResetModified() {
+	m.modified = nil
+	delete(m.clearedFields, settings.FieldModified)
+}
+
+// Where appends a list predicates to the SettingsMutation builder.
+func (m *SettingsMutation) Where(ps ...predicate.Settings) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SettingsMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SettingsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Settings, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SettingsMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SettingsMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Settings).
+func (m *SettingsMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SettingsMutation) Fields() []string {
+	fields := make([]string, 0, 16)
+	if m.language != nil {
+		fields = append(fields, settings.FieldLanguage)
+	}
+	if m.organization != nil {
+		fields = append(fields, settings.FieldOrganization)
+	}
+	if m.postal_address != nil {
+		fields = append(fields, settings.FieldPostalAddress)
+	}
+	if m.postal_code != nil {
+		fields = append(fields, settings.FieldPostalCode)
+	}
+	if m.locality != nil {
+		fields = append(fields, settings.FieldLocality)
+	}
+	if m.province != nil {
+		fields = append(fields, settings.FieldProvince)
+	}
+	if m.state != nil {
+		fields = append(fields, settings.FieldState)
+	}
+	if m.country != nil {
+		fields = append(fields, settings.FieldCountry)
+	}
+	if m.smtp_server != nil {
+		fields = append(fields, settings.FieldSMTPServer)
+	}
+	if m.smtp_port != nil {
+		fields = append(fields, settings.FieldSMTPPort)
+	}
+	if m.smtp_user != nil {
+		fields = append(fields, settings.FieldSMTPUser)
+	}
+	if m.smtp_password != nil {
+		fields = append(fields, settings.FieldSMTPPassword)
+	}
+	if m.smtp_auth != nil {
+		fields = append(fields, settings.FieldSMTPAuth)
+	}
+	if m.smtp_tls != nil {
+		fields = append(fields, settings.FieldSMTPTLS)
+	}
+	if m.created != nil {
+		fields = append(fields, settings.FieldCreated)
+	}
+	if m.modified != nil {
+		fields = append(fields, settings.FieldModified)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case settings.FieldLanguage:
+		return m.Language()
+	case settings.FieldOrganization:
+		return m.Organization()
+	case settings.FieldPostalAddress:
+		return m.PostalAddress()
+	case settings.FieldPostalCode:
+		return m.PostalCode()
+	case settings.FieldLocality:
+		return m.Locality()
+	case settings.FieldProvince:
+		return m.Province()
+	case settings.FieldState:
+		return m.State()
+	case settings.FieldCountry:
+		return m.Country()
+	case settings.FieldSMTPServer:
+		return m.SMTPServer()
+	case settings.FieldSMTPPort:
+		return m.SMTPPort()
+	case settings.FieldSMTPUser:
+		return m.SMTPUser()
+	case settings.FieldSMTPPassword:
+		return m.SMTPPassword()
+	case settings.FieldSMTPAuth:
+		return m.SMTPAuth()
+	case settings.FieldSMTPTLS:
+		return m.SMTPTLS()
+	case settings.FieldCreated:
+		return m.Created()
+	case settings.FieldModified:
+		return m.Modified()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case settings.FieldLanguage:
+		return m.OldLanguage(ctx)
+	case settings.FieldOrganization:
+		return m.OldOrganization(ctx)
+	case settings.FieldPostalAddress:
+		return m.OldPostalAddress(ctx)
+	case settings.FieldPostalCode:
+		return m.OldPostalCode(ctx)
+	case settings.FieldLocality:
+		return m.OldLocality(ctx)
+	case settings.FieldProvince:
+		return m.OldProvince(ctx)
+	case settings.FieldState:
+		return m.OldState(ctx)
+	case settings.FieldCountry:
+		return m.OldCountry(ctx)
+	case settings.FieldSMTPServer:
+		return m.OldSMTPServer(ctx)
+	case settings.FieldSMTPPort:
+		return m.OldSMTPPort(ctx)
+	case settings.FieldSMTPUser:
+		return m.OldSMTPUser(ctx)
+	case settings.FieldSMTPPassword:
+		return m.OldSMTPPassword(ctx)
+	case settings.FieldSMTPAuth:
+		return m.OldSMTPAuth(ctx)
+	case settings.FieldSMTPTLS:
+		return m.OldSMTPTLS(ctx)
+	case settings.FieldCreated:
+		return m.OldCreated(ctx)
+	case settings.FieldModified:
+		return m.OldModified(ctx)
+	}
+	return nil, fmt.Errorf("unknown Settings field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SettingsMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case settings.FieldLanguage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLanguage(v)
+		return nil
+	case settings.FieldOrganization:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganization(v)
+		return nil
+	case settings.FieldPostalAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalAddress(v)
+		return nil
+	case settings.FieldPostalCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalCode(v)
+		return nil
+	case settings.FieldLocality:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocality(v)
+		return nil
+	case settings.FieldProvince:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProvince(v)
+		return nil
+	case settings.FieldState:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
+	case settings.FieldCountry:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCountry(v)
+		return nil
+	case settings.FieldSMTPServer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPServer(v)
+		return nil
+	case settings.FieldSMTPPort:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPPort(v)
+		return nil
+	case settings.FieldSMTPUser:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPUser(v)
+		return nil
+	case settings.FieldSMTPPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPPassword(v)
+		return nil
+	case settings.FieldSMTPAuth:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPAuth(v)
+		return nil
+	case settings.FieldSMTPTLS:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSMTPTLS(v)
+		return nil
+	case settings.FieldCreated:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreated(v)
+		return nil
+	case settings.FieldModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModified(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Settings field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SettingsMutation) AddedFields() []string {
+	var fields []string
+	if m.addsmtp_port != nil {
+		fields = append(fields, settings.FieldSMTPPort)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SettingsMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case settings.FieldSMTPPort:
+		return m.AddedSMTPPort()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SettingsMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case settings.FieldSMTPPort:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSMTPPort(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Settings numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SettingsMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(settings.FieldLanguage) {
+		fields = append(fields, settings.FieldLanguage)
+	}
+	if m.FieldCleared(settings.FieldOrganization) {
+		fields = append(fields, settings.FieldOrganization)
+	}
+	if m.FieldCleared(settings.FieldPostalAddress) {
+		fields = append(fields, settings.FieldPostalAddress)
+	}
+	if m.FieldCleared(settings.FieldPostalCode) {
+		fields = append(fields, settings.FieldPostalCode)
+	}
+	if m.FieldCleared(settings.FieldLocality) {
+		fields = append(fields, settings.FieldLocality)
+	}
+	if m.FieldCleared(settings.FieldProvince) {
+		fields = append(fields, settings.FieldProvince)
+	}
+	if m.FieldCleared(settings.FieldState) {
+		fields = append(fields, settings.FieldState)
+	}
+	if m.FieldCleared(settings.FieldCountry) {
+		fields = append(fields, settings.FieldCountry)
+	}
+	if m.FieldCleared(settings.FieldSMTPServer) {
+		fields = append(fields, settings.FieldSMTPServer)
+	}
+	if m.FieldCleared(settings.FieldSMTPPort) {
+		fields = append(fields, settings.FieldSMTPPort)
+	}
+	if m.FieldCleared(settings.FieldSMTPUser) {
+		fields = append(fields, settings.FieldSMTPUser)
+	}
+	if m.FieldCleared(settings.FieldSMTPPassword) {
+		fields = append(fields, settings.FieldSMTPPassword)
+	}
+	if m.FieldCleared(settings.FieldSMTPAuth) {
+		fields = append(fields, settings.FieldSMTPAuth)
+	}
+	if m.FieldCleared(settings.FieldSMTPTLS) {
+		fields = append(fields, settings.FieldSMTPTLS)
+	}
+	if m.FieldCleared(settings.FieldCreated) {
+		fields = append(fields, settings.FieldCreated)
+	}
+	if m.FieldCleared(settings.FieldModified) {
+		fields = append(fields, settings.FieldModified)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SettingsMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SettingsMutation) ClearField(name string) error {
+	switch name {
+	case settings.FieldLanguage:
+		m.ClearLanguage()
+		return nil
+	case settings.FieldOrganization:
+		m.ClearOrganization()
+		return nil
+	case settings.FieldPostalAddress:
+		m.ClearPostalAddress()
+		return nil
+	case settings.FieldPostalCode:
+		m.ClearPostalCode()
+		return nil
+	case settings.FieldLocality:
+		m.ClearLocality()
+		return nil
+	case settings.FieldProvince:
+		m.ClearProvince()
+		return nil
+	case settings.FieldState:
+		m.ClearState()
+		return nil
+	case settings.FieldCountry:
+		m.ClearCountry()
+		return nil
+	case settings.FieldSMTPServer:
+		m.ClearSMTPServer()
+		return nil
+	case settings.FieldSMTPPort:
+		m.ClearSMTPPort()
+		return nil
+	case settings.FieldSMTPUser:
+		m.ClearSMTPUser()
+		return nil
+	case settings.FieldSMTPPassword:
+		m.ClearSMTPPassword()
+		return nil
+	case settings.FieldSMTPAuth:
+		m.ClearSMTPAuth()
+		return nil
+	case settings.FieldSMTPTLS:
+		m.ClearSMTPTLS()
+		return nil
+	case settings.FieldCreated:
+		m.ClearCreated()
+		return nil
+	case settings.FieldModified:
+		m.ClearModified()
+		return nil
+	}
+	return fmt.Errorf("unknown Settings nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SettingsMutation) ResetField(name string) error {
+	switch name {
+	case settings.FieldLanguage:
+		m.ResetLanguage()
+		return nil
+	case settings.FieldOrganization:
+		m.ResetOrganization()
+		return nil
+	case settings.FieldPostalAddress:
+		m.ResetPostalAddress()
+		return nil
+	case settings.FieldPostalCode:
+		m.ResetPostalCode()
+		return nil
+	case settings.FieldLocality:
+		m.ResetLocality()
+		return nil
+	case settings.FieldProvince:
+		m.ResetProvince()
+		return nil
+	case settings.FieldState:
+		m.ResetState()
+		return nil
+	case settings.FieldCountry:
+		m.ResetCountry()
+		return nil
+	case settings.FieldSMTPServer:
+		m.ResetSMTPServer()
+		return nil
+	case settings.FieldSMTPPort:
+		m.ResetSMTPPort()
+		return nil
+	case settings.FieldSMTPUser:
+		m.ResetSMTPUser()
+		return nil
+	case settings.FieldSMTPPassword:
+		m.ResetSMTPPassword()
+		return nil
+	case settings.FieldSMTPAuth:
+		m.ResetSMTPAuth()
+		return nil
+	case settings.FieldSMTPTLS:
+		m.ResetSMTPTLS()
+		return nil
+	case settings.FieldCreated:
+		m.ResetCreated()
+		return nil
+	case settings.FieldModified:
+		m.ResetModified()
+		return nil
+	}
+	return fmt.Errorf("unknown Settings field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SettingsMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SettingsMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SettingsMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SettingsMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SettingsMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SettingsMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SettingsMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Settings unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SettingsMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Settings edge %s", name)
 }
 
 // ShareMutation represents an operation that mutates the Share nodes in the graph.

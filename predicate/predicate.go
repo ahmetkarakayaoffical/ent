@@ -39,6 +39,9 @@ type Revocation func(*sql.Selector)
 // Sessions is the predicate function for sessions builders.
 type Sessions func(*sql.Selector)
 
+// Settings is the predicate function for settings builders.
+type Settings func(*sql.Selector)
+
 // Share is the predicate function for share builders.
 type Share func(*sql.Selector)
 

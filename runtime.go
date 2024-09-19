@@ -10,6 +10,7 @@ import (
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/user"
 )
 
@@ -69,6 +70,18 @@ func init() {
 	sessionsDescID := sessionsFields[0].Descriptor()
 	// sessions.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
+	settingsFields := schema.Settings{}.Fields()
+	_ = settingsFields
+	// settingsDescCreated is the schema descriptor for created field.
+	settingsDescCreated := settingsFields[14].Descriptor()
+	// settings.DefaultCreated holds the default value on creation for the created field.
+	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
+	// settingsDescModified is the schema descriptor for modified field.
+	settingsDescModified := settingsFields[15].Descriptor()
+	// settings.DefaultModified holds the default value on creation for the modified field.
+	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
+	// settings.UpdateDefaultModified holds the default value on update for the modified field.
+	settings.UpdateDefaultModified = settingsDescModified.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescRegister is the schema descriptor for register field.

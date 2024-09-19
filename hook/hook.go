@@ -141,6 +141,18 @@ func (f SessionsFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SessionsMutation", m)
 }
 
+// The SettingsFunc type is an adapter to allow the use of ordinary
+// function as Settings mutator.
+type SettingsFunc func(context.Context, *openuem_ent.SettingsMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SettingsFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.SettingsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SettingsMutation", m)
+}
+
 // The ShareFunc type is an adapter to allow the use of ordinary
 // function as Share mutator.
 type ShareFunc func(context.Context, *openuem_ent.ShareMutation) (openuem_ent.Value, error)
