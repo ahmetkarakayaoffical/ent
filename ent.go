@@ -15,6 +15,7 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
+	"github.com/doncicuto/openuem_ent/certificate"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
@@ -90,6 +91,7 @@ func checkColumn(table, column string) error {
 			agent.Table:           agent.ValidColumn,
 			antivirus.Table:       antivirus.ValidColumn,
 			app.Table:             app.ValidColumn,
+			certificate.Table:     certificate.ValidColumn,
 			computer.Table:        computer.ValidColumn,
 			logicaldisk.Table:     logicaldisk.ValidColumn,
 			monitor.Table:         monitor.ValidColumn,

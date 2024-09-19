@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/doncicuto/openuem_ent/agent"
+	"github.com/doncicuto/openuem_ent/certificate"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
@@ -44,6 +45,12 @@ func init() {
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	agent.IDValidator = agentDescID.Validators[0].(func(string) error)
+	certificateFields := schema.Certificate{}.Fields()
+	_ = certificateFields
+	// certificateDescRevoked is the schema descriptor for revoked field.
+	certificateDescRevoked := certificateFields[4].Descriptor()
+	// certificate.DefaultRevoked holds the default value on creation for the revoked field.
+	certificate.DefaultRevoked = certificateDescRevoked.Default.(func() time.Time)
 	logicaldiskFields := schema.LogicalDisk{}.Fields()
 	_ = logicaldiskFields
 	// logicaldiskDescUsage is the schema descriptor for usage field.

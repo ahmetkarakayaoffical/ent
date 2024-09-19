@@ -45,6 +45,18 @@ func (f AppFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_en
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.AppMutation", m)
 }
 
+// The CertificateFunc type is an adapter to allow the use of ordinary
+// function as Certificate mutator.
+type CertificateFunc func(context.Context, *openuem_ent.CertificateMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CertificateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.CertificateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.CertificateMutation", m)
+}
+
 // The ComputerFunc type is an adapter to allow the use of ordinary
 // function as Computer mutator.
 type ComputerFunc func(context.Context, *openuem_ent.ComputerMutation) (openuem_ent.Value, error)

@@ -18,6 +18,7 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
+	"github.com/doncicuto/openuem_ent/certificate"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
@@ -43,6 +44,8 @@ type Client struct {
 	Antivirus *AntivirusClient
 	// App is the client for interacting with the App builders.
 	App *AppClient
+	// Certificate is the client for interacting with the Certificate builders.
+	Certificate *CertificateClient
 	// Computer is the client for interacting with the Computer builders.
 	Computer *ComputerClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
@@ -81,6 +84,7 @@ func (c *Client) init() {
 	c.Agent = NewAgentClient(c.config)
 	c.Antivirus = NewAntivirusClient(c.config)
 	c.App = NewAppClient(c.config)
+	c.Certificate = NewCertificateClient(c.config)
 	c.Computer = NewComputerClient(c.config)
 	c.LogicalDisk = NewLogicalDiskClient(c.config)
 	c.Monitor = NewMonitorClient(c.config)
@@ -188,6 +192,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Agent:           NewAgentClient(cfg),
 		Antivirus:       NewAntivirusClient(cfg),
 		App:             NewAppClient(cfg),
+		Certificate:     NewCertificateClient(cfg),
 		Computer:        NewComputerClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
@@ -222,6 +227,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Agent:           NewAgentClient(cfg),
 		Antivirus:       NewAntivirusClient(cfg),
 		App:             NewAppClient(cfg),
+		Certificate:     NewCertificateClient(cfg),
 		Computer:        NewComputerClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
@@ -263,9 +269,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.Antivirus, c.App, c.Computer, c.LogicalDisk, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation, c.Sessions,
-		c.Settings, c.Share, c.SystemUpdate, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.LogicalDisk,
+		c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation,
+		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -275,9 +281,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.Antivirus, c.App, c.Computer, c.LogicalDisk, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation, c.Sessions,
-		c.Settings, c.Share, c.SystemUpdate, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.LogicalDisk,
+		c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation,
+		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -292,6 +298,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Antivirus.mutate(ctx, m)
 	case *AppMutation:
 		return c.App.mutate(ctx, m)
+	case *CertificateMutation:
+		return c.Certificate.mutate(ctx, m)
 	case *ComputerMutation:
 		return c.Computer.mutate(ctx, m)
 	case *LogicalDiskMutation:
@@ -909,6 +917,139 @@ func (c *AppClient) mutate(ctx context.Context, m *AppMutation) (Value, error) {
 		return (&AppDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("openuem_ent: unknown App mutation op: %q", m.Op())
+	}
+}
+
+// CertificateClient is a client for the Certificate schema.
+type CertificateClient struct {
+	config
+}
+
+// NewCertificateClient returns a client for the Certificate from the given config.
+func NewCertificateClient(c config) *CertificateClient {
+	return &CertificateClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `certificate.Hooks(f(g(h())))`.
+func (c *CertificateClient) Use(hooks ...Hook) {
+	c.hooks.Certificate = append(c.hooks.Certificate, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `certificate.Intercept(f(g(h())))`.
+func (c *CertificateClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Certificate = append(c.inters.Certificate, interceptors...)
+}
+
+// Create returns a builder for creating a Certificate entity.
+func (c *CertificateClient) Create() *CertificateCreate {
+	mutation := newCertificateMutation(c.config, OpCreate)
+	return &CertificateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Certificate entities.
+func (c *CertificateClient) CreateBulk(builders ...*CertificateCreate) *CertificateCreateBulk {
+	return &CertificateCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CertificateClient) MapCreateBulk(slice any, setFunc func(*CertificateCreate, int)) *CertificateCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CertificateCreateBulk{err: fmt.Errorf("calling to CertificateClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CertificateCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CertificateCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Certificate.
+func (c *CertificateClient) Update() *CertificateUpdate {
+	mutation := newCertificateMutation(c.config, OpUpdate)
+	return &CertificateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CertificateClient) UpdateOne(ce *Certificate) *CertificateUpdateOne {
+	mutation := newCertificateMutation(c.config, OpUpdateOne, withCertificate(ce))
+	return &CertificateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CertificateClient) UpdateOneID(id int64) *CertificateUpdateOne {
+	mutation := newCertificateMutation(c.config, OpUpdateOne, withCertificateID(id))
+	return &CertificateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Certificate.
+func (c *CertificateClient) Delete() *CertificateDelete {
+	mutation := newCertificateMutation(c.config, OpDelete)
+	return &CertificateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CertificateClient) DeleteOne(ce *Certificate) *CertificateDeleteOne {
+	return c.DeleteOneID(ce.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CertificateClient) DeleteOneID(id int64) *CertificateDeleteOne {
+	builder := c.Delete().Where(certificate.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CertificateDeleteOne{builder}
+}
+
+// Query returns a query builder for Certificate.
+func (c *CertificateClient) Query() *CertificateQuery {
+	return &CertificateQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCertificate},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Certificate entity by its id.
+func (c *CertificateClient) Get(ctx context.Context, id int64) (*Certificate, error) {
+	return c.Query().Where(certificate.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CertificateClient) GetX(ctx context.Context, id int64) *Certificate {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CertificateClient) Hooks() []Hook {
+	return c.hooks.Certificate
+}
+
+// Interceptors returns the client interceptors.
+func (c *CertificateClient) Interceptors() []Interceptor {
+	return c.inters.Certificate
+}
+
+func (c *CertificateClient) mutate(ctx context.Context, m *CertificateMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CertificateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CertificateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CertificateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CertificateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Certificate mutation op: %q", m.Op())
 	}
 }
 
@@ -2671,13 +2812,13 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Computer, LogicalDisk, Monitor, NetworkAdapter,
-		OperatingSystem, Printer, Revocation, Sessions, Settings, Share, SystemUpdate,
-		User []ent.Hook
+		Agent, Antivirus, App, Certificate, Computer, LogicalDisk, Monitor,
+		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
+		Share, SystemUpdate, User []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Computer, LogicalDisk, Monitor, NetworkAdapter,
-		OperatingSystem, Printer, Revocation, Sessions, Settings, Share, SystemUpdate,
-		User []ent.Interceptor
+		Agent, Antivirus, App, Certificate, Computer, LogicalDisk, Monitor,
+		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
+		Share, SystemUpdate, User []ent.Interceptor
 	}
 )

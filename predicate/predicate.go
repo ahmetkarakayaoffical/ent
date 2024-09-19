@@ -15,6 +15,9 @@ type Antivirus func(*sql.Selector)
 // App is the predicate function for app builders.
 type App func(*sql.Selector)
 
+// Certificate is the predicate function for certificate builders.
+type Certificate func(*sql.Selector)
+
 // Computer is the predicate function for computer builders.
 type Computer func(*sql.Selector)
 

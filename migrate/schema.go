@@ -70,6 +70,20 @@ var (
 			},
 		},
 	}
+	// CertificatesColumns holds the columns for the "certificates" table.
+	CertificatesColumns = []*schema.Column{
+		{Name: "serial", Type: field.TypeInt64, Increment: true},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"console", "notification", "cert-manager", "agent", "user"}},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "expiry", Type: field.TypeTime, Nullable: true},
+		{Name: "revoked", Type: field.TypeTime},
+	}
+	// CertificatesTable holds the schema information for the "certificates" table.
+	CertificatesTable = &schema.Table{
+		Name:       "certificates",
+		Columns:    CertificatesColumns,
+		PrimaryKey: []*schema.Column{CertificatesColumns[0]},
+	}
 	// ComputersColumns holds the columns for the "computers" table.
 	ComputersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -367,6 +381,7 @@ var (
 		AgentsTable,
 		AntiviriTable,
 		AppsTable,
+		CertificatesTable,
 		ComputersTable,
 		LogicalDisksTable,
 		MonitorsTable,
