@@ -293,8 +293,9 @@ var (
 		{Name: "smtp_port", Type: field.TypeInt, Nullable: true},
 		{Name: "smtp_user", Type: field.TypeString, Nullable: true},
 		{Name: "smtp_password", Type: field.TypeString, Nullable: true},
-		{Name: "smtp_auth", Type: field.TypeString, Nullable: true},
+		{Name: "smtp_auth", Type: field.TypeString, Nullable: true, Default: "PLAIN"},
 		{Name: "smtp_tls", Type: field.TypeBool, Nullable: true},
+		{Name: "smtp_starttls", Type: field.TypeBool, Nullable: true},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

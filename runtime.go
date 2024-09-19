@@ -72,12 +72,16 @@ func init() {
 	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
 	settingsFields := schema.Settings{}.Fields()
 	_ = settingsFields
+	// settingsDescSMTPAuth is the schema descriptor for smtp_auth field.
+	settingsDescSMTPAuth := settingsFields[12].Descriptor()
+	// settings.DefaultSMTPAuth holds the default value on creation for the smtp_auth field.
+	settings.DefaultSMTPAuth = settingsDescSMTPAuth.Default.(string)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[14].Descriptor()
+	settingsDescCreated := settingsFields[15].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[15].Descriptor()
+	settingsDescModified := settingsFields[16].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

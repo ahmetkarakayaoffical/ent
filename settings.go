@@ -45,6 +45,8 @@ type Settings struct {
 	SMTPAuth string `json:"smtp_auth,omitempty"`
 	// SMTPTLS holds the value of the "smtp_tls" field.
 	SMTPTLS bool `json:"smtp_tls,omitempty"`
+	// SMTPStarttls holds the value of the "smtp_starttls" field.
+	SMTPStarttls bool `json:"smtp_starttls,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -57,7 +59,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case settings.FieldSMTPTLS:
+		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls:
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort:
 			values[i] = new(sql.NullInt64)
@@ -170,6 +172,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.SMTPTLS = value.Bool
 			}
+		case settings.FieldSMTPStarttls:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field smtp_starttls", values[i])
+			} else if value.Valid {
+				s.SMTPStarttls = value.Bool
+			}
 		case settings.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -259,6 +267,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("smtp_tls=")
 	builder.WriteString(fmt.Sprintf("%v", s.SMTPTLS))
+	builder.WriteString(", ")
+	builder.WriteString("smtp_starttls=")
+	builder.WriteString(fmt.Sprintf("%v", s.SMTPStarttls))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(s.Created.Format(time.ANSIC))

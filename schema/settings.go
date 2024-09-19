@@ -27,8 +27,9 @@ func (Settings) Fields() []ent.Field {
 		field.Int("smtp_port").Optional(),
 		field.String("smtp_user").Optional(),
 		field.String("smtp_password").Optional(),
-		field.String("smtp_auth").Optional(),
+		field.String("smtp_auth").Optional().Default("PLAIN"),
 		field.Bool("smtp_tls").Optional(),
+		field.Bool("smtp_starttls").Optional(),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}

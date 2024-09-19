@@ -124,6 +124,11 @@ func SMTPTLS(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldSMTPTLS, v))
 }
 
+// SMTPStarttls applies equality check predicate on the "smtp_starttls" field. It's identical to SMTPStarttlsEQ.
+func SMTPStarttls(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldSMTPStarttls, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1102,6 +1107,26 @@ func SMTPTLSIsNil() predicate.Settings {
 // SMTPTLSNotNil applies the NotNil predicate on the "smtp_tls" field.
 func SMTPTLSNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldSMTPTLS))
+}
+
+// SMTPStarttlsEQ applies the EQ predicate on the "smtp_starttls" field.
+func SMTPStarttlsEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldSMTPStarttls, v))
+}
+
+// SMTPStarttlsNEQ applies the NEQ predicate on the "smtp_starttls" field.
+func SMTPStarttlsNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldSMTPStarttls, v))
+}
+
+// SMTPStarttlsIsNil applies the IsNil predicate on the "smtp_starttls" field.
+func SMTPStarttlsIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldSMTPStarttls))
+}
+
+// SMTPStarttlsNotNil applies the NotNil predicate on the "smtp_starttls" field.
+func SMTPStarttlsNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldSMTPStarttls))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

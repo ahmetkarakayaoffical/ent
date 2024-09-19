@@ -41,6 +41,8 @@ const (
 	FieldSMTPAuth = "smtp_auth"
 	// FieldSMTPTLS holds the string denoting the smtp_tls field in the database.
 	FieldSMTPTLS = "smtp_tls"
+	// FieldSMTPStarttls holds the string denoting the smtp_starttls field in the database.
+	FieldSMTPStarttls = "smtp_starttls"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -66,6 +68,7 @@ var Columns = []string{
 	FieldSMTPPassword,
 	FieldSMTPAuth,
 	FieldSMTPTLS,
+	FieldSMTPStarttls,
 	FieldCreated,
 	FieldModified,
 }
@@ -81,6 +84,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultSMTPAuth holds the default value on creation for the "smtp_auth" field.
+	DefaultSMTPAuth string
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -165,6 +170,11 @@ func BySMTPAuth(opts ...sql.OrderTermOption) OrderOption {
 // BySMTPTLS orders the results by the smtp_tls field.
 func BySMTPTLS(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSMTPTLS, opts...).ToFunc()
+}
+
+// BySMTPStarttls orders the results by the smtp_starttls field.
+func BySMTPStarttls(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSMTPStarttls, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.
