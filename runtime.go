@@ -89,11 +89,11 @@ func init() {
 	// settings.DefaultSMTPStarttls holds the default value on creation for the smtp_starttls field.
 	settings.DefaultSMTPStarttls = settingsDescSMTPStarttls.Default.(bool)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[16].Descriptor()
+	settingsDescCreated := settingsFields[18].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[17].Descriptor()
+	settingsDescModified := settingsFields[19].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

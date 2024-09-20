@@ -336,6 +336,46 @@ func (su *SettingsUpdate) ClearSMTPStarttls() *SettingsUpdate {
 	return su
 }
 
+// SetNatsServer sets the "nats_server" field.
+func (su *SettingsUpdate) SetNatsServer(s string) *SettingsUpdate {
+	su.mutation.SetNatsServer(s)
+	return su
+}
+
+// SetNillableNatsServer sets the "nats_server" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableNatsServer(s *string) *SettingsUpdate {
+	if s != nil {
+		su.SetNatsServer(*s)
+	}
+	return su
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (su *SettingsUpdate) ClearNatsServer() *SettingsUpdate {
+	su.mutation.ClearNatsServer()
+	return su
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (su *SettingsUpdate) SetNatsPort(s string) *SettingsUpdate {
+	su.mutation.SetNatsPort(s)
+	return su
+}
+
+// SetNillableNatsPort sets the "nats_port" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableNatsPort(s *string) *SettingsUpdate {
+	if s != nil {
+		su.SetNatsPort(*s)
+	}
+	return su
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (su *SettingsUpdate) ClearNatsPort() *SettingsUpdate {
+	su.mutation.ClearNatsPort()
+	return su
+}
+
 // SetMessageFrom sets the "message_from" field.
 func (su *SettingsUpdate) SetMessageFrom(s string) *SettingsUpdate {
 	su.mutation.SetMessageFrom(s)
@@ -536,6 +576,18 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.SMTPStarttlsCleared() {
 		_spec.ClearField(settings.FieldSMTPStarttls, field.TypeBool)
+	}
+	if value, ok := su.mutation.NatsServer(); ok {
+		_spec.SetField(settings.FieldNatsServer, field.TypeString, value)
+	}
+	if su.mutation.NatsServerCleared() {
+		_spec.ClearField(settings.FieldNatsServer, field.TypeString)
+	}
+	if value, ok := su.mutation.NatsPort(); ok {
+		_spec.SetField(settings.FieldNatsPort, field.TypeString, value)
+	}
+	if su.mutation.NatsPortCleared() {
+		_spec.ClearField(settings.FieldNatsPort, field.TypeString)
 	}
 	if value, ok := su.mutation.MessageFrom(); ok {
 		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
@@ -884,6 +936,46 @@ func (suo *SettingsUpdateOne) ClearSMTPStarttls() *SettingsUpdateOne {
 	return suo
 }
 
+// SetNatsServer sets the "nats_server" field.
+func (suo *SettingsUpdateOne) SetNatsServer(s string) *SettingsUpdateOne {
+	suo.mutation.SetNatsServer(s)
+	return suo
+}
+
+// SetNillableNatsServer sets the "nats_server" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableNatsServer(s *string) *SettingsUpdateOne {
+	if s != nil {
+		suo.SetNatsServer(*s)
+	}
+	return suo
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (suo *SettingsUpdateOne) ClearNatsServer() *SettingsUpdateOne {
+	suo.mutation.ClearNatsServer()
+	return suo
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (suo *SettingsUpdateOne) SetNatsPort(s string) *SettingsUpdateOne {
+	suo.mutation.SetNatsPort(s)
+	return suo
+}
+
+// SetNillableNatsPort sets the "nats_port" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableNatsPort(s *string) *SettingsUpdateOne {
+	if s != nil {
+		suo.SetNatsPort(*s)
+	}
+	return suo
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (suo *SettingsUpdateOne) ClearNatsPort() *SettingsUpdateOne {
+	suo.mutation.ClearNatsPort()
+	return suo
+}
+
 // SetMessageFrom sets the "message_from" field.
 func (suo *SettingsUpdateOne) SetMessageFrom(s string) *SettingsUpdateOne {
 	suo.mutation.SetMessageFrom(s)
@@ -1114,6 +1206,18 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.SMTPStarttlsCleared() {
 		_spec.ClearField(settings.FieldSMTPStarttls, field.TypeBool)
+	}
+	if value, ok := suo.mutation.NatsServer(); ok {
+		_spec.SetField(settings.FieldNatsServer, field.TypeString, value)
+	}
+	if suo.mutation.NatsServerCleared() {
+		_spec.ClearField(settings.FieldNatsServer, field.TypeString)
+	}
+	if value, ok := suo.mutation.NatsPort(); ok {
+		_spec.SetField(settings.FieldNatsPort, field.TypeString, value)
+	}
+	if suo.mutation.NatsPortCleared() {
+		_spec.ClearField(settings.FieldNatsPort, field.TypeString)
 	}
 	if value, ok := suo.mutation.MessageFrom(); ok {
 		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)

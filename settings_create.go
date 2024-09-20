@@ -232,6 +232,34 @@ func (sc *SettingsCreate) SetNillableSMTPStarttls(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetNatsServer sets the "nats_server" field.
+func (sc *SettingsCreate) SetNatsServer(s string) *SettingsCreate {
+	sc.mutation.SetNatsServer(s)
+	return sc
+}
+
+// SetNillableNatsServer sets the "nats_server" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableNatsServer(s *string) *SettingsCreate {
+	if s != nil {
+		sc.SetNatsServer(*s)
+	}
+	return sc
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (sc *SettingsCreate) SetNatsPort(s string) *SettingsCreate {
+	sc.mutation.SetNatsPort(s)
+	return sc
+}
+
+// SetNillableNatsPort sets the "nats_port" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableNatsPort(s *string) *SettingsCreate {
+	if s != nil {
+		sc.SetNatsPort(*s)
+	}
+	return sc
+}
+
 // SetMessageFrom sets the "message_from" field.
 func (sc *SettingsCreate) SetMessageFrom(s string) *SettingsCreate {
 	sc.mutation.SetMessageFrom(s)
@@ -423,6 +451,14 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.SMTPStarttls(); ok {
 		_spec.SetField(settings.FieldSMTPStarttls, field.TypeBool, value)
 		_node.SMTPStarttls = value
+	}
+	if value, ok := sc.mutation.NatsServer(); ok {
+		_spec.SetField(settings.FieldNatsServer, field.TypeString, value)
+		_node.NatsServer = value
+	}
+	if value, ok := sc.mutation.NatsPort(); ok {
+		_spec.SetField(settings.FieldNatsPort, field.TypeString, value)
+		_node.NatsPort = value
 	}
 	if value, ok := sc.mutation.MessageFrom(); ok {
 		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
@@ -761,6 +797,42 @@ func (u *SettingsUpsert) UpdateSMTPStarttls() *SettingsUpsert {
 // ClearSMTPStarttls clears the value of the "smtp_starttls" field.
 func (u *SettingsUpsert) ClearSMTPStarttls() *SettingsUpsert {
 	u.SetNull(settings.FieldSMTPStarttls)
+	return u
+}
+
+// SetNatsServer sets the "nats_server" field.
+func (u *SettingsUpsert) SetNatsServer(v string) *SettingsUpsert {
+	u.Set(settings.FieldNatsServer, v)
+	return u
+}
+
+// UpdateNatsServer sets the "nats_server" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateNatsServer() *SettingsUpsert {
+	u.SetExcluded(settings.FieldNatsServer)
+	return u
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (u *SettingsUpsert) ClearNatsServer() *SettingsUpsert {
+	u.SetNull(settings.FieldNatsServer)
+	return u
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (u *SettingsUpsert) SetNatsPort(v string) *SettingsUpsert {
+	u.Set(settings.FieldNatsPort, v)
+	return u
+}
+
+// UpdateNatsPort sets the "nats_port" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateNatsPort() *SettingsUpsert {
+	u.SetExcluded(settings.FieldNatsPort)
+	return u
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (u *SettingsUpsert) ClearNatsPort() *SettingsUpsert {
+	u.SetNull(settings.FieldNatsPort)
 	return u
 }
 
@@ -1177,6 +1249,48 @@ func (u *SettingsUpsertOne) UpdateSMTPStarttls() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearSMTPStarttls() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSMTPStarttls()
+	})
+}
+
+// SetNatsServer sets the "nats_server" field.
+func (u *SettingsUpsertOne) SetNatsServer(v string) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsServer(v)
+	})
+}
+
+// UpdateNatsServer sets the "nats_server" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateNatsServer() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsServer()
+	})
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (u *SettingsUpsertOne) ClearNatsServer() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsServer()
+	})
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (u *SettingsUpsertOne) SetNatsPort(v string) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsPort(v)
+	})
+}
+
+// UpdateNatsPort sets the "nats_port" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateNatsPort() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsPort()
+	})
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (u *SettingsUpsertOne) ClearNatsPort() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsPort()
 	})
 }
 
@@ -1766,6 +1880,48 @@ func (u *SettingsUpsertBulk) UpdateSMTPStarttls() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearSMTPStarttls() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSMTPStarttls()
+	})
+}
+
+// SetNatsServer sets the "nats_server" field.
+func (u *SettingsUpsertBulk) SetNatsServer(v string) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsServer(v)
+	})
+}
+
+// UpdateNatsServer sets the "nats_server" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateNatsServer() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsServer()
+	})
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (u *SettingsUpsertBulk) ClearNatsServer() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsServer()
+	})
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (u *SettingsUpsertBulk) SetNatsPort(v string) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsPort(v)
+	})
+}
+
+// UpdateNatsPort sets the "nats_port" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateNatsPort() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsPort()
+	})
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (u *SettingsUpsertBulk) ClearNatsPort() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsPort()
 	})
 }
 

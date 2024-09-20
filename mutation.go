@@ -8917,6 +8917,8 @@ type SettingsMutation struct {
 	smtp_auth      *string
 	smtp_tls       *bool
 	smtp_starttls  *bool
+	nats_server    *string
+	nats_port      *string
 	message_from   *string
 	created        *time.Time
 	modified       *time.Time
@@ -9780,6 +9782,104 @@ func (m *SettingsMutation) ResetSMTPStarttls() {
 	delete(m.clearedFields, settings.FieldSMTPStarttls)
 }
 
+// SetNatsServer sets the "nats_server" field.
+func (m *SettingsMutation) SetNatsServer(s string) {
+	m.nats_server = &s
+}
+
+// NatsServer returns the value of the "nats_server" field in the mutation.
+func (m *SettingsMutation) NatsServer() (r string, exists bool) {
+	v := m.nats_server
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNatsServer returns the old "nats_server" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldNatsServer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNatsServer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNatsServer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNatsServer: %w", err)
+	}
+	return oldValue.NatsServer, nil
+}
+
+// ClearNatsServer clears the value of the "nats_server" field.
+func (m *SettingsMutation) ClearNatsServer() {
+	m.nats_server = nil
+	m.clearedFields[settings.FieldNatsServer] = struct{}{}
+}
+
+// NatsServerCleared returns if the "nats_server" field was cleared in this mutation.
+func (m *SettingsMutation) NatsServerCleared() bool {
+	_, ok := m.clearedFields[settings.FieldNatsServer]
+	return ok
+}
+
+// ResetNatsServer resets all changes to the "nats_server" field.
+func (m *SettingsMutation) ResetNatsServer() {
+	m.nats_server = nil
+	delete(m.clearedFields, settings.FieldNatsServer)
+}
+
+// SetNatsPort sets the "nats_port" field.
+func (m *SettingsMutation) SetNatsPort(s string) {
+	m.nats_port = &s
+}
+
+// NatsPort returns the value of the "nats_port" field in the mutation.
+func (m *SettingsMutation) NatsPort() (r string, exists bool) {
+	v := m.nats_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNatsPort returns the old "nats_port" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldNatsPort(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNatsPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNatsPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNatsPort: %w", err)
+	}
+	return oldValue.NatsPort, nil
+}
+
+// ClearNatsPort clears the value of the "nats_port" field.
+func (m *SettingsMutation) ClearNatsPort() {
+	m.nats_port = nil
+	m.clearedFields[settings.FieldNatsPort] = struct{}{}
+}
+
+// NatsPortCleared returns if the "nats_port" field was cleared in this mutation.
+func (m *SettingsMutation) NatsPortCleared() bool {
+	_, ok := m.clearedFields[settings.FieldNatsPort]
+	return ok
+}
+
+// ResetNatsPort resets all changes to the "nats_port" field.
+func (m *SettingsMutation) ResetNatsPort() {
+	m.nats_port = nil
+	delete(m.clearedFields, settings.FieldNatsPort)
+}
+
 // SetMessageFrom sets the "message_from" field.
 func (m *SettingsMutation) SetMessageFrom(s string) {
 	m.message_from = &s
@@ -9961,7 +10061,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 20)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -10006,6 +10106,12 @@ func (m *SettingsMutation) Fields() []string {
 	}
 	if m.smtp_starttls != nil {
 		fields = append(fields, settings.FieldSMTPStarttls)
+	}
+	if m.nats_server != nil {
+		fields = append(fields, settings.FieldNatsServer)
+	}
+	if m.nats_port != nil {
+		fields = append(fields, settings.FieldNatsPort)
 	}
 	if m.message_from != nil {
 		fields = append(fields, settings.FieldMessageFrom)
@@ -10054,6 +10160,10 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.SMTPTLS()
 	case settings.FieldSMTPStarttls:
 		return m.SMTPStarttls()
+	case settings.FieldNatsServer:
+		return m.NatsServer()
+	case settings.FieldNatsPort:
+		return m.NatsPort()
 	case settings.FieldMessageFrom:
 		return m.MessageFrom()
 	case settings.FieldCreated:
@@ -10099,6 +10209,10 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldSMTPTLS(ctx)
 	case settings.FieldSMTPStarttls:
 		return m.OldSMTPStarttls(ctx)
+	case settings.FieldNatsServer:
+		return m.OldNatsServer(ctx)
+	case settings.FieldNatsPort:
+		return m.OldNatsPort(ctx)
 	case settings.FieldMessageFrom:
 		return m.OldMessageFrom(ctx)
 	case settings.FieldCreated:
@@ -10219,6 +10333,20 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSMTPStarttls(v)
 		return nil
+	case settings.FieldNatsServer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNatsServer(v)
+		return nil
+	case settings.FieldNatsPort:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNatsPort(v)
+		return nil
 	case settings.FieldMessageFrom:
 		v, ok := value.(string)
 		if !ok {
@@ -10330,6 +10458,12 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldSMTPStarttls) {
 		fields = append(fields, settings.FieldSMTPStarttls)
 	}
+	if m.FieldCleared(settings.FieldNatsServer) {
+		fields = append(fields, settings.FieldNatsServer)
+	}
+	if m.FieldCleared(settings.FieldNatsPort) {
+		fields = append(fields, settings.FieldNatsPort)
+	}
 	if m.FieldCleared(settings.FieldMessageFrom) {
 		fields = append(fields, settings.FieldMessageFrom)
 	}
@@ -10398,6 +10532,12 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldSMTPStarttls:
 		m.ClearSMTPStarttls()
 		return nil
+	case settings.FieldNatsServer:
+		m.ClearNatsServer()
+		return nil
+	case settings.FieldNatsPort:
+		m.ClearNatsPort()
+		return nil
 	case settings.FieldMessageFrom:
 		m.ClearMessageFrom()
 		return nil
@@ -10459,6 +10599,12 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldSMTPStarttls:
 		m.ResetSMTPStarttls()
+		return nil
+	case settings.FieldNatsServer:
+		m.ResetNatsServer()
+		return nil
+	case settings.FieldNatsPort:
+		m.ResetNatsPort()
 		return nil
 	case settings.FieldMessageFrom:
 		m.ResetMessageFrom()

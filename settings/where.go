@@ -129,6 +129,16 @@ func SMTPStarttls(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldSMTPStarttls, v))
 }
 
+// NatsServer applies equality check predicate on the "nats_server" field. It's identical to NatsServerEQ.
+func NatsServer(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsServer, v))
+}
+
+// NatsPort applies equality check predicate on the "nats_port" field. It's identical to NatsPortEQ.
+func NatsPort(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsPort, v))
+}
+
 // MessageFrom applies equality check predicate on the "message_from" field. It's identical to MessageFromEQ.
 func MessageFrom(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldMessageFrom, v))
@@ -1132,6 +1142,156 @@ func SMTPStarttlsIsNil() predicate.Settings {
 // SMTPStarttlsNotNil applies the NotNil predicate on the "smtp_starttls" field.
 func SMTPStarttlsNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldSMTPStarttls))
+}
+
+// NatsServerEQ applies the EQ predicate on the "nats_server" field.
+func NatsServerEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsServer, v))
+}
+
+// NatsServerNEQ applies the NEQ predicate on the "nats_server" field.
+func NatsServerNEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldNatsServer, v))
+}
+
+// NatsServerIn applies the In predicate on the "nats_server" field.
+func NatsServerIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldNatsServer, vs...))
+}
+
+// NatsServerNotIn applies the NotIn predicate on the "nats_server" field.
+func NatsServerNotIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldNatsServer, vs...))
+}
+
+// NatsServerGT applies the GT predicate on the "nats_server" field.
+func NatsServerGT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldNatsServer, v))
+}
+
+// NatsServerGTE applies the GTE predicate on the "nats_server" field.
+func NatsServerGTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldNatsServer, v))
+}
+
+// NatsServerLT applies the LT predicate on the "nats_server" field.
+func NatsServerLT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldNatsServer, v))
+}
+
+// NatsServerLTE applies the LTE predicate on the "nats_server" field.
+func NatsServerLTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldNatsServer, v))
+}
+
+// NatsServerContains applies the Contains predicate on the "nats_server" field.
+func NatsServerContains(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContains(FieldNatsServer, v))
+}
+
+// NatsServerHasPrefix applies the HasPrefix predicate on the "nats_server" field.
+func NatsServerHasPrefix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasPrefix(FieldNatsServer, v))
+}
+
+// NatsServerHasSuffix applies the HasSuffix predicate on the "nats_server" field.
+func NatsServerHasSuffix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasSuffix(FieldNatsServer, v))
+}
+
+// NatsServerIsNil applies the IsNil predicate on the "nats_server" field.
+func NatsServerIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldNatsServer))
+}
+
+// NatsServerNotNil applies the NotNil predicate on the "nats_server" field.
+func NatsServerNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldNatsServer))
+}
+
+// NatsServerEqualFold applies the EqualFold predicate on the "nats_server" field.
+func NatsServerEqualFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEqualFold(FieldNatsServer, v))
+}
+
+// NatsServerContainsFold applies the ContainsFold predicate on the "nats_server" field.
+func NatsServerContainsFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContainsFold(FieldNatsServer, v))
+}
+
+// NatsPortEQ applies the EQ predicate on the "nats_port" field.
+func NatsPortEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsPort, v))
+}
+
+// NatsPortNEQ applies the NEQ predicate on the "nats_port" field.
+func NatsPortNEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldNatsPort, v))
+}
+
+// NatsPortIn applies the In predicate on the "nats_port" field.
+func NatsPortIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldNatsPort, vs...))
+}
+
+// NatsPortNotIn applies the NotIn predicate on the "nats_port" field.
+func NatsPortNotIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldNatsPort, vs...))
+}
+
+// NatsPortGT applies the GT predicate on the "nats_port" field.
+func NatsPortGT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldNatsPort, v))
+}
+
+// NatsPortGTE applies the GTE predicate on the "nats_port" field.
+func NatsPortGTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldNatsPort, v))
+}
+
+// NatsPortLT applies the LT predicate on the "nats_port" field.
+func NatsPortLT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldNatsPort, v))
+}
+
+// NatsPortLTE applies the LTE predicate on the "nats_port" field.
+func NatsPortLTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldNatsPort, v))
+}
+
+// NatsPortContains applies the Contains predicate on the "nats_port" field.
+func NatsPortContains(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContains(FieldNatsPort, v))
+}
+
+// NatsPortHasPrefix applies the HasPrefix predicate on the "nats_port" field.
+func NatsPortHasPrefix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasPrefix(FieldNatsPort, v))
+}
+
+// NatsPortHasSuffix applies the HasSuffix predicate on the "nats_port" field.
+func NatsPortHasSuffix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasSuffix(FieldNatsPort, v))
+}
+
+// NatsPortIsNil applies the IsNil predicate on the "nats_port" field.
+func NatsPortIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldNatsPort))
+}
+
+// NatsPortNotNil applies the NotNil predicate on the "nats_port" field.
+func NatsPortNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldNatsPort))
+}
+
+// NatsPortEqualFold applies the EqualFold predicate on the "nats_port" field.
+func NatsPortEqualFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEqualFold(FieldNatsPort, v))
+}
+
+// NatsPortContainsFold applies the ContainsFold predicate on the "nats_port" field.
+func NatsPortContainsFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContainsFold(FieldNatsPort, v))
 }
 
 // MessageFromEQ applies the EQ predicate on the "message_from" field.

@@ -47,6 +47,10 @@ type Settings struct {
 	SMTPTLS bool `json:"smtp_tls,omitempty"`
 	// SMTPStarttls holds the value of the "smtp_starttls" field.
 	SMTPStarttls bool `json:"smtp_starttls,omitempty"`
+	// NatsServer holds the value of the "nats_server" field.
+	NatsServer string `json:"nats_server,omitempty"`
+	// NatsPort holds the value of the "nats_port" field.
+	NatsPort string `json:"nats_port,omitempty"`
 	// MessageFrom holds the value of the "message_from" field.
 	MessageFrom string `json:"message_from,omitempty"`
 	// Created holds the value of the "created" field.
@@ -65,7 +69,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort:
 			values[i] = new(sql.NullInt64)
-		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldMessageFrom:
+		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom:
 			values[i] = new(sql.NullString)
 		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -180,6 +184,18 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.SMTPStarttls = value.Bool
 			}
+		case settings.FieldNatsServer:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nats_server", values[i])
+			} else if value.Valid {
+				s.NatsServer = value.String
+			}
+		case settings.FieldNatsPort:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nats_port", values[i])
+			} else if value.Valid {
+				s.NatsPort = value.String
+			}
 		case settings.FieldMessageFrom:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field message_from", values[i])
@@ -278,6 +294,12 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("smtp_starttls=")
 	builder.WriteString(fmt.Sprintf("%v", s.SMTPStarttls))
+	builder.WriteString(", ")
+	builder.WriteString("nats_server=")
+	builder.WriteString(s.NatsServer)
+	builder.WriteString(", ")
+	builder.WriteString("nats_port=")
+	builder.WriteString(s.NatsPort)
 	builder.WriteString(", ")
 	builder.WriteString("message_from=")
 	builder.WriteString(s.MessageFrom)

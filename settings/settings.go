@@ -43,6 +43,10 @@ const (
 	FieldSMTPTLS = "smtp_tls"
 	// FieldSMTPStarttls holds the string denoting the smtp_starttls field in the database.
 	FieldSMTPStarttls = "smtp_starttls"
+	// FieldNatsServer holds the string denoting the nats_server field in the database.
+	FieldNatsServer = "nats_server"
+	// FieldNatsPort holds the string denoting the nats_port field in the database.
+	FieldNatsPort = "nats_port"
 	// FieldMessageFrom holds the string denoting the message_from field in the database.
 	FieldMessageFrom = "message_from"
 	// FieldCreated holds the string denoting the created field in the database.
@@ -71,6 +75,8 @@ var Columns = []string{
 	FieldSMTPAuth,
 	FieldSMTPTLS,
 	FieldSMTPStarttls,
+	FieldNatsServer,
+	FieldNatsPort,
 	FieldMessageFrom,
 	FieldCreated,
 	FieldModified,
@@ -184,6 +190,16 @@ func BySMTPTLS(opts ...sql.OrderTermOption) OrderOption {
 // BySMTPStarttls orders the results by the smtp_starttls field.
 func BySMTPStarttls(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSMTPStarttls, opts...).ToFunc()
+}
+
+// ByNatsServer orders the results by the nats_server field.
+func ByNatsServer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNatsServer, opts...).ToFunc()
+}
+
+// ByNatsPort orders the results by the nats_port field.
+func ByNatsPort(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNatsPort, opts...).ToFunc()
 }
 
 // ByMessageFrom orders the results by the message_from field.
