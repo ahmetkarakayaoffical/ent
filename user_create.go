@@ -78,6 +78,20 @@ func (uc *UserCreate) SetNillableCertSerial(s *string) *UserCreate {
 	return uc
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (uc *UserCreate) SetEmailVerified(b bool) *UserCreate {
+	uc.mutation.SetEmailVerified(b)
+	return uc
+}
+
+// SetNillableEmailVerified sets the "email_verified" field if the given value is not nil.
+func (uc *UserCreate) SetNillableEmailVerified(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetEmailVerified(*b)
+	}
+	return uc
+}
+
 // SetRegister sets the "register" field.
 func (uc *UserCreate) SetRegister(s string) *UserCreate {
 	uc.mutation.SetRegister(s)
@@ -88,6 +102,20 @@ func (uc *UserCreate) SetRegister(s string) *UserCreate {
 func (uc *UserCreate) SetNillableRegister(s *string) *UserCreate {
 	if s != nil {
 		uc.SetRegister(*s)
+	}
+	return uc
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (uc *UserCreate) SetCertClearPassword(s string) *UserCreate {
+	uc.mutation.SetCertClearPassword(s)
+	return uc
+}
+
+// SetNillableCertClearPassword sets the "cert_clear_password" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCertClearPassword(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCertClearPassword(*s)
 	}
 	return uc
 }
@@ -190,6 +218,10 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.EmailVerified(); !ok {
+		v := user.DefaultEmailVerified
+		uc.mutation.SetEmailVerified(v)
+	}
 	if _, ok := uc.mutation.Register(); !ok {
 		v := user.DefaultRegister
 		uc.mutation.SetRegister(v)
@@ -211,6 +243,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.Country(); !ok {
 		return &ValidationError{Name: "country", err: errors.New(`openuem_ent: missing required field "User.country"`)}
+	}
+	if _, ok := uc.mutation.EmailVerified(); !ok {
+		return &ValidationError{Name: "email_verified", err: errors.New(`openuem_ent: missing required field "User.email_verified"`)}
 	}
 	if _, ok := uc.mutation.Register(); !ok {
 		return &ValidationError{Name: "register", err: errors.New(`openuem_ent: missing required field "User.register"`)}
@@ -276,9 +311,17 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
 		_node.CertSerial = value
 	}
+	if value, ok := uc.mutation.EmailVerified(); ok {
+		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
+		_node.EmailVerified = value
+	}
 	if value, ok := uc.mutation.Register(); ok {
 		_spec.SetField(user.FieldRegister, field.TypeString, value)
 		_node.Register = value
+	}
+	if value, ok := uc.mutation.CertClearPassword(); ok {
+		_spec.SetField(user.FieldCertClearPassword, field.TypeString, value)
+		_node.CertClearPassword = value
 	}
 	if value, ok := uc.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
@@ -438,6 +481,18 @@ func (u *UserUpsert) ClearCertSerial() *UserUpsert {
 	return u
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (u *UserUpsert) SetEmailVerified(v bool) *UserUpsert {
+	u.Set(user.FieldEmailVerified, v)
+	return u
+}
+
+// UpdateEmailVerified sets the "email_verified" field to the value that was provided on create.
+func (u *UserUpsert) UpdateEmailVerified() *UserUpsert {
+	u.SetExcluded(user.FieldEmailVerified)
+	return u
+}
+
 // SetRegister sets the "register" field.
 func (u *UserUpsert) SetRegister(v string) *UserUpsert {
 	u.Set(user.FieldRegister, v)
@@ -447,6 +502,24 @@ func (u *UserUpsert) SetRegister(v string) *UserUpsert {
 // UpdateRegister sets the "register" field to the value that was provided on create.
 func (u *UserUpsert) UpdateRegister() *UserUpsert {
 	u.SetExcluded(user.FieldRegister)
+	return u
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (u *UserUpsert) SetCertClearPassword(v string) *UserUpsert {
+	u.Set(user.FieldCertClearPassword, v)
+	return u
+}
+
+// UpdateCertClearPassword sets the "cert_clear_password" field to the value that was provided on create.
+func (u *UserUpsert) UpdateCertClearPassword() *UserUpsert {
+	u.SetExcluded(user.FieldCertClearPassword)
+	return u
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (u *UserUpsert) ClearCertClearPassword() *UserUpsert {
+	u.SetNull(user.FieldCertClearPassword)
 	return u
 }
 
@@ -643,6 +716,20 @@ func (u *UserUpsertOne) ClearCertSerial() *UserUpsertOne {
 	})
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (u *UserUpsertOne) SetEmailVerified(v bool) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetEmailVerified(v)
+	})
+}
+
+// UpdateEmailVerified sets the "email_verified" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateEmailVerified() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateEmailVerified()
+	})
+}
+
 // SetRegister sets the "register" field.
 func (u *UserUpsertOne) SetRegister(v string) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
@@ -654,6 +741,27 @@ func (u *UserUpsertOne) SetRegister(v string) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateRegister() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateRegister()
+	})
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (u *UserUpsertOne) SetCertClearPassword(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCertClearPassword(v)
+	})
+}
+
+// UpdateCertClearPassword sets the "cert_clear_password" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateCertClearPassword() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCertClearPassword()
+	})
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (u *UserUpsertOne) ClearCertClearPassword() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCertClearPassword()
 	})
 }
 
@@ -1026,6 +1134,20 @@ func (u *UserUpsertBulk) ClearCertSerial() *UserUpsertBulk {
 	})
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (u *UserUpsertBulk) SetEmailVerified(v bool) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetEmailVerified(v)
+	})
+}
+
+// UpdateEmailVerified sets the "email_verified" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateEmailVerified() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateEmailVerified()
+	})
+}
+
 // SetRegister sets the "register" field.
 func (u *UserUpsertBulk) SetRegister(v string) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
@@ -1037,6 +1159,27 @@ func (u *UserUpsertBulk) SetRegister(v string) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateRegister() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateRegister()
+	})
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (u *UserUpsertBulk) SetCertClearPassword(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetCertClearPassword(v)
+	})
+}
+
+// UpdateCertClearPassword sets the "cert_clear_password" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateCertClearPassword() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateCertClearPassword()
+	})
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (u *UserUpsertBulk) ClearCertClearPassword() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCertClearPassword()
 	})
 }
 

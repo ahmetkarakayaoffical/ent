@@ -90,9 +90,19 @@ func CertSerial(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
 }
 
+// EmailVerified applies equality check predicate on the "email_verified" field. It's identical to EmailVerifiedEQ.
+func EmailVerified(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailVerified, v))
+}
+
 // Register applies equality check predicate on the "register" field. It's identical to RegisterEQ.
 func Register(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldRegister, v))
+}
+
+// CertClearPassword applies equality check predicate on the "cert_clear_password" field. It's identical to CertClearPasswordEQ.
+func CertClearPassword(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCertClearPassword, v))
 }
 
 // Expiry applies equality check predicate on the "expiry" field. It's identical to ExpiryEQ.
@@ -465,6 +475,16 @@ func CertSerialContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldCertSerial, v))
 }
 
+// EmailVerifiedEQ applies the EQ predicate on the "email_verified" field.
+func EmailVerifiedEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailVerified, v))
+}
+
+// EmailVerifiedNEQ applies the NEQ predicate on the "email_verified" field.
+func EmailVerifiedNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldEmailVerified, v))
+}
+
 // RegisterEQ applies the EQ predicate on the "register" field.
 func RegisterEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldRegister, v))
@@ -528,6 +548,81 @@ func RegisterEqualFold(v string) predicate.User {
 // RegisterContainsFold applies the ContainsFold predicate on the "register" field.
 func RegisterContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldRegister, v))
+}
+
+// CertClearPasswordEQ applies the EQ predicate on the "cert_clear_password" field.
+func CertClearPasswordEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordNEQ applies the NEQ predicate on the "cert_clear_password" field.
+func CertClearPasswordNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordIn applies the In predicate on the "cert_clear_password" field.
+func CertClearPasswordIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldCertClearPassword, vs...))
+}
+
+// CertClearPasswordNotIn applies the NotIn predicate on the "cert_clear_password" field.
+func CertClearPasswordNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldCertClearPassword, vs...))
+}
+
+// CertClearPasswordGT applies the GT predicate on the "cert_clear_password" field.
+func CertClearPasswordGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordGTE applies the GTE predicate on the "cert_clear_password" field.
+func CertClearPasswordGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordLT applies the LT predicate on the "cert_clear_password" field.
+func CertClearPasswordLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordLTE applies the LTE predicate on the "cert_clear_password" field.
+func CertClearPasswordLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordContains applies the Contains predicate on the "cert_clear_password" field.
+func CertClearPasswordContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordHasPrefix applies the HasPrefix predicate on the "cert_clear_password" field.
+func CertClearPasswordHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordHasSuffix applies the HasSuffix predicate on the "cert_clear_password" field.
+func CertClearPasswordHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordIsNil applies the IsNil predicate on the "cert_clear_password" field.
+func CertClearPasswordIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCertClearPassword))
+}
+
+// CertClearPasswordNotNil applies the NotNil predicate on the "cert_clear_password" field.
+func CertClearPasswordNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCertClearPassword))
+}
+
+// CertClearPasswordEqualFold applies the EqualFold predicate on the "cert_clear_password" field.
+func CertClearPasswordEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldCertClearPassword, v))
+}
+
+// CertClearPasswordContainsFold applies the ContainsFold predicate on the "cert_clear_password" field.
+func CertClearPasswordContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldCertClearPassword, v))
 }
 
 // ExpiryEQ applies the EQ predicate on the "expiry" field.

@@ -24,8 +24,12 @@ const (
 	FieldCountry = "country"
 	// FieldCertSerial holds the string denoting the certserial field in the database.
 	FieldCertSerial = "cert_serial"
+	// FieldEmailVerified holds the string denoting the email_verified field in the database.
+	FieldEmailVerified = "email_verified"
 	// FieldRegister holds the string denoting the register field in the database.
 	FieldRegister = "register"
+	// FieldCertClearPassword holds the string denoting the cert_clear_password field in the database.
+	FieldCertClearPassword = "cert_clear_password"
 	// FieldExpiry holds the string denoting the expiry field in the database.
 	FieldExpiry = "expiry"
 	// FieldCreated holds the string denoting the created field in the database.
@@ -55,7 +59,9 @@ var Columns = []string{
 	FieldPhone,
 	FieldCountry,
 	FieldCertSerial,
+	FieldEmailVerified,
 	FieldRegister,
+	FieldCertClearPassword,
 	FieldExpiry,
 	FieldCreated,
 	FieldModified,
@@ -72,6 +78,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultEmailVerified holds the default value on creation for the "email_verified" field.
+	DefaultEmailVerified bool
 	// DefaultRegister holds the default value on creation for the "register" field.
 	DefaultRegister string
 	// DefaultCreated holds the default value on creation for the "created" field.
@@ -117,9 +125,19 @@ func ByCertSerial(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCertSerial, opts...).ToFunc()
 }
 
+// ByEmailVerified orders the results by the email_verified field.
+func ByEmailVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailVerified, opts...).ToFunc()
+}
+
 // ByRegister orders the results by the register field.
 func ByRegister(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRegister, opts...).ToFunc()
+}
+
+// ByCertClearPassword orders the results by the cert_clear_password field.
+func ByCertClearPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCertClearPassword, opts...).ToFunc()
 }
 
 // ByExpiry orders the results by the expiry field.

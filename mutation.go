@@ -11748,25 +11748,27 @@ func (m *SystemUpdateMutation) ResetEdge(name string) error {
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *string
-	name            *string
-	email           *string
-	phone           *string
-	country         *string
-	certSerial      *string
-	register        *string
-	expiry          *time.Time
-	created         *time.Time
-	modified        *time.Time
-	clearedFields   map[string]struct{}
-	sessions        map[string]struct{}
-	removedsessions map[string]struct{}
-	clearedsessions bool
-	done            bool
-	oldValue        func(context.Context) (*User, error)
-	predicates      []predicate.User
+	op                  Op
+	typ                 string
+	id                  *string
+	name                *string
+	email               *string
+	phone               *string
+	country             *string
+	certSerial          *string
+	email_verified      *bool
+	register            *string
+	cert_clear_password *string
+	expiry              *time.Time
+	created             *time.Time
+	modified            *time.Time
+	clearedFields       map[string]struct{}
+	sessions            map[string]struct{}
+	removedsessions     map[string]struct{}
+	clearedsessions     bool
+	done                bool
+	oldValue            func(context.Context) (*User, error)
+	predicates          []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -12092,6 +12094,42 @@ func (m *UserMutation) ResetCertSerial() {
 	delete(m.clearedFields, user.FieldCertSerial)
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (m *UserMutation) SetEmailVerified(b bool) {
+	m.email_verified = &b
+}
+
+// EmailVerified returns the value of the "email_verified" field in the mutation.
+func (m *UserMutation) EmailVerified() (r bool, exists bool) {
+	v := m.email_verified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailVerified returns the old "email_verified" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldEmailVerified(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailVerified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailVerified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailVerified: %w", err)
+	}
+	return oldValue.EmailVerified, nil
+}
+
+// ResetEmailVerified resets all changes to the "email_verified" field.
+func (m *UserMutation) ResetEmailVerified() {
+	m.email_verified = nil
+}
+
 // SetRegister sets the "register" field.
 func (m *UserMutation) SetRegister(s string) {
 	m.register = &s
@@ -12126,6 +12164,55 @@ func (m *UserMutation) OldRegister(ctx context.Context) (v string, err error) {
 // ResetRegister resets all changes to the "register" field.
 func (m *UserMutation) ResetRegister() {
 	m.register = nil
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (m *UserMutation) SetCertClearPassword(s string) {
+	m.cert_clear_password = &s
+}
+
+// CertClearPassword returns the value of the "cert_clear_password" field in the mutation.
+func (m *UserMutation) CertClearPassword() (r string, exists bool) {
+	v := m.cert_clear_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCertClearPassword returns the old "cert_clear_password" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldCertClearPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCertClearPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCertClearPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCertClearPassword: %w", err)
+	}
+	return oldValue.CertClearPassword, nil
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (m *UserMutation) ClearCertClearPassword() {
+	m.cert_clear_password = nil
+	m.clearedFields[user.FieldCertClearPassword] = struct{}{}
+}
+
+// CertClearPasswordCleared returns if the "cert_clear_password" field was cleared in this mutation.
+func (m *UserMutation) CertClearPasswordCleared() bool {
+	_, ok := m.clearedFields[user.FieldCertClearPassword]
+	return ok
+}
+
+// ResetCertClearPassword resets all changes to the "cert_clear_password" field.
+func (m *UserMutation) ResetCertClearPassword() {
+	m.cert_clear_password = nil
+	delete(m.clearedFields, user.FieldCertClearPassword)
 }
 
 // SetExpiry sets the "expiry" field.
@@ -12363,7 +12450,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -12379,8 +12466,14 @@ func (m *UserMutation) Fields() []string {
 	if m.certSerial != nil {
 		fields = append(fields, user.FieldCertSerial)
 	}
+	if m.email_verified != nil {
+		fields = append(fields, user.FieldEmailVerified)
+	}
 	if m.register != nil {
 		fields = append(fields, user.FieldRegister)
+	}
+	if m.cert_clear_password != nil {
+		fields = append(fields, user.FieldCertClearPassword)
 	}
 	if m.expiry != nil {
 		fields = append(fields, user.FieldExpiry)
@@ -12409,8 +12502,12 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Country()
 	case user.FieldCertSerial:
 		return m.CertSerial()
+	case user.FieldEmailVerified:
+		return m.EmailVerified()
 	case user.FieldRegister:
 		return m.Register()
+	case user.FieldCertClearPassword:
+		return m.CertClearPassword()
 	case user.FieldExpiry:
 		return m.Expiry()
 	case user.FieldCreated:
@@ -12436,8 +12533,12 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCountry(ctx)
 	case user.FieldCertSerial:
 		return m.OldCertSerial(ctx)
+	case user.FieldEmailVerified:
+		return m.OldEmailVerified(ctx)
 	case user.FieldRegister:
 		return m.OldRegister(ctx)
+	case user.FieldCertClearPassword:
+		return m.OldCertClearPassword(ctx)
 	case user.FieldExpiry:
 		return m.OldExpiry(ctx)
 	case user.FieldCreated:
@@ -12488,12 +12589,26 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCertSerial(v)
 		return nil
+	case user.FieldEmailVerified:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailVerified(v)
+		return nil
 	case user.FieldRegister:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRegister(v)
+		return nil
+	case user.FieldCertClearPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCertClearPassword(v)
 		return nil
 	case user.FieldExpiry:
 		v, ok := value.(time.Time)
@@ -12555,6 +12670,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldCertSerial) {
 		fields = append(fields, user.FieldCertSerial)
 	}
+	if m.FieldCleared(user.FieldCertClearPassword) {
+		fields = append(fields, user.FieldCertClearPassword)
+	}
 	if m.FieldCleared(user.FieldExpiry) {
 		fields = append(fields, user.FieldExpiry)
 	}
@@ -12586,6 +12704,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldCertSerial:
 		m.ClearCertSerial()
+		return nil
+	case user.FieldCertClearPassword:
+		m.ClearCertClearPassword()
 		return nil
 	case user.FieldExpiry:
 		m.ClearExpiry()
@@ -12619,8 +12740,14 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldCertSerial:
 		m.ResetCertSerial()
 		return nil
+	case user.FieldEmailVerified:
+		m.ResetEmailVerified()
+		return nil
 	case user.FieldRegister:
 		m.ResetRegister()
+		return nil
+	case user.FieldCertClearPassword:
+		m.ResetCertClearPassword()
 		return nil
 	case user.FieldExpiry:
 		m.ResetExpiry()

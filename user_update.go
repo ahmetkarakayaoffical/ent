@@ -118,6 +118,20 @@ func (uu *UserUpdate) ClearCertSerial() *UserUpdate {
 	return uu
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (uu *UserUpdate) SetEmailVerified(b bool) *UserUpdate {
+	uu.mutation.SetEmailVerified(b)
+	return uu
+}
+
+// SetNillableEmailVerified sets the "email_verified" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableEmailVerified(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetEmailVerified(*b)
+	}
+	return uu
+}
+
 // SetRegister sets the "register" field.
 func (uu *UserUpdate) SetRegister(s string) *UserUpdate {
 	uu.mutation.SetRegister(s)
@@ -129,6 +143,26 @@ func (uu *UserUpdate) SetNillableRegister(s *string) *UserUpdate {
 	if s != nil {
 		uu.SetRegister(*s)
 	}
+	return uu
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (uu *UserUpdate) SetCertClearPassword(s string) *UserUpdate {
+	uu.mutation.SetCertClearPassword(s)
+	return uu
+}
+
+// SetNillableCertClearPassword sets the "cert_clear_password" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCertClearPassword(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetCertClearPassword(*s)
+	}
+	return uu
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (uu *UserUpdate) ClearCertClearPassword() *UserUpdate {
+	uu.mutation.ClearCertClearPassword()
 	return uu
 }
 
@@ -300,8 +334,17 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.CertSerialCleared() {
 		_spec.ClearField(user.FieldCertSerial, field.TypeString)
 	}
+	if value, ok := uu.mutation.EmailVerified(); ok {
+		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
+	}
 	if value, ok := uu.mutation.Register(); ok {
 		_spec.SetField(user.FieldRegister, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.CertClearPassword(); ok {
+		_spec.SetField(user.FieldCertClearPassword, field.TypeString, value)
+	}
+	if uu.mutation.CertClearPasswordCleared() {
+		_spec.ClearField(user.FieldCertClearPassword, field.TypeString)
 	}
 	if value, ok := uu.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
@@ -476,6 +519,20 @@ func (uuo *UserUpdateOne) ClearCertSerial() *UserUpdateOne {
 	return uuo
 }
 
+// SetEmailVerified sets the "email_verified" field.
+func (uuo *UserUpdateOne) SetEmailVerified(b bool) *UserUpdateOne {
+	uuo.mutation.SetEmailVerified(b)
+	return uuo
+}
+
+// SetNillableEmailVerified sets the "email_verified" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableEmailVerified(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetEmailVerified(*b)
+	}
+	return uuo
+}
+
 // SetRegister sets the "register" field.
 func (uuo *UserUpdateOne) SetRegister(s string) *UserUpdateOne {
 	uuo.mutation.SetRegister(s)
@@ -487,6 +544,26 @@ func (uuo *UserUpdateOne) SetNillableRegister(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetRegister(*s)
 	}
+	return uuo
+}
+
+// SetCertClearPassword sets the "cert_clear_password" field.
+func (uuo *UserUpdateOne) SetCertClearPassword(s string) *UserUpdateOne {
+	uuo.mutation.SetCertClearPassword(s)
+	return uuo
+}
+
+// SetNillableCertClearPassword sets the "cert_clear_password" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCertClearPassword(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetCertClearPassword(*s)
+	}
+	return uuo
+}
+
+// ClearCertClearPassword clears the value of the "cert_clear_password" field.
+func (uuo *UserUpdateOne) ClearCertClearPassword() *UserUpdateOne {
+	uuo.mutation.ClearCertClearPassword()
 	return uuo
 }
 
@@ -688,8 +765,17 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.CertSerialCleared() {
 		_spec.ClearField(user.FieldCertSerial, field.TypeString)
 	}
+	if value, ok := uuo.mutation.EmailVerified(); ok {
+		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
+	}
 	if value, ok := uuo.mutation.Register(); ok {
 		_spec.SetField(user.FieldRegister, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.CertClearPassword(); ok {
+		_spec.SetField(user.FieldCertClearPassword, field.TypeString, value)
+	}
+	if uuo.mutation.CertClearPasswordCleared() {
+		_spec.ClearField(user.FieldCertClearPassword, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)

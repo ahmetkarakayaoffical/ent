@@ -27,8 +27,12 @@ type User struct {
 	Country string `json:"country,omitempty"`
 	// CertSerial holds the value of the "certSerial" field.
 	CertSerial string `json:"certSerial,omitempty"`
+	// EmailVerified holds the value of the "email_verified" field.
+	EmailVerified bool `json:"email_verified,omitempty"`
 	// Register holds the value of the "register" field.
 	Register string `json:"register,omitempty"`
+	// CertClearPassword holds the value of the "cert_clear_password" field.
+	CertClearPassword string `json:"cert_clear_password,omitempty"`
 	// Expiry holds the value of the "expiry" field.
 	Expiry time.Time `json:"expiry,omitempty"`
 	// Created holds the value of the "created" field.
@@ -64,7 +68,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldCertSerial, user.FieldRegister:
+		case user.FieldEmailVerified:
+			values[i] = new(sql.NullBool)
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldCertSerial, user.FieldRegister, user.FieldCertClearPassword:
 			values[i] = new(sql.NullString)
 		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -119,11 +125,23 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.CertSerial = value.String
 			}
+		case user.FieldEmailVerified:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field email_verified", values[i])
+			} else if value.Valid {
+				u.EmailVerified = value.Bool
+			}
 		case user.FieldRegister:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field register", values[i])
 			} else if value.Valid {
 				u.Register = value.String
+			}
+		case user.FieldCertClearPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field cert_clear_password", values[i])
+			} else if value.Valid {
+				u.CertClearPassword = value.String
 			}
 		case user.FieldExpiry:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -199,8 +217,14 @@ func (u *User) String() string {
 	builder.WriteString("certSerial=")
 	builder.WriteString(u.CertSerial)
 	builder.WriteString(", ")
+	builder.WriteString("email_verified=")
+	builder.WriteString(fmt.Sprintf("%v", u.EmailVerified))
+	builder.WriteString(", ")
 	builder.WriteString("register=")
 	builder.WriteString(u.Register)
+	builder.WriteString(", ")
+	builder.WriteString("cert_clear_password=")
+	builder.WriteString(u.CertClearPassword)
 	builder.WriteString(", ")
 	builder.WriteString("expiry=")
 	builder.WriteString(u.Expiry.Format(time.ANSIC))
