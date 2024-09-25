@@ -14,7 +14,7 @@ type Certificate struct {
 func (Certificate) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Unique().StorageKey("serial"),
-		field.Enum("type").Values("console", "notification", "cert-manager", "agent", "user"),
+		field.Enum("type").Values("console", "worker", "agent", "user"),
 		field.String("description").Optional(),
 		field.Time("expiry").Optional(),
 	}
