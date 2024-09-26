@@ -400,6 +400,16 @@ func FirstContactLTE(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldLTE(FieldFirstContact, v))
 }
 
+// FirstContactIsNil applies the IsNil predicate on the "first_contact" field.
+func FirstContactIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldFirstContact))
+}
+
+// FirstContactNotNil applies the NotNil predicate on the "first_contact" field.
+func FirstContactNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldFirstContact))
+}
+
 // LastContactEQ applies the EQ predicate on the "last_contact" field.
 func LastContactEQ(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldLastContact, v))
@@ -438,6 +448,16 @@ func LastContactLT(v time.Time) predicate.Agent {
 // LastContactLTE applies the LTE predicate on the "last_contact" field.
 func LastContactLTE(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldLTE(FieldLastContact, v))
+}
+
+// LastContactIsNil applies the IsNil predicate on the "last_contact" field.
+func LastContactIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldLastContact))
+}
+
+// LastContactNotNil applies the NotNil predicate on the "last_contact" field.
+func LastContactNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldLastContact))
 }
 
 // EnabledEQ applies the EQ predicate on the "enabled" field.

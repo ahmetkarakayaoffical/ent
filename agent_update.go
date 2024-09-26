@@ -109,6 +109,12 @@ func (au *AgentUpdate) SetNillableFirstContact(t *time.Time) *AgentUpdate {
 	return au
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (au *AgentUpdate) ClearFirstContact() *AgentUpdate {
+	au.mutation.ClearFirstContact()
+	return au
+}
+
 // SetLastContact sets the "last_contact" field.
 func (au *AgentUpdate) SetLastContact(t time.Time) *AgentUpdate {
 	au.mutation.SetLastContact(t)
@@ -120,6 +126,12 @@ func (au *AgentUpdate) SetNillableLastContact(t *time.Time) *AgentUpdate {
 	if t != nil {
 		au.SetLastContact(*t)
 	}
+	return au
+}
+
+// ClearLastContact clears the value of the "last_contact" field.
+func (au *AgentUpdate) ClearLastContact() *AgentUpdate {
+	au.mutation.ClearLastContact()
 	return au
 }
 
@@ -538,8 +550,14 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.FirstContact(); ok {
 		_spec.SetField(agent.FieldFirstContact, field.TypeTime, value)
 	}
+	if au.mutation.FirstContactCleared() {
+		_spec.ClearField(agent.FieldFirstContact, field.TypeTime)
+	}
 	if value, ok := au.mutation.LastContact(); ok {
 		_spec.SetField(agent.FieldLastContact, field.TypeTime, value)
+	}
+	if au.mutation.LastContactCleared() {
+		_spec.ClearField(agent.FieldLastContact, field.TypeTime)
 	}
 	if value, ok := au.mutation.Enabled(); ok {
 		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
@@ -1022,6 +1040,12 @@ func (auo *AgentUpdateOne) SetNillableFirstContact(t *time.Time) *AgentUpdateOne
 	return auo
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (auo *AgentUpdateOne) ClearFirstContact() *AgentUpdateOne {
+	auo.mutation.ClearFirstContact()
+	return auo
+}
+
 // SetLastContact sets the "last_contact" field.
 func (auo *AgentUpdateOne) SetLastContact(t time.Time) *AgentUpdateOne {
 	auo.mutation.SetLastContact(t)
@@ -1033,6 +1057,12 @@ func (auo *AgentUpdateOne) SetNillableLastContact(t *time.Time) *AgentUpdateOne 
 	if t != nil {
 		auo.SetLastContact(*t)
 	}
+	return auo
+}
+
+// ClearLastContact clears the value of the "last_contact" field.
+func (auo *AgentUpdateOne) ClearLastContact() *AgentUpdateOne {
+	auo.mutation.ClearLastContact()
 	return auo
 }
 
@@ -1481,8 +1511,14 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	if value, ok := auo.mutation.FirstContact(); ok {
 		_spec.SetField(agent.FieldFirstContact, field.TypeTime, value)
 	}
+	if auo.mutation.FirstContactCleared() {
+		_spec.ClearField(agent.FieldFirstContact, field.TypeTime)
+	}
 	if value, ok := auo.mutation.LastContact(); ok {
 		_spec.SetField(agent.FieldLastContact, field.TypeTime, value)
+	}
+	if auo.mutation.LastContactCleared() {
+		_spec.ClearField(agent.FieldLastContact, field.TypeTime)
 	}
 	if value, ok := auo.mutation.Enabled(); ok {
 		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)

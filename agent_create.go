@@ -71,9 +71,25 @@ func (ac *AgentCreate) SetFirstContact(t time.Time) *AgentCreate {
 	return ac
 }
 
+// SetNillableFirstContact sets the "first_contact" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableFirstContact(t *time.Time) *AgentCreate {
+	if t != nil {
+		ac.SetFirstContact(*t)
+	}
+	return ac
+}
+
 // SetLastContact sets the "last_contact" field.
 func (ac *AgentCreate) SetLastContact(t time.Time) *AgentCreate {
 	ac.mutation.SetLastContact(t)
+	return ac
+}
+
+// SetNillableLastContact sets the "last_contact" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableLastContact(t *time.Time) *AgentCreate {
+	if t != nil {
+		ac.SetLastContact(*t)
+	}
 	return ac
 }
 
@@ -336,12 +352,6 @@ func (ac *AgentCreate) check() error {
 	}
 	if _, ok := ac.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`openuem_ent: missing required field "Agent.ip"`)}
-	}
-	if _, ok := ac.mutation.FirstContact(); !ok {
-		return &ValidationError{Name: "first_contact", err: errors.New(`openuem_ent: missing required field "Agent.first_contact"`)}
-	}
-	if _, ok := ac.mutation.LastContact(); !ok {
-		return &ValidationError{Name: "last_contact", err: errors.New(`openuem_ent: missing required field "Agent.last_contact"`)}
 	}
 	if _, ok := ac.mutation.Enabled(); !ok {
 		return &ValidationError{Name: "enabled", err: errors.New(`openuem_ent: missing required field "Agent.enabled"`)}
@@ -687,6 +697,12 @@ func (u *AgentUpsert) UpdateFirstContact() *AgentUpsert {
 	return u
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (u *AgentUpsert) ClearFirstContact() *AgentUpsert {
+	u.SetNull(agent.FieldFirstContact)
+	return u
+}
+
 // SetLastContact sets the "last_contact" field.
 func (u *AgentUpsert) SetLastContact(v time.Time) *AgentUpsert {
 	u.Set(agent.FieldLastContact, v)
@@ -696,6 +712,12 @@ func (u *AgentUpsert) SetLastContact(v time.Time) *AgentUpsert {
 // UpdateLastContact sets the "last_contact" field to the value that was provided on create.
 func (u *AgentUpsert) UpdateLastContact() *AgentUpsert {
 	u.SetExcluded(agent.FieldLastContact)
+	return u
+}
+
+// ClearLastContact clears the value of the "last_contact" field.
+func (u *AgentUpsert) ClearLastContact() *AgentUpsert {
+	u.SetNull(agent.FieldLastContact)
 	return u
 }
 
@@ -829,6 +851,13 @@ func (u *AgentUpsertOne) UpdateFirstContact() *AgentUpsertOne {
 	})
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (u *AgentUpsertOne) ClearFirstContact() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearFirstContact()
+	})
+}
+
 // SetLastContact sets the "last_contact" field.
 func (u *AgentUpsertOne) SetLastContact(v time.Time) *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
@@ -840,6 +869,13 @@ func (u *AgentUpsertOne) SetLastContact(v time.Time) *AgentUpsertOne {
 func (u *AgentUpsertOne) UpdateLastContact() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateLastContact()
+	})
+}
+
+// ClearLastContact clears the value of the "last_contact" field.
+func (u *AgentUpsertOne) ClearLastContact() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearLastContact()
 	})
 }
 
@@ -1142,6 +1178,13 @@ func (u *AgentUpsertBulk) UpdateFirstContact() *AgentUpsertBulk {
 	})
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (u *AgentUpsertBulk) ClearFirstContact() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearFirstContact()
+	})
+}
+
 // SetLastContact sets the "last_contact" field.
 func (u *AgentUpsertBulk) SetLastContact(v time.Time) *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
@@ -1153,6 +1196,13 @@ func (u *AgentUpsertBulk) SetLastContact(v time.Time) *AgentUpsertBulk {
 func (u *AgentUpsertBulk) UpdateLastContact() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateLastContact()
+	})
+}
+
+// ClearLastContact clears the value of the "last_contact" field.
+func (u *AgentUpsertBulk) ClearLastContact() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearLastContact()
 	})
 }
 

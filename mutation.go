@@ -381,9 +381,22 @@ func (m *AgentMutation) OldFirstContact(ctx context.Context) (v time.Time, err e
 	return oldValue.FirstContact, nil
 }
 
+// ClearFirstContact clears the value of the "first_contact" field.
+func (m *AgentMutation) ClearFirstContact() {
+	m.first_contact = nil
+	m.clearedFields[agent.FieldFirstContact] = struct{}{}
+}
+
+// FirstContactCleared returns if the "first_contact" field was cleared in this mutation.
+func (m *AgentMutation) FirstContactCleared() bool {
+	_, ok := m.clearedFields[agent.FieldFirstContact]
+	return ok
+}
+
 // ResetFirstContact resets all changes to the "first_contact" field.
 func (m *AgentMutation) ResetFirstContact() {
 	m.first_contact = nil
+	delete(m.clearedFields, agent.FieldFirstContact)
 }
 
 // SetLastContact sets the "last_contact" field.
@@ -417,9 +430,22 @@ func (m *AgentMutation) OldLastContact(ctx context.Context) (v time.Time, err er
 	return oldValue.LastContact, nil
 }
 
+// ClearLastContact clears the value of the "last_contact" field.
+func (m *AgentMutation) ClearLastContact() {
+	m.last_contact = nil
+	m.clearedFields[agent.FieldLastContact] = struct{}{}
+}
+
+// LastContactCleared returns if the "last_contact" field was cleared in this mutation.
+func (m *AgentMutation) LastContactCleared() bool {
+	_, ok := m.clearedFields[agent.FieldLastContact]
+	return ok
+}
+
 // ResetLastContact resets all changes to the "last_contact" field.
 func (m *AgentMutation) ResetLastContact() {
 	m.last_contact = nil
+	delete(m.clearedFields, agent.FieldLastContact)
 }
 
 // SetEnabled sets the "enabled" field.
@@ -1126,7 +1152,14 @@ func (m *AgentMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *AgentMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(agent.FieldFirstContact) {
+		fields = append(fields, agent.FieldFirstContact)
+	}
+	if m.FieldCleared(agent.FieldLastContact) {
+		fields = append(fields, agent.FieldLastContact)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -1139,6 +1172,14 @@ func (m *AgentMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *AgentMutation) ClearField(name string) error {
+	switch name {
+	case agent.FieldFirstContact:
+		m.ClearFirstContact()
+		return nil
+	case agent.FieldLastContact:
+		m.ClearLastContact()
+		return nil
+	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
 }
 

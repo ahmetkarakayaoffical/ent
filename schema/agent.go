@@ -20,8 +20,8 @@ func (Agent) Fields() []ent.Field {
 		field.String("hostname").NotEmpty(),
 		field.String("version").NotEmpty(),
 		field.String("ip").Default(""),
-		field.Time("first_contact"),
-		field.Time("last_contact"),
+		field.Time("first_contact").Optional(),
+		field.Time("last_contact").Optional(),
 		field.Bool("enabled").Default(true),
 	}
 }
