@@ -101,19 +101,19 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.
-	userDescEmailVerified := userFields[6].Descriptor()
+	userDescEmailVerified := userFields[5].Descriptor()
 	// user.DefaultEmailVerified holds the default value on creation for the email_verified field.
 	user.DefaultEmailVerified = userDescEmailVerified.Default.(bool)
 	// userDescRegister is the schema descriptor for register field.
-	userDescRegister := userFields[7].Descriptor()
+	userDescRegister := userFields[6].Descriptor()
 	// user.DefaultRegister holds the default value on creation for the register field.
 	user.DefaultRegister = userDescRegister.Default.(string)
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[10].Descriptor()
+	userDescCreated := userFields[9].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[11].Descriptor()
+	userDescModified := userFields[10].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

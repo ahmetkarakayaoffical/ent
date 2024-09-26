@@ -64,6 +64,11 @@ func Expiry(v time.Time) predicate.Certificate {
 	return predicate.Certificate(sql.FieldEQ(FieldExpiry, v))
 }
 
+// UID applies equality check predicate on the "uid" field. It's identical to UIDEQ.
+func UID(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldEQ(FieldUID, v))
+}
+
 // TypeEQ applies the EQ predicate on the "type" field.
 func TypeEQ(v Type) predicate.Certificate {
 	return predicate.Certificate(sql.FieldEQ(FieldType, v))
@@ -207,6 +212,81 @@ func ExpiryIsNil() predicate.Certificate {
 // ExpiryNotNil applies the NotNil predicate on the "expiry" field.
 func ExpiryNotNil() predicate.Certificate {
 	return predicate.Certificate(sql.FieldNotNull(FieldExpiry))
+}
+
+// UIDEQ applies the EQ predicate on the "uid" field.
+func UIDEQ(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldEQ(FieldUID, v))
+}
+
+// UIDNEQ applies the NEQ predicate on the "uid" field.
+func UIDNEQ(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldNEQ(FieldUID, v))
+}
+
+// UIDIn applies the In predicate on the "uid" field.
+func UIDIn(vs ...string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldIn(FieldUID, vs...))
+}
+
+// UIDNotIn applies the NotIn predicate on the "uid" field.
+func UIDNotIn(vs ...string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldNotIn(FieldUID, vs...))
+}
+
+// UIDGT applies the GT predicate on the "uid" field.
+func UIDGT(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldGT(FieldUID, v))
+}
+
+// UIDGTE applies the GTE predicate on the "uid" field.
+func UIDGTE(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldGTE(FieldUID, v))
+}
+
+// UIDLT applies the LT predicate on the "uid" field.
+func UIDLT(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldLT(FieldUID, v))
+}
+
+// UIDLTE applies the LTE predicate on the "uid" field.
+func UIDLTE(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldLTE(FieldUID, v))
+}
+
+// UIDContains applies the Contains predicate on the "uid" field.
+func UIDContains(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldContains(FieldUID, v))
+}
+
+// UIDHasPrefix applies the HasPrefix predicate on the "uid" field.
+func UIDHasPrefix(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldHasPrefix(FieldUID, v))
+}
+
+// UIDHasSuffix applies the HasSuffix predicate on the "uid" field.
+func UIDHasSuffix(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldHasSuffix(FieldUID, v))
+}
+
+// UIDIsNil applies the IsNil predicate on the "uid" field.
+func UIDIsNil() predicate.Certificate {
+	return predicate.Certificate(sql.FieldIsNull(FieldUID))
+}
+
+// UIDNotNil applies the NotNil predicate on the "uid" field.
+func UIDNotNil() predicate.Certificate {
+	return predicate.Certificate(sql.FieldNotNull(FieldUID))
+}
+
+// UIDEqualFold applies the EqualFold predicate on the "uid" field.
+func UIDEqualFold(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldEqualFold(FieldUID, v))
+}
+
+// UIDContainsFold applies the ContainsFold predicate on the "uid" field.
+func UIDContainsFold(v string) predicate.Certificate {
+	return predicate.Certificate(sql.FieldContainsFold(FieldUID, v))
 }
 
 // And groups predicates with the AND operator between them.

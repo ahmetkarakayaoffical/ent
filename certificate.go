@@ -22,7 +22,9 @@ type Certificate struct {
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Expiry holds the value of the "expiry" field.
-	Expiry       time.Time `json:"expiry,omitempty"`
+	Expiry time.Time `json:"expiry,omitempty"`
+	// UID holds the value of the "uid" field.
+	UID          string `json:"uid,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -33,7 +35,7 @@ func (*Certificate) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case certificate.FieldID:
 			values[i] = new(sql.NullInt64)
-		case certificate.FieldType, certificate.FieldDescription:
+		case certificate.FieldType, certificate.FieldDescription, certificate.FieldUID:
 			values[i] = new(sql.NullString)
 		case certificate.FieldExpiry:
 			values[i] = new(sql.NullTime)
@@ -75,6 +77,12 @@ func (c *Certificate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field expiry", values[i])
 			} else if value.Valid {
 				c.Expiry = value.Time
+			}
+		case certificate.FieldUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field uid", values[i])
+			} else if value.Valid {
+				c.UID = value.String
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -120,6 +128,9 @@ func (c *Certificate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("expiry=")
 	builder.WriteString(c.Expiry.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("uid=")
+	builder.WriteString(c.UID)
 	builder.WriteByte(')')
 	return builder.String()
 }

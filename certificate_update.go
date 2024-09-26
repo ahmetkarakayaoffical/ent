@@ -83,6 +83,26 @@ func (cu *CertificateUpdate) ClearExpiry() *CertificateUpdate {
 	return cu
 }
 
+// SetUID sets the "uid" field.
+func (cu *CertificateUpdate) SetUID(s string) *CertificateUpdate {
+	cu.mutation.SetUID(s)
+	return cu
+}
+
+// SetNillableUID sets the "uid" field if the given value is not nil.
+func (cu *CertificateUpdate) SetNillableUID(s *string) *CertificateUpdate {
+	if s != nil {
+		cu.SetUID(*s)
+	}
+	return cu
+}
+
+// ClearUID clears the value of the "uid" field.
+func (cu *CertificateUpdate) ClearUID() *CertificateUpdate {
+	cu.mutation.ClearUID()
+	return cu
+}
+
 // Mutation returns the CertificateMutation object of the builder.
 func (cu *CertificateUpdate) Mutation() *CertificateMutation {
 	return cu.mutation
@@ -158,6 +178,12 @@ func (cu *CertificateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.ExpiryCleared() {
 		_spec.ClearField(certificate.FieldExpiry, field.TypeTime)
 	}
+	if value, ok := cu.mutation.UID(); ok {
+		_spec.SetField(certificate.FieldUID, field.TypeString, value)
+	}
+	if cu.mutation.UIDCleared() {
+		_spec.ClearField(certificate.FieldUID, field.TypeString)
+	}
 	_spec.AddModifiers(cu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -231,6 +257,26 @@ func (cuo *CertificateUpdateOne) SetNillableExpiry(t *time.Time) *CertificateUpd
 // ClearExpiry clears the value of the "expiry" field.
 func (cuo *CertificateUpdateOne) ClearExpiry() *CertificateUpdateOne {
 	cuo.mutation.ClearExpiry()
+	return cuo
+}
+
+// SetUID sets the "uid" field.
+func (cuo *CertificateUpdateOne) SetUID(s string) *CertificateUpdateOne {
+	cuo.mutation.SetUID(s)
+	return cuo
+}
+
+// SetNillableUID sets the "uid" field if the given value is not nil.
+func (cuo *CertificateUpdateOne) SetNillableUID(s *string) *CertificateUpdateOne {
+	if s != nil {
+		cuo.SetUID(*s)
+	}
+	return cuo
+}
+
+// ClearUID clears the value of the "uid" field.
+func (cuo *CertificateUpdateOne) ClearUID() *CertificateUpdateOne {
+	cuo.mutation.ClearUID()
 	return cuo
 }
 
@@ -338,6 +384,12 @@ func (cuo *CertificateUpdateOne) sqlSave(ctx context.Context) (_node *Certificat
 	}
 	if cuo.mutation.ExpiryCleared() {
 		_spec.ClearField(certificate.FieldExpiry, field.TypeTime)
+	}
+	if value, ok := cuo.mutation.UID(); ok {
+		_spec.SetField(certificate.FieldUID, field.TypeString, value)
+	}
+	if cuo.mutation.UIDCleared() {
+		_spec.ClearField(certificate.FieldUID, field.TypeString)
 	}
 	_spec.AddModifiers(cuo.modifiers...)
 	_node = &Certificate{config: cuo.config}

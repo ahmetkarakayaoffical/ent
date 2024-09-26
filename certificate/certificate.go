@@ -19,6 +19,8 @@ const (
 	FieldDescription = "description"
 	// FieldExpiry holds the string denoting the expiry field in the database.
 	FieldExpiry = "expiry"
+	// FieldUID holds the string denoting the uid field in the database.
+	FieldUID = "uid"
 	// Table holds the table name of the certificate in the database.
 	Table = "certificates"
 )
@@ -29,6 +31,7 @@ var Columns = []string{
 	FieldType,
 	FieldDescription,
 	FieldExpiry,
+	FieldUID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -89,4 +92,9 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByExpiry orders the results by the expiry field.
 func ByExpiry(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiry, opts...).ToFunc()
+}
+
+// ByUID orders the results by the uid field.
+func ByUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUID, opts...).ToFunc()
 }

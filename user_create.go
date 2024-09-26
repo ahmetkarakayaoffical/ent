@@ -64,20 +64,6 @@ func (uc *UserCreate) SetCountry(s string) *UserCreate {
 	return uc
 }
 
-// SetCertSerial sets the "certSerial" field.
-func (uc *UserCreate) SetCertSerial(s string) *UserCreate {
-	uc.mutation.SetCertSerial(s)
-	return uc
-}
-
-// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
-func (uc *UserCreate) SetNillableCertSerial(s *string) *UserCreate {
-	if s != nil {
-		uc.SetCertSerial(*s)
-	}
-	return uc
-}
-
 // SetEmailVerified sets the "email_verified" field.
 func (uc *UserCreate) SetEmailVerified(b bool) *UserCreate {
 	uc.mutation.SetEmailVerified(b)
@@ -307,10 +293,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
 		_node.Country = value
 	}
-	if value, ok := uc.mutation.CertSerial(); ok {
-		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
-		_node.CertSerial = value
-	}
 	if value, ok := uc.mutation.EmailVerified(); ok {
 		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
 		_node.EmailVerified = value
@@ -460,24 +442,6 @@ func (u *UserUpsert) SetCountry(v string) *UserUpsert {
 // UpdateCountry sets the "country" field to the value that was provided on create.
 func (u *UserUpsert) UpdateCountry() *UserUpsert {
 	u.SetExcluded(user.FieldCountry)
-	return u
-}
-
-// SetCertSerial sets the "certSerial" field.
-func (u *UserUpsert) SetCertSerial(v string) *UserUpsert {
-	u.Set(user.FieldCertSerial, v)
-	return u
-}
-
-// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
-func (u *UserUpsert) UpdateCertSerial() *UserUpsert {
-	u.SetExcluded(user.FieldCertSerial)
-	return u
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (u *UserUpsert) ClearCertSerial() *UserUpsert {
-	u.SetNull(user.FieldCertSerial)
 	return u
 }
 
@@ -692,27 +656,6 @@ func (u *UserUpsertOne) SetCountry(v string) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateCountry() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCountry()
-	})
-}
-
-// SetCertSerial sets the "certSerial" field.
-func (u *UserUpsertOne) SetCertSerial(v string) *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.SetCertSerial(v)
-	})
-}
-
-// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
-func (u *UserUpsertOne) UpdateCertSerial() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateCertSerial()
-	})
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (u *UserUpsertOne) ClearCertSerial() *UserUpsertOne {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearCertSerial()
 	})
 }
 
@@ -1110,27 +1053,6 @@ func (u *UserUpsertBulk) SetCountry(v string) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateCountry() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCountry()
-	})
-}
-
-// SetCertSerial sets the "certSerial" field.
-func (u *UserUpsertBulk) SetCertSerial(v string) *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.SetCertSerial(v)
-	})
-}
-
-// UpdateCertSerial sets the "certSerial" field to the value that was provided on create.
-func (u *UserUpsertBulk) UpdateCertSerial() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.UpdateCertSerial()
-	})
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (u *UserUpsertBulk) ClearCertSerial() *UserUpsertBulk {
-	return u.Update(func(s *UserUpsert) {
-		s.ClearCertSerial()
 	})
 }
 

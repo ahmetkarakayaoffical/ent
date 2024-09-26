@@ -76,6 +76,7 @@ var (
 		{Name: "type", Type: field.TypeEnum, Enums: []string{"console", "worker", "agent", "user", "ocsp", "nats"}},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "expiry", Type: field.TypeTime, Nullable: true},
+		{Name: "uid", Type: field.TypeString, Nullable: true},
 	}
 	// CertificatesTable holds the schema information for the "certificates" table.
 	CertificatesTable = &schema.Table{
@@ -360,7 +361,6 @@ var (
 		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "phone", Type: field.TypeString, Nullable: true},
 		{Name: "country", Type: field.TypeString},
-		{Name: "cert_serial", Type: field.TypeString, Nullable: true},
 		{Name: "email_verified", Type: field.TypeBool, Default: false},
 		{Name: "register", Type: field.TypeString, Default: "users.pending_email_confirmation"},
 		{Name: "cert_clear_password", Type: field.TypeString, Nullable: true},

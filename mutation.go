@@ -2563,6 +2563,7 @@ type CertificateMutation struct {
 	_type         *certificate.Type
 	description   *string
 	expiry        *time.Time
+	uid           *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Certificate, error)
@@ -2807,6 +2808,55 @@ func (m *CertificateMutation) ResetExpiry() {
 	delete(m.clearedFields, certificate.FieldExpiry)
 }
 
+// SetUID sets the "uid" field.
+func (m *CertificateMutation) SetUID(s string) {
+	m.uid = &s
+}
+
+// UID returns the value of the "uid" field in the mutation.
+func (m *CertificateMutation) UID() (r string, exists bool) {
+	v := m.uid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUID returns the old "uid" field's value of the Certificate entity.
+// If the Certificate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CertificateMutation) OldUID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUID: %w", err)
+	}
+	return oldValue.UID, nil
+}
+
+// ClearUID clears the value of the "uid" field.
+func (m *CertificateMutation) ClearUID() {
+	m.uid = nil
+	m.clearedFields[certificate.FieldUID] = struct{}{}
+}
+
+// UIDCleared returns if the "uid" field was cleared in this mutation.
+func (m *CertificateMutation) UIDCleared() bool {
+	_, ok := m.clearedFields[certificate.FieldUID]
+	return ok
+}
+
+// ResetUID resets all changes to the "uid" field.
+func (m *CertificateMutation) ResetUID() {
+	m.uid = nil
+	delete(m.clearedFields, certificate.FieldUID)
+}
+
 // Where appends a list predicates to the CertificateMutation builder.
 func (m *CertificateMutation) Where(ps ...predicate.Certificate) {
 	m.predicates = append(m.predicates, ps...)
@@ -2841,7 +2891,7 @@ func (m *CertificateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CertificateMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m._type != nil {
 		fields = append(fields, certificate.FieldType)
 	}
@@ -2850,6 +2900,9 @@ func (m *CertificateMutation) Fields() []string {
 	}
 	if m.expiry != nil {
 		fields = append(fields, certificate.FieldExpiry)
+	}
+	if m.uid != nil {
+		fields = append(fields, certificate.FieldUID)
 	}
 	return fields
 }
@@ -2865,6 +2918,8 @@ func (m *CertificateMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case certificate.FieldExpiry:
 		return m.Expiry()
+	case certificate.FieldUID:
+		return m.UID()
 	}
 	return nil, false
 }
@@ -2880,6 +2935,8 @@ func (m *CertificateMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case certificate.FieldExpiry:
 		return m.OldExpiry(ctx)
+	case certificate.FieldUID:
+		return m.OldUID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Certificate field %s", name)
 }
@@ -2909,6 +2966,13 @@ func (m *CertificateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExpiry(v)
+		return nil
+	case certificate.FieldUID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Certificate field %s", name)
@@ -2946,6 +3010,9 @@ func (m *CertificateMutation) ClearedFields() []string {
 	if m.FieldCleared(certificate.FieldExpiry) {
 		fields = append(fields, certificate.FieldExpiry)
 	}
+	if m.FieldCleared(certificate.FieldUID) {
+		fields = append(fields, certificate.FieldUID)
+	}
 	return fields
 }
 
@@ -2966,6 +3033,9 @@ func (m *CertificateMutation) ClearField(name string) error {
 	case certificate.FieldExpiry:
 		m.ClearExpiry()
 		return nil
+	case certificate.FieldUID:
+		m.ClearUID()
+		return nil
 	}
 	return fmt.Errorf("unknown Certificate nullable field %s", name)
 }
@@ -2982,6 +3052,9 @@ func (m *CertificateMutation) ResetField(name string) error {
 		return nil
 	case certificate.FieldExpiry:
 		m.ResetExpiry()
+		return nil
+	case certificate.FieldUID:
+		m.ResetUID()
 		return nil
 	}
 	return fmt.Errorf("unknown Certificate field %s", name)
@@ -11755,7 +11828,6 @@ type UserMutation struct {
 	email               *string
 	phone               *string
 	country             *string
-	certSerial          *string
 	email_verified      *bool
 	register            *string
 	cert_clear_password *string
@@ -12043,55 +12115,6 @@ func (m *UserMutation) OldCountry(ctx context.Context) (v string, err error) {
 // ResetCountry resets all changes to the "country" field.
 func (m *UserMutation) ResetCountry() {
 	m.country = nil
-}
-
-// SetCertSerial sets the "certSerial" field.
-func (m *UserMutation) SetCertSerial(s string) {
-	m.certSerial = &s
-}
-
-// CertSerial returns the value of the "certSerial" field in the mutation.
-func (m *UserMutation) CertSerial() (r string, exists bool) {
-	v := m.certSerial
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCertSerial returns the old "certSerial" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldCertSerial(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCertSerial is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCertSerial requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCertSerial: %w", err)
-	}
-	return oldValue.CertSerial, nil
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (m *UserMutation) ClearCertSerial() {
-	m.certSerial = nil
-	m.clearedFields[user.FieldCertSerial] = struct{}{}
-}
-
-// CertSerialCleared returns if the "certSerial" field was cleared in this mutation.
-func (m *UserMutation) CertSerialCleared() bool {
-	_, ok := m.clearedFields[user.FieldCertSerial]
-	return ok
-}
-
-// ResetCertSerial resets all changes to the "certSerial" field.
-func (m *UserMutation) ResetCertSerial() {
-	m.certSerial = nil
-	delete(m.clearedFields, user.FieldCertSerial)
 }
 
 // SetEmailVerified sets the "email_verified" field.
@@ -12450,7 +12473,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 10)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -12462,9 +12485,6 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.country != nil {
 		fields = append(fields, user.FieldCountry)
-	}
-	if m.certSerial != nil {
-		fields = append(fields, user.FieldCertSerial)
 	}
 	if m.email_verified != nil {
 		fields = append(fields, user.FieldEmailVerified)
@@ -12500,8 +12520,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Phone()
 	case user.FieldCountry:
 		return m.Country()
-	case user.FieldCertSerial:
-		return m.CertSerial()
 	case user.FieldEmailVerified:
 		return m.EmailVerified()
 	case user.FieldRegister:
@@ -12531,8 +12549,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldPhone(ctx)
 	case user.FieldCountry:
 		return m.OldCountry(ctx)
-	case user.FieldCertSerial:
-		return m.OldCertSerial(ctx)
 	case user.FieldEmailVerified:
 		return m.OldEmailVerified(ctx)
 	case user.FieldRegister:
@@ -12581,13 +12597,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCountry(v)
-		return nil
-	case user.FieldCertSerial:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCertSerial(v)
 		return nil
 	case user.FieldEmailVerified:
 		v, ok := value.(bool)
@@ -12667,9 +12676,6 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldPhone) {
 		fields = append(fields, user.FieldPhone)
 	}
-	if m.FieldCleared(user.FieldCertSerial) {
-		fields = append(fields, user.FieldCertSerial)
-	}
 	if m.FieldCleared(user.FieldCertClearPassword) {
 		fields = append(fields, user.FieldCertClearPassword)
 	}
@@ -12702,9 +12708,6 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldPhone:
 		m.ClearPhone()
 		return nil
-	case user.FieldCertSerial:
-		m.ClearCertSerial()
-		return nil
 	case user.FieldCertClearPassword:
 		m.ClearCertClearPassword()
 		return nil
@@ -12736,9 +12739,6 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldCountry:
 		m.ResetCountry()
-		return nil
-	case user.FieldCertSerial:
-		m.ResetCertSerial()
 		return nil
 	case user.FieldEmailVerified:
 		m.ResetEmailVerified()

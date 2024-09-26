@@ -98,26 +98,6 @@ func (uu *UserUpdate) SetNillableCountry(s *string) *UserUpdate {
 	return uu
 }
 
-// SetCertSerial sets the "certSerial" field.
-func (uu *UserUpdate) SetCertSerial(s string) *UserUpdate {
-	uu.mutation.SetCertSerial(s)
-	return uu
-}
-
-// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCertSerial(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetCertSerial(*s)
-	}
-	return uu
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (uu *UserUpdate) ClearCertSerial() *UserUpdate {
-	uu.mutation.ClearCertSerial()
-	return uu
-}
-
 // SetEmailVerified sets the "email_verified" field.
 func (uu *UserUpdate) SetEmailVerified(b bool) *UserUpdate {
 	uu.mutation.SetEmailVerified(b)
@@ -328,12 +308,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Country(); ok {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.CertSerial(); ok {
-		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
-	}
-	if uu.mutation.CertSerialCleared() {
-		_spec.ClearField(user.FieldCertSerial, field.TypeString)
-	}
 	if value, ok := uu.mutation.EmailVerified(); ok {
 		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
 	}
@@ -496,26 +470,6 @@ func (uuo *UserUpdateOne) SetNillableCountry(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetCountry(*s)
 	}
-	return uuo
-}
-
-// SetCertSerial sets the "certSerial" field.
-func (uuo *UserUpdateOne) SetCertSerial(s string) *UserUpdateOne {
-	uuo.mutation.SetCertSerial(s)
-	return uuo
-}
-
-// SetNillableCertSerial sets the "certSerial" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCertSerial(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetCertSerial(*s)
-	}
-	return uuo
-}
-
-// ClearCertSerial clears the value of the "certSerial" field.
-func (uuo *UserUpdateOne) ClearCertSerial() *UserUpdateOne {
-	uuo.mutation.ClearCertSerial()
 	return uuo
 }
 
@@ -758,12 +712,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Country(); ok {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
-	}
-	if value, ok := uuo.mutation.CertSerial(); ok {
-		_spec.SetField(user.FieldCertSerial, field.TypeString, value)
-	}
-	if uuo.mutation.CertSerialCleared() {
-		_spec.ClearField(user.FieldCertSerial, field.TypeString)
 	}
 	if value, ok := uuo.mutation.EmailVerified(); ok {
 		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)

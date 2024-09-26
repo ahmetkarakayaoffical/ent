@@ -56,6 +56,20 @@ func (cc *CertificateCreate) SetNillableExpiry(t *time.Time) *CertificateCreate 
 	return cc
 }
 
+// SetUID sets the "uid" field.
+func (cc *CertificateCreate) SetUID(s string) *CertificateCreate {
+	cc.mutation.SetUID(s)
+	return cc
+}
+
+// SetNillableUID sets the "uid" field if the given value is not nil.
+func (cc *CertificateCreate) SetNillableUID(s *string) *CertificateCreate {
+	if s != nil {
+		cc.SetUID(*s)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CertificateCreate) SetID(i int64) *CertificateCreate {
 	cc.mutation.SetID(i)
@@ -148,6 +162,10 @@ func (cc *CertificateCreate) createSpec() (*Certificate, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Expiry(); ok {
 		_spec.SetField(certificate.FieldExpiry, field.TypeTime, value)
 		_node.Expiry = value
+	}
+	if value, ok := cc.mutation.UID(); ok {
+		_spec.SetField(certificate.FieldUID, field.TypeString, value)
+		_node.UID = value
 	}
 	return _node, _spec
 }
@@ -246,6 +264,24 @@ func (u *CertificateUpsert) UpdateExpiry() *CertificateUpsert {
 // ClearExpiry clears the value of the "expiry" field.
 func (u *CertificateUpsert) ClearExpiry() *CertificateUpsert {
 	u.SetNull(certificate.FieldExpiry)
+	return u
+}
+
+// SetUID sets the "uid" field.
+func (u *CertificateUpsert) SetUID(v string) *CertificateUpsert {
+	u.Set(certificate.FieldUID, v)
+	return u
+}
+
+// UpdateUID sets the "uid" field to the value that was provided on create.
+func (u *CertificateUpsert) UpdateUID() *CertificateUpsert {
+	u.SetExcluded(certificate.FieldUID)
+	return u
+}
+
+// ClearUID clears the value of the "uid" field.
+func (u *CertificateUpsert) ClearUID() *CertificateUpsert {
+	u.SetNull(certificate.FieldUID)
 	return u
 }
 
@@ -350,6 +386,27 @@ func (u *CertificateUpsertOne) UpdateExpiry() *CertificateUpsertOne {
 func (u *CertificateUpsertOne) ClearExpiry() *CertificateUpsertOne {
 	return u.Update(func(s *CertificateUpsert) {
 		s.ClearExpiry()
+	})
+}
+
+// SetUID sets the "uid" field.
+func (u *CertificateUpsertOne) SetUID(v string) *CertificateUpsertOne {
+	return u.Update(func(s *CertificateUpsert) {
+		s.SetUID(v)
+	})
+}
+
+// UpdateUID sets the "uid" field to the value that was provided on create.
+func (u *CertificateUpsertOne) UpdateUID() *CertificateUpsertOne {
+	return u.Update(func(s *CertificateUpsert) {
+		s.UpdateUID()
+	})
+}
+
+// ClearUID clears the value of the "uid" field.
+func (u *CertificateUpsertOne) ClearUID() *CertificateUpsertOne {
+	return u.Update(func(s *CertificateUpsert) {
+		s.ClearUID()
 	})
 }
 
@@ -619,6 +676,27 @@ func (u *CertificateUpsertBulk) UpdateExpiry() *CertificateUpsertBulk {
 func (u *CertificateUpsertBulk) ClearExpiry() *CertificateUpsertBulk {
 	return u.Update(func(s *CertificateUpsert) {
 		s.ClearExpiry()
+	})
+}
+
+// SetUID sets the "uid" field.
+func (u *CertificateUpsertBulk) SetUID(v string) *CertificateUpsertBulk {
+	return u.Update(func(s *CertificateUpsert) {
+		s.SetUID(v)
+	})
+}
+
+// UpdateUID sets the "uid" field to the value that was provided on create.
+func (u *CertificateUpsertBulk) UpdateUID() *CertificateUpsertBulk {
+	return u.Update(func(s *CertificateUpsert) {
+		s.UpdateUID()
+	})
+}
+
+// ClearUID clears the value of the "uid" field.
+func (u *CertificateUpsertBulk) ClearUID() *CertificateUpsertBulk {
+	return u.Update(func(s *CertificateUpsert) {
+		s.ClearUID()
 	})
 }
 

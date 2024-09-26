@@ -17,5 +17,6 @@ func (Certificate) Fields() []ent.Field {
 		field.Enum("type").Values("console", "worker", "agent", "user", "ocsp", "nats"),
 		field.String("description").Optional(),
 		field.Time("expiry").Optional(),
+		field.String("uid").Optional(),
 	}
 }

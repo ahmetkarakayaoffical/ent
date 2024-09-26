@@ -25,8 +25,6 @@ type User struct {
 	Phone string `json:"phone,omitempty"`
 	// Country holds the value of the "country" field.
 	Country string `json:"country,omitempty"`
-	// CertSerial holds the value of the "certSerial" field.
-	CertSerial string `json:"certSerial,omitempty"`
 	// EmailVerified holds the value of the "email_verified" field.
 	EmailVerified bool `json:"email_verified,omitempty"`
 	// Register holds the value of the "register" field.
@@ -70,7 +68,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldEmailVerified:
 			values[i] = new(sql.NullBool)
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldCertSerial, user.FieldRegister, user.FieldCertClearPassword:
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword:
 			values[i] = new(sql.NullString)
 		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -118,12 +116,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field country", values[i])
 			} else if value.Valid {
 				u.Country = value.String
-			}
-		case user.FieldCertSerial:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field certSerial", values[i])
-			} else if value.Valid {
-				u.CertSerial = value.String
 			}
 		case user.FieldEmailVerified:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -213,9 +205,6 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("country=")
 	builder.WriteString(u.Country)
-	builder.WriteString(", ")
-	builder.WriteString("certSerial=")
-	builder.WriteString(u.CertSerial)
 	builder.WriteString(", ")
 	builder.WriteString("email_verified=")
 	builder.WriteString(fmt.Sprintf("%v", u.EmailVerified))

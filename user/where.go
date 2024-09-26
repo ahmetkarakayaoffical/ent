@@ -85,11 +85,6 @@ func Country(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCountry, v))
 }
 
-// CertSerial applies equality check predicate on the "certSerial" field. It's identical to CertSerialEQ.
-func CertSerial(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
-}
-
 // EmailVerified applies equality check predicate on the "email_verified" field. It's identical to EmailVerifiedEQ.
 func EmailVerified(v bool) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldEmailVerified, v))
@@ -398,81 +393,6 @@ func CountryEqualFold(v string) predicate.User {
 // CountryContainsFold applies the ContainsFold predicate on the "country" field.
 func CountryContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldCountry, v))
-}
-
-// CertSerialEQ applies the EQ predicate on the "certSerial" field.
-func CertSerialEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCertSerial, v))
-}
-
-// CertSerialNEQ applies the NEQ predicate on the "certSerial" field.
-func CertSerialNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldCertSerial, v))
-}
-
-// CertSerialIn applies the In predicate on the "certSerial" field.
-func CertSerialIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldCertSerial, vs...))
-}
-
-// CertSerialNotIn applies the NotIn predicate on the "certSerial" field.
-func CertSerialNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldCertSerial, vs...))
-}
-
-// CertSerialGT applies the GT predicate on the "certSerial" field.
-func CertSerialGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldCertSerial, v))
-}
-
-// CertSerialGTE applies the GTE predicate on the "certSerial" field.
-func CertSerialGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldCertSerial, v))
-}
-
-// CertSerialLT applies the LT predicate on the "certSerial" field.
-func CertSerialLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldCertSerial, v))
-}
-
-// CertSerialLTE applies the LTE predicate on the "certSerial" field.
-func CertSerialLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldCertSerial, v))
-}
-
-// CertSerialContains applies the Contains predicate on the "certSerial" field.
-func CertSerialContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldCertSerial, v))
-}
-
-// CertSerialHasPrefix applies the HasPrefix predicate on the "certSerial" field.
-func CertSerialHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldCertSerial, v))
-}
-
-// CertSerialHasSuffix applies the HasSuffix predicate on the "certSerial" field.
-func CertSerialHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldCertSerial, v))
-}
-
-// CertSerialIsNil applies the IsNil predicate on the "certSerial" field.
-func CertSerialIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldCertSerial))
-}
-
-// CertSerialNotNil applies the NotNil predicate on the "certSerial" field.
-func CertSerialNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldCertSerial))
-}
-
-// CertSerialEqualFold applies the EqualFold predicate on the "certSerial" field.
-func CertSerialEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldCertSerial, v))
-}
-
-// CertSerialContainsFold applies the ContainsFold predicate on the "certSerial" field.
-func CertSerialContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldCertSerial, v))
 }
 
 // EmailVerifiedEQ applies the EQ predicate on the "email_verified" field.
