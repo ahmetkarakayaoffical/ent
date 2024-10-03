@@ -100,6 +100,11 @@ func Enabled(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldEnabled, v))
 }
 
+// Vnc applies equality check predicate on the "vnc" field. It's identical to VncEQ.
+func Vnc(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldVnc, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -468,6 +473,81 @@ func EnabledEQ(v bool) predicate.Agent {
 // EnabledNEQ applies the NEQ predicate on the "enabled" field.
 func EnabledNEQ(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldNEQ(FieldEnabled, v))
+}
+
+// VncEQ applies the EQ predicate on the "vnc" field.
+func VncEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldVnc, v))
+}
+
+// VncNEQ applies the NEQ predicate on the "vnc" field.
+func VncNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldVnc, v))
+}
+
+// VncIn applies the In predicate on the "vnc" field.
+func VncIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldVnc, vs...))
+}
+
+// VncNotIn applies the NotIn predicate on the "vnc" field.
+func VncNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldVnc, vs...))
+}
+
+// VncGT applies the GT predicate on the "vnc" field.
+func VncGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldVnc, v))
+}
+
+// VncGTE applies the GTE predicate on the "vnc" field.
+func VncGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldVnc, v))
+}
+
+// VncLT applies the LT predicate on the "vnc" field.
+func VncLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldVnc, v))
+}
+
+// VncLTE applies the LTE predicate on the "vnc" field.
+func VncLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldVnc, v))
+}
+
+// VncContains applies the Contains predicate on the "vnc" field.
+func VncContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldVnc, v))
+}
+
+// VncHasPrefix applies the HasPrefix predicate on the "vnc" field.
+func VncHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldVnc, v))
+}
+
+// VncHasSuffix applies the HasSuffix predicate on the "vnc" field.
+func VncHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldVnc, v))
+}
+
+// VncIsNil applies the IsNil predicate on the "vnc" field.
+func VncIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldVnc))
+}
+
+// VncNotNil applies the NotNil predicate on the "vnc" field.
+func VncNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldVnc))
+}
+
+// VncEqualFold applies the EqualFold predicate on the "vnc" field.
+func VncEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldVnc, v))
+}
+
+// VncContainsFold applies the ContainsFold predicate on the "vnc" field.
+func VncContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldVnc, v))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

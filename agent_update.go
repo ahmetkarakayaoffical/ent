@@ -149,6 +149,26 @@ func (au *AgentUpdate) SetNillableEnabled(b *bool) *AgentUpdate {
 	return au
 }
 
+// SetVnc sets the "vnc" field.
+func (au *AgentUpdate) SetVnc(s string) *AgentUpdate {
+	au.mutation.SetVnc(s)
+	return au
+}
+
+// SetNillableVnc sets the "vnc" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableVnc(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetVnc(*s)
+	}
+	return au
+}
+
+// ClearVnc clears the value of the "vnc" field.
+func (au *AgentUpdate) ClearVnc() *AgentUpdate {
+	au.mutation.ClearVnc()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -561,6 +581,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := au.mutation.Enabled(); ok {
 		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
+	}
+	if value, ok := au.mutation.Vnc(); ok {
+		_spec.SetField(agent.FieldVnc, field.TypeString, value)
+	}
+	if au.mutation.VncCleared() {
+		_spec.ClearField(agent.FieldVnc, field.TypeString)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1080,6 +1106,26 @@ func (auo *AgentUpdateOne) SetNillableEnabled(b *bool) *AgentUpdateOne {
 	return auo
 }
 
+// SetVnc sets the "vnc" field.
+func (auo *AgentUpdateOne) SetVnc(s string) *AgentUpdateOne {
+	auo.mutation.SetVnc(s)
+	return auo
+}
+
+// SetNillableVnc sets the "vnc" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableVnc(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetVnc(*s)
+	}
+	return auo
+}
+
+// ClearVnc clears the value of the "vnc" field.
+func (auo *AgentUpdateOne) ClearVnc() *AgentUpdateOne {
+	auo.mutation.ClearVnc()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -1522,6 +1568,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if value, ok := auo.mutation.Enabled(); ok {
 		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
+	}
+	if value, ok := auo.mutation.Vnc(); ok {
+		_spec.SetField(agent.FieldVnc, field.TypeString, value)
+	}
+	if auo.mutation.VncCleared() {
+		_spec.ClearField(agent.FieldVnc, field.TypeString)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

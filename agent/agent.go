@@ -26,6 +26,8 @@ const (
 	FieldLastContact = "last_contact"
 	// FieldEnabled holds the string denoting the enabled field in the database.
 	FieldEnabled = "enabled"
+	// FieldVnc holds the string denoting the vnc field in the database.
+	FieldVnc = "vnc"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -150,6 +152,7 @@ var Columns = []string{
 	FieldFirstContact,
 	FieldLastContact,
 	FieldEnabled,
+	FieldVnc,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -173,6 +176,8 @@ var (
 	DefaultIP string
 	// DefaultEnabled holds the default value on creation for the "enabled" field.
 	DefaultEnabled bool
+	// DefaultVnc holds the default value on creation for the "vnc" field.
+	DefaultVnc string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -218,6 +223,11 @@ func ByLastContact(opts ...sql.OrderTermOption) OrderOption {
 // ByEnabled orders the results by the enabled field.
 func ByEnabled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnabled, opts...).ToFunc()
+}
+
+// ByVnc orders the results by the vnc field.
+func ByVnc(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVnc, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

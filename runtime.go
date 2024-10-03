@@ -40,6 +40,10 @@ func init() {
 	agentDescEnabled := agentFields[7].Descriptor()
 	// agent.DefaultEnabled holds the default value on creation for the enabled field.
 	agent.DefaultEnabled = agentDescEnabled.Default.(bool)
+	// agentDescVnc is the schema descriptor for vnc field.
+	agentDescVnc := agentFields[8].Descriptor()
+	// agent.DefaultVnc holds the default value on creation for the vnc field.
+	agent.DefaultVnc = agentDescVnc.Default.(string)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

@@ -35,6 +35,8 @@ type Agent struct {
 	LastContact time.Time `json:"last_contact,omitempty"`
 	// Enabled holds the value of the "enabled" field.
 	Enabled bool `json:"enabled,omitempty"`
+	// Vnc holds the value of the "vnc" field.
+	Vnc string `json:"vnc,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges        AgentEdges `json:"edges"`
@@ -173,7 +175,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldVnc:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact:
 			values[i] = new(sql.NullTime)
@@ -239,6 +241,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field enabled", values[i])
 			} else if value.Valid {
 				a.Enabled = value.Bool
+			}
+		case agent.FieldVnc:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vnc", values[i])
+			} else if value.Valid {
+				a.Vnc = value.String
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -346,6 +354,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("enabled=")
 	builder.WriteString(fmt.Sprintf("%v", a.Enabled))
+	builder.WriteString(", ")
+	builder.WriteString("vnc=")
+	builder.WriteString(a.Vnc)
 	builder.WriteByte(')')
 	return builder.String()
 }

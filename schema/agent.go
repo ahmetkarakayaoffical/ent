@@ -23,6 +23,7 @@ func (Agent) Fields() []ent.Field {
 		field.Time("first_contact").Optional(),
 		field.Time("last_contact").Optional(),
 		field.Bool("enabled").Default(true),
+		field.String("vnc").Optional().Default(""),
 	}
 }
 

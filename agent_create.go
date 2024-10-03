@@ -107,6 +107,20 @@ func (ac *AgentCreate) SetNillableEnabled(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetVnc sets the "vnc" field.
+func (ac *AgentCreate) SetVnc(s string) *AgentCreate {
+	ac.mutation.SetVnc(s)
+	return ac
+}
+
+// SetNillableVnc sets the "vnc" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableVnc(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetVnc(*s)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -322,6 +336,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultEnabled
 		ac.mutation.SetEnabled(v)
 	}
+	if _, ok := ac.mutation.Vnc(); !ok {
+		v := agent.DefaultVnc
+		ac.mutation.SetVnc(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -424,6 +442,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Enabled(); ok {
 		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
 		_node.Enabled = value
+	}
+	if value, ok := ac.mutation.Vnc(); ok {
+		_spec.SetField(agent.FieldVnc, field.TypeString, value)
+		_node.Vnc = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -733,6 +755,24 @@ func (u *AgentUpsert) UpdateEnabled() *AgentUpsert {
 	return u
 }
 
+// SetVnc sets the "vnc" field.
+func (u *AgentUpsert) SetVnc(v string) *AgentUpsert {
+	u.Set(agent.FieldVnc, v)
+	return u
+}
+
+// UpdateVnc sets the "vnc" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateVnc() *AgentUpsert {
+	u.SetExcluded(agent.FieldVnc)
+	return u
+}
+
+// ClearVnc clears the value of the "vnc" field.
+func (u *AgentUpsert) ClearVnc() *AgentUpsert {
+	u.SetNull(agent.FieldVnc)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -890,6 +930,27 @@ func (u *AgentUpsertOne) SetEnabled(v bool) *AgentUpsertOne {
 func (u *AgentUpsertOne) UpdateEnabled() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateEnabled()
+	})
+}
+
+// SetVnc sets the "vnc" field.
+func (u *AgentUpsertOne) SetVnc(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetVnc(v)
+	})
+}
+
+// UpdateVnc sets the "vnc" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateVnc() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateVnc()
+	})
+}
+
+// ClearVnc clears the value of the "vnc" field.
+func (u *AgentUpsertOne) ClearVnc() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearVnc()
 	})
 }
 
@@ -1217,6 +1278,27 @@ func (u *AgentUpsertBulk) SetEnabled(v bool) *AgentUpsertBulk {
 func (u *AgentUpsertBulk) UpdateEnabled() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateEnabled()
+	})
+}
+
+// SetVnc sets the "vnc" field.
+func (u *AgentUpsertBulk) SetVnc(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetVnc(v)
+	})
+}
+
+// UpdateVnc sets the "vnc" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateVnc() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateVnc()
+	})
+}
+
+// ClearVnc clears the value of the "vnc" field.
+func (u *AgentUpsertBulk) ClearVnc() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearVnc()
 	})
 }
 
