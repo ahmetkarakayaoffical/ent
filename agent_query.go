@@ -16,6 +16,7 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
@@ -43,6 +44,7 @@ type AgentQuery struct {
 	withShares          *ShareQuery
 	withPrinters        *PrinterQuery
 	withNetworkadapters *NetworkAdapterQuery
+	withDeployments     *DeploymentQuery
 	modifiers           []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -300,6 +302,28 @@ func (aq *AgentQuery) QueryNetworkadapters() *NetworkAdapterQuery {
 	return query
 }
 
+// QueryDeployments chains the current query on the "deployments" edge.
+func (aq *AgentQuery) QueryDeployments() *DeploymentQuery {
+	query := (&DeploymentClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(deployment.Table, deployment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.DeploymentsTable, agent.DeploymentsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Agent entity from the query.
 // Returns a *NotFoundError when no Agent was found.
 func (aq *AgentQuery) First(ctx context.Context) (*Agent, error) {
@@ -502,6 +526,7 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withShares:          aq.withShares.Clone(),
 		withPrinters:        aq.withPrinters.Clone(),
 		withNetworkadapters: aq.withNetworkadapters.Clone(),
+		withDeployments:     aq.withDeployments.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -619,6 +644,17 @@ func (aq *AgentQuery) WithNetworkadapters(opts ...func(*NetworkAdapterQuery)) *A
 	return aq
 }
 
+// WithDeployments tells the query-builder to eager-load the nodes that are connected to
+// the "deployments" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithDeployments(opts ...func(*DeploymentQuery)) *AgentQuery {
+	query := (&DeploymentClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withDeployments = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -697,7 +733,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 	var (
 		nodes       = []*Agent{}
 		_spec       = aq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -708,6 +744,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withShares != nil,
 			aq.withPrinters != nil,
 			aq.withNetworkadapters != nil,
+			aq.withDeployments != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -794,6 +831,13 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		if err := aq.loadNetworkadapters(ctx, query, nodes,
 			func(n *Agent) { n.Edges.Networkadapters = []*NetworkAdapter{} },
 			func(n *Agent, e *NetworkAdapter) { n.Edges.Networkadapters = append(n.Edges.Networkadapters, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withDeployments; query != nil {
+		if err := aq.loadDeployments(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Deployments = []*Deployment{} },
+			func(n *Agent, e *Deployment) { n.Edges.Deployments = append(n.Edges.Deployments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1093,6 +1137,37 @@ func (aq *AgentQuery) loadNetworkadapters(ctx context.Context, query *NetworkAda
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "agent_networkadapters" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (aq *AgentQuery) loadDeployments(ctx context.Context, query *DeploymentQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Deployment)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Deployment(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.DeploymentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.agent_deployments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_deployments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_deployments" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

@@ -17,6 +17,7 @@ import (
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/certificate"
 	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
@@ -93,6 +94,7 @@ func checkColumn(table, column string) error {
 			app.Table:             app.ValidColumn,
 			certificate.Table:     certificate.ValidColumn,
 			computer.Table:        computer.ValidColumn,
+			deployment.Table:      deployment.ValidColumn,
 			logicaldisk.Table:     logicaldisk.ValidColumn,
 			monitor.Table:         monitor.ValidColumn,
 			networkadapter.Table:  networkadapter.ValidColumn,

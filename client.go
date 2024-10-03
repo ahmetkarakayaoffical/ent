@@ -20,6 +20,7 @@ import (
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/certificate"
 	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
@@ -48,6 +49,8 @@ type Client struct {
 	Certificate *CertificateClient
 	// Computer is the client for interacting with the Computer builders.
 	Computer *ComputerClient
+	// Deployment is the client for interacting with the Deployment builders.
+	Deployment *DeploymentClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
 	LogicalDisk *LogicalDiskClient
 	// Monitor is the client for interacting with the Monitor builders.
@@ -86,6 +89,7 @@ func (c *Client) init() {
 	c.App = NewAppClient(c.config)
 	c.Certificate = NewCertificateClient(c.config)
 	c.Computer = NewComputerClient(c.config)
+	c.Deployment = NewDeploymentClient(c.config)
 	c.LogicalDisk = NewLogicalDiskClient(c.config)
 	c.Monitor = NewMonitorClient(c.config)
 	c.NetworkAdapter = NewNetworkAdapterClient(c.config)
@@ -194,6 +198,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		App:             NewAppClient(cfg),
 		Certificate:     NewCertificateClient(cfg),
 		Computer:        NewComputerClient(cfg),
+		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
@@ -229,6 +234,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		App:             NewAppClient(cfg),
 		Certificate:     NewCertificateClient(cfg),
 		Computer:        NewComputerClient(cfg),
+		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
@@ -269,9 +275,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.LogicalDisk,
-		c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation,
-		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
+		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
+		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -281,9 +287,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.LogicalDisk,
-		c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer, c.Revocation,
-		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
+		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
+		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -302,6 +308,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Certificate.mutate(ctx, m)
 	case *ComputerMutation:
 		return c.Computer.mutate(ctx, m)
+	case *DeploymentMutation:
+		return c.Deployment.mutate(ctx, m)
 	case *LogicalDiskMutation:
 		return c.LogicalDisk.mutate(ctx, m)
 	case *MonitorMutation:
@@ -590,6 +598,22 @@ func (c *AgentClient) QueryNetworkadapters(a *Agent) *NetworkAdapterQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(networkadapter.Table, networkadapter.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, agent.NetworkadaptersTable, agent.NetworkadaptersColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDeployments queries the deployments edge of a Agent.
+func (c *AgentClient) QueryDeployments(a *Agent) *DeploymentQuery {
+	query := (&DeploymentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(deployment.Table, deployment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.DeploymentsTable, agent.DeploymentsColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1199,6 +1223,155 @@ func (c *ComputerClient) mutate(ctx context.Context, m *ComputerMutation) (Value
 		return (&ComputerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("openuem_ent: unknown Computer mutation op: %q", m.Op())
+	}
+}
+
+// DeploymentClient is a client for the Deployment schema.
+type DeploymentClient struct {
+	config
+}
+
+// NewDeploymentClient returns a client for the Deployment from the given config.
+func NewDeploymentClient(c config) *DeploymentClient {
+	return &DeploymentClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `deployment.Hooks(f(g(h())))`.
+func (c *DeploymentClient) Use(hooks ...Hook) {
+	c.hooks.Deployment = append(c.hooks.Deployment, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `deployment.Intercept(f(g(h())))`.
+func (c *DeploymentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Deployment = append(c.inters.Deployment, interceptors...)
+}
+
+// Create returns a builder for creating a Deployment entity.
+func (c *DeploymentClient) Create() *DeploymentCreate {
+	mutation := newDeploymentMutation(c.config, OpCreate)
+	return &DeploymentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Deployment entities.
+func (c *DeploymentClient) CreateBulk(builders ...*DeploymentCreate) *DeploymentCreateBulk {
+	return &DeploymentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DeploymentClient) MapCreateBulk(slice any, setFunc func(*DeploymentCreate, int)) *DeploymentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DeploymentCreateBulk{err: fmt.Errorf("calling to DeploymentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DeploymentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DeploymentCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Deployment.
+func (c *DeploymentClient) Update() *DeploymentUpdate {
+	mutation := newDeploymentMutation(c.config, OpUpdate)
+	return &DeploymentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DeploymentClient) UpdateOne(d *Deployment) *DeploymentUpdateOne {
+	mutation := newDeploymentMutation(c.config, OpUpdateOne, withDeployment(d))
+	return &DeploymentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DeploymentClient) UpdateOneID(id int) *DeploymentUpdateOne {
+	mutation := newDeploymentMutation(c.config, OpUpdateOne, withDeploymentID(id))
+	return &DeploymentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Deployment.
+func (c *DeploymentClient) Delete() *DeploymentDelete {
+	mutation := newDeploymentMutation(c.config, OpDelete)
+	return &DeploymentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DeploymentClient) DeleteOne(d *Deployment) *DeploymentDeleteOne {
+	return c.DeleteOneID(d.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DeploymentClient) DeleteOneID(id int) *DeploymentDeleteOne {
+	builder := c.Delete().Where(deployment.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DeploymentDeleteOne{builder}
+}
+
+// Query returns a query builder for Deployment.
+func (c *DeploymentClient) Query() *DeploymentQuery {
+	return &DeploymentQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDeployment},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Deployment entity by its id.
+func (c *DeploymentClient) Get(ctx context.Context, id int) (*Deployment, error) {
+	return c.Query().Where(deployment.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DeploymentClient) GetX(ctx context.Context, id int) *Deployment {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Deployment.
+func (c *DeploymentClient) QueryOwner(d *Deployment) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(deployment.Table, deployment.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, deployment.OwnerTable, deployment.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DeploymentClient) Hooks() []Hook {
+	return c.hooks.Deployment
+}
+
+// Interceptors returns the client interceptors.
+func (c *DeploymentClient) Interceptors() []Interceptor {
+	return c.inters.Deployment
+}
+
+func (c *DeploymentClient) mutate(ctx context.Context, m *DeploymentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DeploymentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DeploymentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DeploymentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DeploymentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Deployment mutation op: %q", m.Op())
 	}
 }
 
@@ -2812,12 +2985,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Certificate, Computer, LogicalDisk, Monitor,
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
 		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
 		Share, SystemUpdate, User []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Certificate, Computer, LogicalDisk, Monitor,
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
 		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
 		Share, SystemUpdate, User []ent.Interceptor
 	}

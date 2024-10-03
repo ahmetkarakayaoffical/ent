@@ -40,5 +40,6 @@ func (Agent) Edges() []ent.Edge {
 		edge.To("shares", Share.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("printers", Printer.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("networkadapters", NetworkAdapter.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("deployments", Deployment.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 	}
 }

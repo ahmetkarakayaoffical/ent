@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/doncicuto/openuem_ent/agent"
+	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
@@ -48,6 +49,18 @@ func init() {
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	agent.IDValidator = agentDescID.Validators[0].(func(string) error)
+	deploymentFields := schema.Deployment{}.Fields()
+	_ = deploymentFields
+	// deploymentDescInstalled is the schema descriptor for installed field.
+	deploymentDescInstalled := deploymentFields[3].Descriptor()
+	// deployment.DefaultInstalled holds the default value on creation for the installed field.
+	deployment.DefaultInstalled = deploymentDescInstalled.Default.(func() time.Time)
+	// deploymentDescUpdated is the schema descriptor for updated field.
+	deploymentDescUpdated := deploymentFields[4].Descriptor()
+	// deployment.DefaultUpdated holds the default value on creation for the updated field.
+	deployment.DefaultUpdated = deploymentDescUpdated.Default.(func() time.Time)
+	// deployment.UpdateDefaultUpdated holds the default value on update for the updated field.
+	deployment.UpdateDefaultUpdated = deploymentDescUpdated.UpdateDefault.(func() time.Time)
 	logicaldiskFields := schema.LogicalDisk{}.Fields()
 	_ = logicaldiskFields
 	// logicaldiskDescUsage is the schema descriptor for usage field.

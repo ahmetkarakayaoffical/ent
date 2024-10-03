@@ -22,6 +22,8 @@ type Tx struct {
 	Certificate *CertificateClient
 	// Computer is the client for interacting with the Computer builders.
 	Computer *ComputerClient
+	// Deployment is the client for interacting with the Deployment builders.
+	Deployment *DeploymentClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
 	LogicalDisk *LogicalDiskClient
 	// Monitor is the client for interacting with the Monitor builders.
@@ -180,6 +182,7 @@ func (tx *Tx) init() {
 	tx.App = NewAppClient(tx.config)
 	tx.Certificate = NewCertificateClient(tx.config)
 	tx.Computer = NewComputerClient(tx.config)
+	tx.Deployment = NewDeploymentClient(tx.config)
 	tx.LogicalDisk = NewLogicalDiskClient(tx.config)
 	tx.Monitor = NewMonitorClient(tx.config)
 	tx.NetworkAdapter = NewNetworkAdapterClient(tx.config)

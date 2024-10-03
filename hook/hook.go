@@ -69,6 +69,18 @@ func (f ComputerFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ComputerMutation", m)
 }
 
+// The DeploymentFunc type is an adapter to allow the use of ordinary
+// function as Deployment mutator.
+type DeploymentFunc func(context.Context, *openuem_ent.DeploymentMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DeploymentFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.DeploymentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.DeploymentMutation", m)
+}
+
 // The LogicalDiskFunc type is an adapter to allow the use of ordinary
 // function as LogicalDisk mutator.
 type LogicalDiskFunc func(context.Context, *openuem_ent.LogicalDiskMutation) (openuem_ent.Value, error)

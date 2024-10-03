@@ -65,9 +65,11 @@ type AgentEdges struct {
 	Printers []*Printer `json:"printers,omitempty"`
 	// Networkadapters holds the value of the networkadapters edge.
 	Networkadapters []*NetworkAdapter `json:"networkadapters,omitempty"`
+	// Deployments holds the value of the deployments edge.
+	Deployments []*Deployment `json:"deployments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -166,6 +168,15 @@ func (e AgentEdges) NetworkadaptersOrErr() ([]*NetworkAdapter, error) {
 		return e.Networkadapters, nil
 	}
 	return nil, &NotLoadedError{edge: "networkadapters"}
+}
+
+// DeploymentsOrErr returns the Deployments value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) DeploymentsOrErr() ([]*Deployment, error) {
+	if e.loadedTypes[10] {
+		return e.Deployments, nil
+	}
+	return nil, &NotLoadedError{edge: "deployments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -309,6 +320,11 @@ func (a *Agent) QueryPrinters() *PrinterQuery {
 // QueryNetworkadapters queries the "networkadapters" edge of the Agent entity.
 func (a *Agent) QueryNetworkadapters() *NetworkAdapterQuery {
 	return NewAgentClient(a.config).QueryNetworkadapters(a)
+}
+
+// QueryDeployments queries the "deployments" edge of the Agent entity.
+func (a *Agent) QueryDeployments() *DeploymentQuery {
+	return NewAgentClient(a.config).QueryDeployments(a)
 }
 
 // Update returns a builder for updating this Agent.

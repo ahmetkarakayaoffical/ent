@@ -48,6 +48,8 @@ const (
 	EdgePrinters = "printers"
 	// EdgeNetworkadapters holds the string denoting the networkadapters edge name in mutations.
 	EdgeNetworkadapters = "networkadapters"
+	// EdgeDeployments holds the string denoting the deployments edge name in mutations.
+	EdgeDeployments = "deployments"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -68,6 +70,8 @@ const (
 	PrinterFieldID = "id"
 	// NetworkAdapterFieldID holds the string denoting the ID field of the NetworkAdapter.
 	NetworkAdapterFieldID = "id"
+	// DeploymentFieldID holds the string denoting the ID field of the Deployment.
+	DeploymentFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -140,6 +144,13 @@ const (
 	NetworkadaptersInverseTable = "network_adapters"
 	// NetworkadaptersColumn is the table column denoting the networkadapters relation/edge.
 	NetworkadaptersColumn = "agent_networkadapters"
+	// DeploymentsTable is the table that holds the deployments relation/edge.
+	DeploymentsTable = "deployments"
+	// DeploymentsInverseTable is the table name for the Deployment entity.
+	// It exists in this package in order to avoid circular dependency with the "deployment" package.
+	DeploymentsInverseTable = "deployments"
+	// DeploymentsColumn is the table column denoting the deployments relation/edge.
+	DeploymentsColumn = "agent_deployments"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -341,6 +352,20 @@ func ByNetworkadapters(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newNetworkadaptersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByDeploymentsCount orders the results by deployments count.
+func ByDeploymentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDeploymentsStep(), opts...)
+	}
+}
+
+// ByDeployments orders the results by deployments terms.
+func ByDeployments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDeploymentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -409,5 +434,12 @@ func newNetworkadaptersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NetworkadaptersInverseTable, NetworkAdapterFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, NetworkadaptersTable, NetworkadaptersColumn),
+	)
+}
+func newDeploymentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DeploymentsInverseTable, DeploymentFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DeploymentsTable, DeploymentsColumn),
 	)
 }

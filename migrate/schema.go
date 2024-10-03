@@ -111,6 +111,30 @@ var (
 			},
 		},
 	}
+	// DeploymentsColumns holds the columns for the "deployments" table.
+	DeploymentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "package_id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "installed", Type: field.TypeTime, Nullable: true},
+		{Name: "updated", Type: field.TypeTime, Nullable: true},
+		{Name: "agent_deployments", Type: field.TypeString},
+	}
+	// DeploymentsTable holds the schema information for the "deployments" table.
+	DeploymentsTable = &schema.Table{
+		Name:       "deployments",
+		Columns:    DeploymentsColumns,
+		PrimaryKey: []*schema.Column{DeploymentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "deployments_agents_deployments",
+				Columns:    []*schema.Column{DeploymentsColumns[6]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// LogicalDisksColumns holds the columns for the "logical_disks" table.
 	LogicalDisksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -389,6 +413,7 @@ var (
 		AppsTable,
 		CertificatesTable,
 		ComputersTable,
+		DeploymentsTable,
 		LogicalDisksTable,
 		MonitorsTable,
 		NetworkAdaptersTable,
@@ -407,6 +432,7 @@ func init() {
 	AntiviriTable.ForeignKeys[0].RefTable = AgentsTable
 	AppsTable.ForeignKeys[0].RefTable = AgentsTable
 	ComputersTable.ForeignKeys[0].RefTable = AgentsTable
+	DeploymentsTable.ForeignKeys[0].RefTable = AgentsTable
 	LogicalDisksTable.ForeignKeys[0].RefTable = AgentsTable
 	MonitorsTable.ForeignKeys[0].RefTable = AgentsTable
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable

@@ -21,6 +21,9 @@ type Certificate func(*sql.Selector)
 // Computer is the predicate function for computer builders.
 type Computer func(*sql.Selector)
 
+// Deployment is the predicate function for deployment builders.
+type Deployment func(*sql.Selector)
+
 // LogicalDisk is the predicate function for logicaldisk builders.
 type LogicalDisk func(*sql.Selector)
 

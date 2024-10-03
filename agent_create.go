@@ -16,6 +16,7 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
@@ -291,6 +292,21 @@ func (ac *AgentCreate) AddNetworkadapters(n ...*NetworkAdapter) *AgentCreate {
 		ids[i] = n[i].ID
 	}
 	return ac.AddNetworkadapterIDs(ids...)
+}
+
+// AddDeploymentIDs adds the "deployments" edge to the Deployment entity by IDs.
+func (ac *AgentCreate) AddDeploymentIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddDeploymentIDs(ids...)
+	return ac
+}
+
+// AddDeployments adds the "deployments" edges to the Deployment entity.
+func (ac *AgentCreate) AddDeployments(d ...*Deployment) *AgentCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ac.AddDeploymentIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -600,6 +616,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(networkadapter.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.DeploymentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.DeploymentsTable,
+			Columns: []string{agent.DeploymentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(deployment.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
