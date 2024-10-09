@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -15,9 +14,9 @@ type App struct {
 // Fields of the App.
 func (App) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
-		field.String("version").Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
-		field.String("publisher").Optional().Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
+		field.String("name"),
+		field.String("version"),
+		field.String("publisher").Optional(),
 		field.String("install_date").Optional(),
 	}
 }
