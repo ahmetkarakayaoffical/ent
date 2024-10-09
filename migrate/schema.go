@@ -51,9 +51,9 @@ var (
 	// AppsColumns holds the columns for the "apps" table.
 	AppsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString, Collation: "UTF8_GENERAL_CI"},
-		{Name: "version", Type: field.TypeString, Collation: "UTF8_GENERAL_CI"},
-		{Name: "publisher", Type: field.TypeString, Nullable: true, Collation: "UTF8_GENERAL_CI"},
+		{Name: "name", Type: field.TypeString, Collation: "utf8_general_ci"},
+		{Name: "version", Type: field.TypeString, Collation: "utf8_general_ci"},
+		{Name: "publisher", Type: field.TypeString, Nullable: true, Collation: "utf8_general_ci"},
 		{Name: "install_date", Type: field.TypeString, Nullable: true},
 		{Name: "agent_apps", Type: field.TypeString},
 	}

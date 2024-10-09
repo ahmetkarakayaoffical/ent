@@ -15,9 +15,9 @@ type App struct {
 // Fields of the App.
 func (App) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Annotations(entsql.Annotation{Collation: "UTF8_GENERAL_CI"}),
-		field.String("version").Annotations(entsql.Annotation{Collation: "UTF8_GENERAL_CI"}),
-		field.String("publisher").Optional().Annotations(entsql.Annotation{Collation: "UTF8_GENERAL_CI"}),
+		field.String("name").Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
+		field.String("version").Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
+		field.String("publisher").Optional().Annotations(entsql.Annotation{Collation: "utf8_general_ci"}),
 		field.String("install_date").Optional(),
 	}
 }
