@@ -96,6 +96,20 @@ func (au *AgentUpdate) SetNillableIP(s *string) *AgentUpdate {
 	return au
 }
 
+// SetMAC sets the "mac" field.
+func (au *AgentUpdate) SetMAC(s string) *AgentUpdate {
+	au.mutation.SetMAC(s)
+	return au
+}
+
+// SetNillableMAC sets the "mac" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableMAC(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetMAC(*s)
+	}
+	return au
+}
+
 // SetFirstContact sets the "first_contact" field.
 func (au *AgentUpdate) SetFirstContact(t time.Time) *AgentUpdate {
 	au.mutation.SetFirstContact(t)
@@ -603,6 +617,9 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := au.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
+	}
+	if value, ok := au.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
 	if value, ok := au.mutation.FirstContact(); ok {
 		_spec.SetField(agent.FieldFirstContact, field.TypeTime, value)
@@ -1130,6 +1147,20 @@ func (auo *AgentUpdateOne) SetIP(s string) *AgentUpdateOne {
 func (auo *AgentUpdateOne) SetNillableIP(s *string) *AgentUpdateOne {
 	if s != nil {
 		auo.SetIP(*s)
+	}
+	return auo
+}
+
+// SetMAC sets the "mac" field.
+func (auo *AgentUpdateOne) SetMAC(s string) *AgentUpdateOne {
+	auo.mutation.SetMAC(s)
+	return auo
+}
+
+// SetNillableMAC sets the "mac" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableMAC(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetMAC(*s)
 	}
 	return auo
 }
@@ -1671,6 +1702,9 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if value, ok := auo.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
+	}
+	if value, ok := auo.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.FirstContact(); ok {
 		_spec.SetField(agent.FieldFirstContact, field.TypeTime, value)

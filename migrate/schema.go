@@ -15,6 +15,7 @@ var (
 		{Name: "hostname", Type: field.TypeString},
 		{Name: "version", Type: field.TypeString},
 		{Name: "ip", Type: field.TypeString, Default: ""},
+		{Name: "mac", Type: field.TypeString, Default: ""},
 		{Name: "first_contact", Type: field.TypeTime, Nullable: true},
 		{Name: "last_contact", Type: field.TypeTime, Nullable: true},
 		{Name: "enabled", Type: field.TypeBool, Default: true},

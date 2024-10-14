@@ -69,6 +69,7 @@ type AgentMutation struct {
 	hostname               *string
 	version                *string
 	ip                     *string
+	mac                    *string
 	first_contact          *time.Time
 	last_contact           *time.Time
 	enabled                *bool
@@ -354,6 +355,42 @@ func (m *AgentMutation) OldIP(ctx context.Context) (v string, err error) {
 // ResetIP resets all changes to the "ip" field.
 func (m *AgentMutation) ResetIP() {
 	m.ip = nil
+}
+
+// SetMAC sets the "mac" field.
+func (m *AgentMutation) SetMAC(s string) {
+	m.mac = &s
+}
+
+// MAC returns the value of the "mac" field in the mutation.
+func (m *AgentMutation) MAC() (r string, exists bool) {
+	v := m.mac
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMAC returns the old "mac" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldMAC(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMAC is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMAC requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMAC: %w", err)
+	}
+	return oldValue.MAC, nil
+}
+
+// ResetMAC resets all changes to the "mac" field.
+func (m *AgentMutation) ResetMAC() {
+	m.mac = nil
 }
 
 // SetFirstContact sets the "first_contact" field.
@@ -1107,7 +1144,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1119,6 +1156,9 @@ func (m *AgentMutation) Fields() []string {
 	}
 	if m.ip != nil {
 		fields = append(fields, agent.FieldIP)
+	}
+	if m.mac != nil {
+		fields = append(fields, agent.FieldMAC)
 	}
 	if m.first_contact != nil {
 		fields = append(fields, agent.FieldFirstContact)
@@ -1148,6 +1188,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Version()
 	case agent.FieldIP:
 		return m.IP()
+	case agent.FieldMAC:
+		return m.MAC()
 	case agent.FieldFirstContact:
 		return m.FirstContact()
 	case agent.FieldLastContact:
@@ -1173,6 +1215,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldVersion(ctx)
 	case agent.FieldIP:
 		return m.OldIP(ctx)
+	case agent.FieldMAC:
+		return m.OldMAC(ctx)
 	case agent.FieldFirstContact:
 		return m.OldFirstContact(ctx)
 	case agent.FieldLastContact:
@@ -1217,6 +1261,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIP(v)
+		return nil
+	case agent.FieldMAC:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMAC(v)
 		return nil
 	case agent.FieldFirstContact:
 		v, ok := value.(time.Time)
@@ -1327,6 +1378,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldIP:
 		m.ResetIP()
+		return nil
+	case agent.FieldMAC:
+		m.ResetMAC()
 		return nil
 	case agent.FieldFirstContact:
 		m.ResetFirstContact()

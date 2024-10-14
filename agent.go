@@ -29,6 +29,8 @@ type Agent struct {
 	Version string `json:"version,omitempty"`
 	// IP holds the value of the "ip" field.
 	IP string `json:"ip,omitempty"`
+	// MAC holds the value of the "mac" field.
+	MAC string `json:"mac,omitempty"`
 	// FirstContact holds the value of the "first_contact" field.
 	FirstContact time.Time `json:"first_contact,omitempty"`
 	// LastContact holds the value of the "last_contact" field.
@@ -186,7 +188,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldVnc:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact:
 			values[i] = new(sql.NullTime)
@@ -234,6 +236,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field ip", values[i])
 			} else if value.Valid {
 				a.IP = value.String
+			}
+		case agent.FieldMAC:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mac", values[i])
+			} else if value.Valid {
+				a.MAC = value.String
 			}
 		case agent.FieldFirstContact:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -361,6 +369,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ip=")
 	builder.WriteString(a.IP)
+	builder.WriteString(", ")
+	builder.WriteString("mac=")
+	builder.WriteString(a.MAC)
 	builder.WriteString(", ")
 	builder.WriteString("first_contact=")
 	builder.WriteString(a.FirstContact.Format(time.ANSIC))

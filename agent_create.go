@@ -66,6 +66,20 @@ func (ac *AgentCreate) SetNillableIP(s *string) *AgentCreate {
 	return ac
 }
 
+// SetMAC sets the "mac" field.
+func (ac *AgentCreate) SetMAC(s string) *AgentCreate {
+	ac.mutation.SetMAC(s)
+	return ac
+}
+
+// SetNillableMAC sets the "mac" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableMAC(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetMAC(*s)
+	}
+	return ac
+}
+
 // SetFirstContact sets the "first_contact" field.
 func (ac *AgentCreate) SetFirstContact(t time.Time) *AgentCreate {
 	ac.mutation.SetFirstContact(t)
@@ -348,6 +362,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultIP
 		ac.mutation.SetIP(v)
 	}
+	if _, ok := ac.mutation.MAC(); !ok {
+		v := agent.DefaultMAC
+		ac.mutation.SetMAC(v)
+	}
 	if _, ok := ac.mutation.Enabled(); !ok {
 		v := agent.DefaultEnabled
 		ac.mutation.SetEnabled(v)
@@ -386,6 +404,9 @@ func (ac *AgentCreate) check() error {
 	}
 	if _, ok := ac.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`openuem_ent: missing required field "Agent.ip"`)}
+	}
+	if _, ok := ac.mutation.MAC(); !ok {
+		return &ValidationError{Name: "mac", err: errors.New(`openuem_ent: missing required field "Agent.mac"`)}
 	}
 	if _, ok := ac.mutation.Enabled(); !ok {
 		return &ValidationError{Name: "enabled", err: errors.New(`openuem_ent: missing required field "Agent.enabled"`)}
@@ -446,6 +467,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
 		_node.IP = value
+	}
+	if value, ok := ac.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
+		_node.MAC = value
 	}
 	if value, ok := ac.mutation.FirstContact(); ok {
 		_spec.SetField(agent.FieldFirstContact, field.TypeTime, value)
@@ -739,6 +764,18 @@ func (u *AgentUpsert) UpdateIP() *AgentUpsert {
 	return u
 }
 
+// SetMAC sets the "mac" field.
+func (u *AgentUpsert) SetMAC(v string) *AgentUpsert {
+	u.Set(agent.FieldMAC, v)
+	return u
+}
+
+// UpdateMAC sets the "mac" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateMAC() *AgentUpsert {
+	u.SetExcluded(agent.FieldMAC)
+	return u
+}
+
 // SetFirstContact sets the "first_contact" field.
 func (u *AgentUpsert) SetFirstContact(v time.Time) *AgentUpsert {
 	u.Set(agent.FieldFirstContact, v)
@@ -906,6 +943,20 @@ func (u *AgentUpsertOne) SetIP(v string) *AgentUpsertOne {
 func (u *AgentUpsertOne) UpdateIP() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateIP()
+	})
+}
+
+// SetMAC sets the "mac" field.
+func (u *AgentUpsertOne) SetMAC(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetMAC(v)
+	})
+}
+
+// UpdateMAC sets the "mac" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateMAC() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateMAC()
 	})
 }
 
@@ -1254,6 +1305,20 @@ func (u *AgentUpsertBulk) SetIP(v string) *AgentUpsertBulk {
 func (u *AgentUpsertBulk) UpdateIP() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateIP()
+	})
+}
+
+// SetMAC sets the "mac" field.
+func (u *AgentUpsertBulk) SetMAC(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetMAC(v)
+	})
+}
+
+// UpdateMAC sets the "mac" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateMAC() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateMAC()
 	})
 }
 

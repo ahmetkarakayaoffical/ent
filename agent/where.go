@@ -85,6 +85,11 @@ func IP(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldIP, v))
 }
 
+// MAC applies equality check predicate on the "mac" field. It's identical to MACEQ.
+func MAC(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldMAC, v))
+}
+
 // FirstContact applies equality check predicate on the "first_contact" field. It's identical to FirstContactEQ.
 func FirstContact(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldFirstContact, v))
@@ -363,6 +368,71 @@ func IPEqualFold(v string) predicate.Agent {
 // IPContainsFold applies the ContainsFold predicate on the "ip" field.
 func IPContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldIP, v))
+}
+
+// MACEQ applies the EQ predicate on the "mac" field.
+func MACEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldMAC, v))
+}
+
+// MACNEQ applies the NEQ predicate on the "mac" field.
+func MACNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldMAC, v))
+}
+
+// MACIn applies the In predicate on the "mac" field.
+func MACIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldMAC, vs...))
+}
+
+// MACNotIn applies the NotIn predicate on the "mac" field.
+func MACNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldMAC, vs...))
+}
+
+// MACGT applies the GT predicate on the "mac" field.
+func MACGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldMAC, v))
+}
+
+// MACGTE applies the GTE predicate on the "mac" field.
+func MACGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldMAC, v))
+}
+
+// MACLT applies the LT predicate on the "mac" field.
+func MACLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldMAC, v))
+}
+
+// MACLTE applies the LTE predicate on the "mac" field.
+func MACLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldMAC, v))
+}
+
+// MACContains applies the Contains predicate on the "mac" field.
+func MACContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldMAC, v))
+}
+
+// MACHasPrefix applies the HasPrefix predicate on the "mac" field.
+func MACHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldMAC, v))
+}
+
+// MACHasSuffix applies the HasSuffix predicate on the "mac" field.
+func MACHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldMAC, v))
+}
+
+// MACEqualFold applies the EqualFold predicate on the "mac" field.
+func MACEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldMAC, v))
+}
+
+// MACContainsFold applies the ContainsFold predicate on the "mac" field.
+func MACContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldMAC, v))
 }
 
 // FirstContactEQ applies the EQ predicate on the "first_contact" field.

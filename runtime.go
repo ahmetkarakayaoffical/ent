@@ -37,12 +37,16 @@ func init() {
 	agentDescIP := agentFields[4].Descriptor()
 	// agent.DefaultIP holds the default value on creation for the ip field.
 	agent.DefaultIP = agentDescIP.Default.(string)
+	// agentDescMAC is the schema descriptor for mac field.
+	agentDescMAC := agentFields[5].Descriptor()
+	// agent.DefaultMAC holds the default value on creation for the mac field.
+	agent.DefaultMAC = agentDescMAC.Default.(string)
 	// agentDescEnabled is the schema descriptor for enabled field.
-	agentDescEnabled := agentFields[7].Descriptor()
+	agentDescEnabled := agentFields[8].Descriptor()
 	// agent.DefaultEnabled holds the default value on creation for the enabled field.
 	agent.DefaultEnabled = agentDescEnabled.Default.(bool)
 	// agentDescVnc is the schema descriptor for vnc field.
-	agentDescVnc := agentFields[8].Descriptor()
+	agentDescVnc := agentFields[9].Descriptor()
 	// agent.DefaultVnc holds the default value on creation for the vnc field.
 	agent.DefaultVnc = agentDescVnc.Default.(string)
 	// agentDescID is the schema descriptor for id field.

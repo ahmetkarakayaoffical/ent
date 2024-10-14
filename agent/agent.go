@@ -20,6 +20,8 @@ const (
 	FieldVersion = "version"
 	// FieldIP holds the string denoting the ip field in the database.
 	FieldIP = "ip"
+	// FieldMAC holds the string denoting the mac field in the database.
+	FieldMAC = "mac"
 	// FieldFirstContact holds the string denoting the first_contact field in the database.
 	FieldFirstContact = "first_contact"
 	// FieldLastContact holds the string denoting the last_contact field in the database.
@@ -160,6 +162,7 @@ var Columns = []string{
 	FieldHostname,
 	FieldVersion,
 	FieldIP,
+	FieldMAC,
 	FieldFirstContact,
 	FieldLastContact,
 	FieldEnabled,
@@ -185,6 +188,8 @@ var (
 	VersionValidator func(string) error
 	// DefaultIP holds the default value on creation for the "ip" field.
 	DefaultIP string
+	// DefaultMAC holds the default value on creation for the "mac" field.
+	DefaultMAC string
 	// DefaultEnabled holds the default value on creation for the "enabled" field.
 	DefaultEnabled bool
 	// DefaultVnc holds the default value on creation for the "vnc" field.
@@ -219,6 +224,11 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 // ByIP orders the results by the ip field.
 func ByIP(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIP, opts...).ToFunc()
+}
+
+// ByMAC orders the results by the mac field.
+func ByMAC(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMAC, opts...).ToFunc()
 }
 
 // ByFirstContact orders the results by the first_contact field.
