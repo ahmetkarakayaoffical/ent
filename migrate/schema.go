@@ -380,6 +380,28 @@ var (
 			},
 		},
 	}
+	// UpdatesColumns holds the columns for the "updates" table.
+	UpdatesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "date", Type: field.TypeTime},
+		{Name: "support_url", Type: field.TypeString, Nullable: true},
+		{Name: "agent_updates", Type: field.TypeString},
+	}
+	// UpdatesTable holds the schema information for the "updates" table.
+	UpdatesTable = &schema.Table{
+		Name:       "updates",
+		Columns:    UpdatesColumns,
+		PrimaryKey: []*schema.Column{UpdatesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "updates_agents_updates",
+				Columns:    []*schema.Column{UpdatesColumns[4]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "uid", Type: field.TypeString, Unique: true},
@@ -425,6 +447,7 @@ var (
 		SettingsTable,
 		SharesTable,
 		SystemUpdatesTable,
+		UpdatesTable,
 		UsersTable,
 	}
 )
@@ -442,4 +465,5 @@ func init() {
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
+	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 }

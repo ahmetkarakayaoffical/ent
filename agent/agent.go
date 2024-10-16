@@ -52,6 +52,8 @@ const (
 	EdgeNetworkadapters = "networkadapters"
 	// EdgeDeployments holds the string denoting the deployments edge name in mutations.
 	EdgeDeployments = "deployments"
+	// EdgeUpdates holds the string denoting the updates edge name in mutations.
+	EdgeUpdates = "updates"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -74,6 +76,8 @@ const (
 	NetworkAdapterFieldID = "id"
 	// DeploymentFieldID holds the string denoting the ID field of the Deployment.
 	DeploymentFieldID = "id"
+	// UpdateFieldID holds the string denoting the ID field of the Update.
+	UpdateFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -153,6 +157,13 @@ const (
 	DeploymentsInverseTable = "deployments"
 	// DeploymentsColumn is the table column denoting the deployments relation/edge.
 	DeploymentsColumn = "agent_deployments"
+	// UpdatesTable is the table that holds the updates relation/edge.
+	UpdatesTable = "updates"
+	// UpdatesInverseTable is the table name for the Update entity.
+	// It exists in this package in order to avoid circular dependency with the "update" package.
+	UpdatesInverseTable = "updates"
+	// UpdatesColumn is the table column denoting the updates relation/edge.
+	UpdatesColumn = "agent_updates"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -376,6 +387,20 @@ func ByDeployments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDeploymentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByUpdatesCount orders the results by updates count.
+func ByUpdatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUpdatesStep(), opts...)
+	}
+}
+
+// ByUpdates orders the results by updates terms.
+func ByUpdates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUpdatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -451,5 +476,12 @@ func newDeploymentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DeploymentsInverseTable, DeploymentFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DeploymentsTable, DeploymentsColumn),
+	)
+}
+func newUpdatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UpdatesInverseTable, UpdateFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UpdatesTable, UpdatesColumn),
 	)
 }

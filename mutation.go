@@ -28,6 +28,7 @@ import (
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/update"
 	"github.com/doncicuto/openuem_ent/user"
 )
 
@@ -56,6 +57,7 @@ const (
 	TypeSettings        = "Settings"
 	TypeShare           = "Share"
 	TypeSystemUpdate    = "SystemUpdate"
+	TypeUpdate          = "Update"
 	TypeUser            = "User"
 )
 
@@ -104,6 +106,9 @@ type AgentMutation struct {
 	deployments            map[int]struct{}
 	removeddeployments     map[int]struct{}
 	cleareddeployments     bool
+	updates                map[int]struct{}
+	removedupdates         map[int]struct{}
+	clearedupdates         bool
 	done                   bool
 	oldValue               func(context.Context) (*Agent, error)
 	predicates             []predicate.Agent
@@ -1110,6 +1115,60 @@ func (m *AgentMutation) ResetDeployments() {
 	m.removeddeployments = nil
 }
 
+// AddUpdateIDs adds the "updates" edge to the Update entity by ids.
+func (m *AgentMutation) AddUpdateIDs(ids ...int) {
+	if m.updates == nil {
+		m.updates = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.updates[ids[i]] = struct{}{}
+	}
+}
+
+// ClearUpdates clears the "updates" edge to the Update entity.
+func (m *AgentMutation) ClearUpdates() {
+	m.clearedupdates = true
+}
+
+// UpdatesCleared reports if the "updates" edge to the Update entity was cleared.
+func (m *AgentMutation) UpdatesCleared() bool {
+	return m.clearedupdates
+}
+
+// RemoveUpdateIDs removes the "updates" edge to the Update entity by IDs.
+func (m *AgentMutation) RemoveUpdateIDs(ids ...int) {
+	if m.removedupdates == nil {
+		m.removedupdates = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.updates, ids[i])
+		m.removedupdates[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedUpdates returns the removed IDs of the "updates" edge to the Update entity.
+func (m *AgentMutation) RemovedUpdatesIDs() (ids []int) {
+	for id := range m.removedupdates {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// UpdatesIDs returns the "updates" edge IDs in the mutation.
+func (m *AgentMutation) UpdatesIDs() (ids []int) {
+	for id := range m.updates {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetUpdates resets all changes to the "updates" edge.
+func (m *AgentMutation) ResetUpdates() {
+	m.updates = nil
+	m.clearedupdates = false
+	m.removedupdates = nil
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -1400,7 +1459,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -1433,6 +1492,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.deployments != nil {
 		edges = append(edges, agent.EdgeDeployments)
+	}
+	if m.updates != nil {
+		edges = append(edges, agent.EdgeUpdates)
 	}
 	return edges
 }
@@ -1499,13 +1561,19 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeUpdates:
+		ids := make([]ent.Value, 0, len(m.updates))
+		for id := range m.updates {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -1526,6 +1594,9 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removeddeployments != nil {
 		edges = append(edges, agent.EdgeDeployments)
+	}
+	if m.removedupdates != nil {
+		edges = append(edges, agent.EdgeUpdates)
 	}
 	return edges
 }
@@ -1576,13 +1647,19 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeUpdates:
+		ids := make([]ent.Value, 0, len(m.removedupdates))
+		for id := range m.removedupdates {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 11)
+	edges := make([]string, 0, 12)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -1616,6 +1693,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.cleareddeployments {
 		edges = append(edges, agent.EdgeDeployments)
 	}
+	if m.clearedupdates {
+		edges = append(edges, agent.EdgeUpdates)
+	}
 	return edges
 }
 
@@ -1645,6 +1725,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearednetworkadapters
 	case agent.EdgeDeployments:
 		return m.cleareddeployments
+	case agent.EdgeUpdates:
+		return m.clearedupdates
 	}
 	return false
 }
@@ -1705,6 +1787,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeDeployments:
 		m.ResetDeployments()
+		return nil
+	case agent.EdgeUpdates:
+		m.ResetUpdates()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -12738,6 +12823,529 @@ func (m *SystemUpdateMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown SystemUpdate edge %s", name)
+}
+
+// UpdateMutation represents an operation that mutates the Update nodes in the graph.
+type UpdateMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	title         *string
+	date          *time.Time
+	support_url   *string
+	clearedFields map[string]struct{}
+	owner         *string
+	clearedowner  bool
+	done          bool
+	oldValue      func(context.Context) (*Update, error)
+	predicates    []predicate.Update
+}
+
+var _ ent.Mutation = (*UpdateMutation)(nil)
+
+// updateOption allows management of the mutation configuration using functional options.
+type updateOption func(*UpdateMutation)
+
+// newUpdateMutation creates new mutation for the Update entity.
+func newUpdateMutation(c config, op Op, opts ...updateOption) *UpdateMutation {
+	m := &UpdateMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUpdate,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUpdateID sets the ID field of the mutation.
+func withUpdateID(id int) updateOption {
+	return func(m *UpdateMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Update
+		)
+		m.oldValue = func(ctx context.Context) (*Update, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Update.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUpdate sets the old Update of the mutation.
+func withUpdate(node *Update) updateOption {
+	return func(m *UpdateMutation) {
+		m.oldValue = func(context.Context) (*Update, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m UpdateMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m UpdateMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *UpdateMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *UpdateMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Update.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetTitle sets the "title" field.
+func (m *UpdateMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *UpdateMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the Update entity.
+// If the Update object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UpdateMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *UpdateMutation) ResetTitle() {
+	m.title = nil
+}
+
+// SetDate sets the "date" field.
+func (m *UpdateMutation) SetDate(t time.Time) {
+	m.date = &t
+}
+
+// Date returns the value of the "date" field in the mutation.
+func (m *UpdateMutation) Date() (r time.Time, exists bool) {
+	v := m.date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDate returns the old "date" field's value of the Update entity.
+// If the Update object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UpdateMutation) OldDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDate: %w", err)
+	}
+	return oldValue.Date, nil
+}
+
+// ResetDate resets all changes to the "date" field.
+func (m *UpdateMutation) ResetDate() {
+	m.date = nil
+}
+
+// SetSupportURL sets the "support_url" field.
+func (m *UpdateMutation) SetSupportURL(s string) {
+	m.support_url = &s
+}
+
+// SupportURL returns the value of the "support_url" field in the mutation.
+func (m *UpdateMutation) SupportURL() (r string, exists bool) {
+	v := m.support_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSupportURL returns the old "support_url" field's value of the Update entity.
+// If the Update object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UpdateMutation) OldSupportURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSupportURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSupportURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSupportURL: %w", err)
+	}
+	return oldValue.SupportURL, nil
+}
+
+// ClearSupportURL clears the value of the "support_url" field.
+func (m *UpdateMutation) ClearSupportURL() {
+	m.support_url = nil
+	m.clearedFields[update.FieldSupportURL] = struct{}{}
+}
+
+// SupportURLCleared returns if the "support_url" field was cleared in this mutation.
+func (m *UpdateMutation) SupportURLCleared() bool {
+	_, ok := m.clearedFields[update.FieldSupportURL]
+	return ok
+}
+
+// ResetSupportURL resets all changes to the "support_url" field.
+func (m *UpdateMutation) ResetSupportURL() {
+	m.support_url = nil
+	delete(m.clearedFields, update.FieldSupportURL)
+}
+
+// SetOwnerID sets the "owner" edge to the Agent entity by id.
+func (m *UpdateMutation) SetOwnerID(id string) {
+	m.owner = &id
+}
+
+// ClearOwner clears the "owner" edge to the Agent entity.
+func (m *UpdateMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
+func (m *UpdateMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *UpdateMutation) OwnerID() (id string, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *UpdateMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *UpdateMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// Where appends a list predicates to the UpdateMutation builder.
+func (m *UpdateMutation) Where(ps ...predicate.Update) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the UpdateMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *UpdateMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Update, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *UpdateMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *UpdateMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Update).
+func (m *UpdateMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *UpdateMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.title != nil {
+		fields = append(fields, update.FieldTitle)
+	}
+	if m.date != nil {
+		fields = append(fields, update.FieldDate)
+	}
+	if m.support_url != nil {
+		fields = append(fields, update.FieldSupportURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *UpdateMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case update.FieldTitle:
+		return m.Title()
+	case update.FieldDate:
+		return m.Date()
+	case update.FieldSupportURL:
+		return m.SupportURL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *UpdateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case update.FieldTitle:
+		return m.OldTitle(ctx)
+	case update.FieldDate:
+		return m.OldDate(ctx)
+	case update.FieldSupportURL:
+		return m.OldSupportURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown Update field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UpdateMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case update.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	case update.FieldDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDate(v)
+		return nil
+	case update.FieldSupportURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSupportURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Update field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *UpdateMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *UpdateMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UpdateMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Update numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *UpdateMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(update.FieldSupportURL) {
+		fields = append(fields, update.FieldSupportURL)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *UpdateMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *UpdateMutation) ClearField(name string) error {
+	switch name {
+	case update.FieldSupportURL:
+		m.ClearSupportURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Update nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *UpdateMutation) ResetField(name string) error {
+	switch name {
+	case update.FieldTitle:
+		m.ResetTitle()
+		return nil
+	case update.FieldDate:
+		m.ResetDate()
+		return nil
+	case update.FieldSupportURL:
+		m.ResetSupportURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Update field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *UpdateMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, update.EdgeOwner)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *UpdateMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case update.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *UpdateMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *UpdateMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *UpdateMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, update.EdgeOwner)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *UpdateMutation) EdgeCleared(name string) bool {
+	switch name {
+	case update.EdgeOwner:
+		return m.clearedowner
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *UpdateMutation) ClearEdge(name string) error {
+	switch name {
+	case update.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown Update unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *UpdateMutation) ResetEdge(name string) error {
+	switch name {
+	case update.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown Update edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.

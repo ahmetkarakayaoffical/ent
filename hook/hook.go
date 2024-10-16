@@ -201,6 +201,18 @@ func (f SystemUpdateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (o
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SystemUpdateMutation", m)
 }
 
+// The UpdateFunc type is an adapter to allow the use of ordinary
+// function as Update mutator.
+type UpdateFunc func(context.Context, *openuem_ent.UpdateMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UpdateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.UpdateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.UpdateMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *openuem_ent.UserMutation) (openuem_ent.Value, error)

@@ -54,5 +54,8 @@ type Share func(*sql.Selector)
 // SystemUpdate is the predicate function for systemupdate builders.
 type SystemUpdate func(*sql.Selector)
 
+// Update is the predicate function for update builders.
+type Update func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

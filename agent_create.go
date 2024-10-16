@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/update"
 )
 
 // AgentCreate is the builder for creating a Agent entity.
@@ -321,6 +322,21 @@ func (ac *AgentCreate) AddDeployments(d ...*Deployment) *AgentCreate {
 		ids[i] = d[i].ID
 	}
 	return ac.AddDeploymentIDs(ids...)
+}
+
+// AddUpdateIDs adds the "updates" edge to the Update entity by IDs.
+func (ac *AgentCreate) AddUpdateIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddUpdateIDs(ids...)
+	return ac
+}
+
+// AddUpdates adds the "updates" edges to the Update entity.
+func (ac *AgentCreate) AddUpdates(u ...*Update) *AgentCreate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ac.AddUpdateIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -657,6 +673,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(deployment.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.UpdatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/update"
 )
 
 // AgentUpdate is the builder for updating Agent entities.
@@ -365,6 +366,21 @@ func (au *AgentUpdate) AddDeployments(d ...*Deployment) *AgentUpdate {
 	return au.AddDeploymentIDs(ids...)
 }
 
+// AddUpdateIDs adds the "updates" edge to the Update entity by IDs.
+func (au *AgentUpdate) AddUpdateIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddUpdateIDs(ids...)
+	return au
+}
+
+// AddUpdates adds the "updates" edges to the Update entity.
+func (au *AgentUpdate) AddUpdates(u ...*Update) *AgentUpdate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return au.AddUpdateIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (au *AgentUpdate) Mutation() *AgentMutation {
 	return au.mutation
@@ -539,6 +555,27 @@ func (au *AgentUpdate) RemoveDeployments(d ...*Deployment) *AgentUpdate {
 		ids[i] = d[i].ID
 	}
 	return au.RemoveDeploymentIDs(ids...)
+}
+
+// ClearUpdates clears all "updates" edges to the Update entity.
+func (au *AgentUpdate) ClearUpdates() *AgentUpdate {
+	au.mutation.ClearUpdates()
+	return au
+}
+
+// RemoveUpdateIDs removes the "updates" edge to Update entities by IDs.
+func (au *AgentUpdate) RemoveUpdateIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemoveUpdateIDs(ids...)
+	return au
+}
+
+// RemoveUpdates removes "updates" edges to Update entities.
+func (au *AgentUpdate) RemoveUpdates(u ...*Update) *AgentUpdate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return au.RemoveUpdateIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1073,6 +1110,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.UpdatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedUpdatesIDs(); len(nodes) > 0 && !au.mutation.UpdatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.UpdatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(au.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1420,6 +1502,21 @@ func (auo *AgentUpdateOne) AddDeployments(d ...*Deployment) *AgentUpdateOne {
 	return auo.AddDeploymentIDs(ids...)
 }
 
+// AddUpdateIDs adds the "updates" edge to the Update entity by IDs.
+func (auo *AgentUpdateOne) AddUpdateIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddUpdateIDs(ids...)
+	return auo
+}
+
+// AddUpdates adds the "updates" edges to the Update entity.
+func (auo *AgentUpdateOne) AddUpdates(u ...*Update) *AgentUpdateOne {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return auo.AddUpdateIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (auo *AgentUpdateOne) Mutation() *AgentMutation {
 	return auo.mutation
@@ -1594,6 +1691,27 @@ func (auo *AgentUpdateOne) RemoveDeployments(d ...*Deployment) *AgentUpdateOne {
 		ids[i] = d[i].ID
 	}
 	return auo.RemoveDeploymentIDs(ids...)
+}
+
+// ClearUpdates clears all "updates" edges to the Update entity.
+func (auo *AgentUpdateOne) ClearUpdates() *AgentUpdateOne {
+	auo.mutation.ClearUpdates()
+	return auo
+}
+
+// RemoveUpdateIDs removes the "updates" edge to Update entities by IDs.
+func (auo *AgentUpdateOne) RemoveUpdateIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemoveUpdateIDs(ids...)
+	return auo
+}
+
+// RemoveUpdates removes "updates" edges to Update entities.
+func (auo *AgentUpdateOne) RemoveUpdates(u ...*Update) *AgentUpdateOne {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return auo.RemoveUpdateIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -2151,6 +2269,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(deployment.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.UpdatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedUpdatesIDs(); len(nodes) > 0 && !auo.mutation.UpdatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.UpdatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.UpdatesTable,
+			Columns: []string{agent.UpdatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

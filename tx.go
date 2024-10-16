@@ -44,6 +44,8 @@ type Tx struct {
 	Share *ShareClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
+	// Update is the client for interacting with the Update builders.
+	Update *UpdateClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -193,6 +195,7 @@ func (tx *Tx) init() {
 	tx.Settings = NewSettingsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
+	tx.Update = NewUpdateClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 
