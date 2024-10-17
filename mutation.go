@@ -78,6 +78,7 @@ type AgentMutation struct {
 	last_contact           *time.Time
 	enabled                *bool
 	vnc                    *string
+	notes                  *string
 	clearedFields          map[string]struct{}
 	computer               *int
 	clearedcomputer        bool
@@ -584,6 +585,55 @@ func (m *AgentMutation) VncCleared() bool {
 func (m *AgentMutation) ResetVnc() {
 	m.vnc = nil
 	delete(m.clearedFields, agent.FieldVnc)
+}
+
+// SetNotes sets the "notes" field.
+func (m *AgentMutation) SetNotes(s string) {
+	m.notes = &s
+}
+
+// Notes returns the value of the "notes" field in the mutation.
+func (m *AgentMutation) Notes() (r string, exists bool) {
+	v := m.notes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNotes returns the old "notes" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldNotes(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNotes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNotes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNotes: %w", err)
+	}
+	return oldValue.Notes, nil
+}
+
+// ClearNotes clears the value of the "notes" field.
+func (m *AgentMutation) ClearNotes() {
+	m.notes = nil
+	m.clearedFields[agent.FieldNotes] = struct{}{}
+}
+
+// NotesCleared returns if the "notes" field was cleared in this mutation.
+func (m *AgentMutation) NotesCleared() bool {
+	_, ok := m.clearedFields[agent.FieldNotes]
+	return ok
+}
+
+// ResetNotes resets all changes to the "notes" field.
+func (m *AgentMutation) ResetNotes() {
+	m.notes = nil
+	delete(m.clearedFields, agent.FieldNotes)
 }
 
 // SetComputerID sets the "computer" edge to the Computer entity by id.
@@ -1262,7 +1312,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1290,6 +1340,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.vnc != nil {
 		fields = append(fields, agent.FieldVnc)
 	}
+	if m.notes != nil {
+		fields = append(fields, agent.FieldNotes)
+	}
 	return fields
 }
 
@@ -1316,6 +1369,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Enabled()
 	case agent.FieldVnc:
 		return m.Vnc()
+	case agent.FieldNotes:
+		return m.Notes()
 	}
 	return nil, false
 }
@@ -1343,6 +1398,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldEnabled(ctx)
 	case agent.FieldVnc:
 		return m.OldVnc(ctx)
+	case agent.FieldNotes:
+		return m.OldNotes(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1415,6 +1472,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVnc(v)
 		return nil
+	case agent.FieldNotes:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNotes(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1454,6 +1518,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldVnc) {
 		fields = append(fields, agent.FieldVnc)
 	}
+	if m.FieldCleared(agent.FieldNotes) {
+		fields = append(fields, agent.FieldNotes)
+	}
 	return fields
 }
 
@@ -1476,6 +1543,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldVnc:
 		m.ClearVnc()
+		return nil
+	case agent.FieldNotes:
+		m.ClearNotes()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -1511,6 +1581,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldVnc:
 		m.ResetVnc()
+		return nil
+	case agent.FieldNotes:
+		m.ResetNotes()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

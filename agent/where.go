@@ -110,6 +110,11 @@ func Vnc(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldVnc, v))
 }
 
+// Notes applies equality check predicate on the "notes" field. It's identical to NotesEQ.
+func Notes(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldNotes, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -618,6 +623,81 @@ func VncEqualFold(v string) predicate.Agent {
 // VncContainsFold applies the ContainsFold predicate on the "vnc" field.
 func VncContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldVnc, v))
+}
+
+// NotesEQ applies the EQ predicate on the "notes" field.
+func NotesEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldNotes, v))
+}
+
+// NotesNEQ applies the NEQ predicate on the "notes" field.
+func NotesNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldNotes, v))
+}
+
+// NotesIn applies the In predicate on the "notes" field.
+func NotesIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldNotes, vs...))
+}
+
+// NotesNotIn applies the NotIn predicate on the "notes" field.
+func NotesNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldNotes, vs...))
+}
+
+// NotesGT applies the GT predicate on the "notes" field.
+func NotesGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldNotes, v))
+}
+
+// NotesGTE applies the GTE predicate on the "notes" field.
+func NotesGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldNotes, v))
+}
+
+// NotesLT applies the LT predicate on the "notes" field.
+func NotesLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldNotes, v))
+}
+
+// NotesLTE applies the LTE predicate on the "notes" field.
+func NotesLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldNotes, v))
+}
+
+// NotesContains applies the Contains predicate on the "notes" field.
+func NotesContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldNotes, v))
+}
+
+// NotesHasPrefix applies the HasPrefix predicate on the "notes" field.
+func NotesHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldNotes, v))
+}
+
+// NotesHasSuffix applies the HasSuffix predicate on the "notes" field.
+func NotesHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldNotes, v))
+}
+
+// NotesIsNil applies the IsNil predicate on the "notes" field.
+func NotesIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldNotes))
+}
+
+// NotesNotNil applies the NotNil predicate on the "notes" field.
+func NotesNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldNotes))
+}
+
+// NotesEqualFold applies the EqualFold predicate on the "notes" field.
+func NotesEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldNotes, v))
+}
+
+// NotesContainsFold applies the ContainsFold predicate on the "notes" field.
+func NotesContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldNotes, v))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

@@ -20,6 +20,7 @@ var (
 		{Name: "last_contact", Type: field.TypeTime, Nullable: true},
 		{Name: "enabled", Type: field.TypeBool, Default: true},
 		{Name: "vnc", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{

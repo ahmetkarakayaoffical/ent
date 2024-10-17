@@ -30,6 +30,8 @@ const (
 	FieldEnabled = "enabled"
 	// FieldVnc holds the string denoting the vnc field in the database.
 	FieldVnc = "vnc"
+	// FieldNotes holds the string denoting the notes field in the database.
+	FieldNotes = "notes"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -187,6 +189,7 @@ var Columns = []string{
 	FieldLastContact,
 	FieldEnabled,
 	FieldVnc,
+	FieldNotes,
 }
 
 var (
@@ -275,6 +278,11 @@ func ByEnabled(opts ...sql.OrderTermOption) OrderOption {
 // ByVnc orders the results by the vnc field.
 func ByVnc(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVnc, opts...).ToFunc()
+}
+
+// ByNotes orders the results by the notes field.
+func ByNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNotes, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

@@ -25,6 +25,7 @@ func (Agent) Fields() []ent.Field {
 		field.Time("last_contact").Optional(),
 		field.Bool("enabled").Default(true),
 		field.String("vnc").Optional().Default(""),
+		field.Text("notes").Optional(),
 	}
 }
 

@@ -138,6 +138,20 @@ func (ac *AgentCreate) SetNillableVnc(s *string) *AgentCreate {
 	return ac
 }
 
+// SetNotes sets the "notes" field.
+func (ac *AgentCreate) SetNotes(s string) *AgentCreate {
+	ac.mutation.SetNotes(s)
+	return ac
+}
+
+// SetNillableNotes sets the "notes" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableNotes(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetNotes(*s)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -519,6 +533,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Vnc(); ok {
 		_spec.SetField(agent.FieldVnc, field.TypeString, value)
 		_node.Vnc = value
+	}
+	if value, ok := ac.mutation.Notes(); ok {
+		_spec.SetField(agent.FieldNotes, field.TypeString, value)
+		_node.Notes = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -906,6 +924,24 @@ func (u *AgentUpsert) ClearVnc() *AgentUpsert {
 	return u
 }
 
+// SetNotes sets the "notes" field.
+func (u *AgentUpsert) SetNotes(v string) *AgentUpsert {
+	u.Set(agent.FieldNotes, v)
+	return u
+}
+
+// UpdateNotes sets the "notes" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateNotes() *AgentUpsert {
+	u.SetExcluded(agent.FieldNotes)
+	return u
+}
+
+// ClearNotes clears the value of the "notes" field.
+func (u *AgentUpsert) ClearNotes() *AgentUpsert {
+	u.SetNull(agent.FieldNotes)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1098,6 +1134,27 @@ func (u *AgentUpsertOne) UpdateVnc() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearVnc() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearVnc()
+	})
+}
+
+// SetNotes sets the "notes" field.
+func (u *AgentUpsertOne) SetNotes(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetNotes(v)
+	})
+}
+
+// UpdateNotes sets the "notes" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateNotes() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateNotes()
+	})
+}
+
+// ClearNotes clears the value of the "notes" field.
+func (u *AgentUpsertOne) ClearNotes() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearNotes()
 	})
 }
 
@@ -1460,6 +1517,27 @@ func (u *AgentUpsertBulk) UpdateVnc() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearVnc() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearVnc()
+	})
+}
+
+// SetNotes sets the "notes" field.
+func (u *AgentUpsertBulk) SetNotes(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetNotes(v)
+	})
+}
+
+// UpdateNotes sets the "notes" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateNotes() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateNotes()
+	})
+}
+
+// ClearNotes clears the value of the "notes" field.
+func (u *AgentUpsertBulk) ClearNotes() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearNotes()
 	})
 }
 
