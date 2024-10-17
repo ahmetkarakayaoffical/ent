@@ -18,6 +18,8 @@ type Tag struct {
 	ID string `json:"id,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// Color holds the value of the "color" field.
+	Color string `json:"color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TagQuery when eager-loading is set.
 	Edges        TagEdges `json:"edges"`
@@ -72,7 +74,7 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case tag.FieldID, tag.FieldDescription:
+		case tag.FieldID, tag.FieldDescription, tag.FieldColor:
 			values[i] = new(sql.NullString)
 		case tag.ForeignKeys[0]: // tag_children
 			values[i] = new(sql.NullString)
@@ -102,6 +104,12 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				t.Description = value.String
+			}
+		case tag.FieldColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field color", values[i])
+			} else if value.Valid {
+				t.Color = value.String
 			}
 		case tag.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -163,6 +171,9 @@ func (t *Tag) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
 	builder.WriteString("description=")
 	builder.WriteString(t.Description)
+	builder.WriteString(", ")
+	builder.WriteString("color=")
+	builder.WriteString(t.Color)
 	builder.WriteByte(')')
 	return builder.String()
 }

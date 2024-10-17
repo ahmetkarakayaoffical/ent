@@ -14,6 +14,8 @@ const (
 	FieldID = "tag"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldColor holds the string denoting the color field in the database.
+	FieldColor = "color"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -43,6 +45,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDescription,
+	FieldColor,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tags"
@@ -88,6 +91,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByColor orders the results by the color field.
+func ByColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldColor, opts...).ToFunc()
 }
 
 // ByOwnerCount orders the results by owner count.

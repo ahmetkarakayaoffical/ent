@@ -385,6 +385,7 @@ var (
 	TagsColumns = []*schema.Column{
 		{Name: "tag", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "color", Type: field.TypeString},
 		{Name: "tag_children", Type: field.TypeString, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
@@ -395,7 +396,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tags_tags_children",
-				Columns:    []*schema.Column{TagsColumns[2]},
+				Columns:    []*schema.Column{TagsColumns[3]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

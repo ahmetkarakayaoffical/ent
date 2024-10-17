@@ -12990,6 +12990,7 @@ type TagMutation struct {
 	typ             string
 	id              *string
 	description     *string
+	color           *string
 	clearedFields   map[string]struct{}
 	owner           map[string]struct{}
 	removedowner    map[string]struct{}
@@ -13155,6 +13156,42 @@ func (m *TagMutation) DescriptionCleared() bool {
 func (m *TagMutation) ResetDescription() {
 	m.description = nil
 	delete(m.clearedFields, tag.FieldDescription)
+}
+
+// SetColor sets the "color" field.
+func (m *TagMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *TagMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldColor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *TagMutation) ResetColor() {
+	m.color = nil
 }
 
 // AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
@@ -13338,9 +13375,12 @@ func (m *TagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.description != nil {
 		fields = append(fields, tag.FieldDescription)
+	}
+	if m.color != nil {
+		fields = append(fields, tag.FieldColor)
 	}
 	return fields
 }
@@ -13352,6 +13392,8 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case tag.FieldDescription:
 		return m.Description()
+	case tag.FieldColor:
+		return m.Color()
 	}
 	return nil, false
 }
@@ -13363,6 +13405,8 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 	switch name {
 	case tag.FieldDescription:
 		return m.OldDescription(ctx)
+	case tag.FieldColor:
+		return m.OldColor(ctx)
 	}
 	return nil, fmt.Errorf("unknown Tag field %s", name)
 }
@@ -13378,6 +13422,13 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case tag.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Tag field %s", name)
@@ -13439,6 +13490,9 @@ func (m *TagMutation) ResetField(name string) error {
 	switch name {
 	case tag.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case tag.FieldColor:
+		m.ResetColor()
 		return nil
 	}
 	return fmt.Errorf("unknown Tag field %s", name)

@@ -49,6 +49,20 @@ func (tu *TagUpdate) ClearDescription() *TagUpdate {
 	return tu
 }
 
+// SetColor sets the "color" field.
+func (tu *TagUpdate) SetColor(s string) *TagUpdate {
+	tu.mutation.SetColor(s)
+	return tu
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (tu *TagUpdate) SetNillableColor(s *string) *TagUpdate {
+	if s != nil {
+		tu.SetColor(*s)
+	}
+	return tu
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (tu *TagUpdate) AddOwnerIDs(ids ...string) *TagUpdate {
 	tu.mutation.AddOwnerIDs(ids...)
@@ -198,6 +212,9 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.DescriptionCleared() {
 		_spec.ClearField(tag.FieldDescription, field.TypeString)
+	}
+	if value, ok := tu.mutation.Color(); ok {
+		_spec.SetField(tag.FieldColor, field.TypeString, value)
 	}
 	if tu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -357,6 +374,20 @@ func (tuo *TagUpdateOne) SetNillableDescription(s *string) *TagUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (tuo *TagUpdateOne) ClearDescription() *TagUpdateOne {
 	tuo.mutation.ClearDescription()
+	return tuo
+}
+
+// SetColor sets the "color" field.
+func (tuo *TagUpdateOne) SetColor(s string) *TagUpdateOne {
+	tuo.mutation.SetColor(s)
+	return tuo
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (tuo *TagUpdateOne) SetNillableColor(s *string) *TagUpdateOne {
+	if s != nil {
+		tuo.SetColor(*s)
+	}
 	return tuo
 }
 
@@ -539,6 +570,9 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 	}
 	if tuo.mutation.DescriptionCleared() {
 		_spec.ClearField(tag.FieldDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.Color(); ok {
+		_spec.SetField(tag.FieldColor, field.TypeString, value)
 	}
 	if tuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

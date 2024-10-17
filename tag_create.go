@@ -37,6 +37,12 @@ func (tc *TagCreate) SetNillableDescription(s *string) *TagCreate {
 	return tc
 }
 
+// SetColor sets the "color" field.
+func (tc *TagCreate) SetColor(s string) *TagCreate {
+	tc.mutation.SetColor(s)
+	return tc
+}
+
 // SetID sets the "id" field.
 func (tc *TagCreate) SetID(s string) *TagCreate {
 	tc.mutation.SetID(s)
@@ -126,6 +132,9 @@ func (tc *TagCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (tc *TagCreate) check() error {
+	if _, ok := tc.mutation.Color(); !ok {
+		return &ValidationError{Name: "color", err: errors.New(`openuem_ent: missing required field "Tag.color"`)}
+	}
 	if v, ok := tc.mutation.ID(); ok {
 		if err := tag.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.id": %w`, err)}
@@ -173,6 +182,10 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := tc.mutation.Color(); ok {
+		_spec.SetField(tag.FieldColor, field.TypeString, value)
+		_node.Color = value
 	}
 	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -293,6 +306,18 @@ func (u *TagUpsert) ClearDescription() *TagUpsert {
 	return u
 }
 
+// SetColor sets the "color" field.
+func (u *TagUpsert) SetColor(v string) *TagUpsert {
+	u.Set(tag.FieldColor, v)
+	return u
+}
+
+// UpdateColor sets the "color" field to the value that was provided on create.
+func (u *TagUpsert) UpdateColor() *TagUpsert {
+	u.SetExcluded(tag.FieldColor)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -359,6 +384,20 @@ func (u *TagUpsertOne) UpdateDescription() *TagUpsertOne {
 func (u *TagUpsertOne) ClearDescription() *TagUpsertOne {
 	return u.Update(func(s *TagUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetColor sets the "color" field.
+func (u *TagUpsertOne) SetColor(v string) *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.SetColor(v)
+	})
+}
+
+// UpdateColor sets the "color" field to the value that was provided on create.
+func (u *TagUpsertOne) UpdateColor() *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateColor()
 	})
 }
 
@@ -594,6 +633,20 @@ func (u *TagUpsertBulk) UpdateDescription() *TagUpsertBulk {
 func (u *TagUpsertBulk) ClearDescription() *TagUpsertBulk {
 	return u.Update(func(s *TagUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetColor sets the "color" field.
+func (u *TagUpsertBulk) SetColor(v string) *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.SetColor(v)
+	})
+}
+
+// UpdateColor sets the "color" field to the value that was provided on create.
+func (u *TagUpsertBulk) UpdateColor() *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateColor()
 	})
 }
 
