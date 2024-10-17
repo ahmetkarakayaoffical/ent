@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/tag"
 	"github.com/doncicuto/openuem_ent/update"
 )
 
@@ -337,6 +338,21 @@ func (ac *AgentCreate) AddUpdates(u ...*Update) *AgentCreate {
 		ids[i] = u[i].ID
 	}
 	return ac.AddUpdateIDs(ids...)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (ac *AgentCreate) AddTagIDs(ids ...string) *AgentCreate {
+	ac.mutation.AddTagIDs(ids...)
+	return ac
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (ac *AgentCreate) AddTags(t ...*Tag) *AgentCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ac.AddTagIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -689,6 +705,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

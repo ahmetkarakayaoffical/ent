@@ -12,6 +12,7 @@ import (
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
+	"github.com/doncicuto/openuem_ent/tag"
 	"github.com/doncicuto/openuem_ent/user"
 )
 
@@ -119,6 +120,12 @@ func init() {
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.
 	settings.UpdateDefaultModified = settingsDescModified.UpdateDefault.(func() time.Time)
+	tagFields := schema.Tag{}.Fields()
+	_ = tagFields
+	// tagDescID is the schema descriptor for id field.
+	tagDescID := tagFields[0].Descriptor()
+	// tag.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	tag.IDValidator = tagDescID.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

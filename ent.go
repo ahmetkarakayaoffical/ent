@@ -28,6 +28,7 @@ import (
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/tag"
 	"github.com/doncicuto/openuem_ent/update"
 	"github.com/doncicuto/openuem_ent/user"
 )
@@ -106,6 +107,7 @@ func checkColumn(table, column string) error {
 			settings.Table:        settings.ValidColumn,
 			share.Table:           share.ValidColumn,
 			systemupdate.Table:    systemupdate.ValidColumn,
+			tag.Table:             tag.ValidColumn,
 			update.Table:          update.ValidColumn,
 			user.Table:            user.ValidColumn,
 		})

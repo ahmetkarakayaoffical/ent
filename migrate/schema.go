@@ -380,6 +380,26 @@ var (
 			},
 		},
 	}
+	// TagsColumns holds the columns for the "tags" table.
+	TagsColumns = []*schema.Column{
+		{Name: "tag", Type: field.TypeString, Unique: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "tag_children", Type: field.TypeString, Nullable: true},
+	}
+	// TagsTable holds the schema information for the "tags" table.
+	TagsTable = &schema.Table{
+		Name:       "tags",
+		Columns:    TagsColumns,
+		PrimaryKey: []*schema.Column{TagsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tags_tags_children",
+				Columns:    []*schema.Column{TagsColumns[2]},
+				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// UpdatesColumns holds the columns for the "updates" table.
 	UpdatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -429,6 +449,31 @@ var (
 			},
 		},
 	}
+	// AgentTagsColumns holds the columns for the "agent_tags" table.
+	AgentTagsColumns = []*schema.Column{
+		{Name: "agent_id", Type: field.TypeString},
+		{Name: "tag_id", Type: field.TypeString},
+	}
+	// AgentTagsTable holds the schema information for the "agent_tags" table.
+	AgentTagsTable = &schema.Table{
+		Name:       "agent_tags",
+		Columns:    AgentTagsColumns,
+		PrimaryKey: []*schema.Column{AgentTagsColumns[0], AgentTagsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "agent_tags_agent_id",
+				Columns:    []*schema.Column{AgentTagsColumns[0]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "agent_tags_tag_id",
+				Columns:    []*schema.Column{AgentTagsColumns[1]},
+				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -447,8 +492,10 @@ var (
 		SettingsTable,
 		SharesTable,
 		SystemUpdatesTable,
+		TagsTable,
 		UpdatesTable,
 		UsersTable,
+		AgentTagsTable,
 	}
 )
 
@@ -465,5 +512,8 @@ func init() {
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
+	TagsTable.ForeignKeys[0].RefTable = TagsTable
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
+	AgentTagsTable.ForeignKeys[0].RefTable = AgentsTable
+	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 }

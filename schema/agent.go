@@ -43,5 +43,6 @@ func (Agent) Edges() []ent.Edge {
 		edge.To("networkadapters", NetworkAdapter.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("deployments", Deployment.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("updates", Update.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("tags", Tag.Type),
 	}
 }

@@ -31,6 +31,7 @@ import (
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/tag"
 	"github.com/doncicuto/openuem_ent/update"
 	"github.com/doncicuto/openuem_ent/user"
 )
@@ -72,6 +73,8 @@ type Client struct {
 	Share *ShareClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
+	// Tag is the client for interacting with the Tag builders.
+	Tag *TagClient
 	// Update is the client for interacting with the Update builders.
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
@@ -103,6 +106,7 @@ func (c *Client) init() {
 	c.Settings = NewSettingsClient(c.config)
 	c.Share = NewShareClient(c.config)
 	c.SystemUpdate = NewSystemUpdateClient(c.config)
+	c.Tag = NewTagClient(c.config)
 	c.Update = NewUpdateClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -213,6 +217,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Settings:        NewSettingsClient(cfg),
 		Share:           NewShareClient(cfg),
 		SystemUpdate:    NewSystemUpdateClient(cfg),
+		Tag:             NewTagClient(cfg),
 		Update:          NewUpdateClient(cfg),
 		User:            NewUserClient(cfg),
 	}, nil
@@ -250,6 +255,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Settings:        NewSettingsClient(cfg),
 		Share:           NewShareClient(cfg),
 		SystemUpdate:    NewSystemUpdateClient(cfg),
+		Tag:             NewTagClient(cfg),
 		Update:          NewUpdateClient(cfg),
 		User:            NewUserClient(cfg),
 	}, nil
@@ -283,7 +289,7 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
-		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Update,
+		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update,
 		c.User,
 	} {
 		n.Use(hooks...)
@@ -296,7 +302,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
-		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Update,
+		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update,
 		c.User,
 	} {
 		n.Intercept(interceptors...)
@@ -338,6 +344,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Share.mutate(ctx, m)
 	case *SystemUpdateMutation:
 		return c.SystemUpdate.mutate(ctx, m)
+	case *TagMutation:
+		return c.Tag.mutate(ctx, m)
 	case *UpdateMutation:
 		return c.Update.mutate(ctx, m)
 	case *UserMutation:
@@ -640,6 +648,22 @@ func (c *AgentClient) QueryUpdates(a *Agent) *UpdateQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(update.Table, update.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, agent.UpdatesTable, agent.UpdatesColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTags queries the tags edge of a Agent.
+func (c *AgentClient) QueryTags(a *Agent) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, agent.TagsTable, agent.TagsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2859,6 +2883,187 @@ func (c *SystemUpdateClient) mutate(ctx context.Context, m *SystemUpdateMutation
 	}
 }
 
+// TagClient is a client for the Tag schema.
+type TagClient struct {
+	config
+}
+
+// NewTagClient returns a client for the Tag from the given config.
+func NewTagClient(c config) *TagClient {
+	return &TagClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `tag.Hooks(f(g(h())))`.
+func (c *TagClient) Use(hooks ...Hook) {
+	c.hooks.Tag = append(c.hooks.Tag, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `tag.Intercept(f(g(h())))`.
+func (c *TagClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Tag = append(c.inters.Tag, interceptors...)
+}
+
+// Create returns a builder for creating a Tag entity.
+func (c *TagClient) Create() *TagCreate {
+	mutation := newTagMutation(c.config, OpCreate)
+	return &TagCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Tag entities.
+func (c *TagClient) CreateBulk(builders ...*TagCreate) *TagCreateBulk {
+	return &TagCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TagClient) MapCreateBulk(slice any, setFunc func(*TagCreate, int)) *TagCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TagCreateBulk{err: fmt.Errorf("calling to TagClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TagCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TagCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Tag.
+func (c *TagClient) Update() *TagUpdate {
+	mutation := newTagMutation(c.config, OpUpdate)
+	return &TagUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TagClient) UpdateOne(t *Tag) *TagUpdateOne {
+	mutation := newTagMutation(c.config, OpUpdateOne, withTag(t))
+	return &TagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TagClient) UpdateOneID(id string) *TagUpdateOne {
+	mutation := newTagMutation(c.config, OpUpdateOne, withTagID(id))
+	return &TagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Tag.
+func (c *TagClient) Delete() *TagDelete {
+	mutation := newTagMutation(c.config, OpDelete)
+	return &TagDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TagClient) DeleteOne(t *Tag) *TagDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TagClient) DeleteOneID(id string) *TagDeleteOne {
+	builder := c.Delete().Where(tag.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TagDeleteOne{builder}
+}
+
+// Query returns a query builder for Tag.
+func (c *TagClient) Query() *TagQuery {
+	return &TagQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTag},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Tag entity by its id.
+func (c *TagClient) Get(ctx context.Context, id string) (*Tag, error) {
+	return c.Query().Where(tag.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TagClient) GetX(ctx context.Context, id string) *Tag {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Tag.
+func (c *TagClient) QueryOwner(t *Tag) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, tag.OwnerTable, tag.OwnerPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryParent queries the parent edge of a Tag.
+func (c *TagClient) QueryParent(t *Tag) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tag.ParentTable, tag.ParentColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryChildren queries the children edge of a Tag.
+func (c *TagClient) QueryChildren(t *Tag) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tag.ChildrenTable, tag.ChildrenColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TagClient) Hooks() []Hook {
+	return c.hooks.Tag
+}
+
+// Interceptors returns the client interceptors.
+func (c *TagClient) Interceptors() []Interceptor {
+	return c.inters.Tag
+}
+
+func (c *TagClient) mutate(ctx context.Context, m *TagMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TagCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TagUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TagDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Tag mutation op: %q", m.Op())
+	}
+}
+
 // UpdateClient is a client for the Update schema.
 type UpdateClient struct {
 	config
@@ -3162,11 +3367,11 @@ type (
 	hooks struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
 		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
-		Share, SystemUpdate, Update, User []ent.Hook
+		Share, SystemUpdate, Tag, Update, User []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
 		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
-		Share, SystemUpdate, Update, User []ent.Interceptor
+		Share, SystemUpdate, Tag, Update, User []ent.Interceptor
 	}
 )

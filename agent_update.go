@@ -24,6 +24,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/doncicuto/openuem_ent/tag"
 	"github.com/doncicuto/openuem_ent/update"
 )
 
@@ -381,6 +382,21 @@ func (au *AgentUpdate) AddUpdates(u ...*Update) *AgentUpdate {
 	return au.AddUpdateIDs(ids...)
 }
 
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (au *AgentUpdate) AddTagIDs(ids ...string) *AgentUpdate {
+	au.mutation.AddTagIDs(ids...)
+	return au
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (au *AgentUpdate) AddTags(t ...*Tag) *AgentUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return au.AddTagIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (au *AgentUpdate) Mutation() *AgentMutation {
 	return au.mutation
@@ -576,6 +592,27 @@ func (au *AgentUpdate) RemoveUpdates(u ...*Update) *AgentUpdate {
 		ids[i] = u[i].ID
 	}
 	return au.RemoveUpdateIDs(ids...)
+}
+
+// ClearTags clears all "tags" edges to the Tag entity.
+func (au *AgentUpdate) ClearTags() *AgentUpdate {
+	au.mutation.ClearTags()
+	return au
+}
+
+// RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
+func (au *AgentUpdate) RemoveTagIDs(ids ...string) *AgentUpdate {
+	au.mutation.RemoveTagIDs(ids...)
+	return au
+}
+
+// RemoveTags removes "tags" edges to Tag entities.
+func (au *AgentUpdate) RemoveTags(t ...*Tag) *AgentUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return au.RemoveTagIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1155,6 +1192,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedTagsIDs(); len(nodes) > 0 && !au.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(au.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1517,6 +1599,21 @@ func (auo *AgentUpdateOne) AddUpdates(u ...*Update) *AgentUpdateOne {
 	return auo.AddUpdateIDs(ids...)
 }
 
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (auo *AgentUpdateOne) AddTagIDs(ids ...string) *AgentUpdateOne {
+	auo.mutation.AddTagIDs(ids...)
+	return auo
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (auo *AgentUpdateOne) AddTags(t ...*Tag) *AgentUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return auo.AddTagIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (auo *AgentUpdateOne) Mutation() *AgentMutation {
 	return auo.mutation
@@ -1712,6 +1809,27 @@ func (auo *AgentUpdateOne) RemoveUpdates(u ...*Update) *AgentUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return auo.RemoveUpdateIDs(ids...)
+}
+
+// ClearTags clears all "tags" edges to the Tag entity.
+func (auo *AgentUpdateOne) ClearTags() *AgentUpdateOne {
+	auo.mutation.ClearTags()
+	return auo
+}
+
+// RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
+func (auo *AgentUpdateOne) RemoveTagIDs(ids ...string) *AgentUpdateOne {
+	auo.mutation.RemoveTagIDs(ids...)
+	return auo
+}
+
+// RemoveTags removes "tags" edges to Tag entities.
+func (auo *AgentUpdateOne) RemoveTags(t ...*Tag) *AgentUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return auo.RemoveTagIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -2314,6 +2432,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(update.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !auo.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.TagsTable,
+			Columns: agent.TagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

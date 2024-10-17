@@ -201,6 +201,18 @@ func (f SystemUpdateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (o
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.SystemUpdateMutation", m)
 }
 
+// The TagFunc type is an adapter to allow the use of ordinary
+// function as Tag mutator.
+type TagFunc func(context.Context, *openuem_ent.TagMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TagFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.TagMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.TagMutation", m)
+}
+
 // The UpdateFunc type is an adapter to allow the use of ordinary
 // function as Update mutator.
 type UpdateFunc func(context.Context, *openuem_ent.UpdateMutation) (openuem_ent.Value, error)

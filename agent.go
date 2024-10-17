@@ -71,9 +71,11 @@ type AgentEdges struct {
 	Deployments []*Deployment `json:"deployments,omitempty"`
 	// Updates holds the value of the updates edge.
 	Updates []*Update `json:"updates,omitempty"`
+	// Tags holds the value of the tags edge.
+	Tags []*Tag `json:"tags,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -190,6 +192,15 @@ func (e AgentEdges) UpdatesOrErr() ([]*Update, error) {
 		return e.Updates, nil
 	}
 	return nil, &NotLoadedError{edge: "updates"}
+}
+
+// TagsOrErr returns the Tags value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) TagsOrErr() ([]*Tag, error) {
+	if e.loadedTypes[12] {
+		return e.Tags, nil
+	}
+	return nil, &NotLoadedError{edge: "tags"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -349,6 +360,11 @@ func (a *Agent) QueryDeployments() *DeploymentQuery {
 // QueryUpdates queries the "updates" edge of the Agent entity.
 func (a *Agent) QueryUpdates() *UpdateQuery {
 	return NewAgentClient(a.config).QueryUpdates(a)
+}
+
+// QueryTags queries the "tags" edge of the Agent entity.
+func (a *Agent) QueryTags() *TagQuery {
+	return NewAgentClient(a.config).QueryTags(a)
 }
 
 // Update returns a builder for updating this Agent.
