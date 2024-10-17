@@ -23,7 +23,7 @@ func (Tag) Fields() []ent.Field {
 // Edges of the Update.
 func (Tag) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Agent.Type).Ref("tags").Required(),
+		edge.From("owner", Agent.Type).Ref("tags"),
 		edge.To("children", Tag.Type).From("parent").Unique(),
 	}
 }

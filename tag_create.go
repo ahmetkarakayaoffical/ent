@@ -140,9 +140,6 @@ func (tc *TagCreate) check() error {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.id": %w`, err)}
 		}
 	}
-	if len(tc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Tag.owner"`)}
-	}
 	return nil
 }
 
