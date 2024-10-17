@@ -15,7 +15,9 @@ import (
 type Tag struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID string `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// Tag holds the value of the "tag" field.
+	Tag string `json:"tag,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Color holds the value of the "color" field.
@@ -23,7 +25,7 @@ type Tag struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TagQuery when eager-loading is set.
 	Edges        TagEdges `json:"edges"`
-	tag_children *string
+	tag_children *int
 	selectValues sql.SelectValues
 }
 
@@ -74,10 +76,12 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case tag.FieldID, tag.FieldDescription, tag.FieldColor:
+		case tag.FieldID:
+			values[i] = new(sql.NullInt64)
+		case tag.FieldTag, tag.FieldDescription, tag.FieldColor:
 			values[i] = new(sql.NullString)
 		case tag.ForeignKeys[0]: // tag_children
-			values[i] = new(sql.NullString)
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -94,10 +98,16 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case tag.FieldID:
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
+			}
+			t.ID = int(value.Int64)
+		case tag.FieldTag:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
+				return fmt.Errorf("unexpected type %T for field tag", values[i])
 			} else if value.Valid {
-				t.ID = value.String
+				t.Tag = value.String
 			}
 		case tag.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -112,11 +122,11 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 				t.Color = value.String
 			}
 		case tag.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field tag_children", values[i])
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field tag_children", value)
 			} else if value.Valid {
-				t.tag_children = new(string)
-				*t.tag_children = value.String
+				t.tag_children = new(int)
+				*t.tag_children = int(value.Int64)
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
@@ -169,6 +179,9 @@ func (t *Tag) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tag(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString("tag=")
+	builder.WriteString(t.Tag)
+	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(t.Description)
 	builder.WriteString(", ")

@@ -11,7 +11,9 @@ const (
 	// Label holds the string label denoting the tag type in the database.
 	Label = "tag"
 	// FieldID holds the string denoting the id field in the database.
-	FieldID = "tag"
+	FieldID = "id"
+	// FieldTag holds the string denoting the tag field in the database.
+	FieldTag = "tag"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldColor holds the string denoting the color field in the database.
@@ -44,6 +46,7 @@ const (
 // Columns holds all SQL columns for tag fields.
 var Columns = []string{
 	FieldID,
+	FieldTag,
 	FieldDescription,
 	FieldColor,
 }
@@ -76,8 +79,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// IDValidator is a validator for the "id" field. It is called by the builders before save.
-	IDValidator func(string) error
+	// TagValidator is a validator for the "tag" field. It is called by the builders before save.
+	TagValidator func(string) error
 )
 
 // OrderOption defines the ordering options for the Tag queries.
@@ -86,6 +89,11 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByTag orders the results by the tag field.
+func ByTag(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTag, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

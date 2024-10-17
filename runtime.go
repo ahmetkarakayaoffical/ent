@@ -122,10 +122,10 @@ func init() {
 	settings.UpdateDefaultModified = settingsDescModified.UpdateDefault.(func() time.Time)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
-	// tagDescID is the schema descriptor for id field.
-	tagDescID := tagFields[0].Descriptor()
-	// tag.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	tag.IDValidator = tagDescID.Validators[0].(func(string) error)
+	// tagDescTag is the schema descriptor for tag field.
+	tagDescTag := tagFields[0].Descriptor()
+	// tag.TagValidator is a validator for the "tag" field. It is called by the builders before save.
+	tag.TagValidator = tagDescTag.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

@@ -403,14 +403,14 @@ func (au *AgentUpdate) AddUpdates(u ...*Update) *AgentUpdate {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (au *AgentUpdate) AddTagIDs(ids ...string) *AgentUpdate {
+func (au *AgentUpdate) AddTagIDs(ids ...int) *AgentUpdate {
 	au.mutation.AddTagIDs(ids...)
 	return au
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
 func (au *AgentUpdate) AddTags(t ...*Tag) *AgentUpdate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -621,14 +621,14 @@ func (au *AgentUpdate) ClearTags() *AgentUpdate {
 }
 
 // RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
-func (au *AgentUpdate) RemoveTagIDs(ids ...string) *AgentUpdate {
+func (au *AgentUpdate) RemoveTagIDs(ids ...int) *AgentUpdate {
 	au.mutation.RemoveTagIDs(ids...)
 	return au
 }
 
 // RemoveTags removes "tags" edges to Tag entities.
 func (au *AgentUpdate) RemoveTags(t ...*Tag) *AgentUpdate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -1226,7 +1226,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1239,7 +1239,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1255,7 +1255,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1646,14 +1646,14 @@ func (auo *AgentUpdateOne) AddUpdates(u ...*Update) *AgentUpdateOne {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (auo *AgentUpdateOne) AddTagIDs(ids ...string) *AgentUpdateOne {
+func (auo *AgentUpdateOne) AddTagIDs(ids ...int) *AgentUpdateOne {
 	auo.mutation.AddTagIDs(ids...)
 	return auo
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
 func (auo *AgentUpdateOne) AddTags(t ...*Tag) *AgentUpdateOne {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -1864,14 +1864,14 @@ func (auo *AgentUpdateOne) ClearTags() *AgentUpdateOne {
 }
 
 // RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
-func (auo *AgentUpdateOne) RemoveTagIDs(ids ...string) *AgentUpdateOne {
+func (auo *AgentUpdateOne) RemoveTagIDs(ids ...int) *AgentUpdateOne {
 	auo.mutation.RemoveTagIDs(ids...)
 	return auo
 }
 
 // RemoveTags removes "tags" edges to Tag entities.
 func (auo *AgentUpdateOne) RemoveTags(t ...*Tag) *AgentUpdateOne {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -2499,7 +2499,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -2512,7 +2512,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2528,7 +2528,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -9,58 +9,53 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id string) predicate.Tag {
+func ID(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id string) predicate.Tag {
+func IDEQ(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id string) predicate.Tag {
+func IDNEQ(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...string) predicate.Tag {
+func IDIn(ids ...int) predicate.Tag {
 	return predicate.Tag(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...string) predicate.Tag {
+func IDNotIn(ids ...int) predicate.Tag {
 	return predicate.Tag(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id string) predicate.Tag {
+func IDGT(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id string) predicate.Tag {
+func IDGTE(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id string) predicate.Tag {
+func IDLT(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id string) predicate.Tag {
+func IDLTE(id int) predicate.Tag {
 	return predicate.Tag(sql.FieldLTE(FieldID, id))
 }
 
-// IDEqualFold applies the EqualFold predicate on the ID field.
-func IDEqualFold(id string) predicate.Tag {
-	return predicate.Tag(sql.FieldEqualFold(FieldID, id))
-}
-
-// IDContainsFold applies the ContainsFold predicate on the ID field.
-func IDContainsFold(id string) predicate.Tag {
-	return predicate.Tag(sql.FieldContainsFold(FieldID, id))
+// Tag applies equality check predicate on the "tag" field. It's identical to TagEQ.
+func Tag(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldEQ(FieldTag, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
@@ -71,6 +66,71 @@ func Description(v string) predicate.Tag {
 // Color applies equality check predicate on the "color" field. It's identical to ColorEQ.
 func Color(v string) predicate.Tag {
 	return predicate.Tag(sql.FieldEQ(FieldColor, v))
+}
+
+// TagEQ applies the EQ predicate on the "tag" field.
+func TagEQ(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldEQ(FieldTag, v))
+}
+
+// TagNEQ applies the NEQ predicate on the "tag" field.
+func TagNEQ(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldNEQ(FieldTag, v))
+}
+
+// TagIn applies the In predicate on the "tag" field.
+func TagIn(vs ...string) predicate.Tag {
+	return predicate.Tag(sql.FieldIn(FieldTag, vs...))
+}
+
+// TagNotIn applies the NotIn predicate on the "tag" field.
+func TagNotIn(vs ...string) predicate.Tag {
+	return predicate.Tag(sql.FieldNotIn(FieldTag, vs...))
+}
+
+// TagGT applies the GT predicate on the "tag" field.
+func TagGT(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldGT(FieldTag, v))
+}
+
+// TagGTE applies the GTE predicate on the "tag" field.
+func TagGTE(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldGTE(FieldTag, v))
+}
+
+// TagLT applies the LT predicate on the "tag" field.
+func TagLT(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldLT(FieldTag, v))
+}
+
+// TagLTE applies the LTE predicate on the "tag" field.
+func TagLTE(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldLTE(FieldTag, v))
+}
+
+// TagContains applies the Contains predicate on the "tag" field.
+func TagContains(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldContains(FieldTag, v))
+}
+
+// TagHasPrefix applies the HasPrefix predicate on the "tag" field.
+func TagHasPrefix(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldHasPrefix(FieldTag, v))
+}
+
+// TagHasSuffix applies the HasSuffix predicate on the "tag" field.
+func TagHasSuffix(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldHasSuffix(FieldTag, v))
+}
+
+// TagEqualFold applies the EqualFold predicate on the "tag" field.
+func TagEqualFold(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldEqualFold(FieldTag, v))
+}
+
+// TagContainsFold applies the ContainsFold predicate on the "tag" field.
+func TagContainsFold(v string) predicate.Tag {
+	return predicate.Tag(sql.FieldContainsFold(FieldTag, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.

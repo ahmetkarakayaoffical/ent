@@ -1295,7 +1295,7 @@ func (aq *AgentQuery) loadUpdates(ctx context.Context, query *UpdateQuery, nodes
 func (aq *AgentQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Tag)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Agent)
-	nids := make(map[string]map[*Agent]struct{})
+	nids := make(map[int]map[*Agent]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -1328,7 +1328,7 @@ func (aq *AgentQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Ag
 			}
 			spec.Assign = func(columns []string, values []any) error {
 				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
+				inValue := int(values[1].(*sql.NullInt64).Int64)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Agent]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])

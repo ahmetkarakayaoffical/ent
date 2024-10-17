@@ -83,7 +83,7 @@ const (
 	// UpdateFieldID holds the string denoting the ID field of the Update.
 	UpdateFieldID = "id"
 	// TagFieldID holds the string denoting the ID field of the Tag.
-	TagFieldID = "tag"
+	TagFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.

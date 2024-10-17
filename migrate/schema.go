@@ -383,10 +383,11 @@ var (
 	}
 	// TagsColumns holds the columns for the "tags" table.
 	TagsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "tag", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString},
-		{Name: "tag_children", Type: field.TypeString, Nullable: true},
+		{Name: "tag_children", Type: field.TypeInt, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
 	TagsTable = &schema.Table{
@@ -396,7 +397,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tags_tags_children",
-				Columns:    []*schema.Column{TagsColumns[3]},
+				Columns:    []*schema.Column{TagsColumns[4]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -454,7 +455,7 @@ var (
 	// AgentTagsColumns holds the columns for the "agent_tags" table.
 	AgentTagsColumns = []*schema.Column{
 		{Name: "agent_id", Type: field.TypeString},
-		{Name: "tag_id", Type: field.TypeString},
+		{Name: "tag_id", Type: field.TypeInt},
 	}
 	// AgentTagsTable holds the schema information for the "agent_tags" table.
 	AgentTagsTable = &schema.Table{

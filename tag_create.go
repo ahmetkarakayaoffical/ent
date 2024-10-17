@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -21,6 +20,12 @@ type TagCreate struct {
 	mutation *TagMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
+}
+
+// SetTag sets the "tag" field.
+func (tc *TagCreate) SetTag(s string) *TagCreate {
+	tc.mutation.SetTag(s)
+	return tc
 }
 
 // SetDescription sets the "description" field.
@@ -43,12 +48,6 @@ func (tc *TagCreate) SetColor(s string) *TagCreate {
 	return tc
 }
 
-// SetID sets the "id" field.
-func (tc *TagCreate) SetID(s string) *TagCreate {
-	tc.mutation.SetID(s)
-	return tc
-}
-
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (tc *TagCreate) AddOwnerIDs(ids ...string) *TagCreate {
 	tc.mutation.AddOwnerIDs(ids...)
@@ -65,13 +64,13 @@ func (tc *TagCreate) AddOwner(a ...*Agent) *TagCreate {
 }
 
 // SetParentID sets the "parent" edge to the Tag entity by ID.
-func (tc *TagCreate) SetParentID(id string) *TagCreate {
+func (tc *TagCreate) SetParentID(id int) *TagCreate {
 	tc.mutation.SetParentID(id)
 	return tc
 }
 
 // SetNillableParentID sets the "parent" edge to the Tag entity by ID if the given value is not nil.
-func (tc *TagCreate) SetNillableParentID(id *string) *TagCreate {
+func (tc *TagCreate) SetNillableParentID(id *int) *TagCreate {
 	if id != nil {
 		tc = tc.SetParentID(*id)
 	}
@@ -84,14 +83,14 @@ func (tc *TagCreate) SetParent(t *Tag) *TagCreate {
 }
 
 // AddChildIDs adds the "children" edge to the Tag entity by IDs.
-func (tc *TagCreate) AddChildIDs(ids ...string) *TagCreate {
+func (tc *TagCreate) AddChildIDs(ids ...int) *TagCreate {
 	tc.mutation.AddChildIDs(ids...)
 	return tc
 }
 
 // AddChildren adds the "children" edges to the Tag entity.
 func (tc *TagCreate) AddChildren(t ...*Tag) *TagCreate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -132,13 +131,16 @@ func (tc *TagCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (tc *TagCreate) check() error {
+	if _, ok := tc.mutation.Tag(); !ok {
+		return &ValidationError{Name: "tag", err: errors.New(`openuem_ent: missing required field "Tag.tag"`)}
+	}
+	if v, ok := tc.mutation.Tag(); ok {
+		if err := tag.TagValidator(v); err != nil {
+			return &ValidationError{Name: "tag", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.tag": %w`, err)}
+		}
+	}
 	if _, ok := tc.mutation.Color(); !ok {
 		return &ValidationError{Name: "color", err: errors.New(`openuem_ent: missing required field "Tag.color"`)}
-	}
-	if v, ok := tc.mutation.ID(); ok {
-		if err := tag.IDValidator(v); err != nil {
-			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.id": %w`, err)}
-		}
 	}
 	return nil
 }
@@ -154,13 +156,8 @@ func (tc *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(string); ok {
-			_node.ID = id
-		} else {
-			return nil, fmt.Errorf("unexpected Tag.ID type: %T", _spec.ID.Value)
-		}
-	}
+	id := _spec.ID.Value.(int64)
+	_node.ID = int(id)
 	tc.mutation.id = &_node.ID
 	tc.mutation.done = true
 	return _node, nil
@@ -169,12 +166,12 @@ func (tc *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Tag{config: tc.config}
-		_spec = sqlgraph.NewCreateSpec(tag.Table, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString))
+		_spec = sqlgraph.NewCreateSpec(tag.Table, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = tc.conflict
-	if id, ok := tc.mutation.ID(); ok {
-		_node.ID = id
-		_spec.ID.Value = id
+	if value, ok := tc.mutation.Tag(); ok {
+		_spec.SetField(tag.FieldTag, field.TypeString, value)
+		_node.Tag = value
 	}
 	if value, ok := tc.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
@@ -208,7 +205,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 			Columns: []string{tag.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -225,7 +222,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -240,7 +237,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Tag.Create().
-//		SetDescription(v).
+//		SetTag(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -249,7 +246,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.TagUpsert) {
-//			SetDescription(v+v).
+//			SetTag(v+v).
 //		}).
 //		Exec(ctx)
 func (tc *TagCreate) OnConflict(opts ...sql.ConflictOption) *TagUpsertOne {
@@ -285,6 +282,18 @@ type (
 	}
 )
 
+// SetTag sets the "tag" field.
+func (u *TagUpsert) SetTag(v string) *TagUpsert {
+	u.Set(tag.FieldTag, v)
+	return u
+}
+
+// UpdateTag sets the "tag" field to the value that was provided on create.
+func (u *TagUpsert) UpdateTag() *TagUpsert {
+	u.SetExcluded(tag.FieldTag)
+	return u
+}
+
 // SetDescription sets the "description" field.
 func (u *TagUpsert) SetDescription(v string) *TagUpsert {
 	u.Set(tag.FieldDescription, v)
@@ -315,24 +324,16 @@ func (u *TagUpsert) UpdateColor() *TagUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
 //	client.Tag.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(tag.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *TagUpsertOne) UpdateNewValues() *TagUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		if _, exists := u.create.mutation.ID(); exists {
-			s.SetIgnore(tag.FieldID)
-		}
-	}))
 	return u
 }
 
@@ -361,6 +362,20 @@ func (u *TagUpsertOne) Update(set func(*TagUpsert)) *TagUpsertOne {
 		set(&TagUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetTag sets the "tag" field.
+func (u *TagUpsertOne) SetTag(v string) *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.SetTag(v)
+	})
+}
+
+// UpdateTag sets the "tag" field to the value that was provided on create.
+func (u *TagUpsertOne) UpdateTag() *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateTag()
+	})
 }
 
 // SetDescription sets the "description" field.
@@ -414,12 +429,7 @@ func (u *TagUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *TagUpsertOne) ID(ctx context.Context) (id string, err error) {
-	if u.create.driver.Dialect() == dialect.MySQL {
-		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
-		// fields from the database since MySQL does not support the RETURNING clause.
-		return id, errors.New("openuem_ent: TagUpsertOne.ID is not supported by MySQL driver. Use TagUpsertOne.Exec instead")
-	}
+func (u *TagUpsertOne) ID(ctx context.Context) (id int, err error) {
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -428,7 +438,7 @@ func (u *TagUpsertOne) ID(ctx context.Context) (id string, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *TagUpsertOne) IDX(ctx context.Context) string {
+func (u *TagUpsertOne) IDX(ctx context.Context) int {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -482,6 +492,10 @@ func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})
@@ -533,7 +547,7 @@ func (tcb *TagCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.TagUpsert) {
-//			SetDescription(v+v).
+//			SetTag(v+v).
 //		}).
 //		Exec(ctx)
 func (tcb *TagCreateBulk) OnConflict(opts ...sql.ConflictOption) *TagUpsertBulk {
@@ -568,20 +582,10 @@ type TagUpsertBulk struct {
 //	client.Tag.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(tag.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *TagUpsertBulk) UpdateNewValues() *TagUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		for _, b := range u.create.builders {
-			if _, exists := b.mutation.ID(); exists {
-				s.SetIgnore(tag.FieldID)
-			}
-		}
-	}))
 	return u
 }
 
@@ -610,6 +614,20 @@ func (u *TagUpsertBulk) Update(set func(*TagUpsert)) *TagUpsertBulk {
 		set(&TagUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetTag sets the "tag" field.
+func (u *TagUpsertBulk) SetTag(v string) *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.SetTag(v)
+	})
+}
+
+// UpdateTag sets the "tag" field to the value that was provided on create.
+func (u *TagUpsertBulk) UpdateTag() *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateTag()
+	})
 }
 
 // SetDescription sets the "description" field.

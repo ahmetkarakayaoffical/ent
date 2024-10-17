@@ -355,14 +355,14 @@ func (ac *AgentCreate) AddUpdates(u ...*Update) *AgentCreate {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (ac *AgentCreate) AddTagIDs(ids ...string) *AgentCreate {
+func (ac *AgentCreate) AddTagIDs(ids ...int) *AgentCreate {
 	ac.mutation.AddTagIDs(ids...)
 	return ac
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
 func (ac *AgentCreate) AddTags(t ...*Tag) *AgentCreate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -738,7 +738,7 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Columns: agent.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -112,8 +112,8 @@ type AgentMutation struct {
 	updates                map[int]struct{}
 	removedupdates         map[int]struct{}
 	clearedupdates         bool
-	tags                   map[string]struct{}
-	removedtags            map[string]struct{}
+	tags                   map[int]struct{}
+	removedtags            map[int]struct{}
 	clearedtags            bool
 	done                   bool
 	oldValue               func(context.Context) (*Agent, error)
@@ -1225,9 +1225,9 @@ func (m *AgentMutation) ResetUpdates() {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
-func (m *AgentMutation) AddTagIDs(ids ...string) {
+func (m *AgentMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
-		m.tags = make(map[string]struct{})
+		m.tags = make(map[int]struct{})
 	}
 	for i := range ids {
 		m.tags[ids[i]] = struct{}{}
@@ -1245,9 +1245,9 @@ func (m *AgentMutation) TagsCleared() bool {
 }
 
 // RemoveTagIDs removes the "tags" edge to the Tag entity by IDs.
-func (m *AgentMutation) RemoveTagIDs(ids ...string) {
+func (m *AgentMutation) RemoveTagIDs(ids ...int) {
 	if m.removedtags == nil {
-		m.removedtags = make(map[string]struct{})
+		m.removedtags = make(map[int]struct{})
 	}
 	for i := range ids {
 		delete(m.tags, ids[i])
@@ -1256,7 +1256,7 @@ func (m *AgentMutation) RemoveTagIDs(ids ...string) {
 }
 
 // RemovedTags returns the removed IDs of the "tags" edge to the Tag entity.
-func (m *AgentMutation) RemovedTagsIDs() (ids []string) {
+func (m *AgentMutation) RemovedTagsIDs() (ids []int) {
 	for id := range m.removedtags {
 		ids = append(ids, id)
 	}
@@ -1264,7 +1264,7 @@ func (m *AgentMutation) RemovedTagsIDs() (ids []string) {
 }
 
 // TagsIDs returns the "tags" edge IDs in the mutation.
-func (m *AgentMutation) TagsIDs() (ids []string) {
+func (m *AgentMutation) TagsIDs() (ids []int) {
 	for id := range m.tags {
 		ids = append(ids, id)
 	}
@@ -12988,17 +12988,18 @@ type TagMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *string
+	id              *int
+	tag             *string
 	description     *string
 	color           *string
 	clearedFields   map[string]struct{}
 	owner           map[string]struct{}
 	removedowner    map[string]struct{}
 	clearedowner    bool
-	parent          *string
+	parent          *int
 	clearedparent   bool
-	children        map[string]struct{}
-	removedchildren map[string]struct{}
+	children        map[int]struct{}
+	removedchildren map[int]struct{}
 	clearedchildren bool
 	done            bool
 	oldValue        func(context.Context) (*Tag, error)
@@ -13025,7 +13026,7 @@ func newTagMutation(c config, op Op, opts ...tagOption) *TagMutation {
 }
 
 // withTagID sets the ID field of the mutation.
-func withTagID(id string) tagOption {
+func withTagID(id int) tagOption {
 	return func(m *TagMutation) {
 		var (
 			err   error
@@ -13075,15 +13076,9 @@ func (m TagMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Tag entities.
-func (m *TagMutation) SetID(id string) {
-	m.id = &id
-}
-
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TagMutation) ID() (id string, exists bool) {
+func (m *TagMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -13094,12 +13089,12 @@ func (m *TagMutation) ID() (id string, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TagMutation) IDs(ctx context.Context) ([]string, error) {
+func (m *TagMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []string{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -13107,6 +13102,42 @@ func (m *TagMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetTag sets the "tag" field.
+func (m *TagMutation) SetTag(s string) {
+	m.tag = &s
+}
+
+// Tag returns the value of the "tag" field in the mutation.
+func (m *TagMutation) Tag() (r string, exists bool) {
+	v := m.tag
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTag returns the old "tag" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldTag(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTag is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTag requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTag: %w", err)
+	}
+	return oldValue.Tag, nil
+}
+
+// ResetTag resets all changes to the "tag" field.
+func (m *TagMutation) ResetTag() {
+	m.tag = nil
 }
 
 // SetDescription sets the "description" field.
@@ -13249,7 +13280,7 @@ func (m *TagMutation) ResetOwner() {
 }
 
 // SetParentID sets the "parent" edge to the Tag entity by id.
-func (m *TagMutation) SetParentID(id string) {
+func (m *TagMutation) SetParentID(id int) {
 	m.parent = &id
 }
 
@@ -13264,7 +13295,7 @@ func (m *TagMutation) ParentCleared() bool {
 }
 
 // ParentID returns the "parent" edge ID in the mutation.
-func (m *TagMutation) ParentID() (id string, exists bool) {
+func (m *TagMutation) ParentID() (id int, exists bool) {
 	if m.parent != nil {
 		return *m.parent, true
 	}
@@ -13274,7 +13305,7 @@ func (m *TagMutation) ParentID() (id string, exists bool) {
 // ParentIDs returns the "parent" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ParentID instead. It exists only for internal usage by the builders.
-func (m *TagMutation) ParentIDs() (ids []string) {
+func (m *TagMutation) ParentIDs() (ids []int) {
 	if id := m.parent; id != nil {
 		ids = append(ids, *id)
 	}
@@ -13288,9 +13319,9 @@ func (m *TagMutation) ResetParent() {
 }
 
 // AddChildIDs adds the "children" edge to the Tag entity by ids.
-func (m *TagMutation) AddChildIDs(ids ...string) {
+func (m *TagMutation) AddChildIDs(ids ...int) {
 	if m.children == nil {
-		m.children = make(map[string]struct{})
+		m.children = make(map[int]struct{})
 	}
 	for i := range ids {
 		m.children[ids[i]] = struct{}{}
@@ -13308,9 +13339,9 @@ func (m *TagMutation) ChildrenCleared() bool {
 }
 
 // RemoveChildIDs removes the "children" edge to the Tag entity by IDs.
-func (m *TagMutation) RemoveChildIDs(ids ...string) {
+func (m *TagMutation) RemoveChildIDs(ids ...int) {
 	if m.removedchildren == nil {
-		m.removedchildren = make(map[string]struct{})
+		m.removedchildren = make(map[int]struct{})
 	}
 	for i := range ids {
 		delete(m.children, ids[i])
@@ -13319,7 +13350,7 @@ func (m *TagMutation) RemoveChildIDs(ids ...string) {
 }
 
 // RemovedChildren returns the removed IDs of the "children" edge to the Tag entity.
-func (m *TagMutation) RemovedChildrenIDs() (ids []string) {
+func (m *TagMutation) RemovedChildrenIDs() (ids []int) {
 	for id := range m.removedchildren {
 		ids = append(ids, id)
 	}
@@ -13327,7 +13358,7 @@ func (m *TagMutation) RemovedChildrenIDs() (ids []string) {
 }
 
 // ChildrenIDs returns the "children" edge IDs in the mutation.
-func (m *TagMutation) ChildrenIDs() (ids []string) {
+func (m *TagMutation) ChildrenIDs() (ids []int) {
 	for id := range m.children {
 		ids = append(ids, id)
 	}
@@ -13375,7 +13406,10 @@ func (m *TagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
+	if m.tag != nil {
+		fields = append(fields, tag.FieldTag)
+	}
 	if m.description != nil {
 		fields = append(fields, tag.FieldDescription)
 	}
@@ -13390,6 +13424,8 @@ func (m *TagMutation) Fields() []string {
 // schema.
 func (m *TagMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case tag.FieldTag:
+		return m.Tag()
 	case tag.FieldDescription:
 		return m.Description()
 	case tag.FieldColor:
@@ -13403,6 +13439,8 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case tag.FieldTag:
+		return m.OldTag(ctx)
 	case tag.FieldDescription:
 		return m.OldDescription(ctx)
 	case tag.FieldColor:
@@ -13416,6 +13454,13 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 // type.
 func (m *TagMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case tag.FieldTag:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTag(v)
+		return nil
 	case tag.FieldDescription:
 		v, ok := value.(string)
 		if !ok {
@@ -13488,6 +13533,9 @@ func (m *TagMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *TagMutation) ResetField(name string) error {
 	switch name {
+	case tag.FieldTag:
+		m.ResetTag()
+		return nil
 	case tag.FieldDescription:
 		m.ResetDescription()
 		return nil

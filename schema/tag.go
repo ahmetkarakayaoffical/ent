@@ -14,7 +14,7 @@ type Tag struct {
 // Fields of the Tag.
 func (Tag) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").NotEmpty().Unique().StorageKey("tag"),
+		field.String("tag").NotEmpty().Unique(),
 		field.String("description").Optional(),
 		field.String("color"),
 	}

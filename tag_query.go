@@ -155,8 +155,8 @@ func (tq *TagQuery) FirstX(ctx context.Context) *Tag {
 
 // FirstID returns the first Tag ID from the query.
 // Returns a *NotFoundError when no Tag ID was found.
-func (tq *TagQuery) FirstID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (tq *TagQuery) FirstID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -168,7 +168,7 @@ func (tq *TagQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tq *TagQuery) FirstIDX(ctx context.Context) string {
+func (tq *TagQuery) FirstIDX(ctx context.Context) int {
 	id, err := tq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -206,8 +206,8 @@ func (tq *TagQuery) OnlyX(ctx context.Context) *Tag {
 // OnlyID is like Only, but returns the only Tag ID in the query.
 // Returns a *NotSingularError when more than one Tag ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tq *TagQuery) OnlyID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (tq *TagQuery) OnlyID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -223,7 +223,7 @@ func (tq *TagQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tq *TagQuery) OnlyIDX(ctx context.Context) string {
+func (tq *TagQuery) OnlyIDX(ctx context.Context) int {
 	id, err := tq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -251,7 +251,7 @@ func (tq *TagQuery) AllX(ctx context.Context) []*Tag {
 }
 
 // IDs executes the query and returns a list of Tag IDs.
-func (tq *TagQuery) IDs(ctx context.Context) (ids []string, err error) {
+func (tq *TagQuery) IDs(ctx context.Context) (ids []int, err error) {
 	if tq.ctx.Unique == nil && tq.path != nil {
 		tq.Unique(true)
 	}
@@ -263,7 +263,7 @@ func (tq *TagQuery) IDs(ctx context.Context) (ids []string, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tq *TagQuery) IDsX(ctx context.Context) []string {
+func (tq *TagQuery) IDsX(ctx context.Context) []int {
 	ids, err := tq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -372,12 +372,12 @@ func (tq *TagQuery) WithChildren(opts ...func(*TagQuery)) *TagQuery {
 // Example:
 //
 //	var v []struct {
-//		Description string `json:"description,omitempty"`
+//		Tag string `json:"tag,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Tag.Query().
-//		GroupBy(tag.FieldDescription).
+//		GroupBy(tag.FieldTag).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (tq *TagQuery) GroupBy(field string, fields ...string) *TagGroupBy {
@@ -395,11 +395,11 @@ func (tq *TagQuery) GroupBy(field string, fields ...string) *TagGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Description string `json:"description,omitempty"`
+//		Tag string `json:"tag,omitempty"`
 //	}
 //
 //	client.Tag.Query().
-//		Select(tag.FieldDescription).
+//		Select(tag.FieldTag).
 //		Scan(ctx, &v)
 func (tq *TagQuery) Select(fields ...string) *TagSelect {
 	tq.ctx.Fields = append(tq.ctx.Fields, fields...)
@@ -503,7 +503,7 @@ func (tq *TagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tag, err
 
 func (tq *TagQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes []*Tag, init func(*Tag), assign func(*Tag, *Agent)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Tag)
+	byID := make(map[int]*Tag)
 	nids := make(map[string]map[*Tag]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
@@ -533,10 +533,10 @@ func (tq *TagQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes []*T
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(sql.NullString)}, values...), nil
+				return append([]any{new(sql.NullInt64)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
+				outValue := int(values[0].(*sql.NullInt64).Int64)
 				inValue := values[1].(*sql.NullString).String
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Tag]struct{}{byID[outValue]: {}}
@@ -563,8 +563,8 @@ func (tq *TagQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes []*T
 	return nil
 }
 func (tq *TagQuery) loadParent(ctx context.Context, query *TagQuery, nodes []*Tag, init func(*Tag), assign func(*Tag, *Tag)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*Tag)
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Tag)
 	for i := range nodes {
 		if nodes[i].tag_children == nil {
 			continue
@@ -596,7 +596,7 @@ func (tq *TagQuery) loadParent(ctx context.Context, query *TagQuery, nodes []*Ta
 }
 func (tq *TagQuery) loadChildren(ctx context.Context, query *TagQuery, nodes []*Tag, init func(*Tag), assign func(*Tag, *Tag)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Tag)
+	nodeids := make(map[int]*Tag)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -639,7 +639,7 @@ func (tq *TagQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (tq *TagQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString))
+	_spec := sqlgraph.NewQuerySpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt))
 	_spec.From = tq.sql
 	if unique := tq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

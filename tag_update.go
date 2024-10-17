@@ -29,6 +29,20 @@ func (tu *TagUpdate) Where(ps ...predicate.Tag) *TagUpdate {
 	return tu
 }
 
+// SetTag sets the "tag" field.
+func (tu *TagUpdate) SetTag(s string) *TagUpdate {
+	tu.mutation.SetTag(s)
+	return tu
+}
+
+// SetNillableTag sets the "tag" field if the given value is not nil.
+func (tu *TagUpdate) SetNillableTag(s *string) *TagUpdate {
+	if s != nil {
+		tu.SetTag(*s)
+	}
+	return tu
+}
+
 // SetDescription sets the "description" field.
 func (tu *TagUpdate) SetDescription(s string) *TagUpdate {
 	tu.mutation.SetDescription(s)
@@ -79,13 +93,13 @@ func (tu *TagUpdate) AddOwner(a ...*Agent) *TagUpdate {
 }
 
 // SetParentID sets the "parent" edge to the Tag entity by ID.
-func (tu *TagUpdate) SetParentID(id string) *TagUpdate {
+func (tu *TagUpdate) SetParentID(id int) *TagUpdate {
 	tu.mutation.SetParentID(id)
 	return tu
 }
 
 // SetNillableParentID sets the "parent" edge to the Tag entity by ID if the given value is not nil.
-func (tu *TagUpdate) SetNillableParentID(id *string) *TagUpdate {
+func (tu *TagUpdate) SetNillableParentID(id *int) *TagUpdate {
 	if id != nil {
 		tu = tu.SetParentID(*id)
 	}
@@ -98,14 +112,14 @@ func (tu *TagUpdate) SetParent(t *Tag) *TagUpdate {
 }
 
 // AddChildIDs adds the "children" edge to the Tag entity by IDs.
-func (tu *TagUpdate) AddChildIDs(ids ...string) *TagUpdate {
+func (tu *TagUpdate) AddChildIDs(ids ...int) *TagUpdate {
 	tu.mutation.AddChildIDs(ids...)
 	return tu
 }
 
 // AddChildren adds the "children" edges to the Tag entity.
 func (tu *TagUpdate) AddChildren(t ...*Tag) *TagUpdate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -151,14 +165,14 @@ func (tu *TagUpdate) ClearChildren() *TagUpdate {
 }
 
 // RemoveChildIDs removes the "children" edge to Tag entities by IDs.
-func (tu *TagUpdate) RemoveChildIDs(ids ...string) *TagUpdate {
+func (tu *TagUpdate) RemoveChildIDs(ids ...int) *TagUpdate {
 	tu.mutation.RemoveChildIDs(ids...)
 	return tu
 }
 
 // RemoveChildren removes "children" edges to Tag entities.
 func (tu *TagUpdate) RemoveChildren(t ...*Tag) *TagUpdate {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -192,6 +206,16 @@ func (tu *TagUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tu *TagUpdate) check() error {
+	if v, ok := tu.mutation.Tag(); ok {
+		if err := tag.TagValidator(v); err != nil {
+			return &ValidationError{Name: "tag", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.tag": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tu *TagUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagUpdate {
 	tu.modifiers = append(tu.modifiers, modifiers...)
@@ -199,13 +223,19 @@ func (tu *TagUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagUpdate 
 }
 
 func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString))
+	if err := tu.check(); err != nil {
+		return n, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt))
 	if ps := tu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tu.mutation.Tag(); ok {
+		_spec.SetField(tag.FieldTag, field.TypeString, value)
 	}
 	if value, ok := tu.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
@@ -269,7 +299,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tag.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -282,7 +312,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tag.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -298,7 +328,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -311,7 +341,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -327,7 +357,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -355,6 +385,20 @@ type TagUpdateOne struct {
 	hooks     []Hook
 	mutation  *TagMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetTag sets the "tag" field.
+func (tuo *TagUpdateOne) SetTag(s string) *TagUpdateOne {
+	tuo.mutation.SetTag(s)
+	return tuo
+}
+
+// SetNillableTag sets the "tag" field if the given value is not nil.
+func (tuo *TagUpdateOne) SetNillableTag(s *string) *TagUpdateOne {
+	if s != nil {
+		tuo.SetTag(*s)
+	}
+	return tuo
 }
 
 // SetDescription sets the "description" field.
@@ -407,13 +451,13 @@ func (tuo *TagUpdateOne) AddOwner(a ...*Agent) *TagUpdateOne {
 }
 
 // SetParentID sets the "parent" edge to the Tag entity by ID.
-func (tuo *TagUpdateOne) SetParentID(id string) *TagUpdateOne {
+func (tuo *TagUpdateOne) SetParentID(id int) *TagUpdateOne {
 	tuo.mutation.SetParentID(id)
 	return tuo
 }
 
 // SetNillableParentID sets the "parent" edge to the Tag entity by ID if the given value is not nil.
-func (tuo *TagUpdateOne) SetNillableParentID(id *string) *TagUpdateOne {
+func (tuo *TagUpdateOne) SetNillableParentID(id *int) *TagUpdateOne {
 	if id != nil {
 		tuo = tuo.SetParentID(*id)
 	}
@@ -426,14 +470,14 @@ func (tuo *TagUpdateOne) SetParent(t *Tag) *TagUpdateOne {
 }
 
 // AddChildIDs adds the "children" edge to the Tag entity by IDs.
-func (tuo *TagUpdateOne) AddChildIDs(ids ...string) *TagUpdateOne {
+func (tuo *TagUpdateOne) AddChildIDs(ids ...int) *TagUpdateOne {
 	tuo.mutation.AddChildIDs(ids...)
 	return tuo
 }
 
 // AddChildren adds the "children" edges to the Tag entity.
 func (tuo *TagUpdateOne) AddChildren(t ...*Tag) *TagUpdateOne {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -479,14 +523,14 @@ func (tuo *TagUpdateOne) ClearChildren() *TagUpdateOne {
 }
 
 // RemoveChildIDs removes the "children" edge to Tag entities by IDs.
-func (tuo *TagUpdateOne) RemoveChildIDs(ids ...string) *TagUpdateOne {
+func (tuo *TagUpdateOne) RemoveChildIDs(ids ...int) *TagUpdateOne {
 	tuo.mutation.RemoveChildIDs(ids...)
 	return tuo
 }
 
 // RemoveChildren removes "children" edges to Tag entities.
 func (tuo *TagUpdateOne) RemoveChildren(t ...*Tag) *TagUpdateOne {
-	ids := make([]string, len(t))
+	ids := make([]int, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -533,6 +577,16 @@ func (tuo *TagUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tuo *TagUpdateOne) check() error {
+	if v, ok := tuo.mutation.Tag(); ok {
+		if err := tag.TagValidator(v); err != nil {
+			return &ValidationError{Name: "tag", err: fmt.Errorf(`openuem_ent: validator failed for field "Tag.tag": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tuo *TagUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagUpdateOne {
 	tuo.modifiers = append(tuo.modifiers, modifiers...)
@@ -540,7 +594,10 @@ func (tuo *TagUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagUpd
 }
 
 func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
-	_spec := sqlgraph.NewUpdateSpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString))
+	if err := tuo.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(tag.Table, tag.Columns, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt))
 	id, ok := tuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`openuem_ent: missing "Tag.id" for update`)}
@@ -564,6 +621,9 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.Tag(); ok {
+		_spec.SetField(tag.FieldTag, field.TypeString, value)
 	}
 	if value, ok := tuo.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
@@ -627,7 +687,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Columns: []string{tag.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -640,7 +700,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Columns: []string{tag.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -656,7 +716,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -669,7 +729,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -685,7 +745,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Columns: []string{tag.ChildrenColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
