@@ -26,12 +26,16 @@ type Tx struct {
 	Deployment *DeploymentClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
 	LogicalDisk *LogicalDiskClient
+	// Metadata is the client for interacting with the Metadata builders.
+	Metadata *MetadataClient
 	// Monitor is the client for interacting with the Monitor builders.
 	Monitor *MonitorClient
 	// NetworkAdapter is the client for interacting with the NetworkAdapter builders.
 	NetworkAdapter *NetworkAdapterClient
 	// OperatingSystem is the client for interacting with the OperatingSystem builders.
 	OperatingSystem *OperatingSystemClient
+	// OrgMetadata is the client for interacting with the OrgMetadata builders.
+	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
 	// Revocation is the client for interacting with the Revocation builders.
@@ -188,9 +192,11 @@ func (tx *Tx) init() {
 	tx.Computer = NewComputerClient(tx.config)
 	tx.Deployment = NewDeploymentClient(tx.config)
 	tx.LogicalDisk = NewLogicalDiskClient(tx.config)
+	tx.Metadata = NewMetadataClient(tx.config)
 	tx.Monitor = NewMonitorClient(tx.config)
 	tx.NetworkAdapter = NewNetworkAdapterClient(tx.config)
 	tx.OperatingSystem = NewOperatingSystemClient(tx.config)
+	tx.OrgMetadata = NewOrgMetadataClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
 	tx.Sessions = NewSessionsClient(tx.config)

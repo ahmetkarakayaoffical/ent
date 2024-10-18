@@ -22,9 +22,11 @@ import (
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
@@ -55,12 +57,16 @@ type Client struct {
 	Deployment *DeploymentClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
 	LogicalDisk *LogicalDiskClient
+	// Metadata is the client for interacting with the Metadata builders.
+	Metadata *MetadataClient
 	// Monitor is the client for interacting with the Monitor builders.
 	Monitor *MonitorClient
 	// NetworkAdapter is the client for interacting with the NetworkAdapter builders.
 	NetworkAdapter *NetworkAdapterClient
 	// OperatingSystem is the client for interacting with the OperatingSystem builders.
 	OperatingSystem *OperatingSystemClient
+	// OrgMetadata is the client for interacting with the OrgMetadata builders.
+	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
 	// Revocation is the client for interacting with the Revocation builders.
@@ -97,9 +103,11 @@ func (c *Client) init() {
 	c.Computer = NewComputerClient(c.config)
 	c.Deployment = NewDeploymentClient(c.config)
 	c.LogicalDisk = NewLogicalDiskClient(c.config)
+	c.Metadata = NewMetadataClient(c.config)
 	c.Monitor = NewMonitorClient(c.config)
 	c.NetworkAdapter = NewNetworkAdapterClient(c.config)
 	c.OperatingSystem = NewOperatingSystemClient(c.config)
+	c.OrgMetadata = NewOrgMetadataClient(c.config)
 	c.Printer = NewPrinterClient(c.config)
 	c.Revocation = NewRevocationClient(c.config)
 	c.Sessions = NewSessionsClient(c.config)
@@ -208,9 +216,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Computer:        NewComputerClient(cfg),
 		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
+		Metadata:        NewMetadataClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
 		OperatingSystem: NewOperatingSystemClient(cfg),
+		OrgMetadata:     NewOrgMetadataClient(cfg),
 		Printer:         NewPrinterClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
@@ -246,9 +256,11 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Computer:        NewComputerClient(cfg),
 		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
+		Metadata:        NewMetadataClient(cfg),
 		Monitor:         NewMonitorClient(cfg),
 		NetworkAdapter:  NewNetworkAdapterClient(cfg),
 		OperatingSystem: NewOperatingSystemClient(cfg),
+		OrgMetadata:     NewOrgMetadataClient(cfg),
 		Printer:         NewPrinterClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
@@ -288,9 +300,9 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
-		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update,
-		c.User,
+		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
+		c.OrgMetadata, c.Printer, c.Revocation, c.Sessions, c.Settings, c.Share,
+		c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -301,9 +313,9 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.Monitor, c.NetworkAdapter, c.OperatingSystem, c.Printer,
-		c.Revocation, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update,
-		c.User,
+		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
+		c.OrgMetadata, c.Printer, c.Revocation, c.Sessions, c.Settings, c.Share,
+		c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -326,12 +338,16 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Deployment.mutate(ctx, m)
 	case *LogicalDiskMutation:
 		return c.LogicalDisk.mutate(ctx, m)
+	case *MetadataMutation:
+		return c.Metadata.mutate(ctx, m)
 	case *MonitorMutation:
 		return c.Monitor.mutate(ctx, m)
 	case *NetworkAdapterMutation:
 		return c.NetworkAdapter.mutate(ctx, m)
 	case *OperatingSystemMutation:
 		return c.OperatingSystem.mutate(ctx, m)
+	case *OrgMetadataMutation:
+		return c.OrgMetadata.mutate(ctx, m)
 	case *PrinterMutation:
 		return c.Printer.mutate(ctx, m)
 	case *RevocationMutation:
@@ -664,6 +680,22 @@ func (c *AgentClient) QueryTags(a *Agent) *TagQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, agent.TagsTable, agent.TagsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMetadata queries the metadata edge of a Agent.
+func (c *AgentClient) QueryMetadata(a *Agent) *MetadataQuery {
+	query := (&MetadataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(metadata.Table, metadata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, agent.MetadataTable, agent.MetadataPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1574,6 +1606,155 @@ func (c *LogicalDiskClient) mutate(ctx context.Context, m *LogicalDiskMutation) 
 	}
 }
 
+// MetadataClient is a client for the Metadata schema.
+type MetadataClient struct {
+	config
+}
+
+// NewMetadataClient returns a client for the Metadata from the given config.
+func NewMetadataClient(c config) *MetadataClient {
+	return &MetadataClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `metadata.Hooks(f(g(h())))`.
+func (c *MetadataClient) Use(hooks ...Hook) {
+	c.hooks.Metadata = append(c.hooks.Metadata, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `metadata.Intercept(f(g(h())))`.
+func (c *MetadataClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Metadata = append(c.inters.Metadata, interceptors...)
+}
+
+// Create returns a builder for creating a Metadata entity.
+func (c *MetadataClient) Create() *MetadataCreate {
+	mutation := newMetadataMutation(c.config, OpCreate)
+	return &MetadataCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Metadata entities.
+func (c *MetadataClient) CreateBulk(builders ...*MetadataCreate) *MetadataCreateBulk {
+	return &MetadataCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MetadataClient) MapCreateBulk(slice any, setFunc func(*MetadataCreate, int)) *MetadataCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MetadataCreateBulk{err: fmt.Errorf("calling to MetadataClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MetadataCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MetadataCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Metadata.
+func (c *MetadataClient) Update() *MetadataUpdate {
+	mutation := newMetadataMutation(c.config, OpUpdate)
+	return &MetadataUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MetadataClient) UpdateOne(m *Metadata) *MetadataUpdateOne {
+	mutation := newMetadataMutation(c.config, OpUpdateOne, withMetadata(m))
+	return &MetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MetadataClient) UpdateOneID(id int) *MetadataUpdateOne {
+	mutation := newMetadataMutation(c.config, OpUpdateOne, withMetadataID(id))
+	return &MetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Metadata.
+func (c *MetadataClient) Delete() *MetadataDelete {
+	mutation := newMetadataMutation(c.config, OpDelete)
+	return &MetadataDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MetadataClient) DeleteOne(m *Metadata) *MetadataDeleteOne {
+	return c.DeleteOneID(m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MetadataClient) DeleteOneID(id int) *MetadataDeleteOne {
+	builder := c.Delete().Where(metadata.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MetadataDeleteOne{builder}
+}
+
+// Query returns a query builder for Metadata.
+func (c *MetadataClient) Query() *MetadataQuery {
+	return &MetadataQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMetadata},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Metadata entity by its id.
+func (c *MetadataClient) Get(ctx context.Context, id int) (*Metadata, error) {
+	return c.Query().Where(metadata.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MetadataClient) GetX(ctx context.Context, id int) *Metadata {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Metadata.
+func (c *MetadataClient) QueryOwner(m *Metadata) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(metadata.Table, metadata.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, metadata.OwnerTable, metadata.OwnerPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MetadataClient) Hooks() []Hook {
+	return c.hooks.Metadata
+}
+
+// Interceptors returns the client interceptors.
+func (c *MetadataClient) Interceptors() []Interceptor {
+	return c.inters.Metadata
+}
+
+func (c *MetadataClient) mutate(ctx context.Context, m *MetadataMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MetadataCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MetadataUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MetadataDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Metadata mutation op: %q", m.Op())
+	}
+}
+
 // MonitorClient is a client for the Monitor schema.
 type MonitorClient struct {
 	config
@@ -2018,6 +2199,139 @@ func (c *OperatingSystemClient) mutate(ctx context.Context, m *OperatingSystemMu
 		return (&OperatingSystemDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("openuem_ent: unknown OperatingSystem mutation op: %q", m.Op())
+	}
+}
+
+// OrgMetadataClient is a client for the OrgMetadata schema.
+type OrgMetadataClient struct {
+	config
+}
+
+// NewOrgMetadataClient returns a client for the OrgMetadata from the given config.
+func NewOrgMetadataClient(c config) *OrgMetadataClient {
+	return &OrgMetadataClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgmetadata.Hooks(f(g(h())))`.
+func (c *OrgMetadataClient) Use(hooks ...Hook) {
+	c.hooks.OrgMetadata = append(c.hooks.OrgMetadata, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgmetadata.Intercept(f(g(h())))`.
+func (c *OrgMetadataClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgMetadata = append(c.inters.OrgMetadata, interceptors...)
+}
+
+// Create returns a builder for creating a OrgMetadata entity.
+func (c *OrgMetadataClient) Create() *OrgMetadataCreate {
+	mutation := newOrgMetadataMutation(c.config, OpCreate)
+	return &OrgMetadataCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgMetadata entities.
+func (c *OrgMetadataClient) CreateBulk(builders ...*OrgMetadataCreate) *OrgMetadataCreateBulk {
+	return &OrgMetadataCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgMetadataClient) MapCreateBulk(slice any, setFunc func(*OrgMetadataCreate, int)) *OrgMetadataCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgMetadataCreateBulk{err: fmt.Errorf("calling to OrgMetadataClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgMetadataCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgMetadataCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgMetadata.
+func (c *OrgMetadataClient) Update() *OrgMetadataUpdate {
+	mutation := newOrgMetadataMutation(c.config, OpUpdate)
+	return &OrgMetadataUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgMetadataClient) UpdateOne(om *OrgMetadata) *OrgMetadataUpdateOne {
+	mutation := newOrgMetadataMutation(c.config, OpUpdateOne, withOrgMetadata(om))
+	return &OrgMetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgMetadataClient) UpdateOneID(id int) *OrgMetadataUpdateOne {
+	mutation := newOrgMetadataMutation(c.config, OpUpdateOne, withOrgMetadataID(id))
+	return &OrgMetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgMetadata.
+func (c *OrgMetadataClient) Delete() *OrgMetadataDelete {
+	mutation := newOrgMetadataMutation(c.config, OpDelete)
+	return &OrgMetadataDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgMetadataClient) DeleteOne(om *OrgMetadata) *OrgMetadataDeleteOne {
+	return c.DeleteOneID(om.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgMetadataClient) DeleteOneID(id int) *OrgMetadataDeleteOne {
+	builder := c.Delete().Where(orgmetadata.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgMetadataDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgMetadata.
+func (c *OrgMetadataClient) Query() *OrgMetadataQuery {
+	return &OrgMetadataQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgMetadata},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgMetadata entity by its id.
+func (c *OrgMetadataClient) Get(ctx context.Context, id int) (*OrgMetadata, error) {
+	return c.Query().Where(orgmetadata.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgMetadataClient) GetX(ctx context.Context, id int) *OrgMetadata {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *OrgMetadataClient) Hooks() []Hook {
+	return c.hooks.OrgMetadata
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgMetadataClient) Interceptors() []Interceptor {
+	return c.inters.OrgMetadata
+}
+
+func (c *OrgMetadataClient) mutate(ctx context.Context, m *OrgMetadataMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgMetadataCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgMetadataUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgMetadataUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgMetadataDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown OrgMetadata mutation op: %q", m.Op())
 	}
 }
 
@@ -3365,13 +3679,13 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
-		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
-		Share, SystemUpdate, Tag, Update, User []ent.Hook
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Revocation,
+		Sessions, Settings, Share, SystemUpdate, Tag, Update, User []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Monitor,
-		NetworkAdapter, OperatingSystem, Printer, Revocation, Sessions, Settings,
-		Share, SystemUpdate, Tag, Update, User []ent.Interceptor
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Revocation,
+		Sessions, Settings, Share, SystemUpdate, Tag, Update, User []ent.Interceptor
 	}
 )

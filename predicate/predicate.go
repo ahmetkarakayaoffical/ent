@@ -27,6 +27,9 @@ type Deployment func(*sql.Selector)
 // LogicalDisk is the predicate function for logicaldisk builders.
 type LogicalDisk func(*sql.Selector)
 
+// Metadata is the predicate function for metadata builders.
+type Metadata func(*sql.Selector)
+
 // Monitor is the predicate function for monitor builders.
 type Monitor func(*sql.Selector)
 
@@ -35,6 +38,9 @@ type NetworkAdapter func(*sql.Selector)
 
 // OperatingSystem is the predicate function for operatingsystem builders.
 type OperatingSystem func(*sql.Selector)
+
+// OrgMetadata is the predicate function for orgmetadata builders.
+type OrgMetadata func(*sql.Selector)
 
 // Printer is the predicate function for printer builders.
 type Printer func(*sql.Selector)

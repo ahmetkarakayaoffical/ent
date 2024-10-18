@@ -17,6 +17,7 @@ import (
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
@@ -417,6 +418,21 @@ func (au *AgentUpdate) AddTags(t ...*Tag) *AgentUpdate {
 	return au.AddTagIDs(ids...)
 }
 
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by IDs.
+func (au *AgentUpdate) AddMetadatumIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddMetadatumIDs(ids...)
+	return au
+}
+
+// AddMetadata adds the "metadata" edges to the Metadata entity.
+func (au *AgentUpdate) AddMetadata(m ...*Metadata) *AgentUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (au *AgentUpdate) Mutation() *AgentMutation {
 	return au.mutation
@@ -633,6 +649,27 @@ func (au *AgentUpdate) RemoveTags(t ...*Tag) *AgentUpdate {
 		ids[i] = t[i].ID
 	}
 	return au.RemoveTagIDs(ids...)
+}
+
+// ClearMetadata clears all "metadata" edges to the Metadata entity.
+func (au *AgentUpdate) ClearMetadata() *AgentUpdate {
+	au.mutation.ClearMetadata()
+	return au
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to Metadata entities by IDs.
+func (au *AgentUpdate) RemoveMetadatumIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemoveMetadatumIDs(ids...)
+	return au
+}
+
+// RemoveMetadata removes "metadata" edges to Metadata entities.
+func (au *AgentUpdate) RemoveMetadata(m ...*Metadata) *AgentUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.RemoveMetadatumIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1263,6 +1300,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !au.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(au.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1660,6 +1742,21 @@ func (auo *AgentUpdateOne) AddTags(t ...*Tag) *AgentUpdateOne {
 	return auo.AddTagIDs(ids...)
 }
 
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by IDs.
+func (auo *AgentUpdateOne) AddMetadatumIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddMetadatumIDs(ids...)
+	return auo
+}
+
+// AddMetadata adds the "metadata" edges to the Metadata entity.
+func (auo *AgentUpdateOne) AddMetadata(m ...*Metadata) *AgentUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (auo *AgentUpdateOne) Mutation() *AgentMutation {
 	return auo.mutation
@@ -1876,6 +1973,27 @@ func (auo *AgentUpdateOne) RemoveTags(t ...*Tag) *AgentUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return auo.RemoveTagIDs(ids...)
+}
+
+// ClearMetadata clears all "metadata" edges to the Metadata entity.
+func (auo *AgentUpdateOne) ClearMetadata() *AgentUpdateOne {
+	auo.mutation.ClearMetadata()
+	return auo
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to Metadata entities by IDs.
+func (auo *AgentUpdateOne) RemoveMetadatumIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemoveMetadatumIDs(ids...)
+	return auo
+}
+
+// RemoveMetadata removes "metadata" edges to Metadata entities.
+func (auo *AgentUpdateOne) RemoveMetadata(m ...*Metadata) *AgentUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.RemoveMetadatumIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -2529,6 +2647,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !auo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   agent.MetadataTable,
+			Columns: agent.MetadataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

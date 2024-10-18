@@ -8,6 +8,7 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
@@ -72,6 +73,12 @@ func init() {
 	logicaldiskDescUsage := logicaldiskFields[2].Descriptor()
 	// logicaldisk.DefaultUsage holds the default value on creation for the usage field.
 	logicaldisk.DefaultUsage = logicaldiskDescUsage.Default.(int8)
+	orgmetadataFields := schema.OrgMetadata{}.Fields()
+	_ = orgmetadataFields
+	// orgmetadataDescName is the schema descriptor for name field.
+	orgmetadataDescName := orgmetadataFields[0].Descriptor()
+	// orgmetadata.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	orgmetadata.NameValidator = orgmetadataDescName.Validators[0].(func(string) error)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.

@@ -19,9 +19,11 @@ import (
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/monitor"
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
@@ -98,9 +100,11 @@ func checkColumn(table, column string) error {
 			computer.Table:        computer.ValidColumn,
 			deployment.Table:      deployment.ValidColumn,
 			logicaldisk.Table:     logicaldisk.ValidColumn,
+			metadata.Table:        metadata.ValidColumn,
 			monitor.Table:         monitor.ValidColumn,
 			networkadapter.Table:  networkadapter.ValidColumn,
 			operatingsystem.Table: operatingsystem.ValidColumn,
+			orgmetadata.Table:     orgmetadata.ValidColumn,
 			printer.Table:         printer.ValidColumn,
 			revocation.Table:      revocation.ValidColumn,
 			sessions.Table:        sessions.ValidColumn,

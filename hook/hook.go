@@ -93,6 +93,18 @@ func (f LogicalDiskFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (op
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.LogicalDiskMutation", m)
 }
 
+// The MetadataFunc type is an adapter to allow the use of ordinary
+// function as Metadata mutator.
+type MetadataFunc func(context.Context, *openuem_ent.MetadataMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MetadataFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.MetadataMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.MetadataMutation", m)
+}
+
 // The MonitorFunc type is an adapter to allow the use of ordinary
 // function as Monitor mutator.
 type MonitorFunc func(context.Context, *openuem_ent.MonitorMutation) (openuem_ent.Value, error)
@@ -127,6 +139,18 @@ func (f OperatingSystemFunc) Mutate(ctx context.Context, m openuem_ent.Mutation)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.OperatingSystemMutation", m)
+}
+
+// The OrgMetadataFunc type is an adapter to allow the use of ordinary
+// function as OrgMetadata mutator.
+type OrgMetadataFunc func(context.Context, *openuem_ent.OrgMetadataMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrgMetadataFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.OrgMetadataMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.OrgMetadataMutation", m)
 }
 
 // The PrinterFunc type is an adapter to allow the use of ordinary

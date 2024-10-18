@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -163,6 +164,25 @@ var (
 			},
 		},
 	}
+	// MetadataColumns holds the columns for the "metadata" table.
+	MetadataColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "value", Type: field.TypeString},
+	}
+	// MetadataTable holds the schema information for the "metadata" table.
+	MetadataTable = &schema.Table{
+		Name:       "metadata",
+		Columns:    MetadataColumns,
+		PrimaryKey: []*schema.Column{MetadataColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "metadata_name_value",
+				Unique:  false,
+				Columns: []*schema.Column{MetadataColumns[1], MetadataColumns[2]},
+			},
+		},
+	}
 	// MonitorsColumns holds the columns for the "monitors" table.
 	MonitorsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -240,6 +260,18 @@ var (
 				OnDelete:   schema.Cascade,
 			},
 		},
+	}
+	// OrgMetadataColumns holds the columns for the "org_metadata" table.
+	OrgMetadataColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+	}
+	// OrgMetadataTable holds the schema information for the "org_metadata" table.
+	OrgMetadataTable = &schema.Table{
+		Name:       "org_metadata",
+		Columns:    OrgMetadataColumns,
+		PrimaryKey: []*schema.Column{OrgMetadataColumns[0]},
 	}
 	// PrintersColumns holds the columns for the "printers" table.
 	PrintersColumns = []*schema.Column{
@@ -477,6 +509,31 @@ var (
 			},
 		},
 	}
+	// AgentMetadataColumns holds the columns for the "agent_metadata" table.
+	AgentMetadataColumns = []*schema.Column{
+		{Name: "agent_id", Type: field.TypeString},
+		{Name: "metadata_id", Type: field.TypeInt},
+	}
+	// AgentMetadataTable holds the schema information for the "agent_metadata" table.
+	AgentMetadataTable = &schema.Table{
+		Name:       "agent_metadata",
+		Columns:    AgentMetadataColumns,
+		PrimaryKey: []*schema.Column{AgentMetadataColumns[0], AgentMetadataColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "agent_metadata_agent_id",
+				Columns:    []*schema.Column{AgentMetadataColumns[0]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "agent_metadata_metadata_id",
+				Columns:    []*schema.Column{AgentMetadataColumns[1]},
+				RefColumns: []*schema.Column{MetadataColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -486,9 +543,11 @@ var (
 		ComputersTable,
 		DeploymentsTable,
 		LogicalDisksTable,
+		MetadataTable,
 		MonitorsTable,
 		NetworkAdaptersTable,
 		OperatingSystemsTable,
+		OrgMetadataTable,
 		PrintersTable,
 		RevocationsTable,
 		SessionsTable,
@@ -499,6 +558,7 @@ var (
 		UpdatesTable,
 		UsersTable,
 		AgentTagsTable,
+		AgentMetadataTable,
 	}
 )
 
@@ -519,4 +579,7 @@ func init() {
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
+	AgentMetadataTable.ForeignKeys[0].RefTable = AgentsTable
+	AgentMetadataTable.ForeignKeys[1].RefTable = MetadataTable
+	AgentMetadataTable.Annotation = &entsql.Annotation{}
 }
