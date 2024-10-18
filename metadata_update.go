@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/metadata"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
 
@@ -26,20 +27,6 @@ type MetadataUpdate struct {
 // Where appends a list predicates to the MetadataUpdate builder.
 func (mu *MetadataUpdate) Where(ps ...predicate.Metadata) *MetadataUpdate {
 	mu.mutation.Where(ps...)
-	return mu
-}
-
-// SetName sets the "name" field.
-func (mu *MetadataUpdate) SetName(s string) *MetadataUpdate {
-	mu.mutation.SetName(s)
-	return mu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (mu *MetadataUpdate) SetNillableName(s *string) *MetadataUpdate {
-	if s != nil {
-		mu.SetName(*s)
-	}
 	return mu
 }
 
@@ -68,6 +55,17 @@ func (mu *MetadataUpdate) SetOwner(a *Agent) *MetadataUpdate {
 	return mu.SetOwnerID(a.ID)
 }
 
+// SetOrgID sets the "org" edge to the OrgMetadata entity by ID.
+func (mu *MetadataUpdate) SetOrgID(id int) *MetadataUpdate {
+	mu.mutation.SetOrgID(id)
+	return mu
+}
+
+// SetOrg sets the "org" edge to the OrgMetadata entity.
+func (mu *MetadataUpdate) SetOrg(o *OrgMetadata) *MetadataUpdate {
+	return mu.SetOrgID(o.ID)
+}
+
 // Mutation returns the MetadataMutation object of the builder.
 func (mu *MetadataUpdate) Mutation() *MetadataMutation {
 	return mu.mutation
@@ -76,6 +74,12 @@ func (mu *MetadataUpdate) Mutation() *MetadataMutation {
 // ClearOwner clears the "owner" edge to the Agent entity.
 func (mu *MetadataUpdate) ClearOwner() *MetadataUpdate {
 	mu.mutation.ClearOwner()
+	return mu
+}
+
+// ClearOrg clears the "org" edge to the OrgMetadata entity.
+func (mu *MetadataUpdate) ClearOrg() *MetadataUpdate {
+	mu.mutation.ClearOrg()
 	return mu
 }
 
@@ -111,6 +115,9 @@ func (mu *MetadataUpdate) check() error {
 	if mu.mutation.OwnerCleared() && len(mu.mutation.OwnerIDs()) > 0 {
 		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.owner"`)
 	}
+	if mu.mutation.OrgCleared() && len(mu.mutation.OrgIDs()) > 0 {
+		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.org"`)
+	}
 	return nil
 }
 
@@ -131,9 +138,6 @@ func (mu *MetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := mu.mutation.Name(); ok {
-		_spec.SetField(metadata.FieldName, field.TypeString, value)
 	}
 	if value, ok := mu.mutation.Value(); ok {
 		_spec.SetField(metadata.FieldValue, field.TypeString, value)
@@ -167,6 +171,35 @@ func (mu *MetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if mu.mutation.OrgCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   metadata.OrgTable,
+			Columns: []string{metadata.OrgColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.OrgIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   metadata.OrgTable,
+			Columns: []string{metadata.OrgColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(mu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -187,20 +220,6 @@ type MetadataUpdateOne struct {
 	hooks     []Hook
 	mutation  *MetadataMutation
 	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetName sets the "name" field.
-func (muo *MetadataUpdateOne) SetName(s string) *MetadataUpdateOne {
-	muo.mutation.SetName(s)
-	return muo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (muo *MetadataUpdateOne) SetNillableName(s *string) *MetadataUpdateOne {
-	if s != nil {
-		muo.SetName(*s)
-	}
-	return muo
 }
 
 // SetValue sets the "value" field.
@@ -228,6 +247,17 @@ func (muo *MetadataUpdateOne) SetOwner(a *Agent) *MetadataUpdateOne {
 	return muo.SetOwnerID(a.ID)
 }
 
+// SetOrgID sets the "org" edge to the OrgMetadata entity by ID.
+func (muo *MetadataUpdateOne) SetOrgID(id int) *MetadataUpdateOne {
+	muo.mutation.SetOrgID(id)
+	return muo
+}
+
+// SetOrg sets the "org" edge to the OrgMetadata entity.
+func (muo *MetadataUpdateOne) SetOrg(o *OrgMetadata) *MetadataUpdateOne {
+	return muo.SetOrgID(o.ID)
+}
+
 // Mutation returns the MetadataMutation object of the builder.
 func (muo *MetadataUpdateOne) Mutation() *MetadataMutation {
 	return muo.mutation
@@ -236,6 +266,12 @@ func (muo *MetadataUpdateOne) Mutation() *MetadataMutation {
 // ClearOwner clears the "owner" edge to the Agent entity.
 func (muo *MetadataUpdateOne) ClearOwner() *MetadataUpdateOne {
 	muo.mutation.ClearOwner()
+	return muo
+}
+
+// ClearOrg clears the "org" edge to the OrgMetadata entity.
+func (muo *MetadataUpdateOne) ClearOrg() *MetadataUpdateOne {
+	muo.mutation.ClearOrg()
 	return muo
 }
 
@@ -284,6 +320,9 @@ func (muo *MetadataUpdateOne) check() error {
 	if muo.mutation.OwnerCleared() && len(muo.mutation.OwnerIDs()) > 0 {
 		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.owner"`)
 	}
+	if muo.mutation.OrgCleared() && len(muo.mutation.OrgIDs()) > 0 {
+		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.org"`)
+	}
 	return nil
 }
 
@@ -322,9 +361,6 @@ func (muo *MetadataUpdateOne) sqlSave(ctx context.Context) (_node *Metadata, err
 			}
 		}
 	}
-	if value, ok := muo.mutation.Name(); ok {
-		_spec.SetField(metadata.FieldName, field.TypeString, value)
-	}
 	if value, ok := muo.mutation.Value(); ok {
 		_spec.SetField(metadata.FieldValue, field.TypeString, value)
 	}
@@ -350,6 +386,35 @@ func (muo *MetadataUpdateOne) sqlSave(ctx context.Context) (_node *Metadata, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if muo.mutation.OrgCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   metadata.OrgTable,
+			Columns: []string{metadata.OrgColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.OrgIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   metadata.OrgTable,
+			Columns: []string{metadata.OrgColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/metadata"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 )
 
 // Metadata is the model entity for the Metadata schema.
@@ -17,24 +18,25 @@ type Metadata struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
 	// Value holds the value of the "value" field.
 	Value string `json:"value,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MetadataQuery when eager-loading is set.
-	Edges          MetadataEdges `json:"edges"`
-	agent_metadata *string
-	selectValues   sql.SelectValues
+	Edges                 MetadataEdges `json:"edges"`
+	agent_metadata        *string
+	org_metadata_metadata *int
+	selectValues          sql.SelectValues
 }
 
 // MetadataEdges holds the relations/edges for other nodes in the graph.
 type MetadataEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Agent `json:"owner,omitempty"`
+	// Org holds the value of the org edge.
+	Org *OrgMetadata `json:"org,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -48,6 +50,17 @@ func (e MetadataEdges) OwnerOrErr() (*Agent, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// OrgOrErr returns the Org value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e MetadataEdges) OrgOrErr() (*OrgMetadata, error) {
+	if e.Org != nil {
+		return e.Org, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: orgmetadata.Label}
+	}
+	return nil, &NotLoadedError{edge: "org"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Metadata) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -55,10 +68,12 @@ func (*Metadata) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case metadata.FieldID:
 			values[i] = new(sql.NullInt64)
-		case metadata.FieldName, metadata.FieldValue:
+		case metadata.FieldValue:
 			values[i] = new(sql.NullString)
 		case metadata.ForeignKeys[0]: // agent_metadata
 			values[i] = new(sql.NullString)
+		case metadata.ForeignKeys[1]: // org_metadata_metadata
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -80,12 +95,6 @@ func (m *Metadata) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			m.ID = int(value.Int64)
-		case metadata.FieldName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
-			} else if value.Valid {
-				m.Name = value.String
-			}
 		case metadata.FieldValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field value", values[i])
@@ -98,6 +107,13 @@ func (m *Metadata) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.agent_metadata = new(string)
 				*m.agent_metadata = value.String
+			}
+		case metadata.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field org_metadata_metadata", value)
+			} else if value.Valid {
+				m.org_metadata_metadata = new(int)
+				*m.org_metadata_metadata = int(value.Int64)
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -115,6 +131,11 @@ func (m *Metadata) GetValue(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Metadata entity.
 func (m *Metadata) QueryOwner() *AgentQuery {
 	return NewMetadataClient(m.config).QueryOwner(m)
+}
+
+// QueryOrg queries the "org" edge of the Metadata entity.
+func (m *Metadata) QueryOrg() *OrgMetadataQuery {
+	return NewMetadataClient(m.config).QueryOrg(m)
 }
 
 // Update returns a builder for updating this Metadata.
@@ -140,9 +161,6 @@ func (m *Metadata) String() string {
 	var builder strings.Builder
 	builder.WriteString("Metadata(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", m.ID))
-	builder.WriteString("name=")
-	builder.WriteString(m.Name)
-	builder.WriteString(", ")
 	builder.WriteString("value=")
 	builder.WriteString(m.Value)
 	builder.WriteByte(')')

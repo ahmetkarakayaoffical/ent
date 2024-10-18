@@ -1730,6 +1730,22 @@ func (c *MetadataClient) QueryOwner(m *Metadata) *AgentQuery {
 	return query
 }
 
+// QueryOrg queries the org edge of a Metadata.
+func (c *MetadataClient) QueryOrg(m *Metadata) *OrgMetadataQuery {
+	query := (&OrgMetadataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(metadata.Table, metadata.FieldID, id),
+			sqlgraph.To(orgmetadata.Table, orgmetadata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, metadata.OrgTable, metadata.OrgColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *MetadataClient) Hooks() []Hook {
 	return c.hooks.Metadata
@@ -2308,6 +2324,22 @@ func (c *OrgMetadataClient) GetX(ctx context.Context, id int) *OrgMetadata {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryMetadata queries the metadata edge of a OrgMetadata.
+func (c *OrgMetadataClient) QueryMetadata(om *OrgMetadata) *MetadataQuery {
+	query := (&MetadataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmetadata.Table, orgmetadata.FieldID, id),
+			sqlgraph.To(metadata.Table, metadata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgmetadata.MetadataTable, orgmetadata.MetadataColumn),
+		)
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

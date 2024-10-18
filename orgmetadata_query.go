@@ -4,6 +4,7 @@ package openuem_ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
@@ -18,11 +20,12 @@ import (
 // OrgMetadataQuery is the builder for querying OrgMetadata entities.
 type OrgMetadataQuery struct {
 	config
-	ctx        *QueryContext
-	order      []orgmetadata.OrderOption
-	inters     []Interceptor
-	predicates []predicate.OrgMetadata
-	modifiers  []func(*sql.Selector)
+	ctx          *QueryContext
+	order        []orgmetadata.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.OrgMetadata
+	withMetadata *MetadataQuery
+	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +60,28 @@ func (omq *OrgMetadataQuery) Unique(unique bool) *OrgMetadataQuery {
 func (omq *OrgMetadataQuery) Order(o ...orgmetadata.OrderOption) *OrgMetadataQuery {
 	omq.order = append(omq.order, o...)
 	return omq
+}
+
+// QueryMetadata chains the current query on the "metadata" edge.
+func (omq *OrgMetadataQuery) QueryMetadata() *MetadataQuery {
+	query := (&MetadataClient{config: omq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := omq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := omq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmetadata.Table, orgmetadata.FieldID, selector),
+			sqlgraph.To(metadata.Table, metadata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgmetadata.MetadataTable, orgmetadata.MetadataColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first OrgMetadata entity from the query.
@@ -246,16 +271,28 @@ func (omq *OrgMetadataQuery) Clone() *OrgMetadataQuery {
 		return nil
 	}
 	return &OrgMetadataQuery{
-		config:     omq.config,
-		ctx:        omq.ctx.Clone(),
-		order:      append([]orgmetadata.OrderOption{}, omq.order...),
-		inters:     append([]Interceptor{}, omq.inters...),
-		predicates: append([]predicate.OrgMetadata{}, omq.predicates...),
+		config:       omq.config,
+		ctx:          omq.ctx.Clone(),
+		order:        append([]orgmetadata.OrderOption{}, omq.order...),
+		inters:       append([]Interceptor{}, omq.inters...),
+		predicates:   append([]predicate.OrgMetadata{}, omq.predicates...),
+		withMetadata: omq.withMetadata.Clone(),
 		// clone intermediate query.
 		sql:       omq.sql.Clone(),
 		path:      omq.path,
 		modifiers: append([]func(*sql.Selector){}, omq.modifiers...),
 	}
+}
+
+// WithMetadata tells the query-builder to eager-load the nodes that are connected to
+// the "metadata" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMetadataQuery) WithMetadata(opts ...func(*MetadataQuery)) *OrgMetadataQuery {
+	query := (&MetadataClient{config: omq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	omq.withMetadata = query
+	return omq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -334,8 +371,11 @@ func (omq *OrgMetadataQuery) prepareQuery(ctx context.Context) error {
 
 func (omq *OrgMetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgMetadata, error) {
 	var (
-		nodes = []*OrgMetadata{}
-		_spec = omq.querySpec()
+		nodes       = []*OrgMetadata{}
+		_spec       = omq.querySpec()
+		loadedTypes = [1]bool{
+			omq.withMetadata != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrgMetadata).scanValues(nil, columns)
@@ -343,6 +383,7 @@ func (omq *OrgMetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &OrgMetadata{config: omq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(omq.modifiers) > 0 {
@@ -357,7 +398,46 @@ func (omq *OrgMetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := omq.withMetadata; query != nil {
+		if err := omq.loadMetadata(ctx, query, nodes,
+			func(n *OrgMetadata) { n.Edges.Metadata = []*Metadata{} },
+			func(n *OrgMetadata, e *Metadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (omq *OrgMetadataQuery) loadMetadata(ctx context.Context, query *MetadataQuery, nodes []*OrgMetadata, init func(*OrgMetadata), assign func(*OrgMetadata, *Metadata)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*OrgMetadata)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Metadata(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(orgmetadata.MetadataColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.org_metadata_metadata
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "org_metadata_metadata" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "org_metadata_metadata" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (omq *OrgMetadataQuery) sqlCount(ctx context.Context) (int, error) {

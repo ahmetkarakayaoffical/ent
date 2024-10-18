@@ -12,12 +12,12 @@ const (
 	Label = "metadata"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// FieldValue holds the string denoting the value field in the database.
 	FieldValue = "value"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeOrg holds the string denoting the org edge name in mutations.
+	EdgeOrg = "org"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
 	AgentFieldID = "oid"
 	// Table holds the table name of the metadata in the database.
@@ -29,12 +29,18 @@ const (
 	OwnerInverseTable = "agents"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "agent_metadata"
+	// OrgTable is the table that holds the org relation/edge.
+	OrgTable = "metadata"
+	// OrgInverseTable is the table name for the OrgMetadata entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmetadata" package.
+	OrgInverseTable = "org_metadata"
+	// OrgColumn is the table column denoting the org relation/edge.
+	OrgColumn = "org_metadata_metadata"
 )
 
 // Columns holds all SQL columns for metadata fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
 	FieldValue,
 }
 
@@ -42,6 +48,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"agent_metadata",
+	"org_metadata_metadata",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -67,11 +74,6 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
 // ByValue orders the results by the value field.
 func ByValue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldValue, opts...).ToFunc()
@@ -83,10 +85,24 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByOrgField orders the results by org field.
+func ByOrgField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, AgentFieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newOrgStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrgTable, OrgColumn),
 	)
 }

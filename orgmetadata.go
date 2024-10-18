@@ -19,8 +19,29 @@ type OrgMetadata struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Description holds the value of the "description" field.
-	Description  string `json:"description,omitempty"`
+	Description string `json:"description,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the OrgMetadataQuery when eager-loading is set.
+	Edges        OrgMetadataEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// OrgMetadataEdges holds the relations/edges for other nodes in the graph.
+type OrgMetadataEdges struct {
+	// Metadata holds the value of the metadata edge.
+	Metadata []*Metadata `json:"metadata,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// MetadataOrErr returns the Metadata value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgMetadataEdges) MetadataOrErr() ([]*Metadata, error) {
+	if e.loadedTypes[0] {
+		return e.Metadata, nil
+	}
+	return nil, &NotLoadedError{edge: "metadata"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -76,6 +97,11 @@ func (om *OrgMetadata) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (om *OrgMetadata) Value(name string) (ent.Value, error) {
 	return om.selectValues.Get(name)
+}
+
+// QueryMetadata queries the "metadata" edge of the OrgMetadata entity.
+func (om *OrgMetadata) QueryMetadata() *MetadataQuery {
+	return NewOrgMetadataClient(om.config).QueryMetadata(om)
 }
 
 // Update returns a builder for updating this OrgMetadata.

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
@@ -62,9 +63,45 @@ func (omu *OrgMetadataUpdate) ClearDescription() *OrgMetadataUpdate {
 	return omu
 }
 
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by IDs.
+func (omu *OrgMetadataUpdate) AddMetadatumIDs(ids ...int) *OrgMetadataUpdate {
+	omu.mutation.AddMetadatumIDs(ids...)
+	return omu
+}
+
+// AddMetadata adds the "metadata" edges to the Metadata entity.
+func (omu *OrgMetadataUpdate) AddMetadata(m ...*Metadata) *OrgMetadataUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return omu.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the OrgMetadataMutation object of the builder.
 func (omu *OrgMetadataUpdate) Mutation() *OrgMetadataMutation {
 	return omu.mutation
+}
+
+// ClearMetadata clears all "metadata" edges to the Metadata entity.
+func (omu *OrgMetadataUpdate) ClearMetadata() *OrgMetadataUpdate {
+	omu.mutation.ClearMetadata()
+	return omu
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to Metadata entities by IDs.
+func (omu *OrgMetadataUpdate) RemoveMetadatumIDs(ids ...int) *OrgMetadataUpdate {
+	omu.mutation.RemoveMetadatumIDs(ids...)
+	return omu
+}
+
+// RemoveMetadata removes "metadata" edges to Metadata entities.
+func (omu *OrgMetadataUpdate) RemoveMetadata(m ...*Metadata) *OrgMetadataUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return omu.RemoveMetadatumIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -131,6 +168,51 @@ func (omu *OrgMetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if omu.mutation.DescriptionCleared() {
 		_spec.ClearField(orgmetadata.FieldDescription, field.TypeString)
 	}
+	if omu.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omu.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !omu.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omu.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(omu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, omu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -187,9 +269,45 @@ func (omuo *OrgMetadataUpdateOne) ClearDescription() *OrgMetadataUpdateOne {
 	return omuo
 }
 
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by IDs.
+func (omuo *OrgMetadataUpdateOne) AddMetadatumIDs(ids ...int) *OrgMetadataUpdateOne {
+	omuo.mutation.AddMetadatumIDs(ids...)
+	return omuo
+}
+
+// AddMetadata adds the "metadata" edges to the Metadata entity.
+func (omuo *OrgMetadataUpdateOne) AddMetadata(m ...*Metadata) *OrgMetadataUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return omuo.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the OrgMetadataMutation object of the builder.
 func (omuo *OrgMetadataUpdateOne) Mutation() *OrgMetadataMutation {
 	return omuo.mutation
+}
+
+// ClearMetadata clears all "metadata" edges to the Metadata entity.
+func (omuo *OrgMetadataUpdateOne) ClearMetadata() *OrgMetadataUpdateOne {
+	omuo.mutation.ClearMetadata()
+	return omuo
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to Metadata entities by IDs.
+func (omuo *OrgMetadataUpdateOne) RemoveMetadatumIDs(ids ...int) *OrgMetadataUpdateOne {
+	omuo.mutation.RemoveMetadatumIDs(ids...)
+	return omuo
+}
+
+// RemoveMetadata removes "metadata" edges to Metadata entities.
+func (omuo *OrgMetadataUpdateOne) RemoveMetadata(m ...*Metadata) *OrgMetadataUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return omuo.RemoveMetadatumIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgMetadataUpdate builder.
@@ -285,6 +403,51 @@ func (omuo *OrgMetadataUpdateOne) sqlSave(ctx context.Context) (_node *OrgMetada
 	}
 	if omuo.mutation.DescriptionCleared() {
 		_spec.ClearField(orgmetadata.FieldDescription, field.TypeString)
+	}
+	if omuo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omuo.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !omuo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omuo.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(omuo.modifiers...)
 	_node = &OrgMetadata{config: omuo.config}

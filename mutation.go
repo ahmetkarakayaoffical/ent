@@ -6141,11 +6141,12 @@ type MetadataMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	name          *string
 	value         *string
 	clearedFields map[string]struct{}
 	owner         *string
 	clearedowner  bool
+	org           *int
+	clearedorg    bool
 	done          bool
 	oldValue      func(context.Context) (*Metadata, error)
 	predicates    []predicate.Metadata
@@ -6249,42 +6250,6 @@ func (m *MetadataMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *MetadataMutation) SetName(s string) {
-	m.name = &s
-}
-
-// Name returns the value of the "name" field in the mutation.
-func (m *MetadataMutation) Name() (r string, exists bool) {
-	v := m.name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldName returns the old "name" field's value of the Metadata entity.
-// If the Metadata object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MetadataMutation) OldName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
-	}
-	return oldValue.Name, nil
-}
-
-// ResetName resets all changes to the "name" field.
-func (m *MetadataMutation) ResetName() {
-	m.name = nil
-}
-
 // SetValue sets the "value" field.
 func (m *MetadataMutation) SetValue(s string) {
 	m.value = &s
@@ -6360,6 +6325,45 @@ func (m *MetadataMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// SetOrgID sets the "org" edge to the OrgMetadata entity by id.
+func (m *MetadataMutation) SetOrgID(id int) {
+	m.org = &id
+}
+
+// ClearOrg clears the "org" edge to the OrgMetadata entity.
+func (m *MetadataMutation) ClearOrg() {
+	m.clearedorg = true
+}
+
+// OrgCleared reports if the "org" edge to the OrgMetadata entity was cleared.
+func (m *MetadataMutation) OrgCleared() bool {
+	return m.clearedorg
+}
+
+// OrgID returns the "org" edge ID in the mutation.
+func (m *MetadataMutation) OrgID() (id int, exists bool) {
+	if m.org != nil {
+		return *m.org, true
+	}
+	return
+}
+
+// OrgIDs returns the "org" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrgID instead. It exists only for internal usage by the builders.
+func (m *MetadataMutation) OrgIDs() (ids []int) {
+	if id := m.org; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrg resets all changes to the "org" edge.
+func (m *MetadataMutation) ResetOrg() {
+	m.org = nil
+	m.clearedorg = false
+}
+
 // Where appends a list predicates to the MetadataMutation builder.
 func (m *MetadataMutation) Where(ps ...predicate.Metadata) {
 	m.predicates = append(m.predicates, ps...)
@@ -6394,10 +6398,7 @@ func (m *MetadataMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MetadataMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m.name != nil {
-		fields = append(fields, metadata.FieldName)
-	}
+	fields := make([]string, 0, 1)
 	if m.value != nil {
 		fields = append(fields, metadata.FieldValue)
 	}
@@ -6409,8 +6410,6 @@ func (m *MetadataMutation) Fields() []string {
 // schema.
 func (m *MetadataMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case metadata.FieldName:
-		return m.Name()
 	case metadata.FieldValue:
 		return m.Value()
 	}
@@ -6422,8 +6421,6 @@ func (m *MetadataMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *MetadataMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case metadata.FieldName:
-		return m.OldName(ctx)
 	case metadata.FieldValue:
 		return m.OldValue(ctx)
 	}
@@ -6435,13 +6432,6 @@ func (m *MetadataMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *MetadataMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case metadata.FieldName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetName(v)
-		return nil
 	case metadata.FieldValue:
 		v, ok := value.(string)
 		if !ok {
@@ -6498,9 +6488,6 @@ func (m *MetadataMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *MetadataMutation) ResetField(name string) error {
 	switch name {
-	case metadata.FieldName:
-		m.ResetName()
-		return nil
 	case metadata.FieldValue:
 		m.ResetValue()
 		return nil
@@ -6510,9 +6497,12 @@ func (m *MetadataMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MetadataMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.owner != nil {
 		edges = append(edges, metadata.EdgeOwner)
+	}
+	if m.org != nil {
+		edges = append(edges, metadata.EdgeOrg)
 	}
 	return edges
 }
@@ -6525,13 +6515,17 @@ func (m *MetadataMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case metadata.EdgeOrg:
+		if id := m.org; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MetadataMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	return edges
 }
 
@@ -6543,9 +6537,12 @@ func (m *MetadataMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MetadataMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedowner {
 		edges = append(edges, metadata.EdgeOwner)
+	}
+	if m.clearedorg {
+		edges = append(edges, metadata.EdgeOrg)
 	}
 	return edges
 }
@@ -6556,6 +6553,8 @@ func (m *MetadataMutation) EdgeCleared(name string) bool {
 	switch name {
 	case metadata.EdgeOwner:
 		return m.clearedowner
+	case metadata.EdgeOrg:
+		return m.clearedorg
 	}
 	return false
 }
@@ -6567,6 +6566,9 @@ func (m *MetadataMutation) ClearEdge(name string) error {
 	case metadata.EdgeOwner:
 		m.ClearOwner()
 		return nil
+	case metadata.EdgeOrg:
+		m.ClearOrg()
+		return nil
 	}
 	return fmt.Errorf("unknown Metadata unique edge %s", name)
 }
@@ -6577,6 +6579,9 @@ func (m *MetadataMutation) ResetEdge(name string) error {
 	switch name {
 	case metadata.EdgeOwner:
 		m.ResetOwner()
+		return nil
+	case metadata.EdgeOrg:
+		m.ResetOrg()
 		return nil
 	}
 	return fmt.Errorf("unknown Metadata edge %s", name)
@@ -9011,15 +9016,18 @@ func (m *OperatingSystemMutation) ResetEdge(name string) error {
 // OrgMetadataMutation represents an operation that mutates the OrgMetadata nodes in the graph.
 type OrgMetadataMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	name          *string
-	description   *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*OrgMetadata, error)
-	predicates    []predicate.OrgMetadata
+	op              Op
+	typ             string
+	id              *int
+	name            *string
+	description     *string
+	clearedFields   map[string]struct{}
+	metadata        map[int]struct{}
+	removedmetadata map[int]struct{}
+	clearedmetadata bool
+	done            bool
+	oldValue        func(context.Context) (*OrgMetadata, error)
+	predicates      []predicate.OrgMetadata
 }
 
 var _ ent.Mutation = (*OrgMetadataMutation)(nil)
@@ -9205,6 +9213,60 @@ func (m *OrgMetadataMutation) ResetDescription() {
 	delete(m.clearedFields, orgmetadata.FieldDescription)
 }
 
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by ids.
+func (m *OrgMetadataMutation) AddMetadatumIDs(ids ...int) {
+	if m.metadata == nil {
+		m.metadata = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.metadata[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMetadata clears the "metadata" edge to the Metadata entity.
+func (m *OrgMetadataMutation) ClearMetadata() {
+	m.clearedmetadata = true
+}
+
+// MetadataCleared reports if the "metadata" edge to the Metadata entity was cleared.
+func (m *OrgMetadataMutation) MetadataCleared() bool {
+	return m.clearedmetadata
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to the Metadata entity by IDs.
+func (m *OrgMetadataMutation) RemoveMetadatumIDs(ids ...int) {
+	if m.removedmetadata == nil {
+		m.removedmetadata = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.metadata, ids[i])
+		m.removedmetadata[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMetadata returns the removed IDs of the "metadata" edge to the Metadata entity.
+func (m *OrgMetadataMutation) RemovedMetadataIDs() (ids []int) {
+	for id := range m.removedmetadata {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MetadataIDs returns the "metadata" edge IDs in the mutation.
+func (m *OrgMetadataMutation) MetadataIDs() (ids []int) {
+	for id := range m.metadata {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMetadata resets all changes to the "metadata" edge.
+func (m *OrgMetadataMutation) ResetMetadata() {
+	m.metadata = nil
+	m.clearedmetadata = false
+	m.removedmetadata = nil
+}
+
 // Where appends a list predicates to the OrgMetadataMutation builder.
 func (m *OrgMetadataMutation) Where(ps ...predicate.OrgMetadata) {
 	m.predicates = append(m.predicates, ps...)
@@ -9364,49 +9426,85 @@ func (m *OrgMetadataMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrgMetadataMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.metadata != nil {
+		edges = append(edges, orgmetadata.EdgeMetadata)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *OrgMetadataMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case orgmetadata.EdgeMetadata:
+		ids := make([]ent.Value, 0, len(m.metadata))
+		for id := range m.metadata {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrgMetadataMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedmetadata != nil {
+		edges = append(edges, orgmetadata.EdgeMetadata)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *OrgMetadataMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case orgmetadata.EdgeMetadata:
+		ids := make([]ent.Value, 0, len(m.removedmetadata))
+		for id := range m.removedmetadata {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrgMetadataMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedmetadata {
+		edges = append(edges, orgmetadata.EdgeMetadata)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *OrgMetadataMutation) EdgeCleared(name string) bool {
+	switch name {
+	case orgmetadata.EdgeMetadata:
+		return m.clearedmetadata
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *OrgMetadataMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown OrgMetadata unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *OrgMetadataMutation) ResetEdge(name string) error {
+	switch name {
+	case orgmetadata.EdgeMetadata:
+		m.ResetMetadata()
+		return nil
+	}
 	return fmt.Errorf("unknown OrgMetadata edge %s", name)
 }
 

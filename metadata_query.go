@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/metadata"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
 
@@ -24,6 +25,7 @@ type MetadataQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Metadata
 	withOwner  *AgentQuery
+	withOrg    *OrgMetadataQuery
 	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -77,6 +79,28 @@ func (mq *MetadataQuery) QueryOwner() *AgentQuery {
 			sqlgraph.From(metadata.Table, metadata.FieldID, selector),
 			sqlgraph.To(agent.Table, agent.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, metadata.OwnerTable, metadata.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrg chains the current query on the "org" edge.
+func (mq *MetadataQuery) QueryOrg() *OrgMetadataQuery {
+	query := (&OrgMetadataClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(metadata.Table, metadata.FieldID, selector),
+			sqlgraph.To(orgmetadata.Table, orgmetadata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, metadata.OrgTable, metadata.OrgColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -277,6 +301,7 @@ func (mq *MetadataQuery) Clone() *MetadataQuery {
 		inters:     append([]Interceptor{}, mq.inters...),
 		predicates: append([]predicate.Metadata{}, mq.predicates...),
 		withOwner:  mq.withOwner.Clone(),
+		withOrg:    mq.withOrg.Clone(),
 		// clone intermediate query.
 		sql:       mq.sql.Clone(),
 		path:      mq.path,
@@ -295,18 +320,29 @@ func (mq *MetadataQuery) WithOwner(opts ...func(*AgentQuery)) *MetadataQuery {
 	return mq
 }
 
+// WithOrg tells the query-builder to eager-load the nodes that are connected to
+// the "org" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MetadataQuery) WithOrg(opts ...func(*OrgMetadataQuery)) *MetadataQuery {
+	query := (&OrgMetadataClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withOrg = query
+	return mq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Value string `json:"value,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Metadata.Query().
-//		GroupBy(metadata.FieldName).
+//		GroupBy(metadata.FieldValue).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (mq *MetadataQuery) GroupBy(field string, fields ...string) *MetadataGroupBy {
@@ -324,11 +360,11 @@ func (mq *MetadataQuery) GroupBy(field string, fields ...string) *MetadataGroupB
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Value string `json:"value,omitempty"`
 //	}
 //
 //	client.Metadata.Query().
-//		Select(metadata.FieldName).
+//		Select(metadata.FieldValue).
 //		Scan(ctx, &v)
 func (mq *MetadataQuery) Select(fields ...string) *MetadataSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
@@ -374,11 +410,12 @@ func (mq *MetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Met
 		nodes       = []*Metadata{}
 		withFKs     = mq.withFKs
 		_spec       = mq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			mq.withOwner != nil,
+			mq.withOrg != nil,
 		}
 	)
-	if mq.withOwner != nil {
+	if mq.withOwner != nil || mq.withOrg != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -411,6 +448,12 @@ func (mq *MetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Met
 			return nil, err
 		}
 	}
+	if query := mq.withOrg; query != nil {
+		if err := mq.loadOrg(ctx, query, nodes, nil,
+			func(n *Metadata, e *OrgMetadata) { n.Edges.Org = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
@@ -439,6 +482,38 @@ func (mq *MetadataQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "agent_metadata" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (mq *MetadataQuery) loadOrg(ctx context.Context, query *OrgMetadataQuery, nodes []*Metadata, init func(*Metadata), assign func(*Metadata, *OrgMetadata)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Metadata)
+	for i := range nodes {
+		if nodes[i].org_metadata_metadata == nil {
+			continue
+		}
+		fk := *nodes[i].org_metadata_metadata
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(orgmetadata.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "org_metadata_metadata" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

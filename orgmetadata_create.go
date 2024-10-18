@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/doncicuto/openuem_ent/metadata"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 )
 
@@ -39,6 +40,21 @@ func (omc *OrgMetadataCreate) SetNillableDescription(s *string) *OrgMetadataCrea
 		omc.SetDescription(*s)
 	}
 	return omc
+}
+
+// AddMetadatumIDs adds the "metadata" edge to the Metadata entity by IDs.
+func (omc *OrgMetadataCreate) AddMetadatumIDs(ids ...int) *OrgMetadataCreate {
+	omc.mutation.AddMetadatumIDs(ids...)
+	return omc
+}
+
+// AddMetadata adds the "metadata" edges to the Metadata entity.
+func (omc *OrgMetadataCreate) AddMetadata(m ...*Metadata) *OrgMetadataCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return omc.AddMetadatumIDs(ids...)
 }
 
 // Mutation returns the OrgMetadataMutation object of the builder.
@@ -117,6 +133,22 @@ func (omc *OrgMetadataCreate) createSpec() (*OrgMetadata, *sqlgraph.CreateSpec) 
 	if value, ok := omc.mutation.Description(); ok {
 		_spec.SetField(orgmetadata.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if nodes := omc.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgmetadata.MetadataTable,
+			Columns: []string{orgmetadata.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

@@ -166,9 +166,9 @@ var (
 	// MetadataColumns holds the columns for the "metadata" table.
 	MetadataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
 		{Name: "value", Type: field.TypeString},
 		{Name: "agent_metadata", Type: field.TypeString},
+		{Name: "org_metadata_metadata", Type: field.TypeInt},
 	}
 	// MetadataTable holds the schema information for the "metadata" table.
 	MetadataTable = &schema.Table{
@@ -178,21 +178,15 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "metadata_agents_metadata",
-				Columns:    []*schema.Column{MetadataColumns[3]},
+				Columns:    []*schema.Column{MetadataColumns[2]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
-		},
-		Indexes: []*schema.Index{
 			{
-				Name:    "metadata_name_value",
-				Unique:  false,
-				Columns: []*schema.Column{MetadataColumns[1], MetadataColumns[2]},
-			},
-			{
-				Name:    "metadata_name_agent_metadata",
-				Unique:  true,
-				Columns: []*schema.Column{MetadataColumns[1], MetadataColumns[3]},
+				Symbol:     "metadata_org_metadata_metadata",
+				Columns:    []*schema.Column{MetadataColumns[3]},
+				RefColumns: []*schema.Column{OrgMetadataColumns[0]},
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -556,6 +550,7 @@ func init() {
 	DeploymentsTable.ForeignKeys[0].RefTable = AgentsTable
 	LogicalDisksTable.ForeignKeys[0].RefTable = AgentsTable
 	MetadataTable.ForeignKeys[0].RefTable = AgentsTable
+	MetadataTable.ForeignKeys[1].RefTable = OrgMetadataTable
 	MonitorsTable.ForeignKeys[0].RefTable = AgentsTable
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable

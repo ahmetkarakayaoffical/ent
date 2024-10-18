@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/metadata"
+	"github.com/doncicuto/openuem_ent/orgmetadata"
 )
 
 // MetadataCreate is the builder for creating a Metadata entity.
@@ -20,12 +21,6 @@ type MetadataCreate struct {
 	mutation *MetadataMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
-}
-
-// SetName sets the "name" field.
-func (mc *MetadataCreate) SetName(s string) *MetadataCreate {
-	mc.mutation.SetName(s)
-	return mc
 }
 
 // SetValue sets the "value" field.
@@ -43,6 +38,17 @@ func (mc *MetadataCreate) SetOwnerID(id string) *MetadataCreate {
 // SetOwner sets the "owner" edge to the Agent entity.
 func (mc *MetadataCreate) SetOwner(a *Agent) *MetadataCreate {
 	return mc.SetOwnerID(a.ID)
+}
+
+// SetOrgID sets the "org" edge to the OrgMetadata entity by ID.
+func (mc *MetadataCreate) SetOrgID(id int) *MetadataCreate {
+	mc.mutation.SetOrgID(id)
+	return mc
+}
+
+// SetOrg sets the "org" edge to the OrgMetadata entity.
+func (mc *MetadataCreate) SetOrg(o *OrgMetadata) *MetadataCreate {
+	return mc.SetOrgID(o.ID)
 }
 
 // Mutation returns the MetadataMutation object of the builder.
@@ -79,14 +85,14 @@ func (mc *MetadataCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (mc *MetadataCreate) check() error {
-	if _, ok := mc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`openuem_ent: missing required field "Metadata.name"`)}
-	}
 	if _, ok := mc.mutation.Value(); !ok {
 		return &ValidationError{Name: "value", err: errors.New(`openuem_ent: missing required field "Metadata.value"`)}
 	}
 	if len(mc.mutation.OwnerIDs()) == 0 {
 		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Metadata.owner"`)}
+	}
+	if len(mc.mutation.OrgIDs()) == 0 {
+		return &ValidationError{Name: "org", err: errors.New(`openuem_ent: missing required edge "Metadata.org"`)}
 	}
 	return nil
 }
@@ -115,10 +121,6 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 		_spec = sqlgraph.NewCreateSpec(metadata.Table, sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = mc.conflict
-	if value, ok := mc.mutation.Name(); ok {
-		_spec.SetField(metadata.FieldName, field.TypeString, value)
-		_node.Name = value
-	}
 	if value, ok := mc.mutation.Value(); ok {
 		_spec.SetField(metadata.FieldValue, field.TypeString, value)
 		_node.Value = value
@@ -140,6 +142,23 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 		_node.agent_metadata = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := mc.mutation.OrgIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   metadata.OrgTable,
+			Columns: []string{metadata.OrgColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.org_metadata_metadata = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -147,7 +166,7 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Metadata.Create().
-//		SetName(v).
+//		SetValue(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -156,7 +175,7 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.MetadataUpsert) {
-//			SetName(v+v).
+//			SetValue(v+v).
 //		}).
 //		Exec(ctx)
 func (mc *MetadataCreate) OnConflict(opts ...sql.ConflictOption) *MetadataUpsertOne {
@@ -191,18 +210,6 @@ type (
 		*sql.UpdateSet
 	}
 )
-
-// SetName sets the "name" field.
-func (u *MetadataUpsert) SetName(v string) *MetadataUpsert {
-	u.Set(metadata.FieldName, v)
-	return u
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *MetadataUpsert) UpdateName() *MetadataUpsert {
-	u.SetExcluded(metadata.FieldName)
-	return u
-}
 
 // SetValue sets the "value" field.
 func (u *MetadataUpsert) SetValue(v string) *MetadataUpsert {
@@ -254,20 +261,6 @@ func (u *MetadataUpsertOne) Update(set func(*MetadataUpsert)) *MetadataUpsertOne
 		set(&MetadataUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetName sets the "name" field.
-func (u *MetadataUpsertOne) SetName(v string) *MetadataUpsertOne {
-	return u.Update(func(s *MetadataUpsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *MetadataUpsertOne) UpdateName() *MetadataUpsertOne {
-	return u.Update(func(s *MetadataUpsert) {
-		s.UpdateName()
-	})
 }
 
 // SetValue sets the "value" field.
@@ -418,7 +411,7 @@ func (mcb *MetadataCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.MetadataUpsert) {
-//			SetName(v+v).
+//			SetValue(v+v).
 //		}).
 //		Exec(ctx)
 func (mcb *MetadataCreateBulk) OnConflict(opts ...sql.ConflictOption) *MetadataUpsertBulk {
@@ -485,20 +478,6 @@ func (u *MetadataUpsertBulk) Update(set func(*MetadataUpsert)) *MetadataUpsertBu
 		set(&MetadataUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetName sets the "name" field.
-func (u *MetadataUpsertBulk) SetName(v string) *MetadataUpsertBulk {
-	return u.Update(func(s *MetadataUpsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *MetadataUpsertBulk) UpdateName() *MetadataUpsertBulk {
-	return u.Update(func(s *MetadataUpsert) {
-		s.UpdateName()
-	})
 }
 
 // SetValue sets the "value" field.
