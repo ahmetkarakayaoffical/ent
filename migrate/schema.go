@@ -189,6 +189,13 @@ var (
 				OnDelete:   schema.Cascade,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "metadata_agent_metadata",
+				Unique:  true,
+				Columns: []*schema.Column{MetadataColumns[2]},
+			},
+		},
 	}
 	// MonitorsColumns holds the columns for the "monitors" table.
 	MonitorsColumns = []*schema.Column{
