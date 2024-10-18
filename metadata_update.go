@@ -63,14 +63,6 @@ func (mu *MetadataUpdate) SetOwnerID(id string) *MetadataUpdate {
 	return mu
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
-func (mu *MetadataUpdate) SetNillableOwnerID(id *string) *MetadataUpdate {
-	if id != nil {
-		mu = mu.SetOwnerID(*id)
-	}
-	return mu
-}
-
 // SetOwner sets the "owner" edge to the Agent entity.
 func (mu *MetadataUpdate) SetOwner(a *Agent) *MetadataUpdate {
 	return mu.SetOwnerID(a.ID)
@@ -114,6 +106,14 @@ func (mu *MetadataUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (mu *MetadataUpdate) check() error {
+	if mu.mutation.OwnerCleared() && len(mu.mutation.OwnerIDs()) > 0 {
+		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (mu *MetadataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MetadataUpdate {
 	mu.modifiers = append(mu.modifiers, modifiers...)
@@ -121,6 +121,9 @@ func (mu *MetadataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Metad
 }
 
 func (mu *MetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := mu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(metadata.Table, metadata.Columns, sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -220,14 +223,6 @@ func (muo *MetadataUpdateOne) SetOwnerID(id string) *MetadataUpdateOne {
 	return muo
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
-func (muo *MetadataUpdateOne) SetNillableOwnerID(id *string) *MetadataUpdateOne {
-	if id != nil {
-		muo = muo.SetOwnerID(*id)
-	}
-	return muo
-}
-
 // SetOwner sets the "owner" edge to the Agent entity.
 func (muo *MetadataUpdateOne) SetOwner(a *Agent) *MetadataUpdateOne {
 	return muo.SetOwnerID(a.ID)
@@ -284,6 +279,14 @@ func (muo *MetadataUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (muo *MetadataUpdateOne) check() error {
+	if muo.mutation.OwnerCleared() && len(muo.mutation.OwnerIDs()) > 0 {
+		return errors.New(`openuem_ent: clearing a required unique edge "Metadata.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (muo *MetadataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MetadataUpdateOne {
 	muo.modifiers = append(muo.modifiers, modifiers...)
@@ -291,6 +294,9 @@ func (muo *MetadataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *M
 }
 
 func (muo *MetadataUpdateOne) sqlSave(ctx context.Context) (_node *Metadata, err error) {
+	if err := muo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(metadata.Table, metadata.Columns, sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt))
 	id, ok := muo.mutation.ID()
 	if !ok {

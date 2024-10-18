@@ -40,14 +40,6 @@ func (mc *MetadataCreate) SetOwnerID(id string) *MetadataCreate {
 	return mc
 }
 
-// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
-func (mc *MetadataCreate) SetNillableOwnerID(id *string) *MetadataCreate {
-	if id != nil {
-		mc = mc.SetOwnerID(*id)
-	}
-	return mc
-}
-
 // SetOwner sets the "owner" edge to the Agent entity.
 func (mc *MetadataCreate) SetOwner(a *Agent) *MetadataCreate {
 	return mc.SetOwnerID(a.ID)
@@ -92,6 +84,9 @@ func (mc *MetadataCreate) check() error {
 	}
 	if _, ok := mc.mutation.Value(); !ok {
 		return &ValidationError{Name: "value", err: errors.New(`openuem_ent: missing required field "Metadata.value"`)}
+	}
+	if len(mc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Metadata.owner"`)}
 	}
 	return nil
 }

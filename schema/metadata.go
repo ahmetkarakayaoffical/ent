@@ -23,7 +23,7 @@ func (Metadata) Fields() []ent.Field {
 // Edges of the Metadata.
 func (Metadata) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Agent.Type).Ref("metadata").Unique(),
+		edge.From("owner", Agent.Type).Ref("metadata").Unique().Required(),
 	}
 }
 

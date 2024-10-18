@@ -168,7 +168,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "value", Type: field.TypeString},
-		{Name: "agent_metadata", Type: field.TypeString, Nullable: true},
+		{Name: "agent_metadata", Type: field.TypeString},
 	}
 	// MetadataTable holds the schema information for the "metadata" table.
 	MetadataTable = &schema.Table{
