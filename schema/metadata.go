@@ -30,6 +30,6 @@ func (Metadata) Edges() []ent.Edge {
 // Indexes of the Metadata.
 func (Metadata) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Edges("org").Edges("owner").Unique(),
+		index.Edges("org", "owner").Unique(),
 	}
 }

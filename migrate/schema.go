@@ -191,9 +191,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "metadata_agent_metadata",
+				Name:    "metadata_org_metadata_metadata_agent_metadata",
 				Unique:  true,
-				Columns: []*schema.Column{MetadataColumns[2]},
+				Columns: []*schema.Column{MetadataColumns[3], MetadataColumns[2]},
 			},
 		},
 	}
