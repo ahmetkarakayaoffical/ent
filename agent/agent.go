@@ -179,11 +179,13 @@ const (
 	// TagsInverseTable is the table name for the Tag entity.
 	// It exists in this package in order to avoid circular dependency with the "tag" package.
 	TagsInverseTable = "tags"
-	// MetadataTable is the table that holds the metadata relation/edge. The primary key declared below.
-	MetadataTable = "agent_metadata"
+	// MetadataTable is the table that holds the metadata relation/edge.
+	MetadataTable = "metadata"
 	// MetadataInverseTable is the table name for the Metadata entity.
 	// It exists in this package in order to avoid circular dependency with the "metadata" package.
 	MetadataInverseTable = "metadata"
+	// MetadataColumn is the table column denoting the metadata relation/edge.
+	MetadataColumn = "agent_metadata"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -205,9 +207,6 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"agent_id", "tag_id"}
-	// MetadataPrimaryKey and MetadataColumn2 are the table columns denoting the
-	// primary key for the metadata relation (M2M).
-	MetadataPrimaryKey = []string{"agent_id", "metadata_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -559,6 +558,6 @@ func newMetadataStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MetadataInverseTable, MetadataFieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, MetadataTable, MetadataPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
 	)
 }

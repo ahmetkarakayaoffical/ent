@@ -57,19 +57,23 @@ func (mu *MetadataUpdate) SetNillableValue(s *string) *MetadataUpdate {
 	return mu
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (mu *MetadataUpdate) AddOwnerIDs(ids ...string) *MetadataUpdate {
-	mu.mutation.AddOwnerIDs(ids...)
+// SetOwnerID sets the "owner" edge to the Agent entity by ID.
+func (mu *MetadataUpdate) SetOwnerID(id string) *MetadataUpdate {
+	mu.mutation.SetOwnerID(id)
 	return mu
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (mu *MetadataUpdate) AddOwner(a ...*Agent) *MetadataUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
+func (mu *MetadataUpdate) SetNillableOwnerID(id *string) *MetadataUpdate {
+	if id != nil {
+		mu = mu.SetOwnerID(*id)
 	}
-	return mu.AddOwnerIDs(ids...)
+	return mu
+}
+
+// SetOwner sets the "owner" edge to the Agent entity.
+func (mu *MetadataUpdate) SetOwner(a *Agent) *MetadataUpdate {
+	return mu.SetOwnerID(a.ID)
 }
 
 // Mutation returns the MetadataMutation object of the builder.
@@ -77,25 +81,10 @@ func (mu *MetadataUpdate) Mutation() *MetadataMutation {
 	return mu.mutation
 }
 
-// ClearOwner clears all "owner" edges to the Agent entity.
+// ClearOwner clears the "owner" edge to the Agent entity.
 func (mu *MetadataUpdate) ClearOwner() *MetadataUpdate {
 	mu.mutation.ClearOwner()
 	return mu
-}
-
-// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
-func (mu *MetadataUpdate) RemoveOwnerIDs(ids ...string) *MetadataUpdate {
-	mu.mutation.RemoveOwnerIDs(ids...)
-	return mu
-}
-
-// RemoveOwner removes "owner" edges to Agent entities.
-func (mu *MetadataUpdate) RemoveOwner(a ...*Agent) *MetadataUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return mu.RemoveOwnerIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -148,39 +137,23 @@ func (mu *MetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
+			Columns: []string{metadata.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := mu.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !mu.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
+			Columns: []string{metadata.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -241,19 +214,23 @@ func (muo *MetadataUpdateOne) SetNillableValue(s *string) *MetadataUpdateOne {
 	return muo
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (muo *MetadataUpdateOne) AddOwnerIDs(ids ...string) *MetadataUpdateOne {
-	muo.mutation.AddOwnerIDs(ids...)
+// SetOwnerID sets the "owner" edge to the Agent entity by ID.
+func (muo *MetadataUpdateOne) SetOwnerID(id string) *MetadataUpdateOne {
+	muo.mutation.SetOwnerID(id)
 	return muo
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (muo *MetadataUpdateOne) AddOwner(a ...*Agent) *MetadataUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
+func (muo *MetadataUpdateOne) SetNillableOwnerID(id *string) *MetadataUpdateOne {
+	if id != nil {
+		muo = muo.SetOwnerID(*id)
 	}
-	return muo.AddOwnerIDs(ids...)
+	return muo
+}
+
+// SetOwner sets the "owner" edge to the Agent entity.
+func (muo *MetadataUpdateOne) SetOwner(a *Agent) *MetadataUpdateOne {
+	return muo.SetOwnerID(a.ID)
 }
 
 // Mutation returns the MetadataMutation object of the builder.
@@ -261,25 +238,10 @@ func (muo *MetadataUpdateOne) Mutation() *MetadataMutation {
 	return muo.mutation
 }
 
-// ClearOwner clears all "owner" edges to the Agent entity.
+// ClearOwner clears the "owner" edge to the Agent entity.
 func (muo *MetadataUpdateOne) ClearOwner() *MetadataUpdateOne {
 	muo.mutation.ClearOwner()
 	return muo
-}
-
-// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
-func (muo *MetadataUpdateOne) RemoveOwnerIDs(ids ...string) *MetadataUpdateOne {
-	muo.mutation.RemoveOwnerIDs(ids...)
-	return muo
-}
-
-// RemoveOwner removes "owner" edges to Agent entities.
-func (muo *MetadataUpdateOne) RemoveOwner(a ...*Agent) *MetadataUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return muo.RemoveOwnerIDs(ids...)
 }
 
 // Where appends a list predicates to the MetadataUpdate builder.
@@ -362,39 +324,23 @@ func (muo *MetadataUpdateOne) sqlSave(ctx context.Context) (_node *Metadata, err
 	}
 	if muo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
+			Columns: []string{metadata.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := muo.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !muo.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
+			Columns: []string{metadata.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),

@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/metadata"
 )
 
@@ -22,24 +23,27 @@ type Metadata struct {
 	Value string `json:"value,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MetadataQuery when eager-loading is set.
-	Edges        MetadataEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges          MetadataEdges `json:"edges"`
+	agent_metadata *string
+	selectValues   sql.SelectValues
 }
 
 // MetadataEdges holds the relations/edges for other nodes in the graph.
 type MetadataEdges struct {
 	// Owner holds the value of the owner edge.
-	Owner []*Agent `json:"owner,omitempty"`
+	Owner *Agent `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
-// was not loaded in eager-loading.
-func (e MetadataEdges) OwnerOrErr() ([]*Agent, error) {
-	if e.loadedTypes[0] {
+// was not loaded in eager-loading, or loaded but was not found.
+func (e MetadataEdges) OwnerOrErr() (*Agent, error) {
+	if e.Owner != nil {
 		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: agent.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
 }
@@ -52,6 +56,8 @@ func (*Metadata) scanValues(columns []string) ([]any, error) {
 		case metadata.FieldID:
 			values[i] = new(sql.NullInt64)
 		case metadata.FieldName, metadata.FieldValue:
+			values[i] = new(sql.NullString)
+		case metadata.ForeignKeys[0]: // agent_metadata
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -85,6 +91,13 @@ func (m *Metadata) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field value", values[i])
 			} else if value.Valid {
 				m.Value = value.String
+			}
+		case metadata.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field agent_metadata", values[i])
+			} else if value.Valid {
+				m.agent_metadata = new(string)
+				*m.agent_metadata = value.String
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])

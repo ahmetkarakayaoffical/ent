@@ -6144,8 +6144,7 @@ type MetadataMutation struct {
 	name          *string
 	value         *string
 	clearedFields map[string]struct{}
-	owner         map[string]struct{}
-	removedowner  map[string]struct{}
+	owner         *string
 	clearedowner  bool
 	done          bool
 	oldValue      func(context.Context) (*Metadata, error)
@@ -6322,14 +6321,9 @@ func (m *MetadataMutation) ResetValue() {
 	m.value = nil
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
-func (m *MetadataMutation) AddOwnerIDs(ids ...string) {
-	if m.owner == nil {
-		m.owner = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.owner[ids[i]] = struct{}{}
-	}
+// SetOwnerID sets the "owner" edge to the Agent entity by id.
+func (m *MetadataMutation) SetOwnerID(id string) {
+	m.owner = &id
 }
 
 // ClearOwner clears the "owner" edge to the Agent entity.
@@ -6342,29 +6336,20 @@ func (m *MetadataMutation) OwnerCleared() bool {
 	return m.clearedowner
 }
 
-// RemoveOwnerIDs removes the "owner" edge to the Agent entity by IDs.
-func (m *MetadataMutation) RemoveOwnerIDs(ids ...string) {
-	if m.removedowner == nil {
-		m.removedowner = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.owner, ids[i])
-		m.removedowner[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedOwner returns the removed IDs of the "owner" edge to the Agent entity.
-func (m *MetadataMutation) RemovedOwnerIDs() (ids []string) {
-	for id := range m.removedowner {
-		ids = append(ids, id)
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *MetadataMutation) OwnerID() (id string, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
 	}
 	return
 }
 
 // OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
 func (m *MetadataMutation) OwnerIDs() (ids []string) {
-	for id := range m.owner {
-		ids = append(ids, id)
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -6373,7 +6358,6 @@ func (m *MetadataMutation) OwnerIDs() (ids []string) {
 func (m *MetadataMutation) ResetOwner() {
 	m.owner = nil
 	m.clearedowner = false
-	m.removedowner = nil
 }
 
 // Where appends a list predicates to the MetadataMutation builder.
@@ -6538,11 +6522,9 @@ func (m *MetadataMutation) AddedEdges() []string {
 func (m *MetadataMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case metadata.EdgeOwner:
-		ids := make([]ent.Value, 0, len(m.owner))
-		for id := range m.owner {
-			ids = append(ids, id)
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
 	}
 	return nil
 }
@@ -6550,23 +6532,12 @@ func (m *MetadataMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MetadataMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedowner != nil {
-		edges = append(edges, metadata.EdgeOwner)
-	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *MetadataMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case metadata.EdgeOwner:
-		ids := make([]ent.Value, 0, len(m.removedowner))
-		for id := range m.removedowner {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
@@ -6593,6 +6564,9 @@ func (m *MetadataMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *MetadataMutation) ClearEdge(name string) error {
 	switch name {
+	case metadata.EdgeOwner:
+		m.ClearOwner()
+		return nil
 	}
 	return fmt.Errorf("unknown Metadata unique edge %s", name)
 }

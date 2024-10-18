@@ -34,19 +34,23 @@ func (mc *MetadataCreate) SetValue(s string) *MetadataCreate {
 	return mc
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (mc *MetadataCreate) AddOwnerIDs(ids ...string) *MetadataCreate {
-	mc.mutation.AddOwnerIDs(ids...)
+// SetOwnerID sets the "owner" edge to the Agent entity by ID.
+func (mc *MetadataCreate) SetOwnerID(id string) *MetadataCreate {
+	mc.mutation.SetOwnerID(id)
 	return mc
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (mc *MetadataCreate) AddOwner(a ...*Agent) *MetadataCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+// SetNillableOwnerID sets the "owner" edge to the Agent entity by ID if the given value is not nil.
+func (mc *MetadataCreate) SetNillableOwnerID(id *string) *MetadataCreate {
+	if id != nil {
+		mc = mc.SetOwnerID(*id)
 	}
-	return mc.AddOwnerIDs(ids...)
+	return mc
+}
+
+// SetOwner sets the "owner" edge to the Agent entity.
+func (mc *MetadataCreate) SetOwner(a *Agent) *MetadataCreate {
+	return mc.SetOwnerID(a.ID)
 }
 
 // Mutation returns the MetadataMutation object of the builder.
@@ -126,10 +130,10 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 	}
 	if nodes := mc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   metadata.OwnerTable,
-			Columns: metadata.OwnerPrimaryKey,
+			Columns: []string{metadata.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -138,6 +142,7 @@ func (mc *MetadataCreate) createSpec() (*Metadata, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.agent_metadata = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

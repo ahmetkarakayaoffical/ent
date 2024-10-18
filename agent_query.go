@@ -388,7 +388,7 @@ func (aq *AgentQuery) QueryMetadata() *MetadataQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, selector),
 			sqlgraph.To(metadata.Table, metadata.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, agent.MetadataTable, agent.MetadataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.MetadataTable, agent.MetadataColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -1398,63 +1398,33 @@ func (aq *AgentQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Ag
 	return nil
 }
 func (aq *AgentQuery) loadMetadata(ctx context.Context, query *MetadataQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Metadata)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Agent)
-	nids := make(map[int]map[*Agent]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
 		if init != nil {
-			init(node)
+			init(nodes[i])
 		}
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(agent.MetadataTable)
-		s.Join(joinT).On(s.C(metadata.FieldID), joinT.C(agent.MetadataPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(agent.MetadataPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(agent.MetadataPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := int(values[1].(*sql.NullInt64).Int64)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Agent]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Metadata](ctx, query, qr, query.inters)
+	query.withFKs = true
+	query.Where(predicate.Metadata(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.MetadataColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		fk := n.agent_metadata
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_metadata" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected "metadata" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_metadata" returned %v for node %v`, *fk, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
+		assign(node, n)
 	}
 	return nil
 }

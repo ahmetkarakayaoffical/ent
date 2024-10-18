@@ -695,7 +695,7 @@ func (c *AgentClient) QueryMetadata(a *Agent) *MetadataQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(metadata.Table, metadata.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, agent.MetadataTable, agent.MetadataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.MetadataTable, agent.MetadataColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1722,7 +1722,7 @@ func (c *MetadataClient) QueryOwner(m *Metadata) *AgentQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(metadata.Table, metadata.FieldID, id),
 			sqlgraph.To(agent.Table, agent.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, metadata.OwnerTable, metadata.OwnerPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, metadata.OwnerTable, metadata.OwnerColumn),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil

@@ -1004,7 +1004,7 @@ func HasMetadata() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, MetadataTable, MetadataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
