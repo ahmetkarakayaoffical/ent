@@ -98,6 +98,12 @@ func (uu *UserUpdate) SetNillableCountry(s *string) *UserUpdate {
 	return uu
 }
 
+// ClearCountry clears the value of the "country" field.
+func (uu *UserUpdate) ClearCountry() *UserUpdate {
+	uu.mutation.ClearCountry()
+	return uu
+}
+
 // SetEmailVerified sets the "email_verified" field.
 func (uu *UserUpdate) SetEmailVerified(b bool) *UserUpdate {
 	uu.mutation.SetEmailVerified(b)
@@ -308,6 +314,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Country(); ok {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
 	}
+	if uu.mutation.CountryCleared() {
+		_spec.ClearField(user.FieldCountry, field.TypeString)
+	}
 	if value, ok := uu.mutation.EmailVerified(); ok {
 		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)
 	}
@@ -470,6 +479,12 @@ func (uuo *UserUpdateOne) SetNillableCountry(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetCountry(*s)
 	}
+	return uuo
+}
+
+// ClearCountry clears the value of the "country" field.
+func (uuo *UserUpdateOne) ClearCountry() *UserUpdateOne {
+	uuo.mutation.ClearCountry()
 	return uuo
 }
 
@@ -712,6 +727,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Country(); ok {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
+	}
+	if uuo.mutation.CountryCleared() {
+		_spec.ClearField(user.FieldCountry, field.TypeString)
 	}
 	if value, ok := uuo.mutation.EmailVerified(); ok {
 		_spec.SetField(user.FieldEmailVerified, field.TypeBool, value)

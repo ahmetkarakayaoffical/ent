@@ -477,7 +477,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "phone", Type: field.TypeString, Nullable: true},
-		{Name: "country", Type: field.TypeString},
+		{Name: "country", Type: field.TypeString, Nullable: true},
 		{Name: "email_verified", Type: field.TypeBool, Default: false},
 		{Name: "register", Type: field.TypeString, Default: "users.pending_email_confirmation"},
 		{Name: "cert_clear_password", Type: field.TypeString, Nullable: true},

@@ -15525,9 +15525,22 @@ func (m *UserMutation) OldCountry(ctx context.Context) (v string, err error) {
 	return oldValue.Country, nil
 }
 
+// ClearCountry clears the value of the "country" field.
+func (m *UserMutation) ClearCountry() {
+	m.country = nil
+	m.clearedFields[user.FieldCountry] = struct{}{}
+}
+
+// CountryCleared returns if the "country" field was cleared in this mutation.
+func (m *UserMutation) CountryCleared() bool {
+	_, ok := m.clearedFields[user.FieldCountry]
+	return ok
+}
+
 // ResetCountry resets all changes to the "country" field.
 func (m *UserMutation) ResetCountry() {
 	m.country = nil
+	delete(m.clearedFields, user.FieldCountry)
 }
 
 // SetEmailVerified sets the "email_verified" field.
@@ -16089,6 +16102,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldPhone) {
 		fields = append(fields, user.FieldPhone)
 	}
+	if m.FieldCleared(user.FieldCountry) {
+		fields = append(fields, user.FieldCountry)
+	}
 	if m.FieldCleared(user.FieldCertClearPassword) {
 		fields = append(fields, user.FieldCertClearPassword)
 	}
@@ -16120,6 +16136,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldPhone:
 		m.ClearPhone()
+		return nil
+	case user.FieldCountry:
+		m.ClearCountry()
 		return nil
 	case user.FieldCertClearPassword:
 		m.ClearCertClearPassword()

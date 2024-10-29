@@ -64,6 +64,14 @@ func (uc *UserCreate) SetCountry(s string) *UserCreate {
 	return uc
 }
 
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCountry(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCountry(*s)
+	}
+	return uc
+}
+
 // SetEmailVerified sets the "email_verified" field.
 func (uc *UserCreate) SetEmailVerified(b bool) *UserCreate {
 	uc.mutation.SetEmailVerified(b)
@@ -226,9 +234,6 @@ func (uc *UserCreate) defaults() {
 func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`openuem_ent: missing required field "User.name"`)}
-	}
-	if _, ok := uc.mutation.Country(); !ok {
-		return &ValidationError{Name: "country", err: errors.New(`openuem_ent: missing required field "User.country"`)}
 	}
 	if _, ok := uc.mutation.EmailVerified(); !ok {
 		return &ValidationError{Name: "email_verified", err: errors.New(`openuem_ent: missing required field "User.email_verified"`)}
@@ -445,6 +450,12 @@ func (u *UserUpsert) UpdateCountry() *UserUpsert {
 	return u
 }
 
+// ClearCountry clears the value of the "country" field.
+func (u *UserUpsert) ClearCountry() *UserUpsert {
+	u.SetNull(user.FieldCountry)
+	return u
+}
+
 // SetEmailVerified sets the "email_verified" field.
 func (u *UserUpsert) SetEmailVerified(v bool) *UserUpsert {
 	u.Set(user.FieldEmailVerified, v)
@@ -656,6 +667,13 @@ func (u *UserUpsertOne) SetCountry(v string) *UserUpsertOne {
 func (u *UserUpsertOne) UpdateCountry() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCountry()
+	})
+}
+
+// ClearCountry clears the value of the "country" field.
+func (u *UserUpsertOne) ClearCountry() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCountry()
 	})
 }
 
@@ -1053,6 +1071,13 @@ func (u *UserUpsertBulk) SetCountry(v string) *UserUpsertBulk {
 func (u *UserUpsertBulk) UpdateCountry() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.UpdateCountry()
+	})
+}
+
+// ClearCountry clears the value of the "country" field.
+func (u *UserUpsertBulk) ClearCountry() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearCountry()
 	})
 }
 

@@ -385,6 +385,16 @@ func CountryHasSuffix(v string) predicate.User {
 	return predicate.User(sql.FieldHasSuffix(FieldCountry, v))
 }
 
+// CountryIsNil applies the IsNil predicate on the "country" field.
+func CountryIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCountry))
+}
+
+// CountryNotNil applies the NotNil predicate on the "country" field.
+func CountryNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCountry))
+}
+
 // CountryEqualFold applies the EqualFold predicate on the "country" field.
 func CountryEqualFold(v string) predicate.User {
 	return predicate.User(sql.FieldEqualFold(FieldCountry, v))

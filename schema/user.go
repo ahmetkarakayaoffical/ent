@@ -22,7 +22,7 @@ func (User) Fields() []ent.Field {
 		field.String("name"),
 		field.String("email").Optional(),
 		field.String("phone").Optional(),
-		field.String("country"),
+		field.String("country").Optional(),
 		field.Bool("email_verified").Default(false),
 		field.String("register").Default("users.pending_email_confirmation"),
 		field.String("cert_clear_password").Optional(),
