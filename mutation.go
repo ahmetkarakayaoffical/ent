@@ -11170,34 +11170,39 @@ func (m *SessionsMutation) ResetEdge(name string) error {
 // SettingsMutation represents an operation that mutates the Settings nodes in the graph.
 type SettingsMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	language       *string
-	organization   *string
-	postal_address *string
-	postal_code    *string
-	locality       *string
-	province       *string
-	state          *string
-	country        *string
-	smtp_server    *string
-	smtp_port      *int
-	addsmtp_port   *int
-	smtp_user      *string
-	smtp_password  *string
-	smtp_auth      *string
-	smtp_tls       *bool
-	smtp_starttls  *bool
-	nats_server    *string
-	nats_port      *string
-	message_from   *string
-	created        *time.Time
-	modified       *time.Time
-	clearedFields  map[string]struct{}
-	done           bool
-	oldValue       func(context.Context) (*Settings, error)
-	predicates     []predicate.Settings
+	op                              Op
+	typ                             string
+	id                              *int
+	language                        *string
+	organization                    *string
+	postal_address                  *string
+	postal_code                     *string
+	locality                        *string
+	province                        *string
+	state                           *string
+	country                         *string
+	smtp_server                     *string
+	smtp_port                       *int
+	addsmtp_port                    *int
+	smtp_user                       *string
+	smtp_password                   *string
+	smtp_auth                       *string
+	smtp_tls                        *bool
+	smtp_starttls                   *bool
+	nats_server                     *string
+	nats_port                       *string
+	message_from                    *string
+	max_upload_size                 *string
+	user_cert_years_valid           *int
+	adduser_cert_years_valid        *int
+	nats_request_timeout_seconds    *int
+	addnats_request_timeout_seconds *int
+	created                         *time.Time
+	modified                        *time.Time
+	clearedFields                   map[string]struct{}
+	done                            bool
+	oldValue                        func(context.Context) (*Settings, error)
+	predicates                      []predicate.Settings
 }
 
 var _ ent.Mutation = (*SettingsMutation)(nil)
@@ -12201,6 +12206,195 @@ func (m *SettingsMutation) ResetMessageFrom() {
 	delete(m.clearedFields, settings.FieldMessageFrom)
 }
 
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (m *SettingsMutation) SetMaxUploadSize(s string) {
+	m.max_upload_size = &s
+}
+
+// MaxUploadSize returns the value of the "max_upload_size" field in the mutation.
+func (m *SettingsMutation) MaxUploadSize() (r string, exists bool) {
+	v := m.max_upload_size
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxUploadSize returns the old "max_upload_size" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldMaxUploadSize(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxUploadSize is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxUploadSize requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxUploadSize: %w", err)
+	}
+	return oldValue.MaxUploadSize, nil
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (m *SettingsMutation) ClearMaxUploadSize() {
+	m.max_upload_size = nil
+	m.clearedFields[settings.FieldMaxUploadSize] = struct{}{}
+}
+
+// MaxUploadSizeCleared returns if the "max_upload_size" field was cleared in this mutation.
+func (m *SettingsMutation) MaxUploadSizeCleared() bool {
+	_, ok := m.clearedFields[settings.FieldMaxUploadSize]
+	return ok
+}
+
+// ResetMaxUploadSize resets all changes to the "max_upload_size" field.
+func (m *SettingsMutation) ResetMaxUploadSize() {
+	m.max_upload_size = nil
+	delete(m.clearedFields, settings.FieldMaxUploadSize)
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (m *SettingsMutation) SetUserCertYearsValid(i int) {
+	m.user_cert_years_valid = &i
+	m.adduser_cert_years_valid = nil
+}
+
+// UserCertYearsValid returns the value of the "user_cert_years_valid" field in the mutation.
+func (m *SettingsMutation) UserCertYearsValid() (r int, exists bool) {
+	v := m.user_cert_years_valid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserCertYearsValid returns the old "user_cert_years_valid" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldUserCertYearsValid(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserCertYearsValid is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserCertYearsValid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserCertYearsValid: %w", err)
+	}
+	return oldValue.UserCertYearsValid, nil
+}
+
+// AddUserCertYearsValid adds i to the "user_cert_years_valid" field.
+func (m *SettingsMutation) AddUserCertYearsValid(i int) {
+	if m.adduser_cert_years_valid != nil {
+		*m.adduser_cert_years_valid += i
+	} else {
+		m.adduser_cert_years_valid = &i
+	}
+}
+
+// AddedUserCertYearsValid returns the value that was added to the "user_cert_years_valid" field in this mutation.
+func (m *SettingsMutation) AddedUserCertYearsValid() (r int, exists bool) {
+	v := m.adduser_cert_years_valid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (m *SettingsMutation) ClearUserCertYearsValid() {
+	m.user_cert_years_valid = nil
+	m.adduser_cert_years_valid = nil
+	m.clearedFields[settings.FieldUserCertYearsValid] = struct{}{}
+}
+
+// UserCertYearsValidCleared returns if the "user_cert_years_valid" field was cleared in this mutation.
+func (m *SettingsMutation) UserCertYearsValidCleared() bool {
+	_, ok := m.clearedFields[settings.FieldUserCertYearsValid]
+	return ok
+}
+
+// ResetUserCertYearsValid resets all changes to the "user_cert_years_valid" field.
+func (m *SettingsMutation) ResetUserCertYearsValid() {
+	m.user_cert_years_valid = nil
+	m.adduser_cert_years_valid = nil
+	delete(m.clearedFields, settings.FieldUserCertYearsValid)
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (m *SettingsMutation) SetNatsRequestTimeoutSeconds(i int) {
+	m.nats_request_timeout_seconds = &i
+	m.addnats_request_timeout_seconds = nil
+}
+
+// NatsRequestTimeoutSeconds returns the value of the "nats_request_timeout_seconds" field in the mutation.
+func (m *SettingsMutation) NatsRequestTimeoutSeconds() (r int, exists bool) {
+	v := m.nats_request_timeout_seconds
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNatsRequestTimeoutSeconds returns the old "nats_request_timeout_seconds" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldNatsRequestTimeoutSeconds(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNatsRequestTimeoutSeconds is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNatsRequestTimeoutSeconds requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNatsRequestTimeoutSeconds: %w", err)
+	}
+	return oldValue.NatsRequestTimeoutSeconds, nil
+}
+
+// AddNatsRequestTimeoutSeconds adds i to the "nats_request_timeout_seconds" field.
+func (m *SettingsMutation) AddNatsRequestTimeoutSeconds(i int) {
+	if m.addnats_request_timeout_seconds != nil {
+		*m.addnats_request_timeout_seconds += i
+	} else {
+		m.addnats_request_timeout_seconds = &i
+	}
+}
+
+// AddedNatsRequestTimeoutSeconds returns the value that was added to the "nats_request_timeout_seconds" field in this mutation.
+func (m *SettingsMutation) AddedNatsRequestTimeoutSeconds() (r int, exists bool) {
+	v := m.addnats_request_timeout_seconds
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (m *SettingsMutation) ClearNatsRequestTimeoutSeconds() {
+	m.nats_request_timeout_seconds = nil
+	m.addnats_request_timeout_seconds = nil
+	m.clearedFields[settings.FieldNatsRequestTimeoutSeconds] = struct{}{}
+}
+
+// NatsRequestTimeoutSecondsCleared returns if the "nats_request_timeout_seconds" field was cleared in this mutation.
+func (m *SettingsMutation) NatsRequestTimeoutSecondsCleared() bool {
+	_, ok := m.clearedFields[settings.FieldNatsRequestTimeoutSeconds]
+	return ok
+}
+
+// ResetNatsRequestTimeoutSeconds resets all changes to the "nats_request_timeout_seconds" field.
+func (m *SettingsMutation) ResetNatsRequestTimeoutSeconds() {
+	m.nats_request_timeout_seconds = nil
+	m.addnats_request_timeout_seconds = nil
+	delete(m.clearedFields, settings.FieldNatsRequestTimeoutSeconds)
+}
+
 // SetCreated sets the "created" field.
 func (m *SettingsMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -12333,7 +12527,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 23)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -12388,6 +12582,15 @@ func (m *SettingsMutation) Fields() []string {
 	if m.message_from != nil {
 		fields = append(fields, settings.FieldMessageFrom)
 	}
+	if m.max_upload_size != nil {
+		fields = append(fields, settings.FieldMaxUploadSize)
+	}
+	if m.user_cert_years_valid != nil {
+		fields = append(fields, settings.FieldUserCertYearsValid)
+	}
+	if m.nats_request_timeout_seconds != nil {
+		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
+	}
 	if m.created != nil {
 		fields = append(fields, settings.FieldCreated)
 	}
@@ -12438,6 +12641,12 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.NatsPort()
 	case settings.FieldMessageFrom:
 		return m.MessageFrom()
+	case settings.FieldMaxUploadSize:
+		return m.MaxUploadSize()
+	case settings.FieldUserCertYearsValid:
+		return m.UserCertYearsValid()
+	case settings.FieldNatsRequestTimeoutSeconds:
+		return m.NatsRequestTimeoutSeconds()
 	case settings.FieldCreated:
 		return m.Created()
 	case settings.FieldModified:
@@ -12487,6 +12696,12 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldNatsPort(ctx)
 	case settings.FieldMessageFrom:
 		return m.OldMessageFrom(ctx)
+	case settings.FieldMaxUploadSize:
+		return m.OldMaxUploadSize(ctx)
+	case settings.FieldUserCertYearsValid:
+		return m.OldUserCertYearsValid(ctx)
+	case settings.FieldNatsRequestTimeoutSeconds:
+		return m.OldNatsRequestTimeoutSeconds(ctx)
 	case settings.FieldCreated:
 		return m.OldCreated(ctx)
 	case settings.FieldModified:
@@ -12626,6 +12841,27 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMessageFrom(v)
 		return nil
+	case settings.FieldMaxUploadSize:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxUploadSize(v)
+		return nil
+	case settings.FieldUserCertYearsValid:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserCertYearsValid(v)
+		return nil
+	case settings.FieldNatsRequestTimeoutSeconds:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNatsRequestTimeoutSeconds(v)
+		return nil
 	case settings.FieldCreated:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -12651,6 +12887,12 @@ func (m *SettingsMutation) AddedFields() []string {
 	if m.addsmtp_port != nil {
 		fields = append(fields, settings.FieldSMTPPort)
 	}
+	if m.adduser_cert_years_valid != nil {
+		fields = append(fields, settings.FieldUserCertYearsValid)
+	}
+	if m.addnats_request_timeout_seconds != nil {
+		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
+	}
 	return fields
 }
 
@@ -12661,6 +12903,10 @@ func (m *SettingsMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case settings.FieldSMTPPort:
 		return m.AddedSMTPPort()
+	case settings.FieldUserCertYearsValid:
+		return m.AddedUserCertYearsValid()
+	case settings.FieldNatsRequestTimeoutSeconds:
+		return m.AddedNatsRequestTimeoutSeconds()
 	}
 	return nil, false
 }
@@ -12676,6 +12922,20 @@ func (m *SettingsMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSMTPPort(v)
+		return nil
+	case settings.FieldUserCertYearsValid:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserCertYearsValid(v)
+		return nil
+	case settings.FieldNatsRequestTimeoutSeconds:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNatsRequestTimeoutSeconds(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Settings numeric field %s", name)
@@ -12738,6 +12998,15 @@ func (m *SettingsMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(settings.FieldMessageFrom) {
 		fields = append(fields, settings.FieldMessageFrom)
+	}
+	if m.FieldCleared(settings.FieldMaxUploadSize) {
+		fields = append(fields, settings.FieldMaxUploadSize)
+	}
+	if m.FieldCleared(settings.FieldUserCertYearsValid) {
+		fields = append(fields, settings.FieldUserCertYearsValid)
+	}
+	if m.FieldCleared(settings.FieldNatsRequestTimeoutSeconds) {
+		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
 	}
 	if m.FieldCleared(settings.FieldCreated) {
 		fields = append(fields, settings.FieldCreated)
@@ -12813,6 +13082,15 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldMessageFrom:
 		m.ClearMessageFrom()
 		return nil
+	case settings.FieldMaxUploadSize:
+		m.ClearMaxUploadSize()
+		return nil
+	case settings.FieldUserCertYearsValid:
+		m.ClearUserCertYearsValid()
+		return nil
+	case settings.FieldNatsRequestTimeoutSeconds:
+		m.ClearNatsRequestTimeoutSeconds()
+		return nil
 	case settings.FieldCreated:
 		m.ClearCreated()
 		return nil
@@ -12880,6 +13158,15 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldMessageFrom:
 		m.ResetMessageFrom()
+		return nil
+	case settings.FieldMaxUploadSize:
+		m.ResetMaxUploadSize()
+		return nil
+	case settings.FieldUserCertYearsValid:
+		m.ResetUserCertYearsValid()
+		return nil
+	case settings.FieldNatsRequestTimeoutSeconds:
+		m.ResetNatsRequestTimeoutSeconds()
 		return nil
 	case settings.FieldCreated:
 		m.ResetCreated()

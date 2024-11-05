@@ -101,6 +101,10 @@ func init() {
 	sessions.IDValidator = sessionsDescID.Validators[0].(func(string) error)
 	settingsFields := schema.Settings{}.Fields()
 	_ = settingsFields
+	// settingsDescCountry is the schema descriptor for country field.
+	settingsDescCountry := settingsFields[7].Descriptor()
+	// settings.DefaultCountry holds the default value on creation for the country field.
+	settings.DefaultCountry = settingsDescCountry.Default.(string)
 	// settingsDescSMTPPort is the schema descriptor for smtp_port field.
 	settingsDescSMTPPort := settingsFields[9].Descriptor()
 	// settings.DefaultSMTPPort holds the default value on creation for the smtp_port field.
@@ -117,12 +121,24 @@ func init() {
 	settingsDescSMTPStarttls := settingsFields[14].Descriptor()
 	// settings.DefaultSMTPStarttls holds the default value on creation for the smtp_starttls field.
 	settings.DefaultSMTPStarttls = settingsDescSMTPStarttls.Default.(bool)
+	// settingsDescMaxUploadSize is the schema descriptor for max_upload_size field.
+	settingsDescMaxUploadSize := settingsFields[18].Descriptor()
+	// settings.DefaultMaxUploadSize holds the default value on creation for the max_upload_size field.
+	settings.DefaultMaxUploadSize = settingsDescMaxUploadSize.Default.(string)
+	// settingsDescUserCertYearsValid is the schema descriptor for user_cert_years_valid field.
+	settingsDescUserCertYearsValid := settingsFields[19].Descriptor()
+	// settings.DefaultUserCertYearsValid holds the default value on creation for the user_cert_years_valid field.
+	settings.DefaultUserCertYearsValid = settingsDescUserCertYearsValid.Default.(int)
+	// settingsDescNatsRequestTimeoutSeconds is the schema descriptor for nats_request_timeout_seconds field.
+	settingsDescNatsRequestTimeoutSeconds := settingsFields[20].Descriptor()
+	// settings.DefaultNatsRequestTimeoutSeconds holds the default value on creation for the nats_request_timeout_seconds field.
+	settings.DefaultNatsRequestTimeoutSeconds = settingsDescNatsRequestTimeoutSeconds.Default.(int)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[18].Descriptor()
+	settingsDescCreated := settingsFields[21].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[19].Descriptor()
+	settingsDescModified := settingsFields[22].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

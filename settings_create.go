@@ -274,6 +274,48 @@ func (sc *SettingsCreate) SetNillableMessageFrom(s *string) *SettingsCreate {
 	return sc
 }
 
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (sc *SettingsCreate) SetMaxUploadSize(s string) *SettingsCreate {
+	sc.mutation.SetMaxUploadSize(s)
+	return sc
+}
+
+// SetNillableMaxUploadSize sets the "max_upload_size" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableMaxUploadSize(s *string) *SettingsCreate {
+	if s != nil {
+		sc.SetMaxUploadSize(*s)
+	}
+	return sc
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (sc *SettingsCreate) SetUserCertYearsValid(i int) *SettingsCreate {
+	sc.mutation.SetUserCertYearsValid(i)
+	return sc
+}
+
+// SetNillableUserCertYearsValid sets the "user_cert_years_valid" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableUserCertYearsValid(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetUserCertYearsValid(*i)
+	}
+	return sc
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (sc *SettingsCreate) SetNatsRequestTimeoutSeconds(i int) *SettingsCreate {
+	sc.mutation.SetNatsRequestTimeoutSeconds(i)
+	return sc
+}
+
+// SetNillableNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableNatsRequestTimeoutSeconds(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetNatsRequestTimeoutSeconds(*i)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SettingsCreate) SetCreated(t time.Time) *SettingsCreate {
 	sc.mutation.SetCreated(t)
@@ -337,6 +379,10 @@ func (sc *SettingsCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *SettingsCreate) defaults() {
+	if _, ok := sc.mutation.Country(); !ok {
+		v := settings.DefaultCountry
+		sc.mutation.SetCountry(v)
+	}
 	if _, ok := sc.mutation.SMTPPort(); !ok {
 		v := settings.DefaultSMTPPort
 		sc.mutation.SetSMTPPort(v)
@@ -352,6 +398,18 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.SMTPStarttls(); !ok {
 		v := settings.DefaultSMTPStarttls
 		sc.mutation.SetSMTPStarttls(v)
+	}
+	if _, ok := sc.mutation.MaxUploadSize(); !ok {
+		v := settings.DefaultMaxUploadSize
+		sc.mutation.SetMaxUploadSize(v)
+	}
+	if _, ok := sc.mutation.UserCertYearsValid(); !ok {
+		v := settings.DefaultUserCertYearsValid
+		sc.mutation.SetUserCertYearsValid(v)
+	}
+	if _, ok := sc.mutation.NatsRequestTimeoutSeconds(); !ok {
+		v := settings.DefaultNatsRequestTimeoutSeconds
+		sc.mutation.SetNatsRequestTimeoutSeconds(v)
 	}
 	if _, ok := sc.mutation.Created(); !ok {
 		v := settings.DefaultCreated()
@@ -463,6 +521,18 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.MessageFrom(); ok {
 		_spec.SetField(settings.FieldMessageFrom, field.TypeString, value)
 		_node.MessageFrom = value
+	}
+	if value, ok := sc.mutation.MaxUploadSize(); ok {
+		_spec.SetField(settings.FieldMaxUploadSize, field.TypeString, value)
+		_node.MaxUploadSize = value
+	}
+	if value, ok := sc.mutation.UserCertYearsValid(); ok {
+		_spec.SetField(settings.FieldUserCertYearsValid, field.TypeInt, value)
+		_node.UserCertYearsValid = value
+	}
+	if value, ok := sc.mutation.NatsRequestTimeoutSeconds(); ok {
+		_spec.SetField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
+		_node.NatsRequestTimeoutSeconds = value
 	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -851,6 +921,72 @@ func (u *SettingsUpsert) UpdateMessageFrom() *SettingsUpsert {
 // ClearMessageFrom clears the value of the "message_from" field.
 func (u *SettingsUpsert) ClearMessageFrom() *SettingsUpsert {
 	u.SetNull(settings.FieldMessageFrom)
+	return u
+}
+
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (u *SettingsUpsert) SetMaxUploadSize(v string) *SettingsUpsert {
+	u.Set(settings.FieldMaxUploadSize, v)
+	return u
+}
+
+// UpdateMaxUploadSize sets the "max_upload_size" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateMaxUploadSize() *SettingsUpsert {
+	u.SetExcluded(settings.FieldMaxUploadSize)
+	return u
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (u *SettingsUpsert) ClearMaxUploadSize() *SettingsUpsert {
+	u.SetNull(settings.FieldMaxUploadSize)
+	return u
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (u *SettingsUpsert) SetUserCertYearsValid(v int) *SettingsUpsert {
+	u.Set(settings.FieldUserCertYearsValid, v)
+	return u
+}
+
+// UpdateUserCertYearsValid sets the "user_cert_years_valid" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateUserCertYearsValid() *SettingsUpsert {
+	u.SetExcluded(settings.FieldUserCertYearsValid)
+	return u
+}
+
+// AddUserCertYearsValid adds v to the "user_cert_years_valid" field.
+func (u *SettingsUpsert) AddUserCertYearsValid(v int) *SettingsUpsert {
+	u.Add(settings.FieldUserCertYearsValid, v)
+	return u
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (u *SettingsUpsert) ClearUserCertYearsValid() *SettingsUpsert {
+	u.SetNull(settings.FieldUserCertYearsValid)
+	return u
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsert) SetNatsRequestTimeoutSeconds(v int) *SettingsUpsert {
+	u.Set(settings.FieldNatsRequestTimeoutSeconds, v)
+	return u
+}
+
+// UpdateNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateNatsRequestTimeoutSeconds() *SettingsUpsert {
+	u.SetExcluded(settings.FieldNatsRequestTimeoutSeconds)
+	return u
+}
+
+// AddNatsRequestTimeoutSeconds adds v to the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsert) AddNatsRequestTimeoutSeconds(v int) *SettingsUpsert {
+	u.Add(settings.FieldNatsRequestTimeoutSeconds, v)
+	return u
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsert) ClearNatsRequestTimeoutSeconds() *SettingsUpsert {
+	u.SetNull(settings.FieldNatsRequestTimeoutSeconds)
 	return u
 }
 
@@ -1312,6 +1448,83 @@ func (u *SettingsUpsertOne) UpdateMessageFrom() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearMessageFrom() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearMessageFrom()
+	})
+}
+
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (u *SettingsUpsertOne) SetMaxUploadSize(v string) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetMaxUploadSize(v)
+	})
+}
+
+// UpdateMaxUploadSize sets the "max_upload_size" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateMaxUploadSize() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateMaxUploadSize()
+	})
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (u *SettingsUpsertOne) ClearMaxUploadSize() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearMaxUploadSize()
+	})
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (u *SettingsUpsertOne) SetUserCertYearsValid(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUserCertYearsValid(v)
+	})
+}
+
+// AddUserCertYearsValid adds v to the "user_cert_years_valid" field.
+func (u *SettingsUpsertOne) AddUserCertYearsValid(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddUserCertYearsValid(v)
+	})
+}
+
+// UpdateUserCertYearsValid sets the "user_cert_years_valid" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateUserCertYearsValid() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUserCertYearsValid()
+	})
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (u *SettingsUpsertOne) ClearUserCertYearsValid() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUserCertYearsValid()
+	})
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertOne) SetNatsRequestTimeoutSeconds(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsRequestTimeoutSeconds(v)
+	})
+}
+
+// AddNatsRequestTimeoutSeconds adds v to the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertOne) AddNatsRequestTimeoutSeconds(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddNatsRequestTimeoutSeconds(v)
+	})
+}
+
+// UpdateNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateNatsRequestTimeoutSeconds() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsRequestTimeoutSeconds()
+	})
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertOne) ClearNatsRequestTimeoutSeconds() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsRequestTimeoutSeconds()
 	})
 }
 
@@ -1943,6 +2156,83 @@ func (u *SettingsUpsertBulk) UpdateMessageFrom() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearMessageFrom() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearMessageFrom()
+	})
+}
+
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (u *SettingsUpsertBulk) SetMaxUploadSize(v string) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetMaxUploadSize(v)
+	})
+}
+
+// UpdateMaxUploadSize sets the "max_upload_size" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateMaxUploadSize() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateMaxUploadSize()
+	})
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (u *SettingsUpsertBulk) ClearMaxUploadSize() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearMaxUploadSize()
+	})
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (u *SettingsUpsertBulk) SetUserCertYearsValid(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUserCertYearsValid(v)
+	})
+}
+
+// AddUserCertYearsValid adds v to the "user_cert_years_valid" field.
+func (u *SettingsUpsertBulk) AddUserCertYearsValid(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddUserCertYearsValid(v)
+	})
+}
+
+// UpdateUserCertYearsValid sets the "user_cert_years_valid" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateUserCertYearsValid() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUserCertYearsValid()
+	})
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (u *SettingsUpsertBulk) ClearUserCertYearsValid() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUserCertYearsValid()
+	})
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertBulk) SetNatsRequestTimeoutSeconds(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetNatsRequestTimeoutSeconds(v)
+	})
+}
+
+// AddNatsRequestTimeoutSeconds adds v to the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertBulk) AddNatsRequestTimeoutSeconds(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddNatsRequestTimeoutSeconds(v)
+	})
+}
+
+// UpdateNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateNatsRequestTimeoutSeconds() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateNatsRequestTimeoutSeconds()
+	})
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (u *SettingsUpsertBulk) ClearNatsRequestTimeoutSeconds() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearNatsRequestTimeoutSeconds()
 	})
 }
 

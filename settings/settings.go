@@ -49,6 +49,12 @@ const (
 	FieldNatsPort = "nats_port"
 	// FieldMessageFrom holds the string denoting the message_from field in the database.
 	FieldMessageFrom = "message_from"
+	// FieldMaxUploadSize holds the string denoting the max_upload_size field in the database.
+	FieldMaxUploadSize = "max_upload_size"
+	// FieldUserCertYearsValid holds the string denoting the user_cert_years_valid field in the database.
+	FieldUserCertYearsValid = "user_cert_years_valid"
+	// FieldNatsRequestTimeoutSeconds holds the string denoting the nats_request_timeout_seconds field in the database.
+	FieldNatsRequestTimeoutSeconds = "nats_request_timeout_seconds"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -78,6 +84,9 @@ var Columns = []string{
 	FieldNatsServer,
 	FieldNatsPort,
 	FieldMessageFrom,
+	FieldMaxUploadSize,
+	FieldUserCertYearsValid,
+	FieldNatsRequestTimeoutSeconds,
 	FieldCreated,
 	FieldModified,
 }
@@ -93,6 +102,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultCountry holds the default value on creation for the "country" field.
+	DefaultCountry string
 	// DefaultSMTPPort holds the default value on creation for the "smtp_port" field.
 	DefaultSMTPPort int
 	// DefaultSMTPAuth holds the default value on creation for the "smtp_auth" field.
@@ -101,6 +112,12 @@ var (
 	DefaultSMTPTLS bool
 	// DefaultSMTPStarttls holds the default value on creation for the "smtp_starttls" field.
 	DefaultSMTPStarttls bool
+	// DefaultMaxUploadSize holds the default value on creation for the "max_upload_size" field.
+	DefaultMaxUploadSize string
+	// DefaultUserCertYearsValid holds the default value on creation for the "user_cert_years_valid" field.
+	DefaultUserCertYearsValid int
+	// DefaultNatsRequestTimeoutSeconds holds the default value on creation for the "nats_request_timeout_seconds" field.
+	DefaultNatsRequestTimeoutSeconds int
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -205,6 +222,21 @@ func ByNatsPort(opts ...sql.OrderTermOption) OrderOption {
 // ByMessageFrom orders the results by the message_from field.
 func ByMessageFrom(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMessageFrom, opts...).ToFunc()
+}
+
+// ByMaxUploadSize orders the results by the max_upload_size field.
+func ByMaxUploadSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMaxUploadSize, opts...).ToFunc()
+}
+
+// ByUserCertYearsValid orders the results by the user_cert_years_valid field.
+func ByUserCertYearsValid(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUserCertYearsValid, opts...).ToFunc()
+}
+
+// ByNatsRequestTimeoutSeconds orders the results by the nats_request_timeout_seconds field.
+func ByNatsRequestTimeoutSeconds(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNatsRequestTimeoutSeconds, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

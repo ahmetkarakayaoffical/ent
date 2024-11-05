@@ -362,7 +362,7 @@ var (
 		{Name: "locality", Type: field.TypeString, Nullable: true},
 		{Name: "province", Type: field.TypeString, Nullable: true},
 		{Name: "state", Type: field.TypeString, Nullable: true},
-		{Name: "country", Type: field.TypeString, Nullable: true},
+		{Name: "country", Type: field.TypeString, Nullable: true, Default: "ES"},
 		{Name: "smtp_server", Type: field.TypeString, Nullable: true},
 		{Name: "smtp_port", Type: field.TypeInt, Nullable: true, Default: 587},
 		{Name: "smtp_user", Type: field.TypeString, Nullable: true},
@@ -373,6 +373,9 @@ var (
 		{Name: "nats_server", Type: field.TypeString, Nullable: true},
 		{Name: "nats_port", Type: field.TypeString, Nullable: true},
 		{Name: "message_from", Type: field.TypeString, Nullable: true},
+		{Name: "max_upload_size", Type: field.TypeString, Nullable: true, Default: "512M"},
+		{Name: "user_cert_years_valid", Type: field.TypeInt, Nullable: true, Default: 1},
+		{Name: "nats_request_timeout_seconds", Type: field.TypeInt, Nullable: true, Default: 20},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

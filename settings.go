@@ -53,6 +53,12 @@ type Settings struct {
 	NatsPort string `json:"nats_port,omitempty"`
 	// MessageFrom holds the value of the "message_from" field.
 	MessageFrom string `json:"message_from,omitempty"`
+	// MaxUploadSize holds the value of the "max_upload_size" field.
+	MaxUploadSize string `json:"max_upload_size,omitempty"`
+	// UserCertYearsValid holds the value of the "user_cert_years_valid" field.
+	UserCertYearsValid int `json:"user_cert_years_valid,omitempty"`
+	// NatsRequestTimeoutSeconds holds the value of the "nats_request_timeout_seconds" field.
+	NatsRequestTimeoutSeconds int `json:"nats_request_timeout_seconds,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -67,9 +73,9 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls:
 			values[i] = new(sql.NullBool)
-		case settings.FieldID, settings.FieldSMTPPort:
+		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds:
 			values[i] = new(sql.NullInt64)
-		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom:
+		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize:
 			values[i] = new(sql.NullString)
 		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -202,6 +208,24 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.MessageFrom = value.String
 			}
+		case settings.FieldMaxUploadSize:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field max_upload_size", values[i])
+			} else if value.Valid {
+				s.MaxUploadSize = value.String
+			}
+		case settings.FieldUserCertYearsValid:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field user_cert_years_valid", values[i])
+			} else if value.Valid {
+				s.UserCertYearsValid = int(value.Int64)
+			}
+		case settings.FieldNatsRequestTimeoutSeconds:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field nats_request_timeout_seconds", values[i])
+			} else if value.Valid {
+				s.NatsRequestTimeoutSeconds = int(value.Int64)
+			}
 		case settings.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -303,6 +327,15 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("message_from=")
 	builder.WriteString(s.MessageFrom)
+	builder.WriteString(", ")
+	builder.WriteString("max_upload_size=")
+	builder.WriteString(s.MaxUploadSize)
+	builder.WriteString(", ")
+	builder.WriteString("user_cert_years_valid=")
+	builder.WriteString(fmt.Sprintf("%v", s.UserCertYearsValid))
+	builder.WriteString(", ")
+	builder.WriteString("nats_request_timeout_seconds=")
+	builder.WriteString(fmt.Sprintf("%v", s.NatsRequestTimeoutSeconds))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(s.Created.Format(time.ANSIC))

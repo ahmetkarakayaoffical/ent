@@ -396,6 +396,80 @@ func (su *SettingsUpdate) ClearMessageFrom() *SettingsUpdate {
 	return su
 }
 
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (su *SettingsUpdate) SetMaxUploadSize(s string) *SettingsUpdate {
+	su.mutation.SetMaxUploadSize(s)
+	return su
+}
+
+// SetNillableMaxUploadSize sets the "max_upload_size" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableMaxUploadSize(s *string) *SettingsUpdate {
+	if s != nil {
+		su.SetMaxUploadSize(*s)
+	}
+	return su
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (su *SettingsUpdate) ClearMaxUploadSize() *SettingsUpdate {
+	su.mutation.ClearMaxUploadSize()
+	return su
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (su *SettingsUpdate) SetUserCertYearsValid(i int) *SettingsUpdate {
+	su.mutation.ResetUserCertYearsValid()
+	su.mutation.SetUserCertYearsValid(i)
+	return su
+}
+
+// SetNillableUserCertYearsValid sets the "user_cert_years_valid" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableUserCertYearsValid(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetUserCertYearsValid(*i)
+	}
+	return su
+}
+
+// AddUserCertYearsValid adds i to the "user_cert_years_valid" field.
+func (su *SettingsUpdate) AddUserCertYearsValid(i int) *SettingsUpdate {
+	su.mutation.AddUserCertYearsValid(i)
+	return su
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (su *SettingsUpdate) ClearUserCertYearsValid() *SettingsUpdate {
+	su.mutation.ClearUserCertYearsValid()
+	return su
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (su *SettingsUpdate) SetNatsRequestTimeoutSeconds(i int) *SettingsUpdate {
+	su.mutation.ResetNatsRequestTimeoutSeconds()
+	su.mutation.SetNatsRequestTimeoutSeconds(i)
+	return su
+}
+
+// SetNillableNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableNatsRequestTimeoutSeconds(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetNatsRequestTimeoutSeconds(*i)
+	}
+	return su
+}
+
+// AddNatsRequestTimeoutSeconds adds i to the "nats_request_timeout_seconds" field.
+func (su *SettingsUpdate) AddNatsRequestTimeoutSeconds(i int) *SettingsUpdate {
+	su.mutation.AddNatsRequestTimeoutSeconds(i)
+	return su
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (su *SettingsUpdate) ClearNatsRequestTimeoutSeconds() *SettingsUpdate {
+	su.mutation.ClearNatsRequestTimeoutSeconds()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SettingsUpdate) SetCreated(t time.Time) *SettingsUpdate {
 	su.mutation.SetCreated(t)
@@ -594,6 +668,30 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.MessageFromCleared() {
 		_spec.ClearField(settings.FieldMessageFrom, field.TypeString)
+	}
+	if value, ok := su.mutation.MaxUploadSize(); ok {
+		_spec.SetField(settings.FieldMaxUploadSize, field.TypeString, value)
+	}
+	if su.mutation.MaxUploadSizeCleared() {
+		_spec.ClearField(settings.FieldMaxUploadSize, field.TypeString)
+	}
+	if value, ok := su.mutation.UserCertYearsValid(); ok {
+		_spec.SetField(settings.FieldUserCertYearsValid, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedUserCertYearsValid(); ok {
+		_spec.AddField(settings.FieldUserCertYearsValid, field.TypeInt, value)
+	}
+	if su.mutation.UserCertYearsValidCleared() {
+		_spec.ClearField(settings.FieldUserCertYearsValid, field.TypeInt)
+	}
+	if value, ok := su.mutation.NatsRequestTimeoutSeconds(); ok {
+		_spec.SetField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedNatsRequestTimeoutSeconds(); ok {
+		_spec.AddField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
+	}
+	if su.mutation.NatsRequestTimeoutSecondsCleared() {
+		_spec.ClearField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt)
 	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -996,6 +1094,80 @@ func (suo *SettingsUpdateOne) ClearMessageFrom() *SettingsUpdateOne {
 	return suo
 }
 
+// SetMaxUploadSize sets the "max_upload_size" field.
+func (suo *SettingsUpdateOne) SetMaxUploadSize(s string) *SettingsUpdateOne {
+	suo.mutation.SetMaxUploadSize(s)
+	return suo
+}
+
+// SetNillableMaxUploadSize sets the "max_upload_size" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableMaxUploadSize(s *string) *SettingsUpdateOne {
+	if s != nil {
+		suo.SetMaxUploadSize(*s)
+	}
+	return suo
+}
+
+// ClearMaxUploadSize clears the value of the "max_upload_size" field.
+func (suo *SettingsUpdateOne) ClearMaxUploadSize() *SettingsUpdateOne {
+	suo.mutation.ClearMaxUploadSize()
+	return suo
+}
+
+// SetUserCertYearsValid sets the "user_cert_years_valid" field.
+func (suo *SettingsUpdateOne) SetUserCertYearsValid(i int) *SettingsUpdateOne {
+	suo.mutation.ResetUserCertYearsValid()
+	suo.mutation.SetUserCertYearsValid(i)
+	return suo
+}
+
+// SetNillableUserCertYearsValid sets the "user_cert_years_valid" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableUserCertYearsValid(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetUserCertYearsValid(*i)
+	}
+	return suo
+}
+
+// AddUserCertYearsValid adds i to the "user_cert_years_valid" field.
+func (suo *SettingsUpdateOne) AddUserCertYearsValid(i int) *SettingsUpdateOne {
+	suo.mutation.AddUserCertYearsValid(i)
+	return suo
+}
+
+// ClearUserCertYearsValid clears the value of the "user_cert_years_valid" field.
+func (suo *SettingsUpdateOne) ClearUserCertYearsValid() *SettingsUpdateOne {
+	suo.mutation.ClearUserCertYearsValid()
+	return suo
+}
+
+// SetNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field.
+func (suo *SettingsUpdateOne) SetNatsRequestTimeoutSeconds(i int) *SettingsUpdateOne {
+	suo.mutation.ResetNatsRequestTimeoutSeconds()
+	suo.mutation.SetNatsRequestTimeoutSeconds(i)
+	return suo
+}
+
+// SetNillableNatsRequestTimeoutSeconds sets the "nats_request_timeout_seconds" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableNatsRequestTimeoutSeconds(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetNatsRequestTimeoutSeconds(*i)
+	}
+	return suo
+}
+
+// AddNatsRequestTimeoutSeconds adds i to the "nats_request_timeout_seconds" field.
+func (suo *SettingsUpdateOne) AddNatsRequestTimeoutSeconds(i int) *SettingsUpdateOne {
+	suo.mutation.AddNatsRequestTimeoutSeconds(i)
+	return suo
+}
+
+// ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
+func (suo *SettingsUpdateOne) ClearNatsRequestTimeoutSeconds() *SettingsUpdateOne {
+	suo.mutation.ClearNatsRequestTimeoutSeconds()
+	return suo
+}
+
 // SetCreated sets the "created" field.
 func (suo *SettingsUpdateOne) SetCreated(t time.Time) *SettingsUpdateOne {
 	suo.mutation.SetCreated(t)
@@ -1224,6 +1396,30 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.MessageFromCleared() {
 		_spec.ClearField(settings.FieldMessageFrom, field.TypeString)
+	}
+	if value, ok := suo.mutation.MaxUploadSize(); ok {
+		_spec.SetField(settings.FieldMaxUploadSize, field.TypeString, value)
+	}
+	if suo.mutation.MaxUploadSizeCleared() {
+		_spec.ClearField(settings.FieldMaxUploadSize, field.TypeString)
+	}
+	if value, ok := suo.mutation.UserCertYearsValid(); ok {
+		_spec.SetField(settings.FieldUserCertYearsValid, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedUserCertYearsValid(); ok {
+		_spec.AddField(settings.FieldUserCertYearsValid, field.TypeInt, value)
+	}
+	if suo.mutation.UserCertYearsValidCleared() {
+		_spec.ClearField(settings.FieldUserCertYearsValid, field.TypeInt)
+	}
+	if value, ok := suo.mutation.NatsRequestTimeoutSeconds(); ok {
+		_spec.SetField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedNatsRequestTimeoutSeconds(); ok {
+		_spec.AddField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
+	}
+	if suo.mutation.NatsRequestTimeoutSecondsCleared() {
+		_spec.ClearField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)

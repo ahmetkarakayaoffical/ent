@@ -144,6 +144,21 @@ func MessageFrom(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldMessageFrom, v))
 }
 
+// MaxUploadSize applies equality check predicate on the "max_upload_size" field. It's identical to MaxUploadSizeEQ.
+func MaxUploadSize(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldMaxUploadSize, v))
+}
+
+// UserCertYearsValid applies equality check predicate on the "user_cert_years_valid" field. It's identical to UserCertYearsValidEQ.
+func UserCertYearsValid(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUserCertYearsValid, v))
+}
+
+// NatsRequestTimeoutSeconds applies equality check predicate on the "nats_request_timeout_seconds" field. It's identical to NatsRequestTimeoutSecondsEQ.
+func NatsRequestTimeoutSeconds(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsRequestTimeoutSeconds, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1367,6 +1382,181 @@ func MessageFromEqualFold(v string) predicate.Settings {
 // MessageFromContainsFold applies the ContainsFold predicate on the "message_from" field.
 func MessageFromContainsFold(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldContainsFold(FieldMessageFrom, v))
+}
+
+// MaxUploadSizeEQ applies the EQ predicate on the "max_upload_size" field.
+func MaxUploadSizeEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeNEQ applies the NEQ predicate on the "max_upload_size" field.
+func MaxUploadSizeNEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeIn applies the In predicate on the "max_upload_size" field.
+func MaxUploadSizeIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldMaxUploadSize, vs...))
+}
+
+// MaxUploadSizeNotIn applies the NotIn predicate on the "max_upload_size" field.
+func MaxUploadSizeNotIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldMaxUploadSize, vs...))
+}
+
+// MaxUploadSizeGT applies the GT predicate on the "max_upload_size" field.
+func MaxUploadSizeGT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeGTE applies the GTE predicate on the "max_upload_size" field.
+func MaxUploadSizeGTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeLT applies the LT predicate on the "max_upload_size" field.
+func MaxUploadSizeLT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeLTE applies the LTE predicate on the "max_upload_size" field.
+func MaxUploadSizeLTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeContains applies the Contains predicate on the "max_upload_size" field.
+func MaxUploadSizeContains(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContains(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeHasPrefix applies the HasPrefix predicate on the "max_upload_size" field.
+func MaxUploadSizeHasPrefix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasPrefix(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeHasSuffix applies the HasSuffix predicate on the "max_upload_size" field.
+func MaxUploadSizeHasSuffix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasSuffix(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeIsNil applies the IsNil predicate on the "max_upload_size" field.
+func MaxUploadSizeIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldMaxUploadSize))
+}
+
+// MaxUploadSizeNotNil applies the NotNil predicate on the "max_upload_size" field.
+func MaxUploadSizeNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldMaxUploadSize))
+}
+
+// MaxUploadSizeEqualFold applies the EqualFold predicate on the "max_upload_size" field.
+func MaxUploadSizeEqualFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEqualFold(FieldMaxUploadSize, v))
+}
+
+// MaxUploadSizeContainsFold applies the ContainsFold predicate on the "max_upload_size" field.
+func MaxUploadSizeContainsFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContainsFold(FieldMaxUploadSize, v))
+}
+
+// UserCertYearsValidEQ applies the EQ predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidNEQ applies the NEQ predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidIn applies the In predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldUserCertYearsValid, vs...))
+}
+
+// UserCertYearsValidNotIn applies the NotIn predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldUserCertYearsValid, vs...))
+}
+
+// UserCertYearsValidGT applies the GT predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidGTE applies the GTE predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidLT applies the LT predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidLTE applies the LTE predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldUserCertYearsValid, v))
+}
+
+// UserCertYearsValidIsNil applies the IsNil predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldUserCertYearsValid))
+}
+
+// UserCertYearsValidNotNil applies the NotNil predicate on the "user_cert_years_valid" field.
+func UserCertYearsValidNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldUserCertYearsValid))
+}
+
+// NatsRequestTimeoutSecondsEQ applies the EQ predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsNEQ applies the NEQ predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsIn applies the In predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldNatsRequestTimeoutSeconds, vs...))
+}
+
+// NatsRequestTimeoutSecondsNotIn applies the NotIn predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldNatsRequestTimeoutSeconds, vs...))
+}
+
+// NatsRequestTimeoutSecondsGT applies the GT predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsGTE applies the GTE predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsLT applies the LT predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsLTE applies the LTE predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldNatsRequestTimeoutSeconds, v))
+}
+
+// NatsRequestTimeoutSecondsIsNil applies the IsNil predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldNatsRequestTimeoutSeconds))
+}
+
+// NatsRequestTimeoutSecondsNotNil applies the NotNil predicate on the "nats_request_timeout_seconds" field.
+func NatsRequestTimeoutSecondsNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldNatsRequestTimeoutSeconds))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

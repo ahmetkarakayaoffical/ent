@@ -22,7 +22,7 @@ func (Settings) Fields() []ent.Field {
 		field.String("locality").Optional(),
 		field.String("province").Optional(),
 		field.String("state").Optional(),
-		field.String("country").Optional(),
+		field.String("country").Optional().Default("ES"),
 		field.String("smtp_server").Optional(),
 		field.Int("smtp_port").Optional().Default(587),
 		field.String("smtp_user").Optional(),
@@ -33,6 +33,9 @@ func (Settings) Fields() []ent.Field {
 		field.String("nats_server").Optional(),
 		field.String("nats_port").Optional(),
 		field.String("message_from").Optional(),
+		field.String("max_upload_size").Optional().Default("512M"),
+		field.Int("user_cert_years_valid").Optional().Default(1),
+		field.Int("nats_request_timeout_seconds").Optional().Default(20),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}
