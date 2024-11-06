@@ -18,6 +18,8 @@ type OperatingSystem struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Type holds the value of the "type" field.
+	Type string `json:"type,omitempty"`
 	// Version holds the value of the "version" field.
 	Version string `json:"version,omitempty"`
 	// Description holds the value of the "description" field.
@@ -66,7 +68,7 @@ func (*OperatingSystem) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case operatingsystem.FieldID:
 			values[i] = new(sql.NullInt64)
-		case operatingsystem.FieldVersion, operatingsystem.FieldDescription, operatingsystem.FieldEdition, operatingsystem.FieldArch, operatingsystem.FieldUsername:
+		case operatingsystem.FieldType, operatingsystem.FieldVersion, operatingsystem.FieldDescription, operatingsystem.FieldEdition, operatingsystem.FieldArch, operatingsystem.FieldUsername:
 			values[i] = new(sql.NullString)
 		case operatingsystem.FieldInstallDate, operatingsystem.FieldLastBootupTime:
 			values[i] = new(sql.NullTime)
@@ -93,6 +95,12 @@ func (os *OperatingSystem) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			os.ID = int(value.Int64)
+		case operatingsystem.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				os.Type = value.String
+			}
 		case operatingsystem.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
@@ -183,6 +191,9 @@ func (os *OperatingSystem) String() string {
 	var builder strings.Builder
 	builder.WriteString("OperatingSystem(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", os.ID))
+	builder.WriteString("type=")
+	builder.WriteString(os.Type)
+	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(os.Version)
 	builder.WriteString(", ")

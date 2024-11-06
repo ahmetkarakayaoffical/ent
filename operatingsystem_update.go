@@ -30,6 +30,26 @@ func (osu *OperatingSystemUpdate) Where(ps ...predicate.OperatingSystem) *Operat
 	return osu
 }
 
+// SetType sets the "type" field.
+func (osu *OperatingSystemUpdate) SetType(s string) *OperatingSystemUpdate {
+	osu.mutation.SetType(s)
+	return osu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (osu *OperatingSystemUpdate) SetNillableType(s *string) *OperatingSystemUpdate {
+	if s != nil {
+		osu.SetType(*s)
+	}
+	return osu
+}
+
+// ClearType clears the value of the "type" field.
+func (osu *OperatingSystemUpdate) ClearType() *OperatingSystemUpdate {
+	osu.mutation.ClearType()
+	return osu
+}
+
 // SetVersion sets the "version" field.
 func (osu *OperatingSystemUpdate) SetVersion(s string) *OperatingSystemUpdate {
 	osu.mutation.SetVersion(s)
@@ -227,6 +247,12 @@ func (osu *OperatingSystemUpdate) sqlSave(ctx context.Context) (n int, err error
 			}
 		}
 	}
+	if value, ok := osu.mutation.GetType(); ok {
+		_spec.SetField(operatingsystem.FieldType, field.TypeString, value)
+	}
+	if osu.mutation.TypeCleared() {
+		_spec.ClearField(operatingsystem.FieldType, field.TypeString)
+	}
 	if value, ok := osu.mutation.Version(); ok {
 		_spec.SetField(operatingsystem.FieldVersion, field.TypeString, value)
 	}
@@ -309,6 +335,26 @@ type OperatingSystemUpdateOne struct {
 	hooks     []Hook
 	mutation  *OperatingSystemMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetType sets the "type" field.
+func (osuo *OperatingSystemUpdateOne) SetType(s string) *OperatingSystemUpdateOne {
+	osuo.mutation.SetType(s)
+	return osuo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (osuo *OperatingSystemUpdateOne) SetNillableType(s *string) *OperatingSystemUpdateOne {
+	if s != nil {
+		osuo.SetType(*s)
+	}
+	return osuo
+}
+
+// ClearType clears the value of the "type" field.
+func (osuo *OperatingSystemUpdateOne) ClearType() *OperatingSystemUpdateOne {
+	osuo.mutation.ClearType()
+	return osuo
 }
 
 // SetVersion sets the "version" field.
@@ -537,6 +583,12 @@ func (osuo *OperatingSystemUpdateOne) sqlSave(ctx context.Context) (_node *Opera
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := osuo.mutation.GetType(); ok {
+		_spec.SetField(operatingsystem.FieldType, field.TypeString, value)
+	}
+	if osuo.mutation.TypeCleared() {
+		_spec.ClearField(operatingsystem.FieldType, field.TypeString)
 	}
 	if value, ok := osuo.mutation.Version(); ok {
 		_spec.SetField(operatingsystem.FieldVersion, field.TypeString, value)

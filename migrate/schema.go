@@ -252,6 +252,7 @@ var (
 	// OperatingSystemsColumns holds the columns for the "operating_systems" table.
 	OperatingSystemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString},
 		{Name: "edition", Type: field.TypeString, Nullable: true},
@@ -269,7 +270,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "operating_systems_agents_operatingsystem",
-				Columns:    []*schema.Column{OperatingSystemsColumns[8]},
+				Columns:    []*schema.Column{OperatingSystemsColumns[9]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

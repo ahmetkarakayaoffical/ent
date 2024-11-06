@@ -8223,6 +8223,7 @@ type OperatingSystemMutation struct {
 	op               Op
 	typ              string
 	id               *int
+	_type            *string
 	version          *string
 	description      *string
 	edition          *string
@@ -8334,6 +8335,55 @@ func (m *OperatingSystemMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetType sets the "type" field.
+func (m *OperatingSystemMutation) SetType(s string) {
+	m._type = &s
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *OperatingSystemMutation) GetType() (r string, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the OperatingSystem entity.
+// If the OperatingSystem object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OperatingSystemMutation) OldType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *OperatingSystemMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[operatingsystem.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *OperatingSystemMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[operatingsystem.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *OperatingSystemMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, operatingsystem.FieldType)
 }
 
 // SetVersion sets the "version" field.
@@ -8713,7 +8763,10 @@ func (m *OperatingSystemMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OperatingSystemMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
+	if m._type != nil {
+		fields = append(fields, operatingsystem.FieldType)
+	}
 	if m.version != nil {
 		fields = append(fields, operatingsystem.FieldVersion)
 	}
@@ -8743,6 +8796,8 @@ func (m *OperatingSystemMutation) Fields() []string {
 // schema.
 func (m *OperatingSystemMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case operatingsystem.FieldType:
+		return m.GetType()
 	case operatingsystem.FieldVersion:
 		return m.Version()
 	case operatingsystem.FieldDescription:
@@ -8766,6 +8821,8 @@ func (m *OperatingSystemMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *OperatingSystemMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case operatingsystem.FieldType:
+		return m.OldType(ctx)
 	case operatingsystem.FieldVersion:
 		return m.OldVersion(ctx)
 	case operatingsystem.FieldDescription:
@@ -8789,6 +8846,13 @@ func (m *OperatingSystemMutation) OldField(ctx context.Context, name string) (en
 // type.
 func (m *OperatingSystemMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case operatingsystem.FieldType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
 	case operatingsystem.FieldVersion:
 		v, ok := value.(string)
 		if !ok {
@@ -8868,6 +8932,9 @@ func (m *OperatingSystemMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *OperatingSystemMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(operatingsystem.FieldType) {
+		fields = append(fields, operatingsystem.FieldType)
+	}
 	if m.FieldCleared(operatingsystem.FieldEdition) {
 		fields = append(fields, operatingsystem.FieldEdition)
 	}
@@ -8894,6 +8961,9 @@ func (m *OperatingSystemMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *OperatingSystemMutation) ClearField(name string) error {
 	switch name {
+	case operatingsystem.FieldType:
+		m.ClearType()
+		return nil
 	case operatingsystem.FieldEdition:
 		m.ClearEdition()
 		return nil
@@ -8914,6 +8984,9 @@ func (m *OperatingSystemMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *OperatingSystemMutation) ResetField(name string) error {
 	switch name {
+	case operatingsystem.FieldType:
+		m.ResetType()
+		return nil
 	case operatingsystem.FieldVersion:
 		m.ResetVersion()
 		return nil

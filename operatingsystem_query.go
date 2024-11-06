@@ -301,12 +301,12 @@ func (osq *OperatingSystemQuery) WithOwner(opts ...func(*AgentQuery)) *Operating
 // Example:
 //
 //	var v []struct {
-//		Version string `json:"version,omitempty"`
+//		Type string `json:"type,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.OperatingSystem.Query().
-//		GroupBy(operatingsystem.FieldVersion).
+//		GroupBy(operatingsystem.FieldType).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (osq *OperatingSystemQuery) GroupBy(field string, fields ...string) *OperatingSystemGroupBy {
@@ -324,11 +324,11 @@ func (osq *OperatingSystemQuery) GroupBy(field string, fields ...string) *Operat
 // Example:
 //
 //	var v []struct {
-//		Version string `json:"version,omitempty"`
+//		Type string `json:"type,omitempty"`
 //	}
 //
 //	client.OperatingSystem.Query().
-//		Select(operatingsystem.FieldVersion).
+//		Select(operatingsystem.FieldType).
 //		Scan(ctx, &v)
 func (osq *OperatingSystemQuery) Select(fields ...string) *OperatingSystemSelect {
 	osq.ctx.Fields = append(osq.ctx.Fields, fields...)

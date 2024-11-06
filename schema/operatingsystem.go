@@ -14,6 +14,7 @@ type OperatingSystem struct {
 // Fields of the OperatingSystem.
 func (OperatingSystem) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("type").Optional(),
 		field.String("version"),
 		field.String("description"),
 		field.String("edition").Optional(),

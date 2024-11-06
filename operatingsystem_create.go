@@ -23,6 +23,20 @@ type OperatingSystemCreate struct {
 	conflict []sql.ConflictOption
 }
 
+// SetType sets the "type" field.
+func (osc *OperatingSystemCreate) SetType(s string) *OperatingSystemCreate {
+	osc.mutation.SetType(s)
+	return osc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (osc *OperatingSystemCreate) SetNillableType(s *string) *OperatingSystemCreate {
+	if s != nil {
+		osc.SetType(*s)
+	}
+	return osc
+}
+
 // SetVersion sets the "version" field.
 func (osc *OperatingSystemCreate) SetVersion(s string) *OperatingSystemCreate {
 	osc.mutation.SetVersion(s)
@@ -181,6 +195,10 @@ func (osc *OperatingSystemCreate) createSpec() (*OperatingSystem, *sqlgraph.Crea
 		_spec = sqlgraph.NewCreateSpec(operatingsystem.Table, sqlgraph.NewFieldSpec(operatingsystem.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = osc.conflict
+	if value, ok := osc.mutation.GetType(); ok {
+		_spec.SetField(operatingsystem.FieldType, field.TypeString, value)
+		_node.Type = value
+	}
 	if value, ok := osc.mutation.Version(); ok {
 		_spec.SetField(operatingsystem.FieldVersion, field.TypeString, value)
 		_node.Version = value
@@ -233,7 +251,7 @@ func (osc *OperatingSystemCreate) createSpec() (*OperatingSystem, *sqlgraph.Crea
 // of the `INSERT` statement. For example:
 //
 //	client.OperatingSystem.Create().
-//		SetVersion(v).
+//		SetType(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -242,7 +260,7 @@ func (osc *OperatingSystemCreate) createSpec() (*OperatingSystem, *sqlgraph.Crea
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.OperatingSystemUpsert) {
-//			SetVersion(v+v).
+//			SetType(v+v).
 //		}).
 //		Exec(ctx)
 func (osc *OperatingSystemCreate) OnConflict(opts ...sql.ConflictOption) *OperatingSystemUpsertOne {
@@ -277,6 +295,24 @@ type (
 		*sql.UpdateSet
 	}
 )
+
+// SetType sets the "type" field.
+func (u *OperatingSystemUpsert) SetType(v string) *OperatingSystemUpsert {
+	u.Set(operatingsystem.FieldType, v)
+	return u
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperatingSystemUpsert) UpdateType() *OperatingSystemUpsert {
+	u.SetExcluded(operatingsystem.FieldType)
+	return u
+}
+
+// ClearType clears the value of the "type" field.
+func (u *OperatingSystemUpsert) ClearType() *OperatingSystemUpsert {
+	u.SetNull(operatingsystem.FieldType)
+	return u
+}
 
 // SetVersion sets the "version" field.
 func (u *OperatingSystemUpsert) SetVersion(v string) *OperatingSystemUpsert {
@@ -424,6 +460,27 @@ func (u *OperatingSystemUpsertOne) Update(set func(*OperatingSystemUpsert)) *Ope
 		set(&OperatingSystemUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetType sets the "type" field.
+func (u *OperatingSystemUpsertOne) SetType(v string) *OperatingSystemUpsertOne {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperatingSystemUpsertOne) UpdateType() *OperatingSystemUpsertOne {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *OperatingSystemUpsertOne) ClearType() *OperatingSystemUpsertOne {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.ClearType()
+	})
 }
 
 // SetVersion sets the "version" field.
@@ -686,7 +743,7 @@ func (oscb *OperatingSystemCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.OperatingSystemUpsert) {
-//			SetVersion(v+v).
+//			SetType(v+v).
 //		}).
 //		Exec(ctx)
 func (oscb *OperatingSystemCreateBulk) OnConflict(opts ...sql.ConflictOption) *OperatingSystemUpsertBulk {
@@ -753,6 +810,27 @@ func (u *OperatingSystemUpsertBulk) Update(set func(*OperatingSystemUpsert)) *Op
 		set(&OperatingSystemUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetType sets the "type" field.
+func (u *OperatingSystemUpsertBulk) SetType(v string) *OperatingSystemUpsertBulk {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperatingSystemUpsertBulk) UpdateType() *OperatingSystemUpsertBulk {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *OperatingSystemUpsertBulk) ClearType() *OperatingSystemUpsertBulk {
+	return u.Update(func(s *OperatingSystemUpsert) {
+		s.ClearType()
+	})
 }
 
 // SetVersion sets the "version" field.

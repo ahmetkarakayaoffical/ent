@@ -12,6 +12,8 @@ const (
 	Label = "operating_system"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -44,6 +46,7 @@ const (
 // Columns holds all SQL columns for operatingsystem fields.
 var Columns = []string{
 	FieldID,
+	FieldType,
 	FieldVersion,
 	FieldDescription,
 	FieldEdition,
@@ -80,6 +83,11 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByVersion orders the results by the version field.

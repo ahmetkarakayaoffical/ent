@@ -55,6 +55,11 @@ func IDLTE(id int) predicate.OperatingSystem {
 	return predicate.OperatingSystem(sql.FieldLTE(FieldID, id))
 }
 
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldEQ(FieldType, v))
+}
+
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
 func Version(v string) predicate.OperatingSystem {
 	return predicate.OperatingSystem(sql.FieldEQ(FieldVersion, v))
@@ -88,6 +93,81 @@ func Username(v string) predicate.OperatingSystem {
 // LastBootupTime applies equality check predicate on the "last_bootup_time" field. It's identical to LastBootupTimeEQ.
 func LastBootupTime(v time.Time) predicate.OperatingSystem {
 	return predicate.OperatingSystem(sql.FieldEQ(FieldLastBootupTime, v))
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldGT(FieldType, v))
+}
+
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldGTE(FieldType, v))
+}
+
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldLT(FieldType, v))
+}
+
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldLTE(FieldType, v))
+}
+
+// TypeContains applies the Contains predicate on the "type" field.
+func TypeContains(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldContains(FieldType, v))
+}
+
+// TypeHasPrefix applies the HasPrefix predicate on the "type" field.
+func TypeHasPrefix(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldHasPrefix(FieldType, v))
+}
+
+// TypeHasSuffix applies the HasSuffix predicate on the "type" field.
+func TypeHasSuffix(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldHasSuffix(FieldType, v))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldNotNull(FieldType))
+}
+
+// TypeEqualFold applies the EqualFold predicate on the "type" field.
+func TypeEqualFold(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldEqualFold(FieldType, v))
+}
+
+// TypeContainsFold applies the ContainsFold predicate on the "type" field.
+func TypeContainsFold(v string) predicate.OperatingSystem {
+	return predicate.OperatingSystem(sql.FieldContainsFold(FieldType, v))
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.
