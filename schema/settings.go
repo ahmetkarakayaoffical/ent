@@ -36,6 +36,7 @@ func (Settings) Fields() []ent.Field {
 		field.String("max_upload_size").Optional().Default("512M"),
 		field.Int("user_cert_years_valid").Optional().Default(1),
 		field.Int("nats_request_timeout_seconds").Optional().Default(20),
+		field.Int("refresh_time_in_minutes").Optional().Default(5),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}

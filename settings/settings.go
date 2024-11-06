@@ -55,6 +55,8 @@ const (
 	FieldUserCertYearsValid = "user_cert_years_valid"
 	// FieldNatsRequestTimeoutSeconds holds the string denoting the nats_request_timeout_seconds field in the database.
 	FieldNatsRequestTimeoutSeconds = "nats_request_timeout_seconds"
+	// FieldRefreshTimeInMinutes holds the string denoting the refresh_time_in_minutes field in the database.
+	FieldRefreshTimeInMinutes = "refresh_time_in_minutes"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -87,6 +89,7 @@ var Columns = []string{
 	FieldMaxUploadSize,
 	FieldUserCertYearsValid,
 	FieldNatsRequestTimeoutSeconds,
+	FieldRefreshTimeInMinutes,
 	FieldCreated,
 	FieldModified,
 }
@@ -118,6 +121,8 @@ var (
 	DefaultUserCertYearsValid int
 	// DefaultNatsRequestTimeoutSeconds holds the default value on creation for the "nats_request_timeout_seconds" field.
 	DefaultNatsRequestTimeoutSeconds int
+	// DefaultRefreshTimeInMinutes holds the default value on creation for the "refresh_time_in_minutes" field.
+	DefaultRefreshTimeInMinutes int
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -237,6 +242,11 @@ func ByUserCertYearsValid(opts ...sql.OrderTermOption) OrderOption {
 // ByNatsRequestTimeoutSeconds orders the results by the nats_request_timeout_seconds field.
 func ByNatsRequestTimeoutSeconds(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNatsRequestTimeoutSeconds, opts...).ToFunc()
+}
+
+// ByRefreshTimeInMinutes orders the results by the refresh_time_in_minutes field.
+func ByRefreshTimeInMinutes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefreshTimeInMinutes, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

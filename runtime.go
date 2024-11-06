@@ -133,12 +133,16 @@ func init() {
 	settingsDescNatsRequestTimeoutSeconds := settingsFields[20].Descriptor()
 	// settings.DefaultNatsRequestTimeoutSeconds holds the default value on creation for the nats_request_timeout_seconds field.
 	settings.DefaultNatsRequestTimeoutSeconds = settingsDescNatsRequestTimeoutSeconds.Default.(int)
+	// settingsDescRefreshTimeInMinutes is the schema descriptor for refresh_time_in_minutes field.
+	settingsDescRefreshTimeInMinutes := settingsFields[21].Descriptor()
+	// settings.DefaultRefreshTimeInMinutes holds the default value on creation for the refresh_time_in_minutes field.
+	settings.DefaultRefreshTimeInMinutes = settingsDescRefreshTimeInMinutes.Default.(int)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[21].Descriptor()
+	settingsDescCreated := settingsFields[22].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[22].Descriptor()
+	settingsDescModified := settingsFields[23].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

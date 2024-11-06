@@ -11197,6 +11197,8 @@ type SettingsMutation struct {
 	adduser_cert_years_valid        *int
 	nats_request_timeout_seconds    *int
 	addnats_request_timeout_seconds *int
+	refresh_time_in_minutes         *int
+	addrefresh_time_in_minutes      *int
 	created                         *time.Time
 	modified                        *time.Time
 	clearedFields                   map[string]struct{}
@@ -12395,6 +12397,76 @@ func (m *SettingsMutation) ResetNatsRequestTimeoutSeconds() {
 	delete(m.clearedFields, settings.FieldNatsRequestTimeoutSeconds)
 }
 
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (m *SettingsMutation) SetRefreshTimeInMinutes(i int) {
+	m.refresh_time_in_minutes = &i
+	m.addrefresh_time_in_minutes = nil
+}
+
+// RefreshTimeInMinutes returns the value of the "refresh_time_in_minutes" field in the mutation.
+func (m *SettingsMutation) RefreshTimeInMinutes() (r int, exists bool) {
+	v := m.refresh_time_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefreshTimeInMinutes returns the old "refresh_time_in_minutes" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldRefreshTimeInMinutes(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefreshTimeInMinutes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefreshTimeInMinutes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefreshTimeInMinutes: %w", err)
+	}
+	return oldValue.RefreshTimeInMinutes, nil
+}
+
+// AddRefreshTimeInMinutes adds i to the "refresh_time_in_minutes" field.
+func (m *SettingsMutation) AddRefreshTimeInMinutes(i int) {
+	if m.addrefresh_time_in_minutes != nil {
+		*m.addrefresh_time_in_minutes += i
+	} else {
+		m.addrefresh_time_in_minutes = &i
+	}
+}
+
+// AddedRefreshTimeInMinutes returns the value that was added to the "refresh_time_in_minutes" field in this mutation.
+func (m *SettingsMutation) AddedRefreshTimeInMinutes() (r int, exists bool) {
+	v := m.addrefresh_time_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (m *SettingsMutation) ClearRefreshTimeInMinutes() {
+	m.refresh_time_in_minutes = nil
+	m.addrefresh_time_in_minutes = nil
+	m.clearedFields[settings.FieldRefreshTimeInMinutes] = struct{}{}
+}
+
+// RefreshTimeInMinutesCleared returns if the "refresh_time_in_minutes" field was cleared in this mutation.
+func (m *SettingsMutation) RefreshTimeInMinutesCleared() bool {
+	_, ok := m.clearedFields[settings.FieldRefreshTimeInMinutes]
+	return ok
+}
+
+// ResetRefreshTimeInMinutes resets all changes to the "refresh_time_in_minutes" field.
+func (m *SettingsMutation) ResetRefreshTimeInMinutes() {
+	m.refresh_time_in_minutes = nil
+	m.addrefresh_time_in_minutes = nil
+	delete(m.clearedFields, settings.FieldRefreshTimeInMinutes)
+}
+
 // SetCreated sets the "created" field.
 func (m *SettingsMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -12527,7 +12599,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -12591,6 +12663,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.nats_request_timeout_seconds != nil {
 		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
 	}
+	if m.refresh_time_in_minutes != nil {
+		fields = append(fields, settings.FieldRefreshTimeInMinutes)
+	}
 	if m.created != nil {
 		fields = append(fields, settings.FieldCreated)
 	}
@@ -12647,6 +12722,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.UserCertYearsValid()
 	case settings.FieldNatsRequestTimeoutSeconds:
 		return m.NatsRequestTimeoutSeconds()
+	case settings.FieldRefreshTimeInMinutes:
+		return m.RefreshTimeInMinutes()
 	case settings.FieldCreated:
 		return m.Created()
 	case settings.FieldModified:
@@ -12702,6 +12779,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUserCertYearsValid(ctx)
 	case settings.FieldNatsRequestTimeoutSeconds:
 		return m.OldNatsRequestTimeoutSeconds(ctx)
+	case settings.FieldRefreshTimeInMinutes:
+		return m.OldRefreshTimeInMinutes(ctx)
 	case settings.FieldCreated:
 		return m.OldCreated(ctx)
 	case settings.FieldModified:
@@ -12862,6 +12941,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNatsRequestTimeoutSeconds(v)
 		return nil
+	case settings.FieldRefreshTimeInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefreshTimeInMinutes(v)
+		return nil
 	case settings.FieldCreated:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -12893,6 +12979,9 @@ func (m *SettingsMutation) AddedFields() []string {
 	if m.addnats_request_timeout_seconds != nil {
 		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
 	}
+	if m.addrefresh_time_in_minutes != nil {
+		fields = append(fields, settings.FieldRefreshTimeInMinutes)
+	}
 	return fields
 }
 
@@ -12907,6 +12996,8 @@ func (m *SettingsMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUserCertYearsValid()
 	case settings.FieldNatsRequestTimeoutSeconds:
 		return m.AddedNatsRequestTimeoutSeconds()
+	case settings.FieldRefreshTimeInMinutes:
+		return m.AddedRefreshTimeInMinutes()
 	}
 	return nil, false
 }
@@ -12936,6 +13027,13 @@ func (m *SettingsMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddNatsRequestTimeoutSeconds(v)
+		return nil
+	case settings.FieldRefreshTimeInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRefreshTimeInMinutes(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Settings numeric field %s", name)
@@ -13007,6 +13105,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(settings.FieldNatsRequestTimeoutSeconds) {
 		fields = append(fields, settings.FieldNatsRequestTimeoutSeconds)
+	}
+	if m.FieldCleared(settings.FieldRefreshTimeInMinutes) {
+		fields = append(fields, settings.FieldRefreshTimeInMinutes)
 	}
 	if m.FieldCleared(settings.FieldCreated) {
 		fields = append(fields, settings.FieldCreated)
@@ -13091,6 +13192,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldNatsRequestTimeoutSeconds:
 		m.ClearNatsRequestTimeoutSeconds()
 		return nil
+	case settings.FieldRefreshTimeInMinutes:
+		m.ClearRefreshTimeInMinutes()
+		return nil
 	case settings.FieldCreated:
 		m.ClearCreated()
 		return nil
@@ -13167,6 +13271,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldNatsRequestTimeoutSeconds:
 		m.ResetNatsRequestTimeoutSeconds()
+		return nil
+	case settings.FieldRefreshTimeInMinutes:
+		m.ResetRefreshTimeInMinutes()
 		return nil
 	case settings.FieldCreated:
 		m.ResetCreated()

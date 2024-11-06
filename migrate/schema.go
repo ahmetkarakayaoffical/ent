@@ -376,6 +376,7 @@ var (
 		{Name: "max_upload_size", Type: field.TypeString, Nullable: true, Default: "512M"},
 		{Name: "user_cert_years_valid", Type: field.TypeInt, Nullable: true, Default: 1},
 		{Name: "nats_request_timeout_seconds", Type: field.TypeInt, Nullable: true, Default: 20},
+		{Name: "refresh_time_in_minutes", Type: field.TypeInt, Nullable: true, Default: 5},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

@@ -470,6 +470,33 @@ func (su *SettingsUpdate) ClearNatsRequestTimeoutSeconds() *SettingsUpdate {
 	return su
 }
 
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (su *SettingsUpdate) SetRefreshTimeInMinutes(i int) *SettingsUpdate {
+	su.mutation.ResetRefreshTimeInMinutes()
+	su.mutation.SetRefreshTimeInMinutes(i)
+	return su
+}
+
+// SetNillableRefreshTimeInMinutes sets the "refresh_time_in_minutes" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableRefreshTimeInMinutes(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetRefreshTimeInMinutes(*i)
+	}
+	return su
+}
+
+// AddRefreshTimeInMinutes adds i to the "refresh_time_in_minutes" field.
+func (su *SettingsUpdate) AddRefreshTimeInMinutes(i int) *SettingsUpdate {
+	su.mutation.AddRefreshTimeInMinutes(i)
+	return su
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (su *SettingsUpdate) ClearRefreshTimeInMinutes() *SettingsUpdate {
+	su.mutation.ClearRefreshTimeInMinutes()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SettingsUpdate) SetCreated(t time.Time) *SettingsUpdate {
 	su.mutation.SetCreated(t)
@@ -692,6 +719,15 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.NatsRequestTimeoutSecondsCleared() {
 		_spec.ClearField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt)
+	}
+	if value, ok := su.mutation.RefreshTimeInMinutes(); ok {
+		_spec.SetField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedRefreshTimeInMinutes(); ok {
+		_spec.AddField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
+	}
+	if su.mutation.RefreshTimeInMinutesCleared() {
+		_spec.ClearField(settings.FieldRefreshTimeInMinutes, field.TypeInt)
 	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -1168,6 +1204,33 @@ func (suo *SettingsUpdateOne) ClearNatsRequestTimeoutSeconds() *SettingsUpdateOn
 	return suo
 }
 
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (suo *SettingsUpdateOne) SetRefreshTimeInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.ResetRefreshTimeInMinutes()
+	suo.mutation.SetRefreshTimeInMinutes(i)
+	return suo
+}
+
+// SetNillableRefreshTimeInMinutes sets the "refresh_time_in_minutes" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableRefreshTimeInMinutes(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetRefreshTimeInMinutes(*i)
+	}
+	return suo
+}
+
+// AddRefreshTimeInMinutes adds i to the "refresh_time_in_minutes" field.
+func (suo *SettingsUpdateOne) AddRefreshTimeInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.AddRefreshTimeInMinutes(i)
+	return suo
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (suo *SettingsUpdateOne) ClearRefreshTimeInMinutes() *SettingsUpdateOne {
+	suo.mutation.ClearRefreshTimeInMinutes()
+	return suo
+}
+
 // SetCreated sets the "created" field.
 func (suo *SettingsUpdateOne) SetCreated(t time.Time) *SettingsUpdateOne {
 	suo.mutation.SetCreated(t)
@@ -1420,6 +1483,15 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.NatsRequestTimeoutSecondsCleared() {
 		_spec.ClearField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt)
+	}
+	if value, ok := suo.mutation.RefreshTimeInMinutes(); ok {
+		_spec.SetField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedRefreshTimeInMinutes(); ok {
+		_spec.AddField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
+	}
+	if suo.mutation.RefreshTimeInMinutesCleared() {
+		_spec.ClearField(settings.FieldRefreshTimeInMinutes, field.TypeInt)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)

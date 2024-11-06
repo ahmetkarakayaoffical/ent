@@ -316,6 +316,20 @@ func (sc *SettingsCreate) SetNillableNatsRequestTimeoutSeconds(i *int) *Settings
 	return sc
 }
 
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (sc *SettingsCreate) SetRefreshTimeInMinutes(i int) *SettingsCreate {
+	sc.mutation.SetRefreshTimeInMinutes(i)
+	return sc
+}
+
+// SetNillableRefreshTimeInMinutes sets the "refresh_time_in_minutes" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableRefreshTimeInMinutes(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetRefreshTimeInMinutes(*i)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SettingsCreate) SetCreated(t time.Time) *SettingsCreate {
 	sc.mutation.SetCreated(t)
@@ -410,6 +424,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.NatsRequestTimeoutSeconds(); !ok {
 		v := settings.DefaultNatsRequestTimeoutSeconds
 		sc.mutation.SetNatsRequestTimeoutSeconds(v)
+	}
+	if _, ok := sc.mutation.RefreshTimeInMinutes(); !ok {
+		v := settings.DefaultRefreshTimeInMinutes
+		sc.mutation.SetRefreshTimeInMinutes(v)
 	}
 	if _, ok := sc.mutation.Created(); !ok {
 		v := settings.DefaultCreated()
@@ -533,6 +551,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.NatsRequestTimeoutSeconds(); ok {
 		_spec.SetField(settings.FieldNatsRequestTimeoutSeconds, field.TypeInt, value)
 		_node.NatsRequestTimeoutSeconds = value
+	}
+	if value, ok := sc.mutation.RefreshTimeInMinutes(); ok {
+		_spec.SetField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
+		_node.RefreshTimeInMinutes = value
 	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -987,6 +1009,30 @@ func (u *SettingsUpsert) AddNatsRequestTimeoutSeconds(v int) *SettingsUpsert {
 // ClearNatsRequestTimeoutSeconds clears the value of the "nats_request_timeout_seconds" field.
 func (u *SettingsUpsert) ClearNatsRequestTimeoutSeconds() *SettingsUpsert {
 	u.SetNull(settings.FieldNatsRequestTimeoutSeconds)
+	return u
+}
+
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (u *SettingsUpsert) SetRefreshTimeInMinutes(v int) *SettingsUpsert {
+	u.Set(settings.FieldRefreshTimeInMinutes, v)
+	return u
+}
+
+// UpdateRefreshTimeInMinutes sets the "refresh_time_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateRefreshTimeInMinutes() *SettingsUpsert {
+	u.SetExcluded(settings.FieldRefreshTimeInMinutes)
+	return u
+}
+
+// AddRefreshTimeInMinutes adds v to the "refresh_time_in_minutes" field.
+func (u *SettingsUpsert) AddRefreshTimeInMinutes(v int) *SettingsUpsert {
+	u.Add(settings.FieldRefreshTimeInMinutes, v)
+	return u
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (u *SettingsUpsert) ClearRefreshTimeInMinutes() *SettingsUpsert {
+	u.SetNull(settings.FieldRefreshTimeInMinutes)
 	return u
 }
 
@@ -1525,6 +1571,34 @@ func (u *SettingsUpsertOne) UpdateNatsRequestTimeoutSeconds() *SettingsUpsertOne
 func (u *SettingsUpsertOne) ClearNatsRequestTimeoutSeconds() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearNatsRequestTimeoutSeconds()
+	})
+}
+
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertOne) SetRefreshTimeInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetRefreshTimeInMinutes(v)
+	})
+}
+
+// AddRefreshTimeInMinutes adds v to the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertOne) AddRefreshTimeInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddRefreshTimeInMinutes(v)
+	})
+}
+
+// UpdateRefreshTimeInMinutes sets the "refresh_time_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateRefreshTimeInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateRefreshTimeInMinutes()
+	})
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertOne) ClearRefreshTimeInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearRefreshTimeInMinutes()
 	})
 }
 
@@ -2233,6 +2307,34 @@ func (u *SettingsUpsertBulk) UpdateNatsRequestTimeoutSeconds() *SettingsUpsertBu
 func (u *SettingsUpsertBulk) ClearNatsRequestTimeoutSeconds() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearNatsRequestTimeoutSeconds()
+	})
+}
+
+// SetRefreshTimeInMinutes sets the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertBulk) SetRefreshTimeInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetRefreshTimeInMinutes(v)
+	})
+}
+
+// AddRefreshTimeInMinutes adds v to the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertBulk) AddRefreshTimeInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddRefreshTimeInMinutes(v)
+	})
+}
+
+// UpdateRefreshTimeInMinutes sets the "refresh_time_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateRefreshTimeInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateRefreshTimeInMinutes()
+	})
+}
+
+// ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
+func (u *SettingsUpsertBulk) ClearRefreshTimeInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearRefreshTimeInMinutes()
 	})
 }
 

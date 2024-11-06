@@ -159,6 +159,11 @@ func NatsRequestTimeoutSeconds(v int) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldNatsRequestTimeoutSeconds, v))
 }
 
+// RefreshTimeInMinutes applies equality check predicate on the "refresh_time_in_minutes" field. It's identical to RefreshTimeInMinutesEQ.
+func RefreshTimeInMinutes(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldRefreshTimeInMinutes, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1557,6 +1562,56 @@ func NatsRequestTimeoutSecondsIsNil() predicate.Settings {
 // NatsRequestTimeoutSecondsNotNil applies the NotNil predicate on the "nats_request_timeout_seconds" field.
 func NatsRequestTimeoutSecondsNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldNatsRequestTimeoutSeconds))
+}
+
+// RefreshTimeInMinutesEQ applies the EQ predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesNEQ applies the NEQ predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesIn applies the In predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldRefreshTimeInMinutes, vs...))
+}
+
+// RefreshTimeInMinutesNotIn applies the NotIn predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldRefreshTimeInMinutes, vs...))
+}
+
+// RefreshTimeInMinutesGT applies the GT predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesGTE applies the GTE predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesLT applies the LT predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesLTE applies the LTE predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldRefreshTimeInMinutes, v))
+}
+
+// RefreshTimeInMinutesIsNil applies the IsNil predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldRefreshTimeInMinutes))
+}
+
+// RefreshTimeInMinutesNotNil applies the NotNil predicate on the "refresh_time_in_minutes" field.
+func RefreshTimeInMinutesNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldRefreshTimeInMinutes))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.
