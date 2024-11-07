@@ -330,6 +330,20 @@ func (sc *SettingsCreate) SetNillableRefreshTimeInMinutes(i *int) *SettingsCreat
 	return sc
 }
 
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (sc *SettingsCreate) SetSessionLifetimeInMinutes(i int) *SettingsCreate {
+	sc.mutation.SetSessionLifetimeInMinutes(i)
+	return sc
+}
+
+// SetNillableSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableSessionLifetimeInMinutes(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetSessionLifetimeInMinutes(*i)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SettingsCreate) SetCreated(t time.Time) *SettingsCreate {
 	sc.mutation.SetCreated(t)
@@ -428,6 +442,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.RefreshTimeInMinutes(); !ok {
 		v := settings.DefaultRefreshTimeInMinutes
 		sc.mutation.SetRefreshTimeInMinutes(v)
+	}
+	if _, ok := sc.mutation.SessionLifetimeInMinutes(); !ok {
+		v := settings.DefaultSessionLifetimeInMinutes
+		sc.mutation.SetSessionLifetimeInMinutes(v)
 	}
 	if _, ok := sc.mutation.Created(); !ok {
 		v := settings.DefaultCreated()
@@ -555,6 +573,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.RefreshTimeInMinutes(); ok {
 		_spec.SetField(settings.FieldRefreshTimeInMinutes, field.TypeInt, value)
 		_node.RefreshTimeInMinutes = value
+	}
+	if value, ok := sc.mutation.SessionLifetimeInMinutes(); ok {
+		_spec.SetField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
+		_node.SessionLifetimeInMinutes = value
 	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -1033,6 +1055,30 @@ func (u *SettingsUpsert) AddRefreshTimeInMinutes(v int) *SettingsUpsert {
 // ClearRefreshTimeInMinutes clears the value of the "refresh_time_in_minutes" field.
 func (u *SettingsUpsert) ClearRefreshTimeInMinutes() *SettingsUpsert {
 	u.SetNull(settings.FieldRefreshTimeInMinutes)
+	return u
+}
+
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsert) SetSessionLifetimeInMinutes(v int) *SettingsUpsert {
+	u.Set(settings.FieldSessionLifetimeInMinutes, v)
+	return u
+}
+
+// UpdateSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateSessionLifetimeInMinutes() *SettingsUpsert {
+	u.SetExcluded(settings.FieldSessionLifetimeInMinutes)
+	return u
+}
+
+// AddSessionLifetimeInMinutes adds v to the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsert) AddSessionLifetimeInMinutes(v int) *SettingsUpsert {
+	u.Add(settings.FieldSessionLifetimeInMinutes, v)
+	return u
+}
+
+// ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsert) ClearSessionLifetimeInMinutes() *SettingsUpsert {
+	u.SetNull(settings.FieldSessionLifetimeInMinutes)
 	return u
 }
 
@@ -1599,6 +1645,34 @@ func (u *SettingsUpsertOne) UpdateRefreshTimeInMinutes() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearRefreshTimeInMinutes() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearRefreshTimeInMinutes()
+	})
+}
+
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertOne) SetSessionLifetimeInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetSessionLifetimeInMinutes(v)
+	})
+}
+
+// AddSessionLifetimeInMinutes adds v to the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertOne) AddSessionLifetimeInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddSessionLifetimeInMinutes(v)
+	})
+}
+
+// UpdateSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateSessionLifetimeInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateSessionLifetimeInMinutes()
+	})
+}
+
+// ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertOne) ClearSessionLifetimeInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearSessionLifetimeInMinutes()
 	})
 }
 
@@ -2335,6 +2409,34 @@ func (u *SettingsUpsertBulk) UpdateRefreshTimeInMinutes() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearRefreshTimeInMinutes() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearRefreshTimeInMinutes()
+	})
+}
+
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertBulk) SetSessionLifetimeInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetSessionLifetimeInMinutes(v)
+	})
+}
+
+// AddSessionLifetimeInMinutes adds v to the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertBulk) AddSessionLifetimeInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddSessionLifetimeInMinutes(v)
+	})
+}
+
+// UpdateSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateSessionLifetimeInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateSessionLifetimeInMinutes()
+	})
+}
+
+// ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
+func (u *SettingsUpsertBulk) ClearSessionLifetimeInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearSessionLifetimeInMinutes()
 	})
 }
 

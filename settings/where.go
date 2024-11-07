@@ -164,6 +164,11 @@ func RefreshTimeInMinutes(v int) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldRefreshTimeInMinutes, v))
 }
 
+// SessionLifetimeInMinutes applies equality check predicate on the "session_lifetime_in_minutes" field. It's identical to SessionLifetimeInMinutesEQ.
+func SessionLifetimeInMinutes(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldSessionLifetimeInMinutes, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1612,6 +1617,56 @@ func RefreshTimeInMinutesIsNil() predicate.Settings {
 // RefreshTimeInMinutesNotNil applies the NotNil predicate on the "refresh_time_in_minutes" field.
 func RefreshTimeInMinutesNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldRefreshTimeInMinutes))
+}
+
+// SessionLifetimeInMinutesEQ applies the EQ predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesNEQ applies the NEQ predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesIn applies the In predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldSessionLifetimeInMinutes, vs...))
+}
+
+// SessionLifetimeInMinutesNotIn applies the NotIn predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldSessionLifetimeInMinutes, vs...))
+}
+
+// SessionLifetimeInMinutesGT applies the GT predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesGTE applies the GTE predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesLT applies the LT predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesLTE applies the LTE predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldSessionLifetimeInMinutes, v))
+}
+
+// SessionLifetimeInMinutesIsNil applies the IsNil predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldSessionLifetimeInMinutes))
+}
+
+// SessionLifetimeInMinutesNotNil applies the NotNil predicate on the "session_lifetime_in_minutes" field.
+func SessionLifetimeInMinutesNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldSessionLifetimeInMinutes))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

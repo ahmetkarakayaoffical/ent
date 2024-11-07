@@ -57,6 +57,8 @@ const (
 	FieldNatsRequestTimeoutSeconds = "nats_request_timeout_seconds"
 	// FieldRefreshTimeInMinutes holds the string denoting the refresh_time_in_minutes field in the database.
 	FieldRefreshTimeInMinutes = "refresh_time_in_minutes"
+	// FieldSessionLifetimeInMinutes holds the string denoting the session_lifetime_in_minutes field in the database.
+	FieldSessionLifetimeInMinutes = "session_lifetime_in_minutes"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -90,6 +92,7 @@ var Columns = []string{
 	FieldUserCertYearsValid,
 	FieldNatsRequestTimeoutSeconds,
 	FieldRefreshTimeInMinutes,
+	FieldSessionLifetimeInMinutes,
 	FieldCreated,
 	FieldModified,
 }
@@ -123,6 +126,8 @@ var (
 	DefaultNatsRequestTimeoutSeconds int
 	// DefaultRefreshTimeInMinutes holds the default value on creation for the "refresh_time_in_minutes" field.
 	DefaultRefreshTimeInMinutes int
+	// DefaultSessionLifetimeInMinutes holds the default value on creation for the "session_lifetime_in_minutes" field.
+	DefaultSessionLifetimeInMinutes int
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -247,6 +252,11 @@ func ByNatsRequestTimeoutSeconds(opts ...sql.OrderTermOption) OrderOption {
 // ByRefreshTimeInMinutes orders the results by the refresh_time_in_minutes field.
 func ByRefreshTimeInMinutes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRefreshTimeInMinutes, opts...).ToFunc()
+}
+
+// BySessionLifetimeInMinutes orders the results by the session_lifetime_in_minutes field.
+func BySessionLifetimeInMinutes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSessionLifetimeInMinutes, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

@@ -61,6 +61,8 @@ type Settings struct {
 	NatsRequestTimeoutSeconds int `json:"nats_request_timeout_seconds,omitempty"`
 	// RefreshTimeInMinutes holds the value of the "refresh_time_in_minutes" field.
 	RefreshTimeInMinutes int `json:"refresh_time_in_minutes,omitempty"`
+	// SessionLifetimeInMinutes holds the value of the "session_lifetime_in_minutes" field.
+	SessionLifetimeInMinutes int `json:"session_lifetime_in_minutes,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -75,7 +77,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls:
 			values[i] = new(sql.NullBool)
-		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes:
+		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes:
 			values[i] = new(sql.NullInt64)
 		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize:
 			values[i] = new(sql.NullString)
@@ -234,6 +236,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.RefreshTimeInMinutes = int(value.Int64)
 			}
+		case settings.FieldSessionLifetimeInMinutes:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field session_lifetime_in_minutes", values[i])
+			} else if value.Valid {
+				s.SessionLifetimeInMinutes = int(value.Int64)
+			}
 		case settings.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -347,6 +355,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("refresh_time_in_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", s.RefreshTimeInMinutes))
+	builder.WriteString(", ")
+	builder.WriteString("session_lifetime_in_minutes=")
+	builder.WriteString(fmt.Sprintf("%v", s.SessionLifetimeInMinutes))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(s.Created.Format(time.ANSIC))

@@ -497,6 +497,33 @@ func (su *SettingsUpdate) ClearRefreshTimeInMinutes() *SettingsUpdate {
 	return su
 }
 
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (su *SettingsUpdate) SetSessionLifetimeInMinutes(i int) *SettingsUpdate {
+	su.mutation.ResetSessionLifetimeInMinutes()
+	su.mutation.SetSessionLifetimeInMinutes(i)
+	return su
+}
+
+// SetNillableSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableSessionLifetimeInMinutes(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetSessionLifetimeInMinutes(*i)
+	}
+	return su
+}
+
+// AddSessionLifetimeInMinutes adds i to the "session_lifetime_in_minutes" field.
+func (su *SettingsUpdate) AddSessionLifetimeInMinutes(i int) *SettingsUpdate {
+	su.mutation.AddSessionLifetimeInMinutes(i)
+	return su
+}
+
+// ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
+func (su *SettingsUpdate) ClearSessionLifetimeInMinutes() *SettingsUpdate {
+	su.mutation.ClearSessionLifetimeInMinutes()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SettingsUpdate) SetCreated(t time.Time) *SettingsUpdate {
 	su.mutation.SetCreated(t)
@@ -728,6 +755,15 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.RefreshTimeInMinutesCleared() {
 		_spec.ClearField(settings.FieldRefreshTimeInMinutes, field.TypeInt)
+	}
+	if value, ok := su.mutation.SessionLifetimeInMinutes(); ok {
+		_spec.SetField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedSessionLifetimeInMinutes(); ok {
+		_spec.AddField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
+	}
+	if su.mutation.SessionLifetimeInMinutesCleared() {
+		_spec.ClearField(settings.FieldSessionLifetimeInMinutes, field.TypeInt)
 	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -1231,6 +1267,33 @@ func (suo *SettingsUpdateOne) ClearRefreshTimeInMinutes() *SettingsUpdateOne {
 	return suo
 }
 
+// SetSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field.
+func (suo *SettingsUpdateOne) SetSessionLifetimeInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.ResetSessionLifetimeInMinutes()
+	suo.mutation.SetSessionLifetimeInMinutes(i)
+	return suo
+}
+
+// SetNillableSessionLifetimeInMinutes sets the "session_lifetime_in_minutes" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableSessionLifetimeInMinutes(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetSessionLifetimeInMinutes(*i)
+	}
+	return suo
+}
+
+// AddSessionLifetimeInMinutes adds i to the "session_lifetime_in_minutes" field.
+func (suo *SettingsUpdateOne) AddSessionLifetimeInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.AddSessionLifetimeInMinutes(i)
+	return suo
+}
+
+// ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
+func (suo *SettingsUpdateOne) ClearSessionLifetimeInMinutes() *SettingsUpdateOne {
+	suo.mutation.ClearSessionLifetimeInMinutes()
+	return suo
+}
+
 // SetCreated sets the "created" field.
 func (suo *SettingsUpdateOne) SetCreated(t time.Time) *SettingsUpdateOne {
 	suo.mutation.SetCreated(t)
@@ -1492,6 +1555,15 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.RefreshTimeInMinutesCleared() {
 		_spec.ClearField(settings.FieldRefreshTimeInMinutes, field.TypeInt)
+	}
+	if value, ok := suo.mutation.SessionLifetimeInMinutes(); ok {
+		_spec.SetField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedSessionLifetimeInMinutes(); ok {
+		_spec.AddField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
+	}
+	if suo.mutation.SessionLifetimeInMinutesCleared() {
+		_spec.ClearField(settings.FieldSessionLifetimeInMinutes, field.TypeInt)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
