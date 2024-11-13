@@ -63,10 +63,6 @@ func init() {
 	agentDescUpdateTaskResult := agentFields[13].Descriptor()
 	// agent.DefaultUpdateTaskResult holds the default value on creation for the update_task_result field.
 	agent.DefaultUpdateTaskResult = agentDescUpdateTaskResult.Default.(string)
-	// agentDescUpdateTaskExecution is the schema descriptor for update_task_execution field.
-	agentDescUpdateTaskExecution := agentFields[14].Descriptor()
-	// agent.DefaultUpdateTaskExecution holds the default value on creation for the update_task_execution field.
-	agent.DefaultUpdateTaskExecution = agentDescUpdateTaskExecution.Default.(time.Time)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

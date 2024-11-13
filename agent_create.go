@@ -504,10 +504,6 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultUpdateTaskResult
 		ac.mutation.SetUpdateTaskResult(v)
 	}
-	if _, ok := ac.mutation.UpdateTaskExecution(); !ok {
-		v := agent.DefaultUpdateTaskExecution
-		ac.mutation.SetUpdateTaskExecution(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -3,8 +3,6 @@
 package agent
 
 import (
-	"time"
-
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -254,8 +252,6 @@ var (
 	DefaultUpdateTaskDescription string
 	// DefaultUpdateTaskResult holds the default value on creation for the "update_task_result" field.
 	DefaultUpdateTaskResult string
-	// DefaultUpdateTaskExecution holds the default value on creation for the "update_task_execution" field.
-	DefaultUpdateTaskExecution time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
