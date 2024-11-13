@@ -40,6 +40,8 @@ const (
 	FieldUpdateTaskResult = "update_task_result"
 	// FieldUpdateTaskExecution holds the string denoting the update_task_execution field in the database.
 	FieldUpdateTaskExecution = "update_task_execution"
+	// FieldUpdateTaskVersion holds the string denoting the update_task_version field in the database.
+	FieldUpdateTaskVersion = "update_task_version"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -213,6 +215,7 @@ var Columns = []string{
 	FieldUpdateTaskDescription,
 	FieldUpdateTaskResult,
 	FieldUpdateTaskExecution,
+	FieldUpdateTaskVersion,
 }
 
 var (
@@ -252,6 +255,8 @@ var (
 	DefaultUpdateTaskDescription string
 	// DefaultUpdateTaskResult holds the default value on creation for the "update_task_result" field.
 	DefaultUpdateTaskResult string
+	// DefaultUpdateTaskVersion holds the default value on creation for the "update_task_version" field.
+	DefaultUpdateTaskVersion string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -332,6 +337,11 @@ func ByUpdateTaskResult(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdateTaskExecution orders the results by the update_task_execution field.
 func ByUpdateTaskExecution(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdateTaskExecution, opts...).ToFunc()
+}
+
+// ByUpdateTaskVersion orders the results by the update_task_version field.
+func ByUpdateTaskVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTaskVersion, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

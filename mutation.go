@@ -87,6 +87,7 @@ type AgentMutation struct {
 	update_task_description *string
 	update_task_result      *string
 	update_task_execution   *time.Time
+	update_task_version     *string
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -843,6 +844,55 @@ func (m *AgentMutation) ResetUpdateTaskExecution() {
 	delete(m.clearedFields, agent.FieldUpdateTaskExecution)
 }
 
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (m *AgentMutation) SetUpdateTaskVersion(s string) {
+	m.update_task_version = &s
+}
+
+// UpdateTaskVersion returns the value of the "update_task_version" field in the mutation.
+func (m *AgentMutation) UpdateTaskVersion() (r string, exists bool) {
+	v := m.update_task_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTaskVersion returns the old "update_task_version" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldUpdateTaskVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTaskVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTaskVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTaskVersion: %w", err)
+	}
+	return oldValue.UpdateTaskVersion, nil
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (m *AgentMutation) ClearUpdateTaskVersion() {
+	m.update_task_version = nil
+	m.clearedFields[agent.FieldUpdateTaskVersion] = struct{}{}
+}
+
+// UpdateTaskVersionCleared returns if the "update_task_version" field was cleared in this mutation.
+func (m *AgentMutation) UpdateTaskVersionCleared() bool {
+	_, ok := m.clearedFields[agent.FieldUpdateTaskVersion]
+	return ok
+}
+
+// ResetUpdateTaskVersion resets all changes to the "update_task_version" field.
+func (m *AgentMutation) ResetUpdateTaskVersion() {
+	m.update_task_version = nil
+	delete(m.clearedFields, agent.FieldUpdateTaskVersion)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -1573,7 +1623,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1616,6 +1666,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.update_task_execution != nil {
 		fields = append(fields, agent.FieldUpdateTaskExecution)
 	}
+	if m.update_task_version != nil {
+		fields = append(fields, agent.FieldUpdateTaskVersion)
+	}
 	return fields
 }
 
@@ -1652,6 +1705,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdateTaskResult()
 	case agent.FieldUpdateTaskExecution:
 		return m.UpdateTaskExecution()
+	case agent.FieldUpdateTaskVersion:
+		return m.UpdateTaskVersion()
 	}
 	return nil, false
 }
@@ -1689,6 +1744,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldUpdateTaskResult(ctx)
 	case agent.FieldUpdateTaskExecution:
 		return m.OldUpdateTaskExecution(ctx)
+	case agent.FieldUpdateTaskVersion:
+		return m.OldUpdateTaskVersion(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1796,6 +1853,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdateTaskExecution(v)
 		return nil
+	case agent.FieldUpdateTaskVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTaskVersion(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1850,6 +1914,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldUpdateTaskExecution) {
 		fields = append(fields, agent.FieldUpdateTaskExecution)
 	}
+	if m.FieldCleared(agent.FieldUpdateTaskVersion) {
+		fields = append(fields, agent.FieldUpdateTaskVersion)
+	}
 	return fields
 }
 
@@ -1887,6 +1954,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldUpdateTaskExecution:
 		m.ClearUpdateTaskExecution()
+		return nil
+	case agent.FieldUpdateTaskVersion:
+		m.ClearUpdateTaskVersion()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -1937,6 +2007,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldUpdateTaskExecution:
 		m.ResetUpdateTaskExecution()
+		return nil
+	case agent.FieldUpdateTaskVersion:
+		m.ResetUpdateTaskVersion()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

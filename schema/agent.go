@@ -30,6 +30,7 @@ func (Agent) Fields() []ent.Field {
 		field.String("update_task_description").Optional().Default(""),
 		field.String("update_task_result").Optional().Default(""),
 		field.Time("update_task_execution").Optional(),
+		field.String("update_task_version").Optional().Default(""),
 	}
 }
 

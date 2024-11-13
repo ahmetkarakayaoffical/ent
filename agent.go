@@ -49,6 +49,8 @@ type Agent struct {
 	UpdateTaskResult string `json:"update_task_result,omitempty"`
 	// UpdateTaskExecution holds the value of the "update_task_execution" field.
 	UpdateTaskExecution time.Time `json:"update_task_execution,omitempty"`
+	// UpdateTaskVersion holds the value of the "update_task_version" field.
+	UpdateTaskVersion string `json:"update_task_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges        AgentEdges `json:"edges"`
@@ -231,7 +233,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
@@ -339,6 +341,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field update_task_execution", values[i])
 			} else if value.Valid {
 				a.UpdateTaskExecution = value.Time
+			}
+		case agent.FieldUpdateTaskVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_task_version", values[i])
+			} else if value.Valid {
+				a.UpdateTaskVersion = value.String
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -487,6 +495,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("update_task_execution=")
 	builder.WriteString(a.UpdateTaskExecution.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_task_version=")
+	builder.WriteString(a.UpdateTaskVersion)
 	builder.WriteByte(')')
 	return builder.String()
 }

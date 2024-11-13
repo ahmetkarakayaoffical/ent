@@ -25,6 +25,7 @@ var (
 		{Name: "update_task_description", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
+		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{

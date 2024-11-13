@@ -287,6 +287,26 @@ func (au *AgentUpdate) ClearUpdateTaskExecution() *AgentUpdate {
 	return au
 }
 
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (au *AgentUpdate) SetUpdateTaskVersion(s string) *AgentUpdate {
+	au.mutation.SetUpdateTaskVersion(s)
+	return au
+}
+
+// SetNillableUpdateTaskVersion sets the "update_task_version" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableUpdateTaskVersion(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetUpdateTaskVersion(*s)
+	}
+	return au
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (au *AgentUpdate) ClearUpdateTaskVersion() *AgentUpdate {
+	au.mutation.ClearUpdateTaskVersion()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -882,6 +902,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.UpdateTaskExecutionCleared() {
 		_spec.ClearField(agent.FieldUpdateTaskExecution, field.TypeTime)
+	}
+	if value, ok := au.mutation.UpdateTaskVersion(); ok {
+		_spec.SetField(agent.FieldUpdateTaskVersion, field.TypeString, value)
+	}
+	if au.mutation.UpdateTaskVersionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskVersion, field.TypeString)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1715,6 +1741,26 @@ func (auo *AgentUpdateOne) ClearUpdateTaskExecution() *AgentUpdateOne {
 	return auo
 }
 
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (auo *AgentUpdateOne) SetUpdateTaskVersion(s string) *AgentUpdateOne {
+	auo.mutation.SetUpdateTaskVersion(s)
+	return auo
+}
+
+// SetNillableUpdateTaskVersion sets the "update_task_version" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableUpdateTaskVersion(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetUpdateTaskVersion(*s)
+	}
+	return auo
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (auo *AgentUpdateOne) ClearUpdateTaskVersion() *AgentUpdateOne {
+	auo.mutation.ClearUpdateTaskVersion()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2340,6 +2386,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.UpdateTaskExecutionCleared() {
 		_spec.ClearField(agent.FieldUpdateTaskExecution, field.TypeTime)
+	}
+	if value, ok := auo.mutation.UpdateTaskVersion(); ok {
+		_spec.SetField(agent.FieldUpdateTaskVersion, field.TypeString, value)
+	}
+	if auo.mutation.UpdateTaskVersionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskVersion, field.TypeString)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

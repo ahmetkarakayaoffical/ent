@@ -209,6 +209,20 @@ func (ac *AgentCreate) SetNillableUpdateTaskExecution(t *time.Time) *AgentCreate
 	return ac
 }
 
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (ac *AgentCreate) SetUpdateTaskVersion(s string) *AgentCreate {
+	ac.mutation.SetUpdateTaskVersion(s)
+	return ac
+}
+
+// SetNillableUpdateTaskVersion sets the "update_task_version" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableUpdateTaskVersion(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetUpdateTaskVersion(*s)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -504,6 +518,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultUpdateTaskResult
 		ac.mutation.SetUpdateTaskResult(v)
 	}
+	if _, ok := ac.mutation.UpdateTaskVersion(); !ok {
+		v := agent.DefaultUpdateTaskVersion
+		ac.mutation.SetUpdateTaskVersion(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -637,6 +655,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.UpdateTaskExecution(); ok {
 		_spec.SetField(agent.FieldUpdateTaskExecution, field.TypeTime, value)
 		_node.UpdateTaskExecution = value
+	}
+	if value, ok := ac.mutation.UpdateTaskVersion(); ok {
+		_spec.SetField(agent.FieldUpdateTaskVersion, field.TypeString, value)
+		_node.UpdateTaskVersion = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1130,6 +1152,24 @@ func (u *AgentUpsert) ClearUpdateTaskExecution() *AgentUpsert {
 	return u
 }
 
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (u *AgentUpsert) SetUpdateTaskVersion(v string) *AgentUpsert {
+	u.Set(agent.FieldUpdateTaskVersion, v)
+	return u
+}
+
+// UpdateUpdateTaskVersion sets the "update_task_version" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateUpdateTaskVersion() *AgentUpsert {
+	u.SetExcluded(agent.FieldUpdateTaskVersion)
+	return u
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (u *AgentUpsert) ClearUpdateTaskVersion() *AgentUpsert {
+	u.SetNull(agent.FieldUpdateTaskVersion)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1427,6 +1467,27 @@ func (u *AgentUpsertOne) UpdateUpdateTaskExecution() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearUpdateTaskExecution() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearUpdateTaskExecution()
+	})
+}
+
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (u *AgentUpsertOne) SetUpdateTaskVersion(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskVersion(v)
+	})
+}
+
+// UpdateUpdateTaskVersion sets the "update_task_version" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateUpdateTaskVersion() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskVersion()
+	})
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (u *AgentUpsertOne) ClearUpdateTaskVersion() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskVersion()
 	})
 }
 
@@ -1894,6 +1955,27 @@ func (u *AgentUpsertBulk) UpdateUpdateTaskExecution() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearUpdateTaskExecution() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearUpdateTaskExecution()
+	})
+}
+
+// SetUpdateTaskVersion sets the "update_task_version" field.
+func (u *AgentUpsertBulk) SetUpdateTaskVersion(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskVersion(v)
+	})
+}
+
+// UpdateUpdateTaskVersion sets the "update_task_version" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateUpdateTaskVersion() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskVersion()
+	})
+}
+
+// ClearUpdateTaskVersion clears the value of the "update_task_version" field.
+func (u *AgentUpsertBulk) ClearUpdateTaskVersion() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskVersion()
 	})
 }
 

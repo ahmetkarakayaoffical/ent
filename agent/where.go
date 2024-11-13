@@ -135,6 +135,11 @@ func UpdateTaskExecution(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskExecution, v))
 }
 
+// UpdateTaskVersion applies equality check predicate on the "update_task_version" field. It's identical to UpdateTaskVersionEQ.
+func UpdateTaskVersion(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskVersion, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -993,6 +998,81 @@ func UpdateTaskExecutionIsNil() predicate.Agent {
 // UpdateTaskExecutionNotNil applies the NotNil predicate on the "update_task_execution" field.
 func UpdateTaskExecutionNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskExecution))
+}
+
+// UpdateTaskVersionEQ applies the EQ predicate on the "update_task_version" field.
+func UpdateTaskVersionEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionNEQ applies the NEQ predicate on the "update_task_version" field.
+func UpdateTaskVersionNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionIn applies the In predicate on the "update_task_version" field.
+func UpdateTaskVersionIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldUpdateTaskVersion, vs...))
+}
+
+// UpdateTaskVersionNotIn applies the NotIn predicate on the "update_task_version" field.
+func UpdateTaskVersionNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldUpdateTaskVersion, vs...))
+}
+
+// UpdateTaskVersionGT applies the GT predicate on the "update_task_version" field.
+func UpdateTaskVersionGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionGTE applies the GTE predicate on the "update_task_version" field.
+func UpdateTaskVersionGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionLT applies the LT predicate on the "update_task_version" field.
+func UpdateTaskVersionLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionLTE applies the LTE predicate on the "update_task_version" field.
+func UpdateTaskVersionLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionContains applies the Contains predicate on the "update_task_version" field.
+func UpdateTaskVersionContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionHasPrefix applies the HasPrefix predicate on the "update_task_version" field.
+func UpdateTaskVersionHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionHasSuffix applies the HasSuffix predicate on the "update_task_version" field.
+func UpdateTaskVersionHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionIsNil applies the IsNil predicate on the "update_task_version" field.
+func UpdateTaskVersionIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldUpdateTaskVersion))
+}
+
+// UpdateTaskVersionNotNil applies the NotNil predicate on the "update_task_version" field.
+func UpdateTaskVersionNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskVersion))
+}
+
+// UpdateTaskVersionEqualFold applies the EqualFold predicate on the "update_task_version" field.
+func UpdateTaskVersionEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldUpdateTaskVersion, v))
+}
+
+// UpdateTaskVersionContainsFold applies the ContainsFold predicate on the "update_task_version" field.
+func UpdateTaskVersionContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldUpdateTaskVersion, v))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.
