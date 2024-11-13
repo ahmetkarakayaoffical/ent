@@ -379,6 +379,7 @@ var (
 		{Name: "nats_request_timeout_seconds", Type: field.TypeInt, Nullable: true, Default: 20},
 		{Name: "refresh_time_in_minutes", Type: field.TypeInt, Nullable: true, Default: 5},
 		{Name: "session_lifetime_in_minutes", Type: field.TypeInt, Nullable: true, Default: 1440},
+		{Name: "update_channel", Type: field.TypeString, Nullable: true, Default: "stable"},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

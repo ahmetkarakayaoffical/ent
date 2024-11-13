@@ -11274,6 +11274,7 @@ type SettingsMutation struct {
 	addrefresh_time_in_minutes      *int
 	session_lifetime_in_minutes     *int
 	addsession_lifetime_in_minutes  *int
+	update_channel                  *string
 	created                         *time.Time
 	modified                        *time.Time
 	clearedFields                   map[string]struct{}
@@ -12612,6 +12613,55 @@ func (m *SettingsMutation) ResetSessionLifetimeInMinutes() {
 	delete(m.clearedFields, settings.FieldSessionLifetimeInMinutes)
 }
 
+// SetUpdateChannel sets the "update_channel" field.
+func (m *SettingsMutation) SetUpdateChannel(s string) {
+	m.update_channel = &s
+}
+
+// UpdateChannel returns the value of the "update_channel" field in the mutation.
+func (m *SettingsMutation) UpdateChannel() (r string, exists bool) {
+	v := m.update_channel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateChannel returns the old "update_channel" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldUpdateChannel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateChannel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateChannel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateChannel: %w", err)
+	}
+	return oldValue.UpdateChannel, nil
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (m *SettingsMutation) ClearUpdateChannel() {
+	m.update_channel = nil
+	m.clearedFields[settings.FieldUpdateChannel] = struct{}{}
+}
+
+// UpdateChannelCleared returns if the "update_channel" field was cleared in this mutation.
+func (m *SettingsMutation) UpdateChannelCleared() bool {
+	_, ok := m.clearedFields[settings.FieldUpdateChannel]
+	return ok
+}
+
+// ResetUpdateChannel resets all changes to the "update_channel" field.
+func (m *SettingsMutation) ResetUpdateChannel() {
+	m.update_channel = nil
+	delete(m.clearedFields, settings.FieldUpdateChannel)
+}
+
 // SetCreated sets the "created" field.
 func (m *SettingsMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -12744,7 +12794,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -12814,6 +12864,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.session_lifetime_in_minutes != nil {
 		fields = append(fields, settings.FieldSessionLifetimeInMinutes)
 	}
+	if m.update_channel != nil {
+		fields = append(fields, settings.FieldUpdateChannel)
+	}
 	if m.created != nil {
 		fields = append(fields, settings.FieldCreated)
 	}
@@ -12874,6 +12927,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.RefreshTimeInMinutes()
 	case settings.FieldSessionLifetimeInMinutes:
 		return m.SessionLifetimeInMinutes()
+	case settings.FieldUpdateChannel:
+		return m.UpdateChannel()
 	case settings.FieldCreated:
 		return m.Created()
 	case settings.FieldModified:
@@ -12933,6 +12988,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldRefreshTimeInMinutes(ctx)
 	case settings.FieldSessionLifetimeInMinutes:
 		return m.OldSessionLifetimeInMinutes(ctx)
+	case settings.FieldUpdateChannel:
+		return m.OldUpdateChannel(ctx)
 	case settings.FieldCreated:
 		return m.OldCreated(ctx)
 	case settings.FieldModified:
@@ -13106,6 +13163,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSessionLifetimeInMinutes(v)
+		return nil
+	case settings.FieldUpdateChannel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateChannel(v)
 		return nil
 	case settings.FieldCreated:
 		v, ok := value.(time.Time)
@@ -13283,6 +13347,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldSessionLifetimeInMinutes) {
 		fields = append(fields, settings.FieldSessionLifetimeInMinutes)
 	}
+	if m.FieldCleared(settings.FieldUpdateChannel) {
+		fields = append(fields, settings.FieldUpdateChannel)
+	}
 	if m.FieldCleared(settings.FieldCreated) {
 		fields = append(fields, settings.FieldCreated)
 	}
@@ -13372,6 +13439,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldSessionLifetimeInMinutes:
 		m.ClearSessionLifetimeInMinutes()
 		return nil
+	case settings.FieldUpdateChannel:
+		m.ClearUpdateChannel()
+		return nil
 	case settings.FieldCreated:
 		m.ClearCreated()
 		return nil
@@ -13454,6 +13524,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldSessionLifetimeInMinutes:
 		m.ResetSessionLifetimeInMinutes()
+		return nil
+	case settings.FieldUpdateChannel:
+		m.ResetUpdateChannel()
 		return nil
 	case settings.FieldCreated:
 		m.ResetCreated()

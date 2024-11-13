@@ -141,12 +141,16 @@ func init() {
 	settingsDescSessionLifetimeInMinutes := settingsFields[22].Descriptor()
 	// settings.DefaultSessionLifetimeInMinutes holds the default value on creation for the session_lifetime_in_minutes field.
 	settings.DefaultSessionLifetimeInMinutes = settingsDescSessionLifetimeInMinutes.Default.(int)
+	// settingsDescUpdateChannel is the schema descriptor for update_channel field.
+	settingsDescUpdateChannel := settingsFields[23].Descriptor()
+	// settings.DefaultUpdateChannel holds the default value on creation for the update_channel field.
+	settings.DefaultUpdateChannel = settingsDescUpdateChannel.Default.(string)
 	// settingsDescCreated is the schema descriptor for created field.
-	settingsDescCreated := settingsFields[23].Descriptor()
+	settingsDescCreated := settingsFields[24].Descriptor()
 	// settings.DefaultCreated holds the default value on creation for the created field.
 	settings.DefaultCreated = settingsDescCreated.Default.(func() time.Time)
 	// settingsDescModified is the schema descriptor for modified field.
-	settingsDescModified := settingsFields[24].Descriptor()
+	settingsDescModified := settingsFields[25].Descriptor()
 	// settings.DefaultModified holds the default value on creation for the modified field.
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.

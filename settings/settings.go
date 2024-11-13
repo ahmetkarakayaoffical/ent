@@ -59,6 +59,8 @@ const (
 	FieldRefreshTimeInMinutes = "refresh_time_in_minutes"
 	// FieldSessionLifetimeInMinutes holds the string denoting the session_lifetime_in_minutes field in the database.
 	FieldSessionLifetimeInMinutes = "session_lifetime_in_minutes"
+	// FieldUpdateChannel holds the string denoting the update_channel field in the database.
+	FieldUpdateChannel = "update_channel"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -93,6 +95,7 @@ var Columns = []string{
 	FieldNatsRequestTimeoutSeconds,
 	FieldRefreshTimeInMinutes,
 	FieldSessionLifetimeInMinutes,
+	FieldUpdateChannel,
 	FieldCreated,
 	FieldModified,
 }
@@ -128,6 +131,8 @@ var (
 	DefaultRefreshTimeInMinutes int
 	// DefaultSessionLifetimeInMinutes holds the default value on creation for the "session_lifetime_in_minutes" field.
 	DefaultSessionLifetimeInMinutes int
+	// DefaultUpdateChannel holds the default value on creation for the "update_channel" field.
+	DefaultUpdateChannel string
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -257,6 +262,11 @@ func ByRefreshTimeInMinutes(opts ...sql.OrderTermOption) OrderOption {
 // BySessionLifetimeInMinutes orders the results by the session_lifetime_in_minutes field.
 func BySessionLifetimeInMinutes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSessionLifetimeInMinutes, opts...).ToFunc()
+}
+
+// ByUpdateChannel orders the results by the update_channel field.
+func ByUpdateChannel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateChannel, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

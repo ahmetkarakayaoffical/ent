@@ -524,6 +524,26 @@ func (su *SettingsUpdate) ClearSessionLifetimeInMinutes() *SettingsUpdate {
 	return su
 }
 
+// SetUpdateChannel sets the "update_channel" field.
+func (su *SettingsUpdate) SetUpdateChannel(s string) *SettingsUpdate {
+	su.mutation.SetUpdateChannel(s)
+	return su
+}
+
+// SetNillableUpdateChannel sets the "update_channel" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableUpdateChannel(s *string) *SettingsUpdate {
+	if s != nil {
+		su.SetUpdateChannel(*s)
+	}
+	return su
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (su *SettingsUpdate) ClearUpdateChannel() *SettingsUpdate {
+	su.mutation.ClearUpdateChannel()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SettingsUpdate) SetCreated(t time.Time) *SettingsUpdate {
 	su.mutation.SetCreated(t)
@@ -764,6 +784,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.SessionLifetimeInMinutesCleared() {
 		_spec.ClearField(settings.FieldSessionLifetimeInMinutes, field.TypeInt)
+	}
+	if value, ok := su.mutation.UpdateChannel(); ok {
+		_spec.SetField(settings.FieldUpdateChannel, field.TypeString, value)
+	}
+	if su.mutation.UpdateChannelCleared() {
+		_spec.ClearField(settings.FieldUpdateChannel, field.TypeString)
 	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -1294,6 +1320,26 @@ func (suo *SettingsUpdateOne) ClearSessionLifetimeInMinutes() *SettingsUpdateOne
 	return suo
 }
 
+// SetUpdateChannel sets the "update_channel" field.
+func (suo *SettingsUpdateOne) SetUpdateChannel(s string) *SettingsUpdateOne {
+	suo.mutation.SetUpdateChannel(s)
+	return suo
+}
+
+// SetNillableUpdateChannel sets the "update_channel" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableUpdateChannel(s *string) *SettingsUpdateOne {
+	if s != nil {
+		suo.SetUpdateChannel(*s)
+	}
+	return suo
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (suo *SettingsUpdateOne) ClearUpdateChannel() *SettingsUpdateOne {
+	suo.mutation.ClearUpdateChannel()
+	return suo
+}
+
 // SetCreated sets the "created" field.
 func (suo *SettingsUpdateOne) SetCreated(t time.Time) *SettingsUpdateOne {
 	suo.mutation.SetCreated(t)
@@ -1564,6 +1610,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.SessionLifetimeInMinutesCleared() {
 		_spec.ClearField(settings.FieldSessionLifetimeInMinutes, field.TypeInt)
+	}
+	if value, ok := suo.mutation.UpdateChannel(); ok {
+		_spec.SetField(settings.FieldUpdateChannel, field.TypeString, value)
+	}
+	if suo.mutation.UpdateChannelCleared() {
+		_spec.ClearField(settings.FieldUpdateChannel, field.TypeString)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)

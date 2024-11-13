@@ -169,6 +169,11 @@ func SessionLifetimeInMinutes(v int) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldSessionLifetimeInMinutes, v))
 }
 
+// UpdateChannel applies equality check predicate on the "update_channel" field. It's identical to UpdateChannelEQ.
+func UpdateChannel(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUpdateChannel, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldCreated, v))
@@ -1667,6 +1672,81 @@ func SessionLifetimeInMinutesIsNil() predicate.Settings {
 // SessionLifetimeInMinutesNotNil applies the NotNil predicate on the "session_lifetime_in_minutes" field.
 func SessionLifetimeInMinutesNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldSessionLifetimeInMinutes))
+}
+
+// UpdateChannelEQ applies the EQ predicate on the "update_channel" field.
+func UpdateChannelEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUpdateChannel, v))
+}
+
+// UpdateChannelNEQ applies the NEQ predicate on the "update_channel" field.
+func UpdateChannelNEQ(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldUpdateChannel, v))
+}
+
+// UpdateChannelIn applies the In predicate on the "update_channel" field.
+func UpdateChannelIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldUpdateChannel, vs...))
+}
+
+// UpdateChannelNotIn applies the NotIn predicate on the "update_channel" field.
+func UpdateChannelNotIn(vs ...string) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldUpdateChannel, vs...))
+}
+
+// UpdateChannelGT applies the GT predicate on the "update_channel" field.
+func UpdateChannelGT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldUpdateChannel, v))
+}
+
+// UpdateChannelGTE applies the GTE predicate on the "update_channel" field.
+func UpdateChannelGTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldUpdateChannel, v))
+}
+
+// UpdateChannelLT applies the LT predicate on the "update_channel" field.
+func UpdateChannelLT(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldUpdateChannel, v))
+}
+
+// UpdateChannelLTE applies the LTE predicate on the "update_channel" field.
+func UpdateChannelLTE(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldUpdateChannel, v))
+}
+
+// UpdateChannelContains applies the Contains predicate on the "update_channel" field.
+func UpdateChannelContains(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContains(FieldUpdateChannel, v))
+}
+
+// UpdateChannelHasPrefix applies the HasPrefix predicate on the "update_channel" field.
+func UpdateChannelHasPrefix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasPrefix(FieldUpdateChannel, v))
+}
+
+// UpdateChannelHasSuffix applies the HasSuffix predicate on the "update_channel" field.
+func UpdateChannelHasSuffix(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldHasSuffix(FieldUpdateChannel, v))
+}
+
+// UpdateChannelIsNil applies the IsNil predicate on the "update_channel" field.
+func UpdateChannelIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldUpdateChannel))
+}
+
+// UpdateChannelNotNil applies the NotNil predicate on the "update_channel" field.
+func UpdateChannelNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldUpdateChannel))
+}
+
+// UpdateChannelEqualFold applies the EqualFold predicate on the "update_channel" field.
+func UpdateChannelEqualFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldEqualFold(FieldUpdateChannel, v))
+}
+
+// UpdateChannelContainsFold applies the ContainsFold predicate on the "update_channel" field.
+func UpdateChannelContainsFold(v string) predicate.Settings {
+	return predicate.Settings(sql.FieldContainsFold(FieldUpdateChannel, v))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

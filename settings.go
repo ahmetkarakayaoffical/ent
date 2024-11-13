@@ -63,6 +63,8 @@ type Settings struct {
 	RefreshTimeInMinutes int `json:"refresh_time_in_minutes,omitempty"`
 	// SessionLifetimeInMinutes holds the value of the "session_lifetime_in_minutes" field.
 	SessionLifetimeInMinutes int `json:"session_lifetime_in_minutes,omitempty"`
+	// UpdateChannel holds the value of the "update_channel" field.
+	UpdateChannel string `json:"update_channel,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -79,7 +81,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes:
 			values[i] = new(sql.NullInt64)
-		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize:
+		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize, settings.FieldUpdateChannel:
 			values[i] = new(sql.NullString)
 		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -242,6 +244,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.SessionLifetimeInMinutes = int(value.Int64)
 			}
+		case settings.FieldUpdateChannel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_channel", values[i])
+			} else if value.Valid {
+				s.UpdateChannel = value.String
+			}
 		case settings.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -358,6 +366,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("session_lifetime_in_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", s.SessionLifetimeInMinutes))
+	builder.WriteString(", ")
+	builder.WriteString("update_channel=")
+	builder.WriteString(s.UpdateChannel)
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(s.Created.Format(time.ANSIC))

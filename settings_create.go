@@ -344,6 +344,20 @@ func (sc *SettingsCreate) SetNillableSessionLifetimeInMinutes(i *int) *SettingsC
 	return sc
 }
 
+// SetUpdateChannel sets the "update_channel" field.
+func (sc *SettingsCreate) SetUpdateChannel(s string) *SettingsCreate {
+	sc.mutation.SetUpdateChannel(s)
+	return sc
+}
+
+// SetNillableUpdateChannel sets the "update_channel" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableUpdateChannel(s *string) *SettingsCreate {
+	if s != nil {
+		sc.SetUpdateChannel(*s)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SettingsCreate) SetCreated(t time.Time) *SettingsCreate {
 	sc.mutation.SetCreated(t)
@@ -446,6 +460,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.SessionLifetimeInMinutes(); !ok {
 		v := settings.DefaultSessionLifetimeInMinutes
 		sc.mutation.SetSessionLifetimeInMinutes(v)
+	}
+	if _, ok := sc.mutation.UpdateChannel(); !ok {
+		v := settings.DefaultUpdateChannel
+		sc.mutation.SetUpdateChannel(v)
 	}
 	if _, ok := sc.mutation.Created(); !ok {
 		v := settings.DefaultCreated()
@@ -577,6 +595,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.SessionLifetimeInMinutes(); ok {
 		_spec.SetField(settings.FieldSessionLifetimeInMinutes, field.TypeInt, value)
 		_node.SessionLifetimeInMinutes = value
+	}
+	if value, ok := sc.mutation.UpdateChannel(); ok {
+		_spec.SetField(settings.FieldUpdateChannel, field.TypeString, value)
+		_node.UpdateChannel = value
 	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(settings.FieldCreated, field.TypeTime, value)
@@ -1079,6 +1101,24 @@ func (u *SettingsUpsert) AddSessionLifetimeInMinutes(v int) *SettingsUpsert {
 // ClearSessionLifetimeInMinutes clears the value of the "session_lifetime_in_minutes" field.
 func (u *SettingsUpsert) ClearSessionLifetimeInMinutes() *SettingsUpsert {
 	u.SetNull(settings.FieldSessionLifetimeInMinutes)
+	return u
+}
+
+// SetUpdateChannel sets the "update_channel" field.
+func (u *SettingsUpsert) SetUpdateChannel(v string) *SettingsUpsert {
+	u.Set(settings.FieldUpdateChannel, v)
+	return u
+}
+
+// UpdateUpdateChannel sets the "update_channel" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateUpdateChannel() *SettingsUpsert {
+	u.SetExcluded(settings.FieldUpdateChannel)
+	return u
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (u *SettingsUpsert) ClearUpdateChannel() *SettingsUpsert {
+	u.SetNull(settings.FieldUpdateChannel)
 	return u
 }
 
@@ -1673,6 +1713,27 @@ func (u *SettingsUpsertOne) UpdateSessionLifetimeInMinutes() *SettingsUpsertOne 
 func (u *SettingsUpsertOne) ClearSessionLifetimeInMinutes() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSessionLifetimeInMinutes()
+	})
+}
+
+// SetUpdateChannel sets the "update_channel" field.
+func (u *SettingsUpsertOne) SetUpdateChannel(v string) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUpdateChannel(v)
+	})
+}
+
+// UpdateUpdateChannel sets the "update_channel" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateUpdateChannel() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUpdateChannel()
+	})
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (u *SettingsUpsertOne) ClearUpdateChannel() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUpdateChannel()
 	})
 }
 
@@ -2437,6 +2498,27 @@ func (u *SettingsUpsertBulk) UpdateSessionLifetimeInMinutes() *SettingsUpsertBul
 func (u *SettingsUpsertBulk) ClearSessionLifetimeInMinutes() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearSessionLifetimeInMinutes()
+	})
+}
+
+// SetUpdateChannel sets the "update_channel" field.
+func (u *SettingsUpsertBulk) SetUpdateChannel(v string) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUpdateChannel(v)
+	})
+}
+
+// UpdateUpdateChannel sets the "update_channel" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateUpdateChannel() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUpdateChannel()
+	})
+}
+
+// ClearUpdateChannel clears the value of the "update_channel" field.
+func (u *SettingsUpsertBulk) ClearUpdateChannel() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUpdateChannel()
 	})
 }
 
