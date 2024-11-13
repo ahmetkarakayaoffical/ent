@@ -3,6 +3,8 @@
 package agent
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -32,6 +34,14 @@ const (
 	FieldVnc = "vnc"
 	// FieldNotes holds the string denoting the notes field in the database.
 	FieldNotes = "notes"
+	// FieldUpdateTaskStatus holds the string denoting the update_task_status field in the database.
+	FieldUpdateTaskStatus = "update_task_status"
+	// FieldUpdateTaskDescription holds the string denoting the update_task_description field in the database.
+	FieldUpdateTaskDescription = "update_task_description"
+	// FieldUpdateTaskResult holds the string denoting the update_task_result field in the database.
+	FieldUpdateTaskResult = "update_task_result"
+	// FieldUpdateTaskExecution holds the string denoting the update_task_execution field in the database.
+	FieldUpdateTaskExecution = "update_task_execution"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -201,6 +211,10 @@ var Columns = []string{
 	FieldEnabled,
 	FieldVnc,
 	FieldNotes,
+	FieldUpdateTaskStatus,
+	FieldUpdateTaskDescription,
+	FieldUpdateTaskResult,
+	FieldUpdateTaskExecution,
 }
 
 var (
@@ -234,6 +248,14 @@ var (
 	DefaultEnabled bool
 	// DefaultVnc holds the default value on creation for the "vnc" field.
 	DefaultVnc string
+	// DefaultUpdateTaskStatus holds the default value on creation for the "update_task_status" field.
+	DefaultUpdateTaskStatus string
+	// DefaultUpdateTaskDescription holds the default value on creation for the "update_task_description" field.
+	DefaultUpdateTaskDescription string
+	// DefaultUpdateTaskResult holds the default value on creation for the "update_task_result" field.
+	DefaultUpdateTaskResult string
+	// DefaultUpdateTaskExecution holds the default value on creation for the "update_task_execution" field.
+	DefaultUpdateTaskExecution time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -294,6 +316,26 @@ func ByVnc(opts ...sql.OrderTermOption) OrderOption {
 // ByNotes orders the results by the notes field.
 func ByNotes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNotes, opts...).ToFunc()
+}
+
+// ByUpdateTaskStatus orders the results by the update_task_status field.
+func ByUpdateTaskStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTaskStatus, opts...).ToFunc()
+}
+
+// ByUpdateTaskDescription orders the results by the update_task_description field.
+func ByUpdateTaskDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTaskDescription, opts...).ToFunc()
+}
+
+// ByUpdateTaskResult orders the results by the update_task_result field.
+func ByUpdateTaskResult(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTaskResult, opts...).ToFunc()
+}
+
+// ByUpdateTaskExecution orders the results by the update_task_execution field.
+func ByUpdateTaskExecution(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTaskExecution, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

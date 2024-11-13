@@ -21,6 +21,10 @@ var (
 		{Name: "enabled", Type: field.TypeBool, Default: true},
 		{Name: "vnc", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "update_task_status", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "update_task_description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{

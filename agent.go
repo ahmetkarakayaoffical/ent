@@ -41,6 +41,14 @@ type Agent struct {
 	Vnc string `json:"vnc,omitempty"`
 	// Notes holds the value of the "notes" field.
 	Notes string `json:"notes,omitempty"`
+	// UpdateTaskStatus holds the value of the "update_task_status" field.
+	UpdateTaskStatus string `json:"update_task_status,omitempty"`
+	// UpdateTaskDescription holds the value of the "update_task_description" field.
+	UpdateTaskDescription string `json:"update_task_description,omitempty"`
+	// UpdateTaskResult holds the value of the "update_task_result" field.
+	UpdateTaskResult string `json:"update_task_result,omitempty"`
+	// UpdateTaskExecution holds the value of the "update_task_execution" field.
+	UpdateTaskExecution time.Time `json:"update_task_execution,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges        AgentEdges `json:"edges"`
@@ -223,9 +231,9 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult:
 			values[i] = new(sql.NullString)
-		case agent.FieldFirstContact, agent.FieldLastContact:
+		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -307,6 +315,30 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field notes", values[i])
 			} else if value.Valid {
 				a.Notes = value.String
+			}
+		case agent.FieldUpdateTaskStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_task_status", values[i])
+			} else if value.Valid {
+				a.UpdateTaskStatus = value.String
+			}
+		case agent.FieldUpdateTaskDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_task_description", values[i])
+			} else if value.Valid {
+				a.UpdateTaskDescription = value.String
+			}
+		case agent.FieldUpdateTaskResult:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_task_result", values[i])
+			} else if value.Valid {
+				a.UpdateTaskResult = value.String
+			}
+		case agent.FieldUpdateTaskExecution:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_task_execution", values[i])
+			} else if value.Valid {
+				a.UpdateTaskExecution = value.Time
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -443,6 +475,18 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("notes=")
 	builder.WriteString(a.Notes)
+	builder.WriteString(", ")
+	builder.WriteString("update_task_status=")
+	builder.WriteString(a.UpdateTaskStatus)
+	builder.WriteString(", ")
+	builder.WriteString("update_task_description=")
+	builder.WriteString(a.UpdateTaskDescription)
+	builder.WriteString(", ")
+	builder.WriteString("update_task_result=")
+	builder.WriteString(a.UpdateTaskResult)
+	builder.WriteString(", ")
+	builder.WriteString("update_task_execution=")
+	builder.WriteString(a.UpdateTaskExecution.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

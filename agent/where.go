@@ -115,6 +115,26 @@ func Notes(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldNotes, v))
 }
 
+// UpdateTaskStatus applies equality check predicate on the "update_task_status" field. It's identical to UpdateTaskStatusEQ.
+func UpdateTaskStatus(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskDescription applies equality check predicate on the "update_task_description" field. It's identical to UpdateTaskDescriptionEQ.
+func UpdateTaskDescription(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskResult applies equality check predicate on the "update_task_result" field. It's identical to UpdateTaskResultEQ.
+func UpdateTaskResult(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskExecution applies equality check predicate on the "update_task_execution" field. It's identical to UpdateTaskExecutionEQ.
+func UpdateTaskExecution(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskExecution, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -698,6 +718,281 @@ func NotesEqualFold(v string) predicate.Agent {
 // NotesContainsFold applies the ContainsFold predicate on the "notes" field.
 func NotesContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldNotes, v))
+}
+
+// UpdateTaskStatusEQ applies the EQ predicate on the "update_task_status" field.
+func UpdateTaskStatusEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusNEQ applies the NEQ predicate on the "update_task_status" field.
+func UpdateTaskStatusNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusIn applies the In predicate on the "update_task_status" field.
+func UpdateTaskStatusIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldUpdateTaskStatus, vs...))
+}
+
+// UpdateTaskStatusNotIn applies the NotIn predicate on the "update_task_status" field.
+func UpdateTaskStatusNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldUpdateTaskStatus, vs...))
+}
+
+// UpdateTaskStatusGT applies the GT predicate on the "update_task_status" field.
+func UpdateTaskStatusGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusGTE applies the GTE predicate on the "update_task_status" field.
+func UpdateTaskStatusGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusLT applies the LT predicate on the "update_task_status" field.
+func UpdateTaskStatusLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusLTE applies the LTE predicate on the "update_task_status" field.
+func UpdateTaskStatusLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusContains applies the Contains predicate on the "update_task_status" field.
+func UpdateTaskStatusContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusHasPrefix applies the HasPrefix predicate on the "update_task_status" field.
+func UpdateTaskStatusHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusHasSuffix applies the HasSuffix predicate on the "update_task_status" field.
+func UpdateTaskStatusHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusIsNil applies the IsNil predicate on the "update_task_status" field.
+func UpdateTaskStatusIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldUpdateTaskStatus))
+}
+
+// UpdateTaskStatusNotNil applies the NotNil predicate on the "update_task_status" field.
+func UpdateTaskStatusNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskStatus))
+}
+
+// UpdateTaskStatusEqualFold applies the EqualFold predicate on the "update_task_status" field.
+func UpdateTaskStatusEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskStatusContainsFold applies the ContainsFold predicate on the "update_task_status" field.
+func UpdateTaskStatusContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldUpdateTaskStatus, v))
+}
+
+// UpdateTaskDescriptionEQ applies the EQ predicate on the "update_task_description" field.
+func UpdateTaskDescriptionEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionNEQ applies the NEQ predicate on the "update_task_description" field.
+func UpdateTaskDescriptionNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionIn applies the In predicate on the "update_task_description" field.
+func UpdateTaskDescriptionIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldUpdateTaskDescription, vs...))
+}
+
+// UpdateTaskDescriptionNotIn applies the NotIn predicate on the "update_task_description" field.
+func UpdateTaskDescriptionNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldUpdateTaskDescription, vs...))
+}
+
+// UpdateTaskDescriptionGT applies the GT predicate on the "update_task_description" field.
+func UpdateTaskDescriptionGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionGTE applies the GTE predicate on the "update_task_description" field.
+func UpdateTaskDescriptionGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionLT applies the LT predicate on the "update_task_description" field.
+func UpdateTaskDescriptionLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionLTE applies the LTE predicate on the "update_task_description" field.
+func UpdateTaskDescriptionLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionContains applies the Contains predicate on the "update_task_description" field.
+func UpdateTaskDescriptionContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionHasPrefix applies the HasPrefix predicate on the "update_task_description" field.
+func UpdateTaskDescriptionHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionHasSuffix applies the HasSuffix predicate on the "update_task_description" field.
+func UpdateTaskDescriptionHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionIsNil applies the IsNil predicate on the "update_task_description" field.
+func UpdateTaskDescriptionIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldUpdateTaskDescription))
+}
+
+// UpdateTaskDescriptionNotNil applies the NotNil predicate on the "update_task_description" field.
+func UpdateTaskDescriptionNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskDescription))
+}
+
+// UpdateTaskDescriptionEqualFold applies the EqualFold predicate on the "update_task_description" field.
+func UpdateTaskDescriptionEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskDescriptionContainsFold applies the ContainsFold predicate on the "update_task_description" field.
+func UpdateTaskDescriptionContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldUpdateTaskDescription, v))
+}
+
+// UpdateTaskResultEQ applies the EQ predicate on the "update_task_result" field.
+func UpdateTaskResultEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultNEQ applies the NEQ predicate on the "update_task_result" field.
+func UpdateTaskResultNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultIn applies the In predicate on the "update_task_result" field.
+func UpdateTaskResultIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldUpdateTaskResult, vs...))
+}
+
+// UpdateTaskResultNotIn applies the NotIn predicate on the "update_task_result" field.
+func UpdateTaskResultNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldUpdateTaskResult, vs...))
+}
+
+// UpdateTaskResultGT applies the GT predicate on the "update_task_result" field.
+func UpdateTaskResultGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultGTE applies the GTE predicate on the "update_task_result" field.
+func UpdateTaskResultGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultLT applies the LT predicate on the "update_task_result" field.
+func UpdateTaskResultLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultLTE applies the LTE predicate on the "update_task_result" field.
+func UpdateTaskResultLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultContains applies the Contains predicate on the "update_task_result" field.
+func UpdateTaskResultContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultHasPrefix applies the HasPrefix predicate on the "update_task_result" field.
+func UpdateTaskResultHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultHasSuffix applies the HasSuffix predicate on the "update_task_result" field.
+func UpdateTaskResultHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultIsNil applies the IsNil predicate on the "update_task_result" field.
+func UpdateTaskResultIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldUpdateTaskResult))
+}
+
+// UpdateTaskResultNotNil applies the NotNil predicate on the "update_task_result" field.
+func UpdateTaskResultNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskResult))
+}
+
+// UpdateTaskResultEqualFold applies the EqualFold predicate on the "update_task_result" field.
+func UpdateTaskResultEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskResultContainsFold applies the ContainsFold predicate on the "update_task_result" field.
+func UpdateTaskResultContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldUpdateTaskResult, v))
+}
+
+// UpdateTaskExecutionEQ applies the EQ predicate on the "update_task_execution" field.
+func UpdateTaskExecutionEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionNEQ applies the NEQ predicate on the "update_task_execution" field.
+func UpdateTaskExecutionNEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionIn applies the In predicate on the "update_task_execution" field.
+func UpdateTaskExecutionIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldUpdateTaskExecution, vs...))
+}
+
+// UpdateTaskExecutionNotIn applies the NotIn predicate on the "update_task_execution" field.
+func UpdateTaskExecutionNotIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldUpdateTaskExecution, vs...))
+}
+
+// UpdateTaskExecutionGT applies the GT predicate on the "update_task_execution" field.
+func UpdateTaskExecutionGT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionGTE applies the GTE predicate on the "update_task_execution" field.
+func UpdateTaskExecutionGTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionLT applies the LT predicate on the "update_task_execution" field.
+func UpdateTaskExecutionLT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionLTE applies the LTE predicate on the "update_task_execution" field.
+func UpdateTaskExecutionLTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldUpdateTaskExecution, v))
+}
+
+// UpdateTaskExecutionIsNil applies the IsNil predicate on the "update_task_execution" field.
+func UpdateTaskExecutionIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldUpdateTaskExecution))
+}
+
+// UpdateTaskExecutionNotNil applies the NotNil predicate on the "update_task_execution" field.
+func UpdateTaskExecutionNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldUpdateTaskExecution))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

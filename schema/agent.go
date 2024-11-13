@@ -26,6 +26,10 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("enabled").Default(true),
 		field.String("vnc").Optional().Default(""),
 		field.Text("notes").Optional(),
+		field.String("update_task_status").Optional().Default(""),
+		field.String("update_task_description").Optional().Default(""),
+		field.String("update_task_result").Optional().Default(""),
+		field.Time("update_task_execution").Optional().Default(""),
 	}
 }
 

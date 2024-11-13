@@ -70,61 +70,65 @@ const (
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
 type AgentMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *string
-	os                     *string
-	hostname               *string
-	version                *string
-	ip                     *string
-	mac                    *string
-	first_contact          *time.Time
-	last_contact           *time.Time
-	enabled                *bool
-	vnc                    *string
-	notes                  *string
-	clearedFields          map[string]struct{}
-	computer               *int
-	clearedcomputer        bool
-	operatingsystem        *int
-	clearedoperatingsystem bool
-	systemupdate           *int
-	clearedsystemupdate    bool
-	antivirus              *int
-	clearedantivirus       bool
-	logicaldisks           map[int]struct{}
-	removedlogicaldisks    map[int]struct{}
-	clearedlogicaldisks    bool
-	apps                   map[int]struct{}
-	removedapps            map[int]struct{}
-	clearedapps            bool
-	monitors               map[int]struct{}
-	removedmonitors        map[int]struct{}
-	clearedmonitors        bool
-	shares                 map[int]struct{}
-	removedshares          map[int]struct{}
-	clearedshares          bool
-	printers               map[int]struct{}
-	removedprinters        map[int]struct{}
-	clearedprinters        bool
-	networkadapters        map[int]struct{}
-	removednetworkadapters map[int]struct{}
-	clearednetworkadapters bool
-	deployments            map[int]struct{}
-	removeddeployments     map[int]struct{}
-	cleareddeployments     bool
-	updates                map[int]struct{}
-	removedupdates         map[int]struct{}
-	clearedupdates         bool
-	tags                   map[int]struct{}
-	removedtags            map[int]struct{}
-	clearedtags            bool
-	metadata               map[int]struct{}
-	removedmetadata        map[int]struct{}
-	clearedmetadata        bool
-	done                   bool
-	oldValue               func(context.Context) (*Agent, error)
-	predicates             []predicate.Agent
+	op                      Op
+	typ                     string
+	id                      *string
+	os                      *string
+	hostname                *string
+	version                 *string
+	ip                      *string
+	mac                     *string
+	first_contact           *time.Time
+	last_contact            *time.Time
+	enabled                 *bool
+	vnc                     *string
+	notes                   *string
+	update_task_status      *string
+	update_task_description *string
+	update_task_result      *string
+	update_task_execution   *time.Time
+	clearedFields           map[string]struct{}
+	computer                *int
+	clearedcomputer         bool
+	operatingsystem         *int
+	clearedoperatingsystem  bool
+	systemupdate            *int
+	clearedsystemupdate     bool
+	antivirus               *int
+	clearedantivirus        bool
+	logicaldisks            map[int]struct{}
+	removedlogicaldisks     map[int]struct{}
+	clearedlogicaldisks     bool
+	apps                    map[int]struct{}
+	removedapps             map[int]struct{}
+	clearedapps             bool
+	monitors                map[int]struct{}
+	removedmonitors         map[int]struct{}
+	clearedmonitors         bool
+	shares                  map[int]struct{}
+	removedshares           map[int]struct{}
+	clearedshares           bool
+	printers                map[int]struct{}
+	removedprinters         map[int]struct{}
+	clearedprinters         bool
+	networkadapters         map[int]struct{}
+	removednetworkadapters  map[int]struct{}
+	clearednetworkadapters  bool
+	deployments             map[int]struct{}
+	removeddeployments      map[int]struct{}
+	cleareddeployments      bool
+	updates                 map[int]struct{}
+	removedupdates          map[int]struct{}
+	clearedupdates          bool
+	tags                    map[int]struct{}
+	removedtags             map[int]struct{}
+	clearedtags             bool
+	metadata                map[int]struct{}
+	removedmetadata         map[int]struct{}
+	clearedmetadata         bool
+	done                    bool
+	oldValue                func(context.Context) (*Agent, error)
+	predicates              []predicate.Agent
 }
 
 var _ ent.Mutation = (*AgentMutation)(nil)
@@ -641,6 +645,202 @@ func (m *AgentMutation) NotesCleared() bool {
 func (m *AgentMutation) ResetNotes() {
 	m.notes = nil
 	delete(m.clearedFields, agent.FieldNotes)
+}
+
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (m *AgentMutation) SetUpdateTaskStatus(s string) {
+	m.update_task_status = &s
+}
+
+// UpdateTaskStatus returns the value of the "update_task_status" field in the mutation.
+func (m *AgentMutation) UpdateTaskStatus() (r string, exists bool) {
+	v := m.update_task_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTaskStatus returns the old "update_task_status" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldUpdateTaskStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTaskStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTaskStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTaskStatus: %w", err)
+	}
+	return oldValue.UpdateTaskStatus, nil
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (m *AgentMutation) ClearUpdateTaskStatus() {
+	m.update_task_status = nil
+	m.clearedFields[agent.FieldUpdateTaskStatus] = struct{}{}
+}
+
+// UpdateTaskStatusCleared returns if the "update_task_status" field was cleared in this mutation.
+func (m *AgentMutation) UpdateTaskStatusCleared() bool {
+	_, ok := m.clearedFields[agent.FieldUpdateTaskStatus]
+	return ok
+}
+
+// ResetUpdateTaskStatus resets all changes to the "update_task_status" field.
+func (m *AgentMutation) ResetUpdateTaskStatus() {
+	m.update_task_status = nil
+	delete(m.clearedFields, agent.FieldUpdateTaskStatus)
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (m *AgentMutation) SetUpdateTaskDescription(s string) {
+	m.update_task_description = &s
+}
+
+// UpdateTaskDescription returns the value of the "update_task_description" field in the mutation.
+func (m *AgentMutation) UpdateTaskDescription() (r string, exists bool) {
+	v := m.update_task_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTaskDescription returns the old "update_task_description" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldUpdateTaskDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTaskDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTaskDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTaskDescription: %w", err)
+	}
+	return oldValue.UpdateTaskDescription, nil
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (m *AgentMutation) ClearUpdateTaskDescription() {
+	m.update_task_description = nil
+	m.clearedFields[agent.FieldUpdateTaskDescription] = struct{}{}
+}
+
+// UpdateTaskDescriptionCleared returns if the "update_task_description" field was cleared in this mutation.
+func (m *AgentMutation) UpdateTaskDescriptionCleared() bool {
+	_, ok := m.clearedFields[agent.FieldUpdateTaskDescription]
+	return ok
+}
+
+// ResetUpdateTaskDescription resets all changes to the "update_task_description" field.
+func (m *AgentMutation) ResetUpdateTaskDescription() {
+	m.update_task_description = nil
+	delete(m.clearedFields, agent.FieldUpdateTaskDescription)
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (m *AgentMutation) SetUpdateTaskResult(s string) {
+	m.update_task_result = &s
+}
+
+// UpdateTaskResult returns the value of the "update_task_result" field in the mutation.
+func (m *AgentMutation) UpdateTaskResult() (r string, exists bool) {
+	v := m.update_task_result
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTaskResult returns the old "update_task_result" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldUpdateTaskResult(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTaskResult is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTaskResult requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTaskResult: %w", err)
+	}
+	return oldValue.UpdateTaskResult, nil
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (m *AgentMutation) ClearUpdateTaskResult() {
+	m.update_task_result = nil
+	m.clearedFields[agent.FieldUpdateTaskResult] = struct{}{}
+}
+
+// UpdateTaskResultCleared returns if the "update_task_result" field was cleared in this mutation.
+func (m *AgentMutation) UpdateTaskResultCleared() bool {
+	_, ok := m.clearedFields[agent.FieldUpdateTaskResult]
+	return ok
+}
+
+// ResetUpdateTaskResult resets all changes to the "update_task_result" field.
+func (m *AgentMutation) ResetUpdateTaskResult() {
+	m.update_task_result = nil
+	delete(m.clearedFields, agent.FieldUpdateTaskResult)
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (m *AgentMutation) SetUpdateTaskExecution(t time.Time) {
+	m.update_task_execution = &t
+}
+
+// UpdateTaskExecution returns the value of the "update_task_execution" field in the mutation.
+func (m *AgentMutation) UpdateTaskExecution() (r time.Time, exists bool) {
+	v := m.update_task_execution
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTaskExecution returns the old "update_task_execution" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldUpdateTaskExecution(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTaskExecution is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTaskExecution requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTaskExecution: %w", err)
+	}
+	return oldValue.UpdateTaskExecution, nil
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (m *AgentMutation) ClearUpdateTaskExecution() {
+	m.update_task_execution = nil
+	m.clearedFields[agent.FieldUpdateTaskExecution] = struct{}{}
+}
+
+// UpdateTaskExecutionCleared returns if the "update_task_execution" field was cleared in this mutation.
+func (m *AgentMutation) UpdateTaskExecutionCleared() bool {
+	_, ok := m.clearedFields[agent.FieldUpdateTaskExecution]
+	return ok
+}
+
+// ResetUpdateTaskExecution resets all changes to the "update_task_execution" field.
+func (m *AgentMutation) ResetUpdateTaskExecution() {
+	m.update_task_execution = nil
+	delete(m.clearedFields, agent.FieldUpdateTaskExecution)
 }
 
 // SetComputerID sets the "computer" edge to the Computer entity by id.
@@ -1373,7 +1573,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 14)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1404,6 +1604,18 @@ func (m *AgentMutation) Fields() []string {
 	if m.notes != nil {
 		fields = append(fields, agent.FieldNotes)
 	}
+	if m.update_task_status != nil {
+		fields = append(fields, agent.FieldUpdateTaskStatus)
+	}
+	if m.update_task_description != nil {
+		fields = append(fields, agent.FieldUpdateTaskDescription)
+	}
+	if m.update_task_result != nil {
+		fields = append(fields, agent.FieldUpdateTaskResult)
+	}
+	if m.update_task_execution != nil {
+		fields = append(fields, agent.FieldUpdateTaskExecution)
+	}
 	return fields
 }
 
@@ -1432,6 +1644,14 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Vnc()
 	case agent.FieldNotes:
 		return m.Notes()
+	case agent.FieldUpdateTaskStatus:
+		return m.UpdateTaskStatus()
+	case agent.FieldUpdateTaskDescription:
+		return m.UpdateTaskDescription()
+	case agent.FieldUpdateTaskResult:
+		return m.UpdateTaskResult()
+	case agent.FieldUpdateTaskExecution:
+		return m.UpdateTaskExecution()
 	}
 	return nil, false
 }
@@ -1461,6 +1681,14 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldVnc(ctx)
 	case agent.FieldNotes:
 		return m.OldNotes(ctx)
+	case agent.FieldUpdateTaskStatus:
+		return m.OldUpdateTaskStatus(ctx)
+	case agent.FieldUpdateTaskDescription:
+		return m.OldUpdateTaskDescription(ctx)
+	case agent.FieldUpdateTaskResult:
+		return m.OldUpdateTaskResult(ctx)
+	case agent.FieldUpdateTaskExecution:
+		return m.OldUpdateTaskExecution(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1540,6 +1768,34 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNotes(v)
 		return nil
+	case agent.FieldUpdateTaskStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTaskStatus(v)
+		return nil
+	case agent.FieldUpdateTaskDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTaskDescription(v)
+		return nil
+	case agent.FieldUpdateTaskResult:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTaskResult(v)
+		return nil
+	case agent.FieldUpdateTaskExecution:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTaskExecution(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1582,6 +1838,18 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldNotes) {
 		fields = append(fields, agent.FieldNotes)
 	}
+	if m.FieldCleared(agent.FieldUpdateTaskStatus) {
+		fields = append(fields, agent.FieldUpdateTaskStatus)
+	}
+	if m.FieldCleared(agent.FieldUpdateTaskDescription) {
+		fields = append(fields, agent.FieldUpdateTaskDescription)
+	}
+	if m.FieldCleared(agent.FieldUpdateTaskResult) {
+		fields = append(fields, agent.FieldUpdateTaskResult)
+	}
+	if m.FieldCleared(agent.FieldUpdateTaskExecution) {
+		fields = append(fields, agent.FieldUpdateTaskExecution)
+	}
 	return fields
 }
 
@@ -1607,6 +1875,18 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldNotes:
 		m.ClearNotes()
+		return nil
+	case agent.FieldUpdateTaskStatus:
+		m.ClearUpdateTaskStatus()
+		return nil
+	case agent.FieldUpdateTaskDescription:
+		m.ClearUpdateTaskDescription()
+		return nil
+	case agent.FieldUpdateTaskResult:
+		m.ClearUpdateTaskResult()
+		return nil
+	case agent.FieldUpdateTaskExecution:
+		m.ClearUpdateTaskExecution()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -1645,6 +1925,18 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldNotes:
 		m.ResetNotes()
+		return nil
+	case agent.FieldUpdateTaskStatus:
+		m.ResetUpdateTaskStatus()
+		return nil
+	case agent.FieldUpdateTaskDescription:
+		m.ResetUpdateTaskDescription()
+		return nil
+	case agent.FieldUpdateTaskResult:
+		m.ResetUpdateTaskResult()
+		return nil
+	case agent.FieldUpdateTaskExecution:
+		m.ResetUpdateTaskExecution()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

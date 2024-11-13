@@ -51,6 +51,22 @@ func init() {
 	agentDescVnc := agentFields[9].Descriptor()
 	// agent.DefaultVnc holds the default value on creation for the vnc field.
 	agent.DefaultVnc = agentDescVnc.Default.(string)
+	// agentDescUpdateTaskStatus is the schema descriptor for update_task_status field.
+	agentDescUpdateTaskStatus := agentFields[11].Descriptor()
+	// agent.DefaultUpdateTaskStatus holds the default value on creation for the update_task_status field.
+	agent.DefaultUpdateTaskStatus = agentDescUpdateTaskStatus.Default.(string)
+	// agentDescUpdateTaskDescription is the schema descriptor for update_task_description field.
+	agentDescUpdateTaskDescription := agentFields[12].Descriptor()
+	// agent.DefaultUpdateTaskDescription holds the default value on creation for the update_task_description field.
+	agent.DefaultUpdateTaskDescription = agentDescUpdateTaskDescription.Default.(string)
+	// agentDescUpdateTaskResult is the schema descriptor for update_task_result field.
+	agentDescUpdateTaskResult := agentFields[13].Descriptor()
+	// agent.DefaultUpdateTaskResult holds the default value on creation for the update_task_result field.
+	agent.DefaultUpdateTaskResult = agentDescUpdateTaskResult.Default.(string)
+	// agentDescUpdateTaskExecution is the schema descriptor for update_task_execution field.
+	agentDescUpdateTaskExecution := agentFields[14].Descriptor()
+	// agent.DefaultUpdateTaskExecution holds the default value on creation for the update_task_execution field.
+	agent.DefaultUpdateTaskExecution = agentDescUpdateTaskExecution.Default.(time.Time)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

@@ -153,6 +153,62 @@ func (ac *AgentCreate) SetNillableNotes(s *string) *AgentCreate {
 	return ac
 }
 
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (ac *AgentCreate) SetUpdateTaskStatus(s string) *AgentCreate {
+	ac.mutation.SetUpdateTaskStatus(s)
+	return ac
+}
+
+// SetNillableUpdateTaskStatus sets the "update_task_status" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableUpdateTaskStatus(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetUpdateTaskStatus(*s)
+	}
+	return ac
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (ac *AgentCreate) SetUpdateTaskDescription(s string) *AgentCreate {
+	ac.mutation.SetUpdateTaskDescription(s)
+	return ac
+}
+
+// SetNillableUpdateTaskDescription sets the "update_task_description" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableUpdateTaskDescription(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetUpdateTaskDescription(*s)
+	}
+	return ac
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (ac *AgentCreate) SetUpdateTaskResult(s string) *AgentCreate {
+	ac.mutation.SetUpdateTaskResult(s)
+	return ac
+}
+
+// SetNillableUpdateTaskResult sets the "update_task_result" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableUpdateTaskResult(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetUpdateTaskResult(*s)
+	}
+	return ac
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (ac *AgentCreate) SetUpdateTaskExecution(t time.Time) *AgentCreate {
+	ac.mutation.SetUpdateTaskExecution(t)
+	return ac
+}
+
+// SetNillableUpdateTaskExecution sets the "update_task_execution" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableUpdateTaskExecution(t *time.Time) *AgentCreate {
+	if t != nil {
+		ac.SetUpdateTaskExecution(*t)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -436,6 +492,22 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultVnc
 		ac.mutation.SetVnc(v)
 	}
+	if _, ok := ac.mutation.UpdateTaskStatus(); !ok {
+		v := agent.DefaultUpdateTaskStatus
+		ac.mutation.SetUpdateTaskStatus(v)
+	}
+	if _, ok := ac.mutation.UpdateTaskDescription(); !ok {
+		v := agent.DefaultUpdateTaskDescription
+		ac.mutation.SetUpdateTaskDescription(v)
+	}
+	if _, ok := ac.mutation.UpdateTaskResult(); !ok {
+		v := agent.DefaultUpdateTaskResult
+		ac.mutation.SetUpdateTaskResult(v)
+	}
+	if _, ok := ac.mutation.UpdateTaskExecution(); !ok {
+		v := agent.DefaultUpdateTaskExecution
+		ac.mutation.SetUpdateTaskExecution(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -553,6 +625,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Notes(); ok {
 		_spec.SetField(agent.FieldNotes, field.TypeString, value)
 		_node.Notes = value
+	}
+	if value, ok := ac.mutation.UpdateTaskStatus(); ok {
+		_spec.SetField(agent.FieldUpdateTaskStatus, field.TypeString, value)
+		_node.UpdateTaskStatus = value
+	}
+	if value, ok := ac.mutation.UpdateTaskDescription(); ok {
+		_spec.SetField(agent.FieldUpdateTaskDescription, field.TypeString, value)
+		_node.UpdateTaskDescription = value
+	}
+	if value, ok := ac.mutation.UpdateTaskResult(); ok {
+		_spec.SetField(agent.FieldUpdateTaskResult, field.TypeString, value)
+		_node.UpdateTaskResult = value
+	}
+	if value, ok := ac.mutation.UpdateTaskExecution(); ok {
+		_spec.SetField(agent.FieldUpdateTaskExecution, field.TypeTime, value)
+		_node.UpdateTaskExecution = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -974,6 +1062,78 @@ func (u *AgentUpsert) ClearNotes() *AgentUpsert {
 	return u
 }
 
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (u *AgentUpsert) SetUpdateTaskStatus(v string) *AgentUpsert {
+	u.Set(agent.FieldUpdateTaskStatus, v)
+	return u
+}
+
+// UpdateUpdateTaskStatus sets the "update_task_status" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateUpdateTaskStatus() *AgentUpsert {
+	u.SetExcluded(agent.FieldUpdateTaskStatus)
+	return u
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (u *AgentUpsert) ClearUpdateTaskStatus() *AgentUpsert {
+	u.SetNull(agent.FieldUpdateTaskStatus)
+	return u
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (u *AgentUpsert) SetUpdateTaskDescription(v string) *AgentUpsert {
+	u.Set(agent.FieldUpdateTaskDescription, v)
+	return u
+}
+
+// UpdateUpdateTaskDescription sets the "update_task_description" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateUpdateTaskDescription() *AgentUpsert {
+	u.SetExcluded(agent.FieldUpdateTaskDescription)
+	return u
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (u *AgentUpsert) ClearUpdateTaskDescription() *AgentUpsert {
+	u.SetNull(agent.FieldUpdateTaskDescription)
+	return u
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (u *AgentUpsert) SetUpdateTaskResult(v string) *AgentUpsert {
+	u.Set(agent.FieldUpdateTaskResult, v)
+	return u
+}
+
+// UpdateUpdateTaskResult sets the "update_task_result" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateUpdateTaskResult() *AgentUpsert {
+	u.SetExcluded(agent.FieldUpdateTaskResult)
+	return u
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (u *AgentUpsert) ClearUpdateTaskResult() *AgentUpsert {
+	u.SetNull(agent.FieldUpdateTaskResult)
+	return u
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (u *AgentUpsert) SetUpdateTaskExecution(v time.Time) *AgentUpsert {
+	u.Set(agent.FieldUpdateTaskExecution, v)
+	return u
+}
+
+// UpdateUpdateTaskExecution sets the "update_task_execution" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateUpdateTaskExecution() *AgentUpsert {
+	u.SetExcluded(agent.FieldUpdateTaskExecution)
+	return u
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (u *AgentUpsert) ClearUpdateTaskExecution() *AgentUpsert {
+	u.SetNull(agent.FieldUpdateTaskExecution)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1187,6 +1347,90 @@ func (u *AgentUpsertOne) UpdateNotes() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearNotes() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearNotes()
+	})
+}
+
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (u *AgentUpsertOne) SetUpdateTaskStatus(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskStatus(v)
+	})
+}
+
+// UpdateUpdateTaskStatus sets the "update_task_status" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateUpdateTaskStatus() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskStatus()
+	})
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (u *AgentUpsertOne) ClearUpdateTaskStatus() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskStatus()
+	})
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (u *AgentUpsertOne) SetUpdateTaskDescription(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskDescription(v)
+	})
+}
+
+// UpdateUpdateTaskDescription sets the "update_task_description" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateUpdateTaskDescription() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskDescription()
+	})
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (u *AgentUpsertOne) ClearUpdateTaskDescription() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskDescription()
+	})
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (u *AgentUpsertOne) SetUpdateTaskResult(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskResult(v)
+	})
+}
+
+// UpdateUpdateTaskResult sets the "update_task_result" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateUpdateTaskResult() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskResult()
+	})
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (u *AgentUpsertOne) ClearUpdateTaskResult() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskResult()
+	})
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (u *AgentUpsertOne) SetUpdateTaskExecution(v time.Time) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskExecution(v)
+	})
+}
+
+// UpdateUpdateTaskExecution sets the "update_task_execution" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateUpdateTaskExecution() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskExecution()
+	})
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (u *AgentUpsertOne) ClearUpdateTaskExecution() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskExecution()
 	})
 }
 
@@ -1570,6 +1814,90 @@ func (u *AgentUpsertBulk) UpdateNotes() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearNotes() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearNotes()
+	})
+}
+
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (u *AgentUpsertBulk) SetUpdateTaskStatus(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskStatus(v)
+	})
+}
+
+// UpdateUpdateTaskStatus sets the "update_task_status" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateUpdateTaskStatus() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskStatus()
+	})
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (u *AgentUpsertBulk) ClearUpdateTaskStatus() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskStatus()
+	})
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (u *AgentUpsertBulk) SetUpdateTaskDescription(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskDescription(v)
+	})
+}
+
+// UpdateUpdateTaskDescription sets the "update_task_description" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateUpdateTaskDescription() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskDescription()
+	})
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (u *AgentUpsertBulk) ClearUpdateTaskDescription() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskDescription()
+	})
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (u *AgentUpsertBulk) SetUpdateTaskResult(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskResult(v)
+	})
+}
+
+// UpdateUpdateTaskResult sets the "update_task_result" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateUpdateTaskResult() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskResult()
+	})
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (u *AgentUpsertBulk) ClearUpdateTaskResult() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskResult()
+	})
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (u *AgentUpsertBulk) SetUpdateTaskExecution(v time.Time) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetUpdateTaskExecution(v)
+	})
+}
+
+// UpdateUpdateTaskExecution sets the "update_task_execution" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateUpdateTaskExecution() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateUpdateTaskExecution()
+	})
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (u *AgentUpsertBulk) ClearUpdateTaskExecution() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearUpdateTaskExecution()
 	})
 }
 

@@ -207,6 +207,86 @@ func (au *AgentUpdate) ClearNotes() *AgentUpdate {
 	return au
 }
 
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (au *AgentUpdate) SetUpdateTaskStatus(s string) *AgentUpdate {
+	au.mutation.SetUpdateTaskStatus(s)
+	return au
+}
+
+// SetNillableUpdateTaskStatus sets the "update_task_status" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableUpdateTaskStatus(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetUpdateTaskStatus(*s)
+	}
+	return au
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (au *AgentUpdate) ClearUpdateTaskStatus() *AgentUpdate {
+	au.mutation.ClearUpdateTaskStatus()
+	return au
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (au *AgentUpdate) SetUpdateTaskDescription(s string) *AgentUpdate {
+	au.mutation.SetUpdateTaskDescription(s)
+	return au
+}
+
+// SetNillableUpdateTaskDescription sets the "update_task_description" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableUpdateTaskDescription(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetUpdateTaskDescription(*s)
+	}
+	return au
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (au *AgentUpdate) ClearUpdateTaskDescription() *AgentUpdate {
+	au.mutation.ClearUpdateTaskDescription()
+	return au
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (au *AgentUpdate) SetUpdateTaskResult(s string) *AgentUpdate {
+	au.mutation.SetUpdateTaskResult(s)
+	return au
+}
+
+// SetNillableUpdateTaskResult sets the "update_task_result" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableUpdateTaskResult(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetUpdateTaskResult(*s)
+	}
+	return au
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (au *AgentUpdate) ClearUpdateTaskResult() *AgentUpdate {
+	au.mutation.ClearUpdateTaskResult()
+	return au
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (au *AgentUpdate) SetUpdateTaskExecution(t time.Time) *AgentUpdate {
+	au.mutation.SetUpdateTaskExecution(t)
+	return au
+}
+
+// SetNillableUpdateTaskExecution sets the "update_task_execution" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableUpdateTaskExecution(t *time.Time) *AgentUpdate {
+	if t != nil {
+		au.SetUpdateTaskExecution(*t)
+	}
+	return au
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (au *AgentUpdate) ClearUpdateTaskExecution() *AgentUpdate {
+	au.mutation.ClearUpdateTaskExecution()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -778,6 +858,30 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.NotesCleared() {
 		_spec.ClearField(agent.FieldNotes, field.TypeString)
+	}
+	if value, ok := au.mutation.UpdateTaskStatus(); ok {
+		_spec.SetField(agent.FieldUpdateTaskStatus, field.TypeString, value)
+	}
+	if au.mutation.UpdateTaskStatusCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskStatus, field.TypeString)
+	}
+	if value, ok := au.mutation.UpdateTaskDescription(); ok {
+		_spec.SetField(agent.FieldUpdateTaskDescription, field.TypeString, value)
+	}
+	if au.mutation.UpdateTaskDescriptionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskDescription, field.TypeString)
+	}
+	if value, ok := au.mutation.UpdateTaskResult(); ok {
+		_spec.SetField(agent.FieldUpdateTaskResult, field.TypeString, value)
+	}
+	if au.mutation.UpdateTaskResultCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskResult, field.TypeString)
+	}
+	if value, ok := au.mutation.UpdateTaskExecution(); ok {
+		_spec.SetField(agent.FieldUpdateTaskExecution, field.TypeTime, value)
+	}
+	if au.mutation.UpdateTaskExecutionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskExecution, field.TypeTime)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1531,6 +1635,86 @@ func (auo *AgentUpdateOne) ClearNotes() *AgentUpdateOne {
 	return auo
 }
 
+// SetUpdateTaskStatus sets the "update_task_status" field.
+func (auo *AgentUpdateOne) SetUpdateTaskStatus(s string) *AgentUpdateOne {
+	auo.mutation.SetUpdateTaskStatus(s)
+	return auo
+}
+
+// SetNillableUpdateTaskStatus sets the "update_task_status" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableUpdateTaskStatus(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetUpdateTaskStatus(*s)
+	}
+	return auo
+}
+
+// ClearUpdateTaskStatus clears the value of the "update_task_status" field.
+func (auo *AgentUpdateOne) ClearUpdateTaskStatus() *AgentUpdateOne {
+	auo.mutation.ClearUpdateTaskStatus()
+	return auo
+}
+
+// SetUpdateTaskDescription sets the "update_task_description" field.
+func (auo *AgentUpdateOne) SetUpdateTaskDescription(s string) *AgentUpdateOne {
+	auo.mutation.SetUpdateTaskDescription(s)
+	return auo
+}
+
+// SetNillableUpdateTaskDescription sets the "update_task_description" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableUpdateTaskDescription(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetUpdateTaskDescription(*s)
+	}
+	return auo
+}
+
+// ClearUpdateTaskDescription clears the value of the "update_task_description" field.
+func (auo *AgentUpdateOne) ClearUpdateTaskDescription() *AgentUpdateOne {
+	auo.mutation.ClearUpdateTaskDescription()
+	return auo
+}
+
+// SetUpdateTaskResult sets the "update_task_result" field.
+func (auo *AgentUpdateOne) SetUpdateTaskResult(s string) *AgentUpdateOne {
+	auo.mutation.SetUpdateTaskResult(s)
+	return auo
+}
+
+// SetNillableUpdateTaskResult sets the "update_task_result" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableUpdateTaskResult(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetUpdateTaskResult(*s)
+	}
+	return auo
+}
+
+// ClearUpdateTaskResult clears the value of the "update_task_result" field.
+func (auo *AgentUpdateOne) ClearUpdateTaskResult() *AgentUpdateOne {
+	auo.mutation.ClearUpdateTaskResult()
+	return auo
+}
+
+// SetUpdateTaskExecution sets the "update_task_execution" field.
+func (auo *AgentUpdateOne) SetUpdateTaskExecution(t time.Time) *AgentUpdateOne {
+	auo.mutation.SetUpdateTaskExecution(t)
+	return auo
+}
+
+// SetNillableUpdateTaskExecution sets the "update_task_execution" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableUpdateTaskExecution(t *time.Time) *AgentUpdateOne {
+	if t != nil {
+		auo.SetUpdateTaskExecution(*t)
+	}
+	return auo
+}
+
+// ClearUpdateTaskExecution clears the value of the "update_task_execution" field.
+func (auo *AgentUpdateOne) ClearUpdateTaskExecution() *AgentUpdateOne {
+	auo.mutation.ClearUpdateTaskExecution()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2132,6 +2316,30 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.NotesCleared() {
 		_spec.ClearField(agent.FieldNotes, field.TypeString)
+	}
+	if value, ok := auo.mutation.UpdateTaskStatus(); ok {
+		_spec.SetField(agent.FieldUpdateTaskStatus, field.TypeString, value)
+	}
+	if auo.mutation.UpdateTaskStatusCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskStatus, field.TypeString)
+	}
+	if value, ok := auo.mutation.UpdateTaskDescription(); ok {
+		_spec.SetField(agent.FieldUpdateTaskDescription, field.TypeString, value)
+	}
+	if auo.mutation.UpdateTaskDescriptionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskDescription, field.TypeString)
+	}
+	if value, ok := auo.mutation.UpdateTaskResult(); ok {
+		_spec.SetField(agent.FieldUpdateTaskResult, field.TypeString, value)
+	}
+	if auo.mutation.UpdateTaskResultCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskResult, field.TypeString)
+	}
+	if value, ok := auo.mutation.UpdateTaskExecution(); ok {
+		_spec.SetField(agent.FieldUpdateTaskExecution, field.TypeTime, value)
+	}
+	if auo.mutation.UpdateTaskExecutionCleared() {
+		_spec.ClearField(agent.FieldUpdateTaskExecution, field.TypeTime)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
