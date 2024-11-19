@@ -65,6 +65,8 @@ const (
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
 	FieldModified = "modified"
+	// FieldAgentReportFrequenceInMinutes holds the string denoting the agent_report_frequence_in_minutes field in the database.
+	FieldAgentReportFrequenceInMinutes = "agent_report_frequence_in_minutes"
 	// Table holds the table name of the settings in the database.
 	Table = "settings"
 )
@@ -98,6 +100,7 @@ var Columns = []string{
 	FieldUpdateChannel,
 	FieldCreated,
 	FieldModified,
+	FieldAgentReportFrequenceInMinutes,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -139,6 +142,8 @@ var (
 	DefaultModified func() time.Time
 	// UpdateDefaultModified holds the default value on update for the "modified" field.
 	UpdateDefaultModified func() time.Time
+	// DefaultAgentReportFrequenceInMinutes holds the default value on creation for the "agent_report_frequence_in_minutes" field.
+	DefaultAgentReportFrequenceInMinutes int
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -277,4 +282,9 @@ func ByCreated(opts ...sql.OrderTermOption) OrderOption {
 // ByModified orders the results by the modified field.
 func ByModified(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldModified, opts...).ToFunc()
+}
+
+// ByAgentReportFrequenceInMinutes orders the results by the agent_report_frequence_in_minutes field.
+func ByAgentReportFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAgentReportFrequenceInMinutes, opts...).ToFunc()
 }

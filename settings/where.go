@@ -184,6 +184,11 @@ func Modified(v time.Time) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldModified, v))
 }
 
+// AgentReportFrequenceInMinutes applies equality check predicate on the "agent_report_frequence_in_minutes" field. It's identical to AgentReportFrequenceInMinutesEQ.
+func AgentReportFrequenceInMinutes(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldAgentReportFrequenceInMinutes, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -1847,6 +1852,56 @@ func ModifiedIsNil() predicate.Settings {
 // ModifiedNotNil applies the NotNil predicate on the "modified" field.
 func ModifiedNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldModified))
+}
+
+// AgentReportFrequenceInMinutesEQ applies the EQ predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesNEQ applies the NEQ predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesIn applies the In predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldAgentReportFrequenceInMinutes, vs...))
+}
+
+// AgentReportFrequenceInMinutesNotIn applies the NotIn predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldAgentReportFrequenceInMinutes, vs...))
+}
+
+// AgentReportFrequenceInMinutesGT applies the GT predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesGTE applies the GTE predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesLT applies the LT predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesLTE applies the LTE predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldAgentReportFrequenceInMinutes, v))
+}
+
+// AgentReportFrequenceInMinutesIsNil applies the IsNil predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldAgentReportFrequenceInMinutes))
+}
+
+// AgentReportFrequenceInMinutesNotNil applies the NotNil predicate on the "agent_report_frequence_in_minutes" field.
+func AgentReportFrequenceInMinutesNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldAgentReportFrequenceInMinutes))
 }
 
 // And groups predicates with the AND operator between them.

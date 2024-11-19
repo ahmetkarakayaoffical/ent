@@ -386,6 +386,20 @@ func (sc *SettingsCreate) SetNillableModified(t *time.Time) *SettingsCreate {
 	return sc
 }
 
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (sc *SettingsCreate) SetAgentReportFrequenceInMinutes(i int) *SettingsCreate {
+	sc.mutation.SetAgentReportFrequenceInMinutes(i)
+	return sc
+}
+
+// SetNillableAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableAgentReportFrequenceInMinutes(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetAgentReportFrequenceInMinutes(*i)
+	}
+	return sc
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (sc *SettingsCreate) Mutation() *SettingsMutation {
 	return sc.mutation
@@ -472,6 +486,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.Modified(); !ok {
 		v := settings.DefaultModified()
 		sc.mutation.SetModified(v)
+	}
+	if _, ok := sc.mutation.AgentReportFrequenceInMinutes(); !ok {
+		v := settings.DefaultAgentReportFrequenceInMinutes
+		sc.mutation.SetAgentReportFrequenceInMinutes(v)
 	}
 }
 
@@ -607,6 +625,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Modified(); ok {
 		_spec.SetField(settings.FieldModified, field.TypeTime, value)
 		_node.Modified = value
+	}
+	if value, ok := sc.mutation.AgentReportFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
+		_node.AgentReportFrequenceInMinutes = value
 	}
 	return _node, _spec
 }
@@ -1155,6 +1177,30 @@ func (u *SettingsUpsert) UpdateModified() *SettingsUpsert {
 // ClearModified clears the value of the "modified" field.
 func (u *SettingsUpsert) ClearModified() *SettingsUpsert {
 	u.SetNull(settings.FieldModified)
+	return u
+}
+
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsert) SetAgentReportFrequenceInMinutes(v int) *SettingsUpsert {
+	u.Set(settings.FieldAgentReportFrequenceInMinutes, v)
+	return u
+}
+
+// UpdateAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateAgentReportFrequenceInMinutes() *SettingsUpsert {
+	u.SetExcluded(settings.FieldAgentReportFrequenceInMinutes)
+	return u
+}
+
+// AddAgentReportFrequenceInMinutes adds v to the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsert) AddAgentReportFrequenceInMinutes(v int) *SettingsUpsert {
+	u.Add(settings.FieldAgentReportFrequenceInMinutes, v)
+	return u
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsert) ClearAgentReportFrequenceInMinutes() *SettingsUpsert {
+	u.SetNull(settings.FieldAgentReportFrequenceInMinutes)
 	return u
 }
 
@@ -1776,6 +1822,34 @@ func (u *SettingsUpsertOne) UpdateModified() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearModified() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearModified()
+	})
+}
+
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) SetAgentReportFrequenceInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetAgentReportFrequenceInMinutes(v)
+	})
+}
+
+// AddAgentReportFrequenceInMinutes adds v to the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) AddAgentReportFrequenceInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddAgentReportFrequenceInMinutes(v)
+	})
+}
+
+// UpdateAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateAgentReportFrequenceInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateAgentReportFrequenceInMinutes()
+	})
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) ClearAgentReportFrequenceInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearAgentReportFrequenceInMinutes()
 	})
 }
 
@@ -2561,6 +2635,34 @@ func (u *SettingsUpsertBulk) UpdateModified() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearModified() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearModified()
+	})
+}
+
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) SetAgentReportFrequenceInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetAgentReportFrequenceInMinutes(v)
+	})
+}
+
+// AddAgentReportFrequenceInMinutes adds v to the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) AddAgentReportFrequenceInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddAgentReportFrequenceInMinutes(v)
+	})
+}
+
+// UpdateAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateAgentReportFrequenceInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateAgentReportFrequenceInMinutes()
+	})
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) ClearAgentReportFrequenceInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearAgentReportFrequenceInMinutes()
 	})
 }
 

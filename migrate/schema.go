@@ -387,6 +387,7 @@ var (
 		{Name: "update_channel", Type: field.TypeString, Nullable: true, Default: "stable"},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
+		{Name: "agent_report_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
 	SettingsTable = &schema.Table{

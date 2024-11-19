@@ -171,6 +171,10 @@ func init() {
 	settings.DefaultModified = settingsDescModified.Default.(func() time.Time)
 	// settings.UpdateDefaultModified holds the default value on update for the modified field.
 	settings.UpdateDefaultModified = settingsDescModified.UpdateDefault.(func() time.Time)
+	// settingsDescAgentReportFrequenceInMinutes is the schema descriptor for agent_report_frequence_in_minutes field.
+	settingsDescAgentReportFrequenceInMinutes := settingsFields[26].Descriptor()
+	// settings.DefaultAgentReportFrequenceInMinutes holds the default value on creation for the agent_report_frequence_in_minutes field.
+	settings.DefaultAgentReportFrequenceInMinutes = settingsDescAgentReportFrequenceInMinutes.Default.(int)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

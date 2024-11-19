@@ -576,6 +576,33 @@ func (su *SettingsUpdate) ClearModified() *SettingsUpdate {
 	return su
 }
 
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (su *SettingsUpdate) SetAgentReportFrequenceInMinutes(i int) *SettingsUpdate {
+	su.mutation.ResetAgentReportFrequenceInMinutes()
+	su.mutation.SetAgentReportFrequenceInMinutes(i)
+	return su
+}
+
+// SetNillableAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableAgentReportFrequenceInMinutes(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetAgentReportFrequenceInMinutes(*i)
+	}
+	return su
+}
+
+// AddAgentReportFrequenceInMinutes adds i to the "agent_report_frequence_in_minutes" field.
+func (su *SettingsUpdate) AddAgentReportFrequenceInMinutes(i int) *SettingsUpdate {
+	su.mutation.AddAgentReportFrequenceInMinutes(i)
+	return su
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (su *SettingsUpdate) ClearAgentReportFrequenceInMinutes() *SettingsUpdate {
+	su.mutation.ClearAgentReportFrequenceInMinutes()
+	return su
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (su *SettingsUpdate) Mutation() *SettingsMutation {
 	return su.mutation
@@ -802,6 +829,15 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ModifiedCleared() {
 		_spec.ClearField(settings.FieldModified, field.TypeTime)
+	}
+	if value, ok := su.mutation.AgentReportFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedAgentReportFrequenceInMinutes(); ok {
+		_spec.AddField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
+	}
+	if su.mutation.AgentReportFrequenceInMinutesCleared() {
+		_spec.ClearField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -1372,6 +1408,33 @@ func (suo *SettingsUpdateOne) ClearModified() *SettingsUpdateOne {
 	return suo
 }
 
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) SetAgentReportFrequenceInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.ResetAgentReportFrequenceInMinutes()
+	suo.mutation.SetAgentReportFrequenceInMinutes(i)
+	return suo
+}
+
+// SetNillableAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableAgentReportFrequenceInMinutes(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetAgentReportFrequenceInMinutes(*i)
+	}
+	return suo
+}
+
+// AddAgentReportFrequenceInMinutes adds i to the "agent_report_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) AddAgentReportFrequenceInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.AddAgentReportFrequenceInMinutes(i)
+	return suo
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) ClearAgentReportFrequenceInMinutes() *SettingsUpdateOne {
+	suo.mutation.ClearAgentReportFrequenceInMinutes()
+	return suo
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (suo *SettingsUpdateOne) Mutation() *SettingsMutation {
 	return suo.mutation
@@ -1628,6 +1691,15 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.ModifiedCleared() {
 		_spec.ClearField(settings.FieldModified, field.TypeTime)
+	}
+	if value, ok := suo.mutation.AgentReportFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedAgentReportFrequenceInMinutes(); ok {
+		_spec.AddField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
+	}
+	if suo.mutation.AgentReportFrequenceInMinutesCleared() {
+		_spec.ClearField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Settings{config: suo.config}

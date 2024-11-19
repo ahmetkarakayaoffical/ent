@@ -11608,44 +11608,46 @@ func (m *SessionsMutation) ResetEdge(name string) error {
 // SettingsMutation represents an operation that mutates the Settings nodes in the graph.
 type SettingsMutation struct {
 	config
-	op                              Op
-	typ                             string
-	id                              *int
-	language                        *string
-	organization                    *string
-	postal_address                  *string
-	postal_code                     *string
-	locality                        *string
-	province                        *string
-	state                           *string
-	country                         *string
-	smtp_server                     *string
-	smtp_port                       *int
-	addsmtp_port                    *int
-	smtp_user                       *string
-	smtp_password                   *string
-	smtp_auth                       *string
-	smtp_tls                        *bool
-	smtp_starttls                   *bool
-	nats_server                     *string
-	nats_port                       *string
-	message_from                    *string
-	max_upload_size                 *string
-	user_cert_years_valid           *int
-	adduser_cert_years_valid        *int
-	nats_request_timeout_seconds    *int
-	addnats_request_timeout_seconds *int
-	refresh_time_in_minutes         *int
-	addrefresh_time_in_minutes      *int
-	session_lifetime_in_minutes     *int
-	addsession_lifetime_in_minutes  *int
-	update_channel                  *string
-	created                         *time.Time
-	modified                        *time.Time
-	clearedFields                   map[string]struct{}
-	done                            bool
-	oldValue                        func(context.Context) (*Settings, error)
-	predicates                      []predicate.Settings
+	op                                   Op
+	typ                                  string
+	id                                   *int
+	language                             *string
+	organization                         *string
+	postal_address                       *string
+	postal_code                          *string
+	locality                             *string
+	province                             *string
+	state                                *string
+	country                              *string
+	smtp_server                          *string
+	smtp_port                            *int
+	addsmtp_port                         *int
+	smtp_user                            *string
+	smtp_password                        *string
+	smtp_auth                            *string
+	smtp_tls                             *bool
+	smtp_starttls                        *bool
+	nats_server                          *string
+	nats_port                            *string
+	message_from                         *string
+	max_upload_size                      *string
+	user_cert_years_valid                *int
+	adduser_cert_years_valid             *int
+	nats_request_timeout_seconds         *int
+	addnats_request_timeout_seconds      *int
+	refresh_time_in_minutes              *int
+	addrefresh_time_in_minutes           *int
+	session_lifetime_in_minutes          *int
+	addsession_lifetime_in_minutes       *int
+	update_channel                       *string
+	created                              *time.Time
+	modified                             *time.Time
+	agent_report_frequence_in_minutes    *int
+	addagent_report_frequence_in_minutes *int
+	clearedFields                        map[string]struct{}
+	done                                 bool
+	oldValue                             func(context.Context) (*Settings, error)
+	predicates                           []predicate.Settings
 }
 
 var _ ent.Mutation = (*SettingsMutation)(nil)
@@ -13125,6 +13127,76 @@ func (m *SettingsMutation) ResetModified() {
 	delete(m.clearedFields, settings.FieldModified)
 }
 
+// SetAgentReportFrequenceInMinutes sets the "agent_report_frequence_in_minutes" field.
+func (m *SettingsMutation) SetAgentReportFrequenceInMinutes(i int) {
+	m.agent_report_frequence_in_minutes = &i
+	m.addagent_report_frequence_in_minutes = nil
+}
+
+// AgentReportFrequenceInMinutes returns the value of the "agent_report_frequence_in_minutes" field in the mutation.
+func (m *SettingsMutation) AgentReportFrequenceInMinutes() (r int, exists bool) {
+	v := m.agent_report_frequence_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAgentReportFrequenceInMinutes returns the old "agent_report_frequence_in_minutes" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldAgentReportFrequenceInMinutes(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAgentReportFrequenceInMinutes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAgentReportFrequenceInMinutes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAgentReportFrequenceInMinutes: %w", err)
+	}
+	return oldValue.AgentReportFrequenceInMinutes, nil
+}
+
+// AddAgentReportFrequenceInMinutes adds i to the "agent_report_frequence_in_minutes" field.
+func (m *SettingsMutation) AddAgentReportFrequenceInMinutes(i int) {
+	if m.addagent_report_frequence_in_minutes != nil {
+		*m.addagent_report_frequence_in_minutes += i
+	} else {
+		m.addagent_report_frequence_in_minutes = &i
+	}
+}
+
+// AddedAgentReportFrequenceInMinutes returns the value that was added to the "agent_report_frequence_in_minutes" field in this mutation.
+func (m *SettingsMutation) AddedAgentReportFrequenceInMinutes() (r int, exists bool) {
+	v := m.addagent_report_frequence_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
+func (m *SettingsMutation) ClearAgentReportFrequenceInMinutes() {
+	m.agent_report_frequence_in_minutes = nil
+	m.addagent_report_frequence_in_minutes = nil
+	m.clearedFields[settings.FieldAgentReportFrequenceInMinutes] = struct{}{}
+}
+
+// AgentReportFrequenceInMinutesCleared returns if the "agent_report_frequence_in_minutes" field was cleared in this mutation.
+func (m *SettingsMutation) AgentReportFrequenceInMinutesCleared() bool {
+	_, ok := m.clearedFields[settings.FieldAgentReportFrequenceInMinutes]
+	return ok
+}
+
+// ResetAgentReportFrequenceInMinutes resets all changes to the "agent_report_frequence_in_minutes" field.
+func (m *SettingsMutation) ResetAgentReportFrequenceInMinutes() {
+	m.agent_report_frequence_in_minutes = nil
+	m.addagent_report_frequence_in_minutes = nil
+	delete(m.clearedFields, settings.FieldAgentReportFrequenceInMinutes)
+}
+
 // Where appends a list predicates to the SettingsMutation builder.
 func (m *SettingsMutation) Where(ps ...predicate.Settings) {
 	m.predicates = append(m.predicates, ps...)
@@ -13159,7 +13231,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 27)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -13238,6 +13310,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.modified != nil {
 		fields = append(fields, settings.FieldModified)
 	}
+	if m.agent_report_frequence_in_minutes != nil {
+		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
+	}
 	return fields
 }
 
@@ -13298,6 +13373,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.Created()
 	case settings.FieldModified:
 		return m.Modified()
+	case settings.FieldAgentReportFrequenceInMinutes:
+		return m.AgentReportFrequenceInMinutes()
 	}
 	return nil, false
 }
@@ -13359,6 +13436,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCreated(ctx)
 	case settings.FieldModified:
 		return m.OldModified(ctx)
+	case settings.FieldAgentReportFrequenceInMinutes:
+		return m.OldAgentReportFrequenceInMinutes(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -13550,6 +13629,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetModified(v)
 		return nil
+	case settings.FieldAgentReportFrequenceInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAgentReportFrequenceInMinutes(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -13573,6 +13659,9 @@ func (m *SettingsMutation) AddedFields() []string {
 	if m.addsession_lifetime_in_minutes != nil {
 		fields = append(fields, settings.FieldSessionLifetimeInMinutes)
 	}
+	if m.addagent_report_frequence_in_minutes != nil {
+		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
+	}
 	return fields
 }
 
@@ -13591,6 +13680,8 @@ func (m *SettingsMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedRefreshTimeInMinutes()
 	case settings.FieldSessionLifetimeInMinutes:
 		return m.AddedSessionLifetimeInMinutes()
+	case settings.FieldAgentReportFrequenceInMinutes:
+		return m.AddedAgentReportFrequenceInMinutes()
 	}
 	return nil, false
 }
@@ -13634,6 +13725,13 @@ func (m *SettingsMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSessionLifetimeInMinutes(v)
+		return nil
+	case settings.FieldAgentReportFrequenceInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAgentReportFrequenceInMinutes(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Settings numeric field %s", name)
@@ -13720,6 +13818,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(settings.FieldModified) {
 		fields = append(fields, settings.FieldModified)
+	}
+	if m.FieldCleared(settings.FieldAgentReportFrequenceInMinutes) {
+		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
 	}
 	return fields
 }
@@ -13813,6 +13914,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldModified:
 		m.ClearModified()
 		return nil
+	case settings.FieldAgentReportFrequenceInMinutes:
+		m.ClearAgentReportFrequenceInMinutes()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -13898,6 +14002,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldModified:
 		m.ResetModified()
+		return nil
+	case settings.FieldAgentReportFrequenceInMinutes:
+		m.ResetAgentReportFrequenceInMinutes()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

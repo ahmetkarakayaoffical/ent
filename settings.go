@@ -68,8 +68,10 @@ type Settings struct {
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
-	Modified     time.Time `json:"modified,omitempty"`
-	selectValues sql.SelectValues
+	Modified time.Time `json:"modified,omitempty"`
+	// AgentReportFrequenceInMinutes holds the value of the "agent_report_frequence_in_minutes" field.
+	AgentReportFrequenceInMinutes int `json:"agent_report_frequence_in_minutes,omitempty"`
+	selectValues                  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -79,7 +81,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls:
 			values[i] = new(sql.NullBool)
-		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes:
+		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
 		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize, settings.FieldUpdateChannel:
 			values[i] = new(sql.NullString)
@@ -262,6 +264,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Modified = value.Time
 			}
+		case settings.FieldAgentReportFrequenceInMinutes:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field agent_report_frequence_in_minutes", values[i])
+			} else if value.Valid {
+				s.AgentReportFrequenceInMinutes = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -375,6 +383,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("modified=")
 	builder.WriteString(s.Modified.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("agent_report_frequence_in_minutes=")
+	builder.WriteString(fmt.Sprintf("%v", s.AgentReportFrequenceInMinutes))
 	builder.WriteByte(')')
 	return builder.String()
 }
