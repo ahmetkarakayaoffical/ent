@@ -335,6 +335,8 @@ var (
 		{Name: "checksum", Type: field.TypeString, Nullable: true},
 		{Name: "is_critical", Type: field.TypeBool, Nullable: true},
 		{Name: "release_date", Type: field.TypeTime, Nullable: true},
+		{Name: "os", Type: field.TypeString, Nullable: true},
+		{Name: "arch", Type: field.TypeString, Nullable: true},
 	}
 	// ReleasesTable holds the schema information for the "releases" table.
 	ReleasesTable = &schema.Table{
@@ -343,9 +345,9 @@ var (
 		PrimaryKey: []*schema.Column{ReleasesColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "release_version_channel",
+				Name:    "release_version_channel_os_arch",
 				Unique:  true,
-				Columns: []*schema.Column{ReleasesColumns[1], ReleasesColumns[2]},
+				Columns: []*schema.Column{ReleasesColumns[1], ReleasesColumns[2], ReleasesColumns[9], ReleasesColumns[10]},
 			},
 		},
 	}

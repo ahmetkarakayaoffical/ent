@@ -33,6 +33,10 @@ type Release struct {
 	IsCritical bool `json:"is_critical,omitempty"`
 	// ReleaseDate holds the value of the "release_date" field.
 	ReleaseDate time.Time `json:"release_date,omitempty"`
+	// Os holds the value of the "os" field.
+	Os string `json:"os,omitempty"`
+	// Arch holds the value of the "arch" field.
+	Arch string `json:"arch,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReleaseQuery when eager-loading is set.
 	Edges        ReleaseEdges `json:"edges"`
@@ -66,7 +70,7 @@ func (*Release) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case release.FieldID:
 			values[i] = new(sql.NullInt64)
-		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum:
+		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldOs, release.FieldArch:
 			values[i] = new(sql.NullString)
 		case release.FieldReleaseDate:
 			values[i] = new(sql.NullTime)
@@ -139,6 +143,18 @@ func (r *Release) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.ReleaseDate = value.Time
 			}
+		case release.FieldOs:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field os", values[i])
+			} else if value.Valid {
+				r.Os = value.String
+			}
+		case release.FieldArch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field arch", values[i])
+			} else if value.Valid {
+				r.Arch = value.String
+			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -203,6 +219,12 @@ func (r *Release) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("release_date=")
 	builder.WriteString(r.ReleaseDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("os=")
+	builder.WriteString(r.Os)
+	builder.WriteString(", ")
+	builder.WriteString("arch=")
+	builder.WriteString(r.Arch)
 	builder.WriteByte(')')
 	return builder.String()
 }

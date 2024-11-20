@@ -95,6 +95,16 @@ func ReleaseDate(v time.Time) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldReleaseDate, v))
 }
 
+// Os applies equality check predicate on the "os" field. It's identical to OsEQ.
+func Os(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldOs, v))
+}
+
+// Arch applies equality check predicate on the "arch" field. It's identical to ArchEQ.
+func Arch(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldArch, v))
+}
+
 // VersionEQ applies the EQ predicate on the "version" field.
 func VersionEQ(v string) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldVersion, v))
@@ -613,6 +623,156 @@ func ReleaseDateIsNil() predicate.Release {
 // ReleaseDateNotNil applies the NotNil predicate on the "release_date" field.
 func ReleaseDateNotNil() predicate.Release {
 	return predicate.Release(sql.FieldNotNull(FieldReleaseDate))
+}
+
+// OsEQ applies the EQ predicate on the "os" field.
+func OsEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldOs, v))
+}
+
+// OsNEQ applies the NEQ predicate on the "os" field.
+func OsNEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldNEQ(FieldOs, v))
+}
+
+// OsIn applies the In predicate on the "os" field.
+func OsIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldIn(FieldOs, vs...))
+}
+
+// OsNotIn applies the NotIn predicate on the "os" field.
+func OsNotIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldNotIn(FieldOs, vs...))
+}
+
+// OsGT applies the GT predicate on the "os" field.
+func OsGT(v string) predicate.Release {
+	return predicate.Release(sql.FieldGT(FieldOs, v))
+}
+
+// OsGTE applies the GTE predicate on the "os" field.
+func OsGTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldGTE(FieldOs, v))
+}
+
+// OsLT applies the LT predicate on the "os" field.
+func OsLT(v string) predicate.Release {
+	return predicate.Release(sql.FieldLT(FieldOs, v))
+}
+
+// OsLTE applies the LTE predicate on the "os" field.
+func OsLTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldLTE(FieldOs, v))
+}
+
+// OsContains applies the Contains predicate on the "os" field.
+func OsContains(v string) predicate.Release {
+	return predicate.Release(sql.FieldContains(FieldOs, v))
+}
+
+// OsHasPrefix applies the HasPrefix predicate on the "os" field.
+func OsHasPrefix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasPrefix(FieldOs, v))
+}
+
+// OsHasSuffix applies the HasSuffix predicate on the "os" field.
+func OsHasSuffix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasSuffix(FieldOs, v))
+}
+
+// OsIsNil applies the IsNil predicate on the "os" field.
+func OsIsNil() predicate.Release {
+	return predicate.Release(sql.FieldIsNull(FieldOs))
+}
+
+// OsNotNil applies the NotNil predicate on the "os" field.
+func OsNotNil() predicate.Release {
+	return predicate.Release(sql.FieldNotNull(FieldOs))
+}
+
+// OsEqualFold applies the EqualFold predicate on the "os" field.
+func OsEqualFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldEqualFold(FieldOs, v))
+}
+
+// OsContainsFold applies the ContainsFold predicate on the "os" field.
+func OsContainsFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldContainsFold(FieldOs, v))
+}
+
+// ArchEQ applies the EQ predicate on the "arch" field.
+func ArchEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldArch, v))
+}
+
+// ArchNEQ applies the NEQ predicate on the "arch" field.
+func ArchNEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldNEQ(FieldArch, v))
+}
+
+// ArchIn applies the In predicate on the "arch" field.
+func ArchIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldIn(FieldArch, vs...))
+}
+
+// ArchNotIn applies the NotIn predicate on the "arch" field.
+func ArchNotIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldNotIn(FieldArch, vs...))
+}
+
+// ArchGT applies the GT predicate on the "arch" field.
+func ArchGT(v string) predicate.Release {
+	return predicate.Release(sql.FieldGT(FieldArch, v))
+}
+
+// ArchGTE applies the GTE predicate on the "arch" field.
+func ArchGTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldGTE(FieldArch, v))
+}
+
+// ArchLT applies the LT predicate on the "arch" field.
+func ArchLT(v string) predicate.Release {
+	return predicate.Release(sql.FieldLT(FieldArch, v))
+}
+
+// ArchLTE applies the LTE predicate on the "arch" field.
+func ArchLTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldLTE(FieldArch, v))
+}
+
+// ArchContains applies the Contains predicate on the "arch" field.
+func ArchContains(v string) predicate.Release {
+	return predicate.Release(sql.FieldContains(FieldArch, v))
+}
+
+// ArchHasPrefix applies the HasPrefix predicate on the "arch" field.
+func ArchHasPrefix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasPrefix(FieldArch, v))
+}
+
+// ArchHasSuffix applies the HasSuffix predicate on the "arch" field.
+func ArchHasSuffix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasSuffix(FieldArch, v))
+}
+
+// ArchIsNil applies the IsNil predicate on the "arch" field.
+func ArchIsNil() predicate.Release {
+	return predicate.Release(sql.FieldIsNull(FieldArch))
+}
+
+// ArchNotNil applies the NotNil predicate on the "arch" field.
+func ArchNotNil() predicate.Release {
+	return predicate.Release(sql.FieldNotNull(FieldArch))
+}
+
+// ArchEqualFold applies the EqualFold predicate on the "arch" field.
+func ArchEqualFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldEqualFold(FieldArch, v))
+}
+
+// ArchContainsFold applies the ContainsFold predicate on the "arch" field.
+func ArchContainsFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldContainsFold(FieldArch, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

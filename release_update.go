@@ -190,6 +190,46 @@ func (ru *ReleaseUpdate) ClearReleaseDate() *ReleaseUpdate {
 	return ru
 }
 
+// SetOs sets the "os" field.
+func (ru *ReleaseUpdate) SetOs(s string) *ReleaseUpdate {
+	ru.mutation.SetOs(s)
+	return ru
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (ru *ReleaseUpdate) SetNillableOs(s *string) *ReleaseUpdate {
+	if s != nil {
+		ru.SetOs(*s)
+	}
+	return ru
+}
+
+// ClearOs clears the value of the "os" field.
+func (ru *ReleaseUpdate) ClearOs() *ReleaseUpdate {
+	ru.mutation.ClearOs()
+	return ru
+}
+
+// SetArch sets the "arch" field.
+func (ru *ReleaseUpdate) SetArch(s string) *ReleaseUpdate {
+	ru.mutation.SetArch(s)
+	return ru
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (ru *ReleaseUpdate) SetNillableArch(s *string) *ReleaseUpdate {
+	if s != nil {
+		ru.SetArch(*s)
+	}
+	return ru
+}
+
+// ClearArch clears the value of the "arch" field.
+func (ru *ReleaseUpdate) ClearArch() *ReleaseUpdate {
+	ru.mutation.ClearArch()
+	return ru
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (ru *ReleaseUpdate) AddOwnerIDs(ids ...string) *ReleaseUpdate {
 	ru.mutation.AddOwnerIDs(ids...)
@@ -320,6 +360,18 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.ReleaseDateCleared() {
 		_spec.ClearField(release.FieldReleaseDate, field.TypeTime)
+	}
+	if value, ok := ru.mutation.Os(); ok {
+		_spec.SetField(release.FieldOs, field.TypeString, value)
+	}
+	if ru.mutation.OsCleared() {
+		_spec.ClearField(release.FieldOs, field.TypeString)
+	}
+	if value, ok := ru.mutation.Arch(); ok {
+		_spec.SetField(release.FieldArch, field.TypeString, value)
+	}
+	if ru.mutation.ArchCleared() {
+		_spec.ClearField(release.FieldArch, field.TypeString)
 	}
 	if ru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -548,6 +600,46 @@ func (ruo *ReleaseUpdateOne) ClearReleaseDate() *ReleaseUpdateOne {
 	return ruo
 }
 
+// SetOs sets the "os" field.
+func (ruo *ReleaseUpdateOne) SetOs(s string) *ReleaseUpdateOne {
+	ruo.mutation.SetOs(s)
+	return ruo
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (ruo *ReleaseUpdateOne) SetNillableOs(s *string) *ReleaseUpdateOne {
+	if s != nil {
+		ruo.SetOs(*s)
+	}
+	return ruo
+}
+
+// ClearOs clears the value of the "os" field.
+func (ruo *ReleaseUpdateOne) ClearOs() *ReleaseUpdateOne {
+	ruo.mutation.ClearOs()
+	return ruo
+}
+
+// SetArch sets the "arch" field.
+func (ruo *ReleaseUpdateOne) SetArch(s string) *ReleaseUpdateOne {
+	ruo.mutation.SetArch(s)
+	return ruo
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (ruo *ReleaseUpdateOne) SetNillableArch(s *string) *ReleaseUpdateOne {
+	if s != nil {
+		ruo.SetArch(*s)
+	}
+	return ruo
+}
+
+// ClearArch clears the value of the "arch" field.
+func (ruo *ReleaseUpdateOne) ClearArch() *ReleaseUpdateOne {
+	ruo.mutation.ClearArch()
+	return ruo
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (ruo *ReleaseUpdateOne) AddOwnerIDs(ids ...string) *ReleaseUpdateOne {
 	ruo.mutation.AddOwnerIDs(ids...)
@@ -708,6 +800,18 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 	}
 	if ruo.mutation.ReleaseDateCleared() {
 		_spec.ClearField(release.FieldReleaseDate, field.TypeTime)
+	}
+	if value, ok := ruo.mutation.Os(); ok {
+		_spec.SetField(release.FieldOs, field.TypeString, value)
+	}
+	if ruo.mutation.OsCleared() {
+		_spec.ClearField(release.FieldOs, field.TypeString)
+	}
+	if value, ok := ruo.mutation.Arch(); ok {
+		_spec.SetField(release.FieldArch, field.TypeString, value)
+	}
+	if ruo.mutation.ArchCleared() {
+		_spec.ClearField(release.FieldArch, field.TypeString)
 	}
 	if ruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

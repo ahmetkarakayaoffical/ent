@@ -10582,6 +10582,8 @@ type ReleaseMutation struct {
 	checksum      *string
 	is_critical   *bool
 	release_date  *time.Time
+	os            *string
+	arch          *string
 	clearedFields map[string]struct{}
 	owner         map[string]struct{}
 	removedowner  map[string]struct{}
@@ -11081,6 +11083,104 @@ func (m *ReleaseMutation) ResetReleaseDate() {
 	delete(m.clearedFields, release.FieldReleaseDate)
 }
 
+// SetOs sets the "os" field.
+func (m *ReleaseMutation) SetOs(s string) {
+	m.os = &s
+}
+
+// Os returns the value of the "os" field in the mutation.
+func (m *ReleaseMutation) Os() (r string, exists bool) {
+	v := m.os
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOs returns the old "os" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldOs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOs: %w", err)
+	}
+	return oldValue.Os, nil
+}
+
+// ClearOs clears the value of the "os" field.
+func (m *ReleaseMutation) ClearOs() {
+	m.os = nil
+	m.clearedFields[release.FieldOs] = struct{}{}
+}
+
+// OsCleared returns if the "os" field was cleared in this mutation.
+func (m *ReleaseMutation) OsCleared() bool {
+	_, ok := m.clearedFields[release.FieldOs]
+	return ok
+}
+
+// ResetOs resets all changes to the "os" field.
+func (m *ReleaseMutation) ResetOs() {
+	m.os = nil
+	delete(m.clearedFields, release.FieldOs)
+}
+
+// SetArch sets the "arch" field.
+func (m *ReleaseMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *ReleaseMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ClearArch clears the value of the "arch" field.
+func (m *ReleaseMutation) ClearArch() {
+	m.arch = nil
+	m.clearedFields[release.FieldArch] = struct{}{}
+}
+
+// ArchCleared returns if the "arch" field was cleared in this mutation.
+func (m *ReleaseMutation) ArchCleared() bool {
+	_, ok := m.clearedFields[release.FieldArch]
+	return ok
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *ReleaseMutation) ResetArch() {
+	m.arch = nil
+	delete(m.clearedFields, release.FieldArch)
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
 func (m *ReleaseMutation) AddOwnerIDs(ids ...string) {
 	if m.owner == nil {
@@ -11169,7 +11269,7 @@ func (m *ReleaseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReleaseMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.version != nil {
 		fields = append(fields, release.FieldVersion)
 	}
@@ -11193,6 +11293,12 @@ func (m *ReleaseMutation) Fields() []string {
 	}
 	if m.release_date != nil {
 		fields = append(fields, release.FieldReleaseDate)
+	}
+	if m.os != nil {
+		fields = append(fields, release.FieldOs)
+	}
+	if m.arch != nil {
+		fields = append(fields, release.FieldArch)
 	}
 	return fields
 }
@@ -11218,6 +11324,10 @@ func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 		return m.IsCritical()
 	case release.FieldReleaseDate:
 		return m.ReleaseDate()
+	case release.FieldOs:
+		return m.Os()
+	case release.FieldArch:
+		return m.Arch()
 	}
 	return nil, false
 }
@@ -11243,6 +11353,10 @@ func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldIsCritical(ctx)
 	case release.FieldReleaseDate:
 		return m.OldReleaseDate(ctx)
+	case release.FieldOs:
+		return m.OldOs(ctx)
+	case release.FieldArch:
+		return m.OldArch(ctx)
 	}
 	return nil, fmt.Errorf("unknown Release field %s", name)
 }
@@ -11308,6 +11422,20 @@ func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReleaseDate(v)
 		return nil
+	case release.FieldOs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOs(v)
+		return nil
+	case release.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Release field %s", name)
 }
@@ -11362,6 +11490,12 @@ func (m *ReleaseMutation) ClearedFields() []string {
 	if m.FieldCleared(release.FieldReleaseDate) {
 		fields = append(fields, release.FieldReleaseDate)
 	}
+	if m.FieldCleared(release.FieldOs) {
+		fields = append(fields, release.FieldOs)
+	}
+	if m.FieldCleared(release.FieldArch) {
+		fields = append(fields, release.FieldArch)
+	}
 	return fields
 }
 
@@ -11400,6 +11534,12 @@ func (m *ReleaseMutation) ClearField(name string) error {
 	case release.FieldReleaseDate:
 		m.ClearReleaseDate()
 		return nil
+	case release.FieldOs:
+		m.ClearOs()
+		return nil
+	case release.FieldArch:
+		m.ClearArch()
+		return nil
 	}
 	return fmt.Errorf("unknown Release nullable field %s", name)
 }
@@ -11431,6 +11571,12 @@ func (m *ReleaseMutation) ResetField(name string) error {
 		return nil
 	case release.FieldReleaseDate:
 		m.ResetReleaseDate()
+		return nil
+	case release.FieldOs:
+		m.ResetOs()
+		return nil
+	case release.FieldArch:
+		m.ResetArch()
 		return nil
 	}
 	return fmt.Errorf("unknown Release field %s", name)

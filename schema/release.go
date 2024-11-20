@@ -22,6 +22,8 @@ func (Release) Fields() []ent.Field {
 		field.String("checksum").Optional(),
 		field.Bool("is_critical").Optional(),
 		field.Time("release_date").Optional(),
+		field.String("os").Optional(),
+		field.String("arch").Optional(),
 	}
 }
 
@@ -35,6 +37,6 @@ func (Release) Edges() []ent.Edge {
 // Indexes of the Release.
 func (Release) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("version", "channel").Unique(),
+		index.Fields("version", "channel", "os", "arch").Unique(),
 	}
 }

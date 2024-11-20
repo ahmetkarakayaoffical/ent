@@ -135,6 +135,34 @@ func (rc *ReleaseCreate) SetNillableReleaseDate(t *time.Time) *ReleaseCreate {
 	return rc
 }
 
+// SetOs sets the "os" field.
+func (rc *ReleaseCreate) SetOs(s string) *ReleaseCreate {
+	rc.mutation.SetOs(s)
+	return rc
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (rc *ReleaseCreate) SetNillableOs(s *string) *ReleaseCreate {
+	if s != nil {
+		rc.SetOs(*s)
+	}
+	return rc
+}
+
+// SetArch sets the "arch" field.
+func (rc *ReleaseCreate) SetArch(s string) *ReleaseCreate {
+	rc.mutation.SetArch(s)
+	return rc
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (rc *ReleaseCreate) SetNillableArch(s *string) *ReleaseCreate {
+	if s != nil {
+		rc.SetArch(*s)
+	}
+	return rc
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (rc *ReleaseCreate) AddOwnerIDs(ids ...string) *ReleaseCreate {
 	rc.mutation.AddOwnerIDs(ids...)
@@ -245,6 +273,14 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.ReleaseDate(); ok {
 		_spec.SetField(release.FieldReleaseDate, field.TypeTime, value)
 		_node.ReleaseDate = value
+	}
+	if value, ok := rc.mutation.Os(); ok {
+		_spec.SetField(release.FieldOs, field.TypeString, value)
+		_node.Os = value
+	}
+	if value, ok := rc.mutation.Arch(); ok {
+		_spec.SetField(release.FieldArch, field.TypeString, value)
+		_node.Arch = value
 	}
 	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -458,6 +494,42 @@ func (u *ReleaseUpsert) ClearReleaseDate() *ReleaseUpsert {
 	return u
 }
 
+// SetOs sets the "os" field.
+func (u *ReleaseUpsert) SetOs(v string) *ReleaseUpsert {
+	u.Set(release.FieldOs, v)
+	return u
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ReleaseUpsert) UpdateOs() *ReleaseUpsert {
+	u.SetExcluded(release.FieldOs)
+	return u
+}
+
+// ClearOs clears the value of the "os" field.
+func (u *ReleaseUpsert) ClearOs() *ReleaseUpsert {
+	u.SetNull(release.FieldOs)
+	return u
+}
+
+// SetArch sets the "arch" field.
+func (u *ReleaseUpsert) SetArch(v string) *ReleaseUpsert {
+	u.Set(release.FieldArch, v)
+	return u
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ReleaseUpsert) UpdateArch() *ReleaseUpsert {
+	u.SetExcluded(release.FieldArch)
+	return u
+}
+
+// ClearArch clears the value of the "arch" field.
+func (u *ReleaseUpsert) ClearArch() *ReleaseUpsert {
+	u.SetNull(release.FieldArch)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -663,6 +735,48 @@ func (u *ReleaseUpsertOne) UpdateReleaseDate() *ReleaseUpsertOne {
 func (u *ReleaseUpsertOne) ClearReleaseDate() *ReleaseUpsertOne {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.ClearReleaseDate()
+	})
+}
+
+// SetOs sets the "os" field.
+func (u *ReleaseUpsertOne) SetOs(v string) *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetOs(v)
+	})
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ReleaseUpsertOne) UpdateOs() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateOs()
+	})
+}
+
+// ClearOs clears the value of the "os" field.
+func (u *ReleaseUpsertOne) ClearOs() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearOs()
+	})
+}
+
+// SetArch sets the "arch" field.
+func (u *ReleaseUpsertOne) SetArch(v string) *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetArch(v)
+	})
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ReleaseUpsertOne) UpdateArch() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateArch()
+	})
+}
+
+// ClearArch clears the value of the "arch" field.
+func (u *ReleaseUpsertOne) ClearArch() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearArch()
 	})
 }
 
@@ -1034,6 +1148,48 @@ func (u *ReleaseUpsertBulk) UpdateReleaseDate() *ReleaseUpsertBulk {
 func (u *ReleaseUpsertBulk) ClearReleaseDate() *ReleaseUpsertBulk {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.ClearReleaseDate()
+	})
+}
+
+// SetOs sets the "os" field.
+func (u *ReleaseUpsertBulk) SetOs(v string) *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetOs(v)
+	})
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ReleaseUpsertBulk) UpdateOs() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateOs()
+	})
+}
+
+// ClearOs clears the value of the "os" field.
+func (u *ReleaseUpsertBulk) ClearOs() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearOs()
+	})
+}
+
+// SetArch sets the "arch" field.
+func (u *ReleaseUpsertBulk) SetArch(v string) *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetArch(v)
+	})
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ReleaseUpsertBulk) UpdateArch() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateArch()
+	})
+}
+
+// ClearArch clears the value of the "arch" field.
+func (u *ReleaseUpsertBulk) ClearArch() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearArch()
 	})
 }
 

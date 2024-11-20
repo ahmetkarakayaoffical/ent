@@ -28,6 +28,10 @@ const (
 	FieldIsCritical = "is_critical"
 	// FieldReleaseDate holds the string denoting the release_date field in the database.
 	FieldReleaseDate = "release_date"
+	// FieldOs holds the string denoting the os field in the database.
+	FieldOs = "os"
+	// FieldArch holds the string denoting the arch field in the database.
+	FieldArch = "arch"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
@@ -54,6 +58,8 @@ var Columns = []string{
 	FieldChecksum,
 	FieldIsCritical,
 	FieldReleaseDate,
+	FieldOs,
+	FieldArch,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -112,6 +118,16 @@ func ByIsCritical(opts ...sql.OrderTermOption) OrderOption {
 // ByReleaseDate orders the results by the release_date field.
 func ByReleaseDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReleaseDate, opts...).ToFunc()
+}
+
+// ByOs orders the results by the os field.
+func ByOs(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOs, opts...).ToFunc()
+}
+
+// ByArch orders the results by the arch field.
+func ByArch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArch, opts...).ToFunc()
 }
 
 // ByOwnerCount orders the results by owner count.
