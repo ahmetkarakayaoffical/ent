@@ -10580,7 +10580,7 @@ type ReleaseMutation struct {
 	release_notes *string
 	file_url      *string
 	checksum      *string
-	is_critical   *string
+	is_critical   *bool
 	clearedFields map[string]struct{}
 	owner         map[string]struct{}
 	removedowner  map[string]struct{}
@@ -10983,12 +10983,12 @@ func (m *ReleaseMutation) ResetChecksum() {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (m *ReleaseMutation) SetIsCritical(s string) {
-	m.is_critical = &s
+func (m *ReleaseMutation) SetIsCritical(b bool) {
+	m.is_critical = &b
 }
 
 // IsCritical returns the value of the "is_critical" field in the mutation.
-func (m *ReleaseMutation) IsCritical() (r string, exists bool) {
+func (m *ReleaseMutation) IsCritical() (r bool, exists bool) {
 	v := m.is_critical
 	if v == nil {
 		return
@@ -10999,7 +10999,7 @@ func (m *ReleaseMutation) IsCritical() (r string, exists bool) {
 // OldIsCritical returns the old "is_critical" field's value of the Release entity.
 // If the Release object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ReleaseMutation) OldIsCritical(ctx context.Context) (v string, err error) {
+func (m *ReleaseMutation) OldIsCritical(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsCritical is only allowed on UpdateOne operations")
 	}
@@ -11238,7 +11238,7 @@ func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
 		m.SetChecksum(v)
 		return nil
 	case release.FieldIsCritical:
-		v, ok := value.(string)
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

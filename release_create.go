@@ -107,15 +107,15 @@ func (rc *ReleaseCreate) SetNillableChecksum(s *string) *ReleaseCreate {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (rc *ReleaseCreate) SetIsCritical(s string) *ReleaseCreate {
-	rc.mutation.SetIsCritical(s)
+func (rc *ReleaseCreate) SetIsCritical(b bool) *ReleaseCreate {
+	rc.mutation.SetIsCritical(b)
 	return rc
 }
 
 // SetNillableIsCritical sets the "is_critical" field if the given value is not nil.
-func (rc *ReleaseCreate) SetNillableIsCritical(s *string) *ReleaseCreate {
-	if s != nil {
-		rc.SetIsCritical(*s)
+func (rc *ReleaseCreate) SetNillableIsCritical(b *bool) *ReleaseCreate {
+	if b != nil {
+		rc.SetIsCritical(*b)
 	}
 	return rc
 }
@@ -224,7 +224,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 		_node.Checksum = value
 	}
 	if value, ok := rc.mutation.IsCritical(); ok {
-		_spec.SetField(release.FieldIsCritical, field.TypeString, value)
+		_spec.SetField(release.FieldIsCritical, field.TypeBool, value)
 		_node.IsCritical = value
 	}
 	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -404,7 +404,7 @@ func (u *ReleaseUpsert) ClearChecksum() *ReleaseUpsert {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (u *ReleaseUpsert) SetIsCritical(v string) *ReleaseUpsert {
+func (u *ReleaseUpsert) SetIsCritical(v bool) *ReleaseUpsert {
 	u.Set(release.FieldIsCritical, v)
 	return u
 }
@@ -588,7 +588,7 @@ func (u *ReleaseUpsertOne) ClearChecksum() *ReleaseUpsertOne {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (u *ReleaseUpsertOne) SetIsCritical(v string) *ReleaseUpsertOne {
+func (u *ReleaseUpsertOne) SetIsCritical(v bool) *ReleaseUpsertOne {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.SetIsCritical(v)
 	})
@@ -938,7 +938,7 @@ func (u *ReleaseUpsertBulk) ClearChecksum() *ReleaseUpsertBulk {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (u *ReleaseUpsertBulk) SetIsCritical(v string) *ReleaseUpsertBulk {
+func (u *ReleaseUpsertBulk) SetIsCritical(v bool) *ReleaseUpsertBulk {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.SetIsCritical(v)
 	})

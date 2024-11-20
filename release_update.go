@@ -150,15 +150,15 @@ func (ru *ReleaseUpdate) ClearChecksum() *ReleaseUpdate {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (ru *ReleaseUpdate) SetIsCritical(s string) *ReleaseUpdate {
-	ru.mutation.SetIsCritical(s)
+func (ru *ReleaseUpdate) SetIsCritical(b bool) *ReleaseUpdate {
+	ru.mutation.SetIsCritical(b)
 	return ru
 }
 
 // SetNillableIsCritical sets the "is_critical" field if the given value is not nil.
-func (ru *ReleaseUpdate) SetNillableIsCritical(s *string) *ReleaseUpdate {
-	if s != nil {
-		ru.SetIsCritical(*s)
+func (ru *ReleaseUpdate) SetNillableIsCritical(b *bool) *ReleaseUpdate {
+	if b != nil {
+		ru.SetIsCritical(*b)
 	}
 	return ru
 }
@@ -289,10 +289,10 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(release.FieldChecksum, field.TypeString)
 	}
 	if value, ok := ru.mutation.IsCritical(); ok {
-		_spec.SetField(release.FieldIsCritical, field.TypeString, value)
+		_spec.SetField(release.FieldIsCritical, field.TypeBool, value)
 	}
 	if ru.mutation.IsCriticalCleared() {
-		_spec.ClearField(release.FieldIsCritical, field.TypeString)
+		_spec.ClearField(release.FieldIsCritical, field.TypeBool)
 	}
 	if ru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -482,15 +482,15 @@ func (ruo *ReleaseUpdateOne) ClearChecksum() *ReleaseUpdateOne {
 }
 
 // SetIsCritical sets the "is_critical" field.
-func (ruo *ReleaseUpdateOne) SetIsCritical(s string) *ReleaseUpdateOne {
-	ruo.mutation.SetIsCritical(s)
+func (ruo *ReleaseUpdateOne) SetIsCritical(b bool) *ReleaseUpdateOne {
+	ruo.mutation.SetIsCritical(b)
 	return ruo
 }
 
 // SetNillableIsCritical sets the "is_critical" field if the given value is not nil.
-func (ruo *ReleaseUpdateOne) SetNillableIsCritical(s *string) *ReleaseUpdateOne {
-	if s != nil {
-		ruo.SetIsCritical(*s)
+func (ruo *ReleaseUpdateOne) SetNillableIsCritical(b *bool) *ReleaseUpdateOne {
+	if b != nil {
+		ruo.SetIsCritical(*b)
 	}
 	return ruo
 }
@@ -651,10 +651,10 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 		_spec.ClearField(release.FieldChecksum, field.TypeString)
 	}
 	if value, ok := ruo.mutation.IsCritical(); ok {
-		_spec.SetField(release.FieldIsCritical, field.TypeString, value)
+		_spec.SetField(release.FieldIsCritical, field.TypeBool, value)
 	}
 	if ruo.mutation.IsCriticalCleared() {
-		_spec.ClearField(release.FieldIsCritical, field.TypeString)
+		_spec.ClearField(release.FieldIsCritical, field.TypeBool)
 	}
 	if ruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

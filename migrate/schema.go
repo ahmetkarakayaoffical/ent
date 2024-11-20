@@ -333,7 +333,7 @@ var (
 		{Name: "release_notes", Type: field.TypeString, Nullable: true},
 		{Name: "file_url", Type: field.TypeString, Nullable: true},
 		{Name: "checksum", Type: field.TypeString, Nullable: true},
-		{Name: "is_critical", Type: field.TypeString, Nullable: true},
+		{Name: "is_critical", Type: field.TypeBool, Nullable: true},
 	}
 	// ReleasesTable holds the schema information for the "releases" table.
 	ReleasesTable = &schema.Table{

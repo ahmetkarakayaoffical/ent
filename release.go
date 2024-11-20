@@ -29,7 +29,7 @@ type Release struct {
 	// Checksum holds the value of the "checksum" field.
 	Checksum string `json:"checksum,omitempty"`
 	// IsCritical holds the value of the "is_critical" field.
-	IsCritical string `json:"is_critical,omitempty"`
+	IsCritical bool `json:"is_critical,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReleaseQuery when eager-loading is set.
 	Edges        ReleaseEdges `json:"edges"`
@@ -59,9 +59,11 @@ func (*Release) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case release.FieldIsCritical:
+			values[i] = new(sql.NullBool)
 		case release.FieldID:
 			values[i] = new(sql.NullInt64)
-		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldIsCritical:
+		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -121,10 +123,10 @@ func (r *Release) assignValues(columns []string, values []any) error {
 				r.Checksum = value.String
 			}
 		case release.FieldIsCritical:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_critical", values[i])
 			} else if value.Valid {
-				r.IsCritical = value.String
+				r.IsCritical = value.Bool
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -186,7 +188,7 @@ func (r *Release) String() string {
 	builder.WriteString(r.Checksum)
 	builder.WriteString(", ")
 	builder.WriteString("is_critical=")
-	builder.WriteString(r.IsCritical)
+	builder.WriteString(fmt.Sprintf("%v", r.IsCritical))
 	builder.WriteByte(')')
 	return builder.String()
 }

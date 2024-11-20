@@ -20,7 +20,7 @@ func (Release) Fields() []ent.Field {
 		field.String("release_notes").Optional(),
 		field.String("file_url").Optional(),
 		field.String("checksum").Optional(),
-		field.String("is_critical").Optional(),
+		field.Bool("is_critical").Optional(),
 	}
 }
 

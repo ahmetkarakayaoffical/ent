@@ -84,7 +84,7 @@ func Checksum(v string) predicate.Release {
 }
 
 // IsCritical applies equality check predicate on the "is_critical" field. It's identical to IsCriticalEQ.
-func IsCritical(v string) predicate.Release {
+func IsCritical(v bool) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldIsCritical, v))
 }
 
@@ -539,58 +539,13 @@ func ChecksumContainsFold(v string) predicate.Release {
 }
 
 // IsCriticalEQ applies the EQ predicate on the "is_critical" field.
-func IsCriticalEQ(v string) predicate.Release {
+func IsCriticalEQ(v bool) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldIsCritical, v))
 }
 
 // IsCriticalNEQ applies the NEQ predicate on the "is_critical" field.
-func IsCriticalNEQ(v string) predicate.Release {
+func IsCriticalNEQ(v bool) predicate.Release {
 	return predicate.Release(sql.FieldNEQ(FieldIsCritical, v))
-}
-
-// IsCriticalIn applies the In predicate on the "is_critical" field.
-func IsCriticalIn(vs ...string) predicate.Release {
-	return predicate.Release(sql.FieldIn(FieldIsCritical, vs...))
-}
-
-// IsCriticalNotIn applies the NotIn predicate on the "is_critical" field.
-func IsCriticalNotIn(vs ...string) predicate.Release {
-	return predicate.Release(sql.FieldNotIn(FieldIsCritical, vs...))
-}
-
-// IsCriticalGT applies the GT predicate on the "is_critical" field.
-func IsCriticalGT(v string) predicate.Release {
-	return predicate.Release(sql.FieldGT(FieldIsCritical, v))
-}
-
-// IsCriticalGTE applies the GTE predicate on the "is_critical" field.
-func IsCriticalGTE(v string) predicate.Release {
-	return predicate.Release(sql.FieldGTE(FieldIsCritical, v))
-}
-
-// IsCriticalLT applies the LT predicate on the "is_critical" field.
-func IsCriticalLT(v string) predicate.Release {
-	return predicate.Release(sql.FieldLT(FieldIsCritical, v))
-}
-
-// IsCriticalLTE applies the LTE predicate on the "is_critical" field.
-func IsCriticalLTE(v string) predicate.Release {
-	return predicate.Release(sql.FieldLTE(FieldIsCritical, v))
-}
-
-// IsCriticalContains applies the Contains predicate on the "is_critical" field.
-func IsCriticalContains(v string) predicate.Release {
-	return predicate.Release(sql.FieldContains(FieldIsCritical, v))
-}
-
-// IsCriticalHasPrefix applies the HasPrefix predicate on the "is_critical" field.
-func IsCriticalHasPrefix(v string) predicate.Release {
-	return predicate.Release(sql.FieldHasPrefix(FieldIsCritical, v))
-}
-
-// IsCriticalHasSuffix applies the HasSuffix predicate on the "is_critical" field.
-func IsCriticalHasSuffix(v string) predicate.Release {
-	return predicate.Release(sql.FieldHasSuffix(FieldIsCritical, v))
 }
 
 // IsCriticalIsNil applies the IsNil predicate on the "is_critical" field.
@@ -601,16 +556,6 @@ func IsCriticalIsNil() predicate.Release {
 // IsCriticalNotNil applies the NotNil predicate on the "is_critical" field.
 func IsCriticalNotNil() predicate.Release {
 	return predicate.Release(sql.FieldNotNull(FieldIsCritical))
-}
-
-// IsCriticalEqualFold applies the EqualFold predicate on the "is_critical" field.
-func IsCriticalEqualFold(v string) predicate.Release {
-	return predicate.Release(sql.FieldEqualFold(FieldIsCritical, v))
-}
-
-// IsCriticalContainsFold applies the ContainsFold predicate on the "is_critical" field.
-func IsCriticalContainsFold(v string) predicate.Release {
-	return predicate.Release(sql.FieldContainsFold(FieldIsCritical, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
