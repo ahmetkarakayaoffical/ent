@@ -10581,6 +10581,7 @@ type ReleaseMutation struct {
 	file_url      *string
 	checksum      *string
 	is_critical   *bool
+	release_date  *time.Time
 	clearedFields map[string]struct{}
 	owner         map[string]struct{}
 	removedowner  map[string]struct{}
@@ -11031,6 +11032,55 @@ func (m *ReleaseMutation) ResetIsCritical() {
 	delete(m.clearedFields, release.FieldIsCritical)
 }
 
+// SetReleaseDate sets the "release_date" field.
+func (m *ReleaseMutation) SetReleaseDate(t time.Time) {
+	m.release_date = &t
+}
+
+// ReleaseDate returns the value of the "release_date" field in the mutation.
+func (m *ReleaseMutation) ReleaseDate() (r time.Time, exists bool) {
+	v := m.release_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReleaseDate returns the old "release_date" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldReleaseDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReleaseDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReleaseDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReleaseDate: %w", err)
+	}
+	return oldValue.ReleaseDate, nil
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (m *ReleaseMutation) ClearReleaseDate() {
+	m.release_date = nil
+	m.clearedFields[release.FieldReleaseDate] = struct{}{}
+}
+
+// ReleaseDateCleared returns if the "release_date" field was cleared in this mutation.
+func (m *ReleaseMutation) ReleaseDateCleared() bool {
+	_, ok := m.clearedFields[release.FieldReleaseDate]
+	return ok
+}
+
+// ResetReleaseDate resets all changes to the "release_date" field.
+func (m *ReleaseMutation) ResetReleaseDate() {
+	m.release_date = nil
+	delete(m.clearedFields, release.FieldReleaseDate)
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
 func (m *ReleaseMutation) AddOwnerIDs(ids ...string) {
 	if m.owner == nil {
@@ -11119,7 +11169,7 @@ func (m *ReleaseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReleaseMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.version != nil {
 		fields = append(fields, release.FieldVersion)
 	}
@@ -11140,6 +11190,9 @@ func (m *ReleaseMutation) Fields() []string {
 	}
 	if m.is_critical != nil {
 		fields = append(fields, release.FieldIsCritical)
+	}
+	if m.release_date != nil {
+		fields = append(fields, release.FieldReleaseDate)
 	}
 	return fields
 }
@@ -11163,6 +11216,8 @@ func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 		return m.Checksum()
 	case release.FieldIsCritical:
 		return m.IsCritical()
+	case release.FieldReleaseDate:
+		return m.ReleaseDate()
 	}
 	return nil, false
 }
@@ -11186,6 +11241,8 @@ func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldChecksum(ctx)
 	case release.FieldIsCritical:
 		return m.OldIsCritical(ctx)
+	case release.FieldReleaseDate:
+		return m.OldReleaseDate(ctx)
 	}
 	return nil, fmt.Errorf("unknown Release field %s", name)
 }
@@ -11244,6 +11301,13 @@ func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsCritical(v)
 		return nil
+	case release.FieldReleaseDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReleaseDate(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Release field %s", name)
 }
@@ -11295,6 +11359,9 @@ func (m *ReleaseMutation) ClearedFields() []string {
 	if m.FieldCleared(release.FieldIsCritical) {
 		fields = append(fields, release.FieldIsCritical)
 	}
+	if m.FieldCleared(release.FieldReleaseDate) {
+		fields = append(fields, release.FieldReleaseDate)
+	}
 	return fields
 }
 
@@ -11330,6 +11397,9 @@ func (m *ReleaseMutation) ClearField(name string) error {
 	case release.FieldIsCritical:
 		m.ClearIsCritical()
 		return nil
+	case release.FieldReleaseDate:
+		m.ClearReleaseDate()
+		return nil
 	}
 	return fmt.Errorf("unknown Release nullable field %s", name)
 }
@@ -11358,6 +11428,9 @@ func (m *ReleaseMutation) ResetField(name string) error {
 		return nil
 	case release.FieldIsCritical:
 		m.ResetIsCritical()
+		return nil
+	case release.FieldReleaseDate:
+		m.ResetReleaseDate()
 		return nil
 	}
 	return fmt.Errorf("unknown Release field %s", name)

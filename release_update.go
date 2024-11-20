@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -169,6 +170,26 @@ func (ru *ReleaseUpdate) ClearIsCritical() *ReleaseUpdate {
 	return ru
 }
 
+// SetReleaseDate sets the "release_date" field.
+func (ru *ReleaseUpdate) SetReleaseDate(t time.Time) *ReleaseUpdate {
+	ru.mutation.SetReleaseDate(t)
+	return ru
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (ru *ReleaseUpdate) SetNillableReleaseDate(t *time.Time) *ReleaseUpdate {
+	if t != nil {
+		ru.SetReleaseDate(*t)
+	}
+	return ru
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (ru *ReleaseUpdate) ClearReleaseDate() *ReleaseUpdate {
+	ru.mutation.ClearReleaseDate()
+	return ru
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (ru *ReleaseUpdate) AddOwnerIDs(ids ...string) *ReleaseUpdate {
 	ru.mutation.AddOwnerIDs(ids...)
@@ -293,6 +314,12 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.IsCriticalCleared() {
 		_spec.ClearField(release.FieldIsCritical, field.TypeBool)
+	}
+	if value, ok := ru.mutation.ReleaseDate(); ok {
+		_spec.SetField(release.FieldReleaseDate, field.TypeTime, value)
+	}
+	if ru.mutation.ReleaseDateCleared() {
+		_spec.ClearField(release.FieldReleaseDate, field.TypeTime)
 	}
 	if ru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -501,6 +528,26 @@ func (ruo *ReleaseUpdateOne) ClearIsCritical() *ReleaseUpdateOne {
 	return ruo
 }
 
+// SetReleaseDate sets the "release_date" field.
+func (ruo *ReleaseUpdateOne) SetReleaseDate(t time.Time) *ReleaseUpdateOne {
+	ruo.mutation.SetReleaseDate(t)
+	return ruo
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (ruo *ReleaseUpdateOne) SetNillableReleaseDate(t *time.Time) *ReleaseUpdateOne {
+	if t != nil {
+		ruo.SetReleaseDate(*t)
+	}
+	return ruo
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (ruo *ReleaseUpdateOne) ClearReleaseDate() *ReleaseUpdateOne {
+	ruo.mutation.ClearReleaseDate()
+	return ruo
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (ruo *ReleaseUpdateOne) AddOwnerIDs(ids ...string) *ReleaseUpdateOne {
 	ruo.mutation.AddOwnerIDs(ids...)
@@ -655,6 +702,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 	}
 	if ruo.mutation.IsCriticalCleared() {
 		_spec.ClearField(release.FieldIsCritical, field.TypeBool)
+	}
+	if value, ok := ruo.mutation.ReleaseDate(); ok {
+		_spec.SetField(release.FieldReleaseDate, field.TypeTime, value)
+	}
+	if ruo.mutation.ReleaseDateCleared() {
+		_spec.ClearField(release.FieldReleaseDate, field.TypeTime)
 	}
 	if ruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

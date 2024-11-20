@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -120,6 +121,20 @@ func (rc *ReleaseCreate) SetNillableIsCritical(b *bool) *ReleaseCreate {
 	return rc
 }
 
+// SetReleaseDate sets the "release_date" field.
+func (rc *ReleaseCreate) SetReleaseDate(t time.Time) *ReleaseCreate {
+	rc.mutation.SetReleaseDate(t)
+	return rc
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (rc *ReleaseCreate) SetNillableReleaseDate(t *time.Time) *ReleaseCreate {
+	if t != nil {
+		rc.SetReleaseDate(*t)
+	}
+	return rc
+}
+
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (rc *ReleaseCreate) AddOwnerIDs(ids ...string) *ReleaseCreate {
 	rc.mutation.AddOwnerIDs(ids...)
@@ -226,6 +241,10 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.IsCritical(); ok {
 		_spec.SetField(release.FieldIsCritical, field.TypeBool, value)
 		_node.IsCritical = value
+	}
+	if value, ok := rc.mutation.ReleaseDate(); ok {
+		_spec.SetField(release.FieldReleaseDate, field.TypeTime, value)
+		_node.ReleaseDate = value
 	}
 	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -421,6 +440,24 @@ func (u *ReleaseUpsert) ClearIsCritical() *ReleaseUpsert {
 	return u
 }
 
+// SetReleaseDate sets the "release_date" field.
+func (u *ReleaseUpsert) SetReleaseDate(v time.Time) *ReleaseUpsert {
+	u.Set(release.FieldReleaseDate, v)
+	return u
+}
+
+// UpdateReleaseDate sets the "release_date" field to the value that was provided on create.
+func (u *ReleaseUpsert) UpdateReleaseDate() *ReleaseUpsert {
+	u.SetExcluded(release.FieldReleaseDate)
+	return u
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (u *ReleaseUpsert) ClearReleaseDate() *ReleaseUpsert {
+	u.SetNull(release.FieldReleaseDate)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -605,6 +642,27 @@ func (u *ReleaseUpsertOne) UpdateIsCritical() *ReleaseUpsertOne {
 func (u *ReleaseUpsertOne) ClearIsCritical() *ReleaseUpsertOne {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.ClearIsCritical()
+	})
+}
+
+// SetReleaseDate sets the "release_date" field.
+func (u *ReleaseUpsertOne) SetReleaseDate(v time.Time) *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetReleaseDate(v)
+	})
+}
+
+// UpdateReleaseDate sets the "release_date" field to the value that was provided on create.
+func (u *ReleaseUpsertOne) UpdateReleaseDate() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateReleaseDate()
+	})
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (u *ReleaseUpsertOne) ClearReleaseDate() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearReleaseDate()
 	})
 }
 
@@ -955,6 +1013,27 @@ func (u *ReleaseUpsertBulk) UpdateIsCritical() *ReleaseUpsertBulk {
 func (u *ReleaseUpsertBulk) ClearIsCritical() *ReleaseUpsertBulk {
 	return u.Update(func(s *ReleaseUpsert) {
 		s.ClearIsCritical()
+	})
+}
+
+// SetReleaseDate sets the "release_date" field.
+func (u *ReleaseUpsertBulk) SetReleaseDate(v time.Time) *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetReleaseDate(v)
+	})
+}
+
+// UpdateReleaseDate sets the "release_date" field to the value that was provided on create.
+func (u *ReleaseUpsertBulk) UpdateReleaseDate() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateReleaseDate()
+	})
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (u *ReleaseUpsertBulk) ClearReleaseDate() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearReleaseDate()
 	})
 }
 

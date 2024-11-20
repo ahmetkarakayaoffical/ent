@@ -3,6 +3,8 @@
 package release
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/doncicuto/openuem_ent/predicate"
@@ -86,6 +88,11 @@ func Checksum(v string) predicate.Release {
 // IsCritical applies equality check predicate on the "is_critical" field. It's identical to IsCriticalEQ.
 func IsCritical(v bool) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldIsCritical, v))
+}
+
+// ReleaseDate applies equality check predicate on the "release_date" field. It's identical to ReleaseDateEQ.
+func ReleaseDate(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldReleaseDate, v))
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.
@@ -556,6 +563,56 @@ func IsCriticalIsNil() predicate.Release {
 // IsCriticalNotNil applies the NotNil predicate on the "is_critical" field.
 func IsCriticalNotNil() predicate.Release {
 	return predicate.Release(sql.FieldNotNull(FieldIsCritical))
+}
+
+// ReleaseDateEQ applies the EQ predicate on the "release_date" field.
+func ReleaseDateEQ(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldReleaseDate, v))
+}
+
+// ReleaseDateNEQ applies the NEQ predicate on the "release_date" field.
+func ReleaseDateNEQ(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldNEQ(FieldReleaseDate, v))
+}
+
+// ReleaseDateIn applies the In predicate on the "release_date" field.
+func ReleaseDateIn(vs ...time.Time) predicate.Release {
+	return predicate.Release(sql.FieldIn(FieldReleaseDate, vs...))
+}
+
+// ReleaseDateNotIn applies the NotIn predicate on the "release_date" field.
+func ReleaseDateNotIn(vs ...time.Time) predicate.Release {
+	return predicate.Release(sql.FieldNotIn(FieldReleaseDate, vs...))
+}
+
+// ReleaseDateGT applies the GT predicate on the "release_date" field.
+func ReleaseDateGT(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldGT(FieldReleaseDate, v))
+}
+
+// ReleaseDateGTE applies the GTE predicate on the "release_date" field.
+func ReleaseDateGTE(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldGTE(FieldReleaseDate, v))
+}
+
+// ReleaseDateLT applies the LT predicate on the "release_date" field.
+func ReleaseDateLT(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldLT(FieldReleaseDate, v))
+}
+
+// ReleaseDateLTE applies the LTE predicate on the "release_date" field.
+func ReleaseDateLTE(v time.Time) predicate.Release {
+	return predicate.Release(sql.FieldLTE(FieldReleaseDate, v))
+}
+
+// ReleaseDateIsNil applies the IsNil predicate on the "release_date" field.
+func ReleaseDateIsNil() predicate.Release {
+	return predicate.Release(sql.FieldIsNull(FieldReleaseDate))
+}
+
+// ReleaseDateNotNil applies the NotNil predicate on the "release_date" field.
+func ReleaseDateNotNil() predicate.Release {
+	return predicate.Release(sql.FieldNotNull(FieldReleaseDate))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

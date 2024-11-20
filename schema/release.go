@@ -21,6 +21,7 @@ func (Release) Fields() []ent.Field {
 		field.String("file_url").Optional(),
 		field.String("checksum").Optional(),
 		field.Bool("is_critical").Optional(),
+		field.Time("release_date").Optional(),
 	}
 }
 

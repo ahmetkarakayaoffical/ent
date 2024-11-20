@@ -5,6 +5,7 @@ package openuem_ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -30,6 +31,8 @@ type Release struct {
 	Checksum string `json:"checksum,omitempty"`
 	// IsCritical holds the value of the "is_critical" field.
 	IsCritical bool `json:"is_critical,omitempty"`
+	// ReleaseDate holds the value of the "release_date" field.
+	ReleaseDate time.Time `json:"release_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReleaseQuery when eager-loading is set.
 	Edges        ReleaseEdges `json:"edges"`
@@ -65,6 +68,8 @@ func (*Release) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum:
 			values[i] = new(sql.NullString)
+		case release.FieldReleaseDate:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -128,6 +133,12 @@ func (r *Release) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.IsCritical = value.Bool
 			}
+		case release.FieldReleaseDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field release_date", values[i])
+			} else if value.Valid {
+				r.ReleaseDate = value.Time
+			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
 		}
@@ -189,6 +200,9 @@ func (r *Release) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_critical=")
 	builder.WriteString(fmt.Sprintf("%v", r.IsCritical))
+	builder.WriteString(", ")
+	builder.WriteString("release_date=")
+	builder.WriteString(r.ReleaseDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
