@@ -9,7 +9,6 @@ import (
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
 	"github.com/doncicuto/openuem_ent/sessions"
@@ -92,12 +91,6 @@ func init() {
 	orgmetadataDescName := orgmetadataFields[0].Descriptor()
 	// orgmetadata.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	orgmetadata.NameValidator = orgmetadataDescName.Validators[0].(func(string) error)
-	releaseFields := schema.Release{}.Fields()
-	_ = releaseFields
-	// releaseDescID is the schema descriptor for id field.
-	releaseDescID := releaseFields[0].Descriptor()
-	// release.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	release.IDValidator = releaseDescID.Validators[0].(func(string) error)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.

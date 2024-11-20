@@ -2601,7 +2601,7 @@ func (c *ReleaseClient) UpdateOne(r *Release) *ReleaseUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ReleaseClient) UpdateOneID(id string) *ReleaseUpdateOne {
+func (c *ReleaseClient) UpdateOneID(id int) *ReleaseUpdateOne {
 	mutation := newReleaseMutation(c.config, OpUpdateOne, withReleaseID(id))
 	return &ReleaseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -2618,7 +2618,7 @@ func (c *ReleaseClient) DeleteOne(r *Release) *ReleaseDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ReleaseClient) DeleteOneID(id string) *ReleaseDeleteOne {
+func (c *ReleaseClient) DeleteOneID(id int) *ReleaseDeleteOne {
 	builder := c.Delete().Where(release.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -2635,12 +2635,12 @@ func (c *ReleaseClient) Query() *ReleaseQuery {
 }
 
 // Get returns a Release entity by its id.
-func (c *ReleaseClient) Get(ctx context.Context, id string) (*Release, error) {
+func (c *ReleaseClient) Get(ctx context.Context, id int) (*Release, error) {
 	return c.Query().Where(release.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ReleaseClient) GetX(ctx context.Context, id string) *Release {
+func (c *ReleaseClient) GetX(ctx context.Context, id int) *Release {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

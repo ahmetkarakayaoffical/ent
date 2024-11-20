@@ -12,6 +12,8 @@ const (
 	Label = "release"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldVersion holds the string denoting the version field in the database.
+	FieldVersion = "version"
 	// FieldChannel holds the string denoting the channel field in the database.
 	FieldChannel = "channel"
 	// FieldSummary holds the string denoting the summary field in the database.
@@ -42,6 +44,7 @@ const (
 // Columns holds all SQL columns for release fields.
 var Columns = []string{
 	FieldID,
+	FieldVersion,
 	FieldChannel,
 	FieldSummary,
 	FieldReleaseNotes,
@@ -60,17 +63,17 @@ func ValidColumn(column string) bool {
 	return false
 }
 
-var (
-	// IDValidator is a validator for the "id" field. It is called by the builders before save.
-	IDValidator func(string) error
-)
-
 // OrderOption defines the ordering options for the Release queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
 // ByChannel orders the results by the channel field.

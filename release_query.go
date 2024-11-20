@@ -108,8 +108,8 @@ func (rq *ReleaseQuery) FirstX(ctx context.Context) *Release {
 
 // FirstID returns the first Release ID from the query.
 // Returns a *NotFoundError when no Release ID was found.
-func (rq *ReleaseQuery) FirstID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (rq *ReleaseQuery) FirstID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -121,7 +121,7 @@ func (rq *ReleaseQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rq *ReleaseQuery) FirstIDX(ctx context.Context) string {
+func (rq *ReleaseQuery) FirstIDX(ctx context.Context) int {
 	id, err := rq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -159,8 +159,8 @@ func (rq *ReleaseQuery) OnlyX(ctx context.Context) *Release {
 // OnlyID is like Only, but returns the only Release ID in the query.
 // Returns a *NotSingularError when more than one Release ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rq *ReleaseQuery) OnlyID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (rq *ReleaseQuery) OnlyID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -176,7 +176,7 @@ func (rq *ReleaseQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rq *ReleaseQuery) OnlyIDX(ctx context.Context) string {
+func (rq *ReleaseQuery) OnlyIDX(ctx context.Context) int {
 	id, err := rq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -204,7 +204,7 @@ func (rq *ReleaseQuery) AllX(ctx context.Context) []*Release {
 }
 
 // IDs executes the query and returns a list of Release IDs.
-func (rq *ReleaseQuery) IDs(ctx context.Context) (ids []string, err error) {
+func (rq *ReleaseQuery) IDs(ctx context.Context) (ids []int, err error) {
 	if rq.ctx.Unique == nil && rq.path != nil {
 		rq.Unique(true)
 	}
@@ -216,7 +216,7 @@ func (rq *ReleaseQuery) IDs(ctx context.Context) (ids []string, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rq *ReleaseQuery) IDsX(ctx context.Context) []string {
+func (rq *ReleaseQuery) IDsX(ctx context.Context) []int {
 	ids, err := rq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -301,12 +301,12 @@ func (rq *ReleaseQuery) WithOwner(opts ...func(*AgentQuery)) *ReleaseQuery {
 // Example:
 //
 //	var v []struct {
-//		Channel string `json:"channel,omitempty"`
+//		Version string `json:"version,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Release.Query().
-//		GroupBy(release.FieldChannel).
+//		GroupBy(release.FieldVersion).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (rq *ReleaseQuery) GroupBy(field string, fields ...string) *ReleaseGroupBy {
@@ -324,11 +324,11 @@ func (rq *ReleaseQuery) GroupBy(field string, fields ...string) *ReleaseGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Channel string `json:"channel,omitempty"`
+//		Version string `json:"version,omitempty"`
 //	}
 //
 //	client.Release.Query().
-//		Select(release.FieldChannel).
+//		Select(release.FieldVersion).
 //		Scan(ctx, &v)
 func (rq *ReleaseQuery) Select(fields ...string) *ReleaseSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
@@ -410,7 +410,7 @@ func (rq *ReleaseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rele
 
 func (rq *ReleaseQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes []*Release, init func(*Release), assign func(*Release, *Agent)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Release)
+	nodeids := make(map[int]*Release)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -453,7 +453,7 @@ func (rq *ReleaseQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (rq *ReleaseQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeString))
+	_spec := sqlgraph.NewQuerySpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	_spec.From = rq.sql
 	if unique := rq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

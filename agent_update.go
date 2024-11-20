@@ -521,13 +521,13 @@ func (au *AgentUpdate) AddMetadata(m ...*Metadata) *AgentUpdate {
 }
 
 // SetReleaseID sets the "release" edge to the Release entity by ID.
-func (au *AgentUpdate) SetReleaseID(id string) *AgentUpdate {
+func (au *AgentUpdate) SetReleaseID(id int) *AgentUpdate {
 	au.mutation.SetReleaseID(id)
 	return au
 }
 
 // SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (au *AgentUpdate) SetNillableReleaseID(id *string) *AgentUpdate {
+func (au *AgentUpdate) SetNillableReleaseID(id *int) *AgentUpdate {
 	if id != nil {
 		au = au.SetReleaseID(*id)
 	}
@@ -1487,7 +1487,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1500,7 +1500,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2007,13 +2007,13 @@ func (auo *AgentUpdateOne) AddMetadata(m ...*Metadata) *AgentUpdateOne {
 }
 
 // SetReleaseID sets the "release" edge to the Release entity by ID.
-func (auo *AgentUpdateOne) SetReleaseID(id string) *AgentUpdateOne {
+func (auo *AgentUpdateOne) SetReleaseID(id int) *AgentUpdateOne {
 	auo.mutation.SetReleaseID(id)
 	return auo
 }
 
 // SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (auo *AgentUpdateOne) SetNillableReleaseID(id *string) *AgentUpdateOne {
+func (auo *AgentUpdateOne) SetNillableReleaseID(id *int) *AgentUpdateOne {
 	if id != nil {
 		auo = auo.SetReleaseID(*id)
 	}
@@ -3003,7 +3003,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -3016,7 +3016,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

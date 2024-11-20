@@ -29,6 +29,26 @@ func (ru *ReleaseUpdate) Where(ps ...predicate.Release) *ReleaseUpdate {
 	return ru
 }
 
+// SetVersion sets the "version" field.
+func (ru *ReleaseUpdate) SetVersion(s string) *ReleaseUpdate {
+	ru.mutation.SetVersion(s)
+	return ru
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (ru *ReleaseUpdate) SetNillableVersion(s *string) *ReleaseUpdate {
+	if s != nil {
+		ru.SetVersion(*s)
+	}
+	return ru
+}
+
+// ClearVersion clears the value of the "version" field.
+func (ru *ReleaseUpdate) ClearVersion() *ReleaseUpdate {
+	ru.mutation.ClearVersion()
+	return ru
+}
+
 // SetChannel sets the "channel" field.
 func (ru *ReleaseUpdate) SetChannel(s string) *ReleaseUpdate {
 	ru.mutation.SetChannel(s)
@@ -224,13 +244,19 @@ func (ru *ReleaseUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Releas
 }
 
 func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeString))
+	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ru.mutation.Version(); ok {
+		_spec.SetField(release.FieldVersion, field.TypeString, value)
+	}
+	if ru.mutation.VersionCleared() {
+		_spec.ClearField(release.FieldVersion, field.TypeString)
 	}
 	if value, ok := ru.mutation.Channel(); ok {
 		_spec.SetField(release.FieldChannel, field.TypeString, value)
@@ -333,6 +359,26 @@ type ReleaseUpdateOne struct {
 	hooks     []Hook
 	mutation  *ReleaseMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetVersion sets the "version" field.
+func (ruo *ReleaseUpdateOne) SetVersion(s string) *ReleaseUpdateOne {
+	ruo.mutation.SetVersion(s)
+	return ruo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (ruo *ReleaseUpdateOne) SetNillableVersion(s *string) *ReleaseUpdateOne {
+	if s != nil {
+		ruo.SetVersion(*s)
+	}
+	return ruo
+}
+
+// ClearVersion clears the value of the "version" field.
+func (ruo *ReleaseUpdateOne) ClearVersion() *ReleaseUpdateOne {
+	ruo.mutation.ClearVersion()
+	return ruo
 }
 
 // SetChannel sets the "channel" field.
@@ -543,7 +589,7 @@ func (ruo *ReleaseUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Re
 }
 
 func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err error) {
-	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeString))
+	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`openuem_ent: missing "Release.id" for update`)}
@@ -567,6 +613,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ruo.mutation.Version(); ok {
+		_spec.SetField(release.FieldVersion, field.TypeString, value)
+	}
+	if ruo.mutation.VersionCleared() {
+		_spec.ClearField(release.FieldVersion, field.TypeString)
 	}
 	if value, ok := ruo.mutation.Channel(); ok {
 		_spec.SetField(release.FieldChannel, field.TypeString, value)

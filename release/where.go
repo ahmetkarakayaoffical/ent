@@ -9,58 +9,53 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id string) predicate.Release {
+func ID(id int) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id string) predicate.Release {
+func IDEQ(id int) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id string) predicate.Release {
+func IDNEQ(id int) predicate.Release {
 	return predicate.Release(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...string) predicate.Release {
+func IDIn(ids ...int) predicate.Release {
 	return predicate.Release(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...string) predicate.Release {
+func IDNotIn(ids ...int) predicate.Release {
 	return predicate.Release(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id string) predicate.Release {
+func IDGT(id int) predicate.Release {
 	return predicate.Release(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id string) predicate.Release {
+func IDGTE(id int) predicate.Release {
 	return predicate.Release(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id string) predicate.Release {
+func IDLT(id int) predicate.Release {
 	return predicate.Release(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id string) predicate.Release {
+func IDLTE(id int) predicate.Release {
 	return predicate.Release(sql.FieldLTE(FieldID, id))
 }
 
-// IDEqualFold applies the EqualFold predicate on the ID field.
-func IDEqualFold(id string) predicate.Release {
-	return predicate.Release(sql.FieldEqualFold(FieldID, id))
-}
-
-// IDContainsFold applies the ContainsFold predicate on the ID field.
-func IDContainsFold(id string) predicate.Release {
-	return predicate.Release(sql.FieldContainsFold(FieldID, id))
+// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
+func Version(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldVersion, v))
 }
 
 // Channel applies equality check predicate on the "channel" field. It's identical to ChannelEQ.
@@ -91,6 +86,81 @@ func Checksum(v string) predicate.Release {
 // IsCritical applies equality check predicate on the "is_critical" field. It's identical to IsCriticalEQ.
 func IsCritical(v string) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldIsCritical, v))
+}
+
+// VersionEQ applies the EQ predicate on the "version" field.
+func VersionEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldVersion, v))
+}
+
+// VersionNEQ applies the NEQ predicate on the "version" field.
+func VersionNEQ(v string) predicate.Release {
+	return predicate.Release(sql.FieldNEQ(FieldVersion, v))
+}
+
+// VersionIn applies the In predicate on the "version" field.
+func VersionIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldIn(FieldVersion, vs...))
+}
+
+// VersionNotIn applies the NotIn predicate on the "version" field.
+func VersionNotIn(vs ...string) predicate.Release {
+	return predicate.Release(sql.FieldNotIn(FieldVersion, vs...))
+}
+
+// VersionGT applies the GT predicate on the "version" field.
+func VersionGT(v string) predicate.Release {
+	return predicate.Release(sql.FieldGT(FieldVersion, v))
+}
+
+// VersionGTE applies the GTE predicate on the "version" field.
+func VersionGTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldGTE(FieldVersion, v))
+}
+
+// VersionLT applies the LT predicate on the "version" field.
+func VersionLT(v string) predicate.Release {
+	return predicate.Release(sql.FieldLT(FieldVersion, v))
+}
+
+// VersionLTE applies the LTE predicate on the "version" field.
+func VersionLTE(v string) predicate.Release {
+	return predicate.Release(sql.FieldLTE(FieldVersion, v))
+}
+
+// VersionContains applies the Contains predicate on the "version" field.
+func VersionContains(v string) predicate.Release {
+	return predicate.Release(sql.FieldContains(FieldVersion, v))
+}
+
+// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
+func VersionHasPrefix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasPrefix(FieldVersion, v))
+}
+
+// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
+func VersionHasSuffix(v string) predicate.Release {
+	return predicate.Release(sql.FieldHasSuffix(FieldVersion, v))
+}
+
+// VersionIsNil applies the IsNil predicate on the "version" field.
+func VersionIsNil() predicate.Release {
+	return predicate.Release(sql.FieldIsNull(FieldVersion))
+}
+
+// VersionNotNil applies the NotNil predicate on the "version" field.
+func VersionNotNil() predicate.Release {
+	return predicate.Release(sql.FieldNotNull(FieldVersion))
+}
+
+// VersionEqualFold applies the EqualFold predicate on the "version" field.
+func VersionEqualFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldEqualFold(FieldVersion, v))
+}
+
+// VersionContainsFold applies the ContainsFold predicate on the "version" field.
+func VersionContainsFold(v string) predicate.Release {
+	return predicate.Release(sql.FieldContainsFold(FieldVersion, v))
 }
 
 // ChannelEQ applies the EQ predicate on the "channel" field.

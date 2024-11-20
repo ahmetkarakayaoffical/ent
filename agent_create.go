@@ -451,13 +451,13 @@ func (ac *AgentCreate) AddMetadata(m ...*Metadata) *AgentCreate {
 }
 
 // SetReleaseID sets the "release" edge to the Release entity by ID.
-func (ac *AgentCreate) SetReleaseID(id string) *AgentCreate {
+func (ac *AgentCreate) SetReleaseID(id int) *AgentCreate {
 	ac.mutation.SetReleaseID(id)
 	return ac
 }
 
 // SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (ac *AgentCreate) SetNillableReleaseID(id *string) *AgentCreate {
+func (ac *AgentCreate) SetNillableReleaseID(id *int) *AgentCreate {
 	if id != nil {
 		ac = ac.SetReleaseID(*id)
 	}
@@ -894,7 +894,7 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

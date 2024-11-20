@@ -1480,8 +1480,8 @@ func (aq *AgentQuery) loadMetadata(ctx context.Context, query *MetadataQuery, no
 	return nil
 }
 func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Release)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*Agent)
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Agent)
 	for i := range nodes {
 		if nodes[i].agent_release == nil {
 			continue

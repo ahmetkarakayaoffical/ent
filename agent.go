@@ -53,7 +53,7 @@ type Agent struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges         AgentEdges `json:"edges"`
-	agent_release *string
+	agent_release *int
 	selectValues  sql.SelectValues
 }
 
@@ -251,7 +251,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
 		case agent.ForeignKeys[0]: // agent_release
-			values[i] = new(sql.NullString)
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -358,11 +358,11 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				a.UpdateTaskVersion = value.String
 			}
 		case agent.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field agent_release", values[i])
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field agent_release", value)
 			} else if value.Valid {
-				a.agent_release = new(string)
-				*a.agent_release = value.String
+				a.agent_release = new(int)
+				*a.agent_release = int(value.Int64)
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])

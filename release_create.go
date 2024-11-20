@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -21,6 +20,20 @@ type ReleaseCreate struct {
 	mutation *ReleaseMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
+}
+
+// SetVersion sets the "version" field.
+func (rc *ReleaseCreate) SetVersion(s string) *ReleaseCreate {
+	rc.mutation.SetVersion(s)
+	return rc
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (rc *ReleaseCreate) SetNillableVersion(s *string) *ReleaseCreate {
+	if s != nil {
+		rc.SetVersion(*s)
+	}
+	return rc
 }
 
 // SetChannel sets the "channel" field.
@@ -107,12 +120,6 @@ func (rc *ReleaseCreate) SetNillableIsCritical(s *string) *ReleaseCreate {
 	return rc
 }
 
-// SetID sets the "id" field.
-func (rc *ReleaseCreate) SetID(s string) *ReleaseCreate {
-	rc.mutation.SetID(s)
-	return rc
-}
-
 // AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
 func (rc *ReleaseCreate) AddOwnerIDs(ids ...string) *ReleaseCreate {
 	rc.mutation.AddOwnerIDs(ids...)
@@ -162,11 +169,6 @@ func (rc *ReleaseCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *ReleaseCreate) check() error {
-	if v, ok := rc.mutation.ID(); ok {
-		if err := release.IDValidator(v); err != nil {
-			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Release.id": %w`, err)}
-		}
-	}
 	if len(rc.mutation.OwnerIDs()) == 0 {
 		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Release.owner"`)}
 	}
@@ -184,13 +186,8 @@ func (rc *ReleaseCreate) sqlSave(ctx context.Context) (*Release, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(string); ok {
-			_node.ID = id
-		} else {
-			return nil, fmt.Errorf("unexpected Release.ID type: %T", _spec.ID.Value)
-		}
-	}
+	id := _spec.ID.Value.(int64)
+	_node.ID = int(id)
 	rc.mutation.id = &_node.ID
 	rc.mutation.done = true
 	return _node, nil
@@ -199,12 +196,12 @@ func (rc *ReleaseCreate) sqlSave(ctx context.Context) (*Release, error) {
 func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Release{config: rc.config}
-		_spec = sqlgraph.NewCreateSpec(release.Table, sqlgraph.NewFieldSpec(release.FieldID, field.TypeString))
+		_spec = sqlgraph.NewCreateSpec(release.Table, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = rc.conflict
-	if id, ok := rc.mutation.ID(); ok {
-		_node.ID = id
-		_spec.ID.Value = id
+	if value, ok := rc.mutation.Version(); ok {
+		_spec.SetField(release.FieldVersion, field.TypeString, value)
+		_node.Version = value
 	}
 	if value, ok := rc.mutation.Channel(); ok {
 		_spec.SetField(release.FieldChannel, field.TypeString, value)
@@ -253,7 +250,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Release.Create().
-//		SetChannel(v).
+//		SetVersion(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -262,7 +259,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.ReleaseUpsert) {
-//			SetChannel(v+v).
+//			SetVersion(v+v).
 //		}).
 //		Exec(ctx)
 func (rc *ReleaseCreate) OnConflict(opts ...sql.ConflictOption) *ReleaseUpsertOne {
@@ -297,6 +294,24 @@ type (
 		*sql.UpdateSet
 	}
 )
+
+// SetVersion sets the "version" field.
+func (u *ReleaseUpsert) SetVersion(v string) *ReleaseUpsert {
+	u.Set(release.FieldVersion, v)
+	return u
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ReleaseUpsert) UpdateVersion() *ReleaseUpsert {
+	u.SetExcluded(release.FieldVersion)
+	return u
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *ReleaseUpsert) ClearVersion() *ReleaseUpsert {
+	u.SetNull(release.FieldVersion)
+	return u
+}
 
 // SetChannel sets the "channel" field.
 func (u *ReleaseUpsert) SetChannel(v string) *ReleaseUpsert {
@@ -406,24 +421,16 @@ func (u *ReleaseUpsert) ClearIsCritical() *ReleaseUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
 //	client.Release.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(release.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *ReleaseUpsertOne) UpdateNewValues() *ReleaseUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		if _, exists := u.create.mutation.ID(); exists {
-			s.SetIgnore(release.FieldID)
-		}
-	}))
 	return u
 }
 
@@ -452,6 +459,27 @@ func (u *ReleaseUpsertOne) Update(set func(*ReleaseUpsert)) *ReleaseUpsertOne {
 		set(&ReleaseUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetVersion sets the "version" field.
+func (u *ReleaseUpsertOne) SetVersion(v string) *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ReleaseUpsertOne) UpdateVersion() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *ReleaseUpsertOne) ClearVersion() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearVersion()
+	})
 }
 
 // SetChannel sets the "channel" field.
@@ -596,12 +624,7 @@ func (u *ReleaseUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *ReleaseUpsertOne) ID(ctx context.Context) (id string, err error) {
-	if u.create.driver.Dialect() == dialect.MySQL {
-		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
-		// fields from the database since MySQL does not support the RETURNING clause.
-		return id, errors.New("openuem_ent: ReleaseUpsertOne.ID is not supported by MySQL driver. Use ReleaseUpsertOne.Exec instead")
-	}
+func (u *ReleaseUpsertOne) ID(ctx context.Context) (id int, err error) {
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -610,7 +633,7 @@ func (u *ReleaseUpsertOne) ID(ctx context.Context) (id string, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *ReleaseUpsertOne) IDX(ctx context.Context) string {
+func (u *ReleaseUpsertOne) IDX(ctx context.Context) int {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -664,6 +687,10 @@ func (rcb *ReleaseCreateBulk) Save(ctx context.Context) ([]*Release, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})
@@ -715,7 +742,7 @@ func (rcb *ReleaseCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.ReleaseUpsert) {
-//			SetChannel(v+v).
+//			SetVersion(v+v).
 //		}).
 //		Exec(ctx)
 func (rcb *ReleaseCreateBulk) OnConflict(opts ...sql.ConflictOption) *ReleaseUpsertBulk {
@@ -750,20 +777,10 @@ type ReleaseUpsertBulk struct {
 //	client.Release.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(release.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *ReleaseUpsertBulk) UpdateNewValues() *ReleaseUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		for _, b := range u.create.builders {
-			if _, exists := b.mutation.ID(); exists {
-				s.SetIgnore(release.FieldID)
-			}
-		}
-	}))
 	return u
 }
 
@@ -792,6 +809,27 @@ func (u *ReleaseUpsertBulk) Update(set func(*ReleaseUpsert)) *ReleaseUpsertBulk 
 		set(&ReleaseUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetVersion sets the "version" field.
+func (u *ReleaseUpsertBulk) SetVersion(v string) *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ReleaseUpsertBulk) UpdateVersion() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *ReleaseUpsertBulk) ClearVersion() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearVersion()
+	})
 }
 
 // SetChannel sets the "channel" field.

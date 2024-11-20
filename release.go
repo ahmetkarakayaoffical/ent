@@ -15,7 +15,9 @@ import (
 type Release struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID string `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
+	// Version holds the value of the "version" field.
+	Version string `json:"version,omitempty"`
 	// Channel holds the value of the "channel" field.
 	Channel string `json:"channel,omitempty"`
 	// Summary holds the value of the "summary" field.
@@ -57,7 +59,9 @@ func (*Release) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case release.FieldID, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldIsCritical:
+		case release.FieldID:
+			values[i] = new(sql.NullInt64)
+		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldIsCritical:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -75,10 +79,16 @@ func (r *Release) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case release.FieldID:
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
+			}
+			r.ID = int(value.Int64)
+		case release.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
+				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				r.ID = value.String
+				r.Version = value.String
 			}
 		case release.FieldChannel:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -157,6 +167,9 @@ func (r *Release) String() string {
 	var builder strings.Builder
 	builder.WriteString("Release(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString("version=")
+	builder.WriteString(r.Version)
+	builder.WriteString(", ")
 	builder.WriteString("channel=")
 	builder.WriteString(r.Channel)
 	builder.WriteString(", ")

@@ -25,7 +25,7 @@ var (
 		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "agent_release", Type: field.TypeString, Nullable: true},
+		{Name: "agent_release", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{
@@ -326,7 +326,8 @@ var (
 	}
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "channel", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
 		{Name: "release_notes", Type: field.TypeString, Nullable: true},
@@ -339,6 +340,13 @@ var (
 		Name:       "releases",
 		Columns:    ReleasesColumns,
 		PrimaryKey: []*schema.Column{ReleasesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "release_version_channel",
+				Unique:  true,
+				Columns: []*schema.Column{ReleasesColumns[1], ReleasesColumns[2]},
+			},
+		},
 	}
 	// RevocationsColumns holds the columns for the "revocations" table.
 	RevocationsColumns = []*schema.Column{

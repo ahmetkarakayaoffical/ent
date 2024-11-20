@@ -128,7 +128,7 @@ type AgentMutation struct {
 	metadata                map[int]struct{}
 	removedmetadata         map[int]struct{}
 	clearedmetadata         bool
-	release                 *string
+	release                 *int
 	clearedrelease          bool
 	done                    bool
 	oldValue                func(context.Context) (*Agent, error)
@@ -1557,7 +1557,7 @@ func (m *AgentMutation) ResetMetadata() {
 }
 
 // SetReleaseID sets the "release" edge to the Release entity by id.
-func (m *AgentMutation) SetReleaseID(id string) {
+func (m *AgentMutation) SetReleaseID(id int) {
 	m.release = &id
 }
 
@@ -1572,7 +1572,7 @@ func (m *AgentMutation) ReleaseCleared() bool {
 }
 
 // ReleaseID returns the "release" edge ID in the mutation.
-func (m *AgentMutation) ReleaseID() (id string, exists bool) {
+func (m *AgentMutation) ReleaseID() (id int, exists bool) {
 	if m.release != nil {
 		return *m.release, true
 	}
@@ -1582,7 +1582,7 @@ func (m *AgentMutation) ReleaseID() (id string, exists bool) {
 // ReleaseIDs returns the "release" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ReleaseID instead. It exists only for internal usage by the builders.
-func (m *AgentMutation) ReleaseIDs() (ids []string) {
+func (m *AgentMutation) ReleaseIDs() (ids []int) {
 	if id := m.release; id != nil {
 		ids = append(ids, *id)
 	}
@@ -10573,7 +10573,8 @@ type ReleaseMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *string
+	id            *int
+	version       *string
 	channel       *string
 	summary       *string
 	release_notes *string
@@ -10609,7 +10610,7 @@ func newReleaseMutation(c config, op Op, opts ...releaseOption) *ReleaseMutation
 }
 
 // withReleaseID sets the ID field of the mutation.
-func withReleaseID(id string) releaseOption {
+func withReleaseID(id int) releaseOption {
 	return func(m *ReleaseMutation) {
 		var (
 			err   error
@@ -10659,15 +10660,9 @@ func (m ReleaseMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Release entities.
-func (m *ReleaseMutation) SetID(id string) {
-	m.id = &id
-}
-
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ReleaseMutation) ID() (id string, exists bool) {
+func (m *ReleaseMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -10678,12 +10673,12 @@ func (m *ReleaseMutation) ID() (id string, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ReleaseMutation) IDs(ctx context.Context) ([]string, error) {
+func (m *ReleaseMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []string{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -10691,6 +10686,55 @@ func (m *ReleaseMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetVersion sets the "version" field.
+func (m *ReleaseMutation) SetVersion(s string) {
+	m.version = &s
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *ReleaseMutation) Version() (r string, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// ClearVersion clears the value of the "version" field.
+func (m *ReleaseMutation) ClearVersion() {
+	m.version = nil
+	m.clearedFields[release.FieldVersion] = struct{}{}
+}
+
+// VersionCleared returns if the "version" field was cleared in this mutation.
+func (m *ReleaseMutation) VersionCleared() bool {
+	_, ok := m.clearedFields[release.FieldVersion]
+	return ok
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *ReleaseMutation) ResetVersion() {
+	m.version = nil
+	delete(m.clearedFields, release.FieldVersion)
 }
 
 // SetChannel sets the "channel" field.
@@ -11075,7 +11119,10 @@ func (m *ReleaseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReleaseMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
+	if m.version != nil {
+		fields = append(fields, release.FieldVersion)
+	}
 	if m.channel != nil {
 		fields = append(fields, release.FieldChannel)
 	}
@@ -11102,6 +11149,8 @@ func (m *ReleaseMutation) Fields() []string {
 // schema.
 func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case release.FieldVersion:
+		return m.Version()
 	case release.FieldChannel:
 		return m.Channel()
 	case release.FieldSummary:
@@ -11123,6 +11172,8 @@ func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case release.FieldVersion:
+		return m.OldVersion(ctx)
 	case release.FieldChannel:
 		return m.OldChannel(ctx)
 	case release.FieldSummary:
@@ -11144,6 +11195,13 @@ func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case release.FieldVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
 	case release.FieldChannel:
 		v, ok := value.(string)
 		if !ok {
@@ -11216,6 +11274,9 @@ func (m *ReleaseMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ReleaseMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(release.FieldVersion) {
+		fields = append(fields, release.FieldVersion)
+	}
 	if m.FieldCleared(release.FieldChannel) {
 		fields = append(fields, release.FieldChannel)
 	}
@@ -11248,6 +11309,9 @@ func (m *ReleaseMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ReleaseMutation) ClearField(name string) error {
 	switch name {
+	case release.FieldVersion:
+		m.ClearVersion()
+		return nil
 	case release.FieldChannel:
 		m.ClearChannel()
 		return nil
@@ -11274,6 +11338,9 @@ func (m *ReleaseMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ReleaseMutation) ResetField(name string) error {
 	switch name {
+	case release.FieldVersion:
+		m.ResetVersion()
+		return nil
 	case release.FieldChannel:
 		m.ResetChannel()
 		return nil
