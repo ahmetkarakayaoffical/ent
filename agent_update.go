@@ -1482,7 +1482,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   agent.ReleaseTable,
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
@@ -1495,7 +1495,7 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nodes := au.mutation.ReleaseIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   agent.ReleaseTable,
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
@@ -2998,7 +2998,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	if auo.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   agent.ReleaseTable,
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
@@ -3011,7 +3011,7 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	if nodes := auo.mutation.ReleaseIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   agent.ReleaseTable,
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,

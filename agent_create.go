@@ -889,7 +889,7 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if nodes := ac.mutation.ReleaseIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   agent.ReleaseTable,
 			Columns: []string{agent.ReleaseColumn},
 			Bidi:    false,
@@ -900,7 +900,7 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.agent_release = &nodes[0]
+		_node.release_agents = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

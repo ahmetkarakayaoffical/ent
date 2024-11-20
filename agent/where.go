@@ -1332,7 +1332,7 @@ func HasRelease() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, ReleaseTable, ReleaseColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

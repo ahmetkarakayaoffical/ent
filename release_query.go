@@ -24,7 +24,7 @@ type ReleaseQuery struct {
 	order      []release.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Release
-	withOwner  *AgentQuery
+	withAgents *AgentQuery
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -62,8 +62,8 @@ func (rq *ReleaseQuery) Order(o ...release.OrderOption) *ReleaseQuery {
 	return rq
 }
 
-// QueryOwner chains the current query on the "owner" edge.
-func (rq *ReleaseQuery) QueryOwner() *AgentQuery {
+// QueryAgents chains the current query on the "agents" edge.
+func (rq *ReleaseQuery) QueryAgents() *AgentQuery {
 	query := (&AgentClient{config: rq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := rq.prepareQuery(ctx); err != nil {
@@ -76,7 +76,7 @@ func (rq *ReleaseQuery) QueryOwner() *AgentQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(release.Table, release.FieldID, selector),
 			sqlgraph.To(agent.Table, agent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, release.OwnerTable, release.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, release.AgentsTable, release.AgentsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -276,7 +276,7 @@ func (rq *ReleaseQuery) Clone() *ReleaseQuery {
 		order:      append([]release.OrderOption{}, rq.order...),
 		inters:     append([]Interceptor{}, rq.inters...),
 		predicates: append([]predicate.Release{}, rq.predicates...),
-		withOwner:  rq.withOwner.Clone(),
+		withAgents: rq.withAgents.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -284,14 +284,14 @@ func (rq *ReleaseQuery) Clone() *ReleaseQuery {
 	}
 }
 
-// WithOwner tells the query-builder to eager-load the nodes that are connected to
-// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *ReleaseQuery) WithOwner(opts ...func(*AgentQuery)) *ReleaseQuery {
+// WithAgents tells the query-builder to eager-load the nodes that are connected to
+// the "agents" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *ReleaseQuery) WithAgents(opts ...func(*AgentQuery)) *ReleaseQuery {
 	query := (&AgentClient{config: rq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withOwner = query
+	rq.withAgents = query
 	return rq
 }
 
@@ -374,7 +374,7 @@ func (rq *ReleaseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rele
 		nodes       = []*Release{}
 		_spec       = rq.querySpec()
 		loadedTypes = [1]bool{
-			rq.withOwner != nil,
+			rq.withAgents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -398,17 +398,17 @@ func (rq *ReleaseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rele
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := rq.withOwner; query != nil {
-		if err := rq.loadOwner(ctx, query, nodes,
-			func(n *Release) { n.Edges.Owner = []*Agent{} },
-			func(n *Release, e *Agent) { n.Edges.Owner = append(n.Edges.Owner, e) }); err != nil {
+	if query := rq.withAgents; query != nil {
+		if err := rq.loadAgents(ctx, query, nodes,
+			func(n *Release) { n.Edges.Agents = []*Agent{} },
+			func(n *Release, e *Agent) { n.Edges.Agents = append(n.Edges.Agents, e) }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (rq *ReleaseQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes []*Release, init func(*Release), assign func(*Release, *Agent)) error {
+func (rq *ReleaseQuery) loadAgents(ctx context.Context, query *AgentQuery, nodes []*Release, init func(*Release), assign func(*Release, *Agent)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Release)
 	for i := range nodes {
@@ -420,20 +420,20 @@ func (rq *ReleaseQuery) loadOwner(ctx context.Context, query *AgentQuery, nodes 
 	}
 	query.withFKs = true
 	query.Where(predicate.Agent(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(release.OwnerColumn), fks...))
+		s.Where(sql.InValues(s.C(release.AgentsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.agent_release
+		fk := n.release_agents
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "agent_release" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "release_agents" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "agent_release" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "release_agents" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

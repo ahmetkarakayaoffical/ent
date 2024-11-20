@@ -25,7 +25,7 @@ var (
 		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "agent_release", Type: field.TypeInt, Nullable: true},
+		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{
@@ -34,7 +34,7 @@ var (
 		PrimaryKey: []*schema.Column{AgentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "agents_releases_release",
+				Symbol:     "agents_releases_agents",
 				Columns:    []*schema.Column{AgentsColumns[15]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,

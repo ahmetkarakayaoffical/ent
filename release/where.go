@@ -775,21 +775,21 @@ func ArchContainsFold(v string) predicate.Release {
 	return predicate.Release(sql.FieldContainsFold(FieldArch, v))
 }
 
-// HasOwner applies the HasEdge predicate on the "owner" edge.
-func HasOwner() predicate.Release {
+// HasAgents applies the HasEdge predicate on the "agents" edge.
+func HasAgents() predicate.Release {
 	return predicate.Release(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, OwnerTable, OwnerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, AgentsTable, AgentsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
-func HasOwnerWith(preds ...predicate.Agent) predicate.Release {
+// HasAgentsWith applies the HasEdge predicate on the "agents" edge with a given conditions (other predicates).
+func HasAgentsWith(preds ...predicate.Agent) predicate.Release {
 	return predicate.Release(func(s *sql.Selector) {
-		step := newOwnerStep()
+		step := newAgentsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -30,7 +30,7 @@ func (Release) Fields() []ent.Field {
 // Edges of the Release.
 func (Release) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Agent.Type).Ref("release").Required(),
+		edge.To("agents", Agent.Type),
 	}
 }
 

@@ -719,7 +719,7 @@ func (c *AgentClient) QueryRelease(a *Agent) *ReleaseQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, agent.ReleaseTable, agent.ReleaseColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2648,15 +2648,15 @@ func (c *ReleaseClient) GetX(ctx context.Context, id int) *Release {
 	return obj
 }
 
-// QueryOwner queries the owner edge of a Release.
-func (c *ReleaseClient) QueryOwner(r *Release) *AgentQuery {
+// QueryAgents queries the agents edge of a Release.
+func (c *ReleaseClient) QueryAgents(r *Release) *AgentQuery {
 	query := (&AgentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(release.Table, release.FieldID, id),
 			sqlgraph.To(agent.Table, agent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, release.OwnerTable, release.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, release.AgentsTable, release.AgentsColumn),
 		)
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil

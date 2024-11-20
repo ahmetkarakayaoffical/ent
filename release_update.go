@@ -230,19 +230,19 @@ func (ru *ReleaseUpdate) ClearArch() *ReleaseUpdate {
 	return ru
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (ru *ReleaseUpdate) AddOwnerIDs(ids ...string) *ReleaseUpdate {
-	ru.mutation.AddOwnerIDs(ids...)
+// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
+func (ru *ReleaseUpdate) AddAgentIDs(ids ...string) *ReleaseUpdate {
+	ru.mutation.AddAgentIDs(ids...)
 	return ru
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (ru *ReleaseUpdate) AddOwner(a ...*Agent) *ReleaseUpdate {
+// AddAgents adds the "agents" edges to the Agent entity.
+func (ru *ReleaseUpdate) AddAgents(a ...*Agent) *ReleaseUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return ru.AddOwnerIDs(ids...)
+	return ru.AddAgentIDs(ids...)
 }
 
 // Mutation returns the ReleaseMutation object of the builder.
@@ -250,25 +250,25 @@ func (ru *ReleaseUpdate) Mutation() *ReleaseMutation {
 	return ru.mutation
 }
 
-// ClearOwner clears all "owner" edges to the Agent entity.
-func (ru *ReleaseUpdate) ClearOwner() *ReleaseUpdate {
-	ru.mutation.ClearOwner()
+// ClearAgents clears all "agents" edges to the Agent entity.
+func (ru *ReleaseUpdate) ClearAgents() *ReleaseUpdate {
+	ru.mutation.ClearAgents()
 	return ru
 }
 
-// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
-func (ru *ReleaseUpdate) RemoveOwnerIDs(ids ...string) *ReleaseUpdate {
-	ru.mutation.RemoveOwnerIDs(ids...)
+// RemoveAgentIDs removes the "agents" edge to Agent entities by IDs.
+func (ru *ReleaseUpdate) RemoveAgentIDs(ids ...string) *ReleaseUpdate {
+	ru.mutation.RemoveAgentIDs(ids...)
 	return ru
 }
 
-// RemoveOwner removes "owner" edges to Agent entities.
-func (ru *ReleaseUpdate) RemoveOwner(a ...*Agent) *ReleaseUpdate {
+// RemoveAgents removes "agents" edges to Agent entities.
+func (ru *ReleaseUpdate) RemoveAgents(a ...*Agent) *ReleaseUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return ru.RemoveOwnerIDs(ids...)
+	return ru.RemoveAgentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -373,12 +373,12 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.ArchCleared() {
 		_spec.ClearField(release.FieldArch, field.TypeString)
 	}
-	if ru.mutation.OwnerCleared() {
+	if ru.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -386,12 +386,12 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !ru.mutation.OwnerCleared() {
+	if nodes := ru.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !ru.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -402,12 +402,12 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := ru.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -640,19 +640,19 @@ func (ruo *ReleaseUpdateOne) ClearArch() *ReleaseUpdateOne {
 	return ruo
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (ruo *ReleaseUpdateOne) AddOwnerIDs(ids ...string) *ReleaseUpdateOne {
-	ruo.mutation.AddOwnerIDs(ids...)
+// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
+func (ruo *ReleaseUpdateOne) AddAgentIDs(ids ...string) *ReleaseUpdateOne {
+	ruo.mutation.AddAgentIDs(ids...)
 	return ruo
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (ruo *ReleaseUpdateOne) AddOwner(a ...*Agent) *ReleaseUpdateOne {
+// AddAgents adds the "agents" edges to the Agent entity.
+func (ruo *ReleaseUpdateOne) AddAgents(a ...*Agent) *ReleaseUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return ruo.AddOwnerIDs(ids...)
+	return ruo.AddAgentIDs(ids...)
 }
 
 // Mutation returns the ReleaseMutation object of the builder.
@@ -660,25 +660,25 @@ func (ruo *ReleaseUpdateOne) Mutation() *ReleaseMutation {
 	return ruo.mutation
 }
 
-// ClearOwner clears all "owner" edges to the Agent entity.
-func (ruo *ReleaseUpdateOne) ClearOwner() *ReleaseUpdateOne {
-	ruo.mutation.ClearOwner()
+// ClearAgents clears all "agents" edges to the Agent entity.
+func (ruo *ReleaseUpdateOne) ClearAgents() *ReleaseUpdateOne {
+	ruo.mutation.ClearAgents()
 	return ruo
 }
 
-// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
-func (ruo *ReleaseUpdateOne) RemoveOwnerIDs(ids ...string) *ReleaseUpdateOne {
-	ruo.mutation.RemoveOwnerIDs(ids...)
+// RemoveAgentIDs removes the "agents" edge to Agent entities by IDs.
+func (ruo *ReleaseUpdateOne) RemoveAgentIDs(ids ...string) *ReleaseUpdateOne {
+	ruo.mutation.RemoveAgentIDs(ids...)
 	return ruo
 }
 
-// RemoveOwner removes "owner" edges to Agent entities.
-func (ruo *ReleaseUpdateOne) RemoveOwner(a ...*Agent) *ReleaseUpdateOne {
+// RemoveAgents removes "agents" edges to Agent entities.
+func (ruo *ReleaseUpdateOne) RemoveAgents(a ...*Agent) *ReleaseUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return ruo.RemoveOwnerIDs(ids...)
+	return ruo.RemoveAgentIDs(ids...)
 }
 
 // Where appends a list predicates to the ReleaseUpdate builder.
@@ -813,12 +813,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 	if ruo.mutation.ArchCleared() {
 		_spec.ClearField(release.FieldArch, field.TypeString)
 	}
-	if ruo.mutation.OwnerCleared() {
+	if ruo.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -826,12 +826,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !ruo.mutation.OwnerCleared() {
+	if nodes := ruo.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !ruo.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -842,12 +842,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := ruo.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),

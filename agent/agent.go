@@ -204,7 +204,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "release" package.
 	ReleaseInverseTable = "releases"
 	// ReleaseColumn is the table column denoting the release relation/edge.
-	ReleaseColumn = "agent_release"
+	ReleaseColumn = "release_agents"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -229,7 +229,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"agent_release",
+	"release_agents",
 }
 
 var (
@@ -632,6 +632,6 @@ func newReleaseStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReleaseInverseTable, ReleaseFieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, ReleaseTable, ReleaseColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
 	)
 }

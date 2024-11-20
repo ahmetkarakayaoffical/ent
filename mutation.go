@@ -10585,9 +10585,9 @@ type ReleaseMutation struct {
 	os            *string
 	arch          *string
 	clearedFields map[string]struct{}
-	owner         map[string]struct{}
-	removedowner  map[string]struct{}
-	clearedowner  bool
+	agents        map[string]struct{}
+	removedagents map[string]struct{}
+	clearedagents bool
 	done          bool
 	oldValue      func(context.Context) (*Release, error)
 	predicates    []predicate.Release
@@ -11181,58 +11181,58 @@ func (m *ReleaseMutation) ResetArch() {
 	delete(m.clearedFields, release.FieldArch)
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
-func (m *ReleaseMutation) AddOwnerIDs(ids ...string) {
-	if m.owner == nil {
-		m.owner = make(map[string]struct{})
+// AddAgentIDs adds the "agents" edge to the Agent entity by ids.
+func (m *ReleaseMutation) AddAgentIDs(ids ...string) {
+	if m.agents == nil {
+		m.agents = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.owner[ids[i]] = struct{}{}
+		m.agents[ids[i]] = struct{}{}
 	}
 }
 
-// ClearOwner clears the "owner" edge to the Agent entity.
-func (m *ReleaseMutation) ClearOwner() {
-	m.clearedowner = true
+// ClearAgents clears the "agents" edge to the Agent entity.
+func (m *ReleaseMutation) ClearAgents() {
+	m.clearedagents = true
 }
 
-// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
-func (m *ReleaseMutation) OwnerCleared() bool {
-	return m.clearedowner
+// AgentsCleared reports if the "agents" edge to the Agent entity was cleared.
+func (m *ReleaseMutation) AgentsCleared() bool {
+	return m.clearedagents
 }
 
-// RemoveOwnerIDs removes the "owner" edge to the Agent entity by IDs.
-func (m *ReleaseMutation) RemoveOwnerIDs(ids ...string) {
-	if m.removedowner == nil {
-		m.removedowner = make(map[string]struct{})
+// RemoveAgentIDs removes the "agents" edge to the Agent entity by IDs.
+func (m *ReleaseMutation) RemoveAgentIDs(ids ...string) {
+	if m.removedagents == nil {
+		m.removedagents = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.owner, ids[i])
-		m.removedowner[ids[i]] = struct{}{}
+		delete(m.agents, ids[i])
+		m.removedagents[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedOwner returns the removed IDs of the "owner" edge to the Agent entity.
-func (m *ReleaseMutation) RemovedOwnerIDs() (ids []string) {
-	for id := range m.removedowner {
+// RemovedAgents returns the removed IDs of the "agents" edge to the Agent entity.
+func (m *ReleaseMutation) RemovedAgentsIDs() (ids []string) {
+	for id := range m.removedagents {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// OwnerIDs returns the "owner" edge IDs in the mutation.
-func (m *ReleaseMutation) OwnerIDs() (ids []string) {
-	for id := range m.owner {
+// AgentsIDs returns the "agents" edge IDs in the mutation.
+func (m *ReleaseMutation) AgentsIDs() (ids []string) {
+	for id := range m.agents {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetOwner resets all changes to the "owner" edge.
-func (m *ReleaseMutation) ResetOwner() {
-	m.owner = nil
-	m.clearedowner = false
-	m.removedowner = nil
+// ResetAgents resets all changes to the "agents" edge.
+func (m *ReleaseMutation) ResetAgents() {
+	m.agents = nil
+	m.clearedagents = false
+	m.removedagents = nil
 }
 
 // Where appends a list predicates to the ReleaseMutation builder.
@@ -11585,8 +11585,8 @@ func (m *ReleaseMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ReleaseMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.owner != nil {
-		edges = append(edges, release.EdgeOwner)
+	if m.agents != nil {
+		edges = append(edges, release.EdgeAgents)
 	}
 	return edges
 }
@@ -11595,9 +11595,9 @@ func (m *ReleaseMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case release.EdgeOwner:
-		ids := make([]ent.Value, 0, len(m.owner))
-		for id := range m.owner {
+	case release.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.agents))
+		for id := range m.agents {
 			ids = append(ids, id)
 		}
 		return ids
@@ -11608,8 +11608,8 @@ func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ReleaseMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedowner != nil {
-		edges = append(edges, release.EdgeOwner)
+	if m.removedagents != nil {
+		edges = append(edges, release.EdgeAgents)
 	}
 	return edges
 }
@@ -11618,9 +11618,9 @@ func (m *ReleaseMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case release.EdgeOwner:
-		ids := make([]ent.Value, 0, len(m.removedowner))
-		for id := range m.removedowner {
+	case release.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.removedagents))
+		for id := range m.removedagents {
 			ids = append(ids, id)
 		}
 		return ids
@@ -11631,8 +11631,8 @@ func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ReleaseMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedowner {
-		edges = append(edges, release.EdgeOwner)
+	if m.clearedagents {
+		edges = append(edges, release.EdgeAgents)
 	}
 	return edges
 }
@@ -11641,8 +11641,8 @@ func (m *ReleaseMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ReleaseMutation) EdgeCleared(name string) bool {
 	switch name {
-	case release.EdgeOwner:
-		return m.clearedowner
+	case release.EdgeAgents:
+		return m.clearedagents
 	}
 	return false
 }
@@ -11659,8 +11659,8 @@ func (m *ReleaseMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ReleaseMutation) ResetEdge(name string) error {
 	switch name {
-	case release.EdgeOwner:
-		m.ResetOwner()
+	case release.EdgeAgents:
+		m.ResetAgents()
 		return nil
 	}
 	return fmt.Errorf("unknown Release edge %s", name)

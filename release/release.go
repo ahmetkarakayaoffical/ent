@@ -32,19 +32,19 @@ const (
 	FieldOs = "os"
 	// FieldArch holds the string denoting the arch field in the database.
 	FieldArch = "arch"
-	// EdgeOwner holds the string denoting the owner edge name in mutations.
-	EdgeOwner = "owner"
+	// EdgeAgents holds the string denoting the agents edge name in mutations.
+	EdgeAgents = "agents"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
 	AgentFieldID = "oid"
 	// Table holds the table name of the release in the database.
 	Table = "releases"
-	// OwnerTable is the table that holds the owner relation/edge.
-	OwnerTable = "agents"
-	// OwnerInverseTable is the table name for the Agent entity.
+	// AgentsTable is the table that holds the agents relation/edge.
+	AgentsTable = "agents"
+	// AgentsInverseTable is the table name for the Agent entity.
 	// It exists in this package in order to avoid circular dependency with the "agent" package.
-	OwnerInverseTable = "agents"
-	// OwnerColumn is the table column denoting the owner relation/edge.
-	OwnerColumn = "agent_release"
+	AgentsInverseTable = "agents"
+	// AgentsColumn is the table column denoting the agents relation/edge.
+	AgentsColumn = "release_agents"
 )
 
 // Columns holds all SQL columns for release fields.
@@ -130,23 +130,23 @@ func ByArch(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldArch, opts...).ToFunc()
 }
 
-// ByOwnerCount orders the results by owner count.
-func ByOwnerCount(opts ...sql.OrderTermOption) OrderOption {
+// ByAgentsCount orders the results by agents count.
+func ByAgentsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOwnerStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newAgentsStep(), opts...)
 	}
 }
 
-// ByOwner orders the results by owner terms.
-func ByOwner(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByAgents orders the results by agents terms.
+func ByAgents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newAgentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newOwnerStep() *sqlgraph.Step {
+func newAgentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OwnerInverseTable, AgentFieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, OwnerTable, OwnerColumn),
+		sqlgraph.To(AgentsInverseTable, AgentFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AgentsTable, AgentsColumn),
 	)
 }

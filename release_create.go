@@ -163,19 +163,19 @@ func (rc *ReleaseCreate) SetNillableArch(s *string) *ReleaseCreate {
 	return rc
 }
 
-// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
-func (rc *ReleaseCreate) AddOwnerIDs(ids ...string) *ReleaseCreate {
-	rc.mutation.AddOwnerIDs(ids...)
+// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
+func (rc *ReleaseCreate) AddAgentIDs(ids ...string) *ReleaseCreate {
+	rc.mutation.AddAgentIDs(ids...)
 	return rc
 }
 
-// AddOwner adds the "owner" edges to the Agent entity.
-func (rc *ReleaseCreate) AddOwner(a ...*Agent) *ReleaseCreate {
+// AddAgents adds the "agents" edges to the Agent entity.
+func (rc *ReleaseCreate) AddAgents(a ...*Agent) *ReleaseCreate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return rc.AddOwnerIDs(ids...)
+	return rc.AddAgentIDs(ids...)
 }
 
 // Mutation returns the ReleaseMutation object of the builder.
@@ -212,9 +212,6 @@ func (rc *ReleaseCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *ReleaseCreate) check() error {
-	if len(rc.mutation.OwnerIDs()) == 0 {
-		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Release.owner"`)}
-	}
 	return nil
 }
 
@@ -282,12 +279,12 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 		_spec.SetField(release.FieldArch, field.TypeString, value)
 		_node.Arch = value
 	}
-	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := rc.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   release.OwnerTable,
-			Columns: []string{release.OwnerColumn},
+			Inverse: false,
+			Table:   release.AgentsTable,
+			Columns: []string{release.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),

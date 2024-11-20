@@ -413,7 +413,7 @@ func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, selector),
 			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, agent.ReleaseTable, agent.ReleaseColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -1483,10 +1483,10 @@ func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, node
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Agent)
 	for i := range nodes {
-		if nodes[i].agent_release == nil {
+		if nodes[i].release_agents == nil {
 			continue
 		}
-		fk := *nodes[i].agent_release
+		fk := *nodes[i].release_agents
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1503,7 +1503,7 @@ func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, node
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "agent_release" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "release_agents" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

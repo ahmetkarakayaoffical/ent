@@ -45,20 +45,20 @@ type Release struct {
 
 // ReleaseEdges holds the relations/edges for other nodes in the graph.
 type ReleaseEdges struct {
-	// Owner holds the value of the owner edge.
-	Owner []*Agent `json:"owner,omitempty"`
+	// Agents holds the value of the agents edge.
+	Agents []*Agent `json:"agents,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// OwnerOrErr returns the Owner value or an error if the edge
+// AgentsOrErr returns the Agents value or an error if the edge
 // was not loaded in eager-loading.
-func (e ReleaseEdges) OwnerOrErr() ([]*Agent, error) {
+func (e ReleaseEdges) AgentsOrErr() ([]*Agent, error) {
 	if e.loadedTypes[0] {
-		return e.Owner, nil
+		return e.Agents, nil
 	}
-	return nil, &NotLoadedError{edge: "owner"}
+	return nil, &NotLoadedError{edge: "agents"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -168,9 +168,9 @@ func (r *Release) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
 }
 
-// QueryOwner queries the "owner" edge of the Release entity.
-func (r *Release) QueryOwner() *AgentQuery {
-	return NewReleaseClient(r.config).QueryOwner(r)
+// QueryAgents queries the "agents" edge of the Release entity.
+func (r *Release) QueryAgents() *AgentQuery {
+	return NewReleaseClient(r.config).QueryAgents(r)
 }
 
 // Update returns a builder for updating this Release.
