@@ -45,6 +45,9 @@ type OrgMetadata func(*sql.Selector)
 // Printer is the predicate function for printer builders.
 type Printer func(*sql.Selector)
 
+// Release is the predicate function for release builders.
+type Release func(*sql.Selector)
+
 // Revocation is the predicate function for revocation builders.
 type Revocation func(*sql.Selector)
 

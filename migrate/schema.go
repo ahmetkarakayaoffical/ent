@@ -316,6 +316,22 @@ var (
 			},
 		},
 	}
+	// ReleasesColumns holds the columns for the "releases" table.
+	ReleasesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "channel", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "release_notes", Type: field.TypeString, Nullable: true},
+		{Name: "file_url", Type: field.TypeString, Nullable: true},
+		{Name: "checksum", Type: field.TypeString, Nullable: true},
+		{Name: "is_critical", Type: field.TypeString, Nullable: true},
+	}
+	// ReleasesTable holds the schema information for the "releases" table.
+	ReleasesTable = &schema.Table{
+		Name:       "releases",
+		Columns:    ReleasesColumns,
+		PrimaryKey: []*schema.Column{ReleasesColumns[0]},
+	}
 	// RevocationsColumns holds the columns for the "revocations" table.
 	RevocationsColumns = []*schema.Column{
 		{Name: "serial", Type: field.TypeInt64, Increment: true},
@@ -551,6 +567,7 @@ var (
 		OperatingSystemsTable,
 		OrgMetadataTable,
 		PrintersTable,
+		ReleasesTable,
 		RevocationsTable,
 		SessionsTable,
 		SettingsTable,

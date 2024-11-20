@@ -165,6 +165,18 @@ func (f PrinterFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openue
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.PrinterMutation", m)
 }
 
+// The ReleaseFunc type is an adapter to allow the use of ordinary
+// function as Release mutator.
+type ReleaseFunc func(context.Context, *openuem_ent.ReleaseMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ReleaseFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.ReleaseMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ReleaseMutation", m)
+}
+
 // The RevocationFunc type is an adapter to allow the use of ordinary
 // function as Revocation mutator.
 type RevocationFunc func(context.Context, *openuem_ent.RevocationMutation) (openuem_ent.Value, error)

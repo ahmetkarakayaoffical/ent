@@ -38,6 +38,8 @@ type Tx struct {
 	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Release is the client for interacting with the Release builders.
+	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
 	// Sessions is the client for interacting with the Sessions builders.
@@ -198,6 +200,7 @@ func (tx *Tx) init() {
 	tx.OperatingSystem = NewOperatingSystemClient(tx.config)
 	tx.OrgMetadata = NewOrgMetadataClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
+	tx.Release = NewReleaseClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
 	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Settings = NewSettingsClient(tx.config)

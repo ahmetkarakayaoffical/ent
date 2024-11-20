@@ -25,6 +25,7 @@ import (
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
@@ -57,6 +58,7 @@ const (
 	TypeOperatingSystem = "OperatingSystem"
 	TypeOrgMetadata     = "OrgMetadata"
 	TypePrinter         = "Printer"
+	TypeRelease         = "Release"
 	TypeRevocation      = "Revocation"
 	TypeSessions        = "Sessions"
 	TypeSettings        = "Settings"
@@ -10559,6 +10561,725 @@ func (m *PrinterMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Printer edge %s", name)
+}
+
+// ReleaseMutation represents an operation that mutates the Release nodes in the graph.
+type ReleaseMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	channel       *string
+	summary       *string
+	release_notes *string
+	file_url      *string
+	checksum      *string
+	is_critical   *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Release, error)
+	predicates    []predicate.Release
+}
+
+var _ ent.Mutation = (*ReleaseMutation)(nil)
+
+// releaseOption allows management of the mutation configuration using functional options.
+type releaseOption func(*ReleaseMutation)
+
+// newReleaseMutation creates new mutation for the Release entity.
+func newReleaseMutation(c config, op Op, opts ...releaseOption) *ReleaseMutation {
+	m := &ReleaseMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeRelease,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withReleaseID sets the ID field of the mutation.
+func withReleaseID(id string) releaseOption {
+	return func(m *ReleaseMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Release
+		)
+		m.oldValue = func(ctx context.Context) (*Release, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Release.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withRelease sets the old Release of the mutation.
+func withRelease(node *Release) releaseOption {
+	return func(m *ReleaseMutation) {
+		m.oldValue = func(context.Context) (*Release, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ReleaseMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ReleaseMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Release entities.
+func (m *ReleaseMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ReleaseMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ReleaseMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Release.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChannel sets the "channel" field.
+func (m *ReleaseMutation) SetChannel(s string) {
+	m.channel = &s
+}
+
+// Channel returns the value of the "channel" field in the mutation.
+func (m *ReleaseMutation) Channel() (r string, exists bool) {
+	v := m.channel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChannel returns the old "channel" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldChannel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChannel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChannel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChannel: %w", err)
+	}
+	return oldValue.Channel, nil
+}
+
+// ClearChannel clears the value of the "channel" field.
+func (m *ReleaseMutation) ClearChannel() {
+	m.channel = nil
+	m.clearedFields[release.FieldChannel] = struct{}{}
+}
+
+// ChannelCleared returns if the "channel" field was cleared in this mutation.
+func (m *ReleaseMutation) ChannelCleared() bool {
+	_, ok := m.clearedFields[release.FieldChannel]
+	return ok
+}
+
+// ResetChannel resets all changes to the "channel" field.
+func (m *ReleaseMutation) ResetChannel() {
+	m.channel = nil
+	delete(m.clearedFields, release.FieldChannel)
+}
+
+// SetSummary sets the "summary" field.
+func (m *ReleaseMutation) SetSummary(s string) {
+	m.summary = &s
+}
+
+// Summary returns the value of the "summary" field in the mutation.
+func (m *ReleaseMutation) Summary() (r string, exists bool) {
+	v := m.summary
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSummary returns the old "summary" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldSummary(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSummary is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSummary requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSummary: %w", err)
+	}
+	return oldValue.Summary, nil
+}
+
+// ClearSummary clears the value of the "summary" field.
+func (m *ReleaseMutation) ClearSummary() {
+	m.summary = nil
+	m.clearedFields[release.FieldSummary] = struct{}{}
+}
+
+// SummaryCleared returns if the "summary" field was cleared in this mutation.
+func (m *ReleaseMutation) SummaryCleared() bool {
+	_, ok := m.clearedFields[release.FieldSummary]
+	return ok
+}
+
+// ResetSummary resets all changes to the "summary" field.
+func (m *ReleaseMutation) ResetSummary() {
+	m.summary = nil
+	delete(m.clearedFields, release.FieldSummary)
+}
+
+// SetReleaseNotes sets the "release_notes" field.
+func (m *ReleaseMutation) SetReleaseNotes(s string) {
+	m.release_notes = &s
+}
+
+// ReleaseNotes returns the value of the "release_notes" field in the mutation.
+func (m *ReleaseMutation) ReleaseNotes() (r string, exists bool) {
+	v := m.release_notes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReleaseNotes returns the old "release_notes" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldReleaseNotes(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReleaseNotes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReleaseNotes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReleaseNotes: %w", err)
+	}
+	return oldValue.ReleaseNotes, nil
+}
+
+// ClearReleaseNotes clears the value of the "release_notes" field.
+func (m *ReleaseMutation) ClearReleaseNotes() {
+	m.release_notes = nil
+	m.clearedFields[release.FieldReleaseNotes] = struct{}{}
+}
+
+// ReleaseNotesCleared returns if the "release_notes" field was cleared in this mutation.
+func (m *ReleaseMutation) ReleaseNotesCleared() bool {
+	_, ok := m.clearedFields[release.FieldReleaseNotes]
+	return ok
+}
+
+// ResetReleaseNotes resets all changes to the "release_notes" field.
+func (m *ReleaseMutation) ResetReleaseNotes() {
+	m.release_notes = nil
+	delete(m.clearedFields, release.FieldReleaseNotes)
+}
+
+// SetFileURL sets the "file_url" field.
+func (m *ReleaseMutation) SetFileURL(s string) {
+	m.file_url = &s
+}
+
+// FileURL returns the value of the "file_url" field in the mutation.
+func (m *ReleaseMutation) FileURL() (r string, exists bool) {
+	v := m.file_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileURL returns the old "file_url" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldFileURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileURL: %w", err)
+	}
+	return oldValue.FileURL, nil
+}
+
+// ClearFileURL clears the value of the "file_url" field.
+func (m *ReleaseMutation) ClearFileURL() {
+	m.file_url = nil
+	m.clearedFields[release.FieldFileURL] = struct{}{}
+}
+
+// FileURLCleared returns if the "file_url" field was cleared in this mutation.
+func (m *ReleaseMutation) FileURLCleared() bool {
+	_, ok := m.clearedFields[release.FieldFileURL]
+	return ok
+}
+
+// ResetFileURL resets all changes to the "file_url" field.
+func (m *ReleaseMutation) ResetFileURL() {
+	m.file_url = nil
+	delete(m.clearedFields, release.FieldFileURL)
+}
+
+// SetChecksum sets the "checksum" field.
+func (m *ReleaseMutation) SetChecksum(s string) {
+	m.checksum = &s
+}
+
+// Checksum returns the value of the "checksum" field in the mutation.
+func (m *ReleaseMutation) Checksum() (r string, exists bool) {
+	v := m.checksum
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChecksum returns the old "checksum" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldChecksum(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChecksum is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChecksum requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChecksum: %w", err)
+	}
+	return oldValue.Checksum, nil
+}
+
+// ClearChecksum clears the value of the "checksum" field.
+func (m *ReleaseMutation) ClearChecksum() {
+	m.checksum = nil
+	m.clearedFields[release.FieldChecksum] = struct{}{}
+}
+
+// ChecksumCleared returns if the "checksum" field was cleared in this mutation.
+func (m *ReleaseMutation) ChecksumCleared() bool {
+	_, ok := m.clearedFields[release.FieldChecksum]
+	return ok
+}
+
+// ResetChecksum resets all changes to the "checksum" field.
+func (m *ReleaseMutation) ResetChecksum() {
+	m.checksum = nil
+	delete(m.clearedFields, release.FieldChecksum)
+}
+
+// SetIsCritical sets the "is_critical" field.
+func (m *ReleaseMutation) SetIsCritical(s string) {
+	m.is_critical = &s
+}
+
+// IsCritical returns the value of the "is_critical" field in the mutation.
+func (m *ReleaseMutation) IsCritical() (r string, exists bool) {
+	v := m.is_critical
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsCritical returns the old "is_critical" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldIsCritical(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsCritical is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsCritical requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsCritical: %w", err)
+	}
+	return oldValue.IsCritical, nil
+}
+
+// ClearIsCritical clears the value of the "is_critical" field.
+func (m *ReleaseMutation) ClearIsCritical() {
+	m.is_critical = nil
+	m.clearedFields[release.FieldIsCritical] = struct{}{}
+}
+
+// IsCriticalCleared returns if the "is_critical" field was cleared in this mutation.
+func (m *ReleaseMutation) IsCriticalCleared() bool {
+	_, ok := m.clearedFields[release.FieldIsCritical]
+	return ok
+}
+
+// ResetIsCritical resets all changes to the "is_critical" field.
+func (m *ReleaseMutation) ResetIsCritical() {
+	m.is_critical = nil
+	delete(m.clearedFields, release.FieldIsCritical)
+}
+
+// Where appends a list predicates to the ReleaseMutation builder.
+func (m *ReleaseMutation) Where(ps ...predicate.Release) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ReleaseMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ReleaseMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Release, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ReleaseMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ReleaseMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Release).
+func (m *ReleaseMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ReleaseMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.channel != nil {
+		fields = append(fields, release.FieldChannel)
+	}
+	if m.summary != nil {
+		fields = append(fields, release.FieldSummary)
+	}
+	if m.release_notes != nil {
+		fields = append(fields, release.FieldReleaseNotes)
+	}
+	if m.file_url != nil {
+		fields = append(fields, release.FieldFileURL)
+	}
+	if m.checksum != nil {
+		fields = append(fields, release.FieldChecksum)
+	}
+	if m.is_critical != nil {
+		fields = append(fields, release.FieldIsCritical)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case release.FieldChannel:
+		return m.Channel()
+	case release.FieldSummary:
+		return m.Summary()
+	case release.FieldReleaseNotes:
+		return m.ReleaseNotes()
+	case release.FieldFileURL:
+		return m.FileURL()
+	case release.FieldChecksum:
+		return m.Checksum()
+	case release.FieldIsCritical:
+		return m.IsCritical()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case release.FieldChannel:
+		return m.OldChannel(ctx)
+	case release.FieldSummary:
+		return m.OldSummary(ctx)
+	case release.FieldReleaseNotes:
+		return m.OldReleaseNotes(ctx)
+	case release.FieldFileURL:
+		return m.OldFileURL(ctx)
+	case release.FieldChecksum:
+		return m.OldChecksum(ctx)
+	case release.FieldIsCritical:
+		return m.OldIsCritical(ctx)
+	}
+	return nil, fmt.Errorf("unknown Release field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case release.FieldChannel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChannel(v)
+		return nil
+	case release.FieldSummary:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSummary(v)
+		return nil
+	case release.FieldReleaseNotes:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReleaseNotes(v)
+		return nil
+	case release.FieldFileURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileURL(v)
+		return nil
+	case release.FieldChecksum:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChecksum(v)
+		return nil
+	case release.FieldIsCritical:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsCritical(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Release field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ReleaseMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ReleaseMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReleaseMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Release numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ReleaseMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(release.FieldChannel) {
+		fields = append(fields, release.FieldChannel)
+	}
+	if m.FieldCleared(release.FieldSummary) {
+		fields = append(fields, release.FieldSummary)
+	}
+	if m.FieldCleared(release.FieldReleaseNotes) {
+		fields = append(fields, release.FieldReleaseNotes)
+	}
+	if m.FieldCleared(release.FieldFileURL) {
+		fields = append(fields, release.FieldFileURL)
+	}
+	if m.FieldCleared(release.FieldChecksum) {
+		fields = append(fields, release.FieldChecksum)
+	}
+	if m.FieldCleared(release.FieldIsCritical) {
+		fields = append(fields, release.FieldIsCritical)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ReleaseMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ReleaseMutation) ClearField(name string) error {
+	switch name {
+	case release.FieldChannel:
+		m.ClearChannel()
+		return nil
+	case release.FieldSummary:
+		m.ClearSummary()
+		return nil
+	case release.FieldReleaseNotes:
+		m.ClearReleaseNotes()
+		return nil
+	case release.FieldFileURL:
+		m.ClearFileURL()
+		return nil
+	case release.FieldChecksum:
+		m.ClearChecksum()
+		return nil
+	case release.FieldIsCritical:
+		m.ClearIsCritical()
+		return nil
+	}
+	return fmt.Errorf("unknown Release nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ReleaseMutation) ResetField(name string) error {
+	switch name {
+	case release.FieldChannel:
+		m.ResetChannel()
+		return nil
+	case release.FieldSummary:
+		m.ResetSummary()
+		return nil
+	case release.FieldReleaseNotes:
+		m.ResetReleaseNotes()
+		return nil
+	case release.FieldFileURL:
+		m.ResetFileURL()
+		return nil
+	case release.FieldChecksum:
+		m.ResetChecksum()
+		return nil
+	case release.FieldIsCritical:
+		m.ResetIsCritical()
+		return nil
+	}
+	return fmt.Errorf("unknown Release field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ReleaseMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ReleaseMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ReleaseMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ReleaseMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ReleaseMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Release unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ReleaseMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Release edge %s", name)
 }
 
 // RevocationMutation represents an operation that mutates the Revocation nodes in the graph.

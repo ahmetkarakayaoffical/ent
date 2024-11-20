@@ -28,6 +28,7 @@ import (
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
@@ -69,6 +70,8 @@ type Client struct {
 	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Release is the client for interacting with the Release builders.
+	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
 	// Sessions is the client for interacting with the Sessions builders.
@@ -109,6 +112,7 @@ func (c *Client) init() {
 	c.OperatingSystem = NewOperatingSystemClient(c.config)
 	c.OrgMetadata = NewOrgMetadataClient(c.config)
 	c.Printer = NewPrinterClient(c.config)
+	c.Release = NewReleaseClient(c.config)
 	c.Revocation = NewRevocationClient(c.config)
 	c.Sessions = NewSessionsClient(c.config)
 	c.Settings = NewSettingsClient(c.config)
@@ -222,6 +226,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OperatingSystem: NewOperatingSystemClient(cfg),
 		OrgMetadata:     NewOrgMetadataClient(cfg),
 		Printer:         NewPrinterClient(cfg),
+		Release:         NewReleaseClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Settings:        NewSettingsClient(cfg),
@@ -262,6 +267,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OperatingSystem: NewOperatingSystemClient(cfg),
 		OrgMetadata:     NewOrgMetadataClient(cfg),
 		Printer:         NewPrinterClient(cfg),
+		Release:         NewReleaseClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Settings:        NewSettingsClient(cfg),
@@ -301,8 +307,8 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Revocation, c.Sessions, c.Settings, c.Share,
-		c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Sessions, c.Settings,
+		c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -314,8 +320,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Revocation, c.Sessions, c.Settings, c.Share,
-		c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Sessions, c.Settings,
+		c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -350,6 +356,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrgMetadata.mutate(ctx, m)
 	case *PrinterMutation:
 		return c.Printer.mutate(ctx, m)
+	case *ReleaseMutation:
+		return c.Release.mutate(ctx, m)
 	case *RevocationMutation:
 		return c.Revocation.mutate(ctx, m)
 	case *SessionsMutation:
@@ -2516,6 +2524,139 @@ func (c *PrinterClient) mutate(ctx context.Context, m *PrinterMutation) (Value, 
 	}
 }
 
+// ReleaseClient is a client for the Release schema.
+type ReleaseClient struct {
+	config
+}
+
+// NewReleaseClient returns a client for the Release from the given config.
+func NewReleaseClient(c config) *ReleaseClient {
+	return &ReleaseClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `release.Hooks(f(g(h())))`.
+func (c *ReleaseClient) Use(hooks ...Hook) {
+	c.hooks.Release = append(c.hooks.Release, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `release.Intercept(f(g(h())))`.
+func (c *ReleaseClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Release = append(c.inters.Release, interceptors...)
+}
+
+// Create returns a builder for creating a Release entity.
+func (c *ReleaseClient) Create() *ReleaseCreate {
+	mutation := newReleaseMutation(c.config, OpCreate)
+	return &ReleaseCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Release entities.
+func (c *ReleaseClient) CreateBulk(builders ...*ReleaseCreate) *ReleaseCreateBulk {
+	return &ReleaseCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReleaseClient) MapCreateBulk(slice any, setFunc func(*ReleaseCreate, int)) *ReleaseCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReleaseCreateBulk{err: fmt.Errorf("calling to ReleaseClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReleaseCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReleaseCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Release.
+func (c *ReleaseClient) Update() *ReleaseUpdate {
+	mutation := newReleaseMutation(c.config, OpUpdate)
+	return &ReleaseUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReleaseClient) UpdateOne(r *Release) *ReleaseUpdateOne {
+	mutation := newReleaseMutation(c.config, OpUpdateOne, withRelease(r))
+	return &ReleaseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReleaseClient) UpdateOneID(id string) *ReleaseUpdateOne {
+	mutation := newReleaseMutation(c.config, OpUpdateOne, withReleaseID(id))
+	return &ReleaseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Release.
+func (c *ReleaseClient) Delete() *ReleaseDelete {
+	mutation := newReleaseMutation(c.config, OpDelete)
+	return &ReleaseDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReleaseClient) DeleteOne(r *Release) *ReleaseDeleteOne {
+	return c.DeleteOneID(r.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReleaseClient) DeleteOneID(id string) *ReleaseDeleteOne {
+	builder := c.Delete().Where(release.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReleaseDeleteOne{builder}
+}
+
+// Query returns a query builder for Release.
+func (c *ReleaseClient) Query() *ReleaseQuery {
+	return &ReleaseQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRelease},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Release entity by its id.
+func (c *ReleaseClient) Get(ctx context.Context, id string) (*Release, error) {
+	return c.Query().Where(release.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReleaseClient) GetX(ctx context.Context, id string) *Release {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ReleaseClient) Hooks() []Hook {
+	return c.hooks.Release
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReleaseClient) Interceptors() []Interceptor {
+	return c.inters.Release
+}
+
+func (c *ReleaseClient) mutate(ctx context.Context, m *ReleaseMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReleaseCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReleaseUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReleaseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReleaseDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Release mutation op: %q", m.Op())
+	}
+}
+
 // RevocationClient is a client for the Revocation schema.
 type RevocationClient struct {
 	config
@@ -3712,12 +3853,14 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Revocation,
-		Sessions, Settings, Share, SystemUpdate, Tag, Update, User []ent.Hook
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
+		Revocation, Sessions, Settings, Share, SystemUpdate, Tag, Update,
+		User []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Revocation,
-		Sessions, Settings, Share, SystemUpdate, Tag, Update, User []ent.Interceptor
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
+		Revocation, Sessions, Settings, Share, SystemUpdate, Tag, Update,
+		User []ent.Interceptor
 	}
 )

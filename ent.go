@@ -25,6 +25,7 @@ import (
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
@@ -106,6 +107,7 @@ func checkColumn(table, column string) error {
 			operatingsystem.Table: operatingsystem.ValidColumn,
 			orgmetadata.Table:     orgmetadata.ValidColumn,
 			printer.Table:         printer.ValidColumn,
+			release.Table:         release.ValidColumn,
 			revocation.Table:      revocation.ValidColumn,
 			sessions.Table:        sessions.ValidColumn,
 			settings.Table:        settings.ValidColumn,
