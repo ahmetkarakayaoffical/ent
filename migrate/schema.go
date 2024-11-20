@@ -13,7 +13,6 @@ var (
 		{Name: "oid", Type: field.TypeString, Unique: true},
 		{Name: "os", Type: field.TypeString},
 		{Name: "hostname", Type: field.TypeString},
-		{Name: "version", Type: field.TypeString},
 		{Name: "ip", Type: field.TypeString, Default: ""},
 		{Name: "mac", Type: field.TypeString, Default: ""},
 		{Name: "first_contact", Type: field.TypeTime, Nullable: true},
@@ -26,12 +25,21 @@ var (
 		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "agent_release", Type: field.TypeString, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{
 		Name:       "agents",
 		Columns:    AgentsColumns,
 		PrimaryKey: []*schema.Column{AgentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "agents_releases_release",
+				Columns:    []*schema.Column{AgentsColumns[15]},
+				RefColumns: []*schema.Column{ReleasesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// AntiviriColumns holds the columns for the "antiviri" table.
 	AntiviriColumns = []*schema.Column{
@@ -581,6 +589,7 @@ var (
 )
 
 func init() {
+	AgentsTable.ForeignKeys[0].RefTable = ReleasesTable
 	AntiviriTable.ForeignKeys[0].RefTable = AgentsTable
 	AppsTable.ForeignKeys[0].RefTable = AgentsTable
 	ComputersTable.ForeignKeys[0].RefTable = AgentsTable

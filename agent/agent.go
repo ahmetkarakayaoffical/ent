@@ -16,8 +16,6 @@ const (
 	FieldOs = "os"
 	// FieldHostname holds the string denoting the hostname field in the database.
 	FieldHostname = "hostname"
-	// FieldVersion holds the string denoting the version field in the database.
-	FieldVersion = "version"
 	// FieldIP holds the string denoting the ip field in the database.
 	FieldIP = "ip"
 	// FieldMAC holds the string denoting the mac field in the database.
@@ -70,6 +68,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeMetadata holds the string denoting the metadata edge name in mutations.
 	EdgeMetadata = "metadata"
+	// EdgeRelease holds the string denoting the release edge name in mutations.
+	EdgeRelease = "release"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -98,6 +98,8 @@ const (
 	TagFieldID = "id"
 	// MetadataFieldID holds the string denoting the ID field of the Metadata.
 	MetadataFieldID = "id"
+	// ReleaseFieldID holds the string denoting the ID field of the Release.
+	ReleaseFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -196,6 +198,13 @@ const (
 	MetadataInverseTable = "metadata"
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "agent_metadata"
+	// ReleaseTable is the table that holds the release relation/edge.
+	ReleaseTable = "agents"
+	// ReleaseInverseTable is the table name for the Release entity.
+	// It exists in this package in order to avoid circular dependency with the "release" package.
+	ReleaseInverseTable = "releases"
+	// ReleaseColumn is the table column denoting the release relation/edge.
+	ReleaseColumn = "agent_release"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -203,7 +212,6 @@ var Columns = []string{
 	FieldID,
 	FieldOs,
 	FieldHostname,
-	FieldVersion,
 	FieldIP,
 	FieldMAC,
 	FieldFirstContact,
@@ -216,6 +224,12 @@ var Columns = []string{
 	FieldUpdateTaskResult,
 	FieldUpdateTaskExecution,
 	FieldUpdateTaskVersion,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"agent_release",
 }
 
 var (
@@ -231,6 +245,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -239,8 +258,6 @@ var (
 	OsValidator func(string) error
 	// HostnameValidator is a validator for the "hostname" field. It is called by the builders before save.
 	HostnameValidator func(string) error
-	// VersionValidator is a validator for the "version" field. It is called by the builders before save.
-	VersionValidator func(string) error
 	// DefaultIP holds the default value on creation for the "ip" field.
 	DefaultIP string
 	// DefaultMAC holds the default value on creation for the "mac" field.
@@ -277,11 +294,6 @@ func ByOs(opts ...sql.OrderTermOption) OrderOption {
 // ByHostname orders the results by the hostname field.
 func ByHostname(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHostname, opts...).ToFunc()
-}
-
-// ByVersion orders the results by the version field.
-func ByVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
 // ByIP orders the results by the ip field.
@@ -511,6 +523,13 @@ func ByMetadata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMetadataStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByReleaseField orders the results by release field.
+func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReleaseStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -607,5 +626,12 @@ func newMetadataStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MetadataInverseTable, MetadataFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
+	)
+}
+func newReleaseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReleaseInverseTable, ReleaseFieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReleaseTable, ReleaseColumn),
 	)
 }

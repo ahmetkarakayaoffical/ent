@@ -4,6 +4,7 @@ package release
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -23,8 +24,19 @@ const (
 	FieldChecksum = "checksum"
 	// FieldIsCritical holds the string denoting the is_critical field in the database.
 	FieldIsCritical = "is_critical"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
+	// AgentFieldID holds the string denoting the ID field of the Agent.
+	AgentFieldID = "oid"
 	// Table holds the table name of the release in the database.
 	Table = "releases"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "agents"
+	// OwnerInverseTable is the table name for the Agent entity.
+	// It exists in this package in order to avoid circular dependency with the "agent" package.
+	OwnerInverseTable = "agents"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "agent_release"
 )
 
 // Columns holds all SQL columns for release fields.
@@ -89,4 +101,25 @@ func ByChecksum(opts ...sql.OrderTermOption) OrderOption {
 // ByIsCritical orders the results by the is_critical field.
 func ByIsCritical(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsCritical, opts...).ToFunc()
+}
+
+// ByOwnerCount orders the results by owner count.
+func ByOwnerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOwnerStep(), opts...)
+	}
+}
+
+// ByOwner orders the results by owner terms.
+func ByOwner(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, AgentFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, OwnerTable, OwnerColumn),
+	)
 }

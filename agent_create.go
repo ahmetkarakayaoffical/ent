@@ -23,6 +23,7 @@ import (
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 	"github.com/doncicuto/openuem_ent/tag"
@@ -46,12 +47,6 @@ func (ac *AgentCreate) SetOs(s string) *AgentCreate {
 // SetHostname sets the "hostname" field.
 func (ac *AgentCreate) SetHostname(s string) *AgentCreate {
 	ac.mutation.SetHostname(s)
-	return ac
-}
-
-// SetVersion sets the "version" field.
-func (ac *AgentCreate) SetVersion(s string) *AgentCreate {
-	ac.mutation.SetVersion(s)
 	return ac
 }
 
@@ -455,6 +450,25 @@ func (ac *AgentCreate) AddMetadata(m ...*Metadata) *AgentCreate {
 	return ac.AddMetadatumIDs(ids...)
 }
 
+// SetReleaseID sets the "release" edge to the Release entity by ID.
+func (ac *AgentCreate) SetReleaseID(id string) *AgentCreate {
+	ac.mutation.SetReleaseID(id)
+	return ac
+}
+
+// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
+func (ac *AgentCreate) SetNillableReleaseID(id *string) *AgentCreate {
+	if id != nil {
+		ac = ac.SetReleaseID(*id)
+	}
+	return ac
+}
+
+// SetRelease sets the "release" edge to the Release entity.
+func (ac *AgentCreate) SetRelease(r *Release) *AgentCreate {
+	return ac.SetReleaseID(r.ID)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (ac *AgentCreate) Mutation() *AgentMutation {
 	return ac.mutation
@@ -542,14 +556,6 @@ func (ac *AgentCreate) check() error {
 			return &ValidationError{Name: "hostname", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.hostname": %w`, err)}
 		}
 	}
-	if _, ok := ac.mutation.Version(); !ok {
-		return &ValidationError{Name: "version", err: errors.New(`openuem_ent: missing required field "Agent.version"`)}
-	}
-	if v, ok := ac.mutation.Version(); ok {
-		if err := agent.VersionValidator(v); err != nil {
-			return &ValidationError{Name: "version", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.version": %w`, err)}
-		}
-	}
 	if _, ok := ac.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`openuem_ent: missing required field "Agent.ip"`)}
 	}
@@ -607,10 +613,6 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Hostname(); ok {
 		_spec.SetField(agent.FieldHostname, field.TypeString, value)
 		_node.Hostname = value
-	}
-	if value, ok := ac.mutation.Version(); ok {
-		_spec.SetField(agent.FieldVersion, field.TypeString, value)
-		_node.Version = value
 	}
 	if value, ok := ac.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
@@ -884,6 +886,23 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := ac.mutation.ReleaseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   agent.ReleaseTable,
+			Columns: []string{agent.ReleaseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.agent_release = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -957,18 +976,6 @@ func (u *AgentUpsert) SetHostname(v string) *AgentUpsert {
 // UpdateHostname sets the "hostname" field to the value that was provided on create.
 func (u *AgentUpsert) UpdateHostname() *AgentUpsert {
 	u.SetExcluded(agent.FieldHostname)
-	return u
-}
-
-// SetVersion sets the "version" field.
-func (u *AgentUpsert) SetVersion(v string) *AgentUpsert {
-	u.Set(agent.FieldVersion, v)
-	return u
-}
-
-// UpdateVersion sets the "version" field to the value that was provided on create.
-func (u *AgentUpsert) UpdateVersion() *AgentUpsert {
-	u.SetExcluded(agent.FieldVersion)
 	return u
 }
 
@@ -1243,20 +1250,6 @@ func (u *AgentUpsertOne) SetHostname(v string) *AgentUpsertOne {
 func (u *AgentUpsertOne) UpdateHostname() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateHostname()
-	})
-}
-
-// SetVersion sets the "version" field.
-func (u *AgentUpsertOne) SetVersion(v string) *AgentUpsertOne {
-	return u.Update(func(s *AgentUpsert) {
-		s.SetVersion(v)
-	})
-}
-
-// UpdateVersion sets the "version" field to the value that was provided on create.
-func (u *AgentUpsertOne) UpdateVersion() *AgentUpsertOne {
-	return u.Update(func(s *AgentUpsert) {
-		s.UpdateVersion()
 	})
 }
 
@@ -1731,20 +1724,6 @@ func (u *AgentUpsertBulk) SetHostname(v string) *AgentUpsertBulk {
 func (u *AgentUpsertBulk) UpdateHostname() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.UpdateHostname()
-	})
-}
-
-// SetVersion sets the "version" field.
-func (u *AgentUpsertBulk) SetVersion(v string) *AgentUpsertBulk {
-	return u.Update(func(s *AgentUpsert) {
-		s.SetVersion(v)
-	})
-}
-
-// UpdateVersion sets the "version" field to the value that was provided on create.
-func (u *AgentUpsertBulk) UpdateVersion() *AgentUpsertBulk {
-	return u.Update(func(s *AgentUpsert) {
-		s.UpdateVersion()
 	})
 }
 

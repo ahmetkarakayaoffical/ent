@@ -18,7 +18,6 @@ func (Agent) Fields() []ent.Field {
 		field.String("id").NotEmpty().Unique().StorageKey("oid"),
 		field.String("os").NotEmpty(),
 		field.String("hostname").NotEmpty(),
-		field.String("version").NotEmpty(),
 		field.String("ip").Default(""),
 		field.String("mac").Default(""),
 		field.Time("first_contact").Optional(),
@@ -51,5 +50,6 @@ func (Agent) Edges() []ent.Edge {
 		edge.To("updates", Update.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("tags", Tag.Type),
 		edge.To("metadata", Metadata.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("release", Release.Type).Unique(),
 	}
 }

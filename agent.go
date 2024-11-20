@@ -13,6 +13,7 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 )
 
@@ -25,8 +26,6 @@ type Agent struct {
 	Os string `json:"os,omitempty"`
 	// Hostname holds the value of the "hostname" field.
 	Hostname string `json:"hostname,omitempty"`
-	// Version holds the value of the "version" field.
-	Version string `json:"version,omitempty"`
 	// IP holds the value of the "ip" field.
 	IP string `json:"ip,omitempty"`
 	// MAC holds the value of the "mac" field.
@@ -53,8 +52,9 @@ type Agent struct {
 	UpdateTaskVersion string `json:"update_task_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
-	Edges        AgentEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges         AgentEdges `json:"edges"`
+	agent_release *string
+	selectValues  sql.SelectValues
 }
 
 // AgentEdges holds the relations/edges for other nodes in the graph.
@@ -87,9 +87,11 @@ type AgentEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Metadata holds the value of the metadata edge.
 	Metadata []*Metadata `json:"metadata,omitempty"`
+	// Release holds the value of the release edge.
+	Release *Release `json:"release,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -226,6 +228,17 @@ func (e AgentEdges) MetadataOrErr() ([]*Metadata, error) {
 	return nil, &NotLoadedError{edge: "metadata"}
 }
 
+// ReleaseOrErr returns the Release value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AgentEdges) ReleaseOrErr() (*Release, error) {
+	if e.Release != nil {
+		return e.Release, nil
+	} else if e.loadedTypes[14] {
+		return nil, &NotFoundError{label: release.Label}
+	}
+	return nil, &NotLoadedError{edge: "release"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Agent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -233,10 +246,12 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldVersion, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
+		case agent.ForeignKeys[0]: // agent_release
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -269,12 +284,6 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field hostname", values[i])
 			} else if value.Valid {
 				a.Hostname = value.String
-			}
-		case agent.FieldVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field version", values[i])
-			} else if value.Valid {
-				a.Version = value.String
 			}
 		case agent.FieldIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -347,6 +356,13 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field update_task_version", values[i])
 			} else if value.Valid {
 				a.UpdateTaskVersion = value.String
+			}
+		case agent.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field agent_release", values[i])
+			} else if value.Valid {
+				a.agent_release = new(string)
+				*a.agent_release = value.String
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -431,6 +447,11 @@ func (a *Agent) QueryMetadata() *MetadataQuery {
 	return NewAgentClient(a.config).QueryMetadata(a)
 }
 
+// QueryRelease queries the "release" edge of the Agent entity.
+func (a *Agent) QueryRelease() *ReleaseQuery {
+	return NewAgentClient(a.config).QueryRelease(a)
+}
+
 // Update returns a builder for updating this Agent.
 // Note that you need to call Agent.Unwrap() before calling this method if this Agent
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -459,9 +480,6 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("hostname=")
 	builder.WriteString(a.Hostname)
-	builder.WriteString(", ")
-	builder.WriteString("version=")
-	builder.WriteString(a.Version)
 	builder.WriteString(", ")
 	builder.WriteString("ip=")
 	builder.WriteString(a.IP)

@@ -27,8 +27,29 @@ type Release struct {
 	// Checksum holds the value of the "checksum" field.
 	Checksum string `json:"checksum,omitempty"`
 	// IsCritical holds the value of the "is_critical" field.
-	IsCritical   string `json:"is_critical,omitempty"`
+	IsCritical string `json:"is_critical,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ReleaseQuery when eager-loading is set.
+	Edges        ReleaseEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ReleaseEdges holds the relations/edges for other nodes in the graph.
+type ReleaseEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner []*Agent `json:"owner,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading.
+func (e ReleaseEdges) OwnerOrErr() ([]*Agent, error) {
+	if e.loadedTypes[0] {
+		return e.Owner, nil
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -106,6 +127,11 @@ func (r *Release) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (r *Release) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the Release entity.
+func (r *Release) QueryOwner() *AgentQuery {
+	return NewReleaseClient(r.config).QueryOwner(r)
 }
 
 // Update returns a builder for updating this Release.

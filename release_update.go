@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/release"
 )
@@ -148,9 +149,45 @@ func (ru *ReleaseUpdate) ClearIsCritical() *ReleaseUpdate {
 	return ru
 }
 
+// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
+func (ru *ReleaseUpdate) AddOwnerIDs(ids ...string) *ReleaseUpdate {
+	ru.mutation.AddOwnerIDs(ids...)
+	return ru
+}
+
+// AddOwner adds the "owner" edges to the Agent entity.
+func (ru *ReleaseUpdate) AddOwner(a ...*Agent) *ReleaseUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ru.AddOwnerIDs(ids...)
+}
+
 // Mutation returns the ReleaseMutation object of the builder.
 func (ru *ReleaseUpdate) Mutation() *ReleaseMutation {
 	return ru.mutation
+}
+
+// ClearOwner clears all "owner" edges to the Agent entity.
+func (ru *ReleaseUpdate) ClearOwner() *ReleaseUpdate {
+	ru.mutation.ClearOwner()
+	return ru
+}
+
+// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
+func (ru *ReleaseUpdate) RemoveOwnerIDs(ids ...string) *ReleaseUpdate {
+	ru.mutation.RemoveOwnerIDs(ids...)
+	return ru
+}
+
+// RemoveOwner removes "owner" edges to Agent entities.
+func (ru *ReleaseUpdate) RemoveOwner(a ...*Agent) *ReleaseUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ru.RemoveOwnerIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -230,6 +267,51 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.IsCriticalCleared() {
 		_spec.ClearField(release.FieldIsCritical, field.TypeString)
+	}
+	if ru.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !ru.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(ru.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
@@ -373,9 +455,45 @@ func (ruo *ReleaseUpdateOne) ClearIsCritical() *ReleaseUpdateOne {
 	return ruo
 }
 
+// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
+func (ruo *ReleaseUpdateOne) AddOwnerIDs(ids ...string) *ReleaseUpdateOne {
+	ruo.mutation.AddOwnerIDs(ids...)
+	return ruo
+}
+
+// AddOwner adds the "owner" edges to the Agent entity.
+func (ruo *ReleaseUpdateOne) AddOwner(a ...*Agent) *ReleaseUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ruo.AddOwnerIDs(ids...)
+}
+
 // Mutation returns the ReleaseMutation object of the builder.
 func (ruo *ReleaseUpdateOne) Mutation() *ReleaseMutation {
 	return ruo.mutation
+}
+
+// ClearOwner clears all "owner" edges to the Agent entity.
+func (ruo *ReleaseUpdateOne) ClearOwner() *ReleaseUpdateOne {
+	ruo.mutation.ClearOwner()
+	return ruo
+}
+
+// RemoveOwnerIDs removes the "owner" edge to Agent entities by IDs.
+func (ruo *ReleaseUpdateOne) RemoveOwnerIDs(ids ...string) *ReleaseUpdateOne {
+	ruo.mutation.RemoveOwnerIDs(ids...)
+	return ruo
+}
+
+// RemoveOwner removes "owner" edges to Agent entities.
+func (ruo *ReleaseUpdateOne) RemoveOwner(a ...*Agent) *ReleaseUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ruo.RemoveOwnerIDs(ids...)
 }
 
 // Where appends a list predicates to the ReleaseUpdate builder.
@@ -485,6 +603,51 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 	}
 	if ruo.mutation.IsCriticalCleared() {
 		_spec.ClearField(release.FieldIsCritical, field.TypeString)
+	}
+	if ruo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedOwnerIDs(); len(nodes) > 0 && !ruo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(ruo.modifiers...)
 	_node = &Release{config: ruo.config}

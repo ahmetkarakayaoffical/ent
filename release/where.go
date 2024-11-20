@@ -4,6 +4,7 @@ package release
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
 
@@ -540,6 +541,29 @@ func IsCriticalEqualFold(v string) predicate.Release {
 // IsCriticalContainsFold applies the ContainsFold predicate on the "is_critical" field.
 func IsCriticalContainsFold(v string) predicate.Release {
 	return predicate.Release(sql.FieldContainsFold(FieldIsCritical, v))
+}
+
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.Release {
+	return predicate.Release(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, OwnerTable, OwnerColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Agent) predicate.Release {
+	return predicate.Release(func(s *sql.Selector) {
+		step := newOwnerStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

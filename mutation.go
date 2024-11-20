@@ -77,7 +77,6 @@ type AgentMutation struct {
 	id                      *string
 	os                      *string
 	hostname                *string
-	version                 *string
 	ip                      *string
 	mac                     *string
 	first_contact           *time.Time
@@ -129,6 +128,8 @@ type AgentMutation struct {
 	metadata                map[int]struct{}
 	removedmetadata         map[int]struct{}
 	clearedmetadata         bool
+	release                 *string
+	clearedrelease          bool
 	done                    bool
 	oldValue                func(context.Context) (*Agent, error)
 	predicates              []predicate.Agent
@@ -308,42 +309,6 @@ func (m *AgentMutation) OldHostname(ctx context.Context) (v string, err error) {
 // ResetHostname resets all changes to the "hostname" field.
 func (m *AgentMutation) ResetHostname() {
 	m.hostname = nil
-}
-
-// SetVersion sets the "version" field.
-func (m *AgentMutation) SetVersion(s string) {
-	m.version = &s
-}
-
-// Version returns the value of the "version" field in the mutation.
-func (m *AgentMutation) Version() (r string, exists bool) {
-	v := m.version
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldVersion returns the old "version" field's value of the Agent entity.
-// If the Agent object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AgentMutation) OldVersion(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVersion requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
-	}
-	return oldValue.Version, nil
-}
-
-// ResetVersion resets all changes to the "version" field.
-func (m *AgentMutation) ResetVersion() {
-	m.version = nil
 }
 
 // SetIP sets the "ip" field.
@@ -1591,6 +1556,45 @@ func (m *AgentMutation) ResetMetadata() {
 	m.removedmetadata = nil
 }
 
+// SetReleaseID sets the "release" edge to the Release entity by id.
+func (m *AgentMutation) SetReleaseID(id string) {
+	m.release = &id
+}
+
+// ClearRelease clears the "release" edge to the Release entity.
+func (m *AgentMutation) ClearRelease() {
+	m.clearedrelease = true
+}
+
+// ReleaseCleared reports if the "release" edge to the Release entity was cleared.
+func (m *AgentMutation) ReleaseCleared() bool {
+	return m.clearedrelease
+}
+
+// ReleaseID returns the "release" edge ID in the mutation.
+func (m *AgentMutation) ReleaseID() (id string, exists bool) {
+	if m.release != nil {
+		return *m.release, true
+	}
+	return
+}
+
+// ReleaseIDs returns the "release" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReleaseID instead. It exists only for internal usage by the builders.
+func (m *AgentMutation) ReleaseIDs() (ids []string) {
+	if id := m.release; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetRelease resets all changes to the "release" edge.
+func (m *AgentMutation) ResetRelease() {
+	m.release = nil
+	m.clearedrelease = false
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -1625,15 +1629,12 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 14)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
 	if m.hostname != nil {
 		fields = append(fields, agent.FieldHostname)
-	}
-	if m.version != nil {
-		fields = append(fields, agent.FieldVersion)
 	}
 	if m.ip != nil {
 		fields = append(fields, agent.FieldIP)
@@ -1683,8 +1684,6 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Os()
 	case agent.FieldHostname:
 		return m.Hostname()
-	case agent.FieldVersion:
-		return m.Version()
 	case agent.FieldIP:
 		return m.IP()
 	case agent.FieldMAC:
@@ -1722,8 +1721,6 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldOs(ctx)
 	case agent.FieldHostname:
 		return m.OldHostname(ctx)
-	case agent.FieldVersion:
-		return m.OldVersion(ctx)
 	case agent.FieldIP:
 		return m.OldIP(ctx)
 	case agent.FieldMAC:
@@ -1770,13 +1767,6 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHostname(v)
-		return nil
-	case agent.FieldVersion:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetVersion(v)
 		return nil
 	case agent.FieldIP:
 		v, ok := value.(string)
@@ -1974,9 +1964,6 @@ func (m *AgentMutation) ResetField(name string) error {
 	case agent.FieldHostname:
 		m.ResetHostname()
 		return nil
-	case agent.FieldVersion:
-		m.ResetVersion()
-		return nil
 	case agent.FieldIP:
 		m.ResetIP()
 		return nil
@@ -2019,7 +2006,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 15)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2061,6 +2048,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.metadata != nil {
 		edges = append(edges, agent.EdgeMetadata)
+	}
+	if m.release != nil {
+		edges = append(edges, agent.EdgeRelease)
 	}
 	return edges
 }
@@ -2145,13 +2135,17 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeRelease:
+		if id := m.release; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 15)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -2255,7 +2249,7 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 15)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2298,6 +2292,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedmetadata {
 		edges = append(edges, agent.EdgeMetadata)
 	}
+	if m.clearedrelease {
+		edges = append(edges, agent.EdgeRelease)
+	}
 	return edges
 }
 
@@ -2333,6 +2330,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedtags
 	case agent.EdgeMetadata:
 		return m.clearedmetadata
+	case agent.EdgeRelease:
+		return m.clearedrelease
 	}
 	return false
 }
@@ -2352,6 +2351,9 @@ func (m *AgentMutation) ClearEdge(name string) error {
 		return nil
 	case agent.EdgeAntivirus:
 		m.ClearAntivirus()
+		return nil
+	case agent.EdgeRelease:
+		m.ClearRelease()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent unique edge %s", name)
@@ -2402,6 +2404,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeMetadata:
 		m.ResetMetadata()
+		return nil
+	case agent.EdgeRelease:
+		m.ResetRelease()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -10576,6 +10581,9 @@ type ReleaseMutation struct {
 	checksum      *string
 	is_critical   *string
 	clearedFields map[string]struct{}
+	owner         map[string]struct{}
+	removedowner  map[string]struct{}
+	clearedowner  bool
 	done          bool
 	oldValue      func(context.Context) (*Release, error)
 	predicates    []predicate.Release
@@ -10979,6 +10987,60 @@ func (m *ReleaseMutation) ResetIsCritical() {
 	delete(m.clearedFields, release.FieldIsCritical)
 }
 
+// AddOwnerIDs adds the "owner" edge to the Agent entity by ids.
+func (m *ReleaseMutation) AddOwnerIDs(ids ...string) {
+	if m.owner == nil {
+		m.owner = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.owner[ids[i]] = struct{}{}
+	}
+}
+
+// ClearOwner clears the "owner" edge to the Agent entity.
+func (m *ReleaseMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
+func (m *ReleaseMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// RemoveOwnerIDs removes the "owner" edge to the Agent entity by IDs.
+func (m *ReleaseMutation) RemoveOwnerIDs(ids ...string) {
+	if m.removedowner == nil {
+		m.removedowner = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.owner, ids[i])
+		m.removedowner[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedOwner returns the removed IDs of the "owner" edge to the Agent entity.
+func (m *ReleaseMutation) RemovedOwnerIDs() (ids []string) {
+	for id := range m.removedowner {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+func (m *ReleaseMutation) OwnerIDs() (ids []string) {
+	for id := range m.owner {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *ReleaseMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+	m.removedowner = nil
+}
+
 // Where appends a list predicates to the ReleaseMutation builder.
 func (m *ReleaseMutation) Where(ps ...predicate.Release) {
 	m.predicates = append(m.predicates, ps...)
@@ -11236,49 +11298,85 @@ func (m *ReleaseMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ReleaseMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, release.EdgeOwner)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case release.EdgeOwner:
+		ids := make([]ent.Value, 0, len(m.owner))
+		for id := range m.owner {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ReleaseMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedowner != nil {
+		edges = append(edges, release.EdgeOwner)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case release.EdgeOwner:
+		ids := make([]ent.Value, 0, len(m.removedowner))
+		for id := range m.removedowner {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ReleaseMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, release.EdgeOwner)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ReleaseMutation) EdgeCleared(name string) bool {
+	switch name {
+	case release.EdgeOwner:
+		return m.clearedowner
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ReleaseMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Release unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ReleaseMutation) ResetEdge(name string) error {
+	switch name {
+	case release.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
 	return fmt.Errorf("unknown Release edge %s", name)
 }
 

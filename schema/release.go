@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -19,5 +20,12 @@ func (Release) Fields() []ent.Field {
 		field.String("file_url").Optional(),
 		field.String("checksum").Optional(),
 		field.String("is_critical").Optional(),
+	}
+}
+
+// Edges of the Release.
+func (Release) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("owner", Agent.Type).Ref("release").Required(),
 	}
 }

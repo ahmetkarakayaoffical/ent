@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/release"
 )
 
@@ -112,6 +113,21 @@ func (rc *ReleaseCreate) SetID(s string) *ReleaseCreate {
 	return rc
 }
 
+// AddOwnerIDs adds the "owner" edge to the Agent entity by IDs.
+func (rc *ReleaseCreate) AddOwnerIDs(ids ...string) *ReleaseCreate {
+	rc.mutation.AddOwnerIDs(ids...)
+	return rc
+}
+
+// AddOwner adds the "owner" edges to the Agent entity.
+func (rc *ReleaseCreate) AddOwner(a ...*Agent) *ReleaseCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return rc.AddOwnerIDs(ids...)
+}
+
 // Mutation returns the ReleaseMutation object of the builder.
 func (rc *ReleaseCreate) Mutation() *ReleaseMutation {
 	return rc.mutation
@@ -150,6 +166,9 @@ func (rc *ReleaseCreate) check() error {
 		if err := release.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Release.id": %w`, err)}
 		}
+	}
+	if len(rc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`openuem_ent: missing required edge "Release.owner"`)}
 	}
 	return nil
 }
@@ -210,6 +229,22 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.IsCritical(); ok {
 		_spec.SetField(release.FieldIsCritical, field.TypeString, value)
 		_node.IsCritical = value
+	}
+	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   release.OwnerTable,
+			Columns: []string{release.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
