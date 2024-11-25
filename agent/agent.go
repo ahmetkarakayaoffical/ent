@@ -40,6 +40,10 @@ const (
 	FieldUpdateTaskExecution = "update_task_execution"
 	// FieldUpdateTaskVersion holds the string denoting the update_task_version field in the database.
 	FieldUpdateTaskVersion = "update_task_version"
+	// FieldVncProxyPort holds the string denoting the vnc_proxy_port field in the database.
+	FieldVncProxyPort = "vnc_proxy_port"
+	// FieldSftpPort holds the string denoting the sftp_port field in the database.
+	FieldSftpPort = "sftp_port"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -224,6 +228,8 @@ var Columns = []string{
 	FieldUpdateTaskResult,
 	FieldUpdateTaskExecution,
 	FieldUpdateTaskVersion,
+	FieldVncProxyPort,
+	FieldSftpPort,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -274,6 +280,10 @@ var (
 	DefaultUpdateTaskResult string
 	// DefaultUpdateTaskVersion holds the default value on creation for the "update_task_version" field.
 	DefaultUpdateTaskVersion string
+	// DefaultVncProxyPort holds the default value on creation for the "vnc_proxy_port" field.
+	DefaultVncProxyPort string
+	// DefaultSftpPort holds the default value on creation for the "sftp_port" field.
+	DefaultSftpPort string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -354,6 +364,16 @@ func ByUpdateTaskExecution(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdateTaskVersion orders the results by the update_task_version field.
 func ByUpdateTaskVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdateTaskVersion, opts...).ToFunc()
+}
+
+// ByVncProxyPort orders the results by the vnc_proxy_port field.
+func ByVncProxyPort(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVncProxyPort, opts...).ToFunc()
+}
+
+// BySftpPort orders the results by the sftp_port field.
+func BySftpPort(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSftpPort, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

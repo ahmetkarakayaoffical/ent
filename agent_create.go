@@ -218,6 +218,34 @@ func (ac *AgentCreate) SetNillableUpdateTaskVersion(s *string) *AgentCreate {
 	return ac
 }
 
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (ac *AgentCreate) SetVncProxyPort(s string) *AgentCreate {
+	ac.mutation.SetVncProxyPort(s)
+	return ac
+}
+
+// SetNillableVncProxyPort sets the "vnc_proxy_port" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableVncProxyPort(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetVncProxyPort(*s)
+	}
+	return ac
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (ac *AgentCreate) SetSftpPort(s string) *AgentCreate {
+	ac.mutation.SetSftpPort(s)
+	return ac
+}
+
+// SetNillableSftpPort sets the "sftp_port" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableSftpPort(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetSftpPort(*s)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -536,6 +564,14 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultUpdateTaskVersion
 		ac.mutation.SetUpdateTaskVersion(v)
 	}
+	if _, ok := ac.mutation.VncProxyPort(); !ok {
+		v := agent.DefaultVncProxyPort
+		ac.mutation.SetVncProxyPort(v)
+	}
+	if _, ok := ac.mutation.SftpPort(); !ok {
+		v := agent.DefaultSftpPort
+		ac.mutation.SetSftpPort(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -661,6 +697,14 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.UpdateTaskVersion(); ok {
 		_spec.SetField(agent.FieldUpdateTaskVersion, field.TypeString, value)
 		_node.UpdateTaskVersion = value
+	}
+	if value, ok := ac.mutation.VncProxyPort(); ok {
+		_spec.SetField(agent.FieldVncProxyPort, field.TypeString, value)
+		_node.VncProxyPort = value
+	}
+	if value, ok := ac.mutation.SftpPort(); ok {
+		_spec.SetField(agent.FieldSftpPort, field.TypeString, value)
+		_node.SftpPort = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1177,6 +1221,42 @@ func (u *AgentUpsert) ClearUpdateTaskVersion() *AgentUpsert {
 	return u
 }
 
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (u *AgentUpsert) SetVncProxyPort(v string) *AgentUpsert {
+	u.Set(agent.FieldVncProxyPort, v)
+	return u
+}
+
+// UpdateVncProxyPort sets the "vnc_proxy_port" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateVncProxyPort() *AgentUpsert {
+	u.SetExcluded(agent.FieldVncProxyPort)
+	return u
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (u *AgentUpsert) ClearVncProxyPort() *AgentUpsert {
+	u.SetNull(agent.FieldVncProxyPort)
+	return u
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (u *AgentUpsert) SetSftpPort(v string) *AgentUpsert {
+	u.Set(agent.FieldSftpPort, v)
+	return u
+}
+
+// UpdateSftpPort sets the "sftp_port" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateSftpPort() *AgentUpsert {
+	u.SetExcluded(agent.FieldSftpPort)
+	return u
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (u *AgentUpsert) ClearSftpPort() *AgentUpsert {
+	u.SetNull(agent.FieldSftpPort)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1481,6 +1561,48 @@ func (u *AgentUpsertOne) UpdateUpdateTaskVersion() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearUpdateTaskVersion() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearUpdateTaskVersion()
+	})
+}
+
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (u *AgentUpsertOne) SetVncProxyPort(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetVncProxyPort(v)
+	})
+}
+
+// UpdateVncProxyPort sets the "vnc_proxy_port" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateVncProxyPort() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateVncProxyPort()
+	})
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (u *AgentUpsertOne) ClearVncProxyPort() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearVncProxyPort()
+	})
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (u *AgentUpsertOne) SetSftpPort(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSftpPort(v)
+	})
+}
+
+// UpdateSftpPort sets the "sftp_port" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateSftpPort() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSftpPort()
+	})
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (u *AgentUpsertOne) ClearSftpPort() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSftpPort()
 	})
 }
 
@@ -1955,6 +2077,48 @@ func (u *AgentUpsertBulk) UpdateUpdateTaskVersion() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearUpdateTaskVersion() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearUpdateTaskVersion()
+	})
+}
+
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (u *AgentUpsertBulk) SetVncProxyPort(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetVncProxyPort(v)
+	})
+}
+
+// UpdateVncProxyPort sets the "vnc_proxy_port" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateVncProxyPort() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateVncProxyPort()
+	})
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (u *AgentUpsertBulk) ClearVncProxyPort() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearVncProxyPort()
+	})
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (u *AgentUpsertBulk) SetSftpPort(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSftpPort(v)
+	})
+}
+
+// UpdateSftpPort sets the "sftp_port" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateSftpPort() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSftpPort()
+	})
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (u *AgentUpsertBulk) ClearSftpPort() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSftpPort()
 	})
 }
 

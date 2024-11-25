@@ -25,6 +25,8 @@ var (
 		{Name: "update_task_result", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "update_task_execution", Type: field.TypeTime, Nullable: true},
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "vnc_proxy_port", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "sftp_port", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -35,7 +37,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[15]},
+				Columns:    []*schema.Column{AgentsColumns[17]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

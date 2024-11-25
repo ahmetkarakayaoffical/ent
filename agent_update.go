@@ -294,6 +294,46 @@ func (au *AgentUpdate) ClearUpdateTaskVersion() *AgentUpdate {
 	return au
 }
 
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (au *AgentUpdate) SetVncProxyPort(s string) *AgentUpdate {
+	au.mutation.SetVncProxyPort(s)
+	return au
+}
+
+// SetNillableVncProxyPort sets the "vnc_proxy_port" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableVncProxyPort(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetVncProxyPort(*s)
+	}
+	return au
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (au *AgentUpdate) ClearVncProxyPort() *AgentUpdate {
+	au.mutation.ClearVncProxyPort()
+	return au
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (au *AgentUpdate) SetSftpPort(s string) *AgentUpdate {
+	au.mutation.SetSftpPort(s)
+	return au
+}
+
+// SetNillableSftpPort sets the "sftp_port" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableSftpPort(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetSftpPort(*s)
+	}
+	return au
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (au *AgentUpdate) ClearSftpPort() *AgentUpdate {
+	au.mutation.ClearSftpPort()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -912,6 +952,18 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.UpdateTaskVersionCleared() {
 		_spec.ClearField(agent.FieldUpdateTaskVersion, field.TypeString)
+	}
+	if value, ok := au.mutation.VncProxyPort(); ok {
+		_spec.SetField(agent.FieldVncProxyPort, field.TypeString, value)
+	}
+	if au.mutation.VncProxyPortCleared() {
+		_spec.ClearField(agent.FieldVncProxyPort, field.TypeString)
+	}
+	if value, ok := au.mutation.SftpPort(); ok {
+		_spec.SetField(agent.FieldSftpPort, field.TypeString, value)
+	}
+	if au.mutation.SftpPortCleared() {
+		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1780,6 +1832,46 @@ func (auo *AgentUpdateOne) ClearUpdateTaskVersion() *AgentUpdateOne {
 	return auo
 }
 
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (auo *AgentUpdateOne) SetVncProxyPort(s string) *AgentUpdateOne {
+	auo.mutation.SetVncProxyPort(s)
+	return auo
+}
+
+// SetNillableVncProxyPort sets the "vnc_proxy_port" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableVncProxyPort(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetVncProxyPort(*s)
+	}
+	return auo
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (auo *AgentUpdateOne) ClearVncProxyPort() *AgentUpdateOne {
+	auo.mutation.ClearVncProxyPort()
+	return auo
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (auo *AgentUpdateOne) SetSftpPort(s string) *AgentUpdateOne {
+	auo.mutation.SetSftpPort(s)
+	return auo
+}
+
+// SetNillableSftpPort sets the "sftp_port" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableSftpPort(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetSftpPort(*s)
+	}
+	return auo
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (auo *AgentUpdateOne) ClearSftpPort() *AgentUpdateOne {
+	auo.mutation.ClearSftpPort()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2428,6 +2520,18 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.UpdateTaskVersionCleared() {
 		_spec.ClearField(agent.FieldUpdateTaskVersion, field.TypeString)
+	}
+	if value, ok := auo.mutation.VncProxyPort(); ok {
+		_spec.SetField(agent.FieldVncProxyPort, field.TypeString, value)
+	}
+	if auo.mutation.VncProxyPortCleared() {
+		_spec.ClearField(agent.FieldVncProxyPort, field.TypeString)
+	}
+	if value, ok := auo.mutation.SftpPort(); ok {
+		_spec.SetField(agent.FieldSftpPort, field.TypeString, value)
+	}
+	if auo.mutation.SftpPortCleared() {
+		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

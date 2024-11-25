@@ -63,6 +63,14 @@ func init() {
 	agentDescUpdateTaskVersion := agentFields[14].Descriptor()
 	// agent.DefaultUpdateTaskVersion holds the default value on creation for the update_task_version field.
 	agent.DefaultUpdateTaskVersion = agentDescUpdateTaskVersion.Default.(string)
+	// agentDescVncProxyPort is the schema descriptor for vnc_proxy_port field.
+	agentDescVncProxyPort := agentFields[15].Descriptor()
+	// agent.DefaultVncProxyPort holds the default value on creation for the vnc_proxy_port field.
+	agent.DefaultVncProxyPort = agentDescVncProxyPort.Default.(string)
+	// agentDescSftpPort is the schema descriptor for sftp_port field.
+	agentDescSftpPort := agentFields[16].Descriptor()
+	// agent.DefaultSftpPort holds the default value on creation for the sftp_port field.
+	agent.DefaultSftpPort = agentDescSftpPort.Default.(string)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

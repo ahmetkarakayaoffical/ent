@@ -135,6 +135,16 @@ func UpdateTaskVersion(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldUpdateTaskVersion, v))
 }
 
+// VncProxyPort applies equality check predicate on the "vnc_proxy_port" field. It's identical to VncProxyPortEQ.
+func VncProxyPort(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldVncProxyPort, v))
+}
+
+// SftpPort applies equality check predicate on the "sftp_port" field. It's identical to SftpPortEQ.
+func SftpPort(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSftpPort, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1003,6 +1013,156 @@ func UpdateTaskVersionEqualFold(v string) predicate.Agent {
 // UpdateTaskVersionContainsFold applies the ContainsFold predicate on the "update_task_version" field.
 func UpdateTaskVersionContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldUpdateTaskVersion, v))
+}
+
+// VncProxyPortEQ applies the EQ predicate on the "vnc_proxy_port" field.
+func VncProxyPortEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldVncProxyPort, v))
+}
+
+// VncProxyPortNEQ applies the NEQ predicate on the "vnc_proxy_port" field.
+func VncProxyPortNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldVncProxyPort, v))
+}
+
+// VncProxyPortIn applies the In predicate on the "vnc_proxy_port" field.
+func VncProxyPortIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldVncProxyPort, vs...))
+}
+
+// VncProxyPortNotIn applies the NotIn predicate on the "vnc_proxy_port" field.
+func VncProxyPortNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldVncProxyPort, vs...))
+}
+
+// VncProxyPortGT applies the GT predicate on the "vnc_proxy_port" field.
+func VncProxyPortGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldVncProxyPort, v))
+}
+
+// VncProxyPortGTE applies the GTE predicate on the "vnc_proxy_port" field.
+func VncProxyPortGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldVncProxyPort, v))
+}
+
+// VncProxyPortLT applies the LT predicate on the "vnc_proxy_port" field.
+func VncProxyPortLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldVncProxyPort, v))
+}
+
+// VncProxyPortLTE applies the LTE predicate on the "vnc_proxy_port" field.
+func VncProxyPortLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldVncProxyPort, v))
+}
+
+// VncProxyPortContains applies the Contains predicate on the "vnc_proxy_port" field.
+func VncProxyPortContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldVncProxyPort, v))
+}
+
+// VncProxyPortHasPrefix applies the HasPrefix predicate on the "vnc_proxy_port" field.
+func VncProxyPortHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldVncProxyPort, v))
+}
+
+// VncProxyPortHasSuffix applies the HasSuffix predicate on the "vnc_proxy_port" field.
+func VncProxyPortHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldVncProxyPort, v))
+}
+
+// VncProxyPortIsNil applies the IsNil predicate on the "vnc_proxy_port" field.
+func VncProxyPortIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldVncProxyPort))
+}
+
+// VncProxyPortNotNil applies the NotNil predicate on the "vnc_proxy_port" field.
+func VncProxyPortNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldVncProxyPort))
+}
+
+// VncProxyPortEqualFold applies the EqualFold predicate on the "vnc_proxy_port" field.
+func VncProxyPortEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldVncProxyPort, v))
+}
+
+// VncProxyPortContainsFold applies the ContainsFold predicate on the "vnc_proxy_port" field.
+func VncProxyPortContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldVncProxyPort, v))
+}
+
+// SftpPortEQ applies the EQ predicate on the "sftp_port" field.
+func SftpPortEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSftpPort, v))
+}
+
+// SftpPortNEQ applies the NEQ predicate on the "sftp_port" field.
+func SftpPortNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldSftpPort, v))
+}
+
+// SftpPortIn applies the In predicate on the "sftp_port" field.
+func SftpPortIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldSftpPort, vs...))
+}
+
+// SftpPortNotIn applies the NotIn predicate on the "sftp_port" field.
+func SftpPortNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldSftpPort, vs...))
+}
+
+// SftpPortGT applies the GT predicate on the "sftp_port" field.
+func SftpPortGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldSftpPort, v))
+}
+
+// SftpPortGTE applies the GTE predicate on the "sftp_port" field.
+func SftpPortGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldSftpPort, v))
+}
+
+// SftpPortLT applies the LT predicate on the "sftp_port" field.
+func SftpPortLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldSftpPort, v))
+}
+
+// SftpPortLTE applies the LTE predicate on the "sftp_port" field.
+func SftpPortLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldSftpPort, v))
+}
+
+// SftpPortContains applies the Contains predicate on the "sftp_port" field.
+func SftpPortContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldSftpPort, v))
+}
+
+// SftpPortHasPrefix applies the HasPrefix predicate on the "sftp_port" field.
+func SftpPortHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldSftpPort, v))
+}
+
+// SftpPortHasSuffix applies the HasSuffix predicate on the "sftp_port" field.
+func SftpPortHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldSftpPort, v))
+}
+
+// SftpPortIsNil applies the IsNil predicate on the "sftp_port" field.
+func SftpPortIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldSftpPort))
+}
+
+// SftpPortNotNil applies the NotNil predicate on the "sftp_port" field.
+func SftpPortNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldSftpPort))
+}
+
+// SftpPortEqualFold applies the EqualFold predicate on the "sftp_port" field.
+func SftpPortEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldSftpPort, v))
+}
+
+// SftpPortContainsFold applies the ContainsFold predicate on the "sftp_port" field.
+func SftpPortContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldSftpPort, v))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

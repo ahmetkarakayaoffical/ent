@@ -30,6 +30,8 @@ func (Agent) Fields() []ent.Field {
 		field.String("update_task_result").Optional().Default(""),
 		field.Time("update_task_execution").Optional(),
 		field.String("update_task_version").Optional().Default(""),
+		field.String("vnc_proxy_port").Optional().Default(""),
+		field.String("sftp_port").Optional().Default(""),
 	}
 }
 

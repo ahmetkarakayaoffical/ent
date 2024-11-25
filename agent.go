@@ -50,6 +50,10 @@ type Agent struct {
 	UpdateTaskExecution time.Time `json:"update_task_execution,omitempty"`
 	// UpdateTaskVersion holds the value of the "update_task_version" field.
 	UpdateTaskVersion string `json:"update_task_version,omitempty"`
+	// VncProxyPort holds the value of the "vnc_proxy_port" field.
+	VncProxyPort string `json:"vnc_proxy_port,omitempty"`
+	// SftpPort holds the value of the "sftp_port" field.
+	SftpPort string `json:"sftp_port,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
@@ -246,7 +250,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
@@ -356,6 +360,18 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field update_task_version", values[i])
 			} else if value.Valid {
 				a.UpdateTaskVersion = value.String
+			}
+		case agent.FieldVncProxyPort:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vnc_proxy_port", values[i])
+			} else if value.Valid {
+				a.VncProxyPort = value.String
+			}
+		case agent.FieldSftpPort:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sftp_port", values[i])
+			} else if value.Valid {
+				a.SftpPort = value.String
 			}
 		case agent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -516,6 +532,12 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("update_task_version=")
 	builder.WriteString(a.UpdateTaskVersion)
+	builder.WriteString(", ")
+	builder.WriteString("vnc_proxy_port=")
+	builder.WriteString(a.VncProxyPort)
+	builder.WriteString(", ")
+	builder.WriteString("sftp_port=")
+	builder.WriteString(a.SftpPort)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -89,6 +89,8 @@ type AgentMutation struct {
 	update_task_result      *string
 	update_task_execution   *time.Time
 	update_task_version     *string
+	vnc_proxy_port          *string
+	sftp_port               *string
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -860,6 +862,104 @@ func (m *AgentMutation) ResetUpdateTaskVersion() {
 	delete(m.clearedFields, agent.FieldUpdateTaskVersion)
 }
 
+// SetVncProxyPort sets the "vnc_proxy_port" field.
+func (m *AgentMutation) SetVncProxyPort(s string) {
+	m.vnc_proxy_port = &s
+}
+
+// VncProxyPort returns the value of the "vnc_proxy_port" field in the mutation.
+func (m *AgentMutation) VncProxyPort() (r string, exists bool) {
+	v := m.vnc_proxy_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVncProxyPort returns the old "vnc_proxy_port" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldVncProxyPort(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVncProxyPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVncProxyPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVncProxyPort: %w", err)
+	}
+	return oldValue.VncProxyPort, nil
+}
+
+// ClearVncProxyPort clears the value of the "vnc_proxy_port" field.
+func (m *AgentMutation) ClearVncProxyPort() {
+	m.vnc_proxy_port = nil
+	m.clearedFields[agent.FieldVncProxyPort] = struct{}{}
+}
+
+// VncProxyPortCleared returns if the "vnc_proxy_port" field was cleared in this mutation.
+func (m *AgentMutation) VncProxyPortCleared() bool {
+	_, ok := m.clearedFields[agent.FieldVncProxyPort]
+	return ok
+}
+
+// ResetVncProxyPort resets all changes to the "vnc_proxy_port" field.
+func (m *AgentMutation) ResetVncProxyPort() {
+	m.vnc_proxy_port = nil
+	delete(m.clearedFields, agent.FieldVncProxyPort)
+}
+
+// SetSftpPort sets the "sftp_port" field.
+func (m *AgentMutation) SetSftpPort(s string) {
+	m.sftp_port = &s
+}
+
+// SftpPort returns the value of the "sftp_port" field in the mutation.
+func (m *AgentMutation) SftpPort() (r string, exists bool) {
+	v := m.sftp_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSftpPort returns the old "sftp_port" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldSftpPort(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSftpPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSftpPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSftpPort: %w", err)
+	}
+	return oldValue.SftpPort, nil
+}
+
+// ClearSftpPort clears the value of the "sftp_port" field.
+func (m *AgentMutation) ClearSftpPort() {
+	m.sftp_port = nil
+	m.clearedFields[agent.FieldSftpPort] = struct{}{}
+}
+
+// SftpPortCleared returns if the "sftp_port" field was cleared in this mutation.
+func (m *AgentMutation) SftpPortCleared() bool {
+	_, ok := m.clearedFields[agent.FieldSftpPort]
+	return ok
+}
+
+// ResetSftpPort resets all changes to the "sftp_port" field.
+func (m *AgentMutation) ResetSftpPort() {
+	m.sftp_port = nil
+	delete(m.clearedFields, agent.FieldSftpPort)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -1629,7 +1729,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 16)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1672,6 +1772,12 @@ func (m *AgentMutation) Fields() []string {
 	if m.update_task_version != nil {
 		fields = append(fields, agent.FieldUpdateTaskVersion)
 	}
+	if m.vnc_proxy_port != nil {
+		fields = append(fields, agent.FieldVncProxyPort)
+	}
+	if m.sftp_port != nil {
+		fields = append(fields, agent.FieldSftpPort)
+	}
 	return fields
 }
 
@@ -1708,6 +1814,10 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdateTaskExecution()
 	case agent.FieldUpdateTaskVersion:
 		return m.UpdateTaskVersion()
+	case agent.FieldVncProxyPort:
+		return m.VncProxyPort()
+	case agent.FieldSftpPort:
+		return m.SftpPort()
 	}
 	return nil, false
 }
@@ -1745,6 +1855,10 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldUpdateTaskExecution(ctx)
 	case agent.FieldUpdateTaskVersion:
 		return m.OldUpdateTaskVersion(ctx)
+	case agent.FieldVncProxyPort:
+		return m.OldVncProxyPort(ctx)
+	case agent.FieldSftpPort:
+		return m.OldSftpPort(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1852,6 +1966,20 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdateTaskVersion(v)
 		return nil
+	case agent.FieldVncProxyPort:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVncProxyPort(v)
+		return nil
+	case agent.FieldSftpPort:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSftpPort(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1909,6 +2037,12 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldUpdateTaskVersion) {
 		fields = append(fields, agent.FieldUpdateTaskVersion)
 	}
+	if m.FieldCleared(agent.FieldVncProxyPort) {
+		fields = append(fields, agent.FieldVncProxyPort)
+	}
+	if m.FieldCleared(agent.FieldSftpPort) {
+		fields = append(fields, agent.FieldSftpPort)
+	}
 	return fields
 }
 
@@ -1949,6 +2083,12 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldUpdateTaskVersion:
 		m.ClearUpdateTaskVersion()
+		return nil
+	case agent.FieldVncProxyPort:
+		m.ClearVncProxyPort()
+		return nil
+	case agent.FieldSftpPort:
+		m.ClearSftpPort()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -1999,6 +2139,12 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldUpdateTaskVersion:
 		m.ResetUpdateTaskVersion()
+		return nil
+	case agent.FieldVncProxyPort:
+		m.ResetVncProxyPort()
+		return nil
+	case agent.FieldSftpPort:
+		m.ResetSftpPort()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
