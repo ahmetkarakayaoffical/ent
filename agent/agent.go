@@ -3,6 +3,8 @@
 package agent
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -44,6 +46,8 @@ const (
 	FieldVncProxyPort = "vnc_proxy_port"
 	// FieldSftpPort holds the string denoting the sftp_port field in the database.
 	FieldSftpPort = "sftp_port"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -230,6 +234,7 @@ var Columns = []string{
 	FieldUpdateTaskVersion,
 	FieldVncProxyPort,
 	FieldSftpPort,
+	FieldStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -287,6 +292,33 @@ var (
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
+
+// Status defines the type for the "status" enum field.
+type Status string
+
+// StatusWaitingForAdmission is the default value of the Status enum.
+const DefaultStatus = StatusWaitingForAdmission
+
+// Status values.
+const (
+	StatusWaitingForAdmission Status = "WaitingForAdmission"
+	StatusEnabled             Status = "Enabled"
+	StatusDisabled            Status = "Disabled"
+)
+
+func (s Status) String() string {
+	return string(s)
+}
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusWaitingForAdmission, StatusEnabled, StatusDisabled:
+		return nil
+	default:
+		return fmt.Errorf("agent: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Agent queries.
 type OrderOption func(*sql.Selector)
@@ -374,6 +406,11 @@ func ByVncProxyPort(opts ...sql.OrderTermOption) OrderOption {
 // BySftpPort orders the results by the sftp_port field.
 func BySftpPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSftpPort, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

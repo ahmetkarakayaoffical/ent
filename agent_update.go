@@ -334,6 +334,26 @@ func (au *AgentUpdate) ClearSftpPort() *AgentUpdate {
 	return au
 }
 
+// SetStatus sets the "status" field.
+func (au *AgentUpdate) SetStatus(a agent.Status) *AgentUpdate {
+	au.mutation.SetStatus(a)
+	return au
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableStatus(a *agent.Status) *AgentUpdate {
+	if a != nil {
+		au.SetStatus(*a)
+	}
+	return au
+}
+
+// ClearStatus clears the value of the "status" field.
+func (au *AgentUpdate) ClearStatus() *AgentUpdate {
+	au.mutation.ClearStatus()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -863,6 +883,11 @@ func (au *AgentUpdate) check() error {
 			return &ValidationError{Name: "hostname", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.hostname": %w`, err)}
 		}
 	}
+	if v, ok := au.mutation.Status(); ok {
+		if err := agent.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -964,6 +989,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.SftpPortCleared() {
 		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
+	}
+	if value, ok := au.mutation.Status(); ok {
+		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
+	}
+	if au.mutation.StatusCleared() {
+		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1872,6 +1903,26 @@ func (auo *AgentUpdateOne) ClearSftpPort() *AgentUpdateOne {
 	return auo
 }
 
+// SetStatus sets the "status" field.
+func (auo *AgentUpdateOne) SetStatus(a agent.Status) *AgentUpdateOne {
+	auo.mutation.SetStatus(a)
+	return auo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableStatus(a *agent.Status) *AgentUpdateOne {
+	if a != nil {
+		auo.SetStatus(*a)
+	}
+	return auo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (auo *AgentUpdateOne) ClearStatus() *AgentUpdateOne {
+	auo.mutation.ClearStatus()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2414,6 +2465,11 @@ func (auo *AgentUpdateOne) check() error {
 			return &ValidationError{Name: "hostname", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.hostname": %w`, err)}
 		}
 	}
+	if v, ok := auo.mutation.Status(); ok {
+		if err := agent.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2532,6 +2588,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.SftpPortCleared() {
 		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
+	}
+	if value, ok := auo.mutation.Status(); ok {
+		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
+	}
+	if auo.mutation.StatusCleared() {
+		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

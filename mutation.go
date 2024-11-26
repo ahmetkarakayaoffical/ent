@@ -91,6 +91,7 @@ type AgentMutation struct {
 	update_task_version     *string
 	vnc_proxy_port          *string
 	sftp_port               *string
+	status                  *agent.Status
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -960,6 +961,55 @@ func (m *AgentMutation) ResetSftpPort() {
 	delete(m.clearedFields, agent.FieldSftpPort)
 }
 
+// SetStatus sets the "status" field.
+func (m *AgentMutation) SetStatus(a agent.Status) {
+	m.status = &a
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *AgentMutation) Status() (r agent.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldStatus(ctx context.Context) (v agent.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *AgentMutation) ClearStatus() {
+	m.status = nil
+	m.clearedFields[agent.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *AgentMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[agent.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *AgentMutation) ResetStatus() {
+	m.status = nil
+	delete(m.clearedFields, agent.FieldStatus)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -1729,7 +1779,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1778,6 +1828,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.sftp_port != nil {
 		fields = append(fields, agent.FieldSftpPort)
 	}
+	if m.status != nil {
+		fields = append(fields, agent.FieldStatus)
+	}
 	return fields
 }
 
@@ -1818,6 +1871,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.VncProxyPort()
 	case agent.FieldSftpPort:
 		return m.SftpPort()
+	case agent.FieldStatus:
+		return m.Status()
 	}
 	return nil, false
 }
@@ -1859,6 +1914,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldVncProxyPort(ctx)
 	case agent.FieldSftpPort:
 		return m.OldSftpPort(ctx)
+	case agent.FieldStatus:
+		return m.OldStatus(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1980,6 +2037,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSftpPort(v)
 		return nil
+	case agent.FieldStatus:
+		v, ok := value.(agent.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2043,6 +2107,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldSftpPort) {
 		fields = append(fields, agent.FieldSftpPort)
 	}
+	if m.FieldCleared(agent.FieldStatus) {
+		fields = append(fields, agent.FieldStatus)
+	}
 	return fields
 }
 
@@ -2089,6 +2156,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldSftpPort:
 		m.ClearSftpPort()
+		return nil
+	case agent.FieldStatus:
+		m.ClearStatus()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2145,6 +2215,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldSftpPort:
 		m.ResetSftpPort()
+		return nil
+	case agent.FieldStatus:
+		m.ResetStatus()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

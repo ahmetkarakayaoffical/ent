@@ -1165,6 +1165,36 @@ func SftpPortContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldSftpPort, v))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldStatus))
+}
+
 // HasComputer applies the HasEdge predicate on the "computer" edge.
 func HasComputer() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
