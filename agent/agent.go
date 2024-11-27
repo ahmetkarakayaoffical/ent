@@ -26,8 +26,6 @@ const (
 	FieldFirstContact = "first_contact"
 	// FieldLastContact holds the string denoting the last_contact field in the database.
 	FieldLastContact = "last_contact"
-	// FieldEnabled holds the string denoting the enabled field in the database.
-	FieldEnabled = "enabled"
 	// FieldVnc holds the string denoting the vnc field in the database.
 	FieldVnc = "vnc"
 	// FieldNotes holds the string denoting the notes field in the database.
@@ -48,6 +46,8 @@ const (
 	FieldSftpPort = "sftp_port"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldCertificateReady holds the string denoting the certificate_ready field in the database.
+	FieldCertificateReady = "certificate_ready"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -224,7 +224,6 @@ var Columns = []string{
 	FieldMAC,
 	FieldFirstContact,
 	FieldLastContact,
-	FieldEnabled,
 	FieldVnc,
 	FieldNotes,
 	FieldUpdateTaskStatus,
@@ -235,6 +234,7 @@ var Columns = []string{
 	FieldVncProxyPort,
 	FieldSftpPort,
 	FieldStatus,
+	FieldCertificateReady,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -273,8 +273,6 @@ var (
 	DefaultIP string
 	// DefaultMAC holds the default value on creation for the "mac" field.
 	DefaultMAC string
-	// DefaultEnabled holds the default value on creation for the "enabled" field.
-	DefaultEnabled bool
 	// DefaultVnc holds the default value on creation for the "vnc" field.
 	DefaultVnc string
 	// DefaultUpdateTaskStatus holds the default value on creation for the "update_task_status" field.
@@ -289,6 +287,8 @@ var (
 	DefaultVncProxyPort string
 	// DefaultSftpPort holds the default value on creation for the "sftp_port" field.
 	DefaultSftpPort string
+	// DefaultCertificateReady holds the default value on creation for the "certificate_ready" field.
+	DefaultCertificateReady bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -358,11 +358,6 @@ func ByLastContact(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastContact, opts...).ToFunc()
 }
 
-// ByEnabled orders the results by the enabled field.
-func ByEnabled(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEnabled, opts...).ToFunc()
-}
-
 // ByVnc orders the results by the vnc field.
 func ByVnc(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVnc, opts...).ToFunc()
@@ -411,6 +406,11 @@ func BySftpPort(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByCertificateReady orders the results by the certificate_ready field.
+func ByCertificateReady(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCertificateReady, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

@@ -106,20 +106,6 @@ func (ac *AgentCreate) SetNillableLastContact(t *time.Time) *AgentCreate {
 	return ac
 }
 
-// SetEnabled sets the "enabled" field.
-func (ac *AgentCreate) SetEnabled(b bool) *AgentCreate {
-	ac.mutation.SetEnabled(b)
-	return ac
-}
-
-// SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (ac *AgentCreate) SetNillableEnabled(b *bool) *AgentCreate {
-	if b != nil {
-		ac.SetEnabled(*b)
-	}
-	return ac
-}
-
 // SetVnc sets the "vnc" field.
 func (ac *AgentCreate) SetVnc(s string) *AgentCreate {
 	ac.mutation.SetVnc(s)
@@ -256,6 +242,20 @@ func (ac *AgentCreate) SetStatus(a agent.Status) *AgentCreate {
 func (ac *AgentCreate) SetNillableStatus(a *agent.Status) *AgentCreate {
 	if a != nil {
 		ac.SetStatus(*a)
+	}
+	return ac
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (ac *AgentCreate) SetCertificateReady(b bool) *AgentCreate {
+	ac.mutation.SetCertificateReady(b)
+	return ac
+}
+
+// SetNillableCertificateReady sets the "certificate_ready" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableCertificateReady(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetCertificateReady(*b)
 	}
 	return ac
 }
@@ -554,10 +554,6 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultMAC
 		ac.mutation.SetMAC(v)
 	}
-	if _, ok := ac.mutation.Enabled(); !ok {
-		v := agent.DefaultEnabled
-		ac.mutation.SetEnabled(v)
-	}
 	if _, ok := ac.mutation.Vnc(); !ok {
 		v := agent.DefaultVnc
 		ac.mutation.SetVnc(v)
@@ -590,6 +586,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultStatus
 		ac.mutation.SetStatus(v)
 	}
+	if _, ok := ac.mutation.CertificateReady(); !ok {
+		v := agent.DefaultCertificateReady
+		ac.mutation.SetCertificateReady(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -615,9 +615,6 @@ func (ac *AgentCreate) check() error {
 	}
 	if _, ok := ac.mutation.MAC(); !ok {
 		return &ValidationError{Name: "mac", err: errors.New(`openuem_ent: missing required field "Agent.mac"`)}
-	}
-	if _, ok := ac.mutation.Enabled(); !ok {
-		return &ValidationError{Name: "enabled", err: errors.New(`openuem_ent: missing required field "Agent.enabled"`)}
 	}
 	if v, ok := ac.mutation.Status(); ok {
 		if err := agent.StatusValidator(v); err != nil {
@@ -689,10 +686,6 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		_spec.SetField(agent.FieldLastContact, field.TypeTime, value)
 		_node.LastContact = value
 	}
-	if value, ok := ac.mutation.Enabled(); ok {
-		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
-		_node.Enabled = value
-	}
 	if value, ok := ac.mutation.Vnc(); ok {
 		_spec.SetField(agent.FieldVnc, field.TypeString, value)
 		_node.Vnc = value
@@ -732,6 +725,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Status(); ok {
 		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := ac.mutation.CertificateReady(); ok {
+		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
+		_node.CertificateReady = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1110,18 +1107,6 @@ func (u *AgentUpsert) ClearLastContact() *AgentUpsert {
 	return u
 }
 
-// SetEnabled sets the "enabled" field.
-func (u *AgentUpsert) SetEnabled(v bool) *AgentUpsert {
-	u.Set(agent.FieldEnabled, v)
-	return u
-}
-
-// UpdateEnabled sets the "enabled" field to the value that was provided on create.
-func (u *AgentUpsert) UpdateEnabled() *AgentUpsert {
-	u.SetExcluded(agent.FieldEnabled)
-	return u
-}
-
 // SetVnc sets the "vnc" field.
 func (u *AgentUpsert) SetVnc(v string) *AgentUpsert {
 	u.Set(agent.FieldVnc, v)
@@ -1302,6 +1287,24 @@ func (u *AgentUpsert) ClearStatus() *AgentUpsert {
 	return u
 }
 
+// SetCertificateReady sets the "certificate_ready" field.
+func (u *AgentUpsert) SetCertificateReady(v bool) *AgentUpsert {
+	u.Set(agent.FieldCertificateReady, v)
+	return u
+}
+
+// UpdateCertificateReady sets the "certificate_ready" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateCertificateReady() *AgentUpsert {
+	u.SetExcluded(agent.FieldCertificateReady)
+	return u
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (u *AgentUpsert) ClearCertificateReady() *AgentUpsert {
+	u.SetNull(agent.FieldCertificateReady)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1445,20 +1448,6 @@ func (u *AgentUpsertOne) UpdateLastContact() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearLastContact() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearLastContact()
-	})
-}
-
-// SetEnabled sets the "enabled" field.
-func (u *AgentUpsertOne) SetEnabled(v bool) *AgentUpsertOne {
-	return u.Update(func(s *AgentUpsert) {
-		s.SetEnabled(v)
-	})
-}
-
-// UpdateEnabled sets the "enabled" field to the value that was provided on create.
-func (u *AgentUpsertOne) UpdateEnabled() *AgentUpsertOne {
-	return u.Update(func(s *AgentUpsert) {
-		s.UpdateEnabled()
 	})
 }
 
@@ -1669,6 +1658,27 @@ func (u *AgentUpsertOne) UpdateStatus() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearStatus() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearStatus()
+	})
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (u *AgentUpsertOne) SetCertificateReady(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetCertificateReady(v)
+	})
+}
+
+// UpdateCertificateReady sets the "certificate_ready" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateCertificateReady() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateCertificateReady()
+	})
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (u *AgentUpsertOne) ClearCertificateReady() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearCertificateReady()
 	})
 }
 
@@ -1985,20 +1995,6 @@ func (u *AgentUpsertBulk) ClearLastContact() *AgentUpsertBulk {
 	})
 }
 
-// SetEnabled sets the "enabled" field.
-func (u *AgentUpsertBulk) SetEnabled(v bool) *AgentUpsertBulk {
-	return u.Update(func(s *AgentUpsert) {
-		s.SetEnabled(v)
-	})
-}
-
-// UpdateEnabled sets the "enabled" field to the value that was provided on create.
-func (u *AgentUpsertBulk) UpdateEnabled() *AgentUpsertBulk {
-	return u.Update(func(s *AgentUpsert) {
-		s.UpdateEnabled()
-	})
-}
-
 // SetVnc sets the "vnc" field.
 func (u *AgentUpsertBulk) SetVnc(v string) *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
@@ -2206,6 +2202,27 @@ func (u *AgentUpsertBulk) UpdateStatus() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearStatus() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearStatus()
+	})
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (u *AgentUpsertBulk) SetCertificateReady(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetCertificateReady(v)
+	})
+}
+
+// UpdateCertificateReady sets the "certificate_ready" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateCertificateReady() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateCertificateReady()
+	})
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (u *AgentUpsertBulk) ClearCertificateReady() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearCertificateReady()
 	})
 }
 

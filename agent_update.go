@@ -140,20 +140,6 @@ func (au *AgentUpdate) ClearLastContact() *AgentUpdate {
 	return au
 }
 
-// SetEnabled sets the "enabled" field.
-func (au *AgentUpdate) SetEnabled(b bool) *AgentUpdate {
-	au.mutation.SetEnabled(b)
-	return au
-}
-
-// SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (au *AgentUpdate) SetNillableEnabled(b *bool) *AgentUpdate {
-	if b != nil {
-		au.SetEnabled(*b)
-	}
-	return au
-}
-
 // SetVnc sets the "vnc" field.
 func (au *AgentUpdate) SetVnc(s string) *AgentUpdate {
 	au.mutation.SetVnc(s)
@@ -351,6 +337,26 @@ func (au *AgentUpdate) SetNillableStatus(a *agent.Status) *AgentUpdate {
 // ClearStatus clears the value of the "status" field.
 func (au *AgentUpdate) ClearStatus() *AgentUpdate {
 	au.mutation.ClearStatus()
+	return au
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (au *AgentUpdate) SetCertificateReady(b bool) *AgentUpdate {
+	au.mutation.SetCertificateReady(b)
+	return au
+}
+
+// SetNillableCertificateReady sets the "certificate_ready" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableCertificateReady(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetCertificateReady(*b)
+	}
+	return au
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (au *AgentUpdate) ClearCertificateReady() *AgentUpdate {
+	au.mutation.ClearCertificateReady()
 	return au
 }
 
@@ -933,9 +939,6 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.LastContactCleared() {
 		_spec.ClearField(agent.FieldLastContact, field.TypeTime)
 	}
-	if value, ok := au.mutation.Enabled(); ok {
-		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
-	}
 	if value, ok := au.mutation.Vnc(); ok {
 		_spec.SetField(agent.FieldVnc, field.TypeString, value)
 	}
@@ -995,6 +998,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.StatusCleared() {
 		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := au.mutation.CertificateReady(); ok {
+		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
+	}
+	if au.mutation.CertificateReadyCleared() {
+		_spec.ClearField(agent.FieldCertificateReady, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1709,20 +1718,6 @@ func (auo *AgentUpdateOne) ClearLastContact() *AgentUpdateOne {
 	return auo
 }
 
-// SetEnabled sets the "enabled" field.
-func (auo *AgentUpdateOne) SetEnabled(b bool) *AgentUpdateOne {
-	auo.mutation.SetEnabled(b)
-	return auo
-}
-
-// SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (auo *AgentUpdateOne) SetNillableEnabled(b *bool) *AgentUpdateOne {
-	if b != nil {
-		auo.SetEnabled(*b)
-	}
-	return auo
-}
-
 // SetVnc sets the "vnc" field.
 func (auo *AgentUpdateOne) SetVnc(s string) *AgentUpdateOne {
 	auo.mutation.SetVnc(s)
@@ -1920,6 +1915,26 @@ func (auo *AgentUpdateOne) SetNillableStatus(a *agent.Status) *AgentUpdateOne {
 // ClearStatus clears the value of the "status" field.
 func (auo *AgentUpdateOne) ClearStatus() *AgentUpdateOne {
 	auo.mutation.ClearStatus()
+	return auo
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (auo *AgentUpdateOne) SetCertificateReady(b bool) *AgentUpdateOne {
+	auo.mutation.SetCertificateReady(b)
+	return auo
+}
+
+// SetNillableCertificateReady sets the "certificate_ready" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableCertificateReady(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetCertificateReady(*b)
+	}
+	return auo
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (auo *AgentUpdateOne) ClearCertificateReady() *AgentUpdateOne {
+	auo.mutation.ClearCertificateReady()
 	return auo
 }
 
@@ -2532,9 +2547,6 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	if auo.mutation.LastContactCleared() {
 		_spec.ClearField(agent.FieldLastContact, field.TypeTime)
 	}
-	if value, ok := auo.mutation.Enabled(); ok {
-		_spec.SetField(agent.FieldEnabled, field.TypeBool, value)
-	}
 	if value, ok := auo.mutation.Vnc(); ok {
 		_spec.SetField(agent.FieldVnc, field.TypeString, value)
 	}
@@ -2594,6 +2606,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.StatusCleared() {
 		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := auo.mutation.CertificateReady(); ok {
+		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
+	}
+	if auo.mutation.CertificateReadyCleared() {
+		_spec.ClearField(agent.FieldCertificateReady, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -81,7 +81,6 @@ type AgentMutation struct {
 	mac                     *string
 	first_contact           *time.Time
 	last_contact            *time.Time
-	enabled                 *bool
 	vnc                     *string
 	notes                   *string
 	update_task_status      *string
@@ -92,6 +91,7 @@ type AgentMutation struct {
 	vnc_proxy_port          *string
 	sftp_port               *string
 	status                  *agent.Status
+	certificate_ready       *bool
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -482,42 +482,6 @@ func (m *AgentMutation) LastContactCleared() bool {
 func (m *AgentMutation) ResetLastContact() {
 	m.last_contact = nil
 	delete(m.clearedFields, agent.FieldLastContact)
-}
-
-// SetEnabled sets the "enabled" field.
-func (m *AgentMutation) SetEnabled(b bool) {
-	m.enabled = &b
-}
-
-// Enabled returns the value of the "enabled" field in the mutation.
-func (m *AgentMutation) Enabled() (r bool, exists bool) {
-	v := m.enabled
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEnabled returns the old "enabled" field's value of the Agent entity.
-// If the Agent object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AgentMutation) OldEnabled(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEnabled is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEnabled requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEnabled: %w", err)
-	}
-	return oldValue.Enabled, nil
-}
-
-// ResetEnabled resets all changes to the "enabled" field.
-func (m *AgentMutation) ResetEnabled() {
-	m.enabled = nil
 }
 
 // SetVnc sets the "vnc" field.
@@ -1008,6 +972,55 @@ func (m *AgentMutation) StatusCleared() bool {
 func (m *AgentMutation) ResetStatus() {
 	m.status = nil
 	delete(m.clearedFields, agent.FieldStatus)
+}
+
+// SetCertificateReady sets the "certificate_ready" field.
+func (m *AgentMutation) SetCertificateReady(b bool) {
+	m.certificate_ready = &b
+}
+
+// CertificateReady returns the value of the "certificate_ready" field in the mutation.
+func (m *AgentMutation) CertificateReady() (r bool, exists bool) {
+	v := m.certificate_ready
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCertificateReady returns the old "certificate_ready" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldCertificateReady(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCertificateReady is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCertificateReady requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCertificateReady: %w", err)
+	}
+	return oldValue.CertificateReady, nil
+}
+
+// ClearCertificateReady clears the value of the "certificate_ready" field.
+func (m *AgentMutation) ClearCertificateReady() {
+	m.certificate_ready = nil
+	m.clearedFields[agent.FieldCertificateReady] = struct{}{}
+}
+
+// CertificateReadyCleared returns if the "certificate_ready" field was cleared in this mutation.
+func (m *AgentMutation) CertificateReadyCleared() bool {
+	_, ok := m.clearedFields[agent.FieldCertificateReady]
+	return ok
+}
+
+// ResetCertificateReady resets all changes to the "certificate_ready" field.
+func (m *AgentMutation) ResetCertificateReady() {
+	m.certificate_ready = nil
+	delete(m.clearedFields, agent.FieldCertificateReady)
 }
 
 // SetComputerID sets the "computer" edge to the Computer entity by id.
@@ -1798,9 +1811,6 @@ func (m *AgentMutation) Fields() []string {
 	if m.last_contact != nil {
 		fields = append(fields, agent.FieldLastContact)
 	}
-	if m.enabled != nil {
-		fields = append(fields, agent.FieldEnabled)
-	}
 	if m.vnc != nil {
 		fields = append(fields, agent.FieldVnc)
 	}
@@ -1831,6 +1841,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, agent.FieldStatus)
 	}
+	if m.certificate_ready != nil {
+		fields = append(fields, agent.FieldCertificateReady)
+	}
 	return fields
 }
 
@@ -1851,8 +1864,6 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.FirstContact()
 	case agent.FieldLastContact:
 		return m.LastContact()
-	case agent.FieldEnabled:
-		return m.Enabled()
 	case agent.FieldVnc:
 		return m.Vnc()
 	case agent.FieldNotes:
@@ -1873,6 +1884,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.SftpPort()
 	case agent.FieldStatus:
 		return m.Status()
+	case agent.FieldCertificateReady:
+		return m.CertificateReady()
 	}
 	return nil, false
 }
@@ -1894,8 +1907,6 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldFirstContact(ctx)
 	case agent.FieldLastContact:
 		return m.OldLastContact(ctx)
-	case agent.FieldEnabled:
-		return m.OldEnabled(ctx)
 	case agent.FieldVnc:
 		return m.OldVnc(ctx)
 	case agent.FieldNotes:
@@ -1916,6 +1927,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldSftpPort(ctx)
 	case agent.FieldStatus:
 		return m.OldStatus(ctx)
+	case agent.FieldCertificateReady:
+		return m.OldCertificateReady(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -1966,13 +1979,6 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLastContact(v)
-		return nil
-	case agent.FieldEnabled:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEnabled(v)
 		return nil
 	case agent.FieldVnc:
 		v, ok := value.(string)
@@ -2044,6 +2050,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case agent.FieldCertificateReady:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCertificateReady(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2110,6 +2123,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldStatus) {
 		fields = append(fields, agent.FieldStatus)
 	}
+	if m.FieldCleared(agent.FieldCertificateReady) {
+		fields = append(fields, agent.FieldCertificateReady)
+	}
 	return fields
 }
 
@@ -2160,6 +2176,9 @@ func (m *AgentMutation) ClearField(name string) error {
 	case agent.FieldStatus:
 		m.ClearStatus()
 		return nil
+	case agent.FieldCertificateReady:
+		m.ClearCertificateReady()
+		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
 }
@@ -2185,9 +2204,6 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldLastContact:
 		m.ResetLastContact()
-		return nil
-	case agent.FieldEnabled:
-		m.ResetEnabled()
 		return nil
 	case agent.FieldVnc:
 		m.ResetVnc()
@@ -2218,6 +2234,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case agent.FieldCertificateReady:
+		m.ResetCertificateReady()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

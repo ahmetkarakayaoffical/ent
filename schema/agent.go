@@ -22,7 +22,6 @@ func (Agent) Fields() []ent.Field {
 		field.String("mac").Default(""),
 		field.Time("first_contact").Optional(),
 		field.Time("last_contact").Optional(),
-		field.Bool("enabled").Default(true),
 		field.String("vnc").Optional().Default(""),
 		field.Text("notes").Optional(),
 		field.String("update_task_status").Optional().Default(""),
@@ -33,6 +32,7 @@ func (Agent) Fields() []ent.Field {
 		field.String("vnc_proxy_port").Optional().Default(""),
 		field.String("sftp_port").Optional().Default(""),
 		field.Enum("status").Values("WaitingForAdmission", "Enabled", "Disabled").Optional().Default("WaitingForAdmission"),
+		field.Bool("certificate_ready").Optional().Default(false),
 	}
 }
 

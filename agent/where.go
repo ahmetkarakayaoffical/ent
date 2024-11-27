@@ -95,11 +95,6 @@ func LastContact(v time.Time) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldLastContact, v))
 }
 
-// Enabled applies equality check predicate on the "enabled" field. It's identical to EnabledEQ.
-func Enabled(v bool) predicate.Agent {
-	return predicate.Agent(sql.FieldEQ(FieldEnabled, v))
-}
-
 // Vnc applies equality check predicate on the "vnc" field. It's identical to VncEQ.
 func Vnc(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldVnc, v))
@@ -143,6 +138,11 @@ func VncProxyPort(v string) predicate.Agent {
 // SftpPort applies equality check predicate on the "sftp_port" field. It's identical to SftpPortEQ.
 func SftpPort(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldSftpPort, v))
+}
+
+// CertificateReady applies equality check predicate on the "certificate_ready" field. It's identical to CertificateReadyEQ.
+func CertificateReady(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldCertificateReady, v))
 }
 
 // OsEQ applies the EQ predicate on the "os" field.
@@ -503,16 +503,6 @@ func LastContactIsNil() predicate.Agent {
 // LastContactNotNil applies the NotNil predicate on the "last_contact" field.
 func LastContactNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldLastContact))
-}
-
-// EnabledEQ applies the EQ predicate on the "enabled" field.
-func EnabledEQ(v bool) predicate.Agent {
-	return predicate.Agent(sql.FieldEQ(FieldEnabled, v))
-}
-
-// EnabledNEQ applies the NEQ predicate on the "enabled" field.
-func EnabledNEQ(v bool) predicate.Agent {
-	return predicate.Agent(sql.FieldNEQ(FieldEnabled, v))
 }
 
 // VncEQ applies the EQ predicate on the "vnc" field.
@@ -1193,6 +1183,26 @@ func StatusIsNil() predicate.Agent {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldStatus))
+}
+
+// CertificateReadyEQ applies the EQ predicate on the "certificate_ready" field.
+func CertificateReadyEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldCertificateReady, v))
+}
+
+// CertificateReadyNEQ applies the NEQ predicate on the "certificate_ready" field.
+func CertificateReadyNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldCertificateReady, v))
+}
+
+// CertificateReadyIsNil applies the IsNil predicate on the "certificate_ready" field.
+func CertificateReadyIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldCertificateReady))
+}
+
+// CertificateReadyNotNil applies the NotNil predicate on the "certificate_ready" field.
+func CertificateReadyNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldCertificateReady))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

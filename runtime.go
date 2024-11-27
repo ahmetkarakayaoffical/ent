@@ -39,38 +39,38 @@ func init() {
 	agentDescMAC := agentFields[4].Descriptor()
 	// agent.DefaultMAC holds the default value on creation for the mac field.
 	agent.DefaultMAC = agentDescMAC.Default.(string)
-	// agentDescEnabled is the schema descriptor for enabled field.
-	agentDescEnabled := agentFields[7].Descriptor()
-	// agent.DefaultEnabled holds the default value on creation for the enabled field.
-	agent.DefaultEnabled = agentDescEnabled.Default.(bool)
 	// agentDescVnc is the schema descriptor for vnc field.
-	agentDescVnc := agentFields[8].Descriptor()
+	agentDescVnc := agentFields[7].Descriptor()
 	// agent.DefaultVnc holds the default value on creation for the vnc field.
 	agent.DefaultVnc = agentDescVnc.Default.(string)
 	// agentDescUpdateTaskStatus is the schema descriptor for update_task_status field.
-	agentDescUpdateTaskStatus := agentFields[10].Descriptor()
+	agentDescUpdateTaskStatus := agentFields[9].Descriptor()
 	// agent.DefaultUpdateTaskStatus holds the default value on creation for the update_task_status field.
 	agent.DefaultUpdateTaskStatus = agentDescUpdateTaskStatus.Default.(string)
 	// agentDescUpdateTaskDescription is the schema descriptor for update_task_description field.
-	agentDescUpdateTaskDescription := agentFields[11].Descriptor()
+	agentDescUpdateTaskDescription := agentFields[10].Descriptor()
 	// agent.DefaultUpdateTaskDescription holds the default value on creation for the update_task_description field.
 	agent.DefaultUpdateTaskDescription = agentDescUpdateTaskDescription.Default.(string)
 	// agentDescUpdateTaskResult is the schema descriptor for update_task_result field.
-	agentDescUpdateTaskResult := agentFields[12].Descriptor()
+	agentDescUpdateTaskResult := agentFields[11].Descriptor()
 	// agent.DefaultUpdateTaskResult holds the default value on creation for the update_task_result field.
 	agent.DefaultUpdateTaskResult = agentDescUpdateTaskResult.Default.(string)
 	// agentDescUpdateTaskVersion is the schema descriptor for update_task_version field.
-	agentDescUpdateTaskVersion := agentFields[14].Descriptor()
+	agentDescUpdateTaskVersion := agentFields[13].Descriptor()
 	// agent.DefaultUpdateTaskVersion holds the default value on creation for the update_task_version field.
 	agent.DefaultUpdateTaskVersion = agentDescUpdateTaskVersion.Default.(string)
 	// agentDescVncProxyPort is the schema descriptor for vnc_proxy_port field.
-	agentDescVncProxyPort := agentFields[15].Descriptor()
+	agentDescVncProxyPort := agentFields[14].Descriptor()
 	// agent.DefaultVncProxyPort holds the default value on creation for the vnc_proxy_port field.
 	agent.DefaultVncProxyPort = agentDescVncProxyPort.Default.(string)
 	// agentDescSftpPort is the schema descriptor for sftp_port field.
-	agentDescSftpPort := agentFields[16].Descriptor()
+	agentDescSftpPort := agentFields[15].Descriptor()
 	// agent.DefaultSftpPort holds the default value on creation for the sftp_port field.
 	agent.DefaultSftpPort = agentDescSftpPort.Default.(string)
+	// agentDescCertificateReady is the schema descriptor for certificate_ready field.
+	agentDescCertificateReady := agentFields[17].Descriptor()
+	// agent.DefaultCertificateReady holds the default value on creation for the certificate_ready field.
+	agent.DefaultCertificateReady = agentDescCertificateReady.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

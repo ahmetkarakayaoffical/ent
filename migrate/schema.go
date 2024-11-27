@@ -17,7 +17,6 @@ var (
 		{Name: "mac", Type: field.TypeString, Default: ""},
 		{Name: "first_contact", Type: field.TypeTime, Nullable: true},
 		{Name: "last_contact", Type: field.TypeTime, Nullable: true},
-		{Name: "enabled", Type: field.TypeBool, Default: true},
 		{Name: "vnc", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "update_task_status", Type: field.TypeString, Nullable: true, Default: ""},
@@ -28,6 +27,7 @@ var (
 		{Name: "vnc_proxy_port", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "sftp_port", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled"}, Default: "WaitingForAdmission"},
+		{Name: "certificate_ready", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
