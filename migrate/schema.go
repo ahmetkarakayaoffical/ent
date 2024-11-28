@@ -350,9 +350,9 @@ var (
 		PrimaryKey: []*schema.Column{ReleasesColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "release_version_channel_os_arch",
+				Name:    "release_release_type_version_channel_os_arch",
 				Unique:  true,
-				Columns: []*schema.Column{ReleasesColumns[2], ReleasesColumns[3], ReleasesColumns[10], ReleasesColumns[11]},
+				Columns: []*schema.Column{ReleasesColumns[1], ReleasesColumns[2], ReleasesColumns[3], ReleasesColumns[10], ReleasesColumns[11]},
 			},
 		},
 	}

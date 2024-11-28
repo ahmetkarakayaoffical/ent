@@ -38,6 +38,6 @@ func (Release) Edges() []ent.Edge {
 // Indexes of the Release.
 func (Release) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("version", "channel", "os", "arch").Unique(),
+		index.Fields("release_type", "version", "channel", "os", "arch").Unique(),
 	}
 }
