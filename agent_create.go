@@ -260,6 +260,20 @@ func (ac *AgentCreate) SetNillableCertificateReady(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetRestartRequired sets the "restart_required" field.
+func (ac *AgentCreate) SetRestartRequired(b bool) *AgentCreate {
+	ac.mutation.SetRestartRequired(b)
+	return ac
+}
+
+// SetNillableRestartRequired sets the "restart_required" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableRestartRequired(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetRestartRequired(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -590,6 +604,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultCertificateReady
 		ac.mutation.SetCertificateReady(v)
 	}
+	if _, ok := ac.mutation.RestartRequired(); !ok {
+		v := agent.DefaultRestartRequired
+		ac.mutation.SetRestartRequired(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -729,6 +747,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.CertificateReady(); ok {
 		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
 		_node.CertificateReady = value
+	}
+	if value, ok := ac.mutation.RestartRequired(); ok {
+		_spec.SetField(agent.FieldRestartRequired, field.TypeBool, value)
+		_node.RestartRequired = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1305,6 +1327,24 @@ func (u *AgentUpsert) ClearCertificateReady() *AgentUpsert {
 	return u
 }
 
+// SetRestartRequired sets the "restart_required" field.
+func (u *AgentUpsert) SetRestartRequired(v bool) *AgentUpsert {
+	u.Set(agent.FieldRestartRequired, v)
+	return u
+}
+
+// UpdateRestartRequired sets the "restart_required" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateRestartRequired() *AgentUpsert {
+	u.SetExcluded(agent.FieldRestartRequired)
+	return u
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (u *AgentUpsert) ClearRestartRequired() *AgentUpsert {
+	u.SetNull(agent.FieldRestartRequired)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1679,6 +1719,27 @@ func (u *AgentUpsertOne) UpdateCertificateReady() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearCertificateReady() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearCertificateReady()
+	})
+}
+
+// SetRestartRequired sets the "restart_required" field.
+func (u *AgentUpsertOne) SetRestartRequired(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetRestartRequired(v)
+	})
+}
+
+// UpdateRestartRequired sets the "restart_required" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateRestartRequired() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateRestartRequired()
+	})
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (u *AgentUpsertOne) ClearRestartRequired() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearRestartRequired()
 	})
 }
 
@@ -2223,6 +2284,27 @@ func (u *AgentUpsertBulk) UpdateCertificateReady() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearCertificateReady() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearCertificateReady()
+	})
+}
+
+// SetRestartRequired sets the "restart_required" field.
+func (u *AgentUpsertBulk) SetRestartRequired(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetRestartRequired(v)
+	})
+}
+
+// UpdateRestartRequired sets the "restart_required" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateRestartRequired() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateRestartRequired()
+	})
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (u *AgentUpsertBulk) ClearRestartRequired() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearRestartRequired()
 	})
 }
 

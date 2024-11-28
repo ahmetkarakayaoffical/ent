@@ -360,6 +360,26 @@ func (au *AgentUpdate) ClearCertificateReady() *AgentUpdate {
 	return au
 }
 
+// SetRestartRequired sets the "restart_required" field.
+func (au *AgentUpdate) SetRestartRequired(b bool) *AgentUpdate {
+	au.mutation.SetRestartRequired(b)
+	return au
+}
+
+// SetNillableRestartRequired sets the "restart_required" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableRestartRequired(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetRestartRequired(*b)
+	}
+	return au
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (au *AgentUpdate) ClearRestartRequired() *AgentUpdate {
+	au.mutation.ClearRestartRequired()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1004,6 +1024,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.CertificateReadyCleared() {
 		_spec.ClearField(agent.FieldCertificateReady, field.TypeBool)
+	}
+	if value, ok := au.mutation.RestartRequired(); ok {
+		_spec.SetField(agent.FieldRestartRequired, field.TypeBool, value)
+	}
+	if au.mutation.RestartRequiredCleared() {
+		_spec.ClearField(agent.FieldRestartRequired, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1938,6 +1964,26 @@ func (auo *AgentUpdateOne) ClearCertificateReady() *AgentUpdateOne {
 	return auo
 }
 
+// SetRestartRequired sets the "restart_required" field.
+func (auo *AgentUpdateOne) SetRestartRequired(b bool) *AgentUpdateOne {
+	auo.mutation.SetRestartRequired(b)
+	return auo
+}
+
+// SetNillableRestartRequired sets the "restart_required" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableRestartRequired(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetRestartRequired(*b)
+	}
+	return auo
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (auo *AgentUpdateOne) ClearRestartRequired() *AgentUpdateOne {
+	auo.mutation.ClearRestartRequired()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2612,6 +2658,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.CertificateReadyCleared() {
 		_spec.ClearField(agent.FieldCertificateReady, field.TypeBool)
+	}
+	if value, ok := auo.mutation.RestartRequired(); ok {
+		_spec.SetField(agent.FieldRestartRequired, field.TypeBool, value)
+	}
+	if auo.mutation.RestartRequiredCleared() {
+		_spec.ClearField(agent.FieldRestartRequired, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

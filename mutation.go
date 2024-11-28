@@ -92,6 +92,7 @@ type AgentMutation struct {
 	sftp_port               *string
 	status                  *agent.Status
 	certificate_ready       *bool
+	restart_required        *bool
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -1023,6 +1024,55 @@ func (m *AgentMutation) ResetCertificateReady() {
 	delete(m.clearedFields, agent.FieldCertificateReady)
 }
 
+// SetRestartRequired sets the "restart_required" field.
+func (m *AgentMutation) SetRestartRequired(b bool) {
+	m.restart_required = &b
+}
+
+// RestartRequired returns the value of the "restart_required" field in the mutation.
+func (m *AgentMutation) RestartRequired() (r bool, exists bool) {
+	v := m.restart_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRestartRequired returns the old "restart_required" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldRestartRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRestartRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRestartRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRestartRequired: %w", err)
+	}
+	return oldValue.RestartRequired, nil
+}
+
+// ClearRestartRequired clears the value of the "restart_required" field.
+func (m *AgentMutation) ClearRestartRequired() {
+	m.restart_required = nil
+	m.clearedFields[agent.FieldRestartRequired] = struct{}{}
+}
+
+// RestartRequiredCleared returns if the "restart_required" field was cleared in this mutation.
+func (m *AgentMutation) RestartRequiredCleared() bool {
+	_, ok := m.clearedFields[agent.FieldRestartRequired]
+	return ok
+}
+
+// ResetRestartRequired resets all changes to the "restart_required" field.
+func (m *AgentMutation) ResetRestartRequired() {
+	m.restart_required = nil
+	delete(m.clearedFields, agent.FieldRestartRequired)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -1792,7 +1842,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1844,6 +1894,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.certificate_ready != nil {
 		fields = append(fields, agent.FieldCertificateReady)
 	}
+	if m.restart_required != nil {
+		fields = append(fields, agent.FieldRestartRequired)
+	}
 	return fields
 }
 
@@ -1886,6 +1939,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case agent.FieldCertificateReady:
 		return m.CertificateReady()
+	case agent.FieldRestartRequired:
+		return m.RestartRequired()
 	}
 	return nil, false
 }
@@ -1929,6 +1984,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldStatus(ctx)
 	case agent.FieldCertificateReady:
 		return m.OldCertificateReady(ctx)
+	case agent.FieldRestartRequired:
+		return m.OldRestartRequired(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2057,6 +2114,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCertificateReady(v)
 		return nil
+	case agent.FieldRestartRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRestartRequired(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2126,6 +2190,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldCertificateReady) {
 		fields = append(fields, agent.FieldCertificateReady)
 	}
+	if m.FieldCleared(agent.FieldRestartRequired) {
+		fields = append(fields, agent.FieldRestartRequired)
+	}
 	return fields
 }
 
@@ -2178,6 +2245,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldCertificateReady:
 		m.ClearCertificateReady()
+		return nil
+	case agent.FieldRestartRequired:
+		m.ClearRestartRequired()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2237,6 +2307,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldCertificateReady:
 		m.ResetCertificateReady()
+		return nil
+	case agent.FieldRestartRequired:
+		m.ResetRestartRequired()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

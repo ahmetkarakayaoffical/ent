@@ -33,6 +33,7 @@ func (Agent) Fields() []ent.Field {
 		field.String("sftp_port").Optional().Default(""),
 		field.Enum("status").Values("WaitingForAdmission", "Enabled", "Disabled").Optional().Default("WaitingForAdmission"),
 		field.Bool("certificate_ready").Optional().Default(false),
+		field.Bool("restart_required").Optional().Default(false),
 	}
 }
 

@@ -56,6 +56,8 @@ type Agent struct {
 	Status agent.Status `json:"status,omitempty"`
 	// CertificateReady holds the value of the "certificate_ready" field.
 	CertificateReady bool `json:"certificate_ready,omitempty"`
+	// RestartRequired holds the value of the "restart_required" field.
+	RestartRequired bool `json:"restart_required,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
@@ -250,7 +252,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case agent.FieldCertificateReady:
+		case agent.FieldCertificateReady, agent.FieldRestartRequired:
 			values[i] = new(sql.NullBool)
 		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -380,6 +382,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field certificate_ready", values[i])
 			} else if value.Valid {
 				a.CertificateReady = value.Bool
+			}
+		case agent.FieldRestartRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field restart_required", values[i])
+			} else if value.Valid {
+				a.RestartRequired = value.Bool
 			}
 		case agent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -549,6 +557,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("certificate_ready=")
 	builder.WriteString(fmt.Sprintf("%v", a.CertificateReady))
+	builder.WriteString(", ")
+	builder.WriteString("restart_required=")
+	builder.WriteString(fmt.Sprintf("%v", a.RestartRequired))
 	builder.WriteByte(')')
 	return builder.String()
 }

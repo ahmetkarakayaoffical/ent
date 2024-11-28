@@ -145,6 +145,11 @@ func CertificateReady(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldCertificateReady, v))
 }
 
+// RestartRequired applies equality check predicate on the "restart_required" field. It's identical to RestartRequiredEQ.
+func RestartRequired(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldRestartRequired, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1203,6 +1208,26 @@ func CertificateReadyIsNil() predicate.Agent {
 // CertificateReadyNotNil applies the NotNil predicate on the "certificate_ready" field.
 func CertificateReadyNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldCertificateReady))
+}
+
+// RestartRequiredEQ applies the EQ predicate on the "restart_required" field.
+func RestartRequiredEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldRestartRequired, v))
+}
+
+// RestartRequiredNEQ applies the NEQ predicate on the "restart_required" field.
+func RestartRequiredNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldRestartRequired, v))
+}
+
+// RestartRequiredIsNil applies the IsNil predicate on the "restart_required" field.
+func RestartRequiredIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldRestartRequired))
+}
+
+// RestartRequiredNotNil applies the NotNil predicate on the "restart_required" field.
+func RestartRequiredNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldRestartRequired))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

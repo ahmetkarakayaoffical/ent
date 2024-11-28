@@ -71,6 +71,10 @@ func init() {
 	agentDescCertificateReady := agentFields[17].Descriptor()
 	// agent.DefaultCertificateReady holds the default value on creation for the certificate_ready field.
 	agent.DefaultCertificateReady = agentDescCertificateReady.Default.(bool)
+	// agentDescRestartRequired is the schema descriptor for restart_required field.
+	agentDescRestartRequired := agentFields[18].Descriptor()
+	// agent.DefaultRestartRequired holds the default value on creation for the restart_required field.
+	agent.DefaultRestartRequired = agentDescRestartRequired.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
