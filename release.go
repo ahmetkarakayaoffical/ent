@@ -17,6 +17,8 @@ type Release struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// ReleaseType holds the value of the "release_type" field.
+	ReleaseType release.ReleaseType `json:"release_type,omitempty"`
 	// Version holds the value of the "version" field.
 	Version string `json:"version,omitempty"`
 	// Channel holds the value of the "channel" field.
@@ -70,7 +72,7 @@ func (*Release) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case release.FieldID:
 			values[i] = new(sql.NullInt64)
-		case release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldOs, release.FieldArch:
+		case release.FieldReleaseType, release.FieldVersion, release.FieldChannel, release.FieldSummary, release.FieldReleaseNotes, release.FieldFileURL, release.FieldChecksum, release.FieldOs, release.FieldArch:
 			values[i] = new(sql.NullString)
 		case release.FieldReleaseDate:
 			values[i] = new(sql.NullTime)
@@ -95,6 +97,12 @@ func (r *Release) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			r.ID = int(value.Int64)
+		case release.FieldReleaseType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field release_type", values[i])
+			} else if value.Valid {
+				r.ReleaseType = release.ReleaseType(value.String)
+			}
 		case release.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
@@ -196,6 +204,9 @@ func (r *Release) String() string {
 	var builder strings.Builder
 	builder.WriteString("Release(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString("release_type=")
+	builder.WriteString(fmt.Sprintf("%v", r.ReleaseType))
+	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(r.Version)
 	builder.WriteString(", ")

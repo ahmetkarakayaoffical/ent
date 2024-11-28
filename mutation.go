@@ -10885,6 +10885,7 @@ type ReleaseMutation struct {
 	op            Op
 	typ           string
 	id            *int
+	release_type  *release.ReleaseType
 	version       *string
 	channel       *string
 	summary       *string
@@ -11000,6 +11001,55 @@ func (m *ReleaseMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetReleaseType sets the "release_type" field.
+func (m *ReleaseMutation) SetReleaseType(rt release.ReleaseType) {
+	m.release_type = &rt
+}
+
+// ReleaseType returns the value of the "release_type" field in the mutation.
+func (m *ReleaseMutation) ReleaseType() (r release.ReleaseType, exists bool) {
+	v := m.release_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReleaseType returns the old "release_type" field's value of the Release entity.
+// If the Release object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReleaseMutation) OldReleaseType(ctx context.Context) (v release.ReleaseType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReleaseType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReleaseType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReleaseType: %w", err)
+	}
+	return oldValue.ReleaseType, nil
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (m *ReleaseMutation) ClearReleaseType() {
+	m.release_type = nil
+	m.clearedFields[release.FieldReleaseType] = struct{}{}
+}
+
+// ReleaseTypeCleared returns if the "release_type" field was cleared in this mutation.
+func (m *ReleaseMutation) ReleaseTypeCleared() bool {
+	_, ok := m.clearedFields[release.FieldReleaseType]
+	return ok
+}
+
+// ResetReleaseType resets all changes to the "release_type" field.
+func (m *ReleaseMutation) ResetReleaseType() {
+	m.release_type = nil
+	delete(m.clearedFields, release.FieldReleaseType)
 }
 
 // SetVersion sets the "version" field.
@@ -11580,7 +11630,10 @@ func (m *ReleaseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReleaseMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
+	if m.release_type != nil {
+		fields = append(fields, release.FieldReleaseType)
+	}
 	if m.version != nil {
 		fields = append(fields, release.FieldVersion)
 	}
@@ -11619,6 +11672,8 @@ func (m *ReleaseMutation) Fields() []string {
 // schema.
 func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case release.FieldReleaseType:
+		return m.ReleaseType()
 	case release.FieldVersion:
 		return m.Version()
 	case release.FieldChannel:
@@ -11648,6 +11703,8 @@ func (m *ReleaseMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case release.FieldReleaseType:
+		return m.OldReleaseType(ctx)
 	case release.FieldVersion:
 		return m.OldVersion(ctx)
 	case release.FieldChannel:
@@ -11677,6 +11734,13 @@ func (m *ReleaseMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *ReleaseMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case release.FieldReleaseType:
+		v, ok := value.(release.ReleaseType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReleaseType(v)
+		return nil
 	case release.FieldVersion:
 		v, ok := value.(string)
 		if !ok {
@@ -11777,6 +11841,9 @@ func (m *ReleaseMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ReleaseMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(release.FieldReleaseType) {
+		fields = append(fields, release.FieldReleaseType)
+	}
 	if m.FieldCleared(release.FieldVersion) {
 		fields = append(fields, release.FieldVersion)
 	}
@@ -11821,6 +11888,9 @@ func (m *ReleaseMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ReleaseMutation) ClearField(name string) error {
 	switch name {
+	case release.FieldReleaseType:
+		m.ClearReleaseType()
+		return nil
 	case release.FieldVersion:
 		m.ClearVersion()
 		return nil
@@ -11859,6 +11929,9 @@ func (m *ReleaseMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ReleaseMutation) ResetField(name string) error {
 	switch name {
+	case release.FieldReleaseType:
+		m.ResetReleaseType()
+		return nil
 	case release.FieldVersion:
 		m.ResetVersion()
 		return nil

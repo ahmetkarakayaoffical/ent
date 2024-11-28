@@ -23,6 +23,20 @@ type ReleaseCreate struct {
 	conflict []sql.ConflictOption
 }
 
+// SetReleaseType sets the "release_type" field.
+func (rc *ReleaseCreate) SetReleaseType(rt release.ReleaseType) *ReleaseCreate {
+	rc.mutation.SetReleaseType(rt)
+	return rc
+}
+
+// SetNillableReleaseType sets the "release_type" field if the given value is not nil.
+func (rc *ReleaseCreate) SetNillableReleaseType(rt *release.ReleaseType) *ReleaseCreate {
+	if rt != nil {
+		rc.SetReleaseType(*rt)
+	}
+	return rc
+}
+
 // SetVersion sets the "version" field.
 func (rc *ReleaseCreate) SetVersion(s string) *ReleaseCreate {
 	rc.mutation.SetVersion(s)
@@ -212,6 +226,11 @@ func (rc *ReleaseCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *ReleaseCreate) check() error {
+	if v, ok := rc.mutation.ReleaseType(); ok {
+		if err := release.ReleaseTypeValidator(v); err != nil {
+			return &ValidationError{Name: "release_type", err: fmt.Errorf(`openuem_ent: validator failed for field "Release.release_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -239,6 +258,10 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 		_spec = sqlgraph.NewCreateSpec(release.Table, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = rc.conflict
+	if value, ok := rc.mutation.ReleaseType(); ok {
+		_spec.SetField(release.FieldReleaseType, field.TypeEnum, value)
+		_node.ReleaseType = value
+	}
 	if value, ok := rc.mutation.Version(); ok {
 		_spec.SetField(release.FieldVersion, field.TypeString, value)
 		_node.Version = value
@@ -302,7 +325,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 // of the `INSERT` statement. For example:
 //
 //	client.Release.Create().
-//		SetVersion(v).
+//		SetReleaseType(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -311,7 +334,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.ReleaseUpsert) {
-//			SetVersion(v+v).
+//			SetReleaseType(v+v).
 //		}).
 //		Exec(ctx)
 func (rc *ReleaseCreate) OnConflict(opts ...sql.ConflictOption) *ReleaseUpsertOne {
@@ -346,6 +369,24 @@ type (
 		*sql.UpdateSet
 	}
 )
+
+// SetReleaseType sets the "release_type" field.
+func (u *ReleaseUpsert) SetReleaseType(v release.ReleaseType) *ReleaseUpsert {
+	u.Set(release.FieldReleaseType, v)
+	return u
+}
+
+// UpdateReleaseType sets the "release_type" field to the value that was provided on create.
+func (u *ReleaseUpsert) UpdateReleaseType() *ReleaseUpsert {
+	u.SetExcluded(release.FieldReleaseType)
+	return u
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (u *ReleaseUpsert) ClearReleaseType() *ReleaseUpsert {
+	u.SetNull(release.FieldReleaseType)
+	return u
+}
 
 // SetVersion sets the "version" field.
 func (u *ReleaseUpsert) SetVersion(v string) *ReleaseUpsert {
@@ -565,6 +606,27 @@ func (u *ReleaseUpsertOne) Update(set func(*ReleaseUpsert)) *ReleaseUpsertOne {
 		set(&ReleaseUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetReleaseType sets the "release_type" field.
+func (u *ReleaseUpsertOne) SetReleaseType(v release.ReleaseType) *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetReleaseType(v)
+	})
+}
+
+// UpdateReleaseType sets the "release_type" field to the value that was provided on create.
+func (u *ReleaseUpsertOne) UpdateReleaseType() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateReleaseType()
+	})
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (u *ReleaseUpsertOne) ClearReleaseType() *ReleaseUpsertOne {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearReleaseType()
+	})
 }
 
 // SetVersion sets the "version" field.
@@ -911,7 +973,7 @@ func (rcb *ReleaseCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.ReleaseUpsert) {
-//			SetVersion(v+v).
+//			SetReleaseType(v+v).
 //		}).
 //		Exec(ctx)
 func (rcb *ReleaseCreateBulk) OnConflict(opts ...sql.ConflictOption) *ReleaseUpsertBulk {
@@ -978,6 +1040,27 @@ func (u *ReleaseUpsertBulk) Update(set func(*ReleaseUpsert)) *ReleaseUpsertBulk 
 		set(&ReleaseUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetReleaseType sets the "release_type" field.
+func (u *ReleaseUpsertBulk) SetReleaseType(v release.ReleaseType) *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.SetReleaseType(v)
+	})
+}
+
+// UpdateReleaseType sets the "release_type" field to the value that was provided on create.
+func (u *ReleaseUpsertBulk) UpdateReleaseType() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.UpdateReleaseType()
+	})
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (u *ReleaseUpsertBulk) ClearReleaseType() *ReleaseUpsertBulk {
+	return u.Update(func(s *ReleaseUpsert) {
+		s.ClearReleaseType()
+	})
 }
 
 // SetVersion sets the "version" field.

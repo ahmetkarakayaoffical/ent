@@ -30,6 +30,26 @@ func (ru *ReleaseUpdate) Where(ps ...predicate.Release) *ReleaseUpdate {
 	return ru
 }
 
+// SetReleaseType sets the "release_type" field.
+func (ru *ReleaseUpdate) SetReleaseType(rt release.ReleaseType) *ReleaseUpdate {
+	ru.mutation.SetReleaseType(rt)
+	return ru
+}
+
+// SetNillableReleaseType sets the "release_type" field if the given value is not nil.
+func (ru *ReleaseUpdate) SetNillableReleaseType(rt *release.ReleaseType) *ReleaseUpdate {
+	if rt != nil {
+		ru.SetReleaseType(*rt)
+	}
+	return ru
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (ru *ReleaseUpdate) ClearReleaseType() *ReleaseUpdate {
+	ru.mutation.ClearReleaseType()
+	return ru
+}
+
 // SetVersion sets the "version" field.
 func (ru *ReleaseUpdate) SetVersion(s string) *ReleaseUpdate {
 	ru.mutation.SetVersion(s)
@@ -298,6 +318,16 @@ func (ru *ReleaseUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ru *ReleaseUpdate) check() error {
+	if v, ok := ru.mutation.ReleaseType(); ok {
+		if err := release.ReleaseTypeValidator(v); err != nil {
+			return &ValidationError{Name: "release_type", err: fmt.Errorf(`openuem_ent: validator failed for field "Release.release_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ru *ReleaseUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReleaseUpdate {
 	ru.modifiers = append(ru.modifiers, modifiers...)
@@ -305,6 +335,9 @@ func (ru *ReleaseUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Releas
 }
 
 func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ru.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -312,6 +345,12 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ru.mutation.ReleaseType(); ok {
+		_spec.SetField(release.FieldReleaseType, field.TypeEnum, value)
+	}
+	if ru.mutation.ReleaseTypeCleared() {
+		_spec.ClearField(release.FieldReleaseType, field.TypeEnum)
 	}
 	if value, ok := ru.mutation.Version(); ok {
 		_spec.SetField(release.FieldVersion, field.TypeString, value)
@@ -438,6 +477,26 @@ type ReleaseUpdateOne struct {
 	hooks     []Hook
 	mutation  *ReleaseMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetReleaseType sets the "release_type" field.
+func (ruo *ReleaseUpdateOne) SetReleaseType(rt release.ReleaseType) *ReleaseUpdateOne {
+	ruo.mutation.SetReleaseType(rt)
+	return ruo
+}
+
+// SetNillableReleaseType sets the "release_type" field if the given value is not nil.
+func (ruo *ReleaseUpdateOne) SetNillableReleaseType(rt *release.ReleaseType) *ReleaseUpdateOne {
+	if rt != nil {
+		ruo.SetReleaseType(*rt)
+	}
+	return ruo
+}
+
+// ClearReleaseType clears the value of the "release_type" field.
+func (ruo *ReleaseUpdateOne) ClearReleaseType() *ReleaseUpdateOne {
+	ruo.mutation.ClearReleaseType()
+	return ruo
 }
 
 // SetVersion sets the "version" field.
@@ -721,6 +780,16 @@ func (ruo *ReleaseUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ruo *ReleaseUpdateOne) check() error {
+	if v, ok := ruo.mutation.ReleaseType(); ok {
+		if err := release.ReleaseTypeValidator(v); err != nil {
+			return &ValidationError{Name: "release_type", err: fmt.Errorf(`openuem_ent: validator failed for field "Release.release_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ruo *ReleaseUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReleaseUpdateOne {
 	ruo.modifiers = append(ruo.modifiers, modifiers...)
@@ -728,6 +797,9 @@ func (ruo *ReleaseUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Re
 }
 
 func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err error) {
+	if err := ruo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(release.Table, release.Columns, sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
 	if !ok {
@@ -752,6 +824,12 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ruo.mutation.ReleaseType(); ok {
+		_spec.SetField(release.FieldReleaseType, field.TypeEnum, value)
+	}
+	if ruo.mutation.ReleaseTypeCleared() {
+		_spec.ClearField(release.FieldReleaseType, field.TypeEnum)
 	}
 	if value, ok := ruo.mutation.Version(); ok {
 		_spec.SetField(release.FieldVersion, field.TypeString, value)

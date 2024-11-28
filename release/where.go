@@ -105,6 +105,36 @@ func Arch(v string) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldArch, v))
 }
 
+// ReleaseTypeEQ applies the EQ predicate on the "release_type" field.
+func ReleaseTypeEQ(v ReleaseType) predicate.Release {
+	return predicate.Release(sql.FieldEQ(FieldReleaseType, v))
+}
+
+// ReleaseTypeNEQ applies the NEQ predicate on the "release_type" field.
+func ReleaseTypeNEQ(v ReleaseType) predicate.Release {
+	return predicate.Release(sql.FieldNEQ(FieldReleaseType, v))
+}
+
+// ReleaseTypeIn applies the In predicate on the "release_type" field.
+func ReleaseTypeIn(vs ...ReleaseType) predicate.Release {
+	return predicate.Release(sql.FieldIn(FieldReleaseType, vs...))
+}
+
+// ReleaseTypeNotIn applies the NotIn predicate on the "release_type" field.
+func ReleaseTypeNotIn(vs ...ReleaseType) predicate.Release {
+	return predicate.Release(sql.FieldNotIn(FieldReleaseType, vs...))
+}
+
+// ReleaseTypeIsNil applies the IsNil predicate on the "release_type" field.
+func ReleaseTypeIsNil() predicate.Release {
+	return predicate.Release(sql.FieldIsNull(FieldReleaseType))
+}
+
+// ReleaseTypeNotNil applies the NotNil predicate on the "release_type" field.
+func ReleaseTypeNotNil() predicate.Release {
+	return predicate.Release(sql.FieldNotNull(FieldReleaseType))
+}
+
 // VersionEQ applies the EQ predicate on the "version" field.
 func VersionEQ(v string) predicate.Release {
 	return predicate.Release(sql.FieldEQ(FieldVersion, v))

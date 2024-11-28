@@ -3,6 +3,8 @@
 package release
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -12,6 +14,8 @@ const (
 	Label = "release"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldReleaseType holds the string denoting the release_type field in the database.
+	FieldReleaseType = "release_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
 	// FieldChannel holds the string denoting the channel field in the database.
@@ -50,6 +54,7 @@ const (
 // Columns holds all SQL columns for release fields.
 var Columns = []string{
 	FieldID,
+	FieldReleaseType,
 	FieldVersion,
 	FieldChannel,
 	FieldSummary,
@@ -72,12 +77,41 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// ReleaseType defines the type for the "release_type" enum field.
+type ReleaseType string
+
+// ReleaseType values.
+const (
+	ReleaseTypeAgent     ReleaseType = "agent"
+	ReleaseTypeUpdater   ReleaseType = "updater"
+	ReleaseTypeMessenger ReleaseType = "messenger"
+)
+
+func (rt ReleaseType) String() string {
+	return string(rt)
+}
+
+// ReleaseTypeValidator is a validator for the "release_type" field enum values. It is called by the builders before save.
+func ReleaseTypeValidator(rt ReleaseType) error {
+	switch rt {
+	case ReleaseTypeAgent, ReleaseTypeUpdater, ReleaseTypeMessenger:
+		return nil
+	default:
+		return fmt.Errorf("release: invalid enum value for release_type field: %q", rt)
+	}
+}
+
 // OrderOption defines the ordering options for the Release queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByReleaseType orders the results by the release_type field.
+func ByReleaseType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReleaseType, opts...).ToFunc()
 }
 
 // ByVersion orders the results by the version field.

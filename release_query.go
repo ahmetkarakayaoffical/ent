@@ -301,12 +301,12 @@ func (rq *ReleaseQuery) WithAgents(opts ...func(*AgentQuery)) *ReleaseQuery {
 // Example:
 //
 //	var v []struct {
-//		Version string `json:"version,omitempty"`
+//		ReleaseType release.ReleaseType `json:"release_type,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Release.Query().
-//		GroupBy(release.FieldVersion).
+//		GroupBy(release.FieldReleaseType).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (rq *ReleaseQuery) GroupBy(field string, fields ...string) *ReleaseGroupBy {
@@ -324,11 +324,11 @@ func (rq *ReleaseQuery) GroupBy(field string, fields ...string) *ReleaseGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Version string `json:"version,omitempty"`
+//		ReleaseType release.ReleaseType `json:"release_type,omitempty"`
 //	}
 //
 //	client.Release.Query().
-//		Select(release.FieldVersion).
+//		Select(release.FieldReleaseType).
 //		Scan(ctx, &v)
 func (rq *ReleaseQuery) Select(fields ...string) *ReleaseSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
