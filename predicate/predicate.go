@@ -51,6 +51,9 @@ type Release func(*sql.Selector)
 // Revocation is the predicate function for revocation builders.
 type Revocation func(*sql.Selector)
 
+// Server is the predicate function for server builders.
+type Server func(*sql.Selector)
+
 // Sessions is the predicate function for sessions builders.
 type Sessions func(*sql.Selector)
 

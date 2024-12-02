@@ -49,9 +49,11 @@ type Release struct {
 type ReleaseEdges struct {
 	// Agents holds the value of the agents edge.
 	Agents []*Agent `json:"agents,omitempty"`
+	// Servers holds the value of the servers edge.
+	Servers []*Server `json:"servers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // AgentsOrErr returns the Agents value or an error if the edge
@@ -61,6 +63,15 @@ func (e ReleaseEdges) AgentsOrErr() ([]*Agent, error) {
 		return e.Agents, nil
 	}
 	return nil, &NotLoadedError{edge: "agents"}
+}
+
+// ServersOrErr returns the Servers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ReleaseEdges) ServersOrErr() ([]*Server, error) {
+	if e.loadedTypes[1] {
+		return e.Servers, nil
+	}
+	return nil, &NotLoadedError{edge: "servers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -179,6 +190,11 @@ func (r *Release) Value(name string) (ent.Value, error) {
 // QueryAgents queries the "agents" edge of the Release entity.
 func (r *Release) QueryAgents() *AgentQuery {
 	return NewReleaseClient(r.config).QueryAgents(r)
+}
+
+// QueryServers queries the "servers" edge of the Release entity.
+func (r *Release) QueryServers() *ServerQuery {
+	return NewReleaseClient(r.config).QueryServers(r)
 }
 
 // Update returns a builder for updating this Release.

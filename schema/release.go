@@ -14,7 +14,7 @@ type Release struct {
 
 func (Release) Fields() []ent.Field {
 	return []ent.Field{
-		field.Enum("release_type").Values("agent", "updater", "messenger").Optional(),
+		field.Enum("release_type").Values("agent", "updater", "messenger", "server").Optional(),
 		field.String("version").Optional(),
 		field.String("channel").Optional(),
 		field.String("summary").Optional(),
@@ -32,6 +32,7 @@ func (Release) Fields() []ent.Field {
 func (Release) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("agents", Agent.Type),
+		edge.To("servers", Server.Type),
 	}
 }
 

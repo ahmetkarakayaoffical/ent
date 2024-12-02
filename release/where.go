@@ -828,6 +828,29 @@ func HasAgentsWith(preds ...predicate.Agent) predicate.Release {
 	})
 }
 
+// HasServers applies the HasEdge predicate on the "servers" edge.
+func HasServers() predicate.Release {
+	return predicate.Release(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ServersTable, ServersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasServersWith applies the HasEdge predicate on the "servers" edge with a given conditions (other predicates).
+func HasServersWith(preds ...predicate.Server) predicate.Release {
+	return predicate.Release(func(s *sql.Selector) {
+		step := newServersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Release) predicate.Release {
 	return predicate.Release(sql.AndPredicates(predicates...))

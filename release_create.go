@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/release"
+	"github.com/doncicuto/openuem_ent/server"
 )
 
 // ReleaseCreate is the builder for creating a Release entity.
@@ -192,6 +193,21 @@ func (rc *ReleaseCreate) AddAgents(a ...*Agent) *ReleaseCreate {
 	return rc.AddAgentIDs(ids...)
 }
 
+// AddServerIDs adds the "servers" edge to the Server entity by IDs.
+func (rc *ReleaseCreate) AddServerIDs(ids ...string) *ReleaseCreate {
+	rc.mutation.AddServerIDs(ids...)
+	return rc
+}
+
+// AddServers adds the "servers" edges to the Server entity.
+func (rc *ReleaseCreate) AddServers(s ...*Server) *ReleaseCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return rc.AddServerIDs(ids...)
+}
+
 // Mutation returns the ReleaseMutation object of the builder.
 func (rc *ReleaseCreate) Mutation() *ReleaseMutation {
 	return rc.mutation
@@ -311,6 +327,22 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.ServersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   release.ServersTable,
+			Columns: []string{release.ServersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

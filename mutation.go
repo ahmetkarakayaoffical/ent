@@ -27,6 +27,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
+	"github.com/doncicuto/openuem_ent/server"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
@@ -60,6 +61,7 @@ const (
 	TypePrinter         = "Printer"
 	TypeRelease         = "Release"
 	TypeRevocation      = "Revocation"
+	TypeServer          = "Server"
 	TypeSessions        = "Sessions"
 	TypeSettings        = "Settings"
 	TypeShare           = "Share"
@@ -10882,27 +10884,30 @@ func (m *PrinterMutation) ResetEdge(name string) error {
 // ReleaseMutation represents an operation that mutates the Release nodes in the graph.
 type ReleaseMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	release_type  *release.ReleaseType
-	version       *string
-	channel       *string
-	summary       *string
-	release_notes *string
-	file_url      *string
-	checksum      *string
-	is_critical   *bool
-	release_date  *time.Time
-	os            *string
-	arch          *string
-	clearedFields map[string]struct{}
-	agents        map[string]struct{}
-	removedagents map[string]struct{}
-	clearedagents bool
-	done          bool
-	oldValue      func(context.Context) (*Release, error)
-	predicates    []predicate.Release
+	op             Op
+	typ            string
+	id             *int
+	release_type   *release.ReleaseType
+	version        *string
+	channel        *string
+	summary        *string
+	release_notes  *string
+	file_url       *string
+	checksum       *string
+	is_critical    *bool
+	release_date   *time.Time
+	os             *string
+	arch           *string
+	clearedFields  map[string]struct{}
+	agents         map[string]struct{}
+	removedagents  map[string]struct{}
+	clearedagents  bool
+	servers        map[string]struct{}
+	removedservers map[string]struct{}
+	clearedservers bool
+	done           bool
+	oldValue       func(context.Context) (*Release, error)
+	predicates     []predicate.Release
 }
 
 var _ ent.Mutation = (*ReleaseMutation)(nil)
@@ -11596,6 +11601,60 @@ func (m *ReleaseMutation) ResetAgents() {
 	m.removedagents = nil
 }
 
+// AddServerIDs adds the "servers" edge to the Server entity by ids.
+func (m *ReleaseMutation) AddServerIDs(ids ...string) {
+	if m.servers == nil {
+		m.servers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.servers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearServers clears the "servers" edge to the Server entity.
+func (m *ReleaseMutation) ClearServers() {
+	m.clearedservers = true
+}
+
+// ServersCleared reports if the "servers" edge to the Server entity was cleared.
+func (m *ReleaseMutation) ServersCleared() bool {
+	return m.clearedservers
+}
+
+// RemoveServerIDs removes the "servers" edge to the Server entity by IDs.
+func (m *ReleaseMutation) RemoveServerIDs(ids ...string) {
+	if m.removedservers == nil {
+		m.removedservers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.servers, ids[i])
+		m.removedservers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedServers returns the removed IDs of the "servers" edge to the Server entity.
+func (m *ReleaseMutation) RemovedServersIDs() (ids []string) {
+	for id := range m.removedservers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ServersIDs returns the "servers" edge IDs in the mutation.
+func (m *ReleaseMutation) ServersIDs() (ids []string) {
+	for id := range m.servers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetServers resets all changes to the "servers" edge.
+func (m *ReleaseMutation) ResetServers() {
+	m.servers = nil
+	m.clearedservers = false
+	m.removedservers = nil
+}
+
 // Where appends a list predicates to the ReleaseMutation builder.
 func (m *ReleaseMutation) Where(ps ...predicate.Release) {
 	m.predicates = append(m.predicates, ps...)
@@ -11968,9 +12027,12 @@ func (m *ReleaseMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ReleaseMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.agents != nil {
 		edges = append(edges, release.EdgeAgents)
+	}
+	if m.servers != nil {
+		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -11985,15 +12047,24 @@ func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case release.EdgeServers:
+		ids := make([]ent.Value, 0, len(m.servers))
+		for id := range m.servers {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ReleaseMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedagents != nil {
 		edges = append(edges, release.EdgeAgents)
+	}
+	if m.removedservers != nil {
+		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -12008,15 +12079,24 @@ func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case release.EdgeServers:
+		ids := make([]ent.Value, 0, len(m.removedservers))
+		for id := range m.removedservers {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ReleaseMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedagents {
 		edges = append(edges, release.EdgeAgents)
+	}
+	if m.clearedservers {
+		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -12027,6 +12107,8 @@ func (m *ReleaseMutation) EdgeCleared(name string) bool {
 	switch name {
 	case release.EdgeAgents:
 		return m.clearedagents
+	case release.EdgeServers:
+		return m.clearedservers
 	}
 	return false
 }
@@ -12045,6 +12127,9 @@ func (m *ReleaseMutation) ResetEdge(name string) error {
 	switch name {
 	case release.EdgeAgents:
 		m.ResetAgents()
+		return nil
+	case release.EdgeServers:
+		m.ResetServers()
 		return nil
 	}
 	return fmt.Errorf("unknown Release edge %s", name)
@@ -12639,6 +12724,405 @@ func (m *RevocationMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *RevocationMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Revocation edge %s", name)
+}
+
+// ServerMutation represents an operation that mutates the Server nodes in the graph.
+type ServerMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *string
+	hostname       *string
+	clearedFields  map[string]struct{}
+	release        *int
+	clearedrelease bool
+	done           bool
+	oldValue       func(context.Context) (*Server, error)
+	predicates     []predicate.Server
+}
+
+var _ ent.Mutation = (*ServerMutation)(nil)
+
+// serverOption allows management of the mutation configuration using functional options.
+type serverOption func(*ServerMutation)
+
+// newServerMutation creates new mutation for the Server entity.
+func newServerMutation(c config, op Op, opts ...serverOption) *ServerMutation {
+	m := &ServerMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeServer,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withServerID sets the ID field of the mutation.
+func withServerID(id string) serverOption {
+	return func(m *ServerMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Server
+		)
+		m.oldValue = func(ctx context.Context) (*Server, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Server.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withServer sets the old Server of the mutation.
+func withServer(node *Server) serverOption {
+	return func(m *ServerMutation) {
+		m.oldValue = func(context.Context) (*Server, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ServerMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ServerMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Server entities.
+func (m *ServerMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ServerMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ServerMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Server.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHostname sets the "hostname" field.
+func (m *ServerMutation) SetHostname(s string) {
+	m.hostname = &s
+}
+
+// Hostname returns the value of the "hostname" field in the mutation.
+func (m *ServerMutation) Hostname() (r string, exists bool) {
+	v := m.hostname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHostname returns the old "hostname" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldHostname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHostname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHostname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHostname: %w", err)
+	}
+	return oldValue.Hostname, nil
+}
+
+// ResetHostname resets all changes to the "hostname" field.
+func (m *ServerMutation) ResetHostname() {
+	m.hostname = nil
+}
+
+// SetReleaseID sets the "release" edge to the Release entity by id.
+func (m *ServerMutation) SetReleaseID(id int) {
+	m.release = &id
+}
+
+// ClearRelease clears the "release" edge to the Release entity.
+func (m *ServerMutation) ClearRelease() {
+	m.clearedrelease = true
+}
+
+// ReleaseCleared reports if the "release" edge to the Release entity was cleared.
+func (m *ServerMutation) ReleaseCleared() bool {
+	return m.clearedrelease
+}
+
+// ReleaseID returns the "release" edge ID in the mutation.
+func (m *ServerMutation) ReleaseID() (id int, exists bool) {
+	if m.release != nil {
+		return *m.release, true
+	}
+	return
+}
+
+// ReleaseIDs returns the "release" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReleaseID instead. It exists only for internal usage by the builders.
+func (m *ServerMutation) ReleaseIDs() (ids []int) {
+	if id := m.release; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetRelease resets all changes to the "release" edge.
+func (m *ServerMutation) ResetRelease() {
+	m.release = nil
+	m.clearedrelease = false
+}
+
+// Where appends a list predicates to the ServerMutation builder.
+func (m *ServerMutation) Where(ps ...predicate.Server) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ServerMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ServerMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Server, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ServerMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ServerMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Server).
+func (m *ServerMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ServerMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.hostname != nil {
+		fields = append(fields, server.FieldHostname)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ServerMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case server.FieldHostname:
+		return m.Hostname()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case server.FieldHostname:
+		return m.OldHostname(ctx)
+	}
+	return nil, fmt.Errorf("unknown Server field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ServerMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case server.FieldHostname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHostname(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Server field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ServerMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ServerMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ServerMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Server numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ServerMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ServerMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ServerMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Server nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ServerMutation) ResetField(name string) error {
+	switch name {
+	case server.FieldHostname:
+		m.ResetHostname()
+		return nil
+	}
+	return fmt.Errorf("unknown Server field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ServerMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.release != nil {
+		edges = append(edges, server.EdgeRelease)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ServerMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case server.EdgeRelease:
+		if id := m.release; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ServerMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ServerMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ServerMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedrelease {
+		edges = append(edges, server.EdgeRelease)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ServerMutation) EdgeCleared(name string) bool {
+	switch name {
+	case server.EdgeRelease:
+		return m.clearedrelease
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ServerMutation) ClearEdge(name string) error {
+	switch name {
+	case server.EdgeRelease:
+		m.ClearRelease()
+		return nil
+	}
+	return fmt.Errorf("unknown Server unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ServerMutation) ResetEdge(name string) error {
+	switch name {
+	case server.EdgeRelease:
+		m.ResetRelease()
+		return nil
+	}
+	return fmt.Errorf("unknown Server edge %s", name)
 }
 
 // SessionsMutation represents an operation that mutates the Sessions nodes in the graph.

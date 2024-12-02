@@ -331,7 +331,7 @@ var (
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "release_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"agent", "updater", "messenger"}},
+		{Name: "release_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"agent", "updater", "messenger", "server"}},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "channel", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
@@ -369,6 +369,26 @@ var (
 		Name:       "revocations",
 		Columns:    RevocationsColumns,
 		PrimaryKey: []*schema.Column{RevocationsColumns[0]},
+	}
+	// ServersColumns holds the columns for the "servers" table.
+	ServersColumns = []*schema.Column{
+		{Name: "uuid", Type: field.TypeString, Unique: true},
+		{Name: "hostname", Type: field.TypeString},
+		{Name: "release_servers", Type: field.TypeInt, Nullable: true},
+	}
+	// ServersTable holds the schema information for the "servers" table.
+	ServersTable = &schema.Table{
+		Name:       "servers",
+		Columns:    ServersColumns,
+		PrimaryKey: []*schema.Column{ServersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "servers_releases_servers",
+				Columns:    []*schema.Column{ServersColumns[2]},
+				RefColumns: []*schema.Column{ReleasesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// SessionsColumns holds the columns for the "sessions" table.
 	SessionsColumns = []*schema.Column{
@@ -593,6 +613,7 @@ var (
 		PrintersTable,
 		ReleasesTable,
 		RevocationsTable,
+		ServersTable,
 		SessionsTable,
 		SettingsTable,
 		SharesTable,
@@ -617,6 +638,7 @@ func init() {
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
+	ServersTable.ForeignKeys[0].RefTable = ReleasesTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable

@@ -15,17 +15,19 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/release"
+	"github.com/doncicuto/openuem_ent/server"
 )
 
 // ReleaseQuery is the builder for querying Release entities.
 type ReleaseQuery struct {
 	config
-	ctx        *QueryContext
-	order      []release.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Release
-	withAgents *AgentQuery
-	modifiers  []func(*sql.Selector)
+	ctx         *QueryContext
+	order       []release.OrderOption
+	inters      []Interceptor
+	predicates  []predicate.Release
+	withAgents  *AgentQuery
+	withServers *ServerQuery
+	modifiers   []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,6 +79,28 @@ func (rq *ReleaseQuery) QueryAgents() *AgentQuery {
 			sqlgraph.From(release.Table, release.FieldID, selector),
 			sqlgraph.To(agent.Table, agent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, release.AgentsTable, release.AgentsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryServers chains the current query on the "servers" edge.
+func (rq *ReleaseQuery) QueryServers() *ServerQuery {
+	query := (&ServerClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(release.Table, release.FieldID, selector),
+			sqlgraph.To(server.Table, server.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, release.ServersTable, release.ServersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -271,12 +295,13 @@ func (rq *ReleaseQuery) Clone() *ReleaseQuery {
 		return nil
 	}
 	return &ReleaseQuery{
-		config:     rq.config,
-		ctx:        rq.ctx.Clone(),
-		order:      append([]release.OrderOption{}, rq.order...),
-		inters:     append([]Interceptor{}, rq.inters...),
-		predicates: append([]predicate.Release{}, rq.predicates...),
-		withAgents: rq.withAgents.Clone(),
+		config:      rq.config,
+		ctx:         rq.ctx.Clone(),
+		order:       append([]release.OrderOption{}, rq.order...),
+		inters:      append([]Interceptor{}, rq.inters...),
+		predicates:  append([]predicate.Release{}, rq.predicates...),
+		withAgents:  rq.withAgents.Clone(),
+		withServers: rq.withServers.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -292,6 +317,17 @@ func (rq *ReleaseQuery) WithAgents(opts ...func(*AgentQuery)) *ReleaseQuery {
 		opt(query)
 	}
 	rq.withAgents = query
+	return rq
+}
+
+// WithServers tells the query-builder to eager-load the nodes that are connected to
+// the "servers" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *ReleaseQuery) WithServers(opts ...func(*ServerQuery)) *ReleaseQuery {
+	query := (&ServerClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withServers = query
 	return rq
 }
 
@@ -373,8 +409,9 @@ func (rq *ReleaseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rele
 	var (
 		nodes       = []*Release{}
 		_spec       = rq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			rq.withAgents != nil,
+			rq.withServers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -402,6 +439,13 @@ func (rq *ReleaseQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rele
 		if err := rq.loadAgents(ctx, query, nodes,
 			func(n *Release) { n.Edges.Agents = []*Agent{} },
 			func(n *Release, e *Agent) { n.Edges.Agents = append(n.Edges.Agents, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withServers; query != nil {
+		if err := rq.loadServers(ctx, query, nodes,
+			func(n *Release) { n.Edges.Servers = []*Server{} },
+			func(n *Release, e *Server) { n.Edges.Servers = append(n.Edges.Servers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -434,6 +478,37 @@ func (rq *ReleaseQuery) loadAgents(ctx context.Context, query *AgentQuery, nodes
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "release_agents" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (rq *ReleaseQuery) loadServers(ctx context.Context, query *ServerQuery, nodes []*Release, init func(*Release), assign func(*Release, *Server)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Release)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Server(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(release.ServersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.release_servers
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "release_servers" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "release_servers" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
