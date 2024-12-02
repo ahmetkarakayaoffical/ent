@@ -23,7 +23,11 @@ type Server struct {
 	// Os holds the value of the "os" field.
 	Os string `json:"os,omitempty"`
 	// Component holds the value of the "component" field.
-	Component    server.Component `json:"component,omitempty"`
+	Component server.Component `json:"component,omitempty"`
+	// Version holds the value of the "version" field.
+	Version string `json:"version,omitempty"`
+	// Channel holds the value of the "channel" field.
+	Channel      server.Channel `json:"channel,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -34,7 +38,7 @@ func (*Server) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case server.FieldID:
 			values[i] = new(sql.NullInt64)
-		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldComponent:
+		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldComponent, server.FieldVersion, server.FieldChannel:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -80,6 +84,18 @@ func (s *Server) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field component", values[i])
 			} else if value.Valid {
 				s.Component = server.Component(value.String)
+			}
+		case server.FieldVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field version", values[i])
+			} else if value.Valid {
+				s.Version = value.String
+			}
+		case server.FieldChannel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field channel", values[i])
+			} else if value.Valid {
+				s.Channel = server.Channel(value.String)
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -128,6 +144,12 @@ func (s *Server) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("component=")
 	builder.WriteString(fmt.Sprintf("%v", s.Component))
+	builder.WriteString(", ")
+	builder.WriteString("version=")
+	builder.WriteString(s.Version)
+	builder.WriteString(", ")
+	builder.WriteString("channel=")
+	builder.WriteString(fmt.Sprintf("%v", s.Channel))
 	builder.WriteByte(')')
 	return builder.String()
 }

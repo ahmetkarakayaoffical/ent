@@ -45,6 +45,18 @@ func (sc *ServerCreate) SetComponent(s server.Component) *ServerCreate {
 	return sc
 }
 
+// SetVersion sets the "version" field.
+func (sc *ServerCreate) SetVersion(s string) *ServerCreate {
+	sc.mutation.SetVersion(s)
+	return sc
+}
+
+// SetChannel sets the "channel" field.
+func (sc *ServerCreate) SetChannel(s server.Channel) *ServerCreate {
+	sc.mutation.SetChannel(s)
+	return sc
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (sc *ServerCreate) Mutation() *ServerMutation {
 	return sc.mutation
@@ -96,6 +108,17 @@ func (sc *ServerCreate) check() error {
 			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
 		}
 	}
+	if _, ok := sc.mutation.Version(); !ok {
+		return &ValidationError{Name: "version", err: errors.New(`openuem_ent: missing required field "Server.version"`)}
+	}
+	if _, ok := sc.mutation.Channel(); !ok {
+		return &ValidationError{Name: "channel", err: errors.New(`openuem_ent: missing required field "Server.channel"`)}
+	}
+	if v, ok := sc.mutation.Channel(); ok {
+		if err := server.ChannelValidator(v); err != nil {
+			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.channel": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -138,6 +161,14 @@ func (sc *ServerCreate) createSpec() (*Server, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
 		_node.Component = value
+	}
+	if value, ok := sc.mutation.Version(); ok {
+		_spec.SetField(server.FieldVersion, field.TypeString, value)
+		_node.Version = value
+	}
+	if value, ok := sc.mutation.Channel(); ok {
+		_spec.SetField(server.FieldChannel, field.TypeEnum, value)
+		_node.Channel = value
 	}
 	return _node, _spec
 }
@@ -239,6 +270,30 @@ func (u *ServerUpsert) UpdateComponent() *ServerUpsert {
 	return u
 }
 
+// SetVersion sets the "version" field.
+func (u *ServerUpsert) SetVersion(v string) *ServerUpsert {
+	u.Set(server.FieldVersion, v)
+	return u
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateVersion() *ServerUpsert {
+	u.SetExcluded(server.FieldVersion)
+	return u
+}
+
+// SetChannel sets the "channel" field.
+func (u *ServerUpsert) SetChannel(v server.Channel) *ServerUpsert {
+	u.Set(server.FieldChannel, v)
+	return u
+}
+
+// UpdateChannel sets the "channel" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateChannel() *ServerUpsert {
+	u.SetExcluded(server.FieldChannel)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -332,6 +387,34 @@ func (u *ServerUpsertOne) SetComponent(v server.Component) *ServerUpsertOne {
 func (u *ServerUpsertOne) UpdateComponent() *ServerUpsertOne {
 	return u.Update(func(s *ServerUpsert) {
 		s.UpdateComponent()
+	})
+}
+
+// SetVersion sets the "version" field.
+func (u *ServerUpsertOne) SetVersion(v string) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateVersion() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// SetChannel sets the "channel" field.
+func (u *ServerUpsertOne) SetChannel(v server.Channel) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetChannel(v)
+	})
+}
+
+// UpdateChannel sets the "channel" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateChannel() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateChannel()
 	})
 }
 
@@ -591,6 +674,34 @@ func (u *ServerUpsertBulk) SetComponent(v server.Component) *ServerUpsertBulk {
 func (u *ServerUpsertBulk) UpdateComponent() *ServerUpsertBulk {
 	return u.Update(func(s *ServerUpsert) {
 		s.UpdateComponent()
+	})
+}
+
+// SetVersion sets the "version" field.
+func (u *ServerUpsertBulk) SetVersion(v string) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateVersion() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// SetChannel sets the "channel" field.
+func (u *ServerUpsertBulk) SetChannel(v server.Channel) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetChannel(v)
+	})
+}
+
+// UpdateChannel sets the "channel" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateChannel() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateChannel()
 	})
 }
 

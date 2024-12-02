@@ -67,6 +67,11 @@ func Os(v string) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldOs, v))
 }
 
+// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
+func Version(v string) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldVersion, v))
+}
+
 // HostnameEQ applies the EQ predicate on the "hostname" field.
 func HostnameEQ(v string) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldHostname, v))
@@ -280,6 +285,91 @@ func ComponentIn(vs ...Component) predicate.Server {
 // ComponentNotIn applies the NotIn predicate on the "component" field.
 func ComponentNotIn(vs ...Component) predicate.Server {
 	return predicate.Server(sql.FieldNotIn(FieldComponent, vs...))
+}
+
+// VersionEQ applies the EQ predicate on the "version" field.
+func VersionEQ(v string) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldVersion, v))
+}
+
+// VersionNEQ applies the NEQ predicate on the "version" field.
+func VersionNEQ(v string) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldVersion, v))
+}
+
+// VersionIn applies the In predicate on the "version" field.
+func VersionIn(vs ...string) predicate.Server {
+	return predicate.Server(sql.FieldIn(FieldVersion, vs...))
+}
+
+// VersionNotIn applies the NotIn predicate on the "version" field.
+func VersionNotIn(vs ...string) predicate.Server {
+	return predicate.Server(sql.FieldNotIn(FieldVersion, vs...))
+}
+
+// VersionGT applies the GT predicate on the "version" field.
+func VersionGT(v string) predicate.Server {
+	return predicate.Server(sql.FieldGT(FieldVersion, v))
+}
+
+// VersionGTE applies the GTE predicate on the "version" field.
+func VersionGTE(v string) predicate.Server {
+	return predicate.Server(sql.FieldGTE(FieldVersion, v))
+}
+
+// VersionLT applies the LT predicate on the "version" field.
+func VersionLT(v string) predicate.Server {
+	return predicate.Server(sql.FieldLT(FieldVersion, v))
+}
+
+// VersionLTE applies the LTE predicate on the "version" field.
+func VersionLTE(v string) predicate.Server {
+	return predicate.Server(sql.FieldLTE(FieldVersion, v))
+}
+
+// VersionContains applies the Contains predicate on the "version" field.
+func VersionContains(v string) predicate.Server {
+	return predicate.Server(sql.FieldContains(FieldVersion, v))
+}
+
+// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
+func VersionHasPrefix(v string) predicate.Server {
+	return predicate.Server(sql.FieldHasPrefix(FieldVersion, v))
+}
+
+// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
+func VersionHasSuffix(v string) predicate.Server {
+	return predicate.Server(sql.FieldHasSuffix(FieldVersion, v))
+}
+
+// VersionEqualFold applies the EqualFold predicate on the "version" field.
+func VersionEqualFold(v string) predicate.Server {
+	return predicate.Server(sql.FieldEqualFold(FieldVersion, v))
+}
+
+// VersionContainsFold applies the ContainsFold predicate on the "version" field.
+func VersionContainsFold(v string) predicate.Server {
+	return predicate.Server(sql.FieldContainsFold(FieldVersion, v))
+}
+
+// ChannelEQ applies the EQ predicate on the "channel" field.
+func ChannelEQ(v Channel) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldChannel, v))
+}
+
+// ChannelNEQ applies the NEQ predicate on the "channel" field.
+func ChannelNEQ(v Channel) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldChannel, v))
+}
+
+// ChannelIn applies the In predicate on the "channel" field.
+func ChannelIn(vs ...Channel) predicate.Server {
+	return predicate.Server(sql.FieldIn(FieldChannel, vs...))
+}
+
+// ChannelNotIn applies the NotIn predicate on the "channel" field.
+func ChannelNotIn(vs ...Channel) predicate.Server {
+	return predicate.Server(sql.FieldNotIn(FieldChannel, vs...))
 }
 
 // And groups predicates with the AND operator between them.

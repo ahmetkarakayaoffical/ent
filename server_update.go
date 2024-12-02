@@ -84,6 +84,34 @@ func (su *ServerUpdate) SetNillableComponent(s *server.Component) *ServerUpdate 
 	return su
 }
 
+// SetVersion sets the "version" field.
+func (su *ServerUpdate) SetVersion(s string) *ServerUpdate {
+	su.mutation.SetVersion(s)
+	return su
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableVersion(s *string) *ServerUpdate {
+	if s != nil {
+		su.SetVersion(*s)
+	}
+	return su
+}
+
+// SetChannel sets the "channel" field.
+func (su *ServerUpdate) SetChannel(s server.Channel) *ServerUpdate {
+	su.mutation.SetChannel(s)
+	return su
+}
+
+// SetNillableChannel sets the "channel" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableChannel(s *server.Channel) *ServerUpdate {
+	if s != nil {
+		su.SetChannel(*s)
+	}
+	return su
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (su *ServerUpdate) Mutation() *ServerMutation {
 	return su.mutation
@@ -123,6 +151,11 @@ func (su *ServerUpdate) check() error {
 			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
 		}
 	}
+	if v, ok := su.mutation.Channel(); ok {
+		if err := server.ChannelValidator(v); err != nil {
+			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.channel": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -155,6 +188,12 @@ func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
+	}
+	if value, ok := su.mutation.Version(); ok {
+		_spec.SetField(server.FieldVersion, field.TypeString, value)
+	}
+	if value, ok := su.mutation.Channel(); ok {
+		_spec.SetField(server.FieldChannel, field.TypeEnum, value)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -234,6 +273,34 @@ func (suo *ServerUpdateOne) SetNillableComponent(s *server.Component) *ServerUpd
 	return suo
 }
 
+// SetVersion sets the "version" field.
+func (suo *ServerUpdateOne) SetVersion(s string) *ServerUpdateOne {
+	suo.mutation.SetVersion(s)
+	return suo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableVersion(s *string) *ServerUpdateOne {
+	if s != nil {
+		suo.SetVersion(*s)
+	}
+	return suo
+}
+
+// SetChannel sets the "channel" field.
+func (suo *ServerUpdateOne) SetChannel(s server.Channel) *ServerUpdateOne {
+	suo.mutation.SetChannel(s)
+	return suo
+}
+
+// SetNillableChannel sets the "channel" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableChannel(s *server.Channel) *ServerUpdateOne {
+	if s != nil {
+		suo.SetChannel(*s)
+	}
+	return suo
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (suo *ServerUpdateOne) Mutation() *ServerMutation {
 	return suo.mutation
@@ -286,6 +353,11 @@ func (suo *ServerUpdateOne) check() error {
 			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
 		}
 	}
+	if v, ok := suo.mutation.Channel(); ok {
+		if err := server.ChannelValidator(v); err != nil {
+			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.channel": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -335,6 +407,12 @@ func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err err
 	}
 	if value, ok := suo.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
+	}
+	if value, ok := suo.mutation.Version(); ok {
+		_spec.SetField(server.FieldVersion, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Channel(); ok {
+		_spec.SetField(server.FieldChannel, field.TypeEnum, value)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Server{config: suo.config}

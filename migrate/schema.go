@@ -377,6 +377,8 @@ var (
 		{Name: "arch", Type: field.TypeString},
 		{Name: "os", Type: field.TypeString},
 		{Name: "component", Type: field.TypeEnum, Enums: []string{"ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"}},
+		{Name: "version", Type: field.TypeString},
+		{Name: "channel", Type: field.TypeEnum, Enums: []string{"stable", "testing", "devel"}},
 	}
 	// ServersTable holds the schema information for the "servers" table.
 	ServersTable = &schema.Table{

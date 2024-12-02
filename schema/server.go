@@ -18,6 +18,8 @@ func (Server) Fields() []ent.Field {
 		field.String("arch"),
 		field.String("os"),
 		field.Enum("component").Values("ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"),
+		field.String("version"),
+		field.Enum("channel").Values("stable", "testing", "devel"),
 	}
 }
 

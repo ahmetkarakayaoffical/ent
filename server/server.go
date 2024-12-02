@@ -21,6 +21,10 @@ const (
 	FieldOs = "os"
 	// FieldComponent holds the string denoting the component field in the database.
 	FieldComponent = "component"
+	// FieldVersion holds the string denoting the version field in the database.
+	FieldVersion = "version"
+	// FieldChannel holds the string denoting the channel field in the database.
+	FieldChannel = "channel"
 	// Table holds the table name of the server in the database.
 	Table = "servers"
 )
@@ -32,6 +36,8 @@ var Columns = []string{
 	FieldArch,
 	FieldOs,
 	FieldComponent,
+	FieldVersion,
+	FieldChannel,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -72,6 +78,30 @@ func ComponentValidator(c Component) error {
 	}
 }
 
+// Channel defines the type for the "channel" enum field.
+type Channel string
+
+// Channel values.
+const (
+	ChannelStable  Channel = "stable"
+	ChannelTesting Channel = "testing"
+	ChannelDevel   Channel = "devel"
+)
+
+func (c Channel) String() string {
+	return string(c)
+}
+
+// ChannelValidator is a validator for the "channel" field enum values. It is called by the builders before save.
+func ChannelValidator(c Channel) error {
+	switch c {
+	case ChannelStable, ChannelTesting, ChannelDevel:
+		return nil
+	default:
+		return fmt.Errorf("server: invalid enum value for channel field: %q", c)
+	}
+}
+
 // OrderOption defines the ordering options for the Server queries.
 type OrderOption func(*sql.Selector)
 
@@ -98,4 +128,14 @@ func ByOs(opts ...sql.OrderTermOption) OrderOption {
 // ByComponent orders the results by the component field.
 func ByComponent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldComponent, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByChannel orders the results by the channel field.
+func ByChannel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldChannel, opts...).ToFunc()
 }

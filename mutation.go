@@ -12653,6 +12653,8 @@ type ServerMutation struct {
 	arch          *string
 	os            *string
 	component     *server.Component
+	version       *string
+	channel       *server.Channel
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Server, error)
@@ -12901,6 +12903,78 @@ func (m *ServerMutation) ResetComponent() {
 	m.component = nil
 }
 
+// SetVersion sets the "version" field.
+func (m *ServerMutation) SetVersion(s string) {
+	m.version = &s
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *ServerMutation) Version() (r string, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *ServerMutation) ResetVersion() {
+	m.version = nil
+}
+
+// SetChannel sets the "channel" field.
+func (m *ServerMutation) SetChannel(s server.Channel) {
+	m.channel = &s
+}
+
+// Channel returns the value of the "channel" field in the mutation.
+func (m *ServerMutation) Channel() (r server.Channel, exists bool) {
+	v := m.channel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChannel returns the old "channel" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldChannel(ctx context.Context) (v server.Channel, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChannel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChannel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChannel: %w", err)
+	}
+	return oldValue.Channel, nil
+}
+
+// ResetChannel resets all changes to the "channel" field.
+func (m *ServerMutation) ResetChannel() {
+	m.channel = nil
+}
+
 // Where appends a list predicates to the ServerMutation builder.
 func (m *ServerMutation) Where(ps ...predicate.Server) {
 	m.predicates = append(m.predicates, ps...)
@@ -12935,7 +13009,7 @@ func (m *ServerMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ServerMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 6)
 	if m.hostname != nil {
 		fields = append(fields, server.FieldHostname)
 	}
@@ -12947,6 +13021,12 @@ func (m *ServerMutation) Fields() []string {
 	}
 	if m.component != nil {
 		fields = append(fields, server.FieldComponent)
+	}
+	if m.version != nil {
+		fields = append(fields, server.FieldVersion)
+	}
+	if m.channel != nil {
+		fields = append(fields, server.FieldChannel)
 	}
 	return fields
 }
@@ -12964,6 +13044,10 @@ func (m *ServerMutation) Field(name string) (ent.Value, bool) {
 		return m.Os()
 	case server.FieldComponent:
 		return m.Component()
+	case server.FieldVersion:
+		return m.Version()
+	case server.FieldChannel:
+		return m.Channel()
 	}
 	return nil, false
 }
@@ -12981,6 +13065,10 @@ func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldOs(ctx)
 	case server.FieldComponent:
 		return m.OldComponent(ctx)
+	case server.FieldVersion:
+		return m.OldVersion(ctx)
+	case server.FieldChannel:
+		return m.OldChannel(ctx)
 	}
 	return nil, fmt.Errorf("unknown Server field %s", name)
 }
@@ -13017,6 +13105,20 @@ func (m *ServerMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetComponent(v)
+		return nil
+	case server.FieldVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
+	case server.FieldChannel:
+		v, ok := value.(server.Channel)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChannel(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)
@@ -13078,6 +13180,12 @@ func (m *ServerMutation) ResetField(name string) error {
 		return nil
 	case server.FieldComponent:
 		m.ResetComponent()
+		return nil
+	case server.FieldVersion:
+		m.ResetVersion()
+		return nil
+	case server.FieldChannel:
+		m.ResetChannel()
 		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)
