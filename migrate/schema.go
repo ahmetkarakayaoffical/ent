@@ -93,7 +93,7 @@ var (
 	// CertificatesColumns holds the columns for the "certificates" table.
 	CertificatesColumns = []*schema.Column{
 		{Name: "serial", Type: field.TypeInt64, Increment: true},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"console", "worker", "agent", "user", "ocsp", "nats", "proxy", "sftp"}},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"console", "worker", "agent", "user", "ocsp", "nats", "proxy", "sftp", "updater"}},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "expiry", Type: field.TypeTime, Nullable: true},
 		{Name: "uid", Type: field.TypeString, Nullable: true},
