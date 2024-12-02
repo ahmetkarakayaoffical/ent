@@ -387,9 +387,9 @@ var (
 		PrimaryKey: []*schema.Column{ServersColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "server_hostname_component",
+				Name:    "server_hostname_arch_os_component_version_channel",
 				Unique:  true,
-				Columns: []*schema.Column{ServersColumns[1], ServersColumns[4]},
+				Columns: []*schema.Column{ServersColumns[1], ServersColumns[2], ServersColumns[3], ServersColumns[4], ServersColumns[5], ServersColumns[6]},
 			},
 		},
 	}

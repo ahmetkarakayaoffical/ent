@@ -26,6 +26,6 @@ func (Server) Fields() []ent.Field {
 // Indexes of the Server.
 func (Server) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("hostname", "component").Unique(),
+		index.Fields("hostname", "arch", "os", "component", "version", "channel").Unique(),
 	}
 }
