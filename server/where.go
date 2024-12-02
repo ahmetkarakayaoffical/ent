@@ -4,7 +4,6 @@ package server
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
 
@@ -281,29 +280,6 @@ func ComponentIn(vs ...Component) predicate.Server {
 // ComponentNotIn applies the NotIn predicate on the "component" field.
 func ComponentNotIn(vs ...Component) predicate.Server {
 	return predicate.Server(sql.FieldNotIn(FieldComponent, vs...))
-}
-
-// HasRelease applies the HasEdge predicate on the "release" edge.
-func HasRelease() predicate.Server {
-	return predicate.Server(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasReleaseWith applies the HasEdge predicate on the "release" edge with a given conditions (other predicates).
-func HasReleaseWith(preds ...predicate.Release) predicate.Server {
-	return predicate.Server(func(s *sql.Selector) {
-		step := newReleaseStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
 }
 
 // And groups predicates with the AND operator between them.

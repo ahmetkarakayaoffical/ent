@@ -8,7 +8,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/server"
 )
 
@@ -24,32 +23,8 @@ type Server struct {
 	// Os holds the value of the "os" field.
 	Os string `json:"os,omitempty"`
 	// Component holds the value of the "component" field.
-	Component server.Component `json:"component,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the ServerQuery when eager-loading is set.
-	Edges           ServerEdges `json:"edges"`
-	release_servers *int
-	selectValues    sql.SelectValues
-}
-
-// ServerEdges holds the relations/edges for other nodes in the graph.
-type ServerEdges struct {
-	// Release holds the value of the release edge.
-	Release *Release `json:"release,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// ReleaseOrErr returns the Release value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ServerEdges) ReleaseOrErr() (*Release, error) {
-	if e.Release != nil {
-		return e.Release, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: release.Label}
-	}
-	return nil, &NotLoadedError{edge: "release"}
+	Component    server.Component `json:"component,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -61,8 +36,6 @@ func (*Server) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldComponent:
 			values[i] = new(sql.NullString)
-		case server.ForeignKeys[0]: // release_servers
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -108,13 +81,6 @@ func (s *Server) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Component = server.Component(value.String)
 			}
-		case server.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field release_servers", value)
-			} else if value.Valid {
-				s.release_servers = new(int)
-				*s.release_servers = int(value.Int64)
-			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -126,11 +92,6 @@ func (s *Server) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Server) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
-}
-
-// QueryRelease queries the "release" edge of the Server entity.
-func (s *Server) QueryRelease() *ReleaseQuery {
-	return NewServerClient(s.config).QueryRelease(s)
 }
 
 // Update returns a builder for updating this Server.

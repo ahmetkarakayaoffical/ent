@@ -10884,30 +10884,27 @@ func (m *PrinterMutation) ResetEdge(name string) error {
 // ReleaseMutation represents an operation that mutates the Release nodes in the graph.
 type ReleaseMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	release_type   *release.ReleaseType
-	version        *string
-	channel        *string
-	summary        *string
-	release_notes  *string
-	file_url       *string
-	checksum       *string
-	is_critical    *bool
-	release_date   *time.Time
-	os             *string
-	arch           *string
-	clearedFields  map[string]struct{}
-	agents         map[string]struct{}
-	removedagents  map[string]struct{}
-	clearedagents  bool
-	servers        map[int]struct{}
-	removedservers map[int]struct{}
-	clearedservers bool
-	done           bool
-	oldValue       func(context.Context) (*Release, error)
-	predicates     []predicate.Release
+	op            Op
+	typ           string
+	id            *int
+	release_type  *release.ReleaseType
+	version       *string
+	channel       *string
+	summary       *string
+	release_notes *string
+	file_url      *string
+	checksum      *string
+	is_critical   *bool
+	release_date  *time.Time
+	os            *string
+	arch          *string
+	clearedFields map[string]struct{}
+	agents        map[string]struct{}
+	removedagents map[string]struct{}
+	clearedagents bool
+	done          bool
+	oldValue      func(context.Context) (*Release, error)
+	predicates    []predicate.Release
 }
 
 var _ ent.Mutation = (*ReleaseMutation)(nil)
@@ -11601,60 +11598,6 @@ func (m *ReleaseMutation) ResetAgents() {
 	m.removedagents = nil
 }
 
-// AddServerIDs adds the "servers" edge to the Server entity by ids.
-func (m *ReleaseMutation) AddServerIDs(ids ...int) {
-	if m.servers == nil {
-		m.servers = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.servers[ids[i]] = struct{}{}
-	}
-}
-
-// ClearServers clears the "servers" edge to the Server entity.
-func (m *ReleaseMutation) ClearServers() {
-	m.clearedservers = true
-}
-
-// ServersCleared reports if the "servers" edge to the Server entity was cleared.
-func (m *ReleaseMutation) ServersCleared() bool {
-	return m.clearedservers
-}
-
-// RemoveServerIDs removes the "servers" edge to the Server entity by IDs.
-func (m *ReleaseMutation) RemoveServerIDs(ids ...int) {
-	if m.removedservers == nil {
-		m.removedservers = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.servers, ids[i])
-		m.removedservers[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedServers returns the removed IDs of the "servers" edge to the Server entity.
-func (m *ReleaseMutation) RemovedServersIDs() (ids []int) {
-	for id := range m.removedservers {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ServersIDs returns the "servers" edge IDs in the mutation.
-func (m *ReleaseMutation) ServersIDs() (ids []int) {
-	for id := range m.servers {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetServers resets all changes to the "servers" edge.
-func (m *ReleaseMutation) ResetServers() {
-	m.servers = nil
-	m.clearedservers = false
-	m.removedservers = nil
-}
-
 // Where appends a list predicates to the ReleaseMutation builder.
 func (m *ReleaseMutation) Where(ps ...predicate.Release) {
 	m.predicates = append(m.predicates, ps...)
@@ -12027,12 +11970,9 @@ func (m *ReleaseMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ReleaseMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.agents != nil {
 		edges = append(edges, release.EdgeAgents)
-	}
-	if m.servers != nil {
-		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -12047,24 +11987,15 @@ func (m *ReleaseMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case release.EdgeServers:
-		ids := make([]ent.Value, 0, len(m.servers))
-		for id := range m.servers {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ReleaseMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.removedagents != nil {
 		edges = append(edges, release.EdgeAgents)
-	}
-	if m.removedservers != nil {
-		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -12079,24 +12010,15 @@ func (m *ReleaseMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case release.EdgeServers:
-		ids := make([]ent.Value, 0, len(m.removedservers))
-		for id := range m.removedservers {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ReleaseMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.clearedagents {
 		edges = append(edges, release.EdgeAgents)
-	}
-	if m.clearedservers {
-		edges = append(edges, release.EdgeServers)
 	}
 	return edges
 }
@@ -12107,8 +12029,6 @@ func (m *ReleaseMutation) EdgeCleared(name string) bool {
 	switch name {
 	case release.EdgeAgents:
 		return m.clearedagents
-	case release.EdgeServers:
-		return m.clearedservers
 	}
 	return false
 }
@@ -12127,9 +12047,6 @@ func (m *ReleaseMutation) ResetEdge(name string) error {
 	switch name {
 	case release.EdgeAgents:
 		m.ResetAgents()
-		return nil
-	case release.EdgeServers:
-		m.ResetServers()
 		return nil
 	}
 	return fmt.Errorf("unknown Release edge %s", name)
@@ -12729,19 +12646,17 @@ func (m *RevocationMutation) ResetEdge(name string) error {
 // ServerMutation represents an operation that mutates the Server nodes in the graph.
 type ServerMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	hostname       *string
-	arch           *string
-	os             *string
-	component      *server.Component
-	clearedFields  map[string]struct{}
-	release        *int
-	clearedrelease bool
-	done           bool
-	oldValue       func(context.Context) (*Server, error)
-	predicates     []predicate.Server
+	op            Op
+	typ           string
+	id            *int
+	hostname      *string
+	arch          *string
+	os            *string
+	component     *server.Component
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Server, error)
+	predicates    []predicate.Server
 }
 
 var _ ent.Mutation = (*ServerMutation)(nil)
@@ -12986,45 +12901,6 @@ func (m *ServerMutation) ResetComponent() {
 	m.component = nil
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by id.
-func (m *ServerMutation) SetReleaseID(id int) {
-	m.release = &id
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (m *ServerMutation) ClearRelease() {
-	m.clearedrelease = true
-}
-
-// ReleaseCleared reports if the "release" edge to the Release entity was cleared.
-func (m *ServerMutation) ReleaseCleared() bool {
-	return m.clearedrelease
-}
-
-// ReleaseID returns the "release" edge ID in the mutation.
-func (m *ServerMutation) ReleaseID() (id int, exists bool) {
-	if m.release != nil {
-		return *m.release, true
-	}
-	return
-}
-
-// ReleaseIDs returns the "release" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ReleaseID instead. It exists only for internal usage by the builders.
-func (m *ServerMutation) ReleaseIDs() (ids []int) {
-	if id := m.release; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetRelease resets all changes to the "release" edge.
-func (m *ServerMutation) ResetRelease() {
-	m.release = nil
-	m.clearedrelease = false
-}
-
 // Where appends a list predicates to the ServerMutation builder.
 func (m *ServerMutation) Where(ps ...predicate.Server) {
 	m.predicates = append(m.predicates, ps...)
@@ -13209,28 +13085,19 @@ func (m *ServerMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ServerMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.release != nil {
-		edges = append(edges, server.EdgeRelease)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ServerMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case server.EdgeRelease:
-		if id := m.release; id != nil {
-			return []ent.Value{*id}
-		}
-	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ServerMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 0)
 	return edges
 }
 
@@ -13242,42 +13109,25 @@ func (m *ServerMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ServerMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedrelease {
-		edges = append(edges, server.EdgeRelease)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ServerMutation) EdgeCleared(name string) bool {
-	switch name {
-	case server.EdgeRelease:
-		return m.clearedrelease
-	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ServerMutation) ClearEdge(name string) error {
-	switch name {
-	case server.EdgeRelease:
-		m.ClearRelease()
-		return nil
-	}
 	return fmt.Errorf("unknown Server unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ServerMutation) ResetEdge(name string) error {
-	switch name {
-	case server.EdgeRelease:
-		m.ResetRelease()
-		return nil
-	}
 	return fmt.Errorf("unknown Server edge %s", name)
 }
 

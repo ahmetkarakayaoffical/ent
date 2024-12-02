@@ -14,7 +14,6 @@ import (
 	"github.com/doncicuto/openuem_ent/agent"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/release"
-	"github.com/doncicuto/openuem_ent/server"
 )
 
 // ReleaseUpdate is the builder for updating Release entities.
@@ -266,21 +265,6 @@ func (ru *ReleaseUpdate) AddAgents(a ...*Agent) *ReleaseUpdate {
 	return ru.AddAgentIDs(ids...)
 }
 
-// AddServerIDs adds the "servers" edge to the Server entity by IDs.
-func (ru *ReleaseUpdate) AddServerIDs(ids ...int) *ReleaseUpdate {
-	ru.mutation.AddServerIDs(ids...)
-	return ru
-}
-
-// AddServers adds the "servers" edges to the Server entity.
-func (ru *ReleaseUpdate) AddServers(s ...*Server) *ReleaseUpdate {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ru.AddServerIDs(ids...)
-}
-
 // Mutation returns the ReleaseMutation object of the builder.
 func (ru *ReleaseUpdate) Mutation() *ReleaseMutation {
 	return ru.mutation
@@ -305,27 +289,6 @@ func (ru *ReleaseUpdate) RemoveAgents(a ...*Agent) *ReleaseUpdate {
 		ids[i] = a[i].ID
 	}
 	return ru.RemoveAgentIDs(ids...)
-}
-
-// ClearServers clears all "servers" edges to the Server entity.
-func (ru *ReleaseUpdate) ClearServers() *ReleaseUpdate {
-	ru.mutation.ClearServers()
-	return ru
-}
-
-// RemoveServerIDs removes the "servers" edge to Server entities by IDs.
-func (ru *ReleaseUpdate) RemoveServerIDs(ids ...int) *ReleaseUpdate {
-	ru.mutation.RemoveServerIDs(ids...)
-	return ru
-}
-
-// RemoveServers removes "servers" edges to Server entities.
-func (ru *ReleaseUpdate) RemoveServers(s ...*Server) *ReleaseUpdate {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ru.RemoveServerIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -487,51 +450,6 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ru.mutation.ServersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ru.mutation.RemovedServersIDs(); len(nodes) > 0 && !ru.mutation.ServersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ru.mutation.ServersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -796,21 +714,6 @@ func (ruo *ReleaseUpdateOne) AddAgents(a ...*Agent) *ReleaseUpdateOne {
 	return ruo.AddAgentIDs(ids...)
 }
 
-// AddServerIDs adds the "servers" edge to the Server entity by IDs.
-func (ruo *ReleaseUpdateOne) AddServerIDs(ids ...int) *ReleaseUpdateOne {
-	ruo.mutation.AddServerIDs(ids...)
-	return ruo
-}
-
-// AddServers adds the "servers" edges to the Server entity.
-func (ruo *ReleaseUpdateOne) AddServers(s ...*Server) *ReleaseUpdateOne {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ruo.AddServerIDs(ids...)
-}
-
 // Mutation returns the ReleaseMutation object of the builder.
 func (ruo *ReleaseUpdateOne) Mutation() *ReleaseMutation {
 	return ruo.mutation
@@ -835,27 +738,6 @@ func (ruo *ReleaseUpdateOne) RemoveAgents(a ...*Agent) *ReleaseUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return ruo.RemoveAgentIDs(ids...)
-}
-
-// ClearServers clears all "servers" edges to the Server entity.
-func (ruo *ReleaseUpdateOne) ClearServers() *ReleaseUpdateOne {
-	ruo.mutation.ClearServers()
-	return ruo
-}
-
-// RemoveServerIDs removes the "servers" edge to Server entities by IDs.
-func (ruo *ReleaseUpdateOne) RemoveServerIDs(ids ...int) *ReleaseUpdateOne {
-	ruo.mutation.RemoveServerIDs(ids...)
-	return ruo
-}
-
-// RemoveServers removes "servers" edges to Server entities.
-func (ruo *ReleaseUpdateOne) RemoveServers(s ...*Server) *ReleaseUpdateOne {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return ruo.RemoveServerIDs(ids...)
 }
 
 // Where appends a list predicates to the ReleaseUpdate builder.
@@ -1047,51 +929,6 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ruo.mutation.ServersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ruo.mutation.RemovedServersIDs(); len(nodes) > 0 && !ruo.mutation.ServersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ruo.mutation.ServersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   release.ServersTable,
-			Columns: []string{release.ServersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

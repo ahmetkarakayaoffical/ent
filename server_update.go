@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/predicate"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/server"
 )
 
@@ -85,34 +84,9 @@ func (su *ServerUpdate) SetNillableComponent(s *server.Component) *ServerUpdate 
 	return su
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by ID.
-func (su *ServerUpdate) SetReleaseID(id int) *ServerUpdate {
-	su.mutation.SetReleaseID(id)
-	return su
-}
-
-// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (su *ServerUpdate) SetNillableReleaseID(id *int) *ServerUpdate {
-	if id != nil {
-		su = su.SetReleaseID(*id)
-	}
-	return su
-}
-
-// SetRelease sets the "release" edge to the Release entity.
-func (su *ServerUpdate) SetRelease(r *Release) *ServerUpdate {
-	return su.SetReleaseID(r.ID)
-}
-
 // Mutation returns the ServerMutation object of the builder.
 func (su *ServerUpdate) Mutation() *ServerMutation {
 	return su.mutation
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (su *ServerUpdate) ClearRelease() *ServerUpdate {
-	su.mutation.ClearRelease()
-	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -181,35 +155,6 @@ func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
-	}
-	if su.mutation.ReleaseCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   server.ReleaseTable,
-			Columns: []string{server.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.ReleaseIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   server.ReleaseTable,
-			Columns: []string{server.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -289,34 +234,9 @@ func (suo *ServerUpdateOne) SetNillableComponent(s *server.Component) *ServerUpd
 	return suo
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by ID.
-func (suo *ServerUpdateOne) SetReleaseID(id int) *ServerUpdateOne {
-	suo.mutation.SetReleaseID(id)
-	return suo
-}
-
-// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (suo *ServerUpdateOne) SetNillableReleaseID(id *int) *ServerUpdateOne {
-	if id != nil {
-		suo = suo.SetReleaseID(*id)
-	}
-	return suo
-}
-
-// SetRelease sets the "release" edge to the Release entity.
-func (suo *ServerUpdateOne) SetRelease(r *Release) *ServerUpdateOne {
-	return suo.SetReleaseID(r.ID)
-}
-
 // Mutation returns the ServerMutation object of the builder.
 func (suo *ServerUpdateOne) Mutation() *ServerMutation {
 	return suo.mutation
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (suo *ServerUpdateOne) ClearRelease() *ServerUpdateOne {
-	suo.mutation.ClearRelease()
-	return suo
 }
 
 // Where appends a list predicates to the ServerUpdate builder.
@@ -415,35 +335,6 @@ func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err err
 	}
 	if value, ok := suo.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
-	}
-	if suo.mutation.ReleaseCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   server.ReleaseTable,
-			Columns: []string{server.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.ReleaseIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   server.ReleaseTable,
-			Columns: []string{server.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Server{config: suo.config}

@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/server"
 )
 
@@ -44,25 +43,6 @@ func (sc *ServerCreate) SetOs(s string) *ServerCreate {
 func (sc *ServerCreate) SetComponent(s server.Component) *ServerCreate {
 	sc.mutation.SetComponent(s)
 	return sc
-}
-
-// SetReleaseID sets the "release" edge to the Release entity by ID.
-func (sc *ServerCreate) SetReleaseID(id int) *ServerCreate {
-	sc.mutation.SetReleaseID(id)
-	return sc
-}
-
-// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (sc *ServerCreate) SetNillableReleaseID(id *int) *ServerCreate {
-	if id != nil {
-		sc = sc.SetReleaseID(*id)
-	}
-	return sc
-}
-
-// SetRelease sets the "release" edge to the Release entity.
-func (sc *ServerCreate) SetRelease(r *Release) *ServerCreate {
-	return sc.SetReleaseID(r.ID)
 }
 
 // Mutation returns the ServerMutation object of the builder.
@@ -158,23 +138,6 @@ func (sc *ServerCreate) createSpec() (*Server, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
 		_node.Component = value
-	}
-	if nodes := sc.mutation.ReleaseIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   server.ReleaseTable,
-			Columns: []string{server.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.release_servers = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

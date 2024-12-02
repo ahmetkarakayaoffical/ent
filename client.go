@@ -2672,22 +2672,6 @@ func (c *ReleaseClient) QueryAgents(r *Release) *AgentQuery {
 	return query
 }
 
-// QueryServers queries the servers edge of a Release.
-func (c *ReleaseClient) QueryServers(r *Release) *ServerQuery {
-	query := (&ServerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := r.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(release.Table, release.FieldID, id),
-			sqlgraph.To(server.Table, server.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, release.ServersTable, release.ServersColumn),
-		)
-		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *ReleaseClient) Hooks() []Hook {
 	return c.hooks.Release
@@ -2952,22 +2936,6 @@ func (c *ServerClient) GetX(ctx context.Context, id int) *Server {
 		panic(err)
 	}
 	return obj
-}
-
-// QueryRelease queries the release edge of a Server.
-func (c *ServerClient) QueryRelease(s *Server) *ReleaseQuery {
-	query := (&ReleaseClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(server.Table, server.FieldID, id),
-			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, server.ReleaseTable, server.ReleaseColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // Hooks returns the client hooks.

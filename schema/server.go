@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 )
@@ -19,13 +18,6 @@ func (Server) Fields() []ent.Field {
 		field.String("arch"),
 		field.String("os"),
 		field.Enum("component").Values("ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"),
-	}
-}
-
-// Edges of the Server.
-func (Server) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.From("release", Release.Type).Ref("servers").Unique(),
 	}
 }
 

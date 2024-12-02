@@ -12,20 +12,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/doncicuto/openuem_ent/predicate"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/server"
 )
 
 // ServerQuery is the builder for querying Server entities.
 type ServerQuery struct {
 	config
-	ctx         *QueryContext
-	order       []server.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.Server
-	withRelease *ReleaseQuery
-	withFKs     bool
-	modifiers   []func(*sql.Selector)
+	ctx        *QueryContext
+	order      []server.OrderOption
+	inters     []Interceptor
+	predicates []predicate.Server
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,28 +57,6 @@ func (sq *ServerQuery) Unique(unique bool) *ServerQuery {
 func (sq *ServerQuery) Order(o ...server.OrderOption) *ServerQuery {
 	sq.order = append(sq.order, o...)
 	return sq
-}
-
-// QueryRelease chains the current query on the "release" edge.
-func (sq *ServerQuery) QueryRelease() *ReleaseQuery {
-	query := (&ReleaseClient{config: sq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := sq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(server.Table, server.FieldID, selector),
-			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, server.ReleaseTable, server.ReleaseColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first Server entity from the query.
@@ -271,28 +246,16 @@ func (sq *ServerQuery) Clone() *ServerQuery {
 		return nil
 	}
 	return &ServerQuery{
-		config:      sq.config,
-		ctx:         sq.ctx.Clone(),
-		order:       append([]server.OrderOption{}, sq.order...),
-		inters:      append([]Interceptor{}, sq.inters...),
-		predicates:  append([]predicate.Server{}, sq.predicates...),
-		withRelease: sq.withRelease.Clone(),
+		config:     sq.config,
+		ctx:        sq.ctx.Clone(),
+		order:      append([]server.OrderOption{}, sq.order...),
+		inters:     append([]Interceptor{}, sq.inters...),
+		predicates: append([]predicate.Server{}, sq.predicates...),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
 		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
-}
-
-// WithRelease tells the query-builder to eager-load the nodes that are connected to
-// the "release" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ServerQuery) WithRelease(opts ...func(*ReleaseQuery)) *ServerQuery {
-	query := (&ReleaseClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	sq.withRelease = query
-	return sq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -371,26 +334,15 @@ func (sq *ServerQuery) prepareQuery(ctx context.Context) error {
 
 func (sq *ServerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Server, error) {
 	var (
-		nodes       = []*Server{}
-		withFKs     = sq.withFKs
-		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
-			sq.withRelease != nil,
-		}
+		nodes = []*Server{}
+		_spec = sq.querySpec()
 	)
-	if sq.withRelease != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, server.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Server).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Server{config: sq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(sq.modifiers) > 0 {
@@ -405,46 +357,7 @@ func (sq *ServerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Serve
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withRelease; query != nil {
-		if err := sq.loadRelease(ctx, query, nodes, nil,
-			func(n *Server, e *Release) { n.Edges.Release = e }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (sq *ServerQuery) loadRelease(ctx context.Context, query *ReleaseQuery, nodes []*Server, init func(*Server), assign func(*Server, *Release)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Server)
-	for i := range nodes {
-		if nodes[i].release_servers == nil {
-			continue
-		}
-		fk := *nodes[i].release_servers
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(release.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "release_servers" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
 }
 
 func (sq *ServerQuery) sqlCount(ctx context.Context) (int, error) {

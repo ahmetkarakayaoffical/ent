@@ -38,8 +38,6 @@ const (
 	FieldArch = "arch"
 	// EdgeAgents holds the string denoting the agents edge name in mutations.
 	EdgeAgents = "agents"
-	// EdgeServers holds the string denoting the servers edge name in mutations.
-	EdgeServers = "servers"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
 	AgentFieldID = "oid"
 	// Table holds the table name of the release in the database.
@@ -51,13 +49,6 @@ const (
 	AgentsInverseTable = "agents"
 	// AgentsColumn is the table column denoting the agents relation/edge.
 	AgentsColumn = "release_agents"
-	// ServersTable is the table that holds the servers relation/edge.
-	ServersTable = "servers"
-	// ServersInverseTable is the table name for the Server entity.
-	// It exists in this package in order to avoid circular dependency with the "server" package.
-	ServersInverseTable = "servers"
-	// ServersColumn is the table column denoting the servers relation/edge.
-	ServersColumn = "release_servers"
 )
 
 // Columns holds all SQL columns for release fields.
@@ -94,7 +85,6 @@ const (
 	ReleaseTypeAgent     ReleaseType = "agent"
 	ReleaseTypeUpdater   ReleaseType = "updater"
 	ReleaseTypeMessenger ReleaseType = "messenger"
-	ReleaseTypeServer    ReleaseType = "server"
 )
 
 func (rt ReleaseType) String() string {
@@ -104,7 +94,7 @@ func (rt ReleaseType) String() string {
 // ReleaseTypeValidator is a validator for the "release_type" field enum values. It is called by the builders before save.
 func ReleaseTypeValidator(rt ReleaseType) error {
 	switch rt {
-	case ReleaseTypeAgent, ReleaseTypeUpdater, ReleaseTypeMessenger, ReleaseTypeServer:
+	case ReleaseTypeAgent, ReleaseTypeUpdater, ReleaseTypeMessenger:
 		return nil
 	default:
 		return fmt.Errorf("release: invalid enum value for release_type field: %q", rt)
@@ -187,31 +177,10 @@ func ByAgents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newAgentsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByServersCount orders the results by servers count.
-func ByServersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newServersStep(), opts...)
-	}
-}
-
-// ByServers orders the results by servers terms.
-func ByServers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newServersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
 func newAgentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AgentsInverseTable, AgentFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AgentsTable, AgentsColumn),
-	)
-}
-func newServersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ServersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ServersTable, ServersColumn),
 	)
 }
