@@ -28,6 +28,18 @@ func (sc *ServerCreate) SetHostname(s string) *ServerCreate {
 	return sc
 }
 
+// SetArch sets the "arch" field.
+func (sc *ServerCreate) SetArch(s string) *ServerCreate {
+	sc.mutation.SetArch(s)
+	return sc
+}
+
+// SetOs sets the "os" field.
+func (sc *ServerCreate) SetOs(s string) *ServerCreate {
+	sc.mutation.SetOs(s)
+	return sc
+}
+
 // SetComponent sets the "component" field.
 func (sc *ServerCreate) SetComponent(s server.Component) *ServerCreate {
 	sc.mutation.SetComponent(s)
@@ -90,6 +102,12 @@ func (sc *ServerCreate) check() error {
 	if _, ok := sc.mutation.Hostname(); !ok {
 		return &ValidationError{Name: "hostname", err: errors.New(`openuem_ent: missing required field "Server.hostname"`)}
 	}
+	if _, ok := sc.mutation.Arch(); !ok {
+		return &ValidationError{Name: "arch", err: errors.New(`openuem_ent: missing required field "Server.arch"`)}
+	}
+	if _, ok := sc.mutation.Os(); !ok {
+		return &ValidationError{Name: "os", err: errors.New(`openuem_ent: missing required field "Server.os"`)}
+	}
 	if _, ok := sc.mutation.Component(); !ok {
 		return &ValidationError{Name: "component", err: errors.New(`openuem_ent: missing required field "Server.component"`)}
 	}
@@ -128,6 +146,14 @@ func (sc *ServerCreate) createSpec() (*Server, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
 		_node.Hostname = value
+	}
+	if value, ok := sc.mutation.Arch(); ok {
+		_spec.SetField(server.FieldArch, field.TypeString, value)
+		_node.Arch = value
+	}
+	if value, ok := sc.mutation.Os(); ok {
+		_spec.SetField(server.FieldOs, field.TypeString, value)
+		_node.Os = value
 	}
 	if value, ok := sc.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
@@ -214,6 +240,30 @@ func (u *ServerUpsert) UpdateHostname() *ServerUpsert {
 	return u
 }
 
+// SetArch sets the "arch" field.
+func (u *ServerUpsert) SetArch(v string) *ServerUpsert {
+	u.Set(server.FieldArch, v)
+	return u
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateArch() *ServerUpsert {
+	u.SetExcluded(server.FieldArch)
+	return u
+}
+
+// SetOs sets the "os" field.
+func (u *ServerUpsert) SetOs(v string) *ServerUpsert {
+	u.Set(server.FieldOs, v)
+	return u
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateOs() *ServerUpsert {
+	u.SetExcluded(server.FieldOs)
+	return u
+}
+
 // SetComponent sets the "component" field.
 func (u *ServerUpsert) SetComponent(v server.Component) *ServerUpsert {
 	u.Set(server.FieldComponent, v)
@@ -277,6 +327,34 @@ func (u *ServerUpsertOne) SetHostname(v string) *ServerUpsertOne {
 func (u *ServerUpsertOne) UpdateHostname() *ServerUpsertOne {
 	return u.Update(func(s *ServerUpsert) {
 		s.UpdateHostname()
+	})
+}
+
+// SetArch sets the "arch" field.
+func (u *ServerUpsertOne) SetArch(v string) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetArch(v)
+	})
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateArch() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateArch()
+	})
+}
+
+// SetOs sets the "os" field.
+func (u *ServerUpsertOne) SetOs(v string) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetOs(v)
+	})
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateOs() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateOs()
 	})
 }
 
@@ -508,6 +586,34 @@ func (u *ServerUpsertBulk) SetHostname(v string) *ServerUpsertBulk {
 func (u *ServerUpsertBulk) UpdateHostname() *ServerUpsertBulk {
 	return u.Update(func(s *ServerUpsert) {
 		s.UpdateHostname()
+	})
+}
+
+// SetArch sets the "arch" field.
+func (u *ServerUpsertBulk) SetArch(v string) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetArch(v)
+	})
+}
+
+// UpdateArch sets the "arch" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateArch() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateArch()
+	})
+}
+
+// SetOs sets the "os" field.
+func (u *ServerUpsertBulk) SetOs(v string) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetOs(v)
+	})
+}
+
+// UpdateOs sets the "os" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateOs() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateOs()
 	})
 }
 

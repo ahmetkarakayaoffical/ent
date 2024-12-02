@@ -43,6 +43,34 @@ func (su *ServerUpdate) SetNillableHostname(s *string) *ServerUpdate {
 	return su
 }
 
+// SetArch sets the "arch" field.
+func (su *ServerUpdate) SetArch(s string) *ServerUpdate {
+	su.mutation.SetArch(s)
+	return su
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableArch(s *string) *ServerUpdate {
+	if s != nil {
+		su.SetArch(*s)
+	}
+	return su
+}
+
+// SetOs sets the "os" field.
+func (su *ServerUpdate) SetOs(s string) *ServerUpdate {
+	su.mutation.SetOs(s)
+	return su
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableOs(s *string) *ServerUpdate {
+	if s != nil {
+		su.SetOs(*s)
+	}
+	return su
+}
+
 // SetComponent sets the "component" field.
 func (su *ServerUpdate) SetComponent(s server.Component) *ServerUpdate {
 	su.mutation.SetComponent(s)
@@ -145,6 +173,12 @@ func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
 	}
+	if value, ok := su.mutation.Arch(); ok {
+		_spec.SetField(server.FieldArch, field.TypeString, value)
+	}
+	if value, ok := su.mutation.Os(); ok {
+		_spec.SetField(server.FieldOs, field.TypeString, value)
+	}
 	if value, ok := su.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
 	}
@@ -209,6 +243,34 @@ func (suo *ServerUpdateOne) SetHostname(s string) *ServerUpdateOne {
 func (suo *ServerUpdateOne) SetNillableHostname(s *string) *ServerUpdateOne {
 	if s != nil {
 		suo.SetHostname(*s)
+	}
+	return suo
+}
+
+// SetArch sets the "arch" field.
+func (suo *ServerUpdateOne) SetArch(s string) *ServerUpdateOne {
+	suo.mutation.SetArch(s)
+	return suo
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableArch(s *string) *ServerUpdateOne {
+	if s != nil {
+		suo.SetArch(*s)
+	}
+	return suo
+}
+
+// SetOs sets the "os" field.
+func (suo *ServerUpdateOne) SetOs(s string) *ServerUpdateOne {
+	suo.mutation.SetOs(s)
+	return suo
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableOs(s *string) *ServerUpdateOne {
+	if s != nil {
+		suo.SetOs(*s)
 	}
 	return suo
 }
@@ -344,6 +406,12 @@ func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err err
 	}
 	if value, ok := suo.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Arch(); ok {
+		_spec.SetField(server.FieldArch, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Os(); ok {
+		_spec.SetField(server.FieldOs, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.Component(); ok {
 		_spec.SetField(server.FieldComponent, field.TypeEnum, value)

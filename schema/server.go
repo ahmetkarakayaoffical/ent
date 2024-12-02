@@ -16,6 +16,8 @@ type Server struct {
 func (Server) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("hostname"),
+		field.String("arch"),
+		field.String("os"),
 		field.Enum("component").Values("ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"),
 	}
 }

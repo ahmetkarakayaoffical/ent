@@ -16,6 +16,10 @@ const (
 	FieldID = "id"
 	// FieldHostname holds the string denoting the hostname field in the database.
 	FieldHostname = "hostname"
+	// FieldArch holds the string denoting the arch field in the database.
+	FieldArch = "arch"
+	// FieldOs holds the string denoting the os field in the database.
+	FieldOs = "os"
 	// FieldComponent holds the string denoting the component field in the database.
 	FieldComponent = "component"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
@@ -35,6 +39,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldHostname,
+	FieldArch,
+	FieldOs,
 	FieldComponent,
 }
 
@@ -98,6 +104,16 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByHostname orders the results by the hostname field.
 func ByHostname(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHostname, opts...).ToFunc()
+}
+
+// ByArch orders the results by the arch field.
+func ByArch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArch, opts...).ToFunc()
+}
+
+// ByOs orders the results by the os field.
+func ByOs(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOs, opts...).ToFunc()
 }
 
 // ByComponent orders the results by the component field.

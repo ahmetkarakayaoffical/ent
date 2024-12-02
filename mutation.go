@@ -12733,6 +12733,8 @@ type ServerMutation struct {
 	typ            string
 	id             *int
 	hostname       *string
+	arch           *string
+	os             *string
 	component      *server.Component
 	clearedFields  map[string]struct{}
 	release        *int
@@ -12876,6 +12878,78 @@ func (m *ServerMutation) ResetHostname() {
 	m.hostname = nil
 }
 
+// SetArch sets the "arch" field.
+func (m *ServerMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *ServerMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *ServerMutation) ResetArch() {
+	m.arch = nil
+}
+
+// SetOs sets the "os" field.
+func (m *ServerMutation) SetOs(s string) {
+	m.os = &s
+}
+
+// Os returns the value of the "os" field in the mutation.
+func (m *ServerMutation) Os() (r string, exists bool) {
+	v := m.os
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOs returns the old "os" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldOs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOs: %w", err)
+	}
+	return oldValue.Os, nil
+}
+
+// ResetOs resets all changes to the "os" field.
+func (m *ServerMutation) ResetOs() {
+	m.os = nil
+}
+
 // SetComponent sets the "component" field.
 func (m *ServerMutation) SetComponent(s server.Component) {
 	m.component = &s
@@ -12985,9 +13059,15 @@ func (m *ServerMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ServerMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m.hostname != nil {
 		fields = append(fields, server.FieldHostname)
+	}
+	if m.arch != nil {
+		fields = append(fields, server.FieldArch)
+	}
+	if m.os != nil {
+		fields = append(fields, server.FieldOs)
 	}
 	if m.component != nil {
 		fields = append(fields, server.FieldComponent)
@@ -13002,6 +13082,10 @@ func (m *ServerMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case server.FieldHostname:
 		return m.Hostname()
+	case server.FieldArch:
+		return m.Arch()
+	case server.FieldOs:
+		return m.Os()
 	case server.FieldComponent:
 		return m.Component()
 	}
@@ -13015,6 +13099,10 @@ func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, 
 	switch name {
 	case server.FieldHostname:
 		return m.OldHostname(ctx)
+	case server.FieldArch:
+		return m.OldArch(ctx)
+	case server.FieldOs:
+		return m.OldOs(ctx)
 	case server.FieldComponent:
 		return m.OldComponent(ctx)
 	}
@@ -13032,6 +13120,20 @@ func (m *ServerMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHostname(v)
+		return nil
+	case server.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
+		return nil
+	case server.FieldOs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOs(v)
 		return nil
 	case server.FieldComponent:
 		v, ok := value.(server.Component)
@@ -13091,6 +13193,12 @@ func (m *ServerMutation) ResetField(name string) error {
 	switch name {
 	case server.FieldHostname:
 		m.ResetHostname()
+		return nil
+	case server.FieldArch:
+		m.ResetArch()
+		return nil
+	case server.FieldOs:
+		m.ResetOs()
 		return nil
 	case server.FieldComponent:
 		m.ResetComponent()

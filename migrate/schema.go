@@ -374,6 +374,8 @@ var (
 	ServersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "hostname", Type: field.TypeString},
+		{Name: "arch", Type: field.TypeString},
+		{Name: "os", Type: field.TypeString},
 		{Name: "component", Type: field.TypeEnum, Enums: []string{"ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"}},
 		{Name: "release_servers", Type: field.TypeInt, Nullable: true},
 	}
@@ -385,7 +387,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "servers_releases_servers",
-				Columns:    []*schema.Column{ServersColumns[3]},
+				Columns:    []*schema.Column{ServersColumns[5]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -394,7 +396,7 @@ var (
 			{
 				Name:    "server_hostname_component",
 				Unique:  true,
-				Columns: []*schema.Column{ServersColumns[1], ServersColumns[2]},
+				Columns: []*schema.Column{ServersColumns[1], ServersColumns[4]},
 			},
 		},
 	}

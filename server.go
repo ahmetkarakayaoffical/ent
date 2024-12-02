@@ -19,6 +19,10 @@ type Server struct {
 	ID int `json:"id,omitempty"`
 	// Hostname holds the value of the "hostname" field.
 	Hostname string `json:"hostname,omitempty"`
+	// Arch holds the value of the "arch" field.
+	Arch string `json:"arch,omitempty"`
+	// Os holds the value of the "os" field.
+	Os string `json:"os,omitempty"`
 	// Component holds the value of the "component" field.
 	Component server.Component `json:"component,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -55,7 +59,7 @@ func (*Server) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case server.FieldID:
 			values[i] = new(sql.NullInt64)
-		case server.FieldHostname, server.FieldComponent:
+		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldComponent:
 			values[i] = new(sql.NullString)
 		case server.ForeignKeys[0]: // release_servers
 			values[i] = new(sql.NullInt64)
@@ -85,6 +89,18 @@ func (s *Server) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field hostname", values[i])
 			} else if value.Valid {
 				s.Hostname = value.String
+			}
+		case server.FieldArch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field arch", values[i])
+			} else if value.Valid {
+				s.Arch = value.String
+			}
+		case server.FieldOs:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field os", values[i])
+			} else if value.Valid {
+				s.Os = value.String
 			}
 		case server.FieldComponent:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -142,6 +158,12 @@ func (s *Server) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("hostname=")
 	builder.WriteString(s.Hostname)
+	builder.WriteString(", ")
+	builder.WriteString("arch=")
+	builder.WriteString(s.Arch)
+	builder.WriteString(", ")
+	builder.WriteString("os=")
+	builder.WriteString(s.Os)
 	builder.WriteString(", ")
 	builder.WriteString("component=")
 	builder.WriteString(fmt.Sprintf("%v", s.Component))
