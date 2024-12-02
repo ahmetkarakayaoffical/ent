@@ -16,9 +16,11 @@ import (
 type Server struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID string `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
 	// Hostname holds the value of the "hostname" field.
 	Hostname string `json:"hostname,omitempty"`
+	// Component holds the value of the "component" field.
+	Component server.Component `json:"component,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ServerQuery when eager-loading is set.
 	Edges           ServerEdges `json:"edges"`
@@ -51,7 +53,9 @@ func (*Server) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case server.FieldID, server.FieldHostname:
+		case server.FieldID:
+			values[i] = new(sql.NullInt64)
+		case server.FieldHostname, server.FieldComponent:
 			values[i] = new(sql.NullString)
 		case server.ForeignKeys[0]: // release_servers
 			values[i] = new(sql.NullInt64)
@@ -71,16 +75,22 @@ func (s *Server) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case server.FieldID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value.Valid {
-				s.ID = value.String
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
 			}
+			s.ID = int(value.Int64)
 		case server.FieldHostname:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field hostname", values[i])
 			} else if value.Valid {
 				s.Hostname = value.String
+			}
+		case server.FieldComponent:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field component", values[i])
+			} else if value.Valid {
+				s.Component = server.Component(value.String)
 			}
 		case server.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -132,6 +142,9 @@ func (s *Server) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("hostname=")
 	builder.WriteString(s.Hostname)
+	builder.WriteString(", ")
+	builder.WriteString("component=")
+	builder.WriteString(fmt.Sprintf("%v", s.Component))
 	builder.WriteByte(')')
 	return builder.String()
 }

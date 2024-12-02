@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // Server holds the schema definition for the Server entity.
@@ -14,8 +15,8 @@ type Server struct {
 // Fields of the Server.
 func (Server) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").NotEmpty().Unique().StorageKey("uuid"),
 		field.String("hostname"),
+		field.Enum("component").Values("ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"),
 	}
 }
 
@@ -23,5 +24,12 @@ func (Server) Fields() []ent.Field {
 func (Server) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("release", Release.Type).Ref("servers").Unique(),
+	}
+}
+
+// Indexes of the Server.
+func (Server) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("hostname", "component").Unique(),
 	}
 }

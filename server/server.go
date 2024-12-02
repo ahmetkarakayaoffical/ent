@@ -3,6 +3,8 @@
 package server
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -11,13 +13,13 @@ const (
 	// Label holds the string label denoting the server type in the database.
 	Label = "server"
 	// FieldID holds the string denoting the id field in the database.
-	FieldID = "uuid"
+	FieldID = "id"
 	// FieldHostname holds the string denoting the hostname field in the database.
 	FieldHostname = "hostname"
+	// FieldComponent holds the string denoting the component field in the database.
+	FieldComponent = "component"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
 	EdgeRelease = "release"
-	// ReleaseFieldID holds the string denoting the ID field of the Release.
-	ReleaseFieldID = "id"
 	// Table holds the table name of the server in the database.
 	Table = "servers"
 	// ReleaseTable is the table that holds the release relation/edge.
@@ -33,6 +35,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldHostname,
+	FieldComponent,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "servers"
@@ -56,10 +59,33 @@ func ValidColumn(column string) bool {
 	return false
 }
 
-var (
-	// IDValidator is a validator for the "id" field. It is called by the builders before save.
-	IDValidator func(string) error
+// Component defines the type for the "component" enum field.
+type Component string
+
+// Component values.
+const (
+	ComponentOcsp               Component = "ocsp"
+	ComponentNats               Component = "nats"
+	ComponentCertManager        Component = "cert-manager"
+	ComponentAgentWorker        Component = "agent-worker"
+	ComponentNotificationWorker Component = "notification-worker"
+	ComponentCertManagerWorker  Component = "cert-manager-worker"
+	ComponentConsole            Component = "console"
 )
+
+func (c Component) String() string {
+	return string(c)
+}
+
+// ComponentValidator is a validator for the "component" field enum values. It is called by the builders before save.
+func ComponentValidator(c Component) error {
+	switch c {
+	case ComponentOcsp, ComponentNats, ComponentCertManager, ComponentAgentWorker, ComponentNotificationWorker, ComponentCertManagerWorker, ComponentConsole:
+		return nil
+	default:
+		return fmt.Errorf("server: invalid enum value for component field: %q", c)
+	}
+}
 
 // OrderOption defines the ordering options for the Server queries.
 type OrderOption func(*sql.Selector)
@@ -74,6 +100,11 @@ func ByHostname(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHostname, opts...).ToFunc()
 }
 
+// ByComponent orders the results by the component field.
+func ByComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldComponent, opts...).ToFunc()
+}
+
 // ByReleaseField orders the results by release field.
 func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -83,7 +114,7 @@ func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 func newReleaseStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ReleaseInverseTable, ReleaseFieldID),
+		sqlgraph.To(ReleaseInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
 	)
 }

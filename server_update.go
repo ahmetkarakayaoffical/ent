@@ -43,6 +43,20 @@ func (su *ServerUpdate) SetNillableHostname(s *string) *ServerUpdate {
 	return su
 }
 
+// SetComponent sets the "component" field.
+func (su *ServerUpdate) SetComponent(s server.Component) *ServerUpdate {
+	su.mutation.SetComponent(s)
+	return su
+}
+
+// SetNillableComponent sets the "component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableComponent(s *server.Component) *ServerUpdate {
+	if s != nil {
+		su.SetComponent(*s)
+	}
+	return su
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (su *ServerUpdate) SetReleaseID(id int) *ServerUpdate {
 	su.mutation.SetReleaseID(id)
@@ -100,6 +114,16 @@ func (su *ServerUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (su *ServerUpdate) check() error {
+	if v, ok := su.mutation.Component(); ok {
+		if err := server.ComponentValidator(v); err != nil {
+			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (su *ServerUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ServerUpdate {
 	su.modifiers = append(su.modifiers, modifiers...)
@@ -107,7 +131,10 @@ func (su *ServerUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ServerU
 }
 
 func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(server.Table, server.Columns, sqlgraph.NewFieldSpec(server.FieldID, field.TypeString))
+	if err := su.check(); err != nil {
+		return n, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(server.Table, server.Columns, sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -117,6 +144,9 @@ func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
+	}
+	if value, ok := su.mutation.Component(); ok {
+		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
 	}
 	if su.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -179,6 +209,20 @@ func (suo *ServerUpdateOne) SetHostname(s string) *ServerUpdateOne {
 func (suo *ServerUpdateOne) SetNillableHostname(s *string) *ServerUpdateOne {
 	if s != nil {
 		suo.SetHostname(*s)
+	}
+	return suo
+}
+
+// SetComponent sets the "component" field.
+func (suo *ServerUpdateOne) SetComponent(s server.Component) *ServerUpdateOne {
+	suo.mutation.SetComponent(s)
+	return suo
+}
+
+// SetNillableComponent sets the "component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableComponent(s *server.Component) *ServerUpdateOne {
+	if s != nil {
+		suo.SetComponent(*s)
 	}
 	return suo
 }
@@ -253,6 +297,16 @@ func (suo *ServerUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (suo *ServerUpdateOne) check() error {
+	if v, ok := suo.mutation.Component(); ok {
+		if err := server.ComponentValidator(v); err != nil {
+			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (suo *ServerUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ServerUpdateOne {
 	suo.modifiers = append(suo.modifiers, modifiers...)
@@ -260,7 +314,10 @@ func (suo *ServerUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Ser
 }
 
 func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err error) {
-	_spec := sqlgraph.NewUpdateSpec(server.Table, server.Columns, sqlgraph.NewFieldSpec(server.FieldID, field.TypeString))
+	if err := suo.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(server.Table, server.Columns, sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt))
 	id, ok := suo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`openuem_ent: missing "Server.id" for update`)}
@@ -287,6 +344,9 @@ func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err err
 	}
 	if value, ok := suo.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Component(); ok {
+		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
 	}
 	if suo.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{

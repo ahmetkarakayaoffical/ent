@@ -194,14 +194,14 @@ func (rc *ReleaseCreate) AddAgents(a ...*Agent) *ReleaseCreate {
 }
 
 // AddServerIDs adds the "servers" edge to the Server entity by IDs.
-func (rc *ReleaseCreate) AddServerIDs(ids ...string) *ReleaseCreate {
+func (rc *ReleaseCreate) AddServerIDs(ids ...int) *ReleaseCreate {
 	rc.mutation.AddServerIDs(ids...)
 	return rc
 }
 
 // AddServers adds the "servers" edges to the Server entity.
 func (rc *ReleaseCreate) AddServers(s ...*Server) *ReleaseCreate {
-	ids := make([]string, len(s))
+	ids := make([]int, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
 	}
@@ -342,7 +342,7 @@ func (rc *ReleaseCreate) createSpec() (*Release, *sqlgraph.CreateSpec) {
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

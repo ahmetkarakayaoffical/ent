@@ -11,7 +11,6 @@ import (
 	"github.com/doncicuto/openuem_ent/orgmetadata"
 	"github.com/doncicuto/openuem_ent/revocation"
 	"github.com/doncicuto/openuem_ent/schema"
-	"github.com/doncicuto/openuem_ent/server"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/tag"
@@ -114,12 +113,6 @@ func init() {
 	revocationDescRevoked := revocationFields[4].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
-	serverFields := schema.Server{}.Fields()
-	_ = serverFields
-	// serverDescID is the schema descriptor for id field.
-	serverDescID := serverFields[0].Descriptor()
-	// server.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	server.IDValidator = serverDescID.Validators[0].(func(string) error)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
 	// sessionsDescData is the schema descriptor for data field.

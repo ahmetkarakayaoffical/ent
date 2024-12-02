@@ -10902,8 +10902,8 @@ type ReleaseMutation struct {
 	agents         map[string]struct{}
 	removedagents  map[string]struct{}
 	clearedagents  bool
-	servers        map[string]struct{}
-	removedservers map[string]struct{}
+	servers        map[int]struct{}
+	removedservers map[int]struct{}
 	clearedservers bool
 	done           bool
 	oldValue       func(context.Context) (*Release, error)
@@ -11602,9 +11602,9 @@ func (m *ReleaseMutation) ResetAgents() {
 }
 
 // AddServerIDs adds the "servers" edge to the Server entity by ids.
-func (m *ReleaseMutation) AddServerIDs(ids ...string) {
+func (m *ReleaseMutation) AddServerIDs(ids ...int) {
 	if m.servers == nil {
-		m.servers = make(map[string]struct{})
+		m.servers = make(map[int]struct{})
 	}
 	for i := range ids {
 		m.servers[ids[i]] = struct{}{}
@@ -11622,9 +11622,9 @@ func (m *ReleaseMutation) ServersCleared() bool {
 }
 
 // RemoveServerIDs removes the "servers" edge to the Server entity by IDs.
-func (m *ReleaseMutation) RemoveServerIDs(ids ...string) {
+func (m *ReleaseMutation) RemoveServerIDs(ids ...int) {
 	if m.removedservers == nil {
-		m.removedservers = make(map[string]struct{})
+		m.removedservers = make(map[int]struct{})
 	}
 	for i := range ids {
 		delete(m.servers, ids[i])
@@ -11633,7 +11633,7 @@ func (m *ReleaseMutation) RemoveServerIDs(ids ...string) {
 }
 
 // RemovedServers returns the removed IDs of the "servers" edge to the Server entity.
-func (m *ReleaseMutation) RemovedServersIDs() (ids []string) {
+func (m *ReleaseMutation) RemovedServersIDs() (ids []int) {
 	for id := range m.removedservers {
 		ids = append(ids, id)
 	}
@@ -11641,7 +11641,7 @@ func (m *ReleaseMutation) RemovedServersIDs() (ids []string) {
 }
 
 // ServersIDs returns the "servers" edge IDs in the mutation.
-func (m *ReleaseMutation) ServersIDs() (ids []string) {
+func (m *ReleaseMutation) ServersIDs() (ids []int) {
 	for id := range m.servers {
 		ids = append(ids, id)
 	}
@@ -12731,8 +12731,9 @@ type ServerMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *string
+	id             *int
 	hostname       *string
+	component      *server.Component
 	clearedFields  map[string]struct{}
 	release        *int
 	clearedrelease bool
@@ -12761,7 +12762,7 @@ func newServerMutation(c config, op Op, opts ...serverOption) *ServerMutation {
 }
 
 // withServerID sets the ID field of the mutation.
-func withServerID(id string) serverOption {
+func withServerID(id int) serverOption {
 	return func(m *ServerMutation) {
 		var (
 			err   error
@@ -12811,15 +12812,9 @@ func (m ServerMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Server entities.
-func (m *ServerMutation) SetID(id string) {
-	m.id = &id
-}
-
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ServerMutation) ID() (id string, exists bool) {
+func (m *ServerMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -12830,12 +12825,12 @@ func (m *ServerMutation) ID() (id string, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ServerMutation) IDs(ctx context.Context) ([]string, error) {
+func (m *ServerMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []string{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -12879,6 +12874,42 @@ func (m *ServerMutation) OldHostname(ctx context.Context) (v string, err error) 
 // ResetHostname resets all changes to the "hostname" field.
 func (m *ServerMutation) ResetHostname() {
 	m.hostname = nil
+}
+
+// SetComponent sets the "component" field.
+func (m *ServerMutation) SetComponent(s server.Component) {
+	m.component = &s
+}
+
+// Component returns the value of the "component" field in the mutation.
+func (m *ServerMutation) Component() (r server.Component, exists bool) {
+	v := m.component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldComponent returns the old "component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldComponent(ctx context.Context) (v server.Component, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldComponent: %w", err)
+	}
+	return oldValue.Component, nil
+}
+
+// ResetComponent resets all changes to the "component" field.
+func (m *ServerMutation) ResetComponent() {
+	m.component = nil
 }
 
 // SetReleaseID sets the "release" edge to the Release entity by id.
@@ -12954,9 +12985,12 @@ func (m *ServerMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ServerMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.hostname != nil {
 		fields = append(fields, server.FieldHostname)
+	}
+	if m.component != nil {
+		fields = append(fields, server.FieldComponent)
 	}
 	return fields
 }
@@ -12968,6 +13002,8 @@ func (m *ServerMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case server.FieldHostname:
 		return m.Hostname()
+	case server.FieldComponent:
+		return m.Component()
 	}
 	return nil, false
 }
@@ -12979,6 +13015,8 @@ func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, 
 	switch name {
 	case server.FieldHostname:
 		return m.OldHostname(ctx)
+	case server.FieldComponent:
+		return m.OldComponent(ctx)
 	}
 	return nil, fmt.Errorf("unknown Server field %s", name)
 }
@@ -12994,6 +13032,13 @@ func (m *ServerMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHostname(v)
+		return nil
+	case server.FieldComponent:
+		v, ok := value.(server.Component)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetComponent(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)
@@ -13046,6 +13091,9 @@ func (m *ServerMutation) ResetField(name string) error {
 	switch name {
 	case server.FieldHostname:
 		m.ResetHostname()
+		return nil
+	case server.FieldComponent:
+		m.ResetComponent()
 		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)

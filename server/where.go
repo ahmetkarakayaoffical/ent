@@ -9,58 +9,48 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id string) predicate.Server {
+func ID(id int) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id string) predicate.Server {
+func IDEQ(id int) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id string) predicate.Server {
+func IDNEQ(id int) predicate.Server {
 	return predicate.Server(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...string) predicate.Server {
+func IDIn(ids ...int) predicate.Server {
 	return predicate.Server(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...string) predicate.Server {
+func IDNotIn(ids ...int) predicate.Server {
 	return predicate.Server(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id string) predicate.Server {
+func IDGT(id int) predicate.Server {
 	return predicate.Server(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id string) predicate.Server {
+func IDGTE(id int) predicate.Server {
 	return predicate.Server(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id string) predicate.Server {
+func IDLT(id int) predicate.Server {
 	return predicate.Server(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id string) predicate.Server {
+func IDLTE(id int) predicate.Server {
 	return predicate.Server(sql.FieldLTE(FieldID, id))
-}
-
-// IDEqualFold applies the EqualFold predicate on the ID field.
-func IDEqualFold(id string) predicate.Server {
-	return predicate.Server(sql.FieldEqualFold(FieldID, id))
-}
-
-// IDContainsFold applies the ContainsFold predicate on the ID field.
-func IDContainsFold(id string) predicate.Server {
-	return predicate.Server(sql.FieldContainsFold(FieldID, id))
 }
 
 // Hostname applies equality check predicate on the "hostname" field. It's identical to HostnameEQ.
@@ -131,6 +121,26 @@ func HostnameEqualFold(v string) predicate.Server {
 // HostnameContainsFold applies the ContainsFold predicate on the "hostname" field.
 func HostnameContainsFold(v string) predicate.Server {
 	return predicate.Server(sql.FieldContainsFold(FieldHostname, v))
+}
+
+// ComponentEQ applies the EQ predicate on the "component" field.
+func ComponentEQ(v Component) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldComponent, v))
+}
+
+// ComponentNEQ applies the NEQ predicate on the "component" field.
+func ComponentNEQ(v Component) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldComponent, v))
+}
+
+// ComponentIn applies the In predicate on the "component" field.
+func ComponentIn(vs ...Component) predicate.Server {
+	return predicate.Server(sql.FieldIn(FieldComponent, vs...))
+}
+
+// ComponentNotIn applies the NotIn predicate on the "component" field.
+func ComponentNotIn(vs ...Component) predicate.Server {
+	return predicate.Server(sql.FieldNotIn(FieldComponent, vs...))
 }
 
 // HasRelease applies the HasEdge predicate on the "release" edge.

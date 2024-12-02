@@ -42,8 +42,6 @@ const (
 	EdgeServers = "servers"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
 	AgentFieldID = "oid"
-	// ServerFieldID holds the string denoting the ID field of the Server.
-	ServerFieldID = "uuid"
 	// Table holds the table name of the release in the database.
 	Table = "releases"
 	// AgentsTable is the table that holds the agents relation/edge.
@@ -213,7 +211,7 @@ func newAgentsStep() *sqlgraph.Step {
 func newServersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ServersInverseTable, ServerFieldID),
+		sqlgraph.To(ServersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ServersTable, ServersColumn),
 	)
 }

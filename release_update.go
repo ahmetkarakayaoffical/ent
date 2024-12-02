@@ -267,14 +267,14 @@ func (ru *ReleaseUpdate) AddAgents(a ...*Agent) *ReleaseUpdate {
 }
 
 // AddServerIDs adds the "servers" edge to the Server entity by IDs.
-func (ru *ReleaseUpdate) AddServerIDs(ids ...string) *ReleaseUpdate {
+func (ru *ReleaseUpdate) AddServerIDs(ids ...int) *ReleaseUpdate {
 	ru.mutation.AddServerIDs(ids...)
 	return ru
 }
 
 // AddServers adds the "servers" edges to the Server entity.
 func (ru *ReleaseUpdate) AddServers(s ...*Server) *ReleaseUpdate {
-	ids := make([]string, len(s))
+	ids := make([]int, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
 	}
@@ -314,14 +314,14 @@ func (ru *ReleaseUpdate) ClearServers() *ReleaseUpdate {
 }
 
 // RemoveServerIDs removes the "servers" edge to Server entities by IDs.
-func (ru *ReleaseUpdate) RemoveServerIDs(ids ...string) *ReleaseUpdate {
+func (ru *ReleaseUpdate) RemoveServerIDs(ids ...int) *ReleaseUpdate {
 	ru.mutation.RemoveServerIDs(ids...)
 	return ru
 }
 
 // RemoveServers removes "servers" edges to Server entities.
 func (ru *ReleaseUpdate) RemoveServers(s ...*Server) *ReleaseUpdate {
-	ids := make([]string, len(s))
+	ids := make([]int, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
 	}
@@ -502,7 +502,7 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -515,7 +515,7 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -531,7 +531,7 @@ func (ru *ReleaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -797,14 +797,14 @@ func (ruo *ReleaseUpdateOne) AddAgents(a ...*Agent) *ReleaseUpdateOne {
 }
 
 // AddServerIDs adds the "servers" edge to the Server entity by IDs.
-func (ruo *ReleaseUpdateOne) AddServerIDs(ids ...string) *ReleaseUpdateOne {
+func (ruo *ReleaseUpdateOne) AddServerIDs(ids ...int) *ReleaseUpdateOne {
 	ruo.mutation.AddServerIDs(ids...)
 	return ruo
 }
 
 // AddServers adds the "servers" edges to the Server entity.
 func (ruo *ReleaseUpdateOne) AddServers(s ...*Server) *ReleaseUpdateOne {
-	ids := make([]string, len(s))
+	ids := make([]int, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
 	}
@@ -844,14 +844,14 @@ func (ruo *ReleaseUpdateOne) ClearServers() *ReleaseUpdateOne {
 }
 
 // RemoveServerIDs removes the "servers" edge to Server entities by IDs.
-func (ruo *ReleaseUpdateOne) RemoveServerIDs(ids ...string) *ReleaseUpdateOne {
+func (ruo *ReleaseUpdateOne) RemoveServerIDs(ids ...int) *ReleaseUpdateOne {
 	ruo.mutation.RemoveServerIDs(ids...)
 	return ruo
 }
 
 // RemoveServers removes "servers" edges to Server entities.
 func (ruo *ReleaseUpdateOne) RemoveServers(s ...*Server) *ReleaseUpdateOne {
-	ids := make([]string, len(s))
+	ids := make([]int, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
 	}
@@ -1062,7 +1062,7 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1075,7 +1075,7 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1091,7 +1091,7 @@ func (ruo *ReleaseUpdateOne) sqlSave(ctx context.Context) (_node *Release, err e
 			Columns: []string{release.ServersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

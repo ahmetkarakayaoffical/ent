@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,9 +28,9 @@ func (sc *ServerCreate) SetHostname(s string) *ServerCreate {
 	return sc
 }
 
-// SetID sets the "id" field.
-func (sc *ServerCreate) SetID(s string) *ServerCreate {
-	sc.mutation.SetID(s)
+// SetComponent sets the "component" field.
+func (sc *ServerCreate) SetComponent(s server.Component) *ServerCreate {
+	sc.mutation.SetComponent(s)
 	return sc
 }
 
@@ -91,9 +90,12 @@ func (sc *ServerCreate) check() error {
 	if _, ok := sc.mutation.Hostname(); !ok {
 		return &ValidationError{Name: "hostname", err: errors.New(`openuem_ent: missing required field "Server.hostname"`)}
 	}
-	if v, ok := sc.mutation.ID(); ok {
-		if err := server.IDValidator(v); err != nil {
-			return &ValidationError{Name: "id", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.id": %w`, err)}
+	if _, ok := sc.mutation.Component(); !ok {
+		return &ValidationError{Name: "component", err: errors.New(`openuem_ent: missing required field "Server.component"`)}
+	}
+	if v, ok := sc.mutation.Component(); ok {
+		if err := server.ComponentValidator(v); err != nil {
+			return &ValidationError{Name: "component", err: fmt.Errorf(`openuem_ent: validator failed for field "Server.component": %w`, err)}
 		}
 	}
 	return nil
@@ -110,13 +112,8 @@ func (sc *ServerCreate) sqlSave(ctx context.Context) (*Server, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(string); ok {
-			_node.ID = id
-		} else {
-			return nil, fmt.Errorf("unexpected Server.ID type: %T", _spec.ID.Value)
-		}
-	}
+	id := _spec.ID.Value.(int64)
+	_node.ID = int(id)
 	sc.mutation.id = &_node.ID
 	sc.mutation.done = true
 	return _node, nil
@@ -125,16 +122,16 @@ func (sc *ServerCreate) sqlSave(ctx context.Context) (*Server, error) {
 func (sc *ServerCreate) createSpec() (*Server, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Server{config: sc.config}
-		_spec = sqlgraph.NewCreateSpec(server.Table, sqlgraph.NewFieldSpec(server.FieldID, field.TypeString))
+		_spec = sqlgraph.NewCreateSpec(server.Table, sqlgraph.NewFieldSpec(server.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = sc.conflict
-	if id, ok := sc.mutation.ID(); ok {
-		_node.ID = id
-		_spec.ID.Value = id
-	}
 	if value, ok := sc.mutation.Hostname(); ok {
 		_spec.SetField(server.FieldHostname, field.TypeString, value)
 		_node.Hostname = value
+	}
+	if value, ok := sc.mutation.Component(); ok {
+		_spec.SetField(server.FieldComponent, field.TypeEnum, value)
+		_node.Component = value
 	}
 	if nodes := sc.mutation.ReleaseIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -217,24 +214,28 @@ func (u *ServerUpsert) UpdateHostname() *ServerUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
+// SetComponent sets the "component" field.
+func (u *ServerUpsert) SetComponent(v server.Component) *ServerUpsert {
+	u.Set(server.FieldComponent, v)
+	return u
+}
+
+// UpdateComponent sets the "component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldComponent)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
 //	client.Server.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(server.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *ServerUpsertOne) UpdateNewValues() *ServerUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		if _, exists := u.create.mutation.ID(); exists {
-			s.SetIgnore(server.FieldID)
-		}
-	}))
 	return u
 }
 
@@ -279,6 +280,20 @@ func (u *ServerUpsertOne) UpdateHostname() *ServerUpsertOne {
 	})
 }
 
+// SetComponent sets the "component" field.
+func (u *ServerUpsertOne) SetComponent(v server.Component) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetComponent(v)
+	})
+}
+
+// UpdateComponent sets the "component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateComponent()
+	})
+}
+
 // Exec executes the query.
 func (u *ServerUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -295,12 +310,7 @@ func (u *ServerUpsertOne) ExecX(ctx context.Context) {
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *ServerUpsertOne) ID(ctx context.Context) (id string, err error) {
-	if u.create.driver.Dialect() == dialect.MySQL {
-		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
-		// fields from the database since MySQL does not support the RETURNING clause.
-		return id, errors.New("openuem_ent: ServerUpsertOne.ID is not supported by MySQL driver. Use ServerUpsertOne.Exec instead")
-	}
+func (u *ServerUpsertOne) ID(ctx context.Context) (id int, err error) {
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -309,7 +319,7 @@ func (u *ServerUpsertOne) ID(ctx context.Context) (id string, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *ServerUpsertOne) IDX(ctx context.Context) string {
+func (u *ServerUpsertOne) IDX(ctx context.Context) int {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -363,6 +373,10 @@ func (scb *ServerCreateBulk) Save(ctx context.Context) ([]*Server, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})
@@ -449,20 +463,10 @@ type ServerUpsertBulk struct {
 //	client.Server.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
-//			sql.ResolveWith(func(u *sql.UpdateSet) {
-//				u.SetIgnore(server.FieldID)
-//			}),
 //		).
 //		Exec(ctx)
 func (u *ServerUpsertBulk) UpdateNewValues() *ServerUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
-	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
-		for _, b := range u.create.builders {
-			if _, exists := b.mutation.ID(); exists {
-				s.SetIgnore(server.FieldID)
-			}
-		}
-	}))
 	return u
 }
 
@@ -504,6 +508,20 @@ func (u *ServerUpsertBulk) SetHostname(v string) *ServerUpsertBulk {
 func (u *ServerUpsertBulk) UpdateHostname() *ServerUpsertBulk {
 	return u.Update(func(s *ServerUpsert) {
 		s.UpdateHostname()
+	})
+}
+
+// SetComponent sets the "component" field.
+func (u *ServerUpsertBulk) SetComponent(v server.Component) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetComponent(v)
+	})
+}
+
+// UpdateComponent sets the "component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateComponent()
 	})
 }
 
