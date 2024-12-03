@@ -6,13 +6,13 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Server holds the schema definition for the Server entity.
-type Server struct {
+// Component holds the schema definition for the Server entity.
+type Component struct {
 	ent.Schema
 }
 
-// Fields of the Server.
-func (Server) Fields() []ent.Field {
+// Fields of the Component.
+func (Component) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("hostname"),
 		field.String("arch"),
@@ -23,8 +23,8 @@ func (Server) Fields() []ent.Field {
 	}
 }
 
-// Indexes of the Server.
-func (Server) Indexes() []ent.Index {
+// Indexes of the Component.
+func (Component) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("hostname", "arch", "os", "component", "version", "channel").Unique(),
 	}

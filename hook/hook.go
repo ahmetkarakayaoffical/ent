@@ -57,6 +57,18 @@ func (f CertificateFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (op
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.CertificateMutation", m)
 }
 
+// The ComponentFunc type is an adapter to allow the use of ordinary
+// function as Component mutator.
+type ComponentFunc func(context.Context, *openuem_ent.ComponentMutation) (openuem_ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ComponentFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
+	if mv, ok := m.(*openuem_ent.ComponentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ComponentMutation", m)
+}
+
 // The ComputerFunc type is an adapter to allow the use of ordinary
 // function as Computer mutator.
 type ComputerFunc func(context.Context, *openuem_ent.ComputerMutation) (openuem_ent.Value, error)
@@ -187,18 +199,6 @@ func (f RevocationFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (ope
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.RevocationMutation", m)
-}
-
-// The ServerFunc type is an adapter to allow the use of ordinary
-// function as Server mutator.
-type ServerFunc func(context.Context, *openuem_ent.ServerMutation) (openuem_ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ServerFunc) Mutate(ctx context.Context, m openuem_ent.Mutation) (openuem_ent.Value, error) {
-	if mv, ok := m.(*openuem_ent.ServerMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *openuem_ent.ServerMutation", m)
 }
 
 // The SessionsFunc type is an adapter to allow the use of ordinary

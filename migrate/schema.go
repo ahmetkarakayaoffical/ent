@@ -104,6 +104,29 @@ var (
 		Columns:    CertificatesColumns,
 		PrimaryKey: []*schema.Column{CertificatesColumns[0]},
 	}
+	// ComponentsColumns holds the columns for the "components" table.
+	ComponentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "hostname", Type: field.TypeString},
+		{Name: "arch", Type: field.TypeString},
+		{Name: "os", Type: field.TypeString},
+		{Name: "component", Type: field.TypeEnum, Enums: []string{"ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"}},
+		{Name: "version", Type: field.TypeString},
+		{Name: "channel", Type: field.TypeEnum, Enums: []string{"stable", "testing", "devel"}},
+	}
+	// ComponentsTable holds the schema information for the "components" table.
+	ComponentsTable = &schema.Table{
+		Name:       "components",
+		Columns:    ComponentsColumns,
+		PrimaryKey: []*schema.Column{ComponentsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "component_hostname_arch_os_component_version_channel",
+				Unique:  true,
+				Columns: []*schema.Column{ComponentsColumns[1], ComponentsColumns[2], ComponentsColumns[3], ComponentsColumns[4], ComponentsColumns[5], ComponentsColumns[6]},
+			},
+		},
+	}
 	// ComputersColumns holds the columns for the "computers" table.
 	ComputersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -370,29 +393,6 @@ var (
 		Columns:    RevocationsColumns,
 		PrimaryKey: []*schema.Column{RevocationsColumns[0]},
 	}
-	// ServersColumns holds the columns for the "servers" table.
-	ServersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "hostname", Type: field.TypeString},
-		{Name: "arch", Type: field.TypeString},
-		{Name: "os", Type: field.TypeString},
-		{Name: "component", Type: field.TypeEnum, Enums: []string{"ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"}},
-		{Name: "version", Type: field.TypeString},
-		{Name: "channel", Type: field.TypeEnum, Enums: []string{"stable", "testing", "devel"}},
-	}
-	// ServersTable holds the schema information for the "servers" table.
-	ServersTable = &schema.Table{
-		Name:       "servers",
-		Columns:    ServersColumns,
-		PrimaryKey: []*schema.Column{ServersColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "server_hostname_arch_os_component_version_channel",
-				Unique:  true,
-				Columns: []*schema.Column{ServersColumns[1], ServersColumns[2], ServersColumns[3], ServersColumns[4], ServersColumns[5], ServersColumns[6]},
-			},
-		},
-	}
 	// SessionsColumns holds the columns for the "sessions" table.
 	SessionsColumns = []*schema.Column{
 		{Name: "token", Type: field.TypeString, Unique: true, Size: 2147483647},
@@ -605,6 +605,7 @@ var (
 		AntiviriTable,
 		AppsTable,
 		CertificatesTable,
+		ComponentsTable,
 		ComputersTable,
 		DeploymentsTable,
 		LogicalDisksTable,
@@ -616,7 +617,6 @@ var (
 		PrintersTable,
 		ReleasesTable,
 		RevocationsTable,
-		ServersTable,
 		SessionsTable,
 		SettingsTable,
 		SharesTable,

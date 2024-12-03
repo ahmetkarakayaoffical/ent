@@ -15,6 +15,7 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/certificate"
+	"github.com/doncicuto/openuem_ent/component"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
@@ -27,7 +28,6 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
-	"github.com/doncicuto/openuem_ent/server"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
@@ -50,6 +50,7 @@ const (
 	TypeAntivirus       = "Antivirus"
 	TypeApp             = "App"
 	TypeCertificate     = "Certificate"
+	TypeComponent       = "Component"
 	TypeComputer        = "Computer"
 	TypeDeployment      = "Deployment"
 	TypeLogicalDisk     = "LogicalDisk"
@@ -61,7 +62,6 @@ const (
 	TypePrinter         = "Printer"
 	TypeRelease         = "Release"
 	TypeRevocation      = "Revocation"
-	TypeServer          = "Server"
 	TypeSessions        = "Sessions"
 	TypeSettings        = "Settings"
 	TypeShare           = "Share"
@@ -4374,6 +4374,602 @@ func (m *CertificateMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *CertificateMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Certificate edge %s", name)
+}
+
+// ComponentMutation represents an operation that mutates the Component nodes in the graph.
+type ComponentMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	hostname      *string
+	arch          *string
+	os            *string
+	component     *component.Component
+	version       *string
+	channel       *component.Channel
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Component, error)
+	predicates    []predicate.Component
+}
+
+var _ ent.Mutation = (*ComponentMutation)(nil)
+
+// componentOption allows management of the mutation configuration using functional options.
+type componentOption func(*ComponentMutation)
+
+// newComponentMutation creates new mutation for the Component entity.
+func newComponentMutation(c config, op Op, opts ...componentOption) *ComponentMutation {
+	m := &ComponentMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComponent,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withComponentID sets the ID field of the mutation.
+func withComponentID(id int) componentOption {
+	return func(m *ComponentMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Component
+		)
+		m.oldValue = func(ctx context.Context) (*Component, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Component.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComponent sets the old Component of the mutation.
+func withComponent(node *Component) componentOption {
+	return func(m *ComponentMutation) {
+		m.oldValue = func(context.Context) (*Component, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ComponentMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ComponentMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ComponentMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ComponentMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Component.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHostname sets the "hostname" field.
+func (m *ComponentMutation) SetHostname(s string) {
+	m.hostname = &s
+}
+
+// Hostname returns the value of the "hostname" field in the mutation.
+func (m *ComponentMutation) Hostname() (r string, exists bool) {
+	v := m.hostname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHostname returns the old "hostname" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldHostname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHostname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHostname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHostname: %w", err)
+	}
+	return oldValue.Hostname, nil
+}
+
+// ResetHostname resets all changes to the "hostname" field.
+func (m *ComponentMutation) ResetHostname() {
+	m.hostname = nil
+}
+
+// SetArch sets the "arch" field.
+func (m *ComponentMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *ComponentMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *ComponentMutation) ResetArch() {
+	m.arch = nil
+}
+
+// SetOs sets the "os" field.
+func (m *ComponentMutation) SetOs(s string) {
+	m.os = &s
+}
+
+// Os returns the value of the "os" field in the mutation.
+func (m *ComponentMutation) Os() (r string, exists bool) {
+	v := m.os
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOs returns the old "os" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldOs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOs: %w", err)
+	}
+	return oldValue.Os, nil
+}
+
+// ResetOs resets all changes to the "os" field.
+func (m *ComponentMutation) ResetOs() {
+	m.os = nil
+}
+
+// SetComponent sets the "component" field.
+func (m *ComponentMutation) SetComponent(c component.Component) {
+	m.component = &c
+}
+
+// Component returns the value of the "component" field in the mutation.
+func (m *ComponentMutation) Component() (r component.Component, exists bool) {
+	v := m.component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldComponent returns the old "component" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldComponent(ctx context.Context) (v component.Component, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldComponent: %w", err)
+	}
+	return oldValue.Component, nil
+}
+
+// ResetComponent resets all changes to the "component" field.
+func (m *ComponentMutation) ResetComponent() {
+	m.component = nil
+}
+
+// SetVersion sets the "version" field.
+func (m *ComponentMutation) SetVersion(s string) {
+	m.version = &s
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *ComponentMutation) Version() (r string, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *ComponentMutation) ResetVersion() {
+	m.version = nil
+}
+
+// SetChannel sets the "channel" field.
+func (m *ComponentMutation) SetChannel(c component.Channel) {
+	m.channel = &c
+}
+
+// Channel returns the value of the "channel" field in the mutation.
+func (m *ComponentMutation) Channel() (r component.Channel, exists bool) {
+	v := m.channel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChannel returns the old "channel" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldChannel(ctx context.Context) (v component.Channel, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChannel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChannel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChannel: %w", err)
+	}
+	return oldValue.Channel, nil
+}
+
+// ResetChannel resets all changes to the "channel" field.
+func (m *ComponentMutation) ResetChannel() {
+	m.channel = nil
+}
+
+// Where appends a list predicates to the ComponentMutation builder.
+func (m *ComponentMutation) Where(ps ...predicate.Component) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ComponentMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ComponentMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Component, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ComponentMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ComponentMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Component).
+func (m *ComponentMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ComponentMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.hostname != nil {
+		fields = append(fields, component.FieldHostname)
+	}
+	if m.arch != nil {
+		fields = append(fields, component.FieldArch)
+	}
+	if m.os != nil {
+		fields = append(fields, component.FieldOs)
+	}
+	if m.component != nil {
+		fields = append(fields, component.FieldComponent)
+	}
+	if m.version != nil {
+		fields = append(fields, component.FieldVersion)
+	}
+	if m.channel != nil {
+		fields = append(fields, component.FieldChannel)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ComponentMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case component.FieldHostname:
+		return m.Hostname()
+	case component.FieldArch:
+		return m.Arch()
+	case component.FieldOs:
+		return m.Os()
+	case component.FieldComponent:
+		return m.Component()
+	case component.FieldVersion:
+		return m.Version()
+	case component.FieldChannel:
+		return m.Channel()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ComponentMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case component.FieldHostname:
+		return m.OldHostname(ctx)
+	case component.FieldArch:
+		return m.OldArch(ctx)
+	case component.FieldOs:
+		return m.OldOs(ctx)
+	case component.FieldComponent:
+		return m.OldComponent(ctx)
+	case component.FieldVersion:
+		return m.OldVersion(ctx)
+	case component.FieldChannel:
+		return m.OldChannel(ctx)
+	}
+	return nil, fmt.Errorf("unknown Component field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComponentMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case component.FieldHostname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHostname(v)
+		return nil
+	case component.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
+		return nil
+	case component.FieldOs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOs(v)
+		return nil
+	case component.FieldComponent:
+		v, ok := value.(component.Component)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetComponent(v)
+		return nil
+	case component.FieldVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
+	case component.FieldChannel:
+		v, ok := value.(component.Channel)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChannel(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Component field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ComponentMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ComponentMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComponentMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Component numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ComponentMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ComponentMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ComponentMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Component nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ComponentMutation) ResetField(name string) error {
+	switch name {
+	case component.FieldHostname:
+		m.ResetHostname()
+		return nil
+	case component.FieldArch:
+		m.ResetArch()
+		return nil
+	case component.FieldOs:
+		m.ResetOs()
+		return nil
+	case component.FieldComponent:
+		m.ResetComponent()
+		return nil
+	case component.FieldVersion:
+		m.ResetVersion()
+		return nil
+	case component.FieldChannel:
+		m.ResetChannel()
+		return nil
+	}
+	return fmt.Errorf("unknown Component field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ComponentMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ComponentMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ComponentMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ComponentMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ComponentMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ComponentMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ComponentMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Component unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ComponentMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Component edge %s", name)
 }
 
 // ComputerMutation represents an operation that mutates the Computer nodes in the graph.
@@ -12641,602 +13237,6 @@ func (m *RevocationMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *RevocationMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Revocation edge %s", name)
-}
-
-// ServerMutation represents an operation that mutates the Server nodes in the graph.
-type ServerMutation struct {
-	config
-	op            Op
-	typ           string
-	id            *int
-	hostname      *string
-	arch          *string
-	os            *string
-	component     *server.Component
-	version       *string
-	channel       *server.Channel
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Server, error)
-	predicates    []predicate.Server
-}
-
-var _ ent.Mutation = (*ServerMutation)(nil)
-
-// serverOption allows management of the mutation configuration using functional options.
-type serverOption func(*ServerMutation)
-
-// newServerMutation creates new mutation for the Server entity.
-func newServerMutation(c config, op Op, opts ...serverOption) *ServerMutation {
-	m := &ServerMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeServer,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withServerID sets the ID field of the mutation.
-func withServerID(id int) serverOption {
-	return func(m *ServerMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *Server
-		)
-		m.oldValue = func(ctx context.Context) (*Server, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().Server.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withServer sets the old Server of the mutation.
-func withServer(node *Server) serverOption {
-	return func(m *ServerMutation) {
-		m.oldValue = func(context.Context) (*Server, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m ServerMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m ServerMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("openuem_ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *ServerMutation) ID() (id int, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *ServerMutation) IDs(ctx context.Context) ([]int, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Server.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetHostname sets the "hostname" field.
-func (m *ServerMutation) SetHostname(s string) {
-	m.hostname = &s
-}
-
-// Hostname returns the value of the "hostname" field in the mutation.
-func (m *ServerMutation) Hostname() (r string, exists bool) {
-	v := m.hostname
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldHostname returns the old "hostname" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldHostname(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldHostname is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldHostname requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldHostname: %w", err)
-	}
-	return oldValue.Hostname, nil
-}
-
-// ResetHostname resets all changes to the "hostname" field.
-func (m *ServerMutation) ResetHostname() {
-	m.hostname = nil
-}
-
-// SetArch sets the "arch" field.
-func (m *ServerMutation) SetArch(s string) {
-	m.arch = &s
-}
-
-// Arch returns the value of the "arch" field in the mutation.
-func (m *ServerMutation) Arch() (r string, exists bool) {
-	v := m.arch
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldArch returns the old "arch" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldArch(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldArch is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldArch requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldArch: %w", err)
-	}
-	return oldValue.Arch, nil
-}
-
-// ResetArch resets all changes to the "arch" field.
-func (m *ServerMutation) ResetArch() {
-	m.arch = nil
-}
-
-// SetOs sets the "os" field.
-func (m *ServerMutation) SetOs(s string) {
-	m.os = &s
-}
-
-// Os returns the value of the "os" field in the mutation.
-func (m *ServerMutation) Os() (r string, exists bool) {
-	v := m.os
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOs returns the old "os" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldOs(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOs is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOs requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOs: %w", err)
-	}
-	return oldValue.Os, nil
-}
-
-// ResetOs resets all changes to the "os" field.
-func (m *ServerMutation) ResetOs() {
-	m.os = nil
-}
-
-// SetComponent sets the "component" field.
-func (m *ServerMutation) SetComponent(s server.Component) {
-	m.component = &s
-}
-
-// Component returns the value of the "component" field in the mutation.
-func (m *ServerMutation) Component() (r server.Component, exists bool) {
-	v := m.component
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldComponent returns the old "component" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldComponent(ctx context.Context) (v server.Component, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldComponent is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldComponent requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldComponent: %w", err)
-	}
-	return oldValue.Component, nil
-}
-
-// ResetComponent resets all changes to the "component" field.
-func (m *ServerMutation) ResetComponent() {
-	m.component = nil
-}
-
-// SetVersion sets the "version" field.
-func (m *ServerMutation) SetVersion(s string) {
-	m.version = &s
-}
-
-// Version returns the value of the "version" field in the mutation.
-func (m *ServerMutation) Version() (r string, exists bool) {
-	v := m.version
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldVersion returns the old "version" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldVersion(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVersion requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
-	}
-	return oldValue.Version, nil
-}
-
-// ResetVersion resets all changes to the "version" field.
-func (m *ServerMutation) ResetVersion() {
-	m.version = nil
-}
-
-// SetChannel sets the "channel" field.
-func (m *ServerMutation) SetChannel(s server.Channel) {
-	m.channel = &s
-}
-
-// Channel returns the value of the "channel" field in the mutation.
-func (m *ServerMutation) Channel() (r server.Channel, exists bool) {
-	v := m.channel
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldChannel returns the old "channel" field's value of the Server entity.
-// If the Server object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ServerMutation) OldChannel(ctx context.Context) (v server.Channel, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldChannel is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldChannel requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldChannel: %w", err)
-	}
-	return oldValue.Channel, nil
-}
-
-// ResetChannel resets all changes to the "channel" field.
-func (m *ServerMutation) ResetChannel() {
-	m.channel = nil
-}
-
-// Where appends a list predicates to the ServerMutation builder.
-func (m *ServerMutation) Where(ps ...predicate.Server) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the ServerMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *ServerMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Server, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *ServerMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *ServerMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (Server).
-func (m *ServerMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *ServerMutation) Fields() []string {
-	fields := make([]string, 0, 6)
-	if m.hostname != nil {
-		fields = append(fields, server.FieldHostname)
-	}
-	if m.arch != nil {
-		fields = append(fields, server.FieldArch)
-	}
-	if m.os != nil {
-		fields = append(fields, server.FieldOs)
-	}
-	if m.component != nil {
-		fields = append(fields, server.FieldComponent)
-	}
-	if m.version != nil {
-		fields = append(fields, server.FieldVersion)
-	}
-	if m.channel != nil {
-		fields = append(fields, server.FieldChannel)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *ServerMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case server.FieldHostname:
-		return m.Hostname()
-	case server.FieldArch:
-		return m.Arch()
-	case server.FieldOs:
-		return m.Os()
-	case server.FieldComponent:
-		return m.Component()
-	case server.FieldVersion:
-		return m.Version()
-	case server.FieldChannel:
-		return m.Channel()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case server.FieldHostname:
-		return m.OldHostname(ctx)
-	case server.FieldArch:
-		return m.OldArch(ctx)
-	case server.FieldOs:
-		return m.OldOs(ctx)
-	case server.FieldComponent:
-		return m.OldComponent(ctx)
-	case server.FieldVersion:
-		return m.OldVersion(ctx)
-	case server.FieldChannel:
-		return m.OldChannel(ctx)
-	}
-	return nil, fmt.Errorf("unknown Server field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ServerMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case server.FieldHostname:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetHostname(v)
-		return nil
-	case server.FieldArch:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetArch(v)
-		return nil
-	case server.FieldOs:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOs(v)
-		return nil
-	case server.FieldComponent:
-		v, ok := value.(server.Component)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetComponent(v)
-		return nil
-	case server.FieldVersion:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetVersion(v)
-		return nil
-	case server.FieldChannel:
-		v, ok := value.(server.Channel)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetChannel(v)
-		return nil
-	}
-	return fmt.Errorf("unknown Server field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *ServerMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *ServerMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ServerMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Server numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *ServerMutation) ClearedFields() []string {
-	return nil
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *ServerMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *ServerMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Server nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *ServerMutation) ResetField(name string) error {
-	switch name {
-	case server.FieldHostname:
-		m.ResetHostname()
-		return nil
-	case server.FieldArch:
-		m.ResetArch()
-		return nil
-	case server.FieldOs:
-		m.ResetOs()
-		return nil
-	case server.FieldComponent:
-		m.ResetComponent()
-		return nil
-	case server.FieldVersion:
-		m.ResetVersion()
-		return nil
-	case server.FieldChannel:
-		m.ResetChannel()
-		return nil
-	}
-	return fmt.Errorf("unknown Server field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *ServerMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *ServerMutation) AddedIDs(name string) []ent.Value {
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *ServerMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *ServerMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *ServerMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *ServerMutation) EdgeCleared(name string) bool {
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *ServerMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown Server unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *ServerMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown Server edge %s", name)
 }
 
 // SessionsMutation represents an operation that mutates the Sessions nodes in the graph.
