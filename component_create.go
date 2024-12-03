@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -81,6 +82,20 @@ func (cc *ComponentCreate) SetUpdateMessage(s string) *ComponentCreate {
 func (cc *ComponentCreate) SetNillableUpdateMessage(s *string) *ComponentCreate {
 	if s != nil {
 		cc.SetUpdateMessage(*s)
+	}
+	return cc
+}
+
+// SetUpdateWhen sets the "update_when" field.
+func (cc *ComponentCreate) SetUpdateWhen(t time.Time) *ComponentCreate {
+	cc.mutation.SetUpdateWhen(t)
+	return cc
+}
+
+// SetNillableUpdateWhen sets the "update_when" field if the given value is not nil.
+func (cc *ComponentCreate) SetNillableUpdateWhen(t *time.Time) *ComponentCreate {
+	if t != nil {
+		cc.SetUpdateWhen(*t)
 	}
 	return cc
 }
@@ -210,6 +225,10 @@ func (cc *ComponentCreate) createSpec() (*Component, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.UpdateMessage(); ok {
 		_spec.SetField(component.FieldUpdateMessage, field.TypeString, value)
 		_node.UpdateMessage = value
+	}
+	if value, ok := cc.mutation.UpdateWhen(); ok {
+		_spec.SetField(component.FieldUpdateWhen, field.TypeTime, value)
+		_node.UpdateWhen = value
 	}
 	return _node, _spec
 }
@@ -368,6 +387,24 @@ func (u *ComponentUpsert) UpdateUpdateMessage() *ComponentUpsert {
 // ClearUpdateMessage clears the value of the "update_message" field.
 func (u *ComponentUpsert) ClearUpdateMessage() *ComponentUpsert {
 	u.SetNull(component.FieldUpdateMessage)
+	return u
+}
+
+// SetUpdateWhen sets the "update_when" field.
+func (u *ComponentUpsert) SetUpdateWhen(v time.Time) *ComponentUpsert {
+	u.Set(component.FieldUpdateWhen, v)
+	return u
+}
+
+// UpdateUpdateWhen sets the "update_when" field to the value that was provided on create.
+func (u *ComponentUpsert) UpdateUpdateWhen() *ComponentUpsert {
+	u.SetExcluded(component.FieldUpdateWhen)
+	return u
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (u *ComponentUpsert) ClearUpdateWhen() *ComponentUpsert {
+	u.SetNull(component.FieldUpdateWhen)
 	return u
 }
 
@@ -534,6 +571,27 @@ func (u *ComponentUpsertOne) UpdateUpdateMessage() *ComponentUpsertOne {
 func (u *ComponentUpsertOne) ClearUpdateMessage() *ComponentUpsertOne {
 	return u.Update(func(s *ComponentUpsert) {
 		s.ClearUpdateMessage()
+	})
+}
+
+// SetUpdateWhen sets the "update_when" field.
+func (u *ComponentUpsertOne) SetUpdateWhen(v time.Time) *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateWhen(v)
+	})
+}
+
+// UpdateUpdateWhen sets the "update_when" field to the value that was provided on create.
+func (u *ComponentUpsertOne) UpdateUpdateWhen() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateWhen()
+	})
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (u *ComponentUpsertOne) ClearUpdateWhen() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateWhen()
 	})
 }
 
@@ -863,6 +921,27 @@ func (u *ComponentUpsertBulk) UpdateUpdateMessage() *ComponentUpsertBulk {
 func (u *ComponentUpsertBulk) ClearUpdateMessage() *ComponentUpsertBulk {
 	return u.Update(func(s *ComponentUpsert) {
 		s.ClearUpdateMessage()
+	})
+}
+
+// SetUpdateWhen sets the "update_when" field.
+func (u *ComponentUpsertBulk) SetUpdateWhen(v time.Time) *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateWhen(v)
+	})
+}
+
+// UpdateUpdateWhen sets the "update_when" field to the value that was provided on create.
+func (u *ComponentUpsertBulk) UpdateUpdateWhen() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateWhen()
+	})
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (u *ComponentUpsertBulk) ClearUpdateWhen() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateWhen()
 	})
 }
 

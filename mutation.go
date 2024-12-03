@@ -4390,6 +4390,7 @@ type ComponentMutation struct {
 	channel        *component.Channel
 	update_status  *component.UpdateStatus
 	update_message *string
+	update_when    *time.Time
 	clearedFields  map[string]struct{}
 	done           bool
 	oldValue       func(context.Context) (*Component, error)
@@ -4808,6 +4809,55 @@ func (m *ComponentMutation) ResetUpdateMessage() {
 	delete(m.clearedFields, component.FieldUpdateMessage)
 }
 
+// SetUpdateWhen sets the "update_when" field.
+func (m *ComponentMutation) SetUpdateWhen(t time.Time) {
+	m.update_when = &t
+}
+
+// UpdateWhen returns the value of the "update_when" field in the mutation.
+func (m *ComponentMutation) UpdateWhen() (r time.Time, exists bool) {
+	v := m.update_when
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateWhen returns the old "update_when" field's value of the Component entity.
+// If the Component object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComponentMutation) OldUpdateWhen(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateWhen is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateWhen requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateWhen: %w", err)
+	}
+	return oldValue.UpdateWhen, nil
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (m *ComponentMutation) ClearUpdateWhen() {
+	m.update_when = nil
+	m.clearedFields[component.FieldUpdateWhen] = struct{}{}
+}
+
+// UpdateWhenCleared returns if the "update_when" field was cleared in this mutation.
+func (m *ComponentMutation) UpdateWhenCleared() bool {
+	_, ok := m.clearedFields[component.FieldUpdateWhen]
+	return ok
+}
+
+// ResetUpdateWhen resets all changes to the "update_when" field.
+func (m *ComponentMutation) ResetUpdateWhen() {
+	m.update_when = nil
+	delete(m.clearedFields, component.FieldUpdateWhen)
+}
+
 // Where appends a list predicates to the ComponentMutation builder.
 func (m *ComponentMutation) Where(ps ...predicate.Component) {
 	m.predicates = append(m.predicates, ps...)
@@ -4842,7 +4892,7 @@ func (m *ComponentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComponentMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.hostname != nil {
 		fields = append(fields, component.FieldHostname)
 	}
@@ -4866,6 +4916,9 @@ func (m *ComponentMutation) Fields() []string {
 	}
 	if m.update_message != nil {
 		fields = append(fields, component.FieldUpdateMessage)
+	}
+	if m.update_when != nil {
+		fields = append(fields, component.FieldUpdateWhen)
 	}
 	return fields
 }
@@ -4891,6 +4944,8 @@ func (m *ComponentMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdateStatus()
 	case component.FieldUpdateMessage:
 		return m.UpdateMessage()
+	case component.FieldUpdateWhen:
+		return m.UpdateWhen()
 	}
 	return nil, false
 }
@@ -4916,6 +4971,8 @@ func (m *ComponentMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdateStatus(ctx)
 	case component.FieldUpdateMessage:
 		return m.OldUpdateMessage(ctx)
+	case component.FieldUpdateWhen:
+		return m.OldUpdateWhen(ctx)
 	}
 	return nil, fmt.Errorf("unknown Component field %s", name)
 }
@@ -4981,6 +5038,13 @@ func (m *ComponentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdateMessage(v)
 		return nil
+	case component.FieldUpdateWhen:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateWhen(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Component field %s", name)
 }
@@ -5017,6 +5081,9 @@ func (m *ComponentMutation) ClearedFields() []string {
 	if m.FieldCleared(component.FieldUpdateMessage) {
 		fields = append(fields, component.FieldUpdateMessage)
 	}
+	if m.FieldCleared(component.FieldUpdateWhen) {
+		fields = append(fields, component.FieldUpdateWhen)
+	}
 	return fields
 }
 
@@ -5036,6 +5103,9 @@ func (m *ComponentMutation) ClearField(name string) error {
 		return nil
 	case component.FieldUpdateMessage:
 		m.ClearUpdateMessage()
+		return nil
+	case component.FieldUpdateWhen:
+		m.ClearUpdateWhen()
 		return nil
 	}
 	return fmt.Errorf("unknown Component nullable field %s", name)
@@ -5068,6 +5138,9 @@ func (m *ComponentMutation) ResetField(name string) error {
 		return nil
 	case component.FieldUpdateMessage:
 		m.ResetUpdateMessage()
+		return nil
+	case component.FieldUpdateWhen:
+		m.ResetUpdateWhen()
 		return nil
 	}
 	return fmt.Errorf("unknown Component field %s", name)

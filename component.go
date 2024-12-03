@@ -5,6 +5,7 @@ package openuem_ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -32,7 +33,9 @@ type Component struct {
 	UpdateStatus component.UpdateStatus `json:"update_status,omitempty"`
 	// UpdateMessage holds the value of the "update_message" field.
 	UpdateMessage string `json:"update_message,omitempty"`
-	selectValues  sql.SelectValues
+	// UpdateWhen holds the value of the "update_when" field.
+	UpdateWhen   time.Time `json:"update_when,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -44,6 +47,8 @@ func (*Component) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case component.FieldHostname, component.FieldArch, component.FieldOs, component.FieldComponent, component.FieldVersion, component.FieldChannel, component.FieldUpdateStatus, component.FieldUpdateMessage:
 			values[i] = new(sql.NullString)
+		case component.FieldUpdateWhen:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -113,6 +118,12 @@ func (c *Component) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdateMessage = value.String
 			}
+		case component.FieldUpdateWhen:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_when", values[i])
+			} else if value.Valid {
+				c.UpdateWhen = value.Time
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -172,6 +183,9 @@ func (c *Component) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("update_message=")
 	builder.WriteString(c.UpdateMessage)
+	builder.WriteString(", ")
+	builder.WriteString("update_when=")
+	builder.WriteString(c.UpdateWhen.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -3,6 +3,8 @@
 package component
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/doncicuto/openuem_ent/predicate"
 )
@@ -75,6 +77,11 @@ func Version(v string) predicate.Component {
 // UpdateMessage applies equality check predicate on the "update_message" field. It's identical to UpdateMessageEQ.
 func UpdateMessage(v string) predicate.Component {
 	return predicate.Component(sql.FieldEQ(FieldUpdateMessage, v))
+}
+
+// UpdateWhen applies equality check predicate on the "update_when" field. It's identical to UpdateWhenEQ.
+func UpdateWhen(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldEQ(FieldUpdateWhen, v))
 }
 
 // HostnameEQ applies the EQ predicate on the "hostname" field.
@@ -480,6 +487,56 @@ func UpdateMessageEqualFold(v string) predicate.Component {
 // UpdateMessageContainsFold applies the ContainsFold predicate on the "update_message" field.
 func UpdateMessageContainsFold(v string) predicate.Component {
 	return predicate.Component(sql.FieldContainsFold(FieldUpdateMessage, v))
+}
+
+// UpdateWhenEQ applies the EQ predicate on the "update_when" field.
+func UpdateWhenEQ(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldEQ(FieldUpdateWhen, v))
+}
+
+// UpdateWhenNEQ applies the NEQ predicate on the "update_when" field.
+func UpdateWhenNEQ(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldNEQ(FieldUpdateWhen, v))
+}
+
+// UpdateWhenIn applies the In predicate on the "update_when" field.
+func UpdateWhenIn(vs ...time.Time) predicate.Component {
+	return predicate.Component(sql.FieldIn(FieldUpdateWhen, vs...))
+}
+
+// UpdateWhenNotIn applies the NotIn predicate on the "update_when" field.
+func UpdateWhenNotIn(vs ...time.Time) predicate.Component {
+	return predicate.Component(sql.FieldNotIn(FieldUpdateWhen, vs...))
+}
+
+// UpdateWhenGT applies the GT predicate on the "update_when" field.
+func UpdateWhenGT(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldGT(FieldUpdateWhen, v))
+}
+
+// UpdateWhenGTE applies the GTE predicate on the "update_when" field.
+func UpdateWhenGTE(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldGTE(FieldUpdateWhen, v))
+}
+
+// UpdateWhenLT applies the LT predicate on the "update_when" field.
+func UpdateWhenLT(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldLT(FieldUpdateWhen, v))
+}
+
+// UpdateWhenLTE applies the LTE predicate on the "update_when" field.
+func UpdateWhenLTE(v time.Time) predicate.Component {
+	return predicate.Component(sql.FieldLTE(FieldUpdateWhen, v))
+}
+
+// UpdateWhenIsNil applies the IsNil predicate on the "update_when" field.
+func UpdateWhenIsNil() predicate.Component {
+	return predicate.Component(sql.FieldIsNull(FieldUpdateWhen))
+}
+
+// UpdateWhenNotNil applies the NotNil predicate on the "update_when" field.
+func UpdateWhenNotNil() predicate.Component {
+	return predicate.Component(sql.FieldNotNull(FieldUpdateWhen))
 }
 
 // And groups predicates with the AND operator between them.

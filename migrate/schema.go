@@ -115,6 +115,7 @@ var (
 		{Name: "channel", Type: field.TypeEnum, Enums: []string{"stable", "testing", "devel"}},
 		{Name: "update_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"Success", "Error", "Pending"}},
 		{Name: "update_message", Type: field.TypeString, Nullable: true},
+		{Name: "update_when", Type: field.TypeTime, Nullable: true},
 	}
 	// ComponentsTable holds the schema information for the "components" table.
 	ComponentsTable = &schema.Table{

@@ -29,6 +29,8 @@ const (
 	FieldUpdateStatus = "update_status"
 	// FieldUpdateMessage holds the string denoting the update_message field in the database.
 	FieldUpdateMessage = "update_message"
+	// FieldUpdateWhen holds the string denoting the update_when field in the database.
+	FieldUpdateWhen = "update_when"
 	// Table holds the table name of the component in the database.
 	Table = "components"
 )
@@ -44,6 +46,7 @@ var Columns = []string{
 	FieldChannel,
 	FieldUpdateStatus,
 	FieldUpdateMessage,
+	FieldUpdateWhen,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -178,4 +181,9 @@ func ByUpdateStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdateMessage orders the results by the update_message field.
 func ByUpdateMessage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdateMessage, opts...).ToFunc()
+}
+
+// ByUpdateWhen orders the results by the update_when field.
+func ByUpdateWhen(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateWhen, opts...).ToFunc()
 }

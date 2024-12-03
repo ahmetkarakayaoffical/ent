@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -152,6 +153,26 @@ func (cu *ComponentUpdate) ClearUpdateMessage() *ComponentUpdate {
 	return cu
 }
 
+// SetUpdateWhen sets the "update_when" field.
+func (cu *ComponentUpdate) SetUpdateWhen(t time.Time) *ComponentUpdate {
+	cu.mutation.SetUpdateWhen(t)
+	return cu
+}
+
+// SetNillableUpdateWhen sets the "update_when" field if the given value is not nil.
+func (cu *ComponentUpdate) SetNillableUpdateWhen(t *time.Time) *ComponentUpdate {
+	if t != nil {
+		cu.SetUpdateWhen(*t)
+	}
+	return cu
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (cu *ComponentUpdate) ClearUpdateWhen() *ComponentUpdate {
+	cu.mutation.ClearUpdateWhen()
+	return cu
+}
+
 // Mutation returns the ComponentMutation object of the builder.
 func (cu *ComponentUpdate) Mutation() *ComponentMutation {
 	return cu.mutation
@@ -251,6 +272,12 @@ func (cu *ComponentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.UpdateMessageCleared() {
 		_spec.ClearField(component.FieldUpdateMessage, field.TypeString)
+	}
+	if value, ok := cu.mutation.UpdateWhen(); ok {
+		_spec.SetField(component.FieldUpdateWhen, field.TypeTime, value)
+	}
+	if cu.mutation.UpdateWhenCleared() {
+		_spec.ClearField(component.FieldUpdateWhen, field.TypeTime)
 	}
 	_spec.AddModifiers(cu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
@@ -398,6 +425,26 @@ func (cuo *ComponentUpdateOne) ClearUpdateMessage() *ComponentUpdateOne {
 	return cuo
 }
 
+// SetUpdateWhen sets the "update_when" field.
+func (cuo *ComponentUpdateOne) SetUpdateWhen(t time.Time) *ComponentUpdateOne {
+	cuo.mutation.SetUpdateWhen(t)
+	return cuo
+}
+
+// SetNillableUpdateWhen sets the "update_when" field if the given value is not nil.
+func (cuo *ComponentUpdateOne) SetNillableUpdateWhen(t *time.Time) *ComponentUpdateOne {
+	if t != nil {
+		cuo.SetUpdateWhen(*t)
+	}
+	return cuo
+}
+
+// ClearUpdateWhen clears the value of the "update_when" field.
+func (cuo *ComponentUpdateOne) ClearUpdateWhen() *ComponentUpdateOne {
+	cuo.mutation.ClearUpdateWhen()
+	return cuo
+}
+
 // Mutation returns the ComponentMutation object of the builder.
 func (cuo *ComponentUpdateOne) Mutation() *ComponentMutation {
 	return cuo.mutation
@@ -527,6 +574,12 @@ func (cuo *ComponentUpdateOne) sqlSave(ctx context.Context) (_node *Component, e
 	}
 	if cuo.mutation.UpdateMessageCleared() {
 		_spec.ClearField(component.FieldUpdateMessage, field.TypeString)
+	}
+	if value, ok := cuo.mutation.UpdateWhen(); ok {
+		_spec.SetField(component.FieldUpdateWhen, field.TypeTime, value)
+	}
+	if cuo.mutation.UpdateWhenCleared() {
+		_spec.ClearField(component.FieldUpdateWhen, field.TypeTime)
 	}
 	_spec.AddModifiers(cuo.modifiers...)
 	_node = &Component{config: cuo.config}
