@@ -22,6 +22,7 @@ func (Component) Fields() []ent.Field {
 		field.Enum("channel").Values("stable", "testing", "devel"),
 		field.Enum("update_status").Values("Success", "Error", "Pending").Optional(),
 		field.String("update_message").Optional(),
+		field.Time("update_when").Optional(),
 	}
 }
 
