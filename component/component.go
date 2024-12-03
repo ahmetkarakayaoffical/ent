@@ -25,6 +25,10 @@ const (
 	FieldVersion = "version"
 	// FieldChannel holds the string denoting the channel field in the database.
 	FieldChannel = "channel"
+	// FieldUpdateStatus holds the string denoting the update_status field in the database.
+	FieldUpdateStatus = "update_status"
+	// FieldUpdateMessage holds the string denoting the update_message field in the database.
+	FieldUpdateMessage = "update_message"
 	// Table holds the table name of the component in the database.
 	Table = "components"
 )
@@ -38,6 +42,8 @@ var Columns = []string{
 	FieldComponent,
 	FieldVersion,
 	FieldChannel,
+	FieldUpdateStatus,
+	FieldUpdateMessage,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -102,6 +108,30 @@ func ChannelValidator(c Channel) error {
 	}
 }
 
+// UpdateStatus defines the type for the "update_status" enum field.
+type UpdateStatus string
+
+// UpdateStatus values.
+const (
+	UpdateStatusSuccess UpdateStatus = "Success"
+	UpdateStatusError   UpdateStatus = "Error"
+	UpdateStatusPending UpdateStatus = "Pending"
+)
+
+func (us UpdateStatus) String() string {
+	return string(us)
+}
+
+// UpdateStatusValidator is a validator for the "update_status" field enum values. It is called by the builders before save.
+func UpdateStatusValidator(us UpdateStatus) error {
+	switch us {
+	case UpdateStatusSuccess, UpdateStatusError, UpdateStatusPending:
+		return nil
+	default:
+		return fmt.Errorf("component: invalid enum value for update_status field: %q", us)
+	}
+}
+
 // OrderOption defines the ordering options for the Component queries.
 type OrderOption func(*sql.Selector)
 
@@ -138,4 +168,14 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 // ByChannel orders the results by the channel field.
 func ByChannel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChannel, opts...).ToFunc()
+}
+
+// ByUpdateStatus orders the results by the update_status field.
+func ByUpdateStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateStatus, opts...).ToFunc()
+}
+
+// ByUpdateMessage orders the results by the update_message field.
+func ByUpdateMessage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateMessage, opts...).ToFunc()
 }

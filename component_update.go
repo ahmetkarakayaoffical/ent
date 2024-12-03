@@ -112,6 +112,46 @@ func (cu *ComponentUpdate) SetNillableChannel(c *component.Channel) *ComponentUp
 	return cu
 }
 
+// SetUpdateStatus sets the "update_status" field.
+func (cu *ComponentUpdate) SetUpdateStatus(cs component.UpdateStatus) *ComponentUpdate {
+	cu.mutation.SetUpdateStatus(cs)
+	return cu
+}
+
+// SetNillableUpdateStatus sets the "update_status" field if the given value is not nil.
+func (cu *ComponentUpdate) SetNillableUpdateStatus(cs *component.UpdateStatus) *ComponentUpdate {
+	if cs != nil {
+		cu.SetUpdateStatus(*cs)
+	}
+	return cu
+}
+
+// ClearUpdateStatus clears the value of the "update_status" field.
+func (cu *ComponentUpdate) ClearUpdateStatus() *ComponentUpdate {
+	cu.mutation.ClearUpdateStatus()
+	return cu
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (cu *ComponentUpdate) SetUpdateMessage(s string) *ComponentUpdate {
+	cu.mutation.SetUpdateMessage(s)
+	return cu
+}
+
+// SetNillableUpdateMessage sets the "update_message" field if the given value is not nil.
+func (cu *ComponentUpdate) SetNillableUpdateMessage(s *string) *ComponentUpdate {
+	if s != nil {
+		cu.SetUpdateMessage(*s)
+	}
+	return cu
+}
+
+// ClearUpdateMessage clears the value of the "update_message" field.
+func (cu *ComponentUpdate) ClearUpdateMessage() *ComponentUpdate {
+	cu.mutation.ClearUpdateMessage()
+	return cu
+}
+
 // Mutation returns the ComponentMutation object of the builder.
 func (cu *ComponentUpdate) Mutation() *ComponentMutation {
 	return cu.mutation
@@ -156,6 +196,11 @@ func (cu *ComponentUpdate) check() error {
 			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.channel": %w`, err)}
 		}
 	}
+	if v, ok := cu.mutation.UpdateStatus(); ok {
+		if err := component.UpdateStatusValidator(v); err != nil {
+			return &ValidationError{Name: "update_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.update_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -194,6 +239,18 @@ func (cu *ComponentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := cu.mutation.Channel(); ok {
 		_spec.SetField(component.FieldChannel, field.TypeEnum, value)
+	}
+	if value, ok := cu.mutation.UpdateStatus(); ok {
+		_spec.SetField(component.FieldUpdateStatus, field.TypeEnum, value)
+	}
+	if cu.mutation.UpdateStatusCleared() {
+		_spec.ClearField(component.FieldUpdateStatus, field.TypeEnum)
+	}
+	if value, ok := cu.mutation.UpdateMessage(); ok {
+		_spec.SetField(component.FieldUpdateMessage, field.TypeString, value)
+	}
+	if cu.mutation.UpdateMessageCleared() {
+		_spec.ClearField(component.FieldUpdateMessage, field.TypeString)
 	}
 	_spec.AddModifiers(cu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
@@ -301,6 +358,46 @@ func (cuo *ComponentUpdateOne) SetNillableChannel(c *component.Channel) *Compone
 	return cuo
 }
 
+// SetUpdateStatus sets the "update_status" field.
+func (cuo *ComponentUpdateOne) SetUpdateStatus(cs component.UpdateStatus) *ComponentUpdateOne {
+	cuo.mutation.SetUpdateStatus(cs)
+	return cuo
+}
+
+// SetNillableUpdateStatus sets the "update_status" field if the given value is not nil.
+func (cuo *ComponentUpdateOne) SetNillableUpdateStatus(cs *component.UpdateStatus) *ComponentUpdateOne {
+	if cs != nil {
+		cuo.SetUpdateStatus(*cs)
+	}
+	return cuo
+}
+
+// ClearUpdateStatus clears the value of the "update_status" field.
+func (cuo *ComponentUpdateOne) ClearUpdateStatus() *ComponentUpdateOne {
+	cuo.mutation.ClearUpdateStatus()
+	return cuo
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (cuo *ComponentUpdateOne) SetUpdateMessage(s string) *ComponentUpdateOne {
+	cuo.mutation.SetUpdateMessage(s)
+	return cuo
+}
+
+// SetNillableUpdateMessage sets the "update_message" field if the given value is not nil.
+func (cuo *ComponentUpdateOne) SetNillableUpdateMessage(s *string) *ComponentUpdateOne {
+	if s != nil {
+		cuo.SetUpdateMessage(*s)
+	}
+	return cuo
+}
+
+// ClearUpdateMessage clears the value of the "update_message" field.
+func (cuo *ComponentUpdateOne) ClearUpdateMessage() *ComponentUpdateOne {
+	cuo.mutation.ClearUpdateMessage()
+	return cuo
+}
+
 // Mutation returns the ComponentMutation object of the builder.
 func (cuo *ComponentUpdateOne) Mutation() *ComponentMutation {
 	return cuo.mutation
@@ -358,6 +455,11 @@ func (cuo *ComponentUpdateOne) check() error {
 			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.channel": %w`, err)}
 		}
 	}
+	if v, ok := cuo.mutation.UpdateStatus(); ok {
+		if err := component.UpdateStatusValidator(v); err != nil {
+			return &ValidationError{Name: "update_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.update_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -413,6 +515,18 @@ func (cuo *ComponentUpdateOne) sqlSave(ctx context.Context) (_node *Component, e
 	}
 	if value, ok := cuo.mutation.Channel(); ok {
 		_spec.SetField(component.FieldChannel, field.TypeEnum, value)
+	}
+	if value, ok := cuo.mutation.UpdateStatus(); ok {
+		_spec.SetField(component.FieldUpdateStatus, field.TypeEnum, value)
+	}
+	if cuo.mutation.UpdateStatusCleared() {
+		_spec.ClearField(component.FieldUpdateStatus, field.TypeEnum)
+	}
+	if value, ok := cuo.mutation.UpdateMessage(); ok {
+		_spec.SetField(component.FieldUpdateMessage, field.TypeString, value)
+	}
+	if cuo.mutation.UpdateMessageCleared() {
+		_spec.ClearField(component.FieldUpdateMessage, field.TypeString)
 	}
 	_spec.AddModifiers(cuo.modifiers...)
 	_node = &Component{config: cuo.config}

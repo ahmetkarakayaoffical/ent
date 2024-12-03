@@ -113,6 +113,8 @@ var (
 		{Name: "component", Type: field.TypeEnum, Enums: []string{"ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"}},
 		{Name: "version", Type: field.TypeString},
 		{Name: "channel", Type: field.TypeEnum, Enums: []string{"stable", "testing", "devel"}},
+		{Name: "update_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"Success", "Error", "Pending"}},
+		{Name: "update_message", Type: field.TypeString, Nullable: true},
 	}
 	// ComponentsTable holds the schema information for the "components" table.
 	ComponentsTable = &schema.Table{

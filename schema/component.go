@@ -20,6 +20,8 @@ func (Component) Fields() []ent.Field {
 		field.Enum("component").Values("ocsp", "nats", "cert-manager", "agent-worker", "notification-worker", "cert-manager-worker", "console"),
 		field.String("version"),
 		field.Enum("channel").Values("stable", "testing", "devel"),
+		field.Enum("update_status").Values("Success", "Error", "Pending").Optional(),
+		field.String("update_message").Optional(),
 	}
 }
 

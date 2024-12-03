@@ -57,6 +57,34 @@ func (cc *ComponentCreate) SetChannel(c component.Channel) *ComponentCreate {
 	return cc
 }
 
+// SetUpdateStatus sets the "update_status" field.
+func (cc *ComponentCreate) SetUpdateStatus(cs component.UpdateStatus) *ComponentCreate {
+	cc.mutation.SetUpdateStatus(cs)
+	return cc
+}
+
+// SetNillableUpdateStatus sets the "update_status" field if the given value is not nil.
+func (cc *ComponentCreate) SetNillableUpdateStatus(cs *component.UpdateStatus) *ComponentCreate {
+	if cs != nil {
+		cc.SetUpdateStatus(*cs)
+	}
+	return cc
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (cc *ComponentCreate) SetUpdateMessage(s string) *ComponentCreate {
+	cc.mutation.SetUpdateMessage(s)
+	return cc
+}
+
+// SetNillableUpdateMessage sets the "update_message" field if the given value is not nil.
+func (cc *ComponentCreate) SetNillableUpdateMessage(s *string) *ComponentCreate {
+	if s != nil {
+		cc.SetUpdateMessage(*s)
+	}
+	return cc
+}
+
 // Mutation returns the ComponentMutation object of the builder.
 func (cc *ComponentCreate) Mutation() *ComponentMutation {
 	return cc.mutation
@@ -119,6 +147,11 @@ func (cc *ComponentCreate) check() error {
 			return &ValidationError{Name: "channel", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.channel": %w`, err)}
 		}
 	}
+	if v, ok := cc.mutation.UpdateStatus(); ok {
+		if err := component.UpdateStatusValidator(v); err != nil {
+			return &ValidationError{Name: "update_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Component.update_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -169,6 +202,14 @@ func (cc *ComponentCreate) createSpec() (*Component, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Channel(); ok {
 		_spec.SetField(component.FieldChannel, field.TypeEnum, value)
 		_node.Channel = value
+	}
+	if value, ok := cc.mutation.UpdateStatus(); ok {
+		_spec.SetField(component.FieldUpdateStatus, field.TypeEnum, value)
+		_node.UpdateStatus = value
+	}
+	if value, ok := cc.mutation.UpdateMessage(); ok {
+		_spec.SetField(component.FieldUpdateMessage, field.TypeString, value)
+		_node.UpdateMessage = value
 	}
 	return _node, _spec
 }
@@ -294,6 +335,42 @@ func (u *ComponentUpsert) UpdateChannel() *ComponentUpsert {
 	return u
 }
 
+// SetUpdateStatus sets the "update_status" field.
+func (u *ComponentUpsert) SetUpdateStatus(v component.UpdateStatus) *ComponentUpsert {
+	u.Set(component.FieldUpdateStatus, v)
+	return u
+}
+
+// UpdateUpdateStatus sets the "update_status" field to the value that was provided on create.
+func (u *ComponentUpsert) UpdateUpdateStatus() *ComponentUpsert {
+	u.SetExcluded(component.FieldUpdateStatus)
+	return u
+}
+
+// ClearUpdateStatus clears the value of the "update_status" field.
+func (u *ComponentUpsert) ClearUpdateStatus() *ComponentUpsert {
+	u.SetNull(component.FieldUpdateStatus)
+	return u
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (u *ComponentUpsert) SetUpdateMessage(v string) *ComponentUpsert {
+	u.Set(component.FieldUpdateMessage, v)
+	return u
+}
+
+// UpdateUpdateMessage sets the "update_message" field to the value that was provided on create.
+func (u *ComponentUpsert) UpdateUpdateMessage() *ComponentUpsert {
+	u.SetExcluded(component.FieldUpdateMessage)
+	return u
+}
+
+// ClearUpdateMessage clears the value of the "update_message" field.
+func (u *ComponentUpsert) ClearUpdateMessage() *ComponentUpsert {
+	u.SetNull(component.FieldUpdateMessage)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -415,6 +492,48 @@ func (u *ComponentUpsertOne) SetChannel(v component.Channel) *ComponentUpsertOne
 func (u *ComponentUpsertOne) UpdateChannel() *ComponentUpsertOne {
 	return u.Update(func(s *ComponentUpsert) {
 		s.UpdateChannel()
+	})
+}
+
+// SetUpdateStatus sets the "update_status" field.
+func (u *ComponentUpsertOne) SetUpdateStatus(v component.UpdateStatus) *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateStatus(v)
+	})
+}
+
+// UpdateUpdateStatus sets the "update_status" field to the value that was provided on create.
+func (u *ComponentUpsertOne) UpdateUpdateStatus() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateStatus()
+	})
+}
+
+// ClearUpdateStatus clears the value of the "update_status" field.
+func (u *ComponentUpsertOne) ClearUpdateStatus() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateStatus()
+	})
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (u *ComponentUpsertOne) SetUpdateMessage(v string) *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateMessage(v)
+	})
+}
+
+// UpdateUpdateMessage sets the "update_message" field to the value that was provided on create.
+func (u *ComponentUpsertOne) UpdateUpdateMessage() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateMessage()
+	})
+}
+
+// ClearUpdateMessage clears the value of the "update_message" field.
+func (u *ComponentUpsertOne) ClearUpdateMessage() *ComponentUpsertOne {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateMessage()
 	})
 }
 
@@ -702,6 +821,48 @@ func (u *ComponentUpsertBulk) SetChannel(v component.Channel) *ComponentUpsertBu
 func (u *ComponentUpsertBulk) UpdateChannel() *ComponentUpsertBulk {
 	return u.Update(func(s *ComponentUpsert) {
 		s.UpdateChannel()
+	})
+}
+
+// SetUpdateStatus sets the "update_status" field.
+func (u *ComponentUpsertBulk) SetUpdateStatus(v component.UpdateStatus) *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateStatus(v)
+	})
+}
+
+// UpdateUpdateStatus sets the "update_status" field to the value that was provided on create.
+func (u *ComponentUpsertBulk) UpdateUpdateStatus() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateStatus()
+	})
+}
+
+// ClearUpdateStatus clears the value of the "update_status" field.
+func (u *ComponentUpsertBulk) ClearUpdateStatus() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateStatus()
+	})
+}
+
+// SetUpdateMessage sets the "update_message" field.
+func (u *ComponentUpsertBulk) SetUpdateMessage(v string) *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.SetUpdateMessage(v)
+	})
+}
+
+// UpdateUpdateMessage sets the "update_message" field to the value that was provided on create.
+func (u *ComponentUpsertBulk) UpdateUpdateMessage() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.UpdateUpdateMessage()
+	})
+}
+
+// ClearUpdateMessage clears the value of the "update_message" field.
+func (u *ComponentUpsertBulk) ClearUpdateMessage() *ComponentUpsertBulk {
+	return u.Update(func(s *ComponentUpsert) {
+		s.ClearUpdateMessage()
 	})
 }
 

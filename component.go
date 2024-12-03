@@ -27,8 +27,12 @@ type Component struct {
 	// Version holds the value of the "version" field.
 	Version string `json:"version,omitempty"`
 	// Channel holds the value of the "channel" field.
-	Channel      component.Channel `json:"channel,omitempty"`
-	selectValues sql.SelectValues
+	Channel component.Channel `json:"channel,omitempty"`
+	// UpdateStatus holds the value of the "update_status" field.
+	UpdateStatus component.UpdateStatus `json:"update_status,omitempty"`
+	// UpdateMessage holds the value of the "update_message" field.
+	UpdateMessage string `json:"update_message,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -38,7 +42,7 @@ func (*Component) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case component.FieldID:
 			values[i] = new(sql.NullInt64)
-		case component.FieldHostname, component.FieldArch, component.FieldOs, component.FieldComponent, component.FieldVersion, component.FieldChannel:
+		case component.FieldHostname, component.FieldArch, component.FieldOs, component.FieldComponent, component.FieldVersion, component.FieldChannel, component.FieldUpdateStatus, component.FieldUpdateMessage:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -97,6 +101,18 @@ func (c *Component) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Channel = component.Channel(value.String)
 			}
+		case component.FieldUpdateStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_status", values[i])
+			} else if value.Valid {
+				c.UpdateStatus = component.UpdateStatus(value.String)
+			}
+		case component.FieldUpdateMessage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_message", values[i])
+			} else if value.Valid {
+				c.UpdateMessage = value.String
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -150,6 +166,12 @@ func (c *Component) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("channel=")
 	builder.WriteString(fmt.Sprintf("%v", c.Channel))
+	builder.WriteString(", ")
+	builder.WriteString("update_status=")
+	builder.WriteString(fmt.Sprintf("%v", c.UpdateStatus))
+	builder.WriteString(", ")
+	builder.WriteString("update_message=")
+	builder.WriteString(c.UpdateMessage)
 	builder.WriteByte(')')
 	return builder.String()
 }

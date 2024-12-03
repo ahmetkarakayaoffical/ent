@@ -72,6 +72,11 @@ func Version(v string) predicate.Component {
 	return predicate.Component(sql.FieldEQ(FieldVersion, v))
 }
 
+// UpdateMessage applies equality check predicate on the "update_message" field. It's identical to UpdateMessageEQ.
+func UpdateMessage(v string) predicate.Component {
+	return predicate.Component(sql.FieldEQ(FieldUpdateMessage, v))
+}
+
 // HostnameEQ applies the EQ predicate on the "hostname" field.
 func HostnameEQ(v string) predicate.Component {
 	return predicate.Component(sql.FieldEQ(FieldHostname, v))
@@ -370,6 +375,111 @@ func ChannelIn(vs ...Channel) predicate.Component {
 // ChannelNotIn applies the NotIn predicate on the "channel" field.
 func ChannelNotIn(vs ...Channel) predicate.Component {
 	return predicate.Component(sql.FieldNotIn(FieldChannel, vs...))
+}
+
+// UpdateStatusEQ applies the EQ predicate on the "update_status" field.
+func UpdateStatusEQ(v UpdateStatus) predicate.Component {
+	return predicate.Component(sql.FieldEQ(FieldUpdateStatus, v))
+}
+
+// UpdateStatusNEQ applies the NEQ predicate on the "update_status" field.
+func UpdateStatusNEQ(v UpdateStatus) predicate.Component {
+	return predicate.Component(sql.FieldNEQ(FieldUpdateStatus, v))
+}
+
+// UpdateStatusIn applies the In predicate on the "update_status" field.
+func UpdateStatusIn(vs ...UpdateStatus) predicate.Component {
+	return predicate.Component(sql.FieldIn(FieldUpdateStatus, vs...))
+}
+
+// UpdateStatusNotIn applies the NotIn predicate on the "update_status" field.
+func UpdateStatusNotIn(vs ...UpdateStatus) predicate.Component {
+	return predicate.Component(sql.FieldNotIn(FieldUpdateStatus, vs...))
+}
+
+// UpdateStatusIsNil applies the IsNil predicate on the "update_status" field.
+func UpdateStatusIsNil() predicate.Component {
+	return predicate.Component(sql.FieldIsNull(FieldUpdateStatus))
+}
+
+// UpdateStatusNotNil applies the NotNil predicate on the "update_status" field.
+func UpdateStatusNotNil() predicate.Component {
+	return predicate.Component(sql.FieldNotNull(FieldUpdateStatus))
+}
+
+// UpdateMessageEQ applies the EQ predicate on the "update_message" field.
+func UpdateMessageEQ(v string) predicate.Component {
+	return predicate.Component(sql.FieldEQ(FieldUpdateMessage, v))
+}
+
+// UpdateMessageNEQ applies the NEQ predicate on the "update_message" field.
+func UpdateMessageNEQ(v string) predicate.Component {
+	return predicate.Component(sql.FieldNEQ(FieldUpdateMessage, v))
+}
+
+// UpdateMessageIn applies the In predicate on the "update_message" field.
+func UpdateMessageIn(vs ...string) predicate.Component {
+	return predicate.Component(sql.FieldIn(FieldUpdateMessage, vs...))
+}
+
+// UpdateMessageNotIn applies the NotIn predicate on the "update_message" field.
+func UpdateMessageNotIn(vs ...string) predicate.Component {
+	return predicate.Component(sql.FieldNotIn(FieldUpdateMessage, vs...))
+}
+
+// UpdateMessageGT applies the GT predicate on the "update_message" field.
+func UpdateMessageGT(v string) predicate.Component {
+	return predicate.Component(sql.FieldGT(FieldUpdateMessage, v))
+}
+
+// UpdateMessageGTE applies the GTE predicate on the "update_message" field.
+func UpdateMessageGTE(v string) predicate.Component {
+	return predicate.Component(sql.FieldGTE(FieldUpdateMessage, v))
+}
+
+// UpdateMessageLT applies the LT predicate on the "update_message" field.
+func UpdateMessageLT(v string) predicate.Component {
+	return predicate.Component(sql.FieldLT(FieldUpdateMessage, v))
+}
+
+// UpdateMessageLTE applies the LTE predicate on the "update_message" field.
+func UpdateMessageLTE(v string) predicate.Component {
+	return predicate.Component(sql.FieldLTE(FieldUpdateMessage, v))
+}
+
+// UpdateMessageContains applies the Contains predicate on the "update_message" field.
+func UpdateMessageContains(v string) predicate.Component {
+	return predicate.Component(sql.FieldContains(FieldUpdateMessage, v))
+}
+
+// UpdateMessageHasPrefix applies the HasPrefix predicate on the "update_message" field.
+func UpdateMessageHasPrefix(v string) predicate.Component {
+	return predicate.Component(sql.FieldHasPrefix(FieldUpdateMessage, v))
+}
+
+// UpdateMessageHasSuffix applies the HasSuffix predicate on the "update_message" field.
+func UpdateMessageHasSuffix(v string) predicate.Component {
+	return predicate.Component(sql.FieldHasSuffix(FieldUpdateMessage, v))
+}
+
+// UpdateMessageIsNil applies the IsNil predicate on the "update_message" field.
+func UpdateMessageIsNil() predicate.Component {
+	return predicate.Component(sql.FieldIsNull(FieldUpdateMessage))
+}
+
+// UpdateMessageNotNil applies the NotNil predicate on the "update_message" field.
+func UpdateMessageNotNil() predicate.Component {
+	return predicate.Component(sql.FieldNotNull(FieldUpdateMessage))
+}
+
+// UpdateMessageEqualFold applies the EqualFold predicate on the "update_message" field.
+func UpdateMessageEqualFold(v string) predicate.Component {
+	return predicate.Component(sql.FieldEqualFold(FieldUpdateMessage, v))
+}
+
+// UpdateMessageContainsFold applies the ContainsFold predicate on the "update_message" field.
+func UpdateMessageContainsFold(v string) predicate.Component {
+	return predicate.Component(sql.FieldContainsFold(FieldUpdateMessage, v))
 }
 
 // And groups predicates with the AND operator between them.
