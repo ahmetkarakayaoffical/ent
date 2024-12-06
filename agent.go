@@ -13,6 +13,7 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 )
 
@@ -94,9 +95,11 @@ type AgentEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Metadata holds the value of the metadata edge.
 	Metadata []*Metadata `json:"metadata,omitempty"`
+	// Release holds the value of the release edge.
+	Release *Release `json:"release,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -231,6 +234,17 @@ func (e AgentEdges) MetadataOrErr() ([]*Metadata, error) {
 		return e.Metadata, nil
 	}
 	return nil, &NotLoadedError{edge: "metadata"}
+}
+
+// ReleaseOrErr returns the Release value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AgentEdges) ReleaseOrErr() (*Release, error) {
+	if e.Release != nil {
+		return e.Release, nil
+	} else if e.loadedTypes[14] {
+		return nil, &NotFoundError{label: release.Label}
+	}
+	return nil, &NotLoadedError{edge: "release"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -463,6 +477,11 @@ func (a *Agent) QueryTags() *TagQuery {
 // QueryMetadata queries the "metadata" edge of the Agent entity.
 func (a *Agent) QueryMetadata() *MetadataQuery {
 	return NewAgentClient(a.config).QueryMetadata(a)
+}
+
+// QueryRelease queries the "release" edge of the Agent entity.
+func (a *Agent) QueryRelease() *ReleaseQuery {
+	return NewAgentClient(a.config).QueryRelease(a)
 }
 
 // Update returns a builder for updating this Agent.

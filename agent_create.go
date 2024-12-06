@@ -23,6 +23,7 @@ import (
 	"github.com/doncicuto/openuem_ent/networkadapter"
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 	"github.com/doncicuto/openuem_ent/tag"
@@ -505,6 +506,25 @@ func (ac *AgentCreate) AddMetadata(m ...*Metadata) *AgentCreate {
 	return ac.AddMetadatumIDs(ids...)
 }
 
+// SetReleaseID sets the "release" edge to the Release entity by ID.
+func (ac *AgentCreate) SetReleaseID(id int) *AgentCreate {
+	ac.mutation.SetReleaseID(id)
+	return ac
+}
+
+// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
+func (ac *AgentCreate) SetNillableReleaseID(id *int) *AgentCreate {
+	if id != nil {
+		ac = ac.SetReleaseID(*id)
+	}
+	return ac
+}
+
+// SetRelease sets the "release" edge to the Release entity.
+func (ac *AgentCreate) SetRelease(r *Release) *AgentCreate {
+	return ac.SetReleaseID(r.ID)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (ac *AgentCreate) Mutation() *AgentMutation {
 	return ac.mutation
@@ -954,6 +974,23 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ReleaseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   agent.ReleaseTable,
+			Columns: []string{agent.ReleaseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.release_agents = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
