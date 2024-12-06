@@ -24,7 +24,6 @@ import (
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/printer"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 	"github.com/doncicuto/openuem_ent/tag"
@@ -52,7 +51,6 @@ type AgentQuery struct {
 	withUpdates         *UpdateQuery
 	withTags            *TagQuery
 	withMetadata        *MetadataQuery
-	withRelease         *ReleaseQuery
 	withFKs             bool
 	modifiers           []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -399,28 +397,6 @@ func (aq *AgentQuery) QueryMetadata() *MetadataQuery {
 	return query
 }
 
-// QueryRelease chains the current query on the "release" edge.
-func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
-	query := (&ReleaseClient{config: aq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := aq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := aq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(agent.Table, agent.FieldID, selector),
-			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // First returns the first Agent entity from the query.
 // Returns a *NotFoundError when no Agent was found.
 func (aq *AgentQuery) First(ctx context.Context) (*Agent, error) {
@@ -627,7 +603,6 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withUpdates:         aq.withUpdates.Clone(),
 		withTags:            aq.withTags.Clone(),
 		withMetadata:        aq.withMetadata.Clone(),
-		withRelease:         aq.withRelease.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -789,17 +764,6 @@ func (aq *AgentQuery) WithMetadata(opts ...func(*MetadataQuery)) *AgentQuery {
 	return aq
 }
 
-// WithRelease tells the query-builder to eager-load the nodes that are connected to
-// the "release" edge. The optional arguments are used to configure the query builder of the edge.
-func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
-	query := (&ReleaseClient{config: aq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	aq.withRelease = query
-	return aq
-}
-
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -879,7 +843,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [14]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -894,12 +858,8 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withUpdates != nil,
 			aq.withTags != nil,
 			aq.withMetadata != nil,
-			aq.withRelease != nil,
 		}
 	)
-	if aq.withRelease != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, agent.ForeignKeys...)
 	}
@@ -1015,12 +975,6 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		if err := aq.loadMetadata(ctx, query, nodes,
 			func(n *Agent) { n.Edges.Metadata = []*Metadata{} },
 			func(n *Agent, e *Metadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := aq.withRelease; query != nil {
-		if err := aq.loadRelease(ctx, query, nodes, nil,
-			func(n *Agent, e *Release) { n.Edges.Release = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1476,38 +1430,6 @@ func (aq *AgentQuery) loadMetadata(ctx context.Context, query *MetadataQuery, no
 			return fmt.Errorf(`unexpected referenced foreign-key "agent_metadata" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
-	}
-	return nil
-}
-func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Release)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Agent)
-	for i := range nodes {
-		if nodes[i].release_agents == nil {
-			continue
-		}
-		fk := *nodes[i].release_agents
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(release.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "release_agents" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
 	}
 	return nil
 }

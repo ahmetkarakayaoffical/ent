@@ -78,8 +78,6 @@ const (
 	EdgeTags = "tags"
 	// EdgeMetadata holds the string denoting the metadata edge name in mutations.
 	EdgeMetadata = "metadata"
-	// EdgeRelease holds the string denoting the release edge name in mutations.
-	EdgeRelease = "release"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -108,8 +106,6 @@ const (
 	TagFieldID = "id"
 	// MetadataFieldID holds the string denoting the ID field of the Metadata.
 	MetadataFieldID = "id"
-	// ReleaseFieldID holds the string denoting the ID field of the Release.
-	ReleaseFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -208,13 +204,6 @@ const (
 	MetadataInverseTable = "metadata"
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "agent_metadata"
-	// ReleaseTable is the table that holds the release relation/edge.
-	ReleaseTable = "agents"
-	// ReleaseInverseTable is the table name for the Release entity.
-	// It exists in this package in order to avoid circular dependency with the "release" package.
-	ReleaseInverseTable = "releases"
-	// ReleaseColumn is the table column denoting the release relation/edge.
-	ReleaseColumn = "release_agents"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -590,13 +579,6 @@ func ByMetadata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMetadataStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByReleaseField orders the results by release field.
-func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newReleaseStep(), sql.OrderByField(field, opts...))
-	}
-}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -693,12 +675,5 @@ func newMetadataStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MetadataInverseTable, MetadataFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
-	)
-}
-func newReleaseStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ReleaseInverseTable, ReleaseFieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
 	)
 }

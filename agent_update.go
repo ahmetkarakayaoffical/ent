@@ -23,7 +23,6 @@ import (
 	"github.com/doncicuto/openuem_ent/operatingsystem"
 	"github.com/doncicuto/openuem_ent/predicate"
 	"github.com/doncicuto/openuem_ent/printer"
-	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/share"
 	"github.com/doncicuto/openuem_ent/systemupdate"
 	"github.com/doncicuto/openuem_ent/tag"
@@ -606,25 +605,6 @@ func (au *AgentUpdate) AddMetadata(m ...*Metadata) *AgentUpdate {
 	return au.AddMetadatumIDs(ids...)
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by ID.
-func (au *AgentUpdate) SetReleaseID(id int) *AgentUpdate {
-	au.mutation.SetReleaseID(id)
-	return au
-}
-
-// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (au *AgentUpdate) SetNillableReleaseID(id *int) *AgentUpdate {
-	if id != nil {
-		au = au.SetReleaseID(*id)
-	}
-	return au
-}
-
-// SetRelease sets the "release" edge to the Release entity.
-func (au *AgentUpdate) SetRelease(r *Release) *AgentUpdate {
-	return au.SetReleaseID(r.ID)
-}
-
 // Mutation returns the AgentMutation object of the builder.
 func (au *AgentUpdate) Mutation() *AgentMutation {
 	return au.mutation
@@ -862,12 +842,6 @@ func (au *AgentUpdate) RemoveMetadata(m ...*Metadata) *AgentUpdate {
 		ids[i] = m[i].ID
 	}
 	return au.RemoveMetadatumIDs(ids...)
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (au *AgentUpdate) ClearRelease() *AgentUpdate {
-	au.mutation.ClearRelease()
-	return au
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1597,35 +1571,6 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ReleaseCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   agent.ReleaseTable,
-			Columns: []string{agent.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.ReleaseIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   agent.ReleaseTable,
-			Columns: []string{agent.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	_spec.AddModifiers(au.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -2210,25 +2155,6 @@ func (auo *AgentUpdateOne) AddMetadata(m ...*Metadata) *AgentUpdateOne {
 	return auo.AddMetadatumIDs(ids...)
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by ID.
-func (auo *AgentUpdateOne) SetReleaseID(id int) *AgentUpdateOne {
-	auo.mutation.SetReleaseID(id)
-	return auo
-}
-
-// SetNillableReleaseID sets the "release" edge to the Release entity by ID if the given value is not nil.
-func (auo *AgentUpdateOne) SetNillableReleaseID(id *int) *AgentUpdateOne {
-	if id != nil {
-		auo = auo.SetReleaseID(*id)
-	}
-	return auo
-}
-
-// SetRelease sets the "release" edge to the Release entity.
-func (auo *AgentUpdateOne) SetRelease(r *Release) *AgentUpdateOne {
-	return auo.SetReleaseID(r.ID)
-}
-
 // Mutation returns the AgentMutation object of the builder.
 func (auo *AgentUpdateOne) Mutation() *AgentMutation {
 	return auo.mutation
@@ -2466,12 +2392,6 @@ func (auo *AgentUpdateOne) RemoveMetadata(m ...*Metadata) *AgentUpdateOne {
 		ids[i] = m[i].ID
 	}
 	return auo.RemoveMetadatumIDs(ids...)
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (auo *AgentUpdateOne) ClearRelease() *AgentUpdateOne {
-	auo.mutation.ClearRelease()
-	return auo
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -3224,35 +3144,6 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if auo.mutation.ReleaseCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   agent.ReleaseTable,
-			Columns: []string{agent.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.ReleaseIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   agent.ReleaseTable,
-			Columns: []string{agent.ReleaseColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(release.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

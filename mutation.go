@@ -134,8 +134,6 @@ type AgentMutation struct {
 	metadata                map[int]struct{}
 	removedmetadata         map[int]struct{}
 	clearedmetadata         bool
-	release                 *int
-	clearedrelease          bool
 	done                    bool
 	oldValue                func(context.Context) (*Agent, error)
 	predicates              []predicate.Agent
@@ -1771,45 +1769,6 @@ func (m *AgentMutation) ResetMetadata() {
 	m.removedmetadata = nil
 }
 
-// SetReleaseID sets the "release" edge to the Release entity by id.
-func (m *AgentMutation) SetReleaseID(id int) {
-	m.release = &id
-}
-
-// ClearRelease clears the "release" edge to the Release entity.
-func (m *AgentMutation) ClearRelease() {
-	m.clearedrelease = true
-}
-
-// ReleaseCleared reports if the "release" edge to the Release entity was cleared.
-func (m *AgentMutation) ReleaseCleared() bool {
-	return m.clearedrelease
-}
-
-// ReleaseID returns the "release" edge ID in the mutation.
-func (m *AgentMutation) ReleaseID() (id int, exists bool) {
-	if m.release != nil {
-		return *m.release, true
-	}
-	return
-}
-
-// ReleaseIDs returns the "release" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ReleaseID instead. It exists only for internal usage by the builders.
-func (m *AgentMutation) ReleaseIDs() (ids []int) {
-	if id := m.release; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetRelease resets all changes to the "release" edge.
-func (m *AgentMutation) ResetRelease() {
-	m.release = nil
-	m.clearedrelease = false
-}
-
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -2319,7 +2278,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 14)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2361,9 +2320,6 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.metadata != nil {
 		edges = append(edges, agent.EdgeMetadata)
-	}
-	if m.release != nil {
-		edges = append(edges, agent.EdgeRelease)
 	}
 	return edges
 }
@@ -2448,17 +2404,13 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case agent.EdgeRelease:
-		if id := m.release; id != nil {
-			return []ent.Value{*id}
-		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 14)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -2562,7 +2514,7 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 14)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2605,9 +2557,6 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedmetadata {
 		edges = append(edges, agent.EdgeMetadata)
 	}
-	if m.clearedrelease {
-		edges = append(edges, agent.EdgeRelease)
-	}
 	return edges
 }
 
@@ -2643,8 +2592,6 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedtags
 	case agent.EdgeMetadata:
 		return m.clearedmetadata
-	case agent.EdgeRelease:
-		return m.clearedrelease
 	}
 	return false
 }
@@ -2664,9 +2611,6 @@ func (m *AgentMutation) ClearEdge(name string) error {
 		return nil
 	case agent.EdgeAntivirus:
 		m.ClearAntivirus()
-		return nil
-	case agent.EdgeRelease:
-		m.ClearRelease()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent unique edge %s", name)
@@ -2717,9 +2661,6 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeMetadata:
 		m.ResetMetadata()
-		return nil
-	case agent.EdgeRelease:
-		m.ResetRelease()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)

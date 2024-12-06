@@ -719,22 +719,6 @@ func (c *AgentClient) QueryMetadata(a *Agent) *MetadataQuery {
 	return query
 }
 
-// QueryRelease queries the release edge of a Agent.
-func (c *AgentClient) QueryRelease(a *Agent) *ReleaseQuery {
-	query := (&ReleaseClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(agent.Table, agent.FieldID, id),
-			sqlgraph.To(release.Table, release.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
-		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *AgentClient) Hooks() []Hook {
 	return c.hooks.Agent
