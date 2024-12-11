@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/component"
+	"github.com/doncicuto/openuem_ent/server"
 )
 
-// Component is the model entity for the Component schema.
-type Component struct {
+// Server is the model entity for the Server schema.
+type Server struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -23,14 +23,12 @@ type Component struct {
 	Arch string `json:"arch,omitempty"`
 	// Os holds the value of the "os" field.
 	Os string `json:"os,omitempty"`
-	// Component holds the value of the "component" field.
-	Component component.Component `json:"component,omitempty"`
 	// Version holds the value of the "version" field.
 	Version string `json:"version,omitempty"`
 	// Channel holds the value of the "channel" field.
-	Channel component.Channel `json:"channel,omitempty"`
+	Channel server.Channel `json:"channel,omitempty"`
 	// UpdateStatus holds the value of the "update_status" field.
-	UpdateStatus component.UpdateStatus `json:"update_status,omitempty"`
+	UpdateStatus server.UpdateStatus `json:"update_status,omitempty"`
 	// UpdateMessage holds the value of the "update_message" field.
 	UpdateMessage string `json:"update_message,omitempty"`
 	// UpdateWhen holds the value of the "update_when" field.
@@ -39,15 +37,15 @@ type Component struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Component) scanValues(columns []string) ([]any, error) {
+func (*Server) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case component.FieldID:
+		case server.FieldID:
 			values[i] = new(sql.NullInt64)
-		case component.FieldHostname, component.FieldArch, component.FieldOs, component.FieldComponent, component.FieldVersion, component.FieldChannel, component.FieldUpdateStatus, component.FieldUpdateMessage:
+		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldVersion, server.FieldChannel, server.FieldUpdateStatus, server.FieldUpdateMessage:
 			values[i] = new(sql.NullString)
-		case component.FieldUpdateWhen:
+		case server.FieldUpdateWhen:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -57,138 +55,129 @@ func (*Component) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the Component fields.
-func (c *Component) assignValues(columns []string, values []any) error {
+// to the Server fields.
+func (s *Server) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case component.FieldID:
+		case server.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			c.ID = int(value.Int64)
-		case component.FieldHostname:
+			s.ID = int(value.Int64)
+		case server.FieldHostname:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field hostname", values[i])
 			} else if value.Valid {
-				c.Hostname = value.String
+				s.Hostname = value.String
 			}
-		case component.FieldArch:
+		case server.FieldArch:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field arch", values[i])
 			} else if value.Valid {
-				c.Arch = value.String
+				s.Arch = value.String
 			}
-		case component.FieldOs:
+		case server.FieldOs:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field os", values[i])
 			} else if value.Valid {
-				c.Os = value.String
+				s.Os = value.String
 			}
-		case component.FieldComponent:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field component", values[i])
-			} else if value.Valid {
-				c.Component = component.Component(value.String)
-			}
-		case component.FieldVersion:
+		case server.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				c.Version = value.String
+				s.Version = value.String
 			}
-		case component.FieldChannel:
+		case server.FieldChannel:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field channel", values[i])
 			} else if value.Valid {
-				c.Channel = component.Channel(value.String)
+				s.Channel = server.Channel(value.String)
 			}
-		case component.FieldUpdateStatus:
+		case server.FieldUpdateStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field update_status", values[i])
 			} else if value.Valid {
-				c.UpdateStatus = component.UpdateStatus(value.String)
+				s.UpdateStatus = server.UpdateStatus(value.String)
 			}
-		case component.FieldUpdateMessage:
+		case server.FieldUpdateMessage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field update_message", values[i])
 			} else if value.Valid {
-				c.UpdateMessage = value.String
+				s.UpdateMessage = value.String
 			}
-		case component.FieldUpdateWhen:
+		case server.FieldUpdateWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_when", values[i])
 			} else if value.Valid {
-				c.UpdateWhen = value.Time
+				s.UpdateWhen = value.Time
 			}
 		default:
-			c.selectValues.Set(columns[i], values[i])
+			s.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the Component.
+// Value returns the ent.Value that was dynamically selected and assigned to the Server.
 // This includes values selected through modifiers, order, etc.
-func (c *Component) Value(name string) (ent.Value, error) {
-	return c.selectValues.Get(name)
+func (s *Server) Value(name string) (ent.Value, error) {
+	return s.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this Component.
-// Note that you need to call Component.Unwrap() before calling this method if this Component
+// Update returns a builder for updating this Server.
+// Note that you need to call Server.Unwrap() before calling this method if this Server
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (c *Component) Update() *ComponentUpdateOne {
-	return NewComponentClient(c.config).UpdateOne(c)
+func (s *Server) Update() *ServerUpdateOne {
+	return NewServerClient(s.config).UpdateOne(s)
 }
 
-// Unwrap unwraps the Component entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the Server entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (c *Component) Unwrap() *Component {
-	_tx, ok := c.config.driver.(*txDriver)
+func (s *Server) Unwrap() *Server {
+	_tx, ok := s.config.driver.(*txDriver)
 	if !ok {
-		panic("openuem_ent: Component is not a transactional entity")
+		panic("openuem_ent: Server is not a transactional entity")
 	}
-	c.config.driver = _tx.drv
-	return c
+	s.config.driver = _tx.drv
+	return s
 }
 
 // String implements the fmt.Stringer.
-func (c *Component) String() string {
+func (s *Server) String() string {
 	var builder strings.Builder
-	builder.WriteString("Component(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("Server(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("hostname=")
-	builder.WriteString(c.Hostname)
+	builder.WriteString(s.Hostname)
 	builder.WriteString(", ")
 	builder.WriteString("arch=")
-	builder.WriteString(c.Arch)
+	builder.WriteString(s.Arch)
 	builder.WriteString(", ")
 	builder.WriteString("os=")
-	builder.WriteString(c.Os)
-	builder.WriteString(", ")
-	builder.WriteString("component=")
-	builder.WriteString(fmt.Sprintf("%v", c.Component))
+	builder.WriteString(s.Os)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
-	builder.WriteString(c.Version)
+	builder.WriteString(s.Version)
 	builder.WriteString(", ")
 	builder.WriteString("channel=")
-	builder.WriteString(fmt.Sprintf("%v", c.Channel))
+	builder.WriteString(fmt.Sprintf("%v", s.Channel))
 	builder.WriteString(", ")
 	builder.WriteString("update_status=")
-	builder.WriteString(fmt.Sprintf("%v", c.UpdateStatus))
+	builder.WriteString(fmt.Sprintf("%v", s.UpdateStatus))
 	builder.WriteString(", ")
 	builder.WriteString("update_message=")
-	builder.WriteString(c.UpdateMessage)
+	builder.WriteString(s.UpdateMessage)
 	builder.WriteString(", ")
 	builder.WriteString("update_when=")
-	builder.WriteString(c.UpdateWhen.Format(time.ANSIC))
+	builder.WriteString(s.UpdateWhen.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// Components is a parsable slice of Component.
-type Components []*Component
+// Servers is a parsable slice of Server.
+type Servers []*Server

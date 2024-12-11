@@ -20,8 +20,6 @@ type Tx struct {
 	App *AppClient
 	// Certificate is the client for interacting with the Certificate builders.
 	Certificate *CertificateClient
-	// Component is the client for interacting with the Component builders.
-	Component *ComponentClient
 	// Computer is the client for interacting with the Computer builders.
 	Computer *ComputerClient
 	// Deployment is the client for interacting with the Deployment builders.
@@ -44,6 +42,8 @@ type Tx struct {
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
+	// Server is the client for interacting with the Server builders.
+	Server *ServerClient
 	// Sessions is the client for interacting with the Sessions builders.
 	Sessions *SessionsClient
 	// Settings is the client for interacting with the Settings builders.
@@ -193,7 +193,6 @@ func (tx *Tx) init() {
 	tx.Antivirus = NewAntivirusClient(tx.config)
 	tx.App = NewAppClient(tx.config)
 	tx.Certificate = NewCertificateClient(tx.config)
-	tx.Component = NewComponentClient(tx.config)
 	tx.Computer = NewComputerClient(tx.config)
 	tx.Deployment = NewDeploymentClient(tx.config)
 	tx.LogicalDisk = NewLogicalDiskClient(tx.config)
@@ -205,6 +204,7 @@ func (tx *Tx) init() {
 	tx.Printer = NewPrinterClient(tx.config)
 	tx.Release = NewReleaseClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
+	tx.Server = NewServerClient(tx.config)
 	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Settings = NewSettingsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)

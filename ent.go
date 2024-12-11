@@ -16,7 +16,6 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/certificate"
-	"github.com/doncicuto/openuem_ent/component"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
@@ -28,6 +27,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
+	"github.com/doncicuto/openuem_ent/server"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
@@ -99,7 +99,6 @@ func checkColumn(table, column string) error {
 			antivirus.Table:       antivirus.ValidColumn,
 			app.Table:             app.ValidColumn,
 			certificate.Table:     certificate.ValidColumn,
-			component.Table:       component.ValidColumn,
 			computer.Table:        computer.ValidColumn,
 			deployment.Table:      deployment.ValidColumn,
 			logicaldisk.Table:     logicaldisk.ValidColumn,
@@ -111,6 +110,7 @@ func checkColumn(table, column string) error {
 			printer.Table:         printer.ValidColumn,
 			release.Table:         release.ValidColumn,
 			revocation.Table:      revocation.ValidColumn,
+			server.Table:          server.ValidColumn,
 			sessions.Table:        sessions.ValidColumn,
 			settings.Table:        settings.ValidColumn,
 			share.Table:           share.ValidColumn,

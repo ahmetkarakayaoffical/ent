@@ -19,7 +19,6 @@ import (
 	"github.com/doncicuto/openuem_ent/antivirus"
 	"github.com/doncicuto/openuem_ent/app"
 	"github.com/doncicuto/openuem_ent/certificate"
-	"github.com/doncicuto/openuem_ent/component"
 	"github.com/doncicuto/openuem_ent/computer"
 	"github.com/doncicuto/openuem_ent/deployment"
 	"github.com/doncicuto/openuem_ent/logicaldisk"
@@ -31,6 +30,7 @@ import (
 	"github.com/doncicuto/openuem_ent/printer"
 	"github.com/doncicuto/openuem_ent/release"
 	"github.com/doncicuto/openuem_ent/revocation"
+	"github.com/doncicuto/openuem_ent/server"
 	"github.com/doncicuto/openuem_ent/sessions"
 	"github.com/doncicuto/openuem_ent/settings"
 	"github.com/doncicuto/openuem_ent/share"
@@ -53,8 +53,6 @@ type Client struct {
 	App *AppClient
 	// Certificate is the client for interacting with the Certificate builders.
 	Certificate *CertificateClient
-	// Component is the client for interacting with the Component builders.
-	Component *ComponentClient
 	// Computer is the client for interacting with the Computer builders.
 	Computer *ComputerClient
 	// Deployment is the client for interacting with the Deployment builders.
@@ -77,6 +75,8 @@ type Client struct {
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
+	// Server is the client for interacting with the Server builders.
+	Server *ServerClient
 	// Sessions is the client for interacting with the Sessions builders.
 	Sessions *SessionsClient
 	// Settings is the client for interacting with the Settings builders.
@@ -106,7 +106,6 @@ func (c *Client) init() {
 	c.Antivirus = NewAntivirusClient(c.config)
 	c.App = NewAppClient(c.config)
 	c.Certificate = NewCertificateClient(c.config)
-	c.Component = NewComponentClient(c.config)
 	c.Computer = NewComputerClient(c.config)
 	c.Deployment = NewDeploymentClient(c.config)
 	c.LogicalDisk = NewLogicalDiskClient(c.config)
@@ -118,6 +117,7 @@ func (c *Client) init() {
 	c.Printer = NewPrinterClient(c.config)
 	c.Release = NewReleaseClient(c.config)
 	c.Revocation = NewRevocationClient(c.config)
+	c.Server = NewServerClient(c.config)
 	c.Sessions = NewSessionsClient(c.config)
 	c.Settings = NewSettingsClient(c.config)
 	c.Share = NewShareClient(c.config)
@@ -221,7 +221,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Antivirus:       NewAntivirusClient(cfg),
 		App:             NewAppClient(cfg),
 		Certificate:     NewCertificateClient(cfg),
-		Component:       NewComponentClient(cfg),
 		Computer:        NewComputerClient(cfg),
 		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
@@ -233,6 +232,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Printer:         NewPrinterClient(cfg),
 		Release:         NewReleaseClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
+		Server:          NewServerClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Settings:        NewSettingsClient(cfg),
 		Share:           NewShareClient(cfg),
@@ -263,7 +263,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Antivirus:       NewAntivirusClient(cfg),
 		App:             NewAppClient(cfg),
 		Certificate:     NewCertificateClient(cfg),
-		Component:       NewComponentClient(cfg),
 		Computer:        NewComputerClient(cfg),
 		Deployment:      NewDeploymentClient(cfg),
 		LogicalDisk:     NewLogicalDiskClient(cfg),
@@ -275,6 +274,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Printer:         NewPrinterClient(cfg),
 		Release:         NewReleaseClient(cfg),
 		Revocation:      NewRevocationClient(cfg),
+		Server:          NewServerClient(cfg),
 		Sessions:        NewSessionsClient(cfg),
 		Settings:        NewSettingsClient(cfg),
 		Share:           NewShareClient(cfg),
@@ -311,10 +311,10 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Component, c.Computer,
-		c.Deployment, c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter,
-		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Release, c.Revocation,
-		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
+		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
+		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Server, c.Sessions,
+		c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -324,10 +324,10 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Component, c.Computer,
-		c.Deployment, c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter,
-		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Release, c.Revocation,
-		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
+		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
+		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Server, c.Sessions,
+		c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -344,8 +344,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.App.mutate(ctx, m)
 	case *CertificateMutation:
 		return c.Certificate.mutate(ctx, m)
-	case *ComponentMutation:
-		return c.Component.mutate(ctx, m)
 	case *ComputerMutation:
 		return c.Computer.mutate(ctx, m)
 	case *DeploymentMutation:
@@ -368,6 +366,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Release.mutate(ctx, m)
 	case *RevocationMutation:
 		return c.Revocation.mutate(ctx, m)
+	case *ServerMutation:
+		return c.Server.mutate(ctx, m)
 	case *SessionsMutation:
 		return c.Sessions.mutate(ctx, m)
 	case *SettingsMutation:
@@ -1188,139 +1188,6 @@ func (c *CertificateClient) mutate(ctx context.Context, m *CertificateMutation) 
 		return (&CertificateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("openuem_ent: unknown Certificate mutation op: %q", m.Op())
-	}
-}
-
-// ComponentClient is a client for the Component schema.
-type ComponentClient struct {
-	config
-}
-
-// NewComponentClient returns a client for the Component from the given config.
-func NewComponentClient(c config) *ComponentClient {
-	return &ComponentClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `component.Hooks(f(g(h())))`.
-func (c *ComponentClient) Use(hooks ...Hook) {
-	c.hooks.Component = append(c.hooks.Component, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `component.Intercept(f(g(h())))`.
-func (c *ComponentClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Component = append(c.inters.Component, interceptors...)
-}
-
-// Create returns a builder for creating a Component entity.
-func (c *ComponentClient) Create() *ComponentCreate {
-	mutation := newComponentMutation(c.config, OpCreate)
-	return &ComponentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Component entities.
-func (c *ComponentClient) CreateBulk(builders ...*ComponentCreate) *ComponentCreateBulk {
-	return &ComponentCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ComponentClient) MapCreateBulk(slice any, setFunc func(*ComponentCreate, int)) *ComponentCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ComponentCreateBulk{err: fmt.Errorf("calling to ComponentClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ComponentCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ComponentCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Component.
-func (c *ComponentClient) Update() *ComponentUpdate {
-	mutation := newComponentMutation(c.config, OpUpdate)
-	return &ComponentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ComponentClient) UpdateOne(co *Component) *ComponentUpdateOne {
-	mutation := newComponentMutation(c.config, OpUpdateOne, withComponent(co))
-	return &ComponentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ComponentClient) UpdateOneID(id int) *ComponentUpdateOne {
-	mutation := newComponentMutation(c.config, OpUpdateOne, withComponentID(id))
-	return &ComponentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Component.
-func (c *ComponentClient) Delete() *ComponentDelete {
-	mutation := newComponentMutation(c.config, OpDelete)
-	return &ComponentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ComponentClient) DeleteOne(co *Component) *ComponentDeleteOne {
-	return c.DeleteOneID(co.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ComponentClient) DeleteOneID(id int) *ComponentDeleteOne {
-	builder := c.Delete().Where(component.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ComponentDeleteOne{builder}
-}
-
-// Query returns a query builder for Component.
-func (c *ComponentClient) Query() *ComponentQuery {
-	return &ComponentQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeComponent},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Component entity by its id.
-func (c *ComponentClient) Get(ctx context.Context, id int) (*Component, error) {
-	return c.Query().Where(component.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ComponentClient) GetX(ctx context.Context, id int) *Component {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *ComponentClient) Hooks() []Hook {
-	return c.hooks.Component
-}
-
-// Interceptors returns the client interceptors.
-func (c *ComponentClient) Interceptors() []Interceptor {
-	return c.inters.Component
-}
-
-func (c *ComponentClient) mutate(ctx context.Context, m *ComponentMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ComponentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ComponentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ComponentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ComponentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("openuem_ent: unknown Component mutation op: %q", m.Op())
 	}
 }
 
@@ -2963,6 +2830,139 @@ func (c *RevocationClient) mutate(ctx context.Context, m *RevocationMutation) (V
 	}
 }
 
+// ServerClient is a client for the Server schema.
+type ServerClient struct {
+	config
+}
+
+// NewServerClient returns a client for the Server from the given config.
+func NewServerClient(c config) *ServerClient {
+	return &ServerClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `server.Hooks(f(g(h())))`.
+func (c *ServerClient) Use(hooks ...Hook) {
+	c.hooks.Server = append(c.hooks.Server, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `server.Intercept(f(g(h())))`.
+func (c *ServerClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Server = append(c.inters.Server, interceptors...)
+}
+
+// Create returns a builder for creating a Server entity.
+func (c *ServerClient) Create() *ServerCreate {
+	mutation := newServerMutation(c.config, OpCreate)
+	return &ServerCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Server entities.
+func (c *ServerClient) CreateBulk(builders ...*ServerCreate) *ServerCreateBulk {
+	return &ServerCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ServerClient) MapCreateBulk(slice any, setFunc func(*ServerCreate, int)) *ServerCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ServerCreateBulk{err: fmt.Errorf("calling to ServerClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ServerCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ServerCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Server.
+func (c *ServerClient) Update() *ServerUpdate {
+	mutation := newServerMutation(c.config, OpUpdate)
+	return &ServerUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ServerClient) UpdateOne(s *Server) *ServerUpdateOne {
+	mutation := newServerMutation(c.config, OpUpdateOne, withServer(s))
+	return &ServerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ServerClient) UpdateOneID(id int) *ServerUpdateOne {
+	mutation := newServerMutation(c.config, OpUpdateOne, withServerID(id))
+	return &ServerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Server.
+func (c *ServerClient) Delete() *ServerDelete {
+	mutation := newServerMutation(c.config, OpDelete)
+	return &ServerDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ServerClient) DeleteOne(s *Server) *ServerDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ServerClient) DeleteOneID(id int) *ServerDeleteOne {
+	builder := c.Delete().Where(server.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ServerDeleteOne{builder}
+}
+
+// Query returns a query builder for Server.
+func (c *ServerClient) Query() *ServerQuery {
+	return &ServerQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeServer},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Server entity by its id.
+func (c *ServerClient) Get(ctx context.Context, id int) (*Server, error) {
+	return c.Query().Where(server.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ServerClient) GetX(ctx context.Context, id int) *Server {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ServerClient) Hooks() []Hook {
+	return c.hooks.Server
+}
+
+// Interceptors returns the client interceptors.
+func (c *ServerClient) Interceptors() []Interceptor {
+	return c.inters.Server
+}
+
+func (c *ServerClient) mutate(ctx context.Context, m *ServerMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ServerCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ServerUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ServerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ServerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("openuem_ent: unknown Server mutation op: %q", m.Op())
+	}
+}
+
 // SessionsClient is a client for the Sessions schema.
 type SessionsClient struct {
 	config
@@ -4025,15 +4025,15 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Certificate, Component, Computer, Deployment,
-		LogicalDisk, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
-		Printer, Release, Revocation, Sessions, Settings, Share, SystemUpdate, Tag,
-		Update, User []ent.Hook
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
+		Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag, Update,
+		User []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Certificate, Component, Computer, Deployment,
-		LogicalDisk, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
-		Printer, Release, Revocation, Sessions, Settings, Share, SystemUpdate, Tag,
-		Update, User []ent.Interceptor
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
+		Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag, Update,
+		User []ent.Interceptor
 	}
 )
