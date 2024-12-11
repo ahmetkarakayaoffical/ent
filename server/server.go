@@ -85,9 +85,10 @@ type UpdateStatus string
 
 // UpdateStatus values.
 const (
-	UpdateStatusSuccess UpdateStatus = "Success"
-	UpdateStatusError   UpdateStatus = "Error"
-	UpdateStatusPending UpdateStatus = "Pending"
+	UpdateStatusSuccess    UpdateStatus = "Success"
+	UpdateStatusError      UpdateStatus = "Error"
+	UpdateStatusPending    UpdateStatus = "Pending"
+	UpdateStatusInProgress UpdateStatus = "In Progress"
 )
 
 func (us UpdateStatus) String() string {
@@ -97,7 +98,7 @@ func (us UpdateStatus) String() string {
 // UpdateStatusValidator is a validator for the "update_status" field enum values. It is called by the builders before save.
 func UpdateStatusValidator(us UpdateStatus) error {
 	switch us {
-	case UpdateStatusSuccess, UpdateStatusError, UpdateStatusPending:
+	case UpdateStatusSuccess, UpdateStatusError, UpdateStatusPending, UpdateStatusInProgress:
 		return nil
 	default:
 		return fmt.Errorf("server: invalid enum value for update_status field: %q", us)

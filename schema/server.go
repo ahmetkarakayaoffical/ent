@@ -19,7 +19,7 @@ func (Server) Fields() []ent.Field {
 		field.String("os"),
 		field.String("version"),
 		field.Enum("channel").Values("stable", "testing", "devel"),
-		field.Enum("update_status").Values("Success", "Error", "Pending").Optional(),
+		field.Enum("update_status").Values("Success", "Error", "Pending", "In Progress").Optional(),
 		field.String("update_message").Optional(),
 		field.Time("update_when").Optional(),
 	}
