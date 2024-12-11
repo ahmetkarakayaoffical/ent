@@ -14,7 +14,7 @@ type Release struct {
 
 func (Release) Fields() []ent.Field {
 	return []ent.Field{
-		field.Enum("release_type").Values("agent", "updater", "messenger").Optional(),
+		field.Enum("release_type").Values("agent", "server").Optional(),
 		field.String("version").Optional(),
 		field.String("channel").Optional(),
 		field.String("summary").Optional(),

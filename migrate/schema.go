@@ -357,7 +357,7 @@ var (
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "release_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"agent", "updater", "messenger"}},
+		{Name: "release_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"agent", "server"}},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "channel", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},

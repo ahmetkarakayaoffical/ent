@@ -82,9 +82,8 @@ type ReleaseType string
 
 // ReleaseType values.
 const (
-	ReleaseTypeAgent     ReleaseType = "agent"
-	ReleaseTypeUpdater   ReleaseType = "updater"
-	ReleaseTypeMessenger ReleaseType = "messenger"
+	ReleaseTypeAgent  ReleaseType = "agent"
+	ReleaseTypeServer ReleaseType = "server"
 )
 
 func (rt ReleaseType) String() string {
@@ -94,7 +93,7 @@ func (rt ReleaseType) String() string {
 // ReleaseTypeValidator is a validator for the "release_type" field enum values. It is called by the builders before save.
 func ReleaseTypeValidator(rt ReleaseType) error {
 	switch rt {
-	case ReleaseTypeAgent, ReleaseTypeUpdater, ReleaseTypeMessenger:
+	case ReleaseTypeAgent, ReleaseTypeServer:
 		return nil
 	default:
 		return fmt.Errorf("release: invalid enum value for release_type field: %q", rt)
