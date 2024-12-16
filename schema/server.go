@@ -22,6 +22,12 @@ func (Server) Fields() []ent.Field {
 		field.Enum("update_status").Values("Success", "Error", "Pending", "In Progress").Optional(),
 		field.String("update_message").Optional(),
 		field.Time("update_when").Optional(),
+		field.Bool("nats_component").Optional(),
+		field.Bool("ocsp_component").Optional(),
+		field.Bool("console_component").Optional(),
+		field.Bool("agent_worker_component").Optional(),
+		field.Bool("notification_worker_component").Optional(),
+		field.Bool("cert_manager_worker_component").Optional(),
 	}
 }
 

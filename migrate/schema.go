@@ -381,6 +381,12 @@ var (
 		{Name: "update_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"Success", "Error", "Pending", "In Progress"}},
 		{Name: "update_message", Type: field.TypeString, Nullable: true},
 		{Name: "update_when", Type: field.TypeTime, Nullable: true},
+		{Name: "nats_component", Type: field.TypeBool, Nullable: true},
+		{Name: "ocsp_component", Type: field.TypeBool, Nullable: true},
+		{Name: "console_component", Type: field.TypeBool, Nullable: true},
+		{Name: "agent_worker_component", Type: field.TypeBool, Nullable: true},
+		{Name: "notification_worker_component", Type: field.TypeBool, Nullable: true},
+		{Name: "cert_manager_worker_component", Type: field.TypeBool, Nullable: true},
 	}
 	// ServersTable holds the schema information for the "servers" table.
 	ServersTable = &schema.Table{

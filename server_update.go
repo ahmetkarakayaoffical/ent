@@ -159,6 +159,126 @@ func (su *ServerUpdate) ClearUpdateWhen() *ServerUpdate {
 	return su
 }
 
+// SetNatsComponent sets the "nats_component" field.
+func (su *ServerUpdate) SetNatsComponent(b bool) *ServerUpdate {
+	su.mutation.SetNatsComponent(b)
+	return su
+}
+
+// SetNillableNatsComponent sets the "nats_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableNatsComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetNatsComponent(*b)
+	}
+	return su
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (su *ServerUpdate) ClearNatsComponent() *ServerUpdate {
+	su.mutation.ClearNatsComponent()
+	return su
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (su *ServerUpdate) SetOcspComponent(b bool) *ServerUpdate {
+	su.mutation.SetOcspComponent(b)
+	return su
+}
+
+// SetNillableOcspComponent sets the "ocsp_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableOcspComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetOcspComponent(*b)
+	}
+	return su
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (su *ServerUpdate) ClearOcspComponent() *ServerUpdate {
+	su.mutation.ClearOcspComponent()
+	return su
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (su *ServerUpdate) SetConsoleComponent(b bool) *ServerUpdate {
+	su.mutation.SetConsoleComponent(b)
+	return su
+}
+
+// SetNillableConsoleComponent sets the "console_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableConsoleComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetConsoleComponent(*b)
+	}
+	return su
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (su *ServerUpdate) ClearConsoleComponent() *ServerUpdate {
+	su.mutation.ClearConsoleComponent()
+	return su
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (su *ServerUpdate) SetAgentWorkerComponent(b bool) *ServerUpdate {
+	su.mutation.SetAgentWorkerComponent(b)
+	return su
+}
+
+// SetNillableAgentWorkerComponent sets the "agent_worker_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableAgentWorkerComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetAgentWorkerComponent(*b)
+	}
+	return su
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (su *ServerUpdate) ClearAgentWorkerComponent() *ServerUpdate {
+	su.mutation.ClearAgentWorkerComponent()
+	return su
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (su *ServerUpdate) SetNotificationWorkerComponent(b bool) *ServerUpdate {
+	su.mutation.SetNotificationWorkerComponent(b)
+	return su
+}
+
+// SetNillableNotificationWorkerComponent sets the "notification_worker_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableNotificationWorkerComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetNotificationWorkerComponent(*b)
+	}
+	return su
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (su *ServerUpdate) ClearNotificationWorkerComponent() *ServerUpdate {
+	su.mutation.ClearNotificationWorkerComponent()
+	return su
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (su *ServerUpdate) SetCertManagerWorkerComponent(b bool) *ServerUpdate {
+	su.mutation.SetCertManagerWorkerComponent(b)
+	return su
+}
+
+// SetNillableCertManagerWorkerComponent sets the "cert_manager_worker_component" field if the given value is not nil.
+func (su *ServerUpdate) SetNillableCertManagerWorkerComponent(b *bool) *ServerUpdate {
+	if b != nil {
+		su.SetCertManagerWorkerComponent(*b)
+	}
+	return su
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (su *ServerUpdate) ClearCertManagerWorkerComponent() *ServerUpdate {
+	su.mutation.ClearCertManagerWorkerComponent()
+	return su
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (su *ServerUpdate) Mutation() *ServerMutation {
 	return su.mutation
@@ -256,6 +376,42 @@ func (su *ServerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.UpdateWhenCleared() {
 		_spec.ClearField(server.FieldUpdateWhen, field.TypeTime)
+	}
+	if value, ok := su.mutation.NatsComponent(); ok {
+		_spec.SetField(server.FieldNatsComponent, field.TypeBool, value)
+	}
+	if su.mutation.NatsComponentCleared() {
+		_spec.ClearField(server.FieldNatsComponent, field.TypeBool)
+	}
+	if value, ok := su.mutation.OcspComponent(); ok {
+		_spec.SetField(server.FieldOcspComponent, field.TypeBool, value)
+	}
+	if su.mutation.OcspComponentCleared() {
+		_spec.ClearField(server.FieldOcspComponent, field.TypeBool)
+	}
+	if value, ok := su.mutation.ConsoleComponent(); ok {
+		_spec.SetField(server.FieldConsoleComponent, field.TypeBool, value)
+	}
+	if su.mutation.ConsoleComponentCleared() {
+		_spec.ClearField(server.FieldConsoleComponent, field.TypeBool)
+	}
+	if value, ok := su.mutation.AgentWorkerComponent(); ok {
+		_spec.SetField(server.FieldAgentWorkerComponent, field.TypeBool, value)
+	}
+	if su.mutation.AgentWorkerComponentCleared() {
+		_spec.ClearField(server.FieldAgentWorkerComponent, field.TypeBool)
+	}
+	if value, ok := su.mutation.NotificationWorkerComponent(); ok {
+		_spec.SetField(server.FieldNotificationWorkerComponent, field.TypeBool, value)
+	}
+	if su.mutation.NotificationWorkerComponentCleared() {
+		_spec.ClearField(server.FieldNotificationWorkerComponent, field.TypeBool)
+	}
+	if value, ok := su.mutation.CertManagerWorkerComponent(); ok {
+		_spec.SetField(server.FieldCertManagerWorkerComponent, field.TypeBool, value)
+	}
+	if su.mutation.CertManagerWorkerComponentCleared() {
+		_spec.ClearField(server.FieldCertManagerWorkerComponent, field.TypeBool)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -409,6 +565,126 @@ func (suo *ServerUpdateOne) ClearUpdateWhen() *ServerUpdateOne {
 	return suo
 }
 
+// SetNatsComponent sets the "nats_component" field.
+func (suo *ServerUpdateOne) SetNatsComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetNatsComponent(b)
+	return suo
+}
+
+// SetNillableNatsComponent sets the "nats_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableNatsComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetNatsComponent(*b)
+	}
+	return suo
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (suo *ServerUpdateOne) ClearNatsComponent() *ServerUpdateOne {
+	suo.mutation.ClearNatsComponent()
+	return suo
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (suo *ServerUpdateOne) SetOcspComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetOcspComponent(b)
+	return suo
+}
+
+// SetNillableOcspComponent sets the "ocsp_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableOcspComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetOcspComponent(*b)
+	}
+	return suo
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (suo *ServerUpdateOne) ClearOcspComponent() *ServerUpdateOne {
+	suo.mutation.ClearOcspComponent()
+	return suo
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (suo *ServerUpdateOne) SetConsoleComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetConsoleComponent(b)
+	return suo
+}
+
+// SetNillableConsoleComponent sets the "console_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableConsoleComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetConsoleComponent(*b)
+	}
+	return suo
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (suo *ServerUpdateOne) ClearConsoleComponent() *ServerUpdateOne {
+	suo.mutation.ClearConsoleComponent()
+	return suo
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (suo *ServerUpdateOne) SetAgentWorkerComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetAgentWorkerComponent(b)
+	return suo
+}
+
+// SetNillableAgentWorkerComponent sets the "agent_worker_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableAgentWorkerComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetAgentWorkerComponent(*b)
+	}
+	return suo
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (suo *ServerUpdateOne) ClearAgentWorkerComponent() *ServerUpdateOne {
+	suo.mutation.ClearAgentWorkerComponent()
+	return suo
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (suo *ServerUpdateOne) SetNotificationWorkerComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetNotificationWorkerComponent(b)
+	return suo
+}
+
+// SetNillableNotificationWorkerComponent sets the "notification_worker_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableNotificationWorkerComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetNotificationWorkerComponent(*b)
+	}
+	return suo
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (suo *ServerUpdateOne) ClearNotificationWorkerComponent() *ServerUpdateOne {
+	suo.mutation.ClearNotificationWorkerComponent()
+	return suo
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (suo *ServerUpdateOne) SetCertManagerWorkerComponent(b bool) *ServerUpdateOne {
+	suo.mutation.SetCertManagerWorkerComponent(b)
+	return suo
+}
+
+// SetNillableCertManagerWorkerComponent sets the "cert_manager_worker_component" field if the given value is not nil.
+func (suo *ServerUpdateOne) SetNillableCertManagerWorkerComponent(b *bool) *ServerUpdateOne {
+	if b != nil {
+		suo.SetCertManagerWorkerComponent(*b)
+	}
+	return suo
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (suo *ServerUpdateOne) ClearCertManagerWorkerComponent() *ServerUpdateOne {
+	suo.mutation.ClearCertManagerWorkerComponent()
+	return suo
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (suo *ServerUpdateOne) Mutation() *ServerMutation {
 	return suo.mutation
@@ -536,6 +812,42 @@ func (suo *ServerUpdateOne) sqlSave(ctx context.Context) (_node *Server, err err
 	}
 	if suo.mutation.UpdateWhenCleared() {
 		_spec.ClearField(server.FieldUpdateWhen, field.TypeTime)
+	}
+	if value, ok := suo.mutation.NatsComponent(); ok {
+		_spec.SetField(server.FieldNatsComponent, field.TypeBool, value)
+	}
+	if suo.mutation.NatsComponentCleared() {
+		_spec.ClearField(server.FieldNatsComponent, field.TypeBool)
+	}
+	if value, ok := suo.mutation.OcspComponent(); ok {
+		_spec.SetField(server.FieldOcspComponent, field.TypeBool, value)
+	}
+	if suo.mutation.OcspComponentCleared() {
+		_spec.ClearField(server.FieldOcspComponent, field.TypeBool)
+	}
+	if value, ok := suo.mutation.ConsoleComponent(); ok {
+		_spec.SetField(server.FieldConsoleComponent, field.TypeBool, value)
+	}
+	if suo.mutation.ConsoleComponentCleared() {
+		_spec.ClearField(server.FieldConsoleComponent, field.TypeBool)
+	}
+	if value, ok := suo.mutation.AgentWorkerComponent(); ok {
+		_spec.SetField(server.FieldAgentWorkerComponent, field.TypeBool, value)
+	}
+	if suo.mutation.AgentWorkerComponentCleared() {
+		_spec.ClearField(server.FieldAgentWorkerComponent, field.TypeBool)
+	}
+	if value, ok := suo.mutation.NotificationWorkerComponent(); ok {
+		_spec.SetField(server.FieldNotificationWorkerComponent, field.TypeBool, value)
+	}
+	if suo.mutation.NotificationWorkerComponentCleared() {
+		_spec.ClearField(server.FieldNotificationWorkerComponent, field.TypeBool)
+	}
+	if value, ok := suo.mutation.CertManagerWorkerComponent(); ok {
+		_spec.SetField(server.FieldCertManagerWorkerComponent, field.TypeBool, value)
+	}
+	if suo.mutation.CertManagerWorkerComponentCleared() {
+		_spec.ClearField(server.FieldCertManagerWorkerComponent, field.TypeBool)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Server{config: suo.config}

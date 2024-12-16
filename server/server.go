@@ -29,6 +29,18 @@ const (
 	FieldUpdateMessage = "update_message"
 	// FieldUpdateWhen holds the string denoting the update_when field in the database.
 	FieldUpdateWhen = "update_when"
+	// FieldNatsComponent holds the string denoting the nats_component field in the database.
+	FieldNatsComponent = "nats_component"
+	// FieldOcspComponent holds the string denoting the ocsp_component field in the database.
+	FieldOcspComponent = "ocsp_component"
+	// FieldConsoleComponent holds the string denoting the console_component field in the database.
+	FieldConsoleComponent = "console_component"
+	// FieldAgentWorkerComponent holds the string denoting the agent_worker_component field in the database.
+	FieldAgentWorkerComponent = "agent_worker_component"
+	// FieldNotificationWorkerComponent holds the string denoting the notification_worker_component field in the database.
+	FieldNotificationWorkerComponent = "notification_worker_component"
+	// FieldCertManagerWorkerComponent holds the string denoting the cert_manager_worker_component field in the database.
+	FieldCertManagerWorkerComponent = "cert_manager_worker_component"
 	// Table holds the table name of the server in the database.
 	Table = "servers"
 )
@@ -44,6 +56,12 @@ var Columns = []string{
 	FieldUpdateStatus,
 	FieldUpdateMessage,
 	FieldUpdateWhen,
+	FieldNatsComponent,
+	FieldOcspComponent,
+	FieldConsoleComponent,
+	FieldAgentWorkerComponent,
+	FieldNotificationWorkerComponent,
+	FieldCertManagerWorkerComponent,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -151,4 +169,34 @@ func ByUpdateMessage(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdateWhen orders the results by the update_when field.
 func ByUpdateWhen(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdateWhen, opts...).ToFunc()
+}
+
+// ByNatsComponent orders the results by the nats_component field.
+func ByNatsComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNatsComponent, opts...).ToFunc()
+}
+
+// ByOcspComponent orders the results by the ocsp_component field.
+func ByOcspComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcspComponent, opts...).ToFunc()
+}
+
+// ByConsoleComponent orders the results by the console_component field.
+func ByConsoleComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldConsoleComponent, opts...).ToFunc()
+}
+
+// ByAgentWorkerComponent orders the results by the agent_worker_component field.
+func ByAgentWorkerComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAgentWorkerComponent, opts...).ToFunc()
+}
+
+// ByNotificationWorkerComponent orders the results by the notification_worker_component field.
+func ByNotificationWorkerComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNotificationWorkerComponent, opts...).ToFunc()
+}
+
+// ByCertManagerWorkerComponent orders the results by the cert_manager_worker_component field.
+func ByCertManagerWorkerComponent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCertManagerWorkerComponent, opts...).ToFunc()
 }

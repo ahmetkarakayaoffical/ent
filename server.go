@@ -32,8 +32,20 @@ type Server struct {
 	// UpdateMessage holds the value of the "update_message" field.
 	UpdateMessage string `json:"update_message,omitempty"`
 	// UpdateWhen holds the value of the "update_when" field.
-	UpdateWhen   time.Time `json:"update_when,omitempty"`
-	selectValues sql.SelectValues
+	UpdateWhen time.Time `json:"update_when,omitempty"`
+	// NatsComponent holds the value of the "nats_component" field.
+	NatsComponent bool `json:"nats_component,omitempty"`
+	// OcspComponent holds the value of the "ocsp_component" field.
+	OcspComponent bool `json:"ocsp_component,omitempty"`
+	// ConsoleComponent holds the value of the "console_component" field.
+	ConsoleComponent bool `json:"console_component,omitempty"`
+	// AgentWorkerComponent holds the value of the "agent_worker_component" field.
+	AgentWorkerComponent bool `json:"agent_worker_component,omitempty"`
+	// NotificationWorkerComponent holds the value of the "notification_worker_component" field.
+	NotificationWorkerComponent bool `json:"notification_worker_component,omitempty"`
+	// CertManagerWorkerComponent holds the value of the "cert_manager_worker_component" field.
+	CertManagerWorkerComponent bool `json:"cert_manager_worker_component,omitempty"`
+	selectValues               sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -41,6 +53,8 @@ func (*Server) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case server.FieldNatsComponent, server.FieldOcspComponent, server.FieldConsoleComponent, server.FieldAgentWorkerComponent, server.FieldNotificationWorkerComponent, server.FieldCertManagerWorkerComponent:
+			values[i] = new(sql.NullBool)
 		case server.FieldID:
 			values[i] = new(sql.NullInt64)
 		case server.FieldHostname, server.FieldArch, server.FieldOs, server.FieldVersion, server.FieldChannel, server.FieldUpdateStatus, server.FieldUpdateMessage:
@@ -116,6 +130,42 @@ func (s *Server) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdateWhen = value.Time
 			}
+		case server.FieldNatsComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field nats_component", values[i])
+			} else if value.Valid {
+				s.NatsComponent = value.Bool
+			}
+		case server.FieldOcspComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ocsp_component", values[i])
+			} else if value.Valid {
+				s.OcspComponent = value.Bool
+			}
+		case server.FieldConsoleComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field console_component", values[i])
+			} else if value.Valid {
+				s.ConsoleComponent = value.Bool
+			}
+		case server.FieldAgentWorkerComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field agent_worker_component", values[i])
+			} else if value.Valid {
+				s.AgentWorkerComponent = value.Bool
+			}
+		case server.FieldNotificationWorkerComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field notification_worker_component", values[i])
+			} else if value.Valid {
+				s.NotificationWorkerComponent = value.Bool
+			}
+		case server.FieldCertManagerWorkerComponent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field cert_manager_worker_component", values[i])
+			} else if value.Valid {
+				s.CertManagerWorkerComponent = value.Bool
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -175,6 +225,24 @@ func (s *Server) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("update_when=")
 	builder.WriteString(s.UpdateWhen.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("nats_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.NatsComponent))
+	builder.WriteString(", ")
+	builder.WriteString("ocsp_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.OcspComponent))
+	builder.WriteString(", ")
+	builder.WriteString("console_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.ConsoleComponent))
+	builder.WriteString(", ")
+	builder.WriteString("agent_worker_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.AgentWorkerComponent))
+	builder.WriteString(", ")
+	builder.WriteString("notification_worker_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.NotificationWorkerComponent))
+	builder.WriteString(", ")
+	builder.WriteString("cert_manager_worker_component=")
+	builder.WriteString(fmt.Sprintf("%v", s.CertManagerWorkerComponent))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -94,6 +94,90 @@ func (sc *ServerCreate) SetNillableUpdateWhen(t *time.Time) *ServerCreate {
 	return sc
 }
 
+// SetNatsComponent sets the "nats_component" field.
+func (sc *ServerCreate) SetNatsComponent(b bool) *ServerCreate {
+	sc.mutation.SetNatsComponent(b)
+	return sc
+}
+
+// SetNillableNatsComponent sets the "nats_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableNatsComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetNatsComponent(*b)
+	}
+	return sc
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (sc *ServerCreate) SetOcspComponent(b bool) *ServerCreate {
+	sc.mutation.SetOcspComponent(b)
+	return sc
+}
+
+// SetNillableOcspComponent sets the "ocsp_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableOcspComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetOcspComponent(*b)
+	}
+	return sc
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (sc *ServerCreate) SetConsoleComponent(b bool) *ServerCreate {
+	sc.mutation.SetConsoleComponent(b)
+	return sc
+}
+
+// SetNillableConsoleComponent sets the "console_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableConsoleComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetConsoleComponent(*b)
+	}
+	return sc
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (sc *ServerCreate) SetAgentWorkerComponent(b bool) *ServerCreate {
+	sc.mutation.SetAgentWorkerComponent(b)
+	return sc
+}
+
+// SetNillableAgentWorkerComponent sets the "agent_worker_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableAgentWorkerComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetAgentWorkerComponent(*b)
+	}
+	return sc
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (sc *ServerCreate) SetNotificationWorkerComponent(b bool) *ServerCreate {
+	sc.mutation.SetNotificationWorkerComponent(b)
+	return sc
+}
+
+// SetNillableNotificationWorkerComponent sets the "notification_worker_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableNotificationWorkerComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetNotificationWorkerComponent(*b)
+	}
+	return sc
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (sc *ServerCreate) SetCertManagerWorkerComponent(b bool) *ServerCreate {
+	sc.mutation.SetCertManagerWorkerComponent(b)
+	return sc
+}
+
+// SetNillableCertManagerWorkerComponent sets the "cert_manager_worker_component" field if the given value is not nil.
+func (sc *ServerCreate) SetNillableCertManagerWorkerComponent(b *bool) *ServerCreate {
+	if b != nil {
+		sc.SetCertManagerWorkerComponent(*b)
+	}
+	return sc
+}
+
 // Mutation returns the ServerMutation object of the builder.
 func (sc *ServerCreate) Mutation() *ServerMutation {
 	return sc.mutation
@@ -211,6 +295,30 @@ func (sc *ServerCreate) createSpec() (*Server, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.UpdateWhen(); ok {
 		_spec.SetField(server.FieldUpdateWhen, field.TypeTime, value)
 		_node.UpdateWhen = value
+	}
+	if value, ok := sc.mutation.NatsComponent(); ok {
+		_spec.SetField(server.FieldNatsComponent, field.TypeBool, value)
+		_node.NatsComponent = value
+	}
+	if value, ok := sc.mutation.OcspComponent(); ok {
+		_spec.SetField(server.FieldOcspComponent, field.TypeBool, value)
+		_node.OcspComponent = value
+	}
+	if value, ok := sc.mutation.ConsoleComponent(); ok {
+		_spec.SetField(server.FieldConsoleComponent, field.TypeBool, value)
+		_node.ConsoleComponent = value
+	}
+	if value, ok := sc.mutation.AgentWorkerComponent(); ok {
+		_spec.SetField(server.FieldAgentWorkerComponent, field.TypeBool, value)
+		_node.AgentWorkerComponent = value
+	}
+	if value, ok := sc.mutation.NotificationWorkerComponent(); ok {
+		_spec.SetField(server.FieldNotificationWorkerComponent, field.TypeBool, value)
+		_node.NotificationWorkerComponent = value
+	}
+	if value, ok := sc.mutation.CertManagerWorkerComponent(); ok {
+		_spec.SetField(server.FieldCertManagerWorkerComponent, field.TypeBool, value)
+		_node.CertManagerWorkerComponent = value
 	}
 	return _node, _spec
 }
@@ -375,6 +483,114 @@ func (u *ServerUpsert) UpdateUpdateWhen() *ServerUpsert {
 // ClearUpdateWhen clears the value of the "update_when" field.
 func (u *ServerUpsert) ClearUpdateWhen() *ServerUpsert {
 	u.SetNull(server.FieldUpdateWhen)
+	return u
+}
+
+// SetNatsComponent sets the "nats_component" field.
+func (u *ServerUpsert) SetNatsComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldNatsComponent, v)
+	return u
+}
+
+// UpdateNatsComponent sets the "nats_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateNatsComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldNatsComponent)
+	return u
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (u *ServerUpsert) ClearNatsComponent() *ServerUpsert {
+	u.SetNull(server.FieldNatsComponent)
+	return u
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (u *ServerUpsert) SetOcspComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldOcspComponent, v)
+	return u
+}
+
+// UpdateOcspComponent sets the "ocsp_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateOcspComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldOcspComponent)
+	return u
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (u *ServerUpsert) ClearOcspComponent() *ServerUpsert {
+	u.SetNull(server.FieldOcspComponent)
+	return u
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (u *ServerUpsert) SetConsoleComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldConsoleComponent, v)
+	return u
+}
+
+// UpdateConsoleComponent sets the "console_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateConsoleComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldConsoleComponent)
+	return u
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (u *ServerUpsert) ClearConsoleComponent() *ServerUpsert {
+	u.SetNull(server.FieldConsoleComponent)
+	return u
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (u *ServerUpsert) SetAgentWorkerComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldAgentWorkerComponent, v)
+	return u
+}
+
+// UpdateAgentWorkerComponent sets the "agent_worker_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateAgentWorkerComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldAgentWorkerComponent)
+	return u
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (u *ServerUpsert) ClearAgentWorkerComponent() *ServerUpsert {
+	u.SetNull(server.FieldAgentWorkerComponent)
+	return u
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (u *ServerUpsert) SetNotificationWorkerComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldNotificationWorkerComponent, v)
+	return u
+}
+
+// UpdateNotificationWorkerComponent sets the "notification_worker_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateNotificationWorkerComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldNotificationWorkerComponent)
+	return u
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (u *ServerUpsert) ClearNotificationWorkerComponent() *ServerUpsert {
+	u.SetNull(server.FieldNotificationWorkerComponent)
+	return u
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (u *ServerUpsert) SetCertManagerWorkerComponent(v bool) *ServerUpsert {
+	u.Set(server.FieldCertManagerWorkerComponent, v)
+	return u
+}
+
+// UpdateCertManagerWorkerComponent sets the "cert_manager_worker_component" field to the value that was provided on create.
+func (u *ServerUpsert) UpdateCertManagerWorkerComponent() *ServerUpsert {
+	u.SetExcluded(server.FieldCertManagerWorkerComponent)
+	return u
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (u *ServerUpsert) ClearCertManagerWorkerComponent() *ServerUpsert {
+	u.SetNull(server.FieldCertManagerWorkerComponent)
 	return u
 }
 
@@ -548,6 +764,132 @@ func (u *ServerUpsertOne) UpdateUpdateWhen() *ServerUpsertOne {
 func (u *ServerUpsertOne) ClearUpdateWhen() *ServerUpsertOne {
 	return u.Update(func(s *ServerUpsert) {
 		s.ClearUpdateWhen()
+	})
+}
+
+// SetNatsComponent sets the "nats_component" field.
+func (u *ServerUpsertOne) SetNatsComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetNatsComponent(v)
+	})
+}
+
+// UpdateNatsComponent sets the "nats_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateNatsComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateNatsComponent()
+	})
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (u *ServerUpsertOne) ClearNatsComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearNatsComponent()
+	})
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (u *ServerUpsertOne) SetOcspComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetOcspComponent(v)
+	})
+}
+
+// UpdateOcspComponent sets the "ocsp_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateOcspComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateOcspComponent()
+	})
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (u *ServerUpsertOne) ClearOcspComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearOcspComponent()
+	})
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (u *ServerUpsertOne) SetConsoleComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetConsoleComponent(v)
+	})
+}
+
+// UpdateConsoleComponent sets the "console_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateConsoleComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateConsoleComponent()
+	})
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (u *ServerUpsertOne) ClearConsoleComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearConsoleComponent()
+	})
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (u *ServerUpsertOne) SetAgentWorkerComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetAgentWorkerComponent(v)
+	})
+}
+
+// UpdateAgentWorkerComponent sets the "agent_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateAgentWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateAgentWorkerComponent()
+	})
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (u *ServerUpsertOne) ClearAgentWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearAgentWorkerComponent()
+	})
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (u *ServerUpsertOne) SetNotificationWorkerComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetNotificationWorkerComponent(v)
+	})
+}
+
+// UpdateNotificationWorkerComponent sets the "notification_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateNotificationWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateNotificationWorkerComponent()
+	})
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (u *ServerUpsertOne) ClearNotificationWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearNotificationWorkerComponent()
+	})
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (u *ServerUpsertOne) SetCertManagerWorkerComponent(v bool) *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetCertManagerWorkerComponent(v)
+	})
+}
+
+// UpdateCertManagerWorkerComponent sets the "cert_manager_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertOne) UpdateCertManagerWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateCertManagerWorkerComponent()
+	})
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (u *ServerUpsertOne) ClearCertManagerWorkerComponent() *ServerUpsertOne {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearCertManagerWorkerComponent()
 	})
 }
 
@@ -884,6 +1226,132 @@ func (u *ServerUpsertBulk) UpdateUpdateWhen() *ServerUpsertBulk {
 func (u *ServerUpsertBulk) ClearUpdateWhen() *ServerUpsertBulk {
 	return u.Update(func(s *ServerUpsert) {
 		s.ClearUpdateWhen()
+	})
+}
+
+// SetNatsComponent sets the "nats_component" field.
+func (u *ServerUpsertBulk) SetNatsComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetNatsComponent(v)
+	})
+}
+
+// UpdateNatsComponent sets the "nats_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateNatsComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateNatsComponent()
+	})
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (u *ServerUpsertBulk) ClearNatsComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearNatsComponent()
+	})
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (u *ServerUpsertBulk) SetOcspComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetOcspComponent(v)
+	})
+}
+
+// UpdateOcspComponent sets the "ocsp_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateOcspComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateOcspComponent()
+	})
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (u *ServerUpsertBulk) ClearOcspComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearOcspComponent()
+	})
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (u *ServerUpsertBulk) SetConsoleComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetConsoleComponent(v)
+	})
+}
+
+// UpdateConsoleComponent sets the "console_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateConsoleComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateConsoleComponent()
+	})
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (u *ServerUpsertBulk) ClearConsoleComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearConsoleComponent()
+	})
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (u *ServerUpsertBulk) SetAgentWorkerComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetAgentWorkerComponent(v)
+	})
+}
+
+// UpdateAgentWorkerComponent sets the "agent_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateAgentWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateAgentWorkerComponent()
+	})
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (u *ServerUpsertBulk) ClearAgentWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearAgentWorkerComponent()
+	})
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (u *ServerUpsertBulk) SetNotificationWorkerComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetNotificationWorkerComponent(v)
+	})
+}
+
+// UpdateNotificationWorkerComponent sets the "notification_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateNotificationWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateNotificationWorkerComponent()
+	})
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (u *ServerUpsertBulk) ClearNotificationWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearNotificationWorkerComponent()
+	})
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (u *ServerUpsertBulk) SetCertManagerWorkerComponent(v bool) *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.SetCertManagerWorkerComponent(v)
+	})
+}
+
+// UpdateCertManagerWorkerComponent sets the "cert_manager_worker_component" field to the value that was provided on create.
+func (u *ServerUpsertBulk) UpdateCertManagerWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.UpdateCertManagerWorkerComponent()
+	})
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (u *ServerUpsertBulk) ClearCertManagerWorkerComponent() *ServerUpsertBulk {
+	return u.Update(func(s *ServerUpsert) {
+		s.ClearCertManagerWorkerComponent()
 	})
 }
 

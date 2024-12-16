@@ -12646,21 +12646,27 @@ func (m *RevocationMutation) ResetEdge(name string) error {
 // ServerMutation represents an operation that mutates the Server nodes in the graph.
 type ServerMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	hostname       *string
-	arch           *string
-	os             *string
-	version        *string
-	channel        *server.Channel
-	update_status  *server.UpdateStatus
-	update_message *string
-	update_when    *time.Time
-	clearedFields  map[string]struct{}
-	done           bool
-	oldValue       func(context.Context) (*Server, error)
-	predicates     []predicate.Server
+	op                            Op
+	typ                           string
+	id                            *int
+	hostname                      *string
+	arch                          *string
+	os                            *string
+	version                       *string
+	channel                       *server.Channel
+	update_status                 *server.UpdateStatus
+	update_message                *string
+	update_when                   *time.Time
+	nats_component                *bool
+	ocsp_component                *bool
+	console_component             *bool
+	agent_worker_component        *bool
+	notification_worker_component *bool
+	cert_manager_worker_component *bool
+	clearedFields                 map[string]struct{}
+	done                          bool
+	oldValue                      func(context.Context) (*Server, error)
+	predicates                    []predicate.Server
 }
 
 var _ ent.Mutation = (*ServerMutation)(nil)
@@ -13088,6 +13094,300 @@ func (m *ServerMutation) ResetUpdateWhen() {
 	delete(m.clearedFields, server.FieldUpdateWhen)
 }
 
+// SetNatsComponent sets the "nats_component" field.
+func (m *ServerMutation) SetNatsComponent(b bool) {
+	m.nats_component = &b
+}
+
+// NatsComponent returns the value of the "nats_component" field in the mutation.
+func (m *ServerMutation) NatsComponent() (r bool, exists bool) {
+	v := m.nats_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNatsComponent returns the old "nats_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldNatsComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNatsComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNatsComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNatsComponent: %w", err)
+	}
+	return oldValue.NatsComponent, nil
+}
+
+// ClearNatsComponent clears the value of the "nats_component" field.
+func (m *ServerMutation) ClearNatsComponent() {
+	m.nats_component = nil
+	m.clearedFields[server.FieldNatsComponent] = struct{}{}
+}
+
+// NatsComponentCleared returns if the "nats_component" field was cleared in this mutation.
+func (m *ServerMutation) NatsComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldNatsComponent]
+	return ok
+}
+
+// ResetNatsComponent resets all changes to the "nats_component" field.
+func (m *ServerMutation) ResetNatsComponent() {
+	m.nats_component = nil
+	delete(m.clearedFields, server.FieldNatsComponent)
+}
+
+// SetOcspComponent sets the "ocsp_component" field.
+func (m *ServerMutation) SetOcspComponent(b bool) {
+	m.ocsp_component = &b
+}
+
+// OcspComponent returns the value of the "ocsp_component" field in the mutation.
+func (m *ServerMutation) OcspComponent() (r bool, exists bool) {
+	v := m.ocsp_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcspComponent returns the old "ocsp_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldOcspComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcspComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcspComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcspComponent: %w", err)
+	}
+	return oldValue.OcspComponent, nil
+}
+
+// ClearOcspComponent clears the value of the "ocsp_component" field.
+func (m *ServerMutation) ClearOcspComponent() {
+	m.ocsp_component = nil
+	m.clearedFields[server.FieldOcspComponent] = struct{}{}
+}
+
+// OcspComponentCleared returns if the "ocsp_component" field was cleared in this mutation.
+func (m *ServerMutation) OcspComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldOcspComponent]
+	return ok
+}
+
+// ResetOcspComponent resets all changes to the "ocsp_component" field.
+func (m *ServerMutation) ResetOcspComponent() {
+	m.ocsp_component = nil
+	delete(m.clearedFields, server.FieldOcspComponent)
+}
+
+// SetConsoleComponent sets the "console_component" field.
+func (m *ServerMutation) SetConsoleComponent(b bool) {
+	m.console_component = &b
+}
+
+// ConsoleComponent returns the value of the "console_component" field in the mutation.
+func (m *ServerMutation) ConsoleComponent() (r bool, exists bool) {
+	v := m.console_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldConsoleComponent returns the old "console_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldConsoleComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldConsoleComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldConsoleComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldConsoleComponent: %w", err)
+	}
+	return oldValue.ConsoleComponent, nil
+}
+
+// ClearConsoleComponent clears the value of the "console_component" field.
+func (m *ServerMutation) ClearConsoleComponent() {
+	m.console_component = nil
+	m.clearedFields[server.FieldConsoleComponent] = struct{}{}
+}
+
+// ConsoleComponentCleared returns if the "console_component" field was cleared in this mutation.
+func (m *ServerMutation) ConsoleComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldConsoleComponent]
+	return ok
+}
+
+// ResetConsoleComponent resets all changes to the "console_component" field.
+func (m *ServerMutation) ResetConsoleComponent() {
+	m.console_component = nil
+	delete(m.clearedFields, server.FieldConsoleComponent)
+}
+
+// SetAgentWorkerComponent sets the "agent_worker_component" field.
+func (m *ServerMutation) SetAgentWorkerComponent(b bool) {
+	m.agent_worker_component = &b
+}
+
+// AgentWorkerComponent returns the value of the "agent_worker_component" field in the mutation.
+func (m *ServerMutation) AgentWorkerComponent() (r bool, exists bool) {
+	v := m.agent_worker_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAgentWorkerComponent returns the old "agent_worker_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldAgentWorkerComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAgentWorkerComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAgentWorkerComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAgentWorkerComponent: %w", err)
+	}
+	return oldValue.AgentWorkerComponent, nil
+}
+
+// ClearAgentWorkerComponent clears the value of the "agent_worker_component" field.
+func (m *ServerMutation) ClearAgentWorkerComponent() {
+	m.agent_worker_component = nil
+	m.clearedFields[server.FieldAgentWorkerComponent] = struct{}{}
+}
+
+// AgentWorkerComponentCleared returns if the "agent_worker_component" field was cleared in this mutation.
+func (m *ServerMutation) AgentWorkerComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldAgentWorkerComponent]
+	return ok
+}
+
+// ResetAgentWorkerComponent resets all changes to the "agent_worker_component" field.
+func (m *ServerMutation) ResetAgentWorkerComponent() {
+	m.agent_worker_component = nil
+	delete(m.clearedFields, server.FieldAgentWorkerComponent)
+}
+
+// SetNotificationWorkerComponent sets the "notification_worker_component" field.
+func (m *ServerMutation) SetNotificationWorkerComponent(b bool) {
+	m.notification_worker_component = &b
+}
+
+// NotificationWorkerComponent returns the value of the "notification_worker_component" field in the mutation.
+func (m *ServerMutation) NotificationWorkerComponent() (r bool, exists bool) {
+	v := m.notification_worker_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNotificationWorkerComponent returns the old "notification_worker_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldNotificationWorkerComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNotificationWorkerComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNotificationWorkerComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNotificationWorkerComponent: %w", err)
+	}
+	return oldValue.NotificationWorkerComponent, nil
+}
+
+// ClearNotificationWorkerComponent clears the value of the "notification_worker_component" field.
+func (m *ServerMutation) ClearNotificationWorkerComponent() {
+	m.notification_worker_component = nil
+	m.clearedFields[server.FieldNotificationWorkerComponent] = struct{}{}
+}
+
+// NotificationWorkerComponentCleared returns if the "notification_worker_component" field was cleared in this mutation.
+func (m *ServerMutation) NotificationWorkerComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldNotificationWorkerComponent]
+	return ok
+}
+
+// ResetNotificationWorkerComponent resets all changes to the "notification_worker_component" field.
+func (m *ServerMutation) ResetNotificationWorkerComponent() {
+	m.notification_worker_component = nil
+	delete(m.clearedFields, server.FieldNotificationWorkerComponent)
+}
+
+// SetCertManagerWorkerComponent sets the "cert_manager_worker_component" field.
+func (m *ServerMutation) SetCertManagerWorkerComponent(b bool) {
+	m.cert_manager_worker_component = &b
+}
+
+// CertManagerWorkerComponent returns the value of the "cert_manager_worker_component" field in the mutation.
+func (m *ServerMutation) CertManagerWorkerComponent() (r bool, exists bool) {
+	v := m.cert_manager_worker_component
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCertManagerWorkerComponent returns the old "cert_manager_worker_component" field's value of the Server entity.
+// If the Server object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ServerMutation) OldCertManagerWorkerComponent(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCertManagerWorkerComponent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCertManagerWorkerComponent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCertManagerWorkerComponent: %w", err)
+	}
+	return oldValue.CertManagerWorkerComponent, nil
+}
+
+// ClearCertManagerWorkerComponent clears the value of the "cert_manager_worker_component" field.
+func (m *ServerMutation) ClearCertManagerWorkerComponent() {
+	m.cert_manager_worker_component = nil
+	m.clearedFields[server.FieldCertManagerWorkerComponent] = struct{}{}
+}
+
+// CertManagerWorkerComponentCleared returns if the "cert_manager_worker_component" field was cleared in this mutation.
+func (m *ServerMutation) CertManagerWorkerComponentCleared() bool {
+	_, ok := m.clearedFields[server.FieldCertManagerWorkerComponent]
+	return ok
+}
+
+// ResetCertManagerWorkerComponent resets all changes to the "cert_manager_worker_component" field.
+func (m *ServerMutation) ResetCertManagerWorkerComponent() {
+	m.cert_manager_worker_component = nil
+	delete(m.clearedFields, server.FieldCertManagerWorkerComponent)
+}
+
 // Where appends a list predicates to the ServerMutation builder.
 func (m *ServerMutation) Where(ps ...predicate.Server) {
 	m.predicates = append(m.predicates, ps...)
@@ -13122,7 +13422,7 @@ func (m *ServerMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ServerMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 14)
 	if m.hostname != nil {
 		fields = append(fields, server.FieldHostname)
 	}
@@ -13146,6 +13446,24 @@ func (m *ServerMutation) Fields() []string {
 	}
 	if m.update_when != nil {
 		fields = append(fields, server.FieldUpdateWhen)
+	}
+	if m.nats_component != nil {
+		fields = append(fields, server.FieldNatsComponent)
+	}
+	if m.ocsp_component != nil {
+		fields = append(fields, server.FieldOcspComponent)
+	}
+	if m.console_component != nil {
+		fields = append(fields, server.FieldConsoleComponent)
+	}
+	if m.agent_worker_component != nil {
+		fields = append(fields, server.FieldAgentWorkerComponent)
+	}
+	if m.notification_worker_component != nil {
+		fields = append(fields, server.FieldNotificationWorkerComponent)
+	}
+	if m.cert_manager_worker_component != nil {
+		fields = append(fields, server.FieldCertManagerWorkerComponent)
 	}
 	return fields
 }
@@ -13171,6 +13489,18 @@ func (m *ServerMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdateMessage()
 	case server.FieldUpdateWhen:
 		return m.UpdateWhen()
+	case server.FieldNatsComponent:
+		return m.NatsComponent()
+	case server.FieldOcspComponent:
+		return m.OcspComponent()
+	case server.FieldConsoleComponent:
+		return m.ConsoleComponent()
+	case server.FieldAgentWorkerComponent:
+		return m.AgentWorkerComponent()
+	case server.FieldNotificationWorkerComponent:
+		return m.NotificationWorkerComponent()
+	case server.FieldCertManagerWorkerComponent:
+		return m.CertManagerWorkerComponent()
 	}
 	return nil, false
 }
@@ -13196,6 +13526,18 @@ func (m *ServerMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldUpdateMessage(ctx)
 	case server.FieldUpdateWhen:
 		return m.OldUpdateWhen(ctx)
+	case server.FieldNatsComponent:
+		return m.OldNatsComponent(ctx)
+	case server.FieldOcspComponent:
+		return m.OldOcspComponent(ctx)
+	case server.FieldConsoleComponent:
+		return m.OldConsoleComponent(ctx)
+	case server.FieldAgentWorkerComponent:
+		return m.OldAgentWorkerComponent(ctx)
+	case server.FieldNotificationWorkerComponent:
+		return m.OldNotificationWorkerComponent(ctx)
+	case server.FieldCertManagerWorkerComponent:
+		return m.OldCertManagerWorkerComponent(ctx)
 	}
 	return nil, fmt.Errorf("unknown Server field %s", name)
 }
@@ -13261,6 +13603,48 @@ func (m *ServerMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdateWhen(v)
 		return nil
+	case server.FieldNatsComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNatsComponent(v)
+		return nil
+	case server.FieldOcspComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcspComponent(v)
+		return nil
+	case server.FieldConsoleComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetConsoleComponent(v)
+		return nil
+	case server.FieldAgentWorkerComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAgentWorkerComponent(v)
+		return nil
+	case server.FieldNotificationWorkerComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNotificationWorkerComponent(v)
+		return nil
+	case server.FieldCertManagerWorkerComponent:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCertManagerWorkerComponent(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)
 }
@@ -13300,6 +13684,24 @@ func (m *ServerMutation) ClearedFields() []string {
 	if m.FieldCleared(server.FieldUpdateWhen) {
 		fields = append(fields, server.FieldUpdateWhen)
 	}
+	if m.FieldCleared(server.FieldNatsComponent) {
+		fields = append(fields, server.FieldNatsComponent)
+	}
+	if m.FieldCleared(server.FieldOcspComponent) {
+		fields = append(fields, server.FieldOcspComponent)
+	}
+	if m.FieldCleared(server.FieldConsoleComponent) {
+		fields = append(fields, server.FieldConsoleComponent)
+	}
+	if m.FieldCleared(server.FieldAgentWorkerComponent) {
+		fields = append(fields, server.FieldAgentWorkerComponent)
+	}
+	if m.FieldCleared(server.FieldNotificationWorkerComponent) {
+		fields = append(fields, server.FieldNotificationWorkerComponent)
+	}
+	if m.FieldCleared(server.FieldCertManagerWorkerComponent) {
+		fields = append(fields, server.FieldCertManagerWorkerComponent)
+	}
 	return fields
 }
 
@@ -13322,6 +13724,24 @@ func (m *ServerMutation) ClearField(name string) error {
 		return nil
 	case server.FieldUpdateWhen:
 		m.ClearUpdateWhen()
+		return nil
+	case server.FieldNatsComponent:
+		m.ClearNatsComponent()
+		return nil
+	case server.FieldOcspComponent:
+		m.ClearOcspComponent()
+		return nil
+	case server.FieldConsoleComponent:
+		m.ClearConsoleComponent()
+		return nil
+	case server.FieldAgentWorkerComponent:
+		m.ClearAgentWorkerComponent()
+		return nil
+	case server.FieldNotificationWorkerComponent:
+		m.ClearNotificationWorkerComponent()
+		return nil
+	case server.FieldCertManagerWorkerComponent:
+		m.ClearCertManagerWorkerComponent()
 		return nil
 	}
 	return fmt.Errorf("unknown Server nullable field %s", name)
@@ -13354,6 +13774,24 @@ func (m *ServerMutation) ResetField(name string) error {
 		return nil
 	case server.FieldUpdateWhen:
 		m.ResetUpdateWhen()
+		return nil
+	case server.FieldNatsComponent:
+		m.ResetNatsComponent()
+		return nil
+	case server.FieldOcspComponent:
+		m.ResetOcspComponent()
+		return nil
+	case server.FieldConsoleComponent:
+		m.ResetConsoleComponent()
+		return nil
+	case server.FieldAgentWorkerComponent:
+		m.ResetAgentWorkerComponent()
+		return nil
+	case server.FieldNotificationWorkerComponent:
+		m.ResetNotificationWorkerComponent()
+		return nil
+	case server.FieldCertManagerWorkerComponent:
+		m.ResetCertManagerWorkerComponent()
 		return nil
 	}
 	return fmt.Errorf("unknown Server field %s", name)

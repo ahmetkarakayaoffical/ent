@@ -84,6 +84,36 @@ func UpdateWhen(v time.Time) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldUpdateWhen, v))
 }
 
+// NatsComponent applies equality check predicate on the "nats_component" field. It's identical to NatsComponentEQ.
+func NatsComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldNatsComponent, v))
+}
+
+// OcspComponent applies equality check predicate on the "ocsp_component" field. It's identical to OcspComponentEQ.
+func OcspComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldOcspComponent, v))
+}
+
+// ConsoleComponent applies equality check predicate on the "console_component" field. It's identical to ConsoleComponentEQ.
+func ConsoleComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldConsoleComponent, v))
+}
+
+// AgentWorkerComponent applies equality check predicate on the "agent_worker_component" field. It's identical to AgentWorkerComponentEQ.
+func AgentWorkerComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldAgentWorkerComponent, v))
+}
+
+// NotificationWorkerComponent applies equality check predicate on the "notification_worker_component" field. It's identical to NotificationWorkerComponentEQ.
+func NotificationWorkerComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldNotificationWorkerComponent, v))
+}
+
+// CertManagerWorkerComponent applies equality check predicate on the "cert_manager_worker_component" field. It's identical to CertManagerWorkerComponentEQ.
+func CertManagerWorkerComponent(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldCertManagerWorkerComponent, v))
+}
+
 // HostnameEQ applies the EQ predicate on the "hostname" field.
 func HostnameEQ(v string) predicate.Server {
 	return predicate.Server(sql.FieldEQ(FieldHostname, v))
@@ -517,6 +547,126 @@ func UpdateWhenIsNil() predicate.Server {
 // UpdateWhenNotNil applies the NotNil predicate on the "update_when" field.
 func UpdateWhenNotNil() predicate.Server {
 	return predicate.Server(sql.FieldNotNull(FieldUpdateWhen))
+}
+
+// NatsComponentEQ applies the EQ predicate on the "nats_component" field.
+func NatsComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldNatsComponent, v))
+}
+
+// NatsComponentNEQ applies the NEQ predicate on the "nats_component" field.
+func NatsComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldNatsComponent, v))
+}
+
+// NatsComponentIsNil applies the IsNil predicate on the "nats_component" field.
+func NatsComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldNatsComponent))
+}
+
+// NatsComponentNotNil applies the NotNil predicate on the "nats_component" field.
+func NatsComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldNatsComponent))
+}
+
+// OcspComponentEQ applies the EQ predicate on the "ocsp_component" field.
+func OcspComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldOcspComponent, v))
+}
+
+// OcspComponentNEQ applies the NEQ predicate on the "ocsp_component" field.
+func OcspComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldOcspComponent, v))
+}
+
+// OcspComponentIsNil applies the IsNil predicate on the "ocsp_component" field.
+func OcspComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldOcspComponent))
+}
+
+// OcspComponentNotNil applies the NotNil predicate on the "ocsp_component" field.
+func OcspComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldOcspComponent))
+}
+
+// ConsoleComponentEQ applies the EQ predicate on the "console_component" field.
+func ConsoleComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldConsoleComponent, v))
+}
+
+// ConsoleComponentNEQ applies the NEQ predicate on the "console_component" field.
+func ConsoleComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldConsoleComponent, v))
+}
+
+// ConsoleComponentIsNil applies the IsNil predicate on the "console_component" field.
+func ConsoleComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldConsoleComponent))
+}
+
+// ConsoleComponentNotNil applies the NotNil predicate on the "console_component" field.
+func ConsoleComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldConsoleComponent))
+}
+
+// AgentWorkerComponentEQ applies the EQ predicate on the "agent_worker_component" field.
+func AgentWorkerComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldAgentWorkerComponent, v))
+}
+
+// AgentWorkerComponentNEQ applies the NEQ predicate on the "agent_worker_component" field.
+func AgentWorkerComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldAgentWorkerComponent, v))
+}
+
+// AgentWorkerComponentIsNil applies the IsNil predicate on the "agent_worker_component" field.
+func AgentWorkerComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldAgentWorkerComponent))
+}
+
+// AgentWorkerComponentNotNil applies the NotNil predicate on the "agent_worker_component" field.
+func AgentWorkerComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldAgentWorkerComponent))
+}
+
+// NotificationWorkerComponentEQ applies the EQ predicate on the "notification_worker_component" field.
+func NotificationWorkerComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldNotificationWorkerComponent, v))
+}
+
+// NotificationWorkerComponentNEQ applies the NEQ predicate on the "notification_worker_component" field.
+func NotificationWorkerComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldNotificationWorkerComponent, v))
+}
+
+// NotificationWorkerComponentIsNil applies the IsNil predicate on the "notification_worker_component" field.
+func NotificationWorkerComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldNotificationWorkerComponent))
+}
+
+// NotificationWorkerComponentNotNil applies the NotNil predicate on the "notification_worker_component" field.
+func NotificationWorkerComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldNotificationWorkerComponent))
+}
+
+// CertManagerWorkerComponentEQ applies the EQ predicate on the "cert_manager_worker_component" field.
+func CertManagerWorkerComponentEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldEQ(FieldCertManagerWorkerComponent, v))
+}
+
+// CertManagerWorkerComponentNEQ applies the NEQ predicate on the "cert_manager_worker_component" field.
+func CertManagerWorkerComponentNEQ(v bool) predicate.Server {
+	return predicate.Server(sql.FieldNEQ(FieldCertManagerWorkerComponent, v))
+}
+
+// CertManagerWorkerComponentIsNil applies the IsNil predicate on the "cert_manager_worker_component" field.
+func CertManagerWorkerComponentIsNil() predicate.Server {
+	return predicate.Server(sql.FieldIsNull(FieldCertManagerWorkerComponent))
+}
+
+// CertManagerWorkerComponentNotNil applies the NotNil predicate on the "cert_manager_worker_component" field.
+func CertManagerWorkerComponentNotNil() predicate.Server {
+	return predicate.Server(sql.FieldNotNull(FieldCertManagerWorkerComponent))
 }
 
 // And groups predicates with the AND operator between them.
