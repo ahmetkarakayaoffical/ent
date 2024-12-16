@@ -14337,6 +14337,7 @@ type SettingsMutation struct {
 	modified                             *time.Time
 	agent_report_frequence_in_minutes    *int
 	addagent_report_frequence_in_minutes *int
+	request_vnc_pin                      *bool
 	clearedFields                        map[string]struct{}
 	done                                 bool
 	oldValue                             func(context.Context) (*Settings, error)
@@ -15890,6 +15891,55 @@ func (m *SettingsMutation) ResetAgentReportFrequenceInMinutes() {
 	delete(m.clearedFields, settings.FieldAgentReportFrequenceInMinutes)
 }
 
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (m *SettingsMutation) SetRequestVncPin(b bool) {
+	m.request_vnc_pin = &b
+}
+
+// RequestVncPin returns the value of the "request_vnc_pin" field in the mutation.
+func (m *SettingsMutation) RequestVncPin() (r bool, exists bool) {
+	v := m.request_vnc_pin
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRequestVncPin returns the old "request_vnc_pin" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldRequestVncPin(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRequestVncPin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRequestVncPin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRequestVncPin: %w", err)
+	}
+	return oldValue.RequestVncPin, nil
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (m *SettingsMutation) ClearRequestVncPin() {
+	m.request_vnc_pin = nil
+	m.clearedFields[settings.FieldRequestVncPin] = struct{}{}
+}
+
+// RequestVncPinCleared returns if the "request_vnc_pin" field was cleared in this mutation.
+func (m *SettingsMutation) RequestVncPinCleared() bool {
+	_, ok := m.clearedFields[settings.FieldRequestVncPin]
+	return ok
+}
+
+// ResetRequestVncPin resets all changes to the "request_vnc_pin" field.
+func (m *SettingsMutation) ResetRequestVncPin() {
+	m.request_vnc_pin = nil
+	delete(m.clearedFields, settings.FieldRequestVncPin)
+}
+
 // Where appends a list predicates to the SettingsMutation builder.
 func (m *SettingsMutation) Where(ps ...predicate.Settings) {
 	m.predicates = append(m.predicates, ps...)
@@ -15924,7 +15974,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 28)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -16006,6 +16056,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.agent_report_frequence_in_minutes != nil {
 		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
 	}
+	if m.request_vnc_pin != nil {
+		fields = append(fields, settings.FieldRequestVncPin)
+	}
 	return fields
 }
 
@@ -16068,6 +16121,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.Modified()
 	case settings.FieldAgentReportFrequenceInMinutes:
 		return m.AgentReportFrequenceInMinutes()
+	case settings.FieldRequestVncPin:
+		return m.RequestVncPin()
 	}
 	return nil, false
 }
@@ -16131,6 +16186,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldModified(ctx)
 	case settings.FieldAgentReportFrequenceInMinutes:
 		return m.OldAgentReportFrequenceInMinutes(ctx)
+	case settings.FieldRequestVncPin:
+		return m.OldRequestVncPin(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -16329,6 +16386,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAgentReportFrequenceInMinutes(v)
 		return nil
+	case settings.FieldRequestVncPin:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRequestVncPin(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -16515,6 +16579,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldAgentReportFrequenceInMinutes) {
 		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
 	}
+	if m.FieldCleared(settings.FieldRequestVncPin) {
+		fields = append(fields, settings.FieldRequestVncPin)
+	}
 	return fields
 }
 
@@ -16610,6 +16677,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldAgentReportFrequenceInMinutes:
 		m.ClearAgentReportFrequenceInMinutes()
 		return nil
+	case settings.FieldRequestVncPin:
+		m.ClearRequestVncPin()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -16698,6 +16768,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldAgentReportFrequenceInMinutes:
 		m.ResetAgentReportFrequenceInMinutes()
+		return nil
+	case settings.FieldRequestVncPin:
+		m.ResetRequestVncPin()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

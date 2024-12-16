@@ -400,6 +400,20 @@ func (sc *SettingsCreate) SetNillableAgentReportFrequenceInMinutes(i *int) *Sett
 	return sc
 }
 
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (sc *SettingsCreate) SetRequestVncPin(b bool) *SettingsCreate {
+	sc.mutation.SetRequestVncPin(b)
+	return sc
+}
+
+// SetNillableRequestVncPin sets the "request_vnc_pin" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableRequestVncPin(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetRequestVncPin(*b)
+	}
+	return sc
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (sc *SettingsCreate) Mutation() *SettingsMutation {
 	return sc.mutation
@@ -490,6 +504,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.AgentReportFrequenceInMinutes(); !ok {
 		v := settings.DefaultAgentReportFrequenceInMinutes
 		sc.mutation.SetAgentReportFrequenceInMinutes(v)
+	}
+	if _, ok := sc.mutation.RequestVncPin(); !ok {
+		v := settings.DefaultRequestVncPin
+		sc.mutation.SetRequestVncPin(v)
 	}
 }
 
@@ -629,6 +647,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.AgentReportFrequenceInMinutes(); ok {
 		_spec.SetField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt, value)
 		_node.AgentReportFrequenceInMinutes = value
+	}
+	if value, ok := sc.mutation.RequestVncPin(); ok {
+		_spec.SetField(settings.FieldRequestVncPin, field.TypeBool, value)
+		_node.RequestVncPin = value
 	}
 	return _node, _spec
 }
@@ -1201,6 +1223,24 @@ func (u *SettingsUpsert) AddAgentReportFrequenceInMinutes(v int) *SettingsUpsert
 // ClearAgentReportFrequenceInMinutes clears the value of the "agent_report_frequence_in_minutes" field.
 func (u *SettingsUpsert) ClearAgentReportFrequenceInMinutes() *SettingsUpsert {
 	u.SetNull(settings.FieldAgentReportFrequenceInMinutes)
+	return u
+}
+
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (u *SettingsUpsert) SetRequestVncPin(v bool) *SettingsUpsert {
+	u.Set(settings.FieldRequestVncPin, v)
+	return u
+}
+
+// UpdateRequestVncPin sets the "request_vnc_pin" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateRequestVncPin() *SettingsUpsert {
+	u.SetExcluded(settings.FieldRequestVncPin)
+	return u
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (u *SettingsUpsert) ClearRequestVncPin() *SettingsUpsert {
+	u.SetNull(settings.FieldRequestVncPin)
 	return u
 }
 
@@ -1850,6 +1890,27 @@ func (u *SettingsUpsertOne) UpdateAgentReportFrequenceInMinutes() *SettingsUpser
 func (u *SettingsUpsertOne) ClearAgentReportFrequenceInMinutes() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearAgentReportFrequenceInMinutes()
+	})
+}
+
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (u *SettingsUpsertOne) SetRequestVncPin(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetRequestVncPin(v)
+	})
+}
+
+// UpdateRequestVncPin sets the "request_vnc_pin" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateRequestVncPin() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateRequestVncPin()
+	})
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (u *SettingsUpsertOne) ClearRequestVncPin() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearRequestVncPin()
 	})
 }
 
@@ -2663,6 +2724,27 @@ func (u *SettingsUpsertBulk) UpdateAgentReportFrequenceInMinutes() *SettingsUpse
 func (u *SettingsUpsertBulk) ClearAgentReportFrequenceInMinutes() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearAgentReportFrequenceInMinutes()
+	})
+}
+
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (u *SettingsUpsertBulk) SetRequestVncPin(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetRequestVncPin(v)
+	})
+}
+
+// UpdateRequestVncPin sets the "request_vnc_pin" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateRequestVncPin() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateRequestVncPin()
+	})
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (u *SettingsUpsertBulk) ClearRequestVncPin() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearRequestVncPin()
 	})
 }
 

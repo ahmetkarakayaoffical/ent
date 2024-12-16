@@ -183,6 +183,10 @@ func init() {
 	settingsDescAgentReportFrequenceInMinutes := settingsFields[26].Descriptor()
 	// settings.DefaultAgentReportFrequenceInMinutes holds the default value on creation for the agent_report_frequence_in_minutes field.
 	settings.DefaultAgentReportFrequenceInMinutes = settingsDescAgentReportFrequenceInMinutes.Default.(int)
+	// settingsDescRequestVncPin is the schema descriptor for request_vnc_pin field.
+	settingsDescRequestVncPin := settingsFields[27].Descriptor()
+	// settings.DefaultRequestVncPin holds the default value on creation for the request_vnc_pin field.
+	settings.DefaultRequestVncPin = settingsDescRequestVncPin.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

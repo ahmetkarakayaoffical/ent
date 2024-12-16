@@ -67,6 +67,8 @@ const (
 	FieldModified = "modified"
 	// FieldAgentReportFrequenceInMinutes holds the string denoting the agent_report_frequence_in_minutes field in the database.
 	FieldAgentReportFrequenceInMinutes = "agent_report_frequence_in_minutes"
+	// FieldRequestVncPin holds the string denoting the request_vnc_pin field in the database.
+	FieldRequestVncPin = "request_vnc_pin"
 	// Table holds the table name of the settings in the database.
 	Table = "settings"
 )
@@ -101,6 +103,7 @@ var Columns = []string{
 	FieldCreated,
 	FieldModified,
 	FieldAgentReportFrequenceInMinutes,
+	FieldRequestVncPin,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -144,6 +147,8 @@ var (
 	UpdateDefaultModified func() time.Time
 	// DefaultAgentReportFrequenceInMinutes holds the default value on creation for the "agent_report_frequence_in_minutes" field.
 	DefaultAgentReportFrequenceInMinutes int
+	// DefaultRequestVncPin holds the default value on creation for the "request_vnc_pin" field.
+	DefaultRequestVncPin bool
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -287,4 +292,9 @@ func ByModified(opts ...sql.OrderTermOption) OrderOption {
 // ByAgentReportFrequenceInMinutes orders the results by the agent_report_frequence_in_minutes field.
 func ByAgentReportFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAgentReportFrequenceInMinutes, opts...).ToFunc()
+}
+
+// ByRequestVncPin orders the results by the request_vnc_pin field.
+func ByRequestVncPin(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRequestVncPin, opts...).ToFunc()
 }

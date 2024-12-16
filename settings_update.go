@@ -603,6 +603,26 @@ func (su *SettingsUpdate) ClearAgentReportFrequenceInMinutes() *SettingsUpdate {
 	return su
 }
 
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (su *SettingsUpdate) SetRequestVncPin(b bool) *SettingsUpdate {
+	su.mutation.SetRequestVncPin(b)
+	return su
+}
+
+// SetNillableRequestVncPin sets the "request_vnc_pin" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableRequestVncPin(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetRequestVncPin(*b)
+	}
+	return su
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (su *SettingsUpdate) ClearRequestVncPin() *SettingsUpdate {
+	su.mutation.ClearRequestVncPin()
+	return su
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (su *SettingsUpdate) Mutation() *SettingsMutation {
 	return su.mutation
@@ -838,6 +858,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.AgentReportFrequenceInMinutesCleared() {
 		_spec.ClearField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt)
+	}
+	if value, ok := su.mutation.RequestVncPin(); ok {
+		_spec.SetField(settings.FieldRequestVncPin, field.TypeBool, value)
+	}
+	if su.mutation.RequestVncPinCleared() {
+		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -1435,6 +1461,26 @@ func (suo *SettingsUpdateOne) ClearAgentReportFrequenceInMinutes() *SettingsUpda
 	return suo
 }
 
+// SetRequestVncPin sets the "request_vnc_pin" field.
+func (suo *SettingsUpdateOne) SetRequestVncPin(b bool) *SettingsUpdateOne {
+	suo.mutation.SetRequestVncPin(b)
+	return suo
+}
+
+// SetNillableRequestVncPin sets the "request_vnc_pin" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableRequestVncPin(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetRequestVncPin(*b)
+	}
+	return suo
+}
+
+// ClearRequestVncPin clears the value of the "request_vnc_pin" field.
+func (suo *SettingsUpdateOne) ClearRequestVncPin() *SettingsUpdateOne {
+	suo.mutation.ClearRequestVncPin()
+	return suo
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (suo *SettingsUpdateOne) Mutation() *SettingsMutation {
 	return suo.mutation
@@ -1700,6 +1746,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.AgentReportFrequenceInMinutesCleared() {
 		_spec.ClearField(settings.FieldAgentReportFrequenceInMinutes, field.TypeInt)
+	}
+	if value, ok := suo.mutation.RequestVncPin(); ok {
+		_spec.SetField(settings.FieldRequestVncPin, field.TypeBool, value)
+	}
+	if suo.mutation.RequestVncPinCleared() {
+		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Settings{config: suo.config}

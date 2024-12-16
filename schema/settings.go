@@ -42,5 +42,6 @@ func (Settings) Fields() []ent.Field {
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 		field.Int("agent_report_frequence_in_minutes").Optional().Default(60),
+		field.Bool("request_vnc_pin").Optional().Default(true),
 	}
 }

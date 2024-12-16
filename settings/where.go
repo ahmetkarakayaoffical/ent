@@ -189,6 +189,11 @@ func AgentReportFrequenceInMinutes(v int) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldAgentReportFrequenceInMinutes, v))
 }
 
+// RequestVncPin applies equality check predicate on the "request_vnc_pin" field. It's identical to RequestVncPinEQ.
+func RequestVncPin(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldRequestVncPin, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -1902,6 +1907,26 @@ func AgentReportFrequenceInMinutesIsNil() predicate.Settings {
 // AgentReportFrequenceInMinutesNotNil applies the NotNil predicate on the "agent_report_frequence_in_minutes" field.
 func AgentReportFrequenceInMinutesNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldAgentReportFrequenceInMinutes))
+}
+
+// RequestVncPinEQ applies the EQ predicate on the "request_vnc_pin" field.
+func RequestVncPinEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldRequestVncPin, v))
+}
+
+// RequestVncPinNEQ applies the NEQ predicate on the "request_vnc_pin" field.
+func RequestVncPinNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldRequestVncPin, v))
+}
+
+// RequestVncPinIsNil applies the IsNil predicate on the "request_vnc_pin" field.
+func RequestVncPinIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldRequestVncPin))
+}
+
+// RequestVncPinNotNil applies the NotNil predicate on the "request_vnc_pin" field.
+func RequestVncPinNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldRequestVncPin))
 }
 
 // And groups predicates with the AND operator between them.

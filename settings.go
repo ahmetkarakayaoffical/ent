@@ -71,7 +71,9 @@ type Settings struct {
 	Modified time.Time `json:"modified,omitempty"`
 	// AgentReportFrequenceInMinutes holds the value of the "agent_report_frequence_in_minutes" field.
 	AgentReportFrequenceInMinutes int `json:"agent_report_frequence_in_minutes,omitempty"`
-	selectValues                  sql.SelectValues
+	// RequestVncPin holds the value of the "request_vnc_pin" field.
+	RequestVncPin bool `json:"request_vnc_pin,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -79,7 +81,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls:
+		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin:
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
@@ -270,6 +272,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.AgentReportFrequenceInMinutes = int(value.Int64)
 			}
+		case settings.FieldRequestVncPin:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field request_vnc_pin", values[i])
+			} else if value.Valid {
+				s.RequestVncPin = value.Bool
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -386,6 +394,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("agent_report_frequence_in_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", s.AgentReportFrequenceInMinutes))
+	builder.WriteString(", ")
+	builder.WriteString("request_vnc_pin=")
+	builder.WriteString(fmt.Sprintf("%v", s.RequestVncPin))
 	builder.WriteByte(')')
 	return builder.String()
 }
