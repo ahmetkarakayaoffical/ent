@@ -32,4 +32,5 @@ drop table "sessions" cascade;
 drop table "shares" cascade;
 drop table "system_updates" cascade;
 drop table "updates" cascade;
+drop table "servers" cascade;
 ```
