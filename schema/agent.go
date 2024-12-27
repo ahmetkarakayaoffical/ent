@@ -31,7 +31,7 @@ func (Agent) Fields() []ent.Field {
 		field.String("update_task_version").Optional().Default(""),
 		field.String("vnc_proxy_port").Optional().Default(""),
 		field.String("sftp_port").Optional().Default(""),
-		field.Enum("status").Values("WaitingForAdmission", "Enabled", "Disabled").Optional().Default("WaitingForAdmission"),
+		field.Enum("agent_status").Values("WaitingForAdmission", "Enabled", "Disabled").Optional().Default("WaitingForAdmission"),
 		field.Bool("certificate_ready").Optional().Default(false),
 		field.Bool("restart_required").Optional().Default(false),
 	}

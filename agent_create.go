@@ -232,16 +232,16 @@ func (ac *AgentCreate) SetNillableSftpPort(s *string) *AgentCreate {
 	return ac
 }
 
-// SetStatus sets the "status" field.
-func (ac *AgentCreate) SetStatus(a agent.Status) *AgentCreate {
-	ac.mutation.SetStatus(a)
+// SetAgentStatus sets the "agent_status" field.
+func (ac *AgentCreate) SetAgentStatus(as agent.AgentStatus) *AgentCreate {
+	ac.mutation.SetAgentStatus(as)
 	return ac
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (ac *AgentCreate) SetNillableStatus(a *agent.Status) *AgentCreate {
-	if a != nil {
-		ac.SetStatus(*a)
+// SetNillableAgentStatus sets the "agent_status" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableAgentStatus(as *agent.AgentStatus) *AgentCreate {
+	if as != nil {
+		ac.SetAgentStatus(*as)
 	}
 	return ac
 }
@@ -596,9 +596,9 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultSftpPort
 		ac.mutation.SetSftpPort(v)
 	}
-	if _, ok := ac.mutation.Status(); !ok {
-		v := agent.DefaultStatus
-		ac.mutation.SetStatus(v)
+	if _, ok := ac.mutation.AgentStatus(); !ok {
+		v := agent.DefaultAgentStatus
+		ac.mutation.SetAgentStatus(v)
 	}
 	if _, ok := ac.mutation.CertificateReady(); !ok {
 		v := agent.DefaultCertificateReady
@@ -634,9 +634,9 @@ func (ac *AgentCreate) check() error {
 	if _, ok := ac.mutation.MAC(); !ok {
 		return &ValidationError{Name: "mac", err: errors.New(`openuem_ent: missing required field "Agent.mac"`)}
 	}
-	if v, ok := ac.mutation.Status(); ok {
-		if err := agent.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.status": %w`, err)}
+	if v, ok := ac.mutation.AgentStatus(); ok {
+		if err := agent.AgentStatusValidator(v); err != nil {
+			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.agent_status": %w`, err)}
 		}
 	}
 	if v, ok := ac.mutation.ID(); ok {
@@ -740,9 +740,9 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		_spec.SetField(agent.FieldSftpPort, field.TypeString, value)
 		_node.SftpPort = value
 	}
-	if value, ok := ac.mutation.Status(); ok {
-		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
-		_node.Status = value
+	if value, ok := ac.mutation.AgentStatus(); ok {
+		_spec.SetField(agent.FieldAgentStatus, field.TypeEnum, value)
+		_node.AgentStatus = value
 	}
 	if value, ok := ac.mutation.CertificateReady(); ok {
 		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
@@ -1291,21 +1291,21 @@ func (u *AgentUpsert) ClearSftpPort() *AgentUpsert {
 	return u
 }
 
-// SetStatus sets the "status" field.
-func (u *AgentUpsert) SetStatus(v agent.Status) *AgentUpsert {
-	u.Set(agent.FieldStatus, v)
+// SetAgentStatus sets the "agent_status" field.
+func (u *AgentUpsert) SetAgentStatus(v agent.AgentStatus) *AgentUpsert {
+	u.Set(agent.FieldAgentStatus, v)
 	return u
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *AgentUpsert) UpdateStatus() *AgentUpsert {
-	u.SetExcluded(agent.FieldStatus)
+// UpdateAgentStatus sets the "agent_status" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateAgentStatus() *AgentUpsert {
+	u.SetExcluded(agent.FieldAgentStatus)
 	return u
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *AgentUpsert) ClearStatus() *AgentUpsert {
-	u.SetNull(agent.FieldStatus)
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (u *AgentUpsert) ClearAgentStatus() *AgentUpsert {
+	u.SetNull(agent.FieldAgentStatus)
 	return u
 }
 
@@ -1680,24 +1680,24 @@ func (u *AgentUpsertOne) ClearSftpPort() *AgentUpsertOne {
 	})
 }
 
-// SetStatus sets the "status" field.
-func (u *AgentUpsertOne) SetStatus(v agent.Status) *AgentUpsertOne {
+// SetAgentStatus sets the "agent_status" field.
+func (u *AgentUpsertOne) SetAgentStatus(v agent.AgentStatus) *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
-		s.SetStatus(v)
+		s.SetAgentStatus(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *AgentUpsertOne) UpdateStatus() *AgentUpsertOne {
+// UpdateAgentStatus sets the "agent_status" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateAgentStatus() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
-		s.UpdateStatus()
+		s.UpdateAgentStatus()
 	})
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *AgentUpsertOne) ClearStatus() *AgentUpsertOne {
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (u *AgentUpsertOne) ClearAgentStatus() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
-		s.ClearStatus()
+		s.ClearAgentStatus()
 	})
 }
 
@@ -2245,24 +2245,24 @@ func (u *AgentUpsertBulk) ClearSftpPort() *AgentUpsertBulk {
 	})
 }
 
-// SetStatus sets the "status" field.
-func (u *AgentUpsertBulk) SetStatus(v agent.Status) *AgentUpsertBulk {
+// SetAgentStatus sets the "agent_status" field.
+func (u *AgentUpsertBulk) SetAgentStatus(v agent.AgentStatus) *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
-		s.SetStatus(v)
+		s.SetAgentStatus(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *AgentUpsertBulk) UpdateStatus() *AgentUpsertBulk {
+// UpdateAgentStatus sets the "agent_status" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateAgentStatus() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
-		s.UpdateStatus()
+		s.UpdateAgentStatus()
 	})
 }
 
-// ClearStatus clears the value of the "status" field.
-func (u *AgentUpsertBulk) ClearStatus() *AgentUpsertBulk {
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (u *AgentUpsertBulk) ClearAgentStatus() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
-		s.ClearStatus()
+		s.ClearAgentStatus()
 	})
 }
 

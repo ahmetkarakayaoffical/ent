@@ -52,8 +52,8 @@ type Agent struct {
 	VncProxyPort string `json:"vnc_proxy_port,omitempty"`
 	// SftpPort holds the value of the "sftp_port" field.
 	SftpPort string `json:"sftp_port,omitempty"`
-	// Status holds the value of the "status" field.
-	Status agent.Status `json:"status,omitempty"`
+	// AgentStatus holds the value of the "agent_status" field.
+	AgentStatus agent.AgentStatus `json:"agent_status,omitempty"`
 	// CertificateReady holds the value of the "certificate_ready" field.
 	CertificateReady bool `json:"certificate_ready,omitempty"`
 	// RestartRequired holds the value of the "restart_required" field.
@@ -254,7 +254,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldCertificateReady, agent.FieldRestartRequired:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldStatus:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
 			values[i] = new(sql.NullTime)
@@ -371,11 +371,11 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.SftpPort = value.String
 			}
-		case agent.FieldStatus:
+		case agent.FieldAgentStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
+				return fmt.Errorf("unexpected type %T for field agent_status", values[i])
 			} else if value.Valid {
-				a.Status = agent.Status(value.String)
+				a.AgentStatus = agent.AgentStatus(value.String)
 			}
 		case agent.FieldCertificateReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -552,8 +552,8 @@ func (a *Agent) String() string {
 	builder.WriteString("sftp_port=")
 	builder.WriteString(a.SftpPort)
 	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", a.Status))
+	builder.WriteString("agent_status=")
+	builder.WriteString(fmt.Sprintf("%v", a.AgentStatus))
 	builder.WriteString(", ")
 	builder.WriteString("certificate_ready=")
 	builder.WriteString(fmt.Sprintf("%v", a.CertificateReady))

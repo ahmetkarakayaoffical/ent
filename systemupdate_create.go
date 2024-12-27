@@ -23,9 +23,9 @@ type SystemUpdateCreate struct {
 	conflict []sql.ConflictOption
 }
 
-// SetStatus sets the "status" field.
-func (suc *SystemUpdateCreate) SetStatus(s string) *SystemUpdateCreate {
-	suc.mutation.SetStatus(s)
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (suc *SystemUpdateCreate) SetSystemUpdateStatus(s string) *SystemUpdateCreate {
+	suc.mutation.SetSystemUpdateStatus(s)
 	return suc
 }
 
@@ -92,8 +92,8 @@ func (suc *SystemUpdateCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (suc *SystemUpdateCreate) check() error {
-	if _, ok := suc.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`openuem_ent: missing required field "SystemUpdate.status"`)}
+	if _, ok := suc.mutation.SystemUpdateStatus(); !ok {
+		return &ValidationError{Name: "system_update_status", err: errors.New(`openuem_ent: missing required field "SystemUpdate.system_update_status"`)}
 	}
 	if _, ok := suc.mutation.LastInstall(); !ok {
 		return &ValidationError{Name: "last_install", err: errors.New(`openuem_ent: missing required field "SystemUpdate.last_install"`)}
@@ -134,9 +134,9 @@ func (suc *SystemUpdateCreate) createSpec() (*SystemUpdate, *sqlgraph.CreateSpec
 		_spec = sqlgraph.NewCreateSpec(systemupdate.Table, sqlgraph.NewFieldSpec(systemupdate.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = suc.conflict
-	if value, ok := suc.mutation.Status(); ok {
-		_spec.SetField(systemupdate.FieldStatus, field.TypeString, value)
-		_node.Status = value
+	if value, ok := suc.mutation.SystemUpdateStatus(); ok {
+		_spec.SetField(systemupdate.FieldSystemUpdateStatus, field.TypeString, value)
+		_node.SystemUpdateStatus = value
 	}
 	if value, ok := suc.mutation.LastInstall(); ok {
 		_spec.SetField(systemupdate.FieldLastInstall, field.TypeTime, value)
@@ -174,7 +174,7 @@ func (suc *SystemUpdateCreate) createSpec() (*SystemUpdate, *sqlgraph.CreateSpec
 // of the `INSERT` statement. For example:
 //
 //	client.SystemUpdate.Create().
-//		SetStatus(v).
+//		SetSystemUpdateStatus(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -183,7 +183,7 @@ func (suc *SystemUpdateCreate) createSpec() (*SystemUpdate, *sqlgraph.CreateSpec
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.SystemUpdateUpsert) {
-//			SetStatus(v+v).
+//			SetSystemUpdateStatus(v+v).
 //		}).
 //		Exec(ctx)
 func (suc *SystemUpdateCreate) OnConflict(opts ...sql.ConflictOption) *SystemUpdateUpsertOne {
@@ -219,15 +219,15 @@ type (
 	}
 )
 
-// SetStatus sets the "status" field.
-func (u *SystemUpdateUpsert) SetStatus(v string) *SystemUpdateUpsert {
-	u.Set(systemupdate.FieldStatus, v)
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (u *SystemUpdateUpsert) SetSystemUpdateStatus(v string) *SystemUpdateUpsert {
+	u.Set(systemupdate.FieldSystemUpdateStatus, v)
 	return u
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *SystemUpdateUpsert) UpdateStatus() *SystemUpdateUpsert {
-	u.SetExcluded(systemupdate.FieldStatus)
+// UpdateSystemUpdateStatus sets the "system_update_status" field to the value that was provided on create.
+func (u *SystemUpdateUpsert) UpdateSystemUpdateStatus() *SystemUpdateUpsert {
+	u.SetExcluded(systemupdate.FieldSystemUpdateStatus)
 	return u
 }
 
@@ -307,17 +307,17 @@ func (u *SystemUpdateUpsertOne) Update(set func(*SystemUpdateUpsert)) *SystemUpd
 	return u
 }
 
-// SetStatus sets the "status" field.
-func (u *SystemUpdateUpsertOne) SetStatus(v string) *SystemUpdateUpsertOne {
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (u *SystemUpdateUpsertOne) SetSystemUpdateStatus(v string) *SystemUpdateUpsertOne {
 	return u.Update(func(s *SystemUpdateUpsert) {
-		s.SetStatus(v)
+		s.SetSystemUpdateStatus(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *SystemUpdateUpsertOne) UpdateStatus() *SystemUpdateUpsertOne {
+// UpdateSystemUpdateStatus sets the "system_update_status" field to the value that was provided on create.
+func (u *SystemUpdateUpsertOne) UpdateSystemUpdateStatus() *SystemUpdateUpsertOne {
 	return u.Update(func(s *SystemUpdateUpsert) {
-		s.UpdateStatus()
+		s.UpdateSystemUpdateStatus()
 	})
 }
 
@@ -497,7 +497,7 @@ func (sucb *SystemUpdateCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.SystemUpdateUpsert) {
-//			SetStatus(v+v).
+//			SetSystemUpdateStatus(v+v).
 //		}).
 //		Exec(ctx)
 func (sucb *SystemUpdateCreateBulk) OnConflict(opts ...sql.ConflictOption) *SystemUpdateUpsertBulk {
@@ -566,17 +566,17 @@ func (u *SystemUpdateUpsertBulk) Update(set func(*SystemUpdateUpsert)) *SystemUp
 	return u
 }
 
-// SetStatus sets the "status" field.
-func (u *SystemUpdateUpsertBulk) SetStatus(v string) *SystemUpdateUpsertBulk {
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (u *SystemUpdateUpsertBulk) SetSystemUpdateStatus(v string) *SystemUpdateUpsertBulk {
 	return u.Update(func(s *SystemUpdateUpsert) {
-		s.SetStatus(v)
+		s.SetSystemUpdateStatus(v)
 	})
 }
 
-// UpdateStatus sets the "status" field to the value that was provided on create.
-func (u *SystemUpdateUpsertBulk) UpdateStatus() *SystemUpdateUpsertBulk {
+// UpdateSystemUpdateStatus sets the "system_update_status" field to the value that was provided on create.
+func (u *SystemUpdateUpsertBulk) UpdateSystemUpdateStatus() *SystemUpdateUpsertBulk {
 	return u.Update(func(s *SystemUpdateUpsert) {
-		s.UpdateStatus()
+		s.UpdateSystemUpdateStatus()
 	})
 }
 

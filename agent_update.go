@@ -320,23 +320,23 @@ func (au *AgentUpdate) ClearSftpPort() *AgentUpdate {
 	return au
 }
 
-// SetStatus sets the "status" field.
-func (au *AgentUpdate) SetStatus(a agent.Status) *AgentUpdate {
-	au.mutation.SetStatus(a)
+// SetAgentStatus sets the "agent_status" field.
+func (au *AgentUpdate) SetAgentStatus(as agent.AgentStatus) *AgentUpdate {
+	au.mutation.SetAgentStatus(as)
 	return au
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (au *AgentUpdate) SetNillableStatus(a *agent.Status) *AgentUpdate {
-	if a != nil {
-		au.SetStatus(*a)
+// SetNillableAgentStatus sets the "agent_status" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableAgentStatus(as *agent.AgentStatus) *AgentUpdate {
+	if as != nil {
+		au.SetAgentStatus(*as)
 	}
 	return au
 }
 
-// ClearStatus clears the value of the "status" field.
-func (au *AgentUpdate) ClearStatus() *AgentUpdate {
-	au.mutation.ClearStatus()
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (au *AgentUpdate) ClearAgentStatus() *AgentUpdate {
+	au.mutation.ClearAgentStatus()
 	return au
 }
 
@@ -909,9 +909,9 @@ func (au *AgentUpdate) check() error {
 			return &ValidationError{Name: "hostname", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.hostname": %w`, err)}
 		}
 	}
-	if v, ok := au.mutation.Status(); ok {
-		if err := agent.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.status": %w`, err)}
+	if v, ok := au.mutation.AgentStatus(); ok {
+		if err := agent.AgentStatusValidator(v); err != nil {
+			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.agent_status": %w`, err)}
 		}
 	}
 	return nil
@@ -1013,11 +1013,11 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.SftpPortCleared() {
 		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
 	}
-	if value, ok := au.mutation.Status(); ok {
-		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
+	if value, ok := au.mutation.AgentStatus(); ok {
+		_spec.SetField(agent.FieldAgentStatus, field.TypeEnum, value)
 	}
-	if au.mutation.StatusCleared() {
-		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
+	if au.mutation.AgentStatusCleared() {
+		_spec.ClearField(agent.FieldAgentStatus, field.TypeEnum)
 	}
 	if value, ok := au.mutation.CertificateReady(); ok {
 		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)
@@ -1924,23 +1924,23 @@ func (auo *AgentUpdateOne) ClearSftpPort() *AgentUpdateOne {
 	return auo
 }
 
-// SetStatus sets the "status" field.
-func (auo *AgentUpdateOne) SetStatus(a agent.Status) *AgentUpdateOne {
-	auo.mutation.SetStatus(a)
+// SetAgentStatus sets the "agent_status" field.
+func (auo *AgentUpdateOne) SetAgentStatus(as agent.AgentStatus) *AgentUpdateOne {
+	auo.mutation.SetAgentStatus(as)
 	return auo
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (auo *AgentUpdateOne) SetNillableStatus(a *agent.Status) *AgentUpdateOne {
-	if a != nil {
-		auo.SetStatus(*a)
+// SetNillableAgentStatus sets the "agent_status" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableAgentStatus(as *agent.AgentStatus) *AgentUpdateOne {
+	if as != nil {
+		auo.SetAgentStatus(*as)
 	}
 	return auo
 }
 
-// ClearStatus clears the value of the "status" field.
-func (auo *AgentUpdateOne) ClearStatus() *AgentUpdateOne {
-	auo.mutation.ClearStatus()
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (auo *AgentUpdateOne) ClearAgentStatus() *AgentUpdateOne {
+	auo.mutation.ClearAgentStatus()
 	return auo
 }
 
@@ -2526,9 +2526,9 @@ func (auo *AgentUpdateOne) check() error {
 			return &ValidationError{Name: "hostname", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.hostname": %w`, err)}
 		}
 	}
-	if v, ok := auo.mutation.Status(); ok {
-		if err := agent.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.status": %w`, err)}
+	if v, ok := auo.mutation.AgentStatus(); ok {
+		if err := agent.AgentStatusValidator(v); err != nil {
+			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`openuem_ent: validator failed for field "Agent.agent_status": %w`, err)}
 		}
 	}
 	return nil
@@ -2647,11 +2647,11 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	if auo.mutation.SftpPortCleared() {
 		_spec.ClearField(agent.FieldSftpPort, field.TypeString)
 	}
-	if value, ok := auo.mutation.Status(); ok {
-		_spec.SetField(agent.FieldStatus, field.TypeEnum, value)
+	if value, ok := auo.mutation.AgentStatus(); ok {
+		_spec.SetField(agent.FieldAgentStatus, field.TypeEnum, value)
 	}
-	if auo.mutation.StatusCleared() {
-		_spec.ClearField(agent.FieldStatus, field.TypeEnum)
+	if auo.mutation.AgentStatusCleared() {
+		_spec.ClearField(agent.FieldAgentStatus, field.TypeEnum)
 	}
 	if value, ok := auo.mutation.CertificateReady(); ok {
 		_spec.SetField(agent.FieldCertificateReady, field.TypeBool, value)

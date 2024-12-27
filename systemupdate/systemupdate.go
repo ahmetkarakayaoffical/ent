@@ -12,8 +12,8 @@ const (
 	Label = "system_update"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
+	// FieldSystemUpdateStatus holds the string denoting the system_update_status field in the database.
+	FieldSystemUpdateStatus = "system_update_status"
 	// FieldLastInstall holds the string denoting the last_install field in the database.
 	FieldLastInstall = "last_install"
 	// FieldLastSearch holds the string denoting the last_search field in the database.
@@ -38,7 +38,7 @@ const (
 // Columns holds all SQL columns for systemupdate fields.
 var Columns = []string{
 	FieldID,
-	FieldStatus,
+	FieldSystemUpdateStatus,
 	FieldLastInstall,
 	FieldLastSearch,
 	FieldPendingUpdates,
@@ -73,9 +73,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+// BySystemUpdateStatus orders the results by the system_update_status field.
+func BySystemUpdateStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemUpdateStatus, opts...).ToFunc()
 }
 
 // ByLastInstall orders the results by the last_install field.

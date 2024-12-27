@@ -1160,34 +1160,34 @@ func SftpPortContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldSftpPort, v))
 }
 
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v Status) predicate.Agent {
-	return predicate.Agent(sql.FieldEQ(FieldStatus, v))
+// AgentStatusEQ applies the EQ predicate on the "agent_status" field.
+func AgentStatusEQ(v AgentStatus) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldAgentStatus, v))
 }
 
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v Status) predicate.Agent {
-	return predicate.Agent(sql.FieldNEQ(FieldStatus, v))
+// AgentStatusNEQ applies the NEQ predicate on the "agent_status" field.
+func AgentStatusNEQ(v AgentStatus) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldAgentStatus, v))
 }
 
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...Status) predicate.Agent {
-	return predicate.Agent(sql.FieldIn(FieldStatus, vs...))
+// AgentStatusIn applies the In predicate on the "agent_status" field.
+func AgentStatusIn(vs ...AgentStatus) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldAgentStatus, vs...))
 }
 
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...Status) predicate.Agent {
-	return predicate.Agent(sql.FieldNotIn(FieldStatus, vs...))
+// AgentStatusNotIn applies the NotIn predicate on the "agent_status" field.
+func AgentStatusNotIn(vs ...AgentStatus) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldAgentStatus, vs...))
 }
 
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.Agent {
-	return predicate.Agent(sql.FieldIsNull(FieldStatus))
+// AgentStatusIsNil applies the IsNil predicate on the "agent_status" field.
+func AgentStatusIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldAgentStatus))
 }
 
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.Agent {
-	return predicate.Agent(sql.FieldNotNull(FieldStatus))
+// AgentStatusNotNil applies the NotNil predicate on the "agent_status" field.
+func AgentStatusNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldAgentStatus))
 }
 
 // CertificateReadyEQ applies the EQ predicate on the "certificate_ready" field.
