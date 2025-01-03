@@ -44,8 +44,8 @@ const (
 	FieldVncProxyPort = "vnc_proxy_port"
 	// FieldSftpPort holds the string denoting the sftp_port field in the database.
 	FieldSftpPort = "sftp_port"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
+	// FieldAgentStatus holds the string denoting the agent_status field in the database.
+	FieldAgentStatus = "agent_status"
 	// FieldCertificateReady holds the string denoting the certificate_ready field in the database.
 	FieldCertificateReady = "certificate_ready"
 	// FieldRestartRequired holds the string denoting the restart_required field in the database.
@@ -235,7 +235,7 @@ var Columns = []string{
 	FieldUpdateTaskVersion,
 	FieldVncProxyPort,
 	FieldSftpPort,
-	FieldStatus,
+	FieldAgentStatus,
 	FieldCertificateReady,
 	FieldRestartRequired,
 }
@@ -298,30 +298,30 @@ var (
 	IDValidator func(string) error
 )
 
-// Status defines the type for the "status" enum field.
-type Status string
+// AgentStatus defines the type for the "agent_status" enum field.
+type AgentStatus string
 
-// StatusWaitingForAdmission is the default value of the Status enum.
-const DefaultStatus = StatusWaitingForAdmission
+// AgentStatusWaitingForAdmission is the default value of the AgentStatus enum.
+const DefaultAgentStatus = AgentStatusWaitingForAdmission
 
-// Status values.
+// AgentStatus values.
 const (
-	StatusWaitingForAdmission Status = "WaitingForAdmission"
-	StatusEnabled             Status = "Enabled"
-	StatusDisabled            Status = "Disabled"
+	AgentStatusWaitingForAdmission AgentStatus = "WaitingForAdmission"
+	AgentStatusEnabled             AgentStatus = "Enabled"
+	AgentStatusDisabled            AgentStatus = "Disabled"
 )
 
-func (s Status) String() string {
-	return string(s)
+func (as AgentStatus) String() string {
+	return string(as)
 }
 
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s Status) error {
-	switch s {
-	case StatusWaitingForAdmission, StatusEnabled, StatusDisabled:
+// AgentStatusValidator is a validator for the "agent_status" field enum values. It is called by the builders before save.
+func AgentStatusValidator(as AgentStatus) error {
+	switch as {
+	case AgentStatusWaitingForAdmission, AgentStatusEnabled, AgentStatusDisabled:
 		return nil
 	default:
-		return fmt.Errorf("agent: invalid enum value for status field: %q", s)
+		return fmt.Errorf("agent: invalid enum value for agent_status field: %q", as)
 	}
 }
 
@@ -408,9 +408,9 @@ func BySftpPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSftpPort, opts...).ToFunc()
 }
 
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+// ByAgentStatus orders the results by the agent_status field.
+func ByAgentStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAgentStatus, opts...).ToFunc()
 }
 
 // ByCertificateReady orders the results by the certificate_ready field.

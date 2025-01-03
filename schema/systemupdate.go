@@ -14,7 +14,7 @@ type SystemUpdate struct {
 // Fields of the SystemUpdate.
 func (SystemUpdate) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("status"),
+		field.String("system_update_status"),
 		field.Time("last_install"),
 		field.Time("last_search"),
 		field.Bool("pending_updates"),

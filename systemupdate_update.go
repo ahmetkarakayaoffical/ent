@@ -30,16 +30,16 @@ func (suu *SystemUpdateUpdate) Where(ps ...predicate.SystemUpdate) *SystemUpdate
 	return suu
 }
 
-// SetStatus sets the "status" field.
-func (suu *SystemUpdateUpdate) SetStatus(s string) *SystemUpdateUpdate {
-	suu.mutation.SetStatus(s)
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (suu *SystemUpdateUpdate) SetSystemUpdateStatus(s string) *SystemUpdateUpdate {
+	suu.mutation.SetSystemUpdateStatus(s)
 	return suu
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (suu *SystemUpdateUpdate) SetNillableStatus(s *string) *SystemUpdateUpdate {
+// SetNillableSystemUpdateStatus sets the "system_update_status" field if the given value is not nil.
+func (suu *SystemUpdateUpdate) SetNillableSystemUpdateStatus(s *string) *SystemUpdateUpdate {
 	if s != nil {
-		suu.SetStatus(*s)
+		suu.SetSystemUpdateStatus(*s)
 	}
 	return suu
 }
@@ -161,8 +161,8 @@ func (suu *SystemUpdateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := suu.mutation.Status(); ok {
-		_spec.SetField(systemupdate.FieldStatus, field.TypeString, value)
+	if value, ok := suu.mutation.SystemUpdateStatus(); ok {
+		_spec.SetField(systemupdate.FieldSystemUpdateStatus, field.TypeString, value)
 	}
 	if value, ok := suu.mutation.LastInstall(); ok {
 		_spec.SetField(systemupdate.FieldLastInstall, field.TypeTime, value)
@@ -224,16 +224,16 @@ type SystemUpdateUpdateOne struct {
 	modifiers []func(*sql.UpdateBuilder)
 }
 
-// SetStatus sets the "status" field.
-func (suuo *SystemUpdateUpdateOne) SetStatus(s string) *SystemUpdateUpdateOne {
-	suuo.mutation.SetStatus(s)
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (suuo *SystemUpdateUpdateOne) SetSystemUpdateStatus(s string) *SystemUpdateUpdateOne {
+	suuo.mutation.SetSystemUpdateStatus(s)
 	return suuo
 }
 
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (suuo *SystemUpdateUpdateOne) SetNillableStatus(s *string) *SystemUpdateUpdateOne {
+// SetNillableSystemUpdateStatus sets the "system_update_status" field if the given value is not nil.
+func (suuo *SystemUpdateUpdateOne) SetNillableSystemUpdateStatus(s *string) *SystemUpdateUpdateOne {
 	if s != nil {
-		suuo.SetStatus(*s)
+		suuo.SetSystemUpdateStatus(*s)
 	}
 	return suuo
 }
@@ -385,8 +385,8 @@ func (suuo *SystemUpdateUpdateOne) sqlSave(ctx context.Context) (_node *SystemUp
 			}
 		}
 	}
-	if value, ok := suuo.mutation.Status(); ok {
-		_spec.SetField(systemupdate.FieldStatus, field.TypeString, value)
+	if value, ok := suuo.mutation.SystemUpdateStatus(); ok {
+		_spec.SetField(systemupdate.FieldSystemUpdateStatus, field.TypeString, value)
 	}
 	if value, ok := suuo.mutation.LastInstall(); ok {
 		_spec.SetField(systemupdate.FieldLastInstall, field.TypeTime, value)

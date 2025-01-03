@@ -301,12 +301,12 @@ func (suq *SystemUpdateQuery) WithOwner(opts ...func(*AgentQuery)) *SystemUpdate
 // Example:
 //
 //	var v []struct {
-//		Status string `json:"status,omitempty"`
+//		SystemUpdateStatus string `json:"system_update_status,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.SystemUpdate.Query().
-//		GroupBy(systemupdate.FieldStatus).
+//		GroupBy(systemupdate.FieldSystemUpdateStatus).
 //		Aggregate(openuem_ent.Count()).
 //		Scan(ctx, &v)
 func (suq *SystemUpdateQuery) GroupBy(field string, fields ...string) *SystemUpdateGroupBy {
@@ -324,11 +324,11 @@ func (suq *SystemUpdateQuery) GroupBy(field string, fields ...string) *SystemUpd
 // Example:
 //
 //	var v []struct {
-//		Status string `json:"status,omitempty"`
+//		SystemUpdateStatus string `json:"system_update_status,omitempty"`
 //	}
 //
 //	client.SystemUpdate.Query().
-//		Select(systemupdate.FieldStatus).
+//		Select(systemupdate.FieldSystemUpdateStatus).
 //		Scan(ctx, &v)
 func (suq *SystemUpdateQuery) Select(fields ...string) *SystemUpdateSelect {
 	suq.ctx.Fields = append(suq.ctx.Fields, fields...)

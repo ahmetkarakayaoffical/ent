@@ -55,9 +55,9 @@ func IDLTE(id int) predicate.SystemUpdate {
 	return predicate.SystemUpdate(sql.FieldLTE(FieldID, id))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldEQ(FieldStatus, v))
+// SystemUpdateStatus applies equality check predicate on the "system_update_status" field. It's identical to SystemUpdateStatusEQ.
+func SystemUpdateStatus(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldEQ(FieldSystemUpdateStatus, v))
 }
 
 // LastInstall applies equality check predicate on the "last_install" field. It's identical to LastInstallEQ.
@@ -75,69 +75,69 @@ func PendingUpdates(v bool) predicate.SystemUpdate {
 	return predicate.SystemUpdate(sql.FieldEQ(FieldPendingUpdates, v))
 }
 
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldEQ(FieldStatus, v))
+// SystemUpdateStatusEQ applies the EQ predicate on the "system_update_status" field.
+func SystemUpdateStatusEQ(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldEQ(FieldSystemUpdateStatus, v))
 }
 
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldNEQ(FieldStatus, v))
+// SystemUpdateStatusNEQ applies the NEQ predicate on the "system_update_status" field.
+func SystemUpdateStatusNEQ(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldNEQ(FieldSystemUpdateStatus, v))
 }
 
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldIn(FieldStatus, vs...))
+// SystemUpdateStatusIn applies the In predicate on the "system_update_status" field.
+func SystemUpdateStatusIn(vs ...string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldIn(FieldSystemUpdateStatus, vs...))
 }
 
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldNotIn(FieldStatus, vs...))
+// SystemUpdateStatusNotIn applies the NotIn predicate on the "system_update_status" field.
+func SystemUpdateStatusNotIn(vs ...string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldNotIn(FieldSystemUpdateStatus, vs...))
 }
 
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldGT(FieldStatus, v))
+// SystemUpdateStatusGT applies the GT predicate on the "system_update_status" field.
+func SystemUpdateStatusGT(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldGT(FieldSystemUpdateStatus, v))
 }
 
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldGTE(FieldStatus, v))
+// SystemUpdateStatusGTE applies the GTE predicate on the "system_update_status" field.
+func SystemUpdateStatusGTE(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldGTE(FieldSystemUpdateStatus, v))
 }
 
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldLT(FieldStatus, v))
+// SystemUpdateStatusLT applies the LT predicate on the "system_update_status" field.
+func SystemUpdateStatusLT(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldLT(FieldSystemUpdateStatus, v))
 }
 
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldLTE(FieldStatus, v))
+// SystemUpdateStatusLTE applies the LTE predicate on the "system_update_status" field.
+func SystemUpdateStatusLTE(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldLTE(FieldSystemUpdateStatus, v))
 }
 
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldContains(FieldStatus, v))
+// SystemUpdateStatusContains applies the Contains predicate on the "system_update_status" field.
+func SystemUpdateStatusContains(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldContains(FieldSystemUpdateStatus, v))
 }
 
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldHasPrefix(FieldStatus, v))
+// SystemUpdateStatusHasPrefix applies the HasPrefix predicate on the "system_update_status" field.
+func SystemUpdateStatusHasPrefix(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldHasPrefix(FieldSystemUpdateStatus, v))
 }
 
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldHasSuffix(FieldStatus, v))
+// SystemUpdateStatusHasSuffix applies the HasSuffix predicate on the "system_update_status" field.
+func SystemUpdateStatusHasSuffix(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldHasSuffix(FieldSystemUpdateStatus, v))
 }
 
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldEqualFold(FieldStatus, v))
+// SystemUpdateStatusEqualFold applies the EqualFold predicate on the "system_update_status" field.
+func SystemUpdateStatusEqualFold(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldEqualFold(FieldSystemUpdateStatus, v))
 }
 
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.SystemUpdate {
-	return predicate.SystemUpdate(sql.FieldContainsFold(FieldStatus, v))
+// SystemUpdateStatusContainsFold applies the ContainsFold predicate on the "system_update_status" field.
+func SystemUpdateStatusContainsFold(v string) predicate.SystemUpdate {
+	return predicate.SystemUpdate(sql.FieldContainsFold(FieldSystemUpdateStatus, v))
 }
 
 // LastInstallEQ applies the EQ predicate on the "last_install" field.

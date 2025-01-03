@@ -18,8 +18,8 @@ type SystemUpdate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Status holds the value of the "status" field.
-	Status string `json:"status,omitempty"`
+	// SystemUpdateStatus holds the value of the "system_update_status" field.
+	SystemUpdateStatus string `json:"system_update_status,omitempty"`
 	// LastInstall holds the value of the "last_install" field.
 	LastInstall time.Time `json:"last_install,omitempty"`
 	// LastSearch holds the value of the "last_search" field.
@@ -62,7 +62,7 @@ func (*SystemUpdate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case systemupdate.FieldID:
 			values[i] = new(sql.NullInt64)
-		case systemupdate.FieldStatus:
+		case systemupdate.FieldSystemUpdateStatus:
 			values[i] = new(sql.NullString)
 		case systemupdate.FieldLastInstall, systemupdate.FieldLastSearch:
 			values[i] = new(sql.NullTime)
@@ -89,11 +89,11 @@ func (su *SystemUpdate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			su.ID = int(value.Int64)
-		case systemupdate.FieldStatus:
+		case systemupdate.FieldSystemUpdateStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
+				return fmt.Errorf("unexpected type %T for field system_update_status", values[i])
 			} else if value.Valid {
-				su.Status = value.String
+				su.SystemUpdateStatus = value.String
 			}
 		case systemupdate.FieldLastInstall:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -161,8 +161,8 @@ func (su *SystemUpdate) String() string {
 	var builder strings.Builder
 	builder.WriteString("SystemUpdate(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", su.ID))
-	builder.WriteString("status=")
-	builder.WriteString(su.Status)
+	builder.WriteString("system_update_status=")
+	builder.WriteString(su.SystemUpdateStatus)
 	builder.WriteString(", ")
 	builder.WriteString("last_install=")
 	builder.WriteString(su.LastInstall.Format(time.ANSIC))

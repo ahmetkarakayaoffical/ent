@@ -92,7 +92,7 @@ type AgentMutation struct {
 	update_task_version     *string
 	vnc_proxy_port          *string
 	sftp_port               *string
-	status                  *agent.Status
+	agent_status            *agent.AgentStatus
 	certificate_ready       *bool
 	restart_required        *bool
 	clearedFields           map[string]struct{}
@@ -928,53 +928,53 @@ func (m *AgentMutation) ResetSftpPort() {
 	delete(m.clearedFields, agent.FieldSftpPort)
 }
 
-// SetStatus sets the "status" field.
-func (m *AgentMutation) SetStatus(a agent.Status) {
-	m.status = &a
+// SetAgentStatus sets the "agent_status" field.
+func (m *AgentMutation) SetAgentStatus(as agent.AgentStatus) {
+	m.agent_status = &as
 }
 
-// Status returns the value of the "status" field in the mutation.
-func (m *AgentMutation) Status() (r agent.Status, exists bool) {
-	v := m.status
+// AgentStatus returns the value of the "agent_status" field in the mutation.
+func (m *AgentMutation) AgentStatus() (r agent.AgentStatus, exists bool) {
+	v := m.agent_status
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStatus returns the old "status" field's value of the Agent entity.
+// OldAgentStatus returns the old "agent_status" field's value of the Agent entity.
 // If the Agent object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AgentMutation) OldStatus(ctx context.Context) (v agent.Status, err error) {
+func (m *AgentMutation) OldAgentStatus(ctx context.Context) (v agent.AgentStatus, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+		return v, errors.New("OldAgentStatus is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStatus requires an ID field in the mutation")
+		return v, errors.New("OldAgentStatus requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+		return v, fmt.Errorf("querying old value for OldAgentStatus: %w", err)
 	}
-	return oldValue.Status, nil
+	return oldValue.AgentStatus, nil
 }
 
-// ClearStatus clears the value of the "status" field.
-func (m *AgentMutation) ClearStatus() {
-	m.status = nil
-	m.clearedFields[agent.FieldStatus] = struct{}{}
+// ClearAgentStatus clears the value of the "agent_status" field.
+func (m *AgentMutation) ClearAgentStatus() {
+	m.agent_status = nil
+	m.clearedFields[agent.FieldAgentStatus] = struct{}{}
 }
 
-// StatusCleared returns if the "status" field was cleared in this mutation.
-func (m *AgentMutation) StatusCleared() bool {
-	_, ok := m.clearedFields[agent.FieldStatus]
+// AgentStatusCleared returns if the "agent_status" field was cleared in this mutation.
+func (m *AgentMutation) AgentStatusCleared() bool {
+	_, ok := m.clearedFields[agent.FieldAgentStatus]
 	return ok
 }
 
-// ResetStatus resets all changes to the "status" field.
-func (m *AgentMutation) ResetStatus() {
-	m.status = nil
-	delete(m.clearedFields, agent.FieldStatus)
+// ResetAgentStatus resets all changes to the "agent_status" field.
+func (m *AgentMutation) ResetAgentStatus() {
+	m.agent_status = nil
+	delete(m.clearedFields, agent.FieldAgentStatus)
 }
 
 // SetCertificateReady sets the "certificate_ready" field.
@@ -1890,8 +1890,8 @@ func (m *AgentMutation) Fields() []string {
 	if m.sftp_port != nil {
 		fields = append(fields, agent.FieldSftpPort)
 	}
-	if m.status != nil {
-		fields = append(fields, agent.FieldStatus)
+	if m.agent_status != nil {
+		fields = append(fields, agent.FieldAgentStatus)
 	}
 	if m.certificate_ready != nil {
 		fields = append(fields, agent.FieldCertificateReady)
@@ -1937,8 +1937,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.VncProxyPort()
 	case agent.FieldSftpPort:
 		return m.SftpPort()
-	case agent.FieldStatus:
-		return m.Status()
+	case agent.FieldAgentStatus:
+		return m.AgentStatus()
 	case agent.FieldCertificateReady:
 		return m.CertificateReady()
 	case agent.FieldRestartRequired:
@@ -1982,8 +1982,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldVncProxyPort(ctx)
 	case agent.FieldSftpPort:
 		return m.OldSftpPort(ctx)
-	case agent.FieldStatus:
-		return m.OldStatus(ctx)
+	case agent.FieldAgentStatus:
+		return m.OldAgentStatus(ctx)
 	case agent.FieldCertificateReady:
 		return m.OldCertificateReady(ctx)
 	case agent.FieldRestartRequired:
@@ -2102,12 +2102,12 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSftpPort(v)
 		return nil
-	case agent.FieldStatus:
-		v, ok := value.(agent.Status)
+	case agent.FieldAgentStatus:
+		v, ok := value.(agent.AgentStatus)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetStatus(v)
+		m.SetAgentStatus(v)
 		return nil
 	case agent.FieldCertificateReady:
 		v, ok := value.(bool)
@@ -2186,8 +2186,8 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldSftpPort) {
 		fields = append(fields, agent.FieldSftpPort)
 	}
-	if m.FieldCleared(agent.FieldStatus) {
-		fields = append(fields, agent.FieldStatus)
+	if m.FieldCleared(agent.FieldAgentStatus) {
+		fields = append(fields, agent.FieldAgentStatus)
 	}
 	if m.FieldCleared(agent.FieldCertificateReady) {
 		fields = append(fields, agent.FieldCertificateReady)
@@ -2242,8 +2242,8 @@ func (m *AgentMutation) ClearField(name string) error {
 	case agent.FieldSftpPort:
 		m.ClearSftpPort()
 		return nil
-	case agent.FieldStatus:
-		m.ClearStatus()
+	case agent.FieldAgentStatus:
+		m.ClearAgentStatus()
 		return nil
 	case agent.FieldCertificateReady:
 		m.ClearCertificateReady()
@@ -2304,8 +2304,8 @@ func (m *AgentMutation) ResetField(name string) error {
 	case agent.FieldSftpPort:
 		m.ResetSftpPort()
 		return nil
-	case agent.FieldStatus:
-		m.ResetStatus()
+	case agent.FieldAgentStatus:
+		m.ResetAgentStatus()
 		return nil
 	case agent.FieldCertificateReady:
 		m.ResetCertificateReady()
@@ -17350,19 +17350,19 @@ func (m *ShareMutation) ResetEdge(name string) error {
 // SystemUpdateMutation represents an operation that mutates the SystemUpdate nodes in the graph.
 type SystemUpdateMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	status          *string
-	last_install    *time.Time
-	last_search     *time.Time
-	pending_updates *bool
-	clearedFields   map[string]struct{}
-	owner           *string
-	clearedowner    bool
-	done            bool
-	oldValue        func(context.Context) (*SystemUpdate, error)
-	predicates      []predicate.SystemUpdate
+	op                   Op
+	typ                  string
+	id                   *int
+	system_update_status *string
+	last_install         *time.Time
+	last_search          *time.Time
+	pending_updates      *bool
+	clearedFields        map[string]struct{}
+	owner                *string
+	clearedowner         bool
+	done                 bool
+	oldValue             func(context.Context) (*SystemUpdate, error)
+	predicates           []predicate.SystemUpdate
 }
 
 var _ ent.Mutation = (*SystemUpdateMutation)(nil)
@@ -17463,40 +17463,40 @@ func (m *SystemUpdateMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetStatus sets the "status" field.
-func (m *SystemUpdateMutation) SetStatus(s string) {
-	m.status = &s
+// SetSystemUpdateStatus sets the "system_update_status" field.
+func (m *SystemUpdateMutation) SetSystemUpdateStatus(s string) {
+	m.system_update_status = &s
 }
 
-// Status returns the value of the "status" field in the mutation.
-func (m *SystemUpdateMutation) Status() (r string, exists bool) {
-	v := m.status
+// SystemUpdateStatus returns the value of the "system_update_status" field in the mutation.
+func (m *SystemUpdateMutation) SystemUpdateStatus() (r string, exists bool) {
+	v := m.system_update_status
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStatus returns the old "status" field's value of the SystemUpdate entity.
+// OldSystemUpdateStatus returns the old "system_update_status" field's value of the SystemUpdate entity.
 // If the SystemUpdate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SystemUpdateMutation) OldStatus(ctx context.Context) (v string, err error) {
+func (m *SystemUpdateMutation) OldSystemUpdateStatus(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+		return v, errors.New("OldSystemUpdateStatus is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStatus requires an ID field in the mutation")
+		return v, errors.New("OldSystemUpdateStatus requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+		return v, fmt.Errorf("querying old value for OldSystemUpdateStatus: %w", err)
 	}
-	return oldValue.Status, nil
+	return oldValue.SystemUpdateStatus, nil
 }
 
-// ResetStatus resets all changes to the "status" field.
-func (m *SystemUpdateMutation) ResetStatus() {
-	m.status = nil
+// ResetSystemUpdateStatus resets all changes to the "system_update_status" field.
+func (m *SystemUpdateMutation) ResetSystemUpdateStatus() {
+	m.system_update_status = nil
 }
 
 // SetLastInstall sets the "last_install" field.
@@ -17681,8 +17681,8 @@ func (m *SystemUpdateMutation) Type() string {
 // AddedFields().
 func (m *SystemUpdateMutation) Fields() []string {
 	fields := make([]string, 0, 4)
-	if m.status != nil {
-		fields = append(fields, systemupdate.FieldStatus)
+	if m.system_update_status != nil {
+		fields = append(fields, systemupdate.FieldSystemUpdateStatus)
 	}
 	if m.last_install != nil {
 		fields = append(fields, systemupdate.FieldLastInstall)
@@ -17701,8 +17701,8 @@ func (m *SystemUpdateMutation) Fields() []string {
 // schema.
 func (m *SystemUpdateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case systemupdate.FieldStatus:
-		return m.Status()
+	case systemupdate.FieldSystemUpdateStatus:
+		return m.SystemUpdateStatus()
 	case systemupdate.FieldLastInstall:
 		return m.LastInstall()
 	case systemupdate.FieldLastSearch:
@@ -17718,8 +17718,8 @@ func (m *SystemUpdateMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *SystemUpdateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case systemupdate.FieldStatus:
-		return m.OldStatus(ctx)
+	case systemupdate.FieldSystemUpdateStatus:
+		return m.OldSystemUpdateStatus(ctx)
 	case systemupdate.FieldLastInstall:
 		return m.OldLastInstall(ctx)
 	case systemupdate.FieldLastSearch:
@@ -17735,12 +17735,12 @@ func (m *SystemUpdateMutation) OldField(ctx context.Context, name string) (ent.V
 // type.
 func (m *SystemUpdateMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case systemupdate.FieldStatus:
+	case systemupdate.FieldSystemUpdateStatus:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetStatus(v)
+		m.SetSystemUpdateStatus(v)
 		return nil
 	case systemupdate.FieldLastInstall:
 		v, ok := value.(time.Time)
@@ -17812,8 +17812,8 @@ func (m *SystemUpdateMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *SystemUpdateMutation) ResetField(name string) error {
 	switch name {
-	case systemupdate.FieldStatus:
-		m.ResetStatus()
+	case systemupdate.FieldSystemUpdateStatus:
+		m.ResetSystemUpdateStatus()
 		return nil
 	case systemupdate.FieldLastInstall:
 		m.ResetLastInstall()

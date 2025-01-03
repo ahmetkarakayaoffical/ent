@@ -26,7 +26,7 @@ var (
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "vnc_proxy_port", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "sftp_port", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled"}, Default: "WaitingForAdmission"},
+		{Name: "agent_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled"}, Default: "WaitingForAdmission"},
 		{Name: "certificate_ready", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "restart_required", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
@@ -492,7 +492,7 @@ var (
 	// SystemUpdatesColumns holds the columns for the "system_updates" table.
 	SystemUpdatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "status", Type: field.TypeString},
+		{Name: "system_update_status", Type: field.TypeString},
 		{Name: "last_install", Type: field.TypeTime},
 		{Name: "last_search", Type: field.TypeTime},
 		{Name: "pending_updates", Type: field.TypeBool},
