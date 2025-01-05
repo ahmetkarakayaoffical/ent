@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/networkadapter"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/networkadapter"
 )
 
 // NetworkAdapter is the model entity for the NetworkAdapter schema.

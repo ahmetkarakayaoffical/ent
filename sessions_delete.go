@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/predicate"
-	"github.com/doncicuto/openuem_ent/sessions"
+	"github.com/open-uem/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/sessions"
 )
 
 // SessionsDelete is the builder for deleting a Sessions entity.

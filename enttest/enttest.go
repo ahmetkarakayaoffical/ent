@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/doncicuto/openuem_ent"
+	"github.com/open-uem/openuem_ent"
 	// required by schema hooks.
-	_ "github.com/doncicuto/openuem_ent/runtime"
+	_ "github.com/open-uem/openuem_ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/doncicuto/openuem_ent/migrate"
+	"github.com/open-uem/openuem_ent/migrate"
 )
 
 type (

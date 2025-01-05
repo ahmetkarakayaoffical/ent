@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/computer"
 )
 
 // Computer is the model entity for the Computer schema.

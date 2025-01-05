@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/settings"
+	"github.com/open-uem/openuem_ent/settings"
 )
 
 // Settings is the model entity for the Settings schema.

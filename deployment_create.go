@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/deployment"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/deployment"
 )
 
 // DeploymentCreate is the builder for creating a Deployment entity.

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/release"
+	"github.com/open-uem/openuem_ent/release"
 )
 
 // Release is the model entity for the Release schema.

@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/metadata"
-	"github.com/doncicuto/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/metadata"
+	"github.com/open-uem/openuem_ent/predicate"
 )
 
 // MetadataDelete is the builder for deleting a Metadata entity.

@@ -9,12 +9,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/antivirus"
-	"github.com/doncicuto/openuem_ent/computer"
-	"github.com/doncicuto/openuem_ent/operatingsystem"
-	"github.com/doncicuto/openuem_ent/release"
-	"github.com/doncicuto/openuem_ent/systemupdate"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/antivirus"
+	"github.com/open-uem/openuem_ent/computer"
+	"github.com/open-uem/openuem_ent/operatingsystem"
+	"github.com/open-uem/openuem_ent/release"
+	"github.com/open-uem/openuem_ent/systemupdate"
 )
 
 // Agent is the model entity for the Agent schema.

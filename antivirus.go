@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/antivirus"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/antivirus"
 )
 
 // Antivirus is the model entity for the Antivirus schema.

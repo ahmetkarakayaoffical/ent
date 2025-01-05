@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/certificate"
+	"github.com/open-uem/openuem_ent/certificate"
 )
 
 // Certificate is the model entity for the Certificate schema.

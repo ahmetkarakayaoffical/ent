@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/predicate"
-	"github.com/doncicuto/openuem_ent/settings"
+	"github.com/open-uem/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/settings"
 )
 
 // SettingsQuery is the builder for querying Settings entities.

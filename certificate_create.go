@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/certificate"
+	"github.com/open-uem/openuem_ent/certificate"
 )
 
 // CertificateCreate is the builder for creating a Certificate entity.

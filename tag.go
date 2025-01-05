@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/tag"
+	"github.com/open-uem/openuem_ent/tag"
 )
 
 // Tag is the model entity for the Tag schema.

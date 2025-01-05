@@ -1,4 +1,4 @@
-module github.com/doncicuto/openuem_ent
+module github.com/open-uem/openuem_ent
 
 go 1.23.1
 

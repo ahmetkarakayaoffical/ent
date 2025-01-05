@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

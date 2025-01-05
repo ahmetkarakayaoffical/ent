@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/user"
+	"github.com/open-uem/openuem_ent/user"
 )
 
 // User is the model entity for the User schema.

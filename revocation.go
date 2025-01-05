@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/revocation"
+	"github.com/open-uem/openuem_ent/revocation"
 )
 
 // Revocation is the model entity for the Revocation schema.

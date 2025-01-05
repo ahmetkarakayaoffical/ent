@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/computer"
-	"github.com/doncicuto/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/computer"
+	"github.com/open-uem/openuem_ent/predicate"
 )
 
 // ComputerUpdate is the builder for updating Computer entities.

@@ -5,16 +5,16 @@ package openuem_ent
 import (
 	"time"
 
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/deployment"
-	"github.com/doncicuto/openuem_ent/logicaldisk"
-	"github.com/doncicuto/openuem_ent/orgmetadata"
-	"github.com/doncicuto/openuem_ent/revocation"
-	"github.com/doncicuto/openuem_ent/schema"
-	"github.com/doncicuto/openuem_ent/sessions"
-	"github.com/doncicuto/openuem_ent/settings"
-	"github.com/doncicuto/openuem_ent/tag"
-	"github.com/doncicuto/openuem_ent/user"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/deployment"
+	"github.com/open-uem/openuem_ent/logicaldisk"
+	"github.com/open-uem/openuem_ent/orgmetadata"
+	"github.com/open-uem/openuem_ent/revocation"
+	"github.com/open-uem/openuem_ent/schema"
+	"github.com/open-uem/openuem_ent/sessions"
+	"github.com/open-uem/openuem_ent/settings"
+	"github.com/open-uem/openuem_ent/tag"
+	"github.com/open-uem/openuem_ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code

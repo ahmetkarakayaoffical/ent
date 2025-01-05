@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/monitor"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/monitor"
 )
 
 // Monitor is the model entity for the Monitor schema.

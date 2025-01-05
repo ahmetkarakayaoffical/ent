@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/app"
-	"github.com/doncicuto/openuem_ent/predicate"
+	"github.com/open-uem/openuem_ent/app"
+	"github.com/open-uem/openuem_ent/predicate"
 )
 
 // AppDelete is the builder for deleting a App entity.

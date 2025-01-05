@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/doncicuto/openuem_ent/runtime.go
+// The schema-stitching logic is generated in github.com/open-uem/openuem_ent/runtime.go
 
 const (
 	Version = "v0.14.1"                                         // Version of ent codegen.

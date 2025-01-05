@@ -8,9 +8,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/metadata"
-	"github.com/doncicuto/openuem_ent/orgmetadata"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/metadata"
+	"github.com/open-uem/openuem_ent/orgmetadata"
 )
 
 // Metadata is the model entity for the Metadata schema.

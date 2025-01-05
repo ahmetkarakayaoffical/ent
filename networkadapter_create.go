@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/networkadapter"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/networkadapter"
 )
 
 // NetworkAdapterCreate is the builder for creating a NetworkAdapter entity.

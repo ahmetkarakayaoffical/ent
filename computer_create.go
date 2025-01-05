@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/computer"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/computer"
 )
 
 // ComputerCreate is the builder for creating a Computer entity.

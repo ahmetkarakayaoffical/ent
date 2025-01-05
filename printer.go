@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/doncicuto/openuem_ent/agent"
-	"github.com/doncicuto/openuem_ent/printer"
+	"github.com/open-uem/openuem_ent/agent"
+	"github.com/open-uem/openuem_ent/printer"
 )
 
 // Printer is the model entity for the Printer schema.
