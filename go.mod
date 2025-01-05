@@ -1,6 +1,6 @@
-module github.com/open-uem/openuem_ent
+module github.com/open-uem/openuem-ent
 
-go 1.23.1
+go 1.23.4
 
 require entgo.io/ent v0.14.1
 
