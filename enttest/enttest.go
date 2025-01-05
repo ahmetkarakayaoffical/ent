@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/open-uem/openuem_ent"
+	"github.com/open-uem/ent"
 	// required by schema hooks.
-	_ "github.com/open-uem/openuem_ent/runtime"
+	_ "github.com/open-uem/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/open-uem/openuem_ent/migrate"
+	"github.com/open-uem/ent/migrate"
 )
 
 type (
@@ -25,13 +25,13 @@ type (
 	Option func(*options)
 
 	options struct {
-		opts        []openuem_ent.Option
+		opts        []ent.Option
 		migrateOpts []schema.MigrateOption
 	}
 )
 
 // WithOptions forwards options to client creation.
-func WithOptions(opts ...openuem_ent.Option) Option {
+func WithOptions(opts ...ent.Option) Option {
 	return func(o *options) {
 		o.opts = append(o.opts, opts...)
 	}
@@ -52,10 +52,10 @@ func newOptions(opts []Option) *options {
 	return o
 }
 
-// Open calls openuem_ent.Open and auto-run migration.
-func Open(t TestingT, driverName, dataSourceName string, opts ...Option) *openuem_ent.Client {
+// Open calls ent.Open and auto-run migration.
+func Open(t TestingT, driverName, dataSourceName string, opts ...Option) *ent.Client {
 	o := newOptions(opts)
-	c, err := openuem_ent.Open(driverName, dataSourceName, o.opts...)
+	c, err := ent.Open(driverName, dataSourceName, o.opts...)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
@@ -64,14 +64,14 @@ func Open(t TestingT, driverName, dataSourceName string, opts ...Option) *openue
 	return c
 }
 
-// NewClient calls openuem_ent.NewClient and auto-run migration.
-func NewClient(t TestingT, opts ...Option) *openuem_ent.Client {
+// NewClient calls ent.NewClient and auto-run migration.
+func NewClient(t TestingT, opts ...Option) *ent.Client {
 	o := newOptions(opts)
-	c := openuem_ent.NewClient(o.opts...)
+	c := ent.NewClient(o.opts...)
 	migrateSchema(t, c, o)
 	return c
 }
-func migrateSchema(t TestingT, c *openuem_ent.Client, o *options) {
+func migrateSchema(t TestingT, c *ent.Client, o *options) {
 	tables, err := schema.CopyTables(migrate.Tables)
 	if err != nil {
 		t.Error(err)

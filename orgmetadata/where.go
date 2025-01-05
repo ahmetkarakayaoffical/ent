@@ -5,7 +5,7 @@ package orgmetadata
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/open-uem/openuem_ent/predicate"
+	"github.com/open-uem/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
