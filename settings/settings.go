@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -69,8 +70,17 @@ const (
 	FieldAgentReportFrequenceInMinutes = "agent_report_frequence_in_minutes"
 	// FieldRequestVncPin holds the string denoting the request_vnc_pin field in the database.
 	FieldRequestVncPin = "request_vnc_pin"
+	// EdgeTag holds the string denoting the tag edge name in mutations.
+	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
 	Table = "settings"
+	// TagTable is the table that holds the tag relation/edge.
+	TagTable = "settings"
+	// TagInverseTable is the table name for the Tag entity.
+	// It exists in this package in order to avoid circular dependency with the "tag" package.
+	TagInverseTable = "tags"
+	// TagColumn is the table column denoting the tag relation/edge.
+	TagColumn = "settings_tag"
 )
 
 // Columns holds all SQL columns for settings fields.
@@ -106,10 +116,21 @@ var Columns = []string{
 	FieldRequestVncPin,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"settings_tag",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -297,4 +318,18 @@ func ByAgentReportFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
 // ByRequestVncPin orders the results by the request_vnc_pin field.
 func ByRequestVncPin(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRequestVncPin, opts...).ToFunc()
+}
+
+// ByTagField orders the results by tag field.
+func ByTagField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTagStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newTagStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TagInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TagTable, TagColumn),
+	)
 }

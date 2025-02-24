@@ -460,12 +460,21 @@ var (
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 		{Name: "agent_report_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
 		{Name: "request_vnc_pin", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
 	SettingsTable = &schema.Table{
 		Name:       "settings",
 		Columns:    SettingsColumns,
 		PrimaryKey: []*schema.Column{SettingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "settings_tags_tag",
+				Columns:    []*schema.Column{SettingsColumns[29]},
+				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// SharesColumns holds the columns for the "shares" table.
 	SharesColumns = []*schema.Column{
@@ -651,6 +660,7 @@ func init() {
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
+	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	TagsTable.ForeignKeys[0].RefTable = TagsTable

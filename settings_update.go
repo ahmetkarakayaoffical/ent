@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/settings"
+	"github.com/open-uem/ent/tag"
 )
 
 // SettingsUpdate is the builder for updating Settings entities.
@@ -623,9 +624,34 @@ func (su *SettingsUpdate) ClearRequestVncPin() *SettingsUpdate {
 	return su
 }
 
+// SetTagID sets the "tag" edge to the Tag entity by ID.
+func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
+	su.mutation.SetTagID(id)
+	return su
+}
+
+// SetNillableTagID sets the "tag" edge to the Tag entity by ID if the given value is not nil.
+func (su *SettingsUpdate) SetNillableTagID(id *int) *SettingsUpdate {
+	if id != nil {
+		su = su.SetTagID(*id)
+	}
+	return su
+}
+
+// SetTag sets the "tag" edge to the Tag entity.
+func (su *SettingsUpdate) SetTag(t *Tag) *SettingsUpdate {
+	return su.SetTagID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (su *SettingsUpdate) Mutation() *SettingsMutation {
 	return su.mutation
+}
+
+// ClearTag clears the "tag" edge to the Tag entity.
+func (su *SettingsUpdate) ClearTag() *SettingsUpdate {
+	su.mutation.ClearTag()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -864,6 +890,35 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.RequestVncPinCleared() {
 		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
+	}
+	if su.mutation.TagCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   settings.TagTable,
+			Columns: []string{settings.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.TagIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   settings.TagTable,
+			Columns: []string{settings.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
@@ -1481,9 +1536,34 @@ func (suo *SettingsUpdateOne) ClearRequestVncPin() *SettingsUpdateOne {
 	return suo
 }
 
+// SetTagID sets the "tag" edge to the Tag entity by ID.
+func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
+	suo.mutation.SetTagID(id)
+	return suo
+}
+
+// SetNillableTagID sets the "tag" edge to the Tag entity by ID if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableTagID(id *int) *SettingsUpdateOne {
+	if id != nil {
+		suo = suo.SetTagID(*id)
+	}
+	return suo
+}
+
+// SetTag sets the "tag" edge to the Tag entity.
+func (suo *SettingsUpdateOne) SetTag(t *Tag) *SettingsUpdateOne {
+	return suo.SetTagID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (suo *SettingsUpdateOne) Mutation() *SettingsMutation {
 	return suo.mutation
+}
+
+// ClearTag clears the "tag" edge to the Tag entity.
+func (suo *SettingsUpdateOne) ClearTag() *SettingsUpdateOne {
+	suo.mutation.ClearTag()
+	return suo
 }
 
 // Where appends a list predicates to the SettingsUpdate builder.
@@ -1752,6 +1832,35 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.RequestVncPinCleared() {
 		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
+	}
+	if suo.mutation.TagCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   settings.TagTable,
+			Columns: []string{settings.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.TagIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   settings.TagTable,
+			Columns: []string{settings.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.AddModifiers(suo.modifiers...)
 	_node = &Settings{config: suo.config}

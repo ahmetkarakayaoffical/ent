@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -43,5 +44,12 @@ func (Settings) Fields() []ent.Field {
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 		field.Int("agent_report_frequence_in_minutes").Optional().Default(60),
 		field.Bool("request_vnc_pin").Optional().Default(true),
+	}
+}
+
+// Edges of the Settings.
+func (Settings) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("tag", Tag.Type).Unique(),
 	}
 }

@@ -14339,6 +14339,8 @@ type SettingsMutation struct {
 	addagent_report_frequence_in_minutes *int
 	request_vnc_pin                      *bool
 	clearedFields                        map[string]struct{}
+	tag                                  *int
+	clearedtag                           bool
 	done                                 bool
 	oldValue                             func(context.Context) (*Settings, error)
 	predicates                           []predicate.Settings
@@ -15940,6 +15942,45 @@ func (m *SettingsMutation) ResetRequestVncPin() {
 	delete(m.clearedFields, settings.FieldRequestVncPin)
 }
 
+// SetTagID sets the "tag" edge to the Tag entity by id.
+func (m *SettingsMutation) SetTagID(id int) {
+	m.tag = &id
+}
+
+// ClearTag clears the "tag" edge to the Tag entity.
+func (m *SettingsMutation) ClearTag() {
+	m.clearedtag = true
+}
+
+// TagCleared reports if the "tag" edge to the Tag entity was cleared.
+func (m *SettingsMutation) TagCleared() bool {
+	return m.clearedtag
+}
+
+// TagID returns the "tag" edge ID in the mutation.
+func (m *SettingsMutation) TagID() (id int, exists bool) {
+	if m.tag != nil {
+		return *m.tag, true
+	}
+	return
+}
+
+// TagIDs returns the "tag" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TagID instead. It exists only for internal usage by the builders.
+func (m *SettingsMutation) TagIDs() (ids []int) {
+	if id := m.tag; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetTag resets all changes to the "tag" edge.
+func (m *SettingsMutation) ResetTag() {
+	m.tag = nil
+	m.clearedtag = false
+}
+
 // Where appends a list predicates to the SettingsMutation builder.
 func (m *SettingsMutation) Where(ps ...predicate.Settings) {
 	m.predicates = append(m.predicates, ps...)
@@ -16778,19 +16819,28 @@ func (m *SettingsMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SettingsMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.tag != nil {
+		edges = append(edges, settings.EdgeTag)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *SettingsMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case settings.EdgeTag:
+		if id := m.tag; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettingsMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -16802,25 +16852,42 @@ func (m *SettingsMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SettingsMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedtag {
+		edges = append(edges, settings.EdgeTag)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *SettingsMutation) EdgeCleared(name string) bool {
+	switch name {
+	case settings.EdgeTag:
+		return m.clearedtag
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *SettingsMutation) ClearEdge(name string) error {
+	switch name {
+	case settings.EdgeTag:
+		m.ClearTag()
+		return nil
+	}
 	return fmt.Errorf("unknown Settings unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *SettingsMutation) ResetEdge(name string) error {
+	switch name {
+	case settings.EdgeTag:
+		m.ResetTag()
+		return nil
+	}
 	return fmt.Errorf("unknown Settings edge %s", name)
 }
 

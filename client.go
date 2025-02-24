@@ -3220,6 +3220,22 @@ func (c *SettingsClient) GetX(ctx context.Context, id int) *Settings {
 	return obj
 }
 
+// QueryTag queries the tag edge of a Settings.
+func (c *SettingsClient) QueryTag(s *Settings) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settings.Table, settings.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, settings.TagTable, settings.TagColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SettingsClient) Hooks() []Hook {
 	return c.hooks.Settings

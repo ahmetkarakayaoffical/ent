@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/open-uem/ent/predicate"
 )
 
@@ -1927,6 +1928,29 @@ func RequestVncPinIsNil() predicate.Settings {
 // RequestVncPinNotNil applies the NotNil predicate on the "request_vnc_pin" field.
 func RequestVncPinNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldRequestVncPin))
+}
+
+// HasTag applies the HasEdge predicate on the "tag" edge.
+func HasTag() predicate.Settings {
+	return predicate.Settings(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, TagTable, TagColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTagWith applies the HasEdge predicate on the "tag" edge with a given conditions (other predicates).
+func HasTagWith(preds ...predicate.Tag) predicate.Settings {
+	return predicate.Settings(func(s *sql.Selector) {
+		step := newTagStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

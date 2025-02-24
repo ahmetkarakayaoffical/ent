@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/open-uem/ent/settings"
+	"github.com/open-uem/ent/tag"
 )
 
 // Settings is the model entity for the Settings schema.
@@ -73,7 +74,31 @@ type Settings struct {
 	AgentReportFrequenceInMinutes int `json:"agent_report_frequence_in_minutes,omitempty"`
 	// RequestVncPin holds the value of the "request_vnc_pin" field.
 	RequestVncPin bool `json:"request_vnc_pin,omitempty"`
-	selectValues  sql.SelectValues
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SettingsQuery when eager-loading is set.
+	Edges        SettingsEdges `json:"edges"`
+	settings_tag *int
+	selectValues sql.SelectValues
+}
+
+// SettingsEdges holds the relations/edges for other nodes in the graph.
+type SettingsEdges struct {
+	// Tag holds the value of the tag edge.
+	Tag *Tag `json:"tag,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// TagOrErr returns the Tag value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SettingsEdges) TagOrErr() (*Tag, error) {
+	if e.Tag != nil {
+		return e.Tag, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: tag.Label}
+	}
+	return nil, &NotLoadedError{edge: "tag"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -89,6 +114,8 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
+		case settings.ForeignKeys[0]: // settings_tag
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -278,6 +305,13 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.RequestVncPin = value.Bool
 			}
+		case settings.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field settings_tag", value)
+			} else if value.Valid {
+				s.settings_tag = new(int)
+				*s.settings_tag = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -289,6 +323,11 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Settings) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
+}
+
+// QueryTag queries the "tag" edge of the Settings entity.
+func (s *Settings) QueryTag() *TagQuery {
+	return NewSettingsClient(s.config).QueryTag(s)
 }
 
 // Update returns a builder for updating this Settings.

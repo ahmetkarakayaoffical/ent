@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/settings"
+	"github.com/open-uem/ent/tag"
 )
 
 // SettingsCreate is the builder for creating a Settings entity.
@@ -414,6 +415,25 @@ func (sc *SettingsCreate) SetNillableRequestVncPin(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetTagID sets the "tag" edge to the Tag entity by ID.
+func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
+	sc.mutation.SetTagID(id)
+	return sc
+}
+
+// SetNillableTagID sets the "tag" edge to the Tag entity by ID if the given value is not nil.
+func (sc *SettingsCreate) SetNillableTagID(id *int) *SettingsCreate {
+	if id != nil {
+		sc = sc.SetTagID(*id)
+	}
+	return sc
+}
+
+// SetTag sets the "tag" edge to the Tag entity.
+func (sc *SettingsCreate) SetTag(t *Tag) *SettingsCreate {
+	return sc.SetTagID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (sc *SettingsCreate) Mutation() *SettingsMutation {
 	return sc.mutation
@@ -651,6 +671,23 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.RequestVncPin(); ok {
 		_spec.SetField(settings.FieldRequestVncPin, field.TypeBool, value)
 		_node.RequestVncPin = value
+	}
+	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   settings.TagTable,
+			Columns: []string{settings.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.settings_tag = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
