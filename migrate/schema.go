@@ -29,6 +29,7 @@ var (
 		{Name: "agent_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled"}, Default: "WaitingForAdmission"},
 		{Name: "certificate_ready", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "restart_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "is_remote", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -39,7 +40,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[19]},
+				Columns:    []*schema.Column{AgentsColumns[20]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

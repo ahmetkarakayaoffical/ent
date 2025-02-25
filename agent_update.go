@@ -380,6 +380,26 @@ func (au *AgentUpdate) ClearRestartRequired() *AgentUpdate {
 	return au
 }
 
+// SetIsRemote sets the "is_remote" field.
+func (au *AgentUpdate) SetIsRemote(b bool) *AgentUpdate {
+	au.mutation.SetIsRemote(b)
+	return au
+}
+
+// SetNillableIsRemote sets the "is_remote" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableIsRemote(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetIsRemote(*b)
+	}
+	return au
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (au *AgentUpdate) ClearIsRemote() *AgentUpdate {
+	au.mutation.ClearIsRemote()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1030,6 +1050,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.RestartRequiredCleared() {
 		_spec.ClearField(agent.FieldRestartRequired, field.TypeBool)
+	}
+	if value, ok := au.mutation.IsRemote(); ok {
+		_spec.SetField(agent.FieldIsRemote, field.TypeBool, value)
+	}
+	if au.mutation.IsRemoteCleared() {
+		_spec.ClearField(agent.FieldIsRemote, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1984,6 +2010,26 @@ func (auo *AgentUpdateOne) ClearRestartRequired() *AgentUpdateOne {
 	return auo
 }
 
+// SetIsRemote sets the "is_remote" field.
+func (auo *AgentUpdateOne) SetIsRemote(b bool) *AgentUpdateOne {
+	auo.mutation.SetIsRemote(b)
+	return auo
+}
+
+// SetNillableIsRemote sets the "is_remote" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableIsRemote(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetIsRemote(*b)
+	}
+	return auo
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (auo *AgentUpdateOne) ClearIsRemote() *AgentUpdateOne {
+	auo.mutation.ClearIsRemote()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -2664,6 +2710,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.RestartRequiredCleared() {
 		_spec.ClearField(agent.FieldRestartRequired, field.TypeBool)
+	}
+	if value, ok := auo.mutation.IsRemote(); ok {
+		_spec.SetField(agent.FieldIsRemote, field.TypeBool, value)
+	}
+	if auo.mutation.IsRemoteCleared() {
+		_spec.ClearField(agent.FieldIsRemote, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

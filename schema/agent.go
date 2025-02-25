@@ -34,6 +34,7 @@ func (Agent) Fields() []ent.Field {
 		field.Enum("agent_status").Values("WaitingForAdmission", "Enabled", "Disabled").Optional().Default("WaitingForAdmission"),
 		field.Bool("certificate_ready").Optional().Default(false),
 		field.Bool("restart_required").Optional().Default(false),
+		field.Bool("is_remote").Optional().Default(false),
 	}
 }
 

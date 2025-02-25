@@ -150,6 +150,11 @@ func RestartRequired(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldRestartRequired, v))
 }
 
+// IsRemote applies equality check predicate on the "is_remote" field. It's identical to IsRemoteEQ.
+func IsRemote(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsRemote, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1228,6 +1233,26 @@ func RestartRequiredIsNil() predicate.Agent {
 // RestartRequiredNotNil applies the NotNil predicate on the "restart_required" field.
 func RestartRequiredNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldRestartRequired))
+}
+
+// IsRemoteEQ applies the EQ predicate on the "is_remote" field.
+func IsRemoteEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsRemote, v))
+}
+
+// IsRemoteNEQ applies the NEQ predicate on the "is_remote" field.
+func IsRemoteNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldIsRemote, v))
+}
+
+// IsRemoteIsNil applies the IsNil predicate on the "is_remote" field.
+func IsRemoteIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldIsRemote))
+}
+
+// IsRemoteNotNil applies the NotNil predicate on the "is_remote" field.
+func IsRemoteNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldIsRemote))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

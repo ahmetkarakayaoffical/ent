@@ -95,6 +95,7 @@ type AgentMutation struct {
 	agent_status            *agent.AgentStatus
 	certificate_ready       *bool
 	restart_required        *bool
+	is_remote               *bool
 	clearedFields           map[string]struct{}
 	computer                *int
 	clearedcomputer         bool
@@ -1075,6 +1076,55 @@ func (m *AgentMutation) ResetRestartRequired() {
 	delete(m.clearedFields, agent.FieldRestartRequired)
 }
 
+// SetIsRemote sets the "is_remote" field.
+func (m *AgentMutation) SetIsRemote(b bool) {
+	m.is_remote = &b
+}
+
+// IsRemote returns the value of the "is_remote" field in the mutation.
+func (m *AgentMutation) IsRemote() (r bool, exists bool) {
+	v := m.is_remote
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsRemote returns the old "is_remote" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldIsRemote(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsRemote is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsRemote requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsRemote: %w", err)
+	}
+	return oldValue.IsRemote, nil
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (m *AgentMutation) ClearIsRemote() {
+	m.is_remote = nil
+	m.clearedFields[agent.FieldIsRemote] = struct{}{}
+}
+
+// IsRemoteCleared returns if the "is_remote" field was cleared in this mutation.
+func (m *AgentMutation) IsRemoteCleared() bool {
+	_, ok := m.clearedFields[agent.FieldIsRemote]
+	return ok
+}
+
+// ResetIsRemote resets all changes to the "is_remote" field.
+func (m *AgentMutation) ResetIsRemote() {
+	m.is_remote = nil
+	delete(m.clearedFields, agent.FieldIsRemote)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -1844,7 +1894,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -1899,6 +1949,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.restart_required != nil {
 		fields = append(fields, agent.FieldRestartRequired)
 	}
+	if m.is_remote != nil {
+		fields = append(fields, agent.FieldIsRemote)
+	}
 	return fields
 }
 
@@ -1943,6 +1996,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.CertificateReady()
 	case agent.FieldRestartRequired:
 		return m.RestartRequired()
+	case agent.FieldIsRemote:
+		return m.IsRemote()
 	}
 	return nil, false
 }
@@ -1988,6 +2043,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldCertificateReady(ctx)
 	case agent.FieldRestartRequired:
 		return m.OldRestartRequired(ctx)
+	case agent.FieldIsRemote:
+		return m.OldIsRemote(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2123,6 +2180,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRestartRequired(v)
 		return nil
+	case agent.FieldIsRemote:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsRemote(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2195,6 +2259,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldRestartRequired) {
 		fields = append(fields, agent.FieldRestartRequired)
 	}
+	if m.FieldCleared(agent.FieldIsRemote) {
+		fields = append(fields, agent.FieldIsRemote)
+	}
 	return fields
 }
 
@@ -2250,6 +2317,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldRestartRequired:
 		m.ClearRestartRequired()
+		return nil
+	case agent.FieldIsRemote:
+		m.ClearIsRemote()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2312,6 +2382,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldRestartRequired:
 		m.ResetRestartRequired()
+		return nil
+	case agent.FieldIsRemote:
+		m.ResetIsRemote()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

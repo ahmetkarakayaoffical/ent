@@ -50,6 +50,8 @@ const (
 	FieldCertificateReady = "certificate_ready"
 	// FieldRestartRequired holds the string denoting the restart_required field in the database.
 	FieldRestartRequired = "restart_required"
+	// FieldIsRemote holds the string denoting the is_remote field in the database.
+	FieldIsRemote = "is_remote"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -238,6 +240,7 @@ var Columns = []string{
 	FieldAgentStatus,
 	FieldCertificateReady,
 	FieldRestartRequired,
+	FieldIsRemote,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -294,6 +297,8 @@ var (
 	DefaultCertificateReady bool
 	// DefaultRestartRequired holds the default value on creation for the "restart_required" field.
 	DefaultRestartRequired bool
+	// DefaultIsRemote holds the default value on creation for the "is_remote" field.
+	DefaultIsRemote bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -421,6 +426,11 @@ func ByCertificateReady(opts ...sql.OrderTermOption) OrderOption {
 // ByRestartRequired orders the results by the restart_required field.
 func ByRestartRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRestartRequired, opts...).ToFunc()
+}
+
+// ByIsRemote orders the results by the is_remote field.
+func ByIsRemote(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsRemote, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

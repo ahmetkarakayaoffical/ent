@@ -274,6 +274,20 @@ func (ac *AgentCreate) SetNillableRestartRequired(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetIsRemote sets the "is_remote" field.
+func (ac *AgentCreate) SetIsRemote(b bool) *AgentCreate {
+	ac.mutation.SetIsRemote(b)
+	return ac
+}
+
+// SetNillableIsRemote sets the "is_remote" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableIsRemote(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetIsRemote(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -608,6 +622,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultRestartRequired
 		ac.mutation.SetRestartRequired(v)
 	}
+	if _, ok := ac.mutation.IsRemote(); !ok {
+		v := agent.DefaultIsRemote
+		ac.mutation.SetIsRemote(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -751,6 +769,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.RestartRequired(); ok {
 		_spec.SetField(agent.FieldRestartRequired, field.TypeBool, value)
 		_node.RestartRequired = value
+	}
+	if value, ok := ac.mutation.IsRemote(); ok {
+		_spec.SetField(agent.FieldIsRemote, field.TypeBool, value)
+		_node.IsRemote = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1345,6 +1367,24 @@ func (u *AgentUpsert) ClearRestartRequired() *AgentUpsert {
 	return u
 }
 
+// SetIsRemote sets the "is_remote" field.
+func (u *AgentUpsert) SetIsRemote(v bool) *AgentUpsert {
+	u.Set(agent.FieldIsRemote, v)
+	return u
+}
+
+// UpdateIsRemote sets the "is_remote" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateIsRemote() *AgentUpsert {
+	u.SetExcluded(agent.FieldIsRemote)
+	return u
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (u *AgentUpsert) ClearIsRemote() *AgentUpsert {
+	u.SetNull(agent.FieldIsRemote)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1740,6 +1780,27 @@ func (u *AgentUpsertOne) UpdateRestartRequired() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearRestartRequired() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearRestartRequired()
+	})
+}
+
+// SetIsRemote sets the "is_remote" field.
+func (u *AgentUpsertOne) SetIsRemote(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsRemote(v)
+	})
+}
+
+// UpdateIsRemote sets the "is_remote" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateIsRemote() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsRemote()
+	})
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (u *AgentUpsertOne) ClearIsRemote() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsRemote()
 	})
 }
 
@@ -2305,6 +2366,27 @@ func (u *AgentUpsertBulk) UpdateRestartRequired() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearRestartRequired() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearRestartRequired()
+	})
+}
+
+// SetIsRemote sets the "is_remote" field.
+func (u *AgentUpsertBulk) SetIsRemote(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsRemote(v)
+	})
+}
+
+// UpdateIsRemote sets the "is_remote" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateIsRemote() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsRemote()
+	})
+}
+
+// ClearIsRemote clears the value of the "is_remote" field.
+func (u *AgentUpsertBulk) ClearIsRemote() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsRemote()
 	})
 }
 
