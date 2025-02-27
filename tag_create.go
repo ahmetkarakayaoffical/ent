@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/agent"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
 )
 
@@ -95,6 +96,21 @@ func (tc *TagCreate) AddChildren(t ...*Tag) *TagCreate {
 		ids[i] = t[i].ID
 	}
 	return tc.AddChildIDs(ids...)
+}
+
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (tc *TagCreate) AddProfileIDs(ids ...int) *TagCreate {
+	tc.mutation.AddProfileIDs(ids...)
+	return tc
+}
+
+// AddProfile adds the "profile" edges to the Profile entity.
+func (tc *TagCreate) AddProfile(p ...*Profile) *TagCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tc.AddProfileIDs(ids...)
 }
 
 // Mutation returns the TagMutation object of the builder.
@@ -223,6 +239,22 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

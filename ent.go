@@ -25,6 +25,7 @@ import (
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/server"
@@ -33,6 +34,7 @@ import (
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
 )
@@ -108,6 +110,7 @@ func checkColumn(table, column string) error {
 			operatingsystem.Table: operatingsystem.ValidColumn,
 			orgmetadata.Table:     orgmetadata.ValidColumn,
 			printer.Table:         printer.ValidColumn,
+			profile.Table:         profile.ValidColumn,
 			release.Table:         release.ValidColumn,
 			revocation.Table:      revocation.ValidColumn,
 			server.Table:          server.ValidColumn,
@@ -116,6 +119,7 @@ func checkColumn(table, column string) error {
 			share.Table:           share.ValidColumn,
 			systemupdate.Table:    systemupdate.ValidColumn,
 			tag.Table:             tag.ValidColumn,
+			task.Table:            task.ValidColumn,
 			update.Table:          update.ValidColumn,
 			user.Table:            user.ValidColumn,
 		})

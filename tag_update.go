@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
 )
 
@@ -126,6 +127,21 @@ func (tu *TagUpdate) AddChildren(t ...*Tag) *TagUpdate {
 	return tu.AddChildIDs(ids...)
 }
 
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (tu *TagUpdate) AddProfileIDs(ids ...int) *TagUpdate {
+	tu.mutation.AddProfileIDs(ids...)
+	return tu
+}
+
+// AddProfile adds the "profile" edges to the Profile entity.
+func (tu *TagUpdate) AddProfile(p ...*Profile) *TagUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tu.AddProfileIDs(ids...)
+}
+
 // Mutation returns the TagMutation object of the builder.
 func (tu *TagUpdate) Mutation() *TagMutation {
 	return tu.mutation
@@ -177,6 +193,27 @@ func (tu *TagUpdate) RemoveChildren(t ...*Tag) *TagUpdate {
 		ids[i] = t[i].ID
 	}
 	return tu.RemoveChildIDs(ids...)
+}
+
+// ClearProfile clears all "profile" edges to the Profile entity.
+func (tu *TagUpdate) ClearProfile() *TagUpdate {
+	tu.mutation.ClearProfile()
+	return tu
+}
+
+// RemoveProfileIDs removes the "profile" edge to Profile entities by IDs.
+func (tu *TagUpdate) RemoveProfileIDs(ids ...int) *TagUpdate {
+	tu.mutation.RemoveProfileIDs(ids...)
+	return tu
+}
+
+// RemoveProfile removes "profile" edges to Profile entities.
+func (tu *TagUpdate) RemoveProfile(p ...*Profile) *TagUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tu.RemoveProfileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -365,6 +402,51 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedProfileIDs(); len(nodes) > 0 && !tu.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -484,6 +566,21 @@ func (tuo *TagUpdateOne) AddChildren(t ...*Tag) *TagUpdateOne {
 	return tuo.AddChildIDs(ids...)
 }
 
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (tuo *TagUpdateOne) AddProfileIDs(ids ...int) *TagUpdateOne {
+	tuo.mutation.AddProfileIDs(ids...)
+	return tuo
+}
+
+// AddProfile adds the "profile" edges to the Profile entity.
+func (tuo *TagUpdateOne) AddProfile(p ...*Profile) *TagUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tuo.AddProfileIDs(ids...)
+}
+
 // Mutation returns the TagMutation object of the builder.
 func (tuo *TagUpdateOne) Mutation() *TagMutation {
 	return tuo.mutation
@@ -535,6 +632,27 @@ func (tuo *TagUpdateOne) RemoveChildren(t ...*Tag) *TagUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return tuo.RemoveChildIDs(ids...)
+}
+
+// ClearProfile clears all "profile" edges to the Profile entity.
+func (tuo *TagUpdateOne) ClearProfile() *TagUpdateOne {
+	tuo.mutation.ClearProfile()
+	return tuo
+}
+
+// RemoveProfileIDs removes the "profile" edge to Profile entities by IDs.
+func (tuo *TagUpdateOne) RemoveProfileIDs(ids ...int) *TagUpdateOne {
+	tuo.mutation.RemoveProfileIDs(ids...)
+	return tuo
+}
+
+// RemoveProfile removes "profile" edges to Profile entities.
+func (tuo *TagUpdateOne) RemoveProfile(p ...*Profile) *TagUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tuo.RemoveProfileIDs(ids...)
 }
 
 // Where appends a list predicates to the TagUpdate builder.
@@ -746,6 +864,51 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedProfileIDs(); len(nodes) > 0 && !tuo.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   tag.ProfileTable,
+			Columns: tag.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

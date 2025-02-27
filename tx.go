@@ -38,6 +38,8 @@ type Tx struct {
 	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Profile is the client for interacting with the Profile builders.
+	Profile *ProfileClient
 	// Release is the client for interacting with the Release builders.
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
@@ -54,6 +56,8 @@ type Tx struct {
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
 	Tag *TagClient
+	// Task is the client for interacting with the Task builders.
+	Task *TaskClient
 	// Update is the client for interacting with the Update builders.
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
@@ -202,6 +206,7 @@ func (tx *Tx) init() {
 	tx.OperatingSystem = NewOperatingSystemClient(tx.config)
 	tx.OrgMetadata = NewOrgMetadataClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
+	tx.Profile = NewProfileClient(tx.config)
 	tx.Release = NewReleaseClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
 	tx.Server = NewServerClient(tx.config)
@@ -210,6 +215,7 @@ func (tx *Tx) init() {
 	tx.Share = NewShareClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
 	tx.Tag = NewTagClient(tx.config)
+	tx.Task = NewTaskClient(tx.config)
 	tx.Update = NewUpdateClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }

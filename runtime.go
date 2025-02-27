@@ -9,11 +9,13 @@ import (
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/user"
 )
 
@@ -107,6 +109,12 @@ func init() {
 	orgmetadataDescName := orgmetadataFields[0].Descriptor()
 	// orgmetadata.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	orgmetadata.NameValidator = orgmetadataDescName.Validators[0].(func(string) error)
+	profileFields := schema.Profile{}.Fields()
+	_ = profileFields
+	// profileDescName is the schema descriptor for name field.
+	profileDescName := profileFields[0].Descriptor()
+	// profile.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	profile.NameValidator = profileDescName.Validators[0].(func(string) error)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.
@@ -197,6 +205,16 @@ func init() {
 	tagDescTag := tagFields[0].Descriptor()
 	// tag.TagValidator is a validator for the "tag" field. It is called by the builders before save.
 	tag.TagValidator = tagDescTag.Validators[0].(func(string) error)
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescName is the schema descriptor for name field.
+	taskDescName := taskFields[0].Descriptor()
+	// task.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	task.NameValidator = taskDescName.Validators[0].(func(string) error)
+	// taskDescExecute is the schema descriptor for execute field.
+	taskDescExecute := taskFields[2].Descriptor()
+	// task.DefaultExecute holds the default value on creation for the execute field.
+	task.DefaultExecute = taskDescExecute.Default.(string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

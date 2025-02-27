@@ -329,6 +329,17 @@ var (
 			},
 		},
 	}
+	// ProfilesColumns holds the columns for the "profiles" table.
+	ProfilesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// ProfilesTable holds the schema information for the "profiles" table.
+	ProfilesTable = &schema.Table{
+		Name:       "profiles",
+		Columns:    ProfilesColumns,
+		PrimaryKey: []*schema.Column{ProfilesColumns[0]},
+	}
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -529,6 +540,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString},
 		{Name: "tag_children", Type: field.TypeInt, Nullable: true},
+		{Name: "task_tags", Type: field.TypeInt, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
 	TagsTable = &schema.Table{
@@ -540,6 +552,35 @@ var (
 				Symbol:     "tags_tags_children",
 				Columns:    []*schema.Column{TagsColumns[4]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tags_tasks_tags",
+				Columns:    []*schema.Column{TagsColumns[5]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"install", "update", "delete", "execute", "reboot", "poweroff"}},
+		{Name: "execute", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_profiles_tasks",
+				Columns:    []*schema.Column{TasksColumns[5]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -618,6 +659,31 @@ var (
 			},
 		},
 	}
+	// ProfileTagsColumns holds the columns for the "profile_tags" table.
+	ProfileTagsColumns = []*schema.Column{
+		{Name: "profile_id", Type: field.TypeInt},
+		{Name: "tag_id", Type: field.TypeInt},
+	}
+	// ProfileTagsTable holds the schema information for the "profile_tags" table.
+	ProfileTagsTable = &schema.Table{
+		Name:       "profile_tags",
+		Columns:    ProfileTagsColumns,
+		PrimaryKey: []*schema.Column{ProfileTagsColumns[0], ProfileTagsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profile_tags_profile_id",
+				Columns:    []*schema.Column{ProfileTagsColumns[0]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "profile_tags_tag_id",
+				Columns:    []*schema.Column{ProfileTagsColumns[1]},
+				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -633,6 +699,7 @@ var (
 		OperatingSystemsTable,
 		OrgMetadataTable,
 		PrintersTable,
+		ProfilesTable,
 		ReleasesTable,
 		RevocationsTable,
 		ServersTable,
@@ -641,9 +708,11 @@ var (
 		SharesTable,
 		SystemUpdatesTable,
 		TagsTable,
+		TasksTable,
 		UpdatesTable,
 		UsersTable,
 		AgentTagsTable,
+		ProfileTagsTable,
 	}
 )
 
@@ -665,7 +734,11 @@ func init() {
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	TagsTable.ForeignKeys[0].RefTable = TagsTable
+	TagsTable.ForeignKeys[1].RefTable = TasksTable
+	TasksTable.ForeignKeys[0].RefTable = ProfilesTable
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
+	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
+	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
 }

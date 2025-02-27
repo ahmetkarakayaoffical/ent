@@ -45,6 +45,9 @@ type OrgMetadata func(*sql.Selector)
 // Printer is the predicate function for printer builders.
 type Printer func(*sql.Selector)
 
+// Profile is the predicate function for profile builders.
+type Profile func(*sql.Selector)
+
 // Release is the predicate function for release builders.
 type Release func(*sql.Selector)
 
@@ -68,6 +71,9 @@ type SystemUpdate func(*sql.Selector)
 
 // Tag is the predicate function for tag builders.
 type Tag func(*sql.Selector)
+
+// Task is the predicate function for task builders.
+type Task func(*sql.Selector)
 
 // Update is the predicate function for update builders.
 type Update func(*sql.Selector)
