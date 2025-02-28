@@ -15,7 +15,7 @@ type Task struct {
 func (Task) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").NotEmpty(),
-		field.Enum("type").Optional().Values("tasks.winget_install", "tasks.winget_update", "tasks.winget_delete", "tasks.execute_command", "tasks.reboot", "tasks.poweroff"),
+		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "execute_command", "reboot", "poweroff"),
 		field.String("execute").Optional().Default(""),
 		field.Time("when").Optional(),
 	}

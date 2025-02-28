@@ -86,12 +86,12 @@ type Type string
 
 // Type values.
 const (
-	TypeInstall  Type = "install"
-	TypeUpdate   Type = "update"
-	TypeDelete   Type = "delete"
-	TypeExecute  Type = "execute"
-	TypeReboot   Type = "reboot"
-	TypePoweroff Type = "poweroff"
+	TypeWingetInstall  Type = "winget_install"
+	TypeWingetUpdate   Type = "winget_update"
+	TypeWingetDelete   Type = "winget_delete"
+	TypeExecuteCommand Type = "execute_command"
+	TypeReboot         Type = "reboot"
+	TypePoweroff       Type = "poweroff"
 )
 
 func (_type Type) String() string {
@@ -101,7 +101,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeInstall, TypeUpdate, TypeDelete, TypeExecute, TypeReboot, TypePoweroff:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeExecuteCommand, TypeReboot, TypePoweroff:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
