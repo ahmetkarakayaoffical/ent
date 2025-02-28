@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldApplyToAll holds the string denoting the apply_to_all field in the database.
+	FieldApplyToAll = "apply_to_all"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -38,6 +40,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldApplyToAll,
 }
 
 var (
@@ -59,6 +62,8 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultApplyToAll holds the default value on creation for the "apply_to_all" field.
+	DefaultApplyToAll bool
 )
 
 // OrderOption defines the ordering options for the Profile queries.
@@ -72,6 +77,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByApplyToAll orders the results by the apply_to_all field.
+func ByApplyToAll(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApplyToAll, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.

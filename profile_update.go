@@ -44,6 +44,20 @@ func (pu *ProfileUpdate) SetNillableName(s *string) *ProfileUpdate {
 	return pu
 }
 
+// SetApplyToAll sets the "apply_to_all" field.
+func (pu *ProfileUpdate) SetApplyToAll(b bool) *ProfileUpdate {
+	pu.mutation.SetApplyToAll(b)
+	return pu
+}
+
+// SetNillableApplyToAll sets the "apply_to_all" field if the given value is not nil.
+func (pu *ProfileUpdate) SetNillableApplyToAll(b *bool) *ProfileUpdate {
+	if b != nil {
+		pu.SetApplyToAll(*b)
+	}
+	return pu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (pu *ProfileUpdate) AddTagIDs(ids ...int) *ProfileUpdate {
 	pu.mutation.AddTagIDs(ids...)
@@ -179,6 +193,9 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
 	}
+	if value, ok := pu.mutation.ApplyToAll(); ok {
+		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
+	}
 	if pu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -301,6 +318,20 @@ func (puo *ProfileUpdateOne) SetName(s string) *ProfileUpdateOne {
 func (puo *ProfileUpdateOne) SetNillableName(s *string) *ProfileUpdateOne {
 	if s != nil {
 		puo.SetName(*s)
+	}
+	return puo
+}
+
+// SetApplyToAll sets the "apply_to_all" field.
+func (puo *ProfileUpdateOne) SetApplyToAll(b bool) *ProfileUpdateOne {
+	puo.mutation.SetApplyToAll(b)
+	return puo
+}
+
+// SetNillableApplyToAll sets the "apply_to_all" field if the given value is not nil.
+func (puo *ProfileUpdateOne) SetNillableApplyToAll(b *bool) *ProfileUpdateOne {
+	if b != nil {
+		puo.SetApplyToAll(*b)
 	}
 	return puo
 }
@@ -469,6 +500,9 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
+	}
+	if value, ok := puo.mutation.ApplyToAll(); ok {
+		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
 	}
 	if puo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

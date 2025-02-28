@@ -29,6 +29,20 @@ func (pc *ProfileCreate) SetName(s string) *ProfileCreate {
 	return pc
 }
 
+// SetApplyToAll sets the "apply_to_all" field.
+func (pc *ProfileCreate) SetApplyToAll(b bool) *ProfileCreate {
+	pc.mutation.SetApplyToAll(b)
+	return pc
+}
+
+// SetNillableApplyToAll sets the "apply_to_all" field if the given value is not nil.
+func (pc *ProfileCreate) SetNillableApplyToAll(b *bool) *ProfileCreate {
+	if b != nil {
+		pc.SetApplyToAll(*b)
+	}
+	return pc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (pc *ProfileCreate) AddTagIDs(ids ...int) *ProfileCreate {
 	pc.mutation.AddTagIDs(ids...)
@@ -66,6 +80,7 @@ func (pc *ProfileCreate) Mutation() *ProfileMutation {
 
 // Save creates the Profile in the database.
 func (pc *ProfileCreate) Save(ctx context.Context) (*Profile, error) {
+	pc.defaults()
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -91,6 +106,14 @@ func (pc *ProfileCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProfileCreate) defaults() {
+	if _, ok := pc.mutation.ApplyToAll(); !ok {
+		v := profile.DefaultApplyToAll
+		pc.mutation.SetApplyToAll(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProfileCreate) check() error {
 	if _, ok := pc.mutation.Name(); !ok {
@@ -100,6 +123,9 @@ func (pc *ProfileCreate) check() error {
 		if err := profile.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Profile.name": %w`, err)}
 		}
+	}
+	if _, ok := pc.mutation.ApplyToAll(); !ok {
+		return &ValidationError{Name: "apply_to_all", err: errors.New(`ent: missing required field "Profile.apply_to_all"`)}
 	}
 	return nil
 }
@@ -131,6 +157,10 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := pc.mutation.ApplyToAll(); ok {
+		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
+		_node.ApplyToAll = value
 	}
 	if nodes := pc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -228,6 +258,18 @@ func (u *ProfileUpsert) UpdateName() *ProfileUpsert {
 	return u
 }
 
+// SetApplyToAll sets the "apply_to_all" field.
+func (u *ProfileUpsert) SetApplyToAll(v bool) *ProfileUpsert {
+	u.Set(profile.FieldApplyToAll, v)
+	return u
+}
+
+// UpdateApplyToAll sets the "apply_to_all" field to the value that was provided on create.
+func (u *ProfileUpsert) UpdateApplyToAll() *ProfileUpsert {
+	u.SetExcluded(profile.FieldApplyToAll)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -279,6 +321,20 @@ func (u *ProfileUpsertOne) SetName(v string) *ProfileUpsertOne {
 func (u *ProfileUpsertOne) UpdateName() *ProfileUpsertOne {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetApplyToAll sets the "apply_to_all" field.
+func (u *ProfileUpsertOne) SetApplyToAll(v bool) *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetApplyToAll(v)
+	})
+}
+
+// UpdateApplyToAll sets the "apply_to_all" field to the value that was provided on create.
+func (u *ProfileUpsertOne) UpdateApplyToAll() *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateApplyToAll()
 	})
 }
 
@@ -334,6 +390,7 @@ func (pcb *ProfileCreateBulk) Save(ctx context.Context) ([]*Profile, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProfileMutation)
 				if !ok {
@@ -496,6 +553,20 @@ func (u *ProfileUpsertBulk) SetName(v string) *ProfileUpsertBulk {
 func (u *ProfileUpsertBulk) UpdateName() *ProfileUpsertBulk {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetApplyToAll sets the "apply_to_all" field.
+func (u *ProfileUpsertBulk) SetApplyToAll(v bool) *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetApplyToAll(v)
+	})
+}
+
+// UpdateApplyToAll sets the "apply_to_all" field to the value that was provided on create.
+func (u *ProfileUpsertBulk) UpdateApplyToAll() *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateApplyToAll()
 	})
 }
 

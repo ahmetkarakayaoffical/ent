@@ -58,6 +58,11 @@ func Name(v string) predicate.Profile {
 	return predicate.Profile(sql.FieldEQ(FieldName, v))
 }
 
+// ApplyToAll applies equality check predicate on the "apply_to_all" field. It's identical to ApplyToAllEQ.
+func ApplyToAll(v bool) predicate.Profile {
+	return predicate.Profile(sql.FieldEQ(FieldApplyToAll, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Profile {
 	return predicate.Profile(sql.FieldEQ(FieldName, v))
@@ -121,6 +126,16 @@ func NameEqualFold(v string) predicate.Profile {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.Profile {
 	return predicate.Profile(sql.FieldContainsFold(FieldName, v))
+}
+
+// ApplyToAllEQ applies the EQ predicate on the "apply_to_all" field.
+func ApplyToAllEQ(v bool) predicate.Profile {
+	return predicate.Profile(sql.FieldEQ(FieldApplyToAll, v))
+}
+
+// ApplyToAllNEQ applies the NEQ predicate on the "apply_to_all" field.
+func ApplyToAllNEQ(v bool) predicate.Profile {
+	return predicate.Profile(sql.FieldNEQ(FieldApplyToAll, v))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.

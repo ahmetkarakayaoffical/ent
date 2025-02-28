@@ -10965,6 +10965,7 @@ type ProfileMutation struct {
 	typ           string
 	id            *int
 	name          *string
+	apply_to_all  *bool
 	clearedFields map[string]struct{}
 	tags          map[int]struct{}
 	removedtags   map[int]struct{}
@@ -11111,6 +11112,42 @@ func (m *ProfileMutation) ResetName() {
 	m.name = nil
 }
 
+// SetApplyToAll sets the "apply_to_all" field.
+func (m *ProfileMutation) SetApplyToAll(b bool) {
+	m.apply_to_all = &b
+}
+
+// ApplyToAll returns the value of the "apply_to_all" field in the mutation.
+func (m *ProfileMutation) ApplyToAll() (r bool, exists bool) {
+	v := m.apply_to_all
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApplyToAll returns the old "apply_to_all" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldApplyToAll(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApplyToAll is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApplyToAll requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApplyToAll: %w", err)
+	}
+	return oldValue.ApplyToAll, nil
+}
+
+// ResetApplyToAll resets all changes to the "apply_to_all" field.
+func (m *ProfileMutation) ResetApplyToAll() {
+	m.apply_to_all = nil
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
 func (m *ProfileMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
@@ -11253,9 +11290,12 @@ func (m *ProfileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProfileMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.name != nil {
 		fields = append(fields, profile.FieldName)
+	}
+	if m.apply_to_all != nil {
+		fields = append(fields, profile.FieldApplyToAll)
 	}
 	return fields
 }
@@ -11267,6 +11307,8 @@ func (m *ProfileMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case profile.FieldName:
 		return m.Name()
+	case profile.FieldApplyToAll:
+		return m.ApplyToAll()
 	}
 	return nil, false
 }
@@ -11278,6 +11320,8 @@ func (m *ProfileMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case profile.FieldName:
 		return m.OldName(ctx)
+	case profile.FieldApplyToAll:
+		return m.OldApplyToAll(ctx)
 	}
 	return nil, fmt.Errorf("unknown Profile field %s", name)
 }
@@ -11293,6 +11337,13 @@ func (m *ProfileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case profile.FieldApplyToAll:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApplyToAll(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Profile field %s", name)
@@ -11345,6 +11396,9 @@ func (m *ProfileMutation) ResetField(name string) error {
 	switch name {
 	case profile.FieldName:
 		m.ResetName()
+		return nil
+	case profile.FieldApplyToAll:
+		m.ResetApplyToAll()
 		return nil
 	}
 	return fmt.Errorf("unknown Profile field %s", name)

@@ -115,6 +115,10 @@ func init() {
 	profileDescName := profileFields[0].Descriptor()
 	// profile.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	profile.NameValidator = profileDescName.Validators[0].(func(string) error)
+	// profileDescApplyToAll is the schema descriptor for apply_to_all field.
+	profileDescApplyToAll := profileFields[1].Descriptor()
+	// profile.DefaultApplyToAll holds the default value on creation for the apply_to_all field.
+	profile.DefaultApplyToAll = profileDescApplyToAll.Default.(bool)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.
