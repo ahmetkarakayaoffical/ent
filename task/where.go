@@ -65,6 +65,11 @@ func Execute(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldExecute, v))
 }
 
+// PackageID applies equality check predicate on the "package_id" field. It's identical to PackageIDEQ.
+func PackageID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageID, v))
+}
+
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
 func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
@@ -228,6 +233,81 @@ func ExecuteEqualFold(v string) predicate.Task {
 // ExecuteContainsFold applies the ContainsFold predicate on the "execute" field.
 func ExecuteContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldExecute, v))
+}
+
+// PackageIDEQ applies the EQ predicate on the "package_id" field.
+func PackageIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageID, v))
+}
+
+// PackageIDNEQ applies the NEQ predicate on the "package_id" field.
+func PackageIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldPackageID, v))
+}
+
+// PackageIDIn applies the In predicate on the "package_id" field.
+func PackageIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldPackageID, vs...))
+}
+
+// PackageIDNotIn applies the NotIn predicate on the "package_id" field.
+func PackageIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldPackageID, vs...))
+}
+
+// PackageIDGT applies the GT predicate on the "package_id" field.
+func PackageIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldPackageID, v))
+}
+
+// PackageIDGTE applies the GTE predicate on the "package_id" field.
+func PackageIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldPackageID, v))
+}
+
+// PackageIDLT applies the LT predicate on the "package_id" field.
+func PackageIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldPackageID, v))
+}
+
+// PackageIDLTE applies the LTE predicate on the "package_id" field.
+func PackageIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldPackageID, v))
+}
+
+// PackageIDContains applies the Contains predicate on the "package_id" field.
+func PackageIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldPackageID, v))
+}
+
+// PackageIDHasPrefix applies the HasPrefix predicate on the "package_id" field.
+func PackageIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldPackageID, v))
+}
+
+// PackageIDHasSuffix applies the HasSuffix predicate on the "package_id" field.
+func PackageIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldPackageID, v))
+}
+
+// PackageIDIsNil applies the IsNil predicate on the "package_id" field.
+func PackageIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldPackageID))
+}
+
+// PackageIDNotNil applies the NotNil predicate on the "package_id" field.
+func PackageIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldPackageID))
+}
+
+// PackageIDEqualFold applies the EqualFold predicate on the "package_id" field.
+func PackageIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldPackageID, v))
+}
+
+// PackageIDContainsFold applies the ContainsFold predicate on the "package_id" field.
+func PackageIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldPackageID, v))
 }
 
 // WhenEQ applies the EQ predicate on the "when" field.

@@ -50,6 +50,20 @@ func (tc *TaskCreate) SetNillableExecute(s *string) *TaskCreate {
 	return tc
 }
 
+// SetPackageID sets the "package_id" field.
+func (tc *TaskCreate) SetPackageID(s string) *TaskCreate {
+	tc.mutation.SetPackageID(s)
+	return tc
+}
+
+// SetNillablePackageID sets the "package_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillablePackageID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetPackageID(*s)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -137,6 +151,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultExecute
 		tc.mutation.SetExecute(v)
 	}
+	if _, ok := tc.mutation.PackageID(); !ok {
+		v := task.DefaultPackageID
+		tc.mutation.SetPackageID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -195,6 +213,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Execute(); ok {
 		_spec.SetField(task.FieldExecute, field.TypeString, value)
 		_node.Execute = value
+	}
+	if value, ok := tc.mutation.PackageID(); ok {
+		_spec.SetField(task.FieldPackageID, field.TypeString, value)
+		_node.PackageID = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -327,6 +349,24 @@ func (u *TaskUpsert) ClearExecute() *TaskUpsert {
 	return u
 }
 
+// SetPackageID sets the "package_id" field.
+func (u *TaskUpsert) SetPackageID(v string) *TaskUpsert {
+	u.Set(task.FieldPackageID, v)
+	return u
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *TaskUpsert) UpdatePackageID() *TaskUpsert {
+	u.SetExcluded(task.FieldPackageID)
+	return u
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *TaskUpsert) ClearPackageID() *TaskUpsert {
+	u.SetNull(task.FieldPackageID)
+	return u
+}
+
 // SetWhen sets the "when" field.
 func (u *TaskUpsert) SetWhen(v time.Time) *TaskUpsert {
 	u.Set(task.FieldWhen, v)
@@ -431,6 +471,27 @@ func (u *TaskUpsertOne) UpdateExecute() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearExecute() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearExecute()
+	})
+}
+
+// SetPackageID sets the "package_id" field.
+func (u *TaskUpsertOne) SetPackageID(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageID(v)
+	})
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdatePackageID() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageID()
+	})
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *TaskUpsertOne) ClearPackageID() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageID()
 	})
 }
 
@@ -705,6 +766,27 @@ func (u *TaskUpsertBulk) UpdateExecute() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearExecute() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearExecute()
+	})
+}
+
+// SetPackageID sets the "package_id" field.
+func (u *TaskUpsertBulk) SetPackageID(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageID(v)
+	})
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdatePackageID() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageID()
+	})
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *TaskUpsertBulk) ClearPackageID() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageID()
 	})
 }
 

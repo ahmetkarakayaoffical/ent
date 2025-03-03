@@ -19385,6 +19385,7 @@ type TaskMutation struct {
 	name           *string
 	_type          *task.Type
 	execute        *string
+	package_id     *string
 	when           *time.Time
 	clearedFields  map[string]struct{}
 	tags           map[int]struct{}
@@ -19616,6 +19617,55 @@ func (m *TaskMutation) ResetExecute() {
 	delete(m.clearedFields, task.FieldExecute)
 }
 
+// SetPackageID sets the "package_id" field.
+func (m *TaskMutation) SetPackageID(s string) {
+	m.package_id = &s
+}
+
+// PackageID returns the value of the "package_id" field in the mutation.
+func (m *TaskMutation) PackageID() (r string, exists bool) {
+	v := m.package_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageID returns the old "package_id" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldPackageID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageID: %w", err)
+	}
+	return oldValue.PackageID, nil
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (m *TaskMutation) ClearPackageID() {
+	m.package_id = nil
+	m.clearedFields[task.FieldPackageID] = struct{}{}
+}
+
+// PackageIDCleared returns if the "package_id" field was cleared in this mutation.
+func (m *TaskMutation) PackageIDCleared() bool {
+	_, ok := m.clearedFields[task.FieldPackageID]
+	return ok
+}
+
+// ResetPackageID resets all changes to the "package_id" field.
+func (m *TaskMutation) ResetPackageID() {
+	m.package_id = nil
+	delete(m.clearedFields, task.FieldPackageID)
+}
+
 // SetWhen sets the "when" field.
 func (m *TaskMutation) SetWhen(t time.Time) {
 	m.when = &t
@@ -19792,7 +19842,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -19801,6 +19851,9 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.execute != nil {
 		fields = append(fields, task.FieldExecute)
+	}
+	if m.package_id != nil {
+		fields = append(fields, task.FieldPackageID)
 	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
@@ -19819,6 +19872,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.GetType()
 	case task.FieldExecute:
 		return m.Execute()
+	case task.FieldPackageID:
+		return m.PackageID()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -19836,6 +19891,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldType(ctx)
 	case task.FieldExecute:
 		return m.OldExecute(ctx)
+	case task.FieldPackageID:
+		return m.OldPackageID(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -19867,6 +19924,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExecute(v)
+		return nil
+	case task.FieldPackageID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageID(v)
 		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
@@ -19908,6 +19972,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldExecute) {
 		fields = append(fields, task.FieldExecute)
 	}
+	if m.FieldCleared(task.FieldPackageID) {
+		fields = append(fields, task.FieldPackageID)
+	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -19928,6 +19995,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldExecute:
 		m.ClearExecute()
 		return nil
+	case task.FieldPackageID:
+		m.ClearPackageID()
+		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
@@ -19947,6 +20017,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldExecute:
 		m.ResetExecute()
+		return nil
+	case task.FieldPackageID:
+		m.ResetPackageID()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()
