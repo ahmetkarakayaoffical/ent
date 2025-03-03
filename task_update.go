@@ -99,6 +99,26 @@ func (tu *TaskUpdate) ClearPackageID() *TaskUpdate {
 	return tu
 }
 
+// SetPackageName sets the "package_name" field.
+func (tu *TaskUpdate) SetPackageName(s string) *TaskUpdate {
+	tu.mutation.SetPackageName(s)
+	return tu
+}
+
+// SetNillablePackageName sets the "package_name" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillablePackageName(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetPackageName(*s)
+	}
+	return tu
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (tu *TaskUpdate) ClearPackageName() *TaskUpdate {
+	tu.mutation.ClearPackageName()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -262,6 +282,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.PackageIDCleared() {
 		_spec.ClearField(task.FieldPackageID, field.TypeString)
+	}
+	if value, ok := tu.mutation.PackageName(); ok {
+		_spec.SetField(task.FieldPackageName, field.TypeString, value)
+	}
+	if tu.mutation.PackageNameCleared() {
+		_spec.ClearField(task.FieldPackageName, field.TypeString)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -430,6 +456,26 @@ func (tuo *TaskUpdateOne) SetNillablePackageID(s *string) *TaskUpdateOne {
 // ClearPackageID clears the value of the "package_id" field.
 func (tuo *TaskUpdateOne) ClearPackageID() *TaskUpdateOne {
 	tuo.mutation.ClearPackageID()
+	return tuo
+}
+
+// SetPackageName sets the "package_name" field.
+func (tuo *TaskUpdateOne) SetPackageName(s string) *TaskUpdateOne {
+	tuo.mutation.SetPackageName(s)
+	return tuo
+}
+
+// SetNillablePackageName sets the "package_name" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillablePackageName(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetPackageName(*s)
+	}
+	return tuo
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (tuo *TaskUpdateOne) ClearPackageName() *TaskUpdateOne {
+	tuo.mutation.ClearPackageName()
 	return tuo
 }
 
@@ -626,6 +672,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.PackageIDCleared() {
 		_spec.ClearField(task.FieldPackageID, field.TypeString)
+	}
+	if value, ok := tuo.mutation.PackageName(); ok {
+		_spec.SetField(task.FieldPackageName, field.TypeString, value)
+	}
+	if tuo.mutation.PackageNameCleared() {
+		_spec.ClearField(task.FieldPackageName, field.TypeString)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

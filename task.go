@@ -26,6 +26,8 @@ type Task struct {
 	Execute string `json:"execute,omitempty"`
 	// PackageID holds the value of the "package_id" field.
 	PackageID string `json:"package_id,omitempty"`
+	// PackageName holds the value of the "package_name" field.
+	PackageName string `json:"package_name,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -73,7 +75,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldExecute, task.FieldPackageID:
+		case task.FieldName, task.FieldType, task.FieldExecute, task.FieldPackageID, task.FieldPackageName:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -123,6 +125,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field package_id", values[i])
 			} else if value.Valid {
 				t.PackageID = value.String
+			}
+		case task.FieldPackageName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field package_name", values[i])
+			} else if value.Valid {
+				t.PackageName = value.String
 			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -194,6 +202,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("package_id=")
 	builder.WriteString(t.PackageID)
+	builder.WriteString(", ")
+	builder.WriteString("package_name=")
+	builder.WriteString(t.PackageName)
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

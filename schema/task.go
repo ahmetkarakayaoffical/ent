@@ -18,6 +18,7 @@ func (Task) Fields() []ent.Field {
 		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "execute_command", "reboot", "poweroff"),
 		field.String("execute").Optional().Default(""),
 		field.String("package_id").Optional().Default(""),
+		field.String("package_name").Optional().Default(""),
 		field.Time("when").Optional(),
 	}
 }

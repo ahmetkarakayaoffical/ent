@@ -22,6 +22,8 @@ const (
 	FieldExecute = "execute"
 	// FieldPackageID holds the string denoting the package_id field in the database.
 	FieldPackageID = "package_id"
+	// FieldPackageName holds the string denoting the package_name field in the database.
+	FieldPackageName = "package_name"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldType,
 	FieldExecute,
 	FieldPackageID,
+	FieldPackageName,
 	FieldWhen,
 }
 
@@ -84,6 +87,8 @@ var (
 	DefaultExecute string
 	// DefaultPackageID holds the default value on creation for the "package_id" field.
 	DefaultPackageID string
+	// DefaultPackageName holds the default value on creation for the "package_name" field.
+	DefaultPackageName string
 )
 
 // Type defines the type for the "type" enum field.
@@ -139,6 +144,11 @@ func ByExecute(opts ...sql.OrderTermOption) OrderOption {
 // ByPackageID orders the results by the package_id field.
 func ByPackageID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPackageID, opts...).ToFunc()
+}
+
+// ByPackageName orders the results by the package_name field.
+func ByPackageName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageName, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

@@ -223,6 +223,10 @@ func init() {
 	taskDescPackageID := taskFields[3].Descriptor()
 	// task.DefaultPackageID holds the default value on creation for the package_id field.
 	task.DefaultPackageID = taskDescPackageID.Default.(string)
+	// taskDescPackageName is the schema descriptor for package_name field.
+	taskDescPackageName := taskFields[4].Descriptor()
+	// task.DefaultPackageName holds the default value on creation for the package_name field.
+	task.DefaultPackageName = taskDescPackageName.Default.(string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.
