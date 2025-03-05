@@ -10966,6 +10966,7 @@ type ProfileMutation struct {
 	id            *int
 	name          *string
 	apply_to_all  *bool
+	_type         *profile.Type
 	clearedFields map[string]struct{}
 	tags          map[int]struct{}
 	removedtags   map[int]struct{}
@@ -11148,6 +11149,55 @@ func (m *ProfileMutation) ResetApplyToAll() {
 	m.apply_to_all = nil
 }
 
+// SetType sets the "type" field.
+func (m *ProfileMutation) SetType(pr profile.Type) {
+	m._type = &pr
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ProfileMutation) GetType() (r profile.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldType(ctx context.Context) (v profile.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *ProfileMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[profile.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *ProfileMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[profile.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ProfileMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, profile.FieldType)
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
 func (m *ProfileMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
@@ -11290,12 +11340,15 @@ func (m *ProfileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProfileMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.name != nil {
 		fields = append(fields, profile.FieldName)
 	}
 	if m.apply_to_all != nil {
 		fields = append(fields, profile.FieldApplyToAll)
+	}
+	if m._type != nil {
+		fields = append(fields, profile.FieldType)
 	}
 	return fields
 }
@@ -11309,6 +11362,8 @@ func (m *ProfileMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case profile.FieldApplyToAll:
 		return m.ApplyToAll()
+	case profile.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -11322,6 +11377,8 @@ func (m *ProfileMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldName(ctx)
 	case profile.FieldApplyToAll:
 		return m.OldApplyToAll(ctx)
+	case profile.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Profile field %s", name)
 }
@@ -11344,6 +11401,13 @@ func (m *ProfileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetApplyToAll(v)
+		return nil
+	case profile.FieldType:
+		v, ok := value.(profile.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Profile field %s", name)
@@ -11374,7 +11438,11 @@ func (m *ProfileMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProfileMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(profile.FieldType) {
+		fields = append(fields, profile.FieldType)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -11387,6 +11455,11 @@ func (m *ProfileMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProfileMutation) ClearField(name string) error {
+	switch name {
+	case profile.FieldType:
+		m.ClearType()
+		return nil
+	}
 	return fmt.Errorf("unknown Profile nullable field %s", name)
 }
 
@@ -11399,6 +11472,9 @@ func (m *ProfileMutation) ResetField(name string) error {
 		return nil
 	case profile.FieldApplyToAll:
 		m.ResetApplyToAll()
+		return nil
+	case profile.FieldType:
+		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Profile field %s", name)

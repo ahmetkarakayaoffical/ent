@@ -58,6 +58,26 @@ func (pu *ProfileUpdate) SetNillableApplyToAll(b *bool) *ProfileUpdate {
 	return pu
 }
 
+// SetType sets the "type" field.
+func (pu *ProfileUpdate) SetType(pr profile.Type) *ProfileUpdate {
+	pu.mutation.SetType(pr)
+	return pu
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (pu *ProfileUpdate) SetNillableType(pr *profile.Type) *ProfileUpdate {
+	if pr != nil {
+		pu.SetType(*pr)
+	}
+	return pu
+}
+
+// ClearType clears the value of the "type" field.
+func (pu *ProfileUpdate) ClearType() *ProfileUpdate {
+	pu.mutation.ClearType()
+	return pu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (pu *ProfileUpdate) AddTagIDs(ids ...int) *ProfileUpdate {
 	pu.mutation.AddTagIDs(ids...)
@@ -169,6 +189,11 @@ func (pu *ProfileUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Profile.name": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.GetType(); ok {
+		if err := profile.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Profile.type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -195,6 +220,12 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
+	}
+	if value, ok := pu.mutation.GetType(); ok {
+		_spec.SetField(profile.FieldType, field.TypeEnum, value)
+	}
+	if pu.mutation.TypeCleared() {
+		_spec.ClearField(profile.FieldType, field.TypeEnum)
 	}
 	if pu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -336,6 +367,26 @@ func (puo *ProfileUpdateOne) SetNillableApplyToAll(b *bool) *ProfileUpdateOne {
 	return puo
 }
 
+// SetType sets the "type" field.
+func (puo *ProfileUpdateOne) SetType(pr profile.Type) *ProfileUpdateOne {
+	puo.mutation.SetType(pr)
+	return puo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (puo *ProfileUpdateOne) SetNillableType(pr *profile.Type) *ProfileUpdateOne {
+	if pr != nil {
+		puo.SetType(*pr)
+	}
+	return puo
+}
+
+// ClearType clears the value of the "type" field.
+func (puo *ProfileUpdateOne) ClearType() *ProfileUpdateOne {
+	puo.mutation.ClearType()
+	return puo
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (puo *ProfileUpdateOne) AddTagIDs(ids ...int) *ProfileUpdateOne {
 	puo.mutation.AddTagIDs(ids...)
@@ -460,6 +511,11 @@ func (puo *ProfileUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Profile.name": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.GetType(); ok {
+		if err := profile.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Profile.type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -503,6 +559,12 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 	}
 	if value, ok := puo.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
+	}
+	if value, ok := puo.mutation.GetType(); ok {
+		_spec.SetField(profile.FieldType, field.TypeEnum, value)
+	}
+	if puo.mutation.TypeCleared() {
+		_spec.ClearField(profile.FieldType, field.TypeEnum)
 	}
 	if puo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

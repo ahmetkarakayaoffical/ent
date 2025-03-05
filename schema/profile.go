@@ -16,6 +16,7 @@ func (Profile) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").NotEmpty(),
 		field.Bool("apply_to_all").Default(false),
+		field.Enum("type").Values("winget").Optional().Default("winget"),
 	}
 }
 

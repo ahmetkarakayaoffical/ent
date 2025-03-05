@@ -334,6 +334,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "apply_to_all", Type: field.TypeBool, Default: false},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"winget"}, Default: "winget"},
 	}
 	// ProfilesTable holds the schema information for the "profiles" table.
 	ProfilesTable = &schema.Table{

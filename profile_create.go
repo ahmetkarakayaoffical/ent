@@ -43,6 +43,20 @@ func (pc *ProfileCreate) SetNillableApplyToAll(b *bool) *ProfileCreate {
 	return pc
 }
 
+// SetType sets the "type" field.
+func (pc *ProfileCreate) SetType(pr profile.Type) *ProfileCreate {
+	pc.mutation.SetType(pr)
+	return pc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (pc *ProfileCreate) SetNillableType(pr *profile.Type) *ProfileCreate {
+	if pr != nil {
+		pc.SetType(*pr)
+	}
+	return pc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (pc *ProfileCreate) AddTagIDs(ids ...int) *ProfileCreate {
 	pc.mutation.AddTagIDs(ids...)
@@ -112,6 +126,10 @@ func (pc *ProfileCreate) defaults() {
 		v := profile.DefaultApplyToAll
 		pc.mutation.SetApplyToAll(v)
 	}
+	if _, ok := pc.mutation.GetType(); !ok {
+		v := profile.DefaultType
+		pc.mutation.SetType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -126,6 +144,11 @@ func (pc *ProfileCreate) check() error {
 	}
 	if _, ok := pc.mutation.ApplyToAll(); !ok {
 		return &ValidationError{Name: "apply_to_all", err: errors.New(`ent: missing required field "Profile.apply_to_all"`)}
+	}
+	if v, ok := pc.mutation.GetType(); ok {
+		if err := profile.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Profile.type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -161,6 +184,10 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
 		_node.ApplyToAll = value
+	}
+	if value, ok := pc.mutation.GetType(); ok {
+		_spec.SetField(profile.FieldType, field.TypeEnum, value)
+		_node.Type = value
 	}
 	if nodes := pc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -270,6 +297,24 @@ func (u *ProfileUpsert) UpdateApplyToAll() *ProfileUpsert {
 	return u
 }
 
+// SetType sets the "type" field.
+func (u *ProfileUpsert) SetType(v profile.Type) *ProfileUpsert {
+	u.Set(profile.FieldType, v)
+	return u
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *ProfileUpsert) UpdateType() *ProfileUpsert {
+	u.SetExcluded(profile.FieldType)
+	return u
+}
+
+// ClearType clears the value of the "type" field.
+func (u *ProfileUpsert) ClearType() *ProfileUpsert {
+	u.SetNull(profile.FieldType)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -335,6 +380,27 @@ func (u *ProfileUpsertOne) SetApplyToAll(v bool) *ProfileUpsertOne {
 func (u *ProfileUpsertOne) UpdateApplyToAll() *ProfileUpsertOne {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateApplyToAll()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *ProfileUpsertOne) SetType(v profile.Type) *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *ProfileUpsertOne) UpdateType() *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *ProfileUpsertOne) ClearType() *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.ClearType()
 	})
 }
 
@@ -567,6 +633,27 @@ func (u *ProfileUpsertBulk) SetApplyToAll(v bool) *ProfileUpsertBulk {
 func (u *ProfileUpsertBulk) UpdateApplyToAll() *ProfileUpsertBulk {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateApplyToAll()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *ProfileUpsertBulk) SetType(v profile.Type) *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *ProfileUpsertBulk) UpdateType() *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateType()
+	})
+}
+
+// ClearType clears the value of the "type" field.
+func (u *ProfileUpsertBulk) ClearType() *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.ClearType()
 	})
 }
 

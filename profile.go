@@ -20,6 +20,8 @@ type Profile struct {
 	Name string `json:"name,omitempty"`
 	// ApplyToAll holds the value of the "apply_to_all" field.
 	ApplyToAll bool `json:"apply_to_all,omitempty"`
+	// Type holds the value of the "type" field.
+	Type profile.Type `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProfileQuery when eager-loading is set.
 	Edges        ProfileEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*Profile) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case profile.FieldID:
 			values[i] = new(sql.NullInt64)
-		case profile.FieldName:
+		case profile.FieldName, profile.FieldType:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -98,6 +100,12 @@ func (pr *Profile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field apply_to_all", values[i])
 			} else if value.Valid {
 				pr.ApplyToAll = value.Bool
+			}
+		case profile.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				pr.Type = profile.Type(value.String)
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -150,6 +158,9 @@ func (pr *Profile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("apply_to_all=")
 	builder.WriteString(fmt.Sprintf("%v", pr.ApplyToAll))
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Type))
 	builder.WriteByte(')')
 	return builder.String()
 }

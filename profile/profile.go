@@ -3,6 +3,8 @@
 package profile
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -16,6 +18,8 @@ const (
 	FieldName = "name"
 	// FieldApplyToAll holds the string denoting the apply_to_all field in the database.
 	FieldApplyToAll = "apply_to_all"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -41,6 +45,7 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldApplyToAll,
+	FieldType,
 }
 
 var (
@@ -66,6 +71,31 @@ var (
 	DefaultApplyToAll bool
 )
 
+// Type defines the type for the "type" enum field.
+type Type string
+
+// TypeWinget is the default value of the Type enum.
+const DefaultType = TypeWinget
+
+// Type values.
+const (
+	TypeWinget Type = "winget"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeWinget:
+		return nil
+	default:
+		return fmt.Errorf("profile: invalid enum value for type field: %q", _type)
+	}
+}
+
 // OrderOption defines the ordering options for the Profile queries.
 type OrderOption func(*sql.Selector)
 
@@ -82,6 +112,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByApplyToAll orders the results by the apply_to_all field.
 func ByApplyToAll(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldApplyToAll, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.

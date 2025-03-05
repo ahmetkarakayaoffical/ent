@@ -138,6 +138,36 @@ func ApplyToAllNEQ(v bool) predicate.Profile {
 	return predicate.Profile(sql.FieldNEQ(FieldApplyToAll, v))
 }
 
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Profile {
+	return predicate.Profile(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Profile {
+	return predicate.Profile(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Profile {
+	return predicate.Profile(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Profile {
+	return predicate.Profile(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Profile {
+	return predicate.Profile(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Profile {
+	return predicate.Profile(sql.FieldNotNull(FieldType))
+}
+
 // HasTags applies the HasEdge predicate on the "tags" edge.
 func HasTags() predicate.Profile {
 	return predicate.Profile(func(s *sql.Selector) {
