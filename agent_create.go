@@ -28,6 +28,7 @@ import (
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // AgentCreate is the builder for creating a Agent entity.
@@ -520,6 +521,21 @@ func (ac *AgentCreate) AddMetadata(m ...*Metadata) *AgentCreate {
 	return ac.AddMetadatumIDs(ids...)
 }
 
+// AddWingetcfgexclusionIDs adds the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by IDs.
+func (ac *AgentCreate) AddWingetcfgexclusionIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddWingetcfgexclusionIDs(ids...)
+	return ac
+}
+
+// AddWingetcfgexclusions adds the "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (ac *AgentCreate) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentCreate {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return ac.AddWingetcfgexclusionIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (ac *AgentCreate) SetReleaseID(id int) *AgentCreate {
 	ac.mutation.SetReleaseID(id)
@@ -991,6 +1007,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.WingetcfgexclusionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

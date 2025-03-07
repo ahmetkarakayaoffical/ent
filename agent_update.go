@@ -28,6 +28,7 @@ import (
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // AgentUpdate is the builder for updating Agent entities.
@@ -626,6 +627,21 @@ func (au *AgentUpdate) AddMetadata(m ...*Metadata) *AgentUpdate {
 	return au.AddMetadatumIDs(ids...)
 }
 
+// AddWingetcfgexclusionIDs adds the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by IDs.
+func (au *AgentUpdate) AddWingetcfgexclusionIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddWingetcfgexclusionIDs(ids...)
+	return au
+}
+
+// AddWingetcfgexclusions adds the "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (au *AgentUpdate) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentUpdate {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return au.AddWingetcfgexclusionIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (au *AgentUpdate) SetReleaseID(id int) *AgentUpdate {
 	au.mutation.SetReleaseID(id)
@@ -882,6 +898,27 @@ func (au *AgentUpdate) RemoveMetadata(m ...*Metadata) *AgentUpdate {
 		ids[i] = m[i].ID
 	}
 	return au.RemoveMetadatumIDs(ids...)
+}
+
+// ClearWingetcfgexclusions clears all "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (au *AgentUpdate) ClearWingetcfgexclusions() *AgentUpdate {
+	au.mutation.ClearWingetcfgexclusions()
+	return au
+}
+
+// RemoveWingetcfgexclusionIDs removes the "wingetcfgexclusions" edge to WingetConfigExclusion entities by IDs.
+func (au *AgentUpdate) RemoveWingetcfgexclusionIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemoveWingetcfgexclusionIDs(ids...)
+	return au
+}
+
+// RemoveWingetcfgexclusions removes "wingetcfgexclusions" edges to WingetConfigExclusion entities.
+func (au *AgentUpdate) RemoveWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentUpdate {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return au.RemoveWingetcfgexclusionIDs(ids...)
 }
 
 // ClearRelease clears the "release" edge to the Release entity.
@@ -1623,6 +1660,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.WingetcfgexclusionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedWingetcfgexclusionsIDs(); len(nodes) > 0 && !au.mutation.WingetcfgexclusionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.WingetcfgexclusionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if au.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2256,6 +2338,21 @@ func (auo *AgentUpdateOne) AddMetadata(m ...*Metadata) *AgentUpdateOne {
 	return auo.AddMetadatumIDs(ids...)
 }
 
+// AddWingetcfgexclusionIDs adds the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by IDs.
+func (auo *AgentUpdateOne) AddWingetcfgexclusionIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddWingetcfgexclusionIDs(ids...)
+	return auo
+}
+
+// AddWingetcfgexclusions adds the "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (auo *AgentUpdateOne) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentUpdateOne {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return auo.AddWingetcfgexclusionIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (auo *AgentUpdateOne) SetReleaseID(id int) *AgentUpdateOne {
 	auo.mutation.SetReleaseID(id)
@@ -2512,6 +2609,27 @@ func (auo *AgentUpdateOne) RemoveMetadata(m ...*Metadata) *AgentUpdateOne {
 		ids[i] = m[i].ID
 	}
 	return auo.RemoveMetadatumIDs(ids...)
+}
+
+// ClearWingetcfgexclusions clears all "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (auo *AgentUpdateOne) ClearWingetcfgexclusions() *AgentUpdateOne {
+	auo.mutation.ClearWingetcfgexclusions()
+	return auo
+}
+
+// RemoveWingetcfgexclusionIDs removes the "wingetcfgexclusions" edge to WingetConfigExclusion entities by IDs.
+func (auo *AgentUpdateOne) RemoveWingetcfgexclusionIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemoveWingetcfgexclusionIDs(ids...)
+	return auo
+}
+
+// RemoveWingetcfgexclusions removes "wingetcfgexclusions" edges to WingetConfigExclusion entities.
+func (auo *AgentUpdateOne) RemoveWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentUpdateOne {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return auo.RemoveWingetcfgexclusionIDs(ids...)
 }
 
 // ClearRelease clears the "release" edge to the Release entity.
@@ -3276,6 +3394,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.WingetcfgexclusionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedWingetcfgexclusionsIDs(); len(nodes) > 0 && !auo.mutation.WingetcfgexclusionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.WingetcfgexclusionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

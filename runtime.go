@@ -17,6 +17,7 @@ import (
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -251,4 +252,10 @@ func init() {
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	user.IDValidator = userDescID.Validators[0].(func(string) error)
+	wingetconfigexclusionFields := schema.WingetConfigExclusion{}.Fields()
+	_ = wingetconfigexclusionFields
+	// wingetconfigexclusionDescWhen is the schema descriptor for when field.
+	wingetconfigexclusionDescWhen := wingetconfigexclusionFields[1].Descriptor()
+	// wingetconfigexclusion.DefaultWhen holds the default value on creation for the when field.
+	wingetconfigexclusion.DefaultWhen = wingetconfigexclusionDescWhen.Default.(func() time.Time)
 }

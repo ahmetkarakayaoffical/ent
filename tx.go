@@ -62,6 +62,8 @@ type Tx struct {
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// WingetConfigExclusion is the client for interacting with the WingetConfigExclusion builders.
+	WingetConfigExclusion *WingetConfigExclusionClient
 
 	// lazily loaded.
 	client     *Client
@@ -218,6 +220,7 @@ func (tx *Tx) init() {
 	tx.Task = NewTaskClient(tx.config)
 	tx.Update = NewUpdateClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.WingetConfigExclusion = NewWingetConfigExclusionClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

@@ -40,6 +40,7 @@ import (
 	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // Client is the client that holds all ent builders.
@@ -97,6 +98,8 @@ type Client struct {
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// WingetConfigExclusion is the client for interacting with the WingetConfigExclusion builders.
+	WingetConfigExclusion *WingetConfigExclusionClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -133,6 +136,7 @@ func (c *Client) init() {
 	c.Task = NewTaskClient(c.config)
 	c.Update = NewUpdateClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.WingetConfigExclusion = NewWingetConfigExclusionClient(c.config)
 }
 
 type (
@@ -223,33 +227,34 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		Antivirus:       NewAntivirusClient(cfg),
-		App:             NewAppClient(cfg),
-		Certificate:     NewCertificateClient(cfg),
-		Computer:        NewComputerClient(cfg),
-		Deployment:      NewDeploymentClient(cfg),
-		LogicalDisk:     NewLogicalDiskClient(cfg),
-		Metadata:        NewMetadataClient(cfg),
-		Monitor:         NewMonitorClient(cfg),
-		NetworkAdapter:  NewNetworkAdapterClient(cfg),
-		OperatingSystem: NewOperatingSystemClient(cfg),
-		OrgMetadata:     NewOrgMetadataClient(cfg),
-		Printer:         NewPrinterClient(cfg),
-		Profile:         NewProfileClient(cfg),
-		Release:         NewReleaseClient(cfg),
-		Revocation:      NewRevocationClient(cfg),
-		Server:          NewServerClient(cfg),
-		Sessions:        NewSessionsClient(cfg),
-		Settings:        NewSettingsClient(cfg),
-		Share:           NewShareClient(cfg),
-		SystemUpdate:    NewSystemUpdateClient(cfg),
-		Tag:             NewTagClient(cfg),
-		Task:            NewTaskClient(cfg),
-		Update:          NewUpdateClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		Antivirus:             NewAntivirusClient(cfg),
+		App:                   NewAppClient(cfg),
+		Certificate:           NewCertificateClient(cfg),
+		Computer:              NewComputerClient(cfg),
+		Deployment:            NewDeploymentClient(cfg),
+		LogicalDisk:           NewLogicalDiskClient(cfg),
+		Metadata:              NewMetadataClient(cfg),
+		Monitor:               NewMonitorClient(cfg),
+		NetworkAdapter:        NewNetworkAdapterClient(cfg),
+		OperatingSystem:       NewOperatingSystemClient(cfg),
+		OrgMetadata:           NewOrgMetadataClient(cfg),
+		Printer:               NewPrinterClient(cfg),
+		Profile:               NewProfileClient(cfg),
+		Release:               NewReleaseClient(cfg),
+		Revocation:            NewRevocationClient(cfg),
+		Server:                NewServerClient(cfg),
+		Sessions:              NewSessionsClient(cfg),
+		Settings:              NewSettingsClient(cfg),
+		Share:                 NewShareClient(cfg),
+		SystemUpdate:          NewSystemUpdateClient(cfg),
+		Tag:                   NewTagClient(cfg),
+		Task:                  NewTaskClient(cfg),
+		Update:                NewUpdateClient(cfg),
+		User:                  NewUserClient(cfg),
+		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
 	}, nil
 }
 
@@ -267,33 +272,34 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		Antivirus:       NewAntivirusClient(cfg),
-		App:             NewAppClient(cfg),
-		Certificate:     NewCertificateClient(cfg),
-		Computer:        NewComputerClient(cfg),
-		Deployment:      NewDeploymentClient(cfg),
-		LogicalDisk:     NewLogicalDiskClient(cfg),
-		Metadata:        NewMetadataClient(cfg),
-		Monitor:         NewMonitorClient(cfg),
-		NetworkAdapter:  NewNetworkAdapterClient(cfg),
-		OperatingSystem: NewOperatingSystemClient(cfg),
-		OrgMetadata:     NewOrgMetadataClient(cfg),
-		Printer:         NewPrinterClient(cfg),
-		Profile:         NewProfileClient(cfg),
-		Release:         NewReleaseClient(cfg),
-		Revocation:      NewRevocationClient(cfg),
-		Server:          NewServerClient(cfg),
-		Sessions:        NewSessionsClient(cfg),
-		Settings:        NewSettingsClient(cfg),
-		Share:           NewShareClient(cfg),
-		SystemUpdate:    NewSystemUpdateClient(cfg),
-		Tag:             NewTagClient(cfg),
-		Task:            NewTaskClient(cfg),
-		Update:          NewUpdateClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		Antivirus:             NewAntivirusClient(cfg),
+		App:                   NewAppClient(cfg),
+		Certificate:           NewCertificateClient(cfg),
+		Computer:              NewComputerClient(cfg),
+		Deployment:            NewDeploymentClient(cfg),
+		LogicalDisk:           NewLogicalDiskClient(cfg),
+		Metadata:              NewMetadataClient(cfg),
+		Monitor:               NewMonitorClient(cfg),
+		NetworkAdapter:        NewNetworkAdapterClient(cfg),
+		OperatingSystem:       NewOperatingSystemClient(cfg),
+		OrgMetadata:           NewOrgMetadataClient(cfg),
+		Printer:               NewPrinterClient(cfg),
+		Profile:               NewProfileClient(cfg),
+		Release:               NewReleaseClient(cfg),
+		Revocation:            NewRevocationClient(cfg),
+		Server:                NewServerClient(cfg),
+		Sessions:              NewSessionsClient(cfg),
+		Settings:              NewSettingsClient(cfg),
+		Share:                 NewShareClient(cfg),
+		SystemUpdate:          NewSystemUpdateClient(cfg),
+		Tag:                   NewTagClient(cfg),
+		Task:                  NewTaskClient(cfg),
+		Update:                NewUpdateClient(cfg),
+		User:                  NewUserClient(cfg),
+		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
 	}, nil
 }
 
@@ -327,7 +333,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
 		c.OrgMetadata, c.Printer, c.Profile, c.Release, c.Revocation, c.Server,
 		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task, c.Update,
-		c.User,
+		c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -341,7 +347,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
 		c.OrgMetadata, c.Printer, c.Profile, c.Release, c.Revocation, c.Server,
 		c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task, c.Update,
-		c.User,
+		c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -400,6 +406,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Update.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *WingetConfigExclusionMutation:
+		return c.WingetConfigExclusion.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -730,6 +738,22 @@ func (c *AgentClient) QueryMetadata(a *Agent) *MetadataQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(metadata.Table, metadata.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, agent.MetadataTable, agent.MetadataColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWingetcfgexclusions queries the wingetcfgexclusions edge of a Agent.
+func (c *AgentClient) QueryWingetcfgexclusions(a *Agent) *WingetConfigExclusionQuery {
+	query := (&WingetConfigExclusionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.WingetcfgexclusionsTable, agent.WingetcfgexclusionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -4402,18 +4426,167 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
+// WingetConfigExclusionClient is a client for the WingetConfigExclusion schema.
+type WingetConfigExclusionClient struct {
+	config
+}
+
+// NewWingetConfigExclusionClient returns a client for the WingetConfigExclusion from the given config.
+func NewWingetConfigExclusionClient(c config) *WingetConfigExclusionClient {
+	return &WingetConfigExclusionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `wingetconfigexclusion.Hooks(f(g(h())))`.
+func (c *WingetConfigExclusionClient) Use(hooks ...Hook) {
+	c.hooks.WingetConfigExclusion = append(c.hooks.WingetConfigExclusion, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `wingetconfigexclusion.Intercept(f(g(h())))`.
+func (c *WingetConfigExclusionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WingetConfigExclusion = append(c.inters.WingetConfigExclusion, interceptors...)
+}
+
+// Create returns a builder for creating a WingetConfigExclusion entity.
+func (c *WingetConfigExclusionClient) Create() *WingetConfigExclusionCreate {
+	mutation := newWingetConfigExclusionMutation(c.config, OpCreate)
+	return &WingetConfigExclusionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WingetConfigExclusion entities.
+func (c *WingetConfigExclusionClient) CreateBulk(builders ...*WingetConfigExclusionCreate) *WingetConfigExclusionCreateBulk {
+	return &WingetConfigExclusionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WingetConfigExclusionClient) MapCreateBulk(slice any, setFunc func(*WingetConfigExclusionCreate, int)) *WingetConfigExclusionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WingetConfigExclusionCreateBulk{err: fmt.Errorf("calling to WingetConfigExclusionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WingetConfigExclusionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WingetConfigExclusionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Update() *WingetConfigExclusionUpdate {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdate)
+	return &WingetConfigExclusionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WingetConfigExclusionClient) UpdateOne(wce *WingetConfigExclusion) *WingetConfigExclusionUpdateOne {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdateOne, withWingetConfigExclusion(wce))
+	return &WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WingetConfigExclusionClient) UpdateOneID(id int) *WingetConfigExclusionUpdateOne {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdateOne, withWingetConfigExclusionID(id))
+	return &WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Delete() *WingetConfigExclusionDelete {
+	mutation := newWingetConfigExclusionMutation(c.config, OpDelete)
+	return &WingetConfigExclusionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WingetConfigExclusionClient) DeleteOne(wce *WingetConfigExclusion) *WingetConfigExclusionDeleteOne {
+	return c.DeleteOneID(wce.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WingetConfigExclusionClient) DeleteOneID(id int) *WingetConfigExclusionDeleteOne {
+	builder := c.Delete().Where(wingetconfigexclusion.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WingetConfigExclusionDeleteOne{builder}
+}
+
+// Query returns a query builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Query() *WingetConfigExclusionQuery {
+	return &WingetConfigExclusionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWingetConfigExclusion},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WingetConfigExclusion entity by its id.
+func (c *WingetConfigExclusionClient) Get(ctx context.Context, id int) (*WingetConfigExclusion, error) {
+	return c.Query().Where(wingetconfigexclusion.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WingetConfigExclusionClient) GetX(ctx context.Context, id int) *WingetConfigExclusion {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) QueryOwner(wce *WingetConfigExclusion) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := wce.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, wingetconfigexclusion.OwnerTable, wingetconfigexclusion.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(wce.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WingetConfigExclusionClient) Hooks() []Hook {
+	return c.hooks.WingetConfigExclusion
+}
+
+// Interceptors returns the client interceptors.
+func (c *WingetConfigExclusionClient) Interceptors() []Interceptor {
+	return c.inters.WingetConfigExclusion
+}
+
+func (c *WingetConfigExclusionClient) mutate(ctx context.Context, m *WingetConfigExclusionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WingetConfigExclusionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WingetConfigExclusionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WingetConfigExclusionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown WingetConfigExclusion mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
 		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
 		Release, Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag,
-		Task, Update, User []ent.Hook
+		Task, Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
 		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
 		Release, Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag,
-		Task, Update, User []ent.Interceptor
+		Task, Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )

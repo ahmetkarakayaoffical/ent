@@ -638,6 +638,27 @@ var (
 			},
 		},
 	}
+	// WingetConfigExclusionsColumns holds the columns for the "winget_config_exclusions" table.
+	WingetConfigExclusionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "package_id", Type: field.TypeString},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "agent_wingetcfgexclusions", Type: field.TypeString},
+	}
+	// WingetConfigExclusionsTable holds the schema information for the "winget_config_exclusions" table.
+	WingetConfigExclusionsTable = &schema.Table{
+		Name:       "winget_config_exclusions",
+		Columns:    WingetConfigExclusionsColumns,
+		PrimaryKey: []*schema.Column{WingetConfigExclusionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "winget_config_exclusions_agents_wingetcfgexclusions",
+				Columns:    []*schema.Column{WingetConfigExclusionsColumns[3]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// AgentTagsColumns holds the columns for the "agent_tags" table.
 	AgentTagsColumns = []*schema.Column{
 		{Name: "agent_id", Type: field.TypeString},
@@ -715,6 +736,7 @@ var (
 		TasksTable,
 		UpdatesTable,
 		UsersTable,
+		WingetConfigExclusionsTable,
 		AgentTagsTable,
 		ProfileTagsTable,
 	}
@@ -741,6 +763,7 @@ func init() {
 	TagsTable.ForeignKeys[1].RefTable = TasksTable
 	TasksTable.ForeignKeys[0].RefTable = ProfilesTable
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
+	WingetConfigExclusionsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable

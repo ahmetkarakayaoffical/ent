@@ -80,3 +80,6 @@ type Update func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// WingetConfigExclusion is the predicate function for wingetconfigexclusion builders.
+type WingetConfigExclusion func(*sql.Selector)

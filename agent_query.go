@@ -29,32 +29,34 @@ import (
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // AgentQuery is the builder for querying Agent entities.
 type AgentQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []agent.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Agent
-	withComputer        *ComputerQuery
-	withOperatingsystem *OperatingSystemQuery
-	withSystemupdate    *SystemUpdateQuery
-	withAntivirus       *AntivirusQuery
-	withLogicaldisks    *LogicalDiskQuery
-	withApps            *AppQuery
-	withMonitors        *MonitorQuery
-	withShares          *ShareQuery
-	withPrinters        *PrinterQuery
-	withNetworkadapters *NetworkAdapterQuery
-	withDeployments     *DeploymentQuery
-	withUpdates         *UpdateQuery
-	withTags            *TagQuery
-	withMetadata        *MetadataQuery
-	withRelease         *ReleaseQuery
-	withFKs             bool
-	modifiers           []func(*sql.Selector)
+	ctx                     *QueryContext
+	order                   []agent.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.Agent
+	withComputer            *ComputerQuery
+	withOperatingsystem     *OperatingSystemQuery
+	withSystemupdate        *SystemUpdateQuery
+	withAntivirus           *AntivirusQuery
+	withLogicaldisks        *LogicalDiskQuery
+	withApps                *AppQuery
+	withMonitors            *MonitorQuery
+	withShares              *ShareQuery
+	withPrinters            *PrinterQuery
+	withNetworkadapters     *NetworkAdapterQuery
+	withDeployments         *DeploymentQuery
+	withUpdates             *UpdateQuery
+	withTags                *TagQuery
+	withMetadata            *MetadataQuery
+	withWingetcfgexclusions *WingetConfigExclusionQuery
+	withRelease             *ReleaseQuery
+	withFKs                 bool
+	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -399,6 +401,28 @@ func (aq *AgentQuery) QueryMetadata() *MetadataQuery {
 	return query
 }
 
+// QueryWingetcfgexclusions chains the current query on the "wingetcfgexclusions" edge.
+func (aq *AgentQuery) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
+	query := (&WingetConfigExclusionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.WingetcfgexclusionsTable, agent.WingetcfgexclusionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryRelease chains the current query on the "release" edge.
 func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 	query := (&ReleaseClient{config: aq.config}).Query()
@@ -608,26 +632,27 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		return nil
 	}
 	return &AgentQuery{
-		config:              aq.config,
-		ctx:                 aq.ctx.Clone(),
-		order:               append([]agent.OrderOption{}, aq.order...),
-		inters:              append([]Interceptor{}, aq.inters...),
-		predicates:          append([]predicate.Agent{}, aq.predicates...),
-		withComputer:        aq.withComputer.Clone(),
-		withOperatingsystem: aq.withOperatingsystem.Clone(),
-		withSystemupdate:    aq.withSystemupdate.Clone(),
-		withAntivirus:       aq.withAntivirus.Clone(),
-		withLogicaldisks:    aq.withLogicaldisks.Clone(),
-		withApps:            aq.withApps.Clone(),
-		withMonitors:        aq.withMonitors.Clone(),
-		withShares:          aq.withShares.Clone(),
-		withPrinters:        aq.withPrinters.Clone(),
-		withNetworkadapters: aq.withNetworkadapters.Clone(),
-		withDeployments:     aq.withDeployments.Clone(),
-		withUpdates:         aq.withUpdates.Clone(),
-		withTags:            aq.withTags.Clone(),
-		withMetadata:        aq.withMetadata.Clone(),
-		withRelease:         aq.withRelease.Clone(),
+		config:                  aq.config,
+		ctx:                     aq.ctx.Clone(),
+		order:                   append([]agent.OrderOption{}, aq.order...),
+		inters:                  append([]Interceptor{}, aq.inters...),
+		predicates:              append([]predicate.Agent{}, aq.predicates...),
+		withComputer:            aq.withComputer.Clone(),
+		withOperatingsystem:     aq.withOperatingsystem.Clone(),
+		withSystemupdate:        aq.withSystemupdate.Clone(),
+		withAntivirus:           aq.withAntivirus.Clone(),
+		withLogicaldisks:        aq.withLogicaldisks.Clone(),
+		withApps:                aq.withApps.Clone(),
+		withMonitors:            aq.withMonitors.Clone(),
+		withShares:              aq.withShares.Clone(),
+		withPrinters:            aq.withPrinters.Clone(),
+		withNetworkadapters:     aq.withNetworkadapters.Clone(),
+		withDeployments:         aq.withDeployments.Clone(),
+		withUpdates:             aq.withUpdates.Clone(),
+		withTags:                aq.withTags.Clone(),
+		withMetadata:            aq.withMetadata.Clone(),
+		withWingetcfgexclusions: aq.withWingetcfgexclusions.Clone(),
+		withRelease:             aq.withRelease.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -789,6 +814,17 @@ func (aq *AgentQuery) WithMetadata(opts ...func(*MetadataQuery)) *AgentQuery {
 	return aq
 }
 
+// WithWingetcfgexclusions tells the query-builder to eager-load the nodes that are connected to
+// the "wingetcfgexclusions" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithWingetcfgexclusions(opts ...func(*WingetConfigExclusionQuery)) *AgentQuery {
+	query := (&WingetConfigExclusionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withWingetcfgexclusions = query
+	return aq
+}
+
 // WithRelease tells the query-builder to eager-load the nodes that are connected to
 // the "release" edge. The optional arguments are used to configure the query builder of the edge.
 func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
@@ -879,7 +915,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [16]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -894,6 +930,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withUpdates != nil,
 			aq.withTags != nil,
 			aq.withMetadata != nil,
+			aq.withWingetcfgexclusions != nil,
 			aq.withRelease != nil,
 		}
 	)
@@ -1015,6 +1052,15 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		if err := aq.loadMetadata(ctx, query, nodes,
 			func(n *Agent) { n.Edges.Metadata = []*Metadata{} },
 			func(n *Agent, e *Metadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withWingetcfgexclusions; query != nil {
+		if err := aq.loadWingetcfgexclusions(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Wingetcfgexclusions = []*WingetConfigExclusion{} },
+			func(n *Agent, e *WingetConfigExclusion) {
+				n.Edges.Wingetcfgexclusions = append(n.Edges.Wingetcfgexclusions, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1474,6 +1520,37 @@ func (aq *AgentQuery) loadMetadata(ctx context.Context, query *MetadataQuery, no
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "agent_metadata" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (aq *AgentQuery) loadWingetcfgexclusions(ctx context.Context, query *WingetConfigExclusionQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *WingetConfigExclusion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.WingetConfigExclusion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.WingetcfgexclusionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.agent_wingetcfgexclusions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_wingetcfgexclusions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_wingetcfgexclusions" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

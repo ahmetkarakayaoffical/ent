@@ -1577,6 +1577,29 @@ func HasMetadataWith(preds ...predicate.Metadata) predicate.Agent {
 	})
 }
 
+// HasWingetcfgexclusions applies the HasEdge predicate on the "wingetcfgexclusions" edge.
+func HasWingetcfgexclusions() predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WingetcfgexclusionsTable, WingetcfgexclusionsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWingetcfgexclusionsWith applies the HasEdge predicate on the "wingetcfgexclusions" edge with a given conditions (other predicates).
+func HasWingetcfgexclusionsWith(preds ...predicate.WingetConfigExclusion) predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := newWingetcfgexclusionsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRelease applies the HasEdge predicate on the "release" edge.
 func HasRelease() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {

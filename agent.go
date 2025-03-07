@@ -97,11 +97,13 @@ type AgentEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Metadata holds the value of the metadata edge.
 	Metadata []*Metadata `json:"metadata,omitempty"`
+	// Wingetcfgexclusions holds the value of the wingetcfgexclusions edge.
+	Wingetcfgexclusions []*WingetConfigExclusion `json:"wingetcfgexclusions,omitempty"`
 	// Release holds the value of the release edge.
 	Release *Release `json:"release,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -238,12 +240,21 @@ func (e AgentEdges) MetadataOrErr() ([]*Metadata, error) {
 	return nil, &NotLoadedError{edge: "metadata"}
 }
 
+// WingetcfgexclusionsOrErr returns the Wingetcfgexclusions value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) WingetcfgexclusionsOrErr() ([]*WingetConfigExclusion, error) {
+	if e.loadedTypes[14] {
+		return e.Wingetcfgexclusions, nil
+	}
+	return nil, &NotLoadedError{edge: "wingetcfgexclusions"}
+}
+
 // ReleaseOrErr returns the Release value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AgentEdges) ReleaseOrErr() (*Release, error) {
 	if e.Release != nil {
 		return e.Release, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[15] {
 		return nil, &NotFoundError{label: release.Label}
 	}
 	return nil, &NotLoadedError{edge: "release"}
@@ -485,6 +496,11 @@ func (a *Agent) QueryTags() *TagQuery {
 // QueryMetadata queries the "metadata" edge of the Agent entity.
 func (a *Agent) QueryMetadata() *MetadataQuery {
 	return NewAgentClient(a.config).QueryMetadata(a)
+}
+
+// QueryWingetcfgexclusions queries the "wingetcfgexclusions" edge of the Agent entity.
+func (a *Agent) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
+	return NewAgentClient(a.config).QueryWingetcfgexclusions(a)
 }
 
 // QueryRelease queries the "release" edge of the Agent entity.

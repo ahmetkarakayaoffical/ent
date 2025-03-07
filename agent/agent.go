@@ -80,6 +80,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeMetadata holds the string denoting the metadata edge name in mutations.
 	EdgeMetadata = "metadata"
+	// EdgeWingetcfgexclusions holds the string denoting the wingetcfgexclusions edge name in mutations.
+	EdgeWingetcfgexclusions = "wingetcfgexclusions"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
 	EdgeRelease = "release"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
@@ -110,6 +112,8 @@ const (
 	TagFieldID = "id"
 	// MetadataFieldID holds the string denoting the ID field of the Metadata.
 	MetadataFieldID = "id"
+	// WingetConfigExclusionFieldID holds the string denoting the ID field of the WingetConfigExclusion.
+	WingetConfigExclusionFieldID = "id"
 	// ReleaseFieldID holds the string denoting the ID field of the Release.
 	ReleaseFieldID = "id"
 	// Table holds the table name of the agent in the database.
@@ -210,6 +214,13 @@ const (
 	MetadataInverseTable = "metadata"
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "agent_metadata"
+	// WingetcfgexclusionsTable is the table that holds the wingetcfgexclusions relation/edge.
+	WingetcfgexclusionsTable = "winget_config_exclusions"
+	// WingetcfgexclusionsInverseTable is the table name for the WingetConfigExclusion entity.
+	// It exists in this package in order to avoid circular dependency with the "wingetconfigexclusion" package.
+	WingetcfgexclusionsInverseTable = "winget_config_exclusions"
+	// WingetcfgexclusionsColumn is the table column denoting the wingetcfgexclusions relation/edge.
+	WingetcfgexclusionsColumn = "agent_wingetcfgexclusions"
 	// ReleaseTable is the table that holds the release relation/edge.
 	ReleaseTable = "agents"
 	// ReleaseInverseTable is the table name for the Release entity.
@@ -601,6 +612,20 @@ func ByMetadata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByWingetcfgexclusionsCount orders the results by wingetcfgexclusions count.
+func ByWingetcfgexclusionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWingetcfgexclusionsStep(), opts...)
+	}
+}
+
+// ByWingetcfgexclusions orders the results by wingetcfgexclusions terms.
+func ByWingetcfgexclusions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWingetcfgexclusionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByReleaseField orders the results by release field.
 func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -703,6 +728,13 @@ func newMetadataStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MetadataInverseTable, MetadataFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
+	)
+}
+func newWingetcfgexclusionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WingetcfgexclusionsInverseTable, WingetConfigExclusionFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WingetcfgexclusionsTable, WingetcfgexclusionsColumn),
 	)
 }
 func newReleaseStep() *sqlgraph.Step {

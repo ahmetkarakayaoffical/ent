@@ -309,6 +309,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
 }
 
+// The WingetConfigExclusionFunc type is an adapter to allow the use of ordinary
+// function as WingetConfigExclusion mutator.
+type WingetConfigExclusionFunc func(context.Context, *ent.WingetConfigExclusionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WingetConfigExclusionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.WingetConfigExclusionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.WingetConfigExclusionMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, ent.Mutation) bool
 

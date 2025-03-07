@@ -37,6 +37,7 @@ import (
 	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -97,31 +98,32 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			agent.Table:           agent.ValidColumn,
-			antivirus.Table:       antivirus.ValidColumn,
-			app.Table:             app.ValidColumn,
-			certificate.Table:     certificate.ValidColumn,
-			computer.Table:        computer.ValidColumn,
-			deployment.Table:      deployment.ValidColumn,
-			logicaldisk.Table:     logicaldisk.ValidColumn,
-			metadata.Table:        metadata.ValidColumn,
-			monitor.Table:         monitor.ValidColumn,
-			networkadapter.Table:  networkadapter.ValidColumn,
-			operatingsystem.Table: operatingsystem.ValidColumn,
-			orgmetadata.Table:     orgmetadata.ValidColumn,
-			printer.Table:         printer.ValidColumn,
-			profile.Table:         profile.ValidColumn,
-			release.Table:         release.ValidColumn,
-			revocation.Table:      revocation.ValidColumn,
-			server.Table:          server.ValidColumn,
-			sessions.Table:        sessions.ValidColumn,
-			settings.Table:        settings.ValidColumn,
-			share.Table:           share.ValidColumn,
-			systemupdate.Table:    systemupdate.ValidColumn,
-			tag.Table:             tag.ValidColumn,
-			task.Table:            task.ValidColumn,
-			update.Table:          update.ValidColumn,
-			user.Table:            user.ValidColumn,
+			agent.Table:                 agent.ValidColumn,
+			antivirus.Table:             antivirus.ValidColumn,
+			app.Table:                   app.ValidColumn,
+			certificate.Table:           certificate.ValidColumn,
+			computer.Table:              computer.ValidColumn,
+			deployment.Table:            deployment.ValidColumn,
+			logicaldisk.Table:           logicaldisk.ValidColumn,
+			metadata.Table:              metadata.ValidColumn,
+			monitor.Table:               monitor.ValidColumn,
+			networkadapter.Table:        networkadapter.ValidColumn,
+			operatingsystem.Table:       operatingsystem.ValidColumn,
+			orgmetadata.Table:           orgmetadata.ValidColumn,
+			printer.Table:               printer.ValidColumn,
+			profile.Table:               profile.ValidColumn,
+			release.Table:               release.ValidColumn,
+			revocation.Table:            revocation.ValidColumn,
+			server.Table:                server.ValidColumn,
+			sessions.Table:              sessions.ValidColumn,
+			settings.Table:              settings.ValidColumn,
+			share.Table:                 share.ValidColumn,
+			systemupdate.Table:          systemupdate.ValidColumn,
+			tag.Table:                   tag.ValidColumn,
+			task.Table:                  task.ValidColumn,
+			update.Table:                update.ValidColumn,
+			user.Table:                  user.ValidColumn,
+			wingetconfigexclusion.Table: wingetconfigexclusion.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)
