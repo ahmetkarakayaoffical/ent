@@ -110,6 +110,26 @@ func (du *DeploymentUpdate) ClearUpdated() *DeploymentUpdate {
 	return du
 }
 
+// SetByProfile sets the "by_profile" field.
+func (du *DeploymentUpdate) SetByProfile(b bool) *DeploymentUpdate {
+	du.mutation.SetByProfile(b)
+	return du
+}
+
+// SetNillableByProfile sets the "by_profile" field if the given value is not nil.
+func (du *DeploymentUpdate) SetNillableByProfile(b *bool) *DeploymentUpdate {
+	if b != nil {
+		du.SetByProfile(*b)
+	}
+	return du
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (du *DeploymentUpdate) ClearByProfile() *DeploymentUpdate {
+	du.mutation.ClearByProfile()
+	return du
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (du *DeploymentUpdate) SetOwnerID(id string) *DeploymentUpdate {
 	du.mutation.SetOwnerID(id)
@@ -217,6 +237,12 @@ func (du *DeploymentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.UpdatedCleared() {
 		_spec.ClearField(deployment.FieldUpdated, field.TypeTime)
+	}
+	if value, ok := du.mutation.ByProfile(); ok {
+		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)
+	}
+	if du.mutation.ByProfileCleared() {
+		_spec.ClearField(deployment.FieldByProfile, field.TypeBool)
 	}
 	if du.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -346,6 +372,26 @@ func (duo *DeploymentUpdateOne) SetUpdated(t time.Time) *DeploymentUpdateOne {
 // ClearUpdated clears the value of the "updated" field.
 func (duo *DeploymentUpdateOne) ClearUpdated() *DeploymentUpdateOne {
 	duo.mutation.ClearUpdated()
+	return duo
+}
+
+// SetByProfile sets the "by_profile" field.
+func (duo *DeploymentUpdateOne) SetByProfile(b bool) *DeploymentUpdateOne {
+	duo.mutation.SetByProfile(b)
+	return duo
+}
+
+// SetNillableByProfile sets the "by_profile" field if the given value is not nil.
+func (duo *DeploymentUpdateOne) SetNillableByProfile(b *bool) *DeploymentUpdateOne {
+	if b != nil {
+		duo.SetByProfile(*b)
+	}
+	return duo
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (duo *DeploymentUpdateOne) ClearByProfile() *DeploymentUpdateOne {
+	duo.mutation.ClearByProfile()
 	return duo
 }
 
@@ -486,6 +532,12 @@ func (duo *DeploymentUpdateOne) sqlSave(ctx context.Context) (_node *Deployment,
 	}
 	if duo.mutation.UpdatedCleared() {
 		_spec.ClearField(deployment.FieldUpdated, field.TypeTime)
+	}
+	if value, ok := duo.mutation.ByProfile(); ok {
+		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)
+	}
+	if duo.mutation.ByProfileCleared() {
+		_spec.ClearField(deployment.FieldByProfile, field.TypeBool)
 	}
 	if duo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

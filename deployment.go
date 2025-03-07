@@ -28,6 +28,8 @@ type Deployment struct {
 	Installed time.Time `json:"installed,omitempty"`
 	// Updated holds the value of the "updated" field.
 	Updated time.Time `json:"updated,omitempty"`
+	// ByProfile holds the value of the "by_profile" field.
+	ByProfile bool `json:"by_profile,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DeploymentQuery when eager-loading is set.
 	Edges             DeploymentEdges `json:"edges"`
@@ -60,6 +62,8 @@ func (*Deployment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case deployment.FieldByProfile:
+			values[i] = new(sql.NullBool)
 		case deployment.FieldID:
 			values[i] = new(sql.NullInt64)
 		case deployment.FieldPackageID, deployment.FieldName, deployment.FieldVersion:
@@ -118,6 +122,12 @@ func (d *Deployment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated", values[i])
 			} else if value.Valid {
 				d.Updated = value.Time
+			}
+		case deployment.FieldByProfile:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field by_profile", values[i])
+			} else if value.Valid {
+				d.ByProfile = value.Bool
 			}
 		case deployment.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -181,6 +191,9 @@ func (d *Deployment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated=")
 	builder.WriteString(d.Updated.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("by_profile=")
+	builder.WriteString(fmt.Sprintf("%v", d.ByProfile))
 	builder.WriteByte(')')
 	return builder.String()
 }

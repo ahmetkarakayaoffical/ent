@@ -24,6 +24,8 @@ const (
 	FieldInstalled = "installed"
 	// FieldUpdated holds the string denoting the updated field in the database.
 	FieldUpdated = "updated"
+	// FieldByProfile holds the string denoting the by_profile field in the database.
+	FieldByProfile = "by_profile"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
@@ -47,6 +49,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldInstalled,
 	FieldUpdated,
+	FieldByProfile,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "deployments"
@@ -77,6 +80,8 @@ var (
 	DefaultUpdated func() time.Time
 	// UpdateDefaultUpdated holds the default value on update for the "updated" field.
 	UpdateDefaultUpdated func() time.Time
+	// DefaultByProfile holds the default value on creation for the "by_profile" field.
+	DefaultByProfile bool
 )
 
 // OrderOption defines the ordering options for the Deployment queries.
@@ -110,6 +115,11 @@ func ByInstalled(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdated orders the results by the updated field.
 func ByUpdated(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdated, opts...).ToFunc()
+}
+
+// ByByProfile orders the results by the by_profile field.
+func ByByProfile(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldByProfile, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

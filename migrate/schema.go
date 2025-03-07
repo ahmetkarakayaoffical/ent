@@ -139,6 +139,7 @@ var (
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "installed", Type: field.TypeTime, Nullable: true},
 		{Name: "updated", Type: field.TypeTime, Nullable: true},
+		{Name: "by_profile", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "agent_deployments", Type: field.TypeString},
 	}
 	// DeploymentsTable holds the schema information for the "deployments" table.
@@ -149,7 +150,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "deployments_agents_deployments",
-				Columns:    []*schema.Column{DeploymentsColumns[6]},
+				Columns:    []*schema.Column{DeploymentsColumns[7]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

@@ -98,6 +98,10 @@ func init() {
 	deployment.DefaultUpdated = deploymentDescUpdated.Default.(func() time.Time)
 	// deployment.UpdateDefaultUpdated holds the default value on update for the updated field.
 	deployment.UpdateDefaultUpdated = deploymentDescUpdated.UpdateDefault.(func() time.Time)
+	// deploymentDescByProfile is the schema descriptor for by_profile field.
+	deploymentDescByProfile := deploymentFields[5].Descriptor()
+	// deployment.DefaultByProfile holds the default value on creation for the by_profile field.
+	deployment.DefaultByProfile = deploymentDescByProfile.Default.(bool)
 	logicaldiskFields := schema.LogicalDisk{}.Fields()
 	_ = logicaldiskFields
 	// logicaldiskDescUsage is the schema descriptor for usage field.
