@@ -569,7 +569,7 @@ var (
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "execute_command", "reboot", "poweroff"}},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "registry", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"}},
 		{Name: "execute", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "package_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
