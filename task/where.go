@@ -85,6 +85,11 @@ func RegistryKeyValueData(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueData, v))
 }
 
+// RegistryForce applies equality check predicate on the "registry_force" field. It's identical to RegistryForceEQ.
+func RegistryForce(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryForce, v))
+}
+
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
 func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
@@ -578,6 +583,26 @@ func RegistryKeyValueDataEqualFold(v string) predicate.Task {
 // RegistryKeyValueDataContainsFold applies the ContainsFold predicate on the "registry_key_value_data" field.
 func RegistryKeyValueDataContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldRegistryKeyValueData, v))
+}
+
+// RegistryForceEQ applies the EQ predicate on the "registry_force" field.
+func RegistryForceEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryForce, v))
+}
+
+// RegistryForceNEQ applies the NEQ predicate on the "registry_force" field.
+func RegistryForceNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryForce, v))
+}
+
+// RegistryForceIsNil applies the IsNil predicate on the "registry_force" field.
+func RegistryForceIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryForce))
+}
+
+// RegistryForceNotNil applies the NotNil predicate on the "registry_force" field.
+func RegistryForceNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryForce))
 }
 
 // WhenEQ applies the EQ predicate on the "when" field.

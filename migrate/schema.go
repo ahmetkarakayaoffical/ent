@@ -576,6 +576,7 @@ var (
 		{Name: "registry_key_value_name", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_key_value_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"String", "Binary", "DWord", "QWord", "Multistring", "ExpandString"}},
 		{Name: "registry_key_value_data", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_force", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -587,7 +588,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[10]},
+				Columns:    []*schema.Column{TasksColumns[11]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

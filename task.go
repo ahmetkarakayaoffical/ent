@@ -34,6 +34,8 @@ type Task struct {
 	RegistryKeyValueType task.RegistryKeyValueType `json:"registry_key_value_type,omitempty"`
 	// RegistryKeyValueData holds the value of the "registry_key_value_data" field.
 	RegistryKeyValueData string `json:"registry_key_value_data,omitempty"`
+	// RegistryForce holds the value of the "registry_force" field.
+	RegistryForce bool `json:"registry_force,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -79,6 +81,8 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case task.FieldRegistryForce:
+			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
 		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData:
@@ -155,6 +159,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field registry_key_value_data", values[i])
 			} else if value.Valid {
 				t.RegistryKeyValueData = value.String
+			}
+		case task.FieldRegistryForce:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_force", values[i])
+			} else if value.Valid {
+				t.RegistryForce = value.Bool
 			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -238,6 +248,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("registry_key_value_data=")
 	builder.WriteString(t.RegistryKeyValueData)
+	builder.WriteString(", ")
+	builder.WriteString("registry_force=")
+	builder.WriteString(fmt.Sprintf("%v", t.RegistryForce))
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

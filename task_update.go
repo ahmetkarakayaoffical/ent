@@ -179,6 +179,26 @@ func (tu *TaskUpdate) ClearRegistryKeyValueData() *TaskUpdate {
 	return tu
 }
 
+// SetRegistryForce sets the "registry_force" field.
+func (tu *TaskUpdate) SetRegistryForce(b bool) *TaskUpdate {
+	tu.mutation.SetRegistryForce(b)
+	return tu
+}
+
+// SetNillableRegistryForce sets the "registry_force" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryForce(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetRegistryForce(*b)
+	}
+	return tu
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (tu *TaskUpdate) ClearRegistryForce() *TaskUpdate {
+	tu.mutation.ClearRegistryForce()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -371,6 +391,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.RegistryKeyValueDataCleared() {
 		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
+	}
+	if value, ok := tu.mutation.RegistryForce(); ok {
+		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
+	}
+	if tu.mutation.RegistryForceCleared() {
+		_spec.ClearField(task.FieldRegistryForce, field.TypeBool)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -622,6 +648,26 @@ func (tuo *TaskUpdateOne) ClearRegistryKeyValueData() *TaskUpdateOne {
 	return tuo
 }
 
+// SetRegistryForce sets the "registry_force" field.
+func (tuo *TaskUpdateOne) SetRegistryForce(b bool) *TaskUpdateOne {
+	tuo.mutation.SetRegistryForce(b)
+	return tuo
+}
+
+// SetNillableRegistryForce sets the "registry_force" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryForce(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetRegistryForce(*b)
+	}
+	return tuo
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (tuo *TaskUpdateOne) ClearRegistryForce() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryForce()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -844,6 +890,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.RegistryKeyValueDataCleared() {
 		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
+	}
+	if value, ok := tuo.mutation.RegistryForce(); ok {
+		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
+	}
+	if tuo.mutation.RegistryForceCleared() {
+		_spec.ClearField(task.FieldRegistryForce, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

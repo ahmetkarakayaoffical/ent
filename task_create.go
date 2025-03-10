@@ -120,6 +120,20 @@ func (tc *TaskCreate) SetNillableRegistryKeyValueData(s *string) *TaskCreate {
 	return tc
 }
 
+// SetRegistryForce sets the "registry_force" field.
+func (tc *TaskCreate) SetRegistryForce(b bool) *TaskCreate {
+	tc.mutation.SetRegistryForce(b)
+	return tc
+}
+
+// SetNillableRegistryForce sets the "registry_force" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryForce(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetRegistryForce(*b)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -223,6 +237,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultRegistryKeyValueData
 		tc.mutation.SetRegistryKeyValueData(v)
 	}
+	if _, ok := tc.mutation.RegistryForce(); !ok {
+		v := task.DefaultRegistryForce
+		tc.mutation.SetRegistryForce(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -306,6 +324,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.RegistryKeyValueData(); ok {
 		_spec.SetField(task.FieldRegistryKeyValueData, field.TypeString, value)
 		_node.RegistryKeyValueData = value
+	}
+	if value, ok := tc.mutation.RegistryForce(); ok {
+		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
+		_node.RegistryForce = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -528,6 +550,24 @@ func (u *TaskUpsert) ClearRegistryKeyValueData() *TaskUpsert {
 	return u
 }
 
+// SetRegistryForce sets the "registry_force" field.
+func (u *TaskUpsert) SetRegistryForce(v bool) *TaskUpsert {
+	u.Set(task.FieldRegistryForce, v)
+	return u
+}
+
+// UpdateRegistryForce sets the "registry_force" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryForce() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryForce)
+	return u
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (u *TaskUpsert) ClearRegistryForce() *TaskUpsert {
+	u.SetNull(task.FieldRegistryForce)
+	return u
+}
+
 // SetWhen sets the "when" field.
 func (u *TaskUpsert) SetWhen(v time.Time) *TaskUpsert {
 	u.Set(task.FieldWhen, v)
@@ -737,6 +777,27 @@ func (u *TaskUpsertOne) UpdateRegistryKeyValueData() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearRegistryKeyValueData() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryKeyValueData()
+	})
+}
+
+// SetRegistryForce sets the "registry_force" field.
+func (u *TaskUpsertOne) SetRegistryForce(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryForce(v)
+	})
+}
+
+// UpdateRegistryForce sets the "registry_force" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryForce()
+	})
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (u *TaskUpsertOne) ClearRegistryForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryForce()
 	})
 }
 
@@ -1116,6 +1177,27 @@ func (u *TaskUpsertBulk) UpdateRegistryKeyValueData() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearRegistryKeyValueData() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryKeyValueData()
+	})
+}
+
+// SetRegistryForce sets the "registry_force" field.
+func (u *TaskUpsertBulk) SetRegistryForce(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryForce(v)
+	})
+}
+
+// UpdateRegistryForce sets the "registry_force" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryForce()
+	})
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (u *TaskUpsertBulk) ClearRegistryForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryForce()
 	})
 }
 

@@ -240,6 +240,10 @@ func init() {
 	taskDescRegistryKeyValueData := taskFields[7].Descriptor()
 	// task.DefaultRegistryKeyValueData holds the default value on creation for the registry_key_value_data field.
 	task.DefaultRegistryKeyValueData = taskDescRegistryKeyValueData.Default.(string)
+	// taskDescRegistryForce is the schema descriptor for registry_force field.
+	taskDescRegistryForce := taskFields[8].Descriptor()
+	// task.DefaultRegistryForce holds the default value on creation for the registry_force field.
+	task.DefaultRegistryForce = taskDescRegistryForce.Default.(bool)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

@@ -22,6 +22,7 @@ func (Task) Fields() []ent.Field {
 		field.String("registry_key_value_name").Optional().Default(""),
 		field.Enum("registry_key_value_type").Values("String", "Binary", "DWord", "QWord", "Multistring", "ExpandString").Optional(),
 		field.String("registry_key_value_data").Optional().Default(""),
+		field.Bool("registry_force").Optional().Default(false),
 		field.Time("when").Optional(),
 	}
 }

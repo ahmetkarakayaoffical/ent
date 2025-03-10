@@ -30,6 +30,8 @@ const (
 	FieldRegistryKeyValueType = "registry_key_value_type"
 	// FieldRegistryKeyValueData holds the string denoting the registry_key_value_data field in the database.
 	FieldRegistryKeyValueData = "registry_key_value_data"
+	// FieldRegistryForce holds the string denoting the registry_force field in the database.
+	FieldRegistryForce = "registry_force"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -65,6 +67,7 @@ var Columns = []string{
 	FieldRegistryKeyValueName,
 	FieldRegistryKeyValueType,
 	FieldRegistryKeyValueData,
+	FieldRegistryForce,
 	FieldWhen,
 }
 
@@ -102,6 +105,8 @@ var (
 	DefaultRegistryKeyValueName string
 	// DefaultRegistryKeyValueData holds the default value on creation for the "registry_key_value_data" field.
 	DefaultRegistryKeyValueData string
+	// DefaultRegistryForce holds the default value on creation for the "registry_force" field.
+	DefaultRegistryForce bool
 )
 
 // Type defines the type for the "type" enum field.
@@ -214,6 +219,11 @@ func ByRegistryKeyValueType(opts ...sql.OrderTermOption) OrderOption {
 // ByRegistryKeyValueData orders the results by the registry_key_value_data field.
 func ByRegistryKeyValueData(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRegistryKeyValueData, opts...).ToFunc()
+}
+
+// ByRegistryForce orders the results by the registry_force field.
+func ByRegistryForce(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryForce, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.
