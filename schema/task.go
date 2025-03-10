@@ -15,7 +15,7 @@ type Task struct {
 func (Task) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").NotEmpty(),
-		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "registry", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"),
+		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "add_registry_key", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"),
 		field.String("execute").Optional().Default(""),
 		field.String("package_id").Optional().Default(""),
 		field.String("package_name").Optional().Default(""),
