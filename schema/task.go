@@ -20,7 +20,7 @@ func (Task) Fields() []ent.Field {
 		field.String("package_name").Optional().Default(""),
 		field.String("registry_key").Optional().Default(""),
 		field.String("registry_key_value_name").Optional().Default(""),
-		field.Enum("registry_key_type").Values("String", "Binary", "DWord", "QWord", "Multistring", "ExpandString").Optional(),
+		field.Enum("registry_key_value_type").Values("String", "Binary", "DWord", "QWord", "Multistring", "ExpandString").Optional(),
 		field.String("registry_key_value_data").Optional().Default(""),
 		field.Time("when").Optional(),
 	}
