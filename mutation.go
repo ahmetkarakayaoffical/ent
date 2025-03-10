@@ -19624,6 +19624,7 @@ type TaskMutation struct {
 	registry_key_value_name *string
 	registry_key_value_type *task.RegistryKeyValueType
 	registry_key_value_data *string
+	registry_hex            *bool
 	registry_force          *bool
 	when                    *time.Time
 	clearedFields           map[string]struct{}
@@ -20101,6 +20102,55 @@ func (m *TaskMutation) ResetRegistryKeyValueData() {
 	delete(m.clearedFields, task.FieldRegistryKeyValueData)
 }
 
+// SetRegistryHex sets the "registry_hex" field.
+func (m *TaskMutation) SetRegistryHex(b bool) {
+	m.registry_hex = &b
+}
+
+// RegistryHex returns the value of the "registry_hex" field in the mutation.
+func (m *TaskMutation) RegistryHex() (r bool, exists bool) {
+	v := m.registry_hex
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryHex returns the old "registry_hex" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryHex(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryHex is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryHex requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryHex: %w", err)
+	}
+	return oldValue.RegistryHex, nil
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (m *TaskMutation) ClearRegistryHex() {
+	m.registry_hex = nil
+	m.clearedFields[task.FieldRegistryHex] = struct{}{}
+}
+
+// RegistryHexCleared returns if the "registry_hex" field was cleared in this mutation.
+func (m *TaskMutation) RegistryHexCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryHex]
+	return ok
+}
+
+// ResetRegistryHex resets all changes to the "registry_hex" field.
+func (m *TaskMutation) ResetRegistryHex() {
+	m.registry_hex = nil
+	delete(m.clearedFields, task.FieldRegistryHex)
+}
+
 // SetRegistryForce sets the "registry_force" field.
 func (m *TaskMutation) SetRegistryForce(b bool) {
 	m.registry_force = &b
@@ -20326,7 +20376,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -20350,6 +20400,9 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.registry_key_value_data != nil {
 		fields = append(fields, task.FieldRegistryKeyValueData)
+	}
+	if m.registry_hex != nil {
+		fields = append(fields, task.FieldRegistryHex)
 	}
 	if m.registry_force != nil {
 		fields = append(fields, task.FieldRegistryForce)
@@ -20381,6 +20434,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.RegistryKeyValueType()
 	case task.FieldRegistryKeyValueData:
 		return m.RegistryKeyValueData()
+	case task.FieldRegistryHex:
+		return m.RegistryHex()
 	case task.FieldRegistryForce:
 		return m.RegistryForce()
 	case task.FieldWhen:
@@ -20410,6 +20465,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldRegistryKeyValueType(ctx)
 	case task.FieldRegistryKeyValueData:
 		return m.OldRegistryKeyValueData(ctx)
+	case task.FieldRegistryHex:
+		return m.OldRegistryHex(ctx)
 	case task.FieldRegistryForce:
 		return m.OldRegistryForce(ctx)
 	case task.FieldWhen:
@@ -20479,6 +20536,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRegistryKeyValueData(v)
 		return nil
+	case task.FieldRegistryHex:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryHex(v)
+		return nil
 	case task.FieldRegistryForce:
 		v, ok := value.(bool)
 		if !ok {
@@ -20541,6 +20605,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldRegistryKeyValueData) {
 		fields = append(fields, task.FieldRegistryKeyValueData)
 	}
+	if m.FieldCleared(task.FieldRegistryHex) {
+		fields = append(fields, task.FieldRegistryHex)
+	}
 	if m.FieldCleared(task.FieldRegistryForce) {
 		fields = append(fields, task.FieldRegistryForce)
 	}
@@ -20579,6 +20646,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldRegistryKeyValueData:
 		m.ClearRegistryKeyValueData()
 		return nil
+	case task.FieldRegistryHex:
+		m.ClearRegistryHex()
+		return nil
 	case task.FieldRegistryForce:
 		m.ClearRegistryForce()
 		return nil
@@ -20616,6 +20686,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldRegistryKeyValueData:
 		m.ResetRegistryKeyValueData()
+		return nil
+	case task.FieldRegistryHex:
+		m.ResetRegistryHex()
 		return nil
 	case task.FieldRegistryForce:
 		m.ResetRegistryForce()

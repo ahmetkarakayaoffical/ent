@@ -85,6 +85,11 @@ func RegistryKeyValueData(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueData, v))
 }
 
+// RegistryHex applies equality check predicate on the "registry_hex" field. It's identical to RegistryHexEQ.
+func RegistryHex(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryHex, v))
+}
+
 // RegistryForce applies equality check predicate on the "registry_force" field. It's identical to RegistryForceEQ.
 func RegistryForce(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldRegistryForce, v))
@@ -583,6 +588,26 @@ func RegistryKeyValueDataEqualFold(v string) predicate.Task {
 // RegistryKeyValueDataContainsFold applies the ContainsFold predicate on the "registry_key_value_data" field.
 func RegistryKeyValueDataContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldRegistryKeyValueData, v))
+}
+
+// RegistryHexEQ applies the EQ predicate on the "registry_hex" field.
+func RegistryHexEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryHex, v))
+}
+
+// RegistryHexNEQ applies the NEQ predicate on the "registry_hex" field.
+func RegistryHexNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryHex, v))
+}
+
+// RegistryHexIsNil applies the IsNil predicate on the "registry_hex" field.
+func RegistryHexIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryHex))
+}
+
+// RegistryHexNotNil applies the NotNil predicate on the "registry_hex" field.
+func RegistryHexNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryHex))
 }
 
 // RegistryForceEQ applies the EQ predicate on the "registry_force" field.

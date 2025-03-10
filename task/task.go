@@ -30,6 +30,8 @@ const (
 	FieldRegistryKeyValueType = "registry_key_value_type"
 	// FieldRegistryKeyValueData holds the string denoting the registry_key_value_data field in the database.
 	FieldRegistryKeyValueData = "registry_key_value_data"
+	// FieldRegistryHex holds the string denoting the registry_hex field in the database.
+	FieldRegistryHex = "registry_hex"
 	// FieldRegistryForce holds the string denoting the registry_force field in the database.
 	FieldRegistryForce = "registry_force"
 	// FieldWhen holds the string denoting the when field in the database.
@@ -67,6 +69,7 @@ var Columns = []string{
 	FieldRegistryKeyValueName,
 	FieldRegistryKeyValueType,
 	FieldRegistryKeyValueData,
+	FieldRegistryHex,
 	FieldRegistryForce,
 	FieldWhen,
 }
@@ -105,6 +108,8 @@ var (
 	DefaultRegistryKeyValueName string
 	// DefaultRegistryKeyValueData holds the default value on creation for the "registry_key_value_data" field.
 	DefaultRegistryKeyValueData string
+	// DefaultRegistryHex holds the default value on creation for the "registry_hex" field.
+	DefaultRegistryHex bool
 	// DefaultRegistryForce holds the default value on creation for the "registry_force" field.
 	DefaultRegistryForce bool
 )
@@ -219,6 +224,11 @@ func ByRegistryKeyValueType(opts ...sql.OrderTermOption) OrderOption {
 // ByRegistryKeyValueData orders the results by the registry_key_value_data field.
 func ByRegistryKeyValueData(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRegistryKeyValueData, opts...).ToFunc()
+}
+
+// ByRegistryHex orders the results by the registry_hex field.
+func ByRegistryHex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryHex, opts...).ToFunc()
 }
 
 // ByRegistryForce orders the results by the registry_force field.

@@ -179,6 +179,26 @@ func (tu *TaskUpdate) ClearRegistryKeyValueData() *TaskUpdate {
 	return tu
 }
 
+// SetRegistryHex sets the "registry_hex" field.
+func (tu *TaskUpdate) SetRegistryHex(b bool) *TaskUpdate {
+	tu.mutation.SetRegistryHex(b)
+	return tu
+}
+
+// SetNillableRegistryHex sets the "registry_hex" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryHex(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetRegistryHex(*b)
+	}
+	return tu
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (tu *TaskUpdate) ClearRegistryHex() *TaskUpdate {
+	tu.mutation.ClearRegistryHex()
+	return tu
+}
+
 // SetRegistryForce sets the "registry_force" field.
 func (tu *TaskUpdate) SetRegistryForce(b bool) *TaskUpdate {
 	tu.mutation.SetRegistryForce(b)
@@ -391,6 +411,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.RegistryKeyValueDataCleared() {
 		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
+	}
+	if value, ok := tu.mutation.RegistryHex(); ok {
+		_spec.SetField(task.FieldRegistryHex, field.TypeBool, value)
+	}
+	if tu.mutation.RegistryHexCleared() {
+		_spec.ClearField(task.FieldRegistryHex, field.TypeBool)
 	}
 	if value, ok := tu.mutation.RegistryForce(); ok {
 		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
@@ -648,6 +674,26 @@ func (tuo *TaskUpdateOne) ClearRegistryKeyValueData() *TaskUpdateOne {
 	return tuo
 }
 
+// SetRegistryHex sets the "registry_hex" field.
+func (tuo *TaskUpdateOne) SetRegistryHex(b bool) *TaskUpdateOne {
+	tuo.mutation.SetRegistryHex(b)
+	return tuo
+}
+
+// SetNillableRegistryHex sets the "registry_hex" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryHex(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetRegistryHex(*b)
+	}
+	return tuo
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (tuo *TaskUpdateOne) ClearRegistryHex() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryHex()
+	return tuo
+}
+
 // SetRegistryForce sets the "registry_force" field.
 func (tuo *TaskUpdateOne) SetRegistryForce(b bool) *TaskUpdateOne {
 	tuo.mutation.SetRegistryForce(b)
@@ -890,6 +936,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.RegistryKeyValueDataCleared() {
 		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
+	}
+	if value, ok := tuo.mutation.RegistryHex(); ok {
+		_spec.SetField(task.FieldRegistryHex, field.TypeBool, value)
+	}
+	if tuo.mutation.RegistryHexCleared() {
+		_spec.ClearField(task.FieldRegistryHex, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.RegistryForce(); ok {
 		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)

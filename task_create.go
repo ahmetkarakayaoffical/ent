@@ -120,6 +120,20 @@ func (tc *TaskCreate) SetNillableRegistryKeyValueData(s *string) *TaskCreate {
 	return tc
 }
 
+// SetRegistryHex sets the "registry_hex" field.
+func (tc *TaskCreate) SetRegistryHex(b bool) *TaskCreate {
+	tc.mutation.SetRegistryHex(b)
+	return tc
+}
+
+// SetNillableRegistryHex sets the "registry_hex" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryHex(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetRegistryHex(*b)
+	}
+	return tc
+}
+
 // SetRegistryForce sets the "registry_force" field.
 func (tc *TaskCreate) SetRegistryForce(b bool) *TaskCreate {
 	tc.mutation.SetRegistryForce(b)
@@ -237,6 +251,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultRegistryKeyValueData
 		tc.mutation.SetRegistryKeyValueData(v)
 	}
+	if _, ok := tc.mutation.RegistryHex(); !ok {
+		v := task.DefaultRegistryHex
+		tc.mutation.SetRegistryHex(v)
+	}
 	if _, ok := tc.mutation.RegistryForce(); !ok {
 		v := task.DefaultRegistryForce
 		tc.mutation.SetRegistryForce(v)
@@ -324,6 +342,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.RegistryKeyValueData(); ok {
 		_spec.SetField(task.FieldRegistryKeyValueData, field.TypeString, value)
 		_node.RegistryKeyValueData = value
+	}
+	if value, ok := tc.mutation.RegistryHex(); ok {
+		_spec.SetField(task.FieldRegistryHex, field.TypeBool, value)
+		_node.RegistryHex = value
 	}
 	if value, ok := tc.mutation.RegistryForce(); ok {
 		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
@@ -547,6 +569,24 @@ func (u *TaskUpsert) UpdateRegistryKeyValueData() *TaskUpsert {
 // ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
 func (u *TaskUpsert) ClearRegistryKeyValueData() *TaskUpsert {
 	u.SetNull(task.FieldRegistryKeyValueData)
+	return u
+}
+
+// SetRegistryHex sets the "registry_hex" field.
+func (u *TaskUpsert) SetRegistryHex(v bool) *TaskUpsert {
+	u.Set(task.FieldRegistryHex, v)
+	return u
+}
+
+// UpdateRegistryHex sets the "registry_hex" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryHex() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryHex)
+	return u
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (u *TaskUpsert) ClearRegistryHex() *TaskUpsert {
+	u.SetNull(task.FieldRegistryHex)
 	return u
 }
 
@@ -777,6 +817,27 @@ func (u *TaskUpsertOne) UpdateRegistryKeyValueData() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearRegistryKeyValueData() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryKeyValueData()
+	})
+}
+
+// SetRegistryHex sets the "registry_hex" field.
+func (u *TaskUpsertOne) SetRegistryHex(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryHex(v)
+	})
+}
+
+// UpdateRegistryHex sets the "registry_hex" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryHex() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryHex()
+	})
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (u *TaskUpsertOne) ClearRegistryHex() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryHex()
 	})
 }
 
@@ -1177,6 +1238,27 @@ func (u *TaskUpsertBulk) UpdateRegistryKeyValueData() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearRegistryKeyValueData() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryKeyValueData()
+	})
+}
+
+// SetRegistryHex sets the "registry_hex" field.
+func (u *TaskUpsertBulk) SetRegistryHex(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryHex(v)
+	})
+}
+
+// UpdateRegistryHex sets the "registry_hex" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryHex() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryHex()
+	})
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (u *TaskUpsertBulk) ClearRegistryHex() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryHex()
 	})
 }
 

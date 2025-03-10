@@ -34,6 +34,8 @@ type Task struct {
 	RegistryKeyValueType task.RegistryKeyValueType `json:"registry_key_value_type,omitempty"`
 	// RegistryKeyValueData holds the value of the "registry_key_value_data" field.
 	RegistryKeyValueData string `json:"registry_key_value_data,omitempty"`
+	// RegistryHex holds the value of the "registry_hex" field.
+	RegistryHex bool `json:"registry_hex,omitempty"`
 	// RegistryForce holds the value of the "registry_force" field.
 	RegistryForce bool `json:"registry_force,omitempty"`
 	// When holds the value of the "when" field.
@@ -81,7 +83,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldRegistryForce:
+		case task.FieldRegistryHex, task.FieldRegistryForce:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
@@ -159,6 +161,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field registry_key_value_data", values[i])
 			} else if value.Valid {
 				t.RegistryKeyValueData = value.String
+			}
+		case task.FieldRegistryHex:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_hex", values[i])
+			} else if value.Valid {
+				t.RegistryHex = value.Bool
 			}
 		case task.FieldRegistryForce:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -248,6 +256,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("registry_key_value_data=")
 	builder.WriteString(t.RegistryKeyValueData)
+	builder.WriteString(", ")
+	builder.WriteString("registry_hex=")
+	builder.WriteString(fmt.Sprintf("%v", t.RegistryHex))
 	builder.WriteString(", ")
 	builder.WriteString("registry_force=")
 	builder.WriteString(fmt.Sprintf("%v", t.RegistryForce))

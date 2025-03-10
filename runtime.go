@@ -240,8 +240,12 @@ func init() {
 	taskDescRegistryKeyValueData := taskFields[7].Descriptor()
 	// task.DefaultRegistryKeyValueData holds the default value on creation for the registry_key_value_data field.
 	task.DefaultRegistryKeyValueData = taskDescRegistryKeyValueData.Default.(string)
+	// taskDescRegistryHex is the schema descriptor for registry_hex field.
+	taskDescRegistryHex := taskFields[8].Descriptor()
+	// task.DefaultRegistryHex holds the default value on creation for the registry_hex field.
+	task.DefaultRegistryHex = taskDescRegistryHex.Default.(bool)
 	// taskDescRegistryForce is the schema descriptor for registry_force field.
-	taskDescRegistryForce := taskFields[8].Descriptor()
+	taskDescRegistryForce := taskFields[9].Descriptor()
 	// task.DefaultRegistryForce holds the default value on creation for the registry_force field.
 	task.DefaultRegistryForce = taskDescRegistryForce.Default.(bool)
 	userFields := schema.User{}.Fields()
