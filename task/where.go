@@ -60,11 +60,6 @@ func Name(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldName, v))
 }
 
-// Execute applies equality check predicate on the "execute" field. It's identical to ExecuteEQ.
-func Execute(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldExecute, v))
-}
-
 // PackageID applies equality check predicate on the "package_id" field. It's identical to PackageIDEQ.
 func PackageID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldPackageID, v))
@@ -73,6 +68,21 @@ func PackageID(v string) predicate.Task {
 // PackageName applies equality check predicate on the "package_name" field. It's identical to PackageNameEQ.
 func PackageName(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldPackageName, v))
+}
+
+// RegistryKey applies equality check predicate on the "registry_key" field. It's identical to RegistryKeyEQ.
+func RegistryKey(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKey, v))
+}
+
+// RegistryKeyValueName applies equality check predicate on the "registry_key_value_name" field. It's identical to RegistryKeyValueNameEQ.
+func RegistryKeyValueName(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueData applies equality check predicate on the "registry_key_value_data" field. It's identical to RegistryKeyValueDataEQ.
+func RegistryKeyValueData(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueData, v))
 }
 
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
@@ -163,81 +173,6 @@ func TypeIn(vs ...Type) predicate.Task {
 // TypeNotIn applies the NotIn predicate on the "type" field.
 func TypeNotIn(vs ...Type) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldType, vs...))
-}
-
-// ExecuteEQ applies the EQ predicate on the "execute" field.
-func ExecuteEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldExecute, v))
-}
-
-// ExecuteNEQ applies the NEQ predicate on the "execute" field.
-func ExecuteNEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldNEQ(FieldExecute, v))
-}
-
-// ExecuteIn applies the In predicate on the "execute" field.
-func ExecuteIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldIn(FieldExecute, vs...))
-}
-
-// ExecuteNotIn applies the NotIn predicate on the "execute" field.
-func ExecuteNotIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldNotIn(FieldExecute, vs...))
-}
-
-// ExecuteGT applies the GT predicate on the "execute" field.
-func ExecuteGT(v string) predicate.Task {
-	return predicate.Task(sql.FieldGT(FieldExecute, v))
-}
-
-// ExecuteGTE applies the GTE predicate on the "execute" field.
-func ExecuteGTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldGTE(FieldExecute, v))
-}
-
-// ExecuteLT applies the LT predicate on the "execute" field.
-func ExecuteLT(v string) predicate.Task {
-	return predicate.Task(sql.FieldLT(FieldExecute, v))
-}
-
-// ExecuteLTE applies the LTE predicate on the "execute" field.
-func ExecuteLTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldLTE(FieldExecute, v))
-}
-
-// ExecuteContains applies the Contains predicate on the "execute" field.
-func ExecuteContains(v string) predicate.Task {
-	return predicate.Task(sql.FieldContains(FieldExecute, v))
-}
-
-// ExecuteHasPrefix applies the HasPrefix predicate on the "execute" field.
-func ExecuteHasPrefix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasPrefix(FieldExecute, v))
-}
-
-// ExecuteHasSuffix applies the HasSuffix predicate on the "execute" field.
-func ExecuteHasSuffix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasSuffix(FieldExecute, v))
-}
-
-// ExecuteIsNil applies the IsNil predicate on the "execute" field.
-func ExecuteIsNil() predicate.Task {
-	return predicate.Task(sql.FieldIsNull(FieldExecute))
-}
-
-// ExecuteNotNil applies the NotNil predicate on the "execute" field.
-func ExecuteNotNil() predicate.Task {
-	return predicate.Task(sql.FieldNotNull(FieldExecute))
-}
-
-// ExecuteEqualFold applies the EqualFold predicate on the "execute" field.
-func ExecuteEqualFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldEqualFold(FieldExecute, v))
-}
-
-// ExecuteContainsFold applies the ContainsFold predicate on the "execute" field.
-func ExecuteContainsFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldContainsFold(FieldExecute, v))
 }
 
 // PackageIDEQ applies the EQ predicate on the "package_id" field.
@@ -388,6 +323,261 @@ func PackageNameEqualFold(v string) predicate.Task {
 // PackageNameContainsFold applies the ContainsFold predicate on the "package_name" field.
 func PackageNameContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldPackageName, v))
+}
+
+// RegistryKeyEQ applies the EQ predicate on the "registry_key" field.
+func RegistryKeyEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKey, v))
+}
+
+// RegistryKeyNEQ applies the NEQ predicate on the "registry_key" field.
+func RegistryKeyNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryKey, v))
+}
+
+// RegistryKeyIn applies the In predicate on the "registry_key" field.
+func RegistryKeyIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldRegistryKey, vs...))
+}
+
+// RegistryKeyNotIn applies the NotIn predicate on the "registry_key" field.
+func RegistryKeyNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldRegistryKey, vs...))
+}
+
+// RegistryKeyGT applies the GT predicate on the "registry_key" field.
+func RegistryKeyGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldRegistryKey, v))
+}
+
+// RegistryKeyGTE applies the GTE predicate on the "registry_key" field.
+func RegistryKeyGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldRegistryKey, v))
+}
+
+// RegistryKeyLT applies the LT predicate on the "registry_key" field.
+func RegistryKeyLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldRegistryKey, v))
+}
+
+// RegistryKeyLTE applies the LTE predicate on the "registry_key" field.
+func RegistryKeyLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldRegistryKey, v))
+}
+
+// RegistryKeyContains applies the Contains predicate on the "registry_key" field.
+func RegistryKeyContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldRegistryKey, v))
+}
+
+// RegistryKeyHasPrefix applies the HasPrefix predicate on the "registry_key" field.
+func RegistryKeyHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldRegistryKey, v))
+}
+
+// RegistryKeyHasSuffix applies the HasSuffix predicate on the "registry_key" field.
+func RegistryKeyHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldRegistryKey, v))
+}
+
+// RegistryKeyIsNil applies the IsNil predicate on the "registry_key" field.
+func RegistryKeyIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryKey))
+}
+
+// RegistryKeyNotNil applies the NotNil predicate on the "registry_key" field.
+func RegistryKeyNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryKey))
+}
+
+// RegistryKeyEqualFold applies the EqualFold predicate on the "registry_key" field.
+func RegistryKeyEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldRegistryKey, v))
+}
+
+// RegistryKeyContainsFold applies the ContainsFold predicate on the "registry_key" field.
+func RegistryKeyContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldRegistryKey, v))
+}
+
+// RegistryKeyValueNameEQ applies the EQ predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameNEQ applies the NEQ predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameIn applies the In predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldRegistryKeyValueName, vs...))
+}
+
+// RegistryKeyValueNameNotIn applies the NotIn predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldRegistryKeyValueName, vs...))
+}
+
+// RegistryKeyValueNameGT applies the GT predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameGTE applies the GTE predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameLT applies the LT predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameLTE applies the LTE predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameContains applies the Contains predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameHasPrefix applies the HasPrefix predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameHasSuffix applies the HasSuffix predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameIsNil applies the IsNil predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryKeyValueName))
+}
+
+// RegistryKeyValueNameNotNil applies the NotNil predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryKeyValueName))
+}
+
+// RegistryKeyValueNameEqualFold applies the EqualFold predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueNameContainsFold applies the ContainsFold predicate on the "registry_key_value_name" field.
+func RegistryKeyValueNameContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldRegistryKeyValueName, v))
+}
+
+// RegistryKeyValueTypeEQ applies the EQ predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeEQ(v RegistryKeyValueType) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueType, v))
+}
+
+// RegistryKeyValueTypeNEQ applies the NEQ predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeNEQ(v RegistryKeyValueType) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryKeyValueType, v))
+}
+
+// RegistryKeyValueTypeIn applies the In predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeIn(vs ...RegistryKeyValueType) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldRegistryKeyValueType, vs...))
+}
+
+// RegistryKeyValueTypeNotIn applies the NotIn predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeNotIn(vs ...RegistryKeyValueType) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldRegistryKeyValueType, vs...))
+}
+
+// RegistryKeyValueTypeIsNil applies the IsNil predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryKeyValueType))
+}
+
+// RegistryKeyValueTypeNotNil applies the NotNil predicate on the "registry_key_value_type" field.
+func RegistryKeyValueTypeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryKeyValueType))
+}
+
+// RegistryKeyValueDataEQ applies the EQ predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataNEQ applies the NEQ predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataIn applies the In predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldRegistryKeyValueData, vs...))
+}
+
+// RegistryKeyValueDataNotIn applies the NotIn predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldRegistryKeyValueData, vs...))
+}
+
+// RegistryKeyValueDataGT applies the GT predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataGTE applies the GTE predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataLT applies the LT predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataLTE applies the LTE predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataContains applies the Contains predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataHasPrefix applies the HasPrefix predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataHasSuffix applies the HasSuffix predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataIsNil applies the IsNil predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldRegistryKeyValueData))
+}
+
+// RegistryKeyValueDataNotNil applies the NotNil predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldRegistryKeyValueData))
+}
+
+// RegistryKeyValueDataEqualFold applies the EqualFold predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldRegistryKeyValueData, v))
+}
+
+// RegistryKeyValueDataContainsFold applies the ContainsFold predicate on the "registry_key_value_data" field.
+func RegistryKeyValueDataContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldRegistryKeyValueData, v))
 }
 
 // WhenEQ applies the EQ predicate on the "when" field.

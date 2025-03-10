@@ -18,12 +18,18 @@ const (
 	FieldName = "name"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
-	// FieldExecute holds the string denoting the execute field in the database.
-	FieldExecute = "execute"
 	// FieldPackageID holds the string denoting the package_id field in the database.
 	FieldPackageID = "package_id"
 	// FieldPackageName holds the string denoting the package_name field in the database.
 	FieldPackageName = "package_name"
+	// FieldRegistryKey holds the string denoting the registry_key field in the database.
+	FieldRegistryKey = "registry_key"
+	// FieldRegistryKeyValueName holds the string denoting the registry_key_value_name field in the database.
+	FieldRegistryKeyValueName = "registry_key_value_name"
+	// FieldRegistryKeyValueType holds the string denoting the registry_key_value_type field in the database.
+	FieldRegistryKeyValueType = "registry_key_value_type"
+	// FieldRegistryKeyValueData holds the string denoting the registry_key_value_data field in the database.
+	FieldRegistryKeyValueData = "registry_key_value_data"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -53,9 +59,12 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldType,
-	FieldExecute,
 	FieldPackageID,
 	FieldPackageName,
+	FieldRegistryKey,
+	FieldRegistryKeyValueName,
+	FieldRegistryKeyValueType,
+	FieldRegistryKeyValueData,
 	FieldWhen,
 }
 
@@ -83,12 +92,16 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DefaultExecute holds the default value on creation for the "execute" field.
-	DefaultExecute string
 	// DefaultPackageID holds the default value on creation for the "package_id" field.
 	DefaultPackageID string
 	// DefaultPackageName holds the default value on creation for the "package_name" field.
 	DefaultPackageName string
+	// DefaultRegistryKey holds the default value on creation for the "registry_key" field.
+	DefaultRegistryKey string
+	// DefaultRegistryKeyValueName holds the default value on creation for the "registry_key_value_name" field.
+	DefaultRegistryKeyValueName string
+	// DefaultRegistryKeyValueData holds the default value on creation for the "registry_key_value_data" field.
+	DefaultRegistryKeyValueData string
 )
 
 // Type defines the type for the "type" enum field.
@@ -96,18 +109,22 @@ type Type string
 
 // Type values.
 const (
-	TypeWingetInstall  Type = "winget_install"
-	TypeWingetUpdate   Type = "winget_update"
-	TypeWingetDelete   Type = "winget_delete"
-	TypeRegistry       Type = "registry"
-	TypeEnvironment    Type = "environment"
-	TypePackage        Type = "package"
-	TypeRemoteFile     Type = "remote_file"
-	TypeLocalUser      Type = "local_user"
-	TypeLocalGroup     Type = "local_group"
-	TypeExecuteCommand Type = "execute_command"
-	TypeReboot         Type = "reboot"
-	TypePoweroff       Type = "poweroff"
+	TypeWingetInstall                 Type = "winget_install"
+	TypeWingetUpdate                  Type = "winget_update"
+	TypeWingetDelete                  Type = "winget_delete"
+	TypeAddRegistryKey                Type = "add_registry_key"
+	TypeUpdateRegistryKeyDefaultValue Type = "update_registry_key_default_value"
+	TypeAddRegistryKeyValue           Type = "add_registry_key_value"
+	TypeRemoveRegistryKey             Type = "remove_registry_key"
+	TypeRemoveRegistryKeyValue        Type = "remove_registry_key_value"
+	TypeEnvironment                   Type = "environment"
+	TypePackage                       Type = "package"
+	TypeRemoteFile                    Type = "remote_file"
+	TypeLocalUser                     Type = "local_user"
+	TypeLocalGroup                    Type = "local_group"
+	TypeExecuteCommand                Type = "execute_command"
+	TypeReboot                        Type = "reboot"
+	TypePoweroff                      Type = "poweroff"
 )
 
 func (_type Type) String() string {
@@ -117,10 +134,37 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeRegistry, TypeEnvironment, TypePackage, TypeRemoteFile, TypeLocalUser, TypeLocalGroup, TypeExecuteCommand, TypeReboot, TypePoweroff:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeEnvironment, TypePackage, TypeRemoteFile, TypeLocalUser, TypeLocalGroup, TypeExecuteCommand, TypeReboot, TypePoweroff:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
+	}
+}
+
+// RegistryKeyValueType defines the type for the "registry_key_value_type" enum field.
+type RegistryKeyValueType string
+
+// RegistryKeyValueType values.
+const (
+	RegistryKeyValueTypeString       RegistryKeyValueType = "String"
+	RegistryKeyValueTypeBinary       RegistryKeyValueType = "Binary"
+	RegistryKeyValueTypeDWord        RegistryKeyValueType = "DWord"
+	RegistryKeyValueTypeQWord        RegistryKeyValueType = "QWord"
+	RegistryKeyValueTypeMultistring  RegistryKeyValueType = "Multistring"
+	RegistryKeyValueTypeExpandString RegistryKeyValueType = "ExpandString"
+)
+
+func (rkvt RegistryKeyValueType) String() string {
+	return string(rkvt)
+}
+
+// RegistryKeyValueTypeValidator is a validator for the "registry_key_value_type" field enum values. It is called by the builders before save.
+func RegistryKeyValueTypeValidator(rkvt RegistryKeyValueType) error {
+	switch rkvt {
+	case RegistryKeyValueTypeString, RegistryKeyValueTypeBinary, RegistryKeyValueTypeDWord, RegistryKeyValueTypeQWord, RegistryKeyValueTypeMultistring, RegistryKeyValueTypeExpandString:
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for registry_key_value_type field: %q", rkvt)
 	}
 }
 
@@ -142,11 +186,6 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
-// ByExecute orders the results by the execute field.
-func ByExecute(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExecute, opts...).ToFunc()
-}
-
 // ByPackageID orders the results by the package_id field.
 func ByPackageID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPackageID, opts...).ToFunc()
@@ -155,6 +194,26 @@ func ByPackageID(opts ...sql.OrderTermOption) OrderOption {
 // ByPackageName orders the results by the package_name field.
 func ByPackageName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPackageName, opts...).ToFunc()
+}
+
+// ByRegistryKey orders the results by the registry_key field.
+func ByRegistryKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryKey, opts...).ToFunc()
+}
+
+// ByRegistryKeyValueName orders the results by the registry_key_value_name field.
+func ByRegistryKeyValueName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryKeyValueName, opts...).ToFunc()
+}
+
+// ByRegistryKeyValueType orders the results by the registry_key_value_type field.
+func ByRegistryKeyValueType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryKeyValueType, opts...).ToFunc()
+}
+
+// ByRegistryKeyValueData orders the results by the registry_key_value_data field.
+func ByRegistryKeyValueData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegistryKeyValueData, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

@@ -19613,24 +19613,27 @@ func (m *TagMutation) ResetEdge(name string) error {
 // TaskMutation represents an operation that mutates the Task nodes in the graph.
 type TaskMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	name           *string
-	_type          *task.Type
-	execute        *string
-	package_id     *string
-	package_name   *string
-	when           *time.Time
-	clearedFields  map[string]struct{}
-	tags           map[int]struct{}
-	removedtags    map[int]struct{}
-	clearedtags    bool
-	profile        *int
-	clearedprofile bool
-	done           bool
-	oldValue       func(context.Context) (*Task, error)
-	predicates     []predicate.Task
+	op                      Op
+	typ                     string
+	id                      *int
+	name                    *string
+	_type                   *task.Type
+	package_id              *string
+	package_name            *string
+	registry_key            *string
+	registry_key_value_name *string
+	registry_key_value_type *task.RegistryKeyValueType
+	registry_key_value_data *string
+	when                    *time.Time
+	clearedFields           map[string]struct{}
+	tags                    map[int]struct{}
+	removedtags             map[int]struct{}
+	clearedtags             bool
+	profile                 *int
+	clearedprofile          bool
+	done                    bool
+	oldValue                func(context.Context) (*Task, error)
+	predicates              []predicate.Task
 }
 
 var _ ent.Mutation = (*TaskMutation)(nil)
@@ -19803,55 +19806,6 @@ func (m *TaskMutation) ResetType() {
 	m._type = nil
 }
 
-// SetExecute sets the "execute" field.
-func (m *TaskMutation) SetExecute(s string) {
-	m.execute = &s
-}
-
-// Execute returns the value of the "execute" field in the mutation.
-func (m *TaskMutation) Execute() (r string, exists bool) {
-	v := m.execute
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExecute returns the old "execute" field's value of the Task entity.
-// If the Task object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldExecute(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExecute is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExecute requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExecute: %w", err)
-	}
-	return oldValue.Execute, nil
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (m *TaskMutation) ClearExecute() {
-	m.execute = nil
-	m.clearedFields[task.FieldExecute] = struct{}{}
-}
-
-// ExecuteCleared returns if the "execute" field was cleared in this mutation.
-func (m *TaskMutation) ExecuteCleared() bool {
-	_, ok := m.clearedFields[task.FieldExecute]
-	return ok
-}
-
-// ResetExecute resets all changes to the "execute" field.
-func (m *TaskMutation) ResetExecute() {
-	m.execute = nil
-	delete(m.clearedFields, task.FieldExecute)
-}
-
 // SetPackageID sets the "package_id" field.
 func (m *TaskMutation) SetPackageID(s string) {
 	m.package_id = &s
@@ -19948,6 +19902,202 @@ func (m *TaskMutation) PackageNameCleared() bool {
 func (m *TaskMutation) ResetPackageName() {
 	m.package_name = nil
 	delete(m.clearedFields, task.FieldPackageName)
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (m *TaskMutation) SetRegistryKey(s string) {
+	m.registry_key = &s
+}
+
+// RegistryKey returns the value of the "registry_key" field in the mutation.
+func (m *TaskMutation) RegistryKey() (r string, exists bool) {
+	v := m.registry_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKey returns the old "registry_key" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKey: %w", err)
+	}
+	return oldValue.RegistryKey, nil
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (m *TaskMutation) ClearRegistryKey() {
+	m.registry_key = nil
+	m.clearedFields[task.FieldRegistryKey] = struct{}{}
+}
+
+// RegistryKeyCleared returns if the "registry_key" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKey]
+	return ok
+}
+
+// ResetRegistryKey resets all changes to the "registry_key" field.
+func (m *TaskMutation) ResetRegistryKey() {
+	m.registry_key = nil
+	delete(m.clearedFields, task.FieldRegistryKey)
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (m *TaskMutation) SetRegistryKeyValueName(s string) {
+	m.registry_key_value_name = &s
+}
+
+// RegistryKeyValueName returns the value of the "registry_key_value_name" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueName() (r string, exists bool) {
+	v := m.registry_key_value_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueName returns the old "registry_key_value_name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueName: %w", err)
+	}
+	return oldValue.RegistryKeyValueName, nil
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (m *TaskMutation) ClearRegistryKeyValueName() {
+	m.registry_key_value_name = nil
+	m.clearedFields[task.FieldRegistryKeyValueName] = struct{}{}
+}
+
+// RegistryKeyValueNameCleared returns if the "registry_key_value_name" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueNameCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueName]
+	return ok
+}
+
+// ResetRegistryKeyValueName resets all changes to the "registry_key_value_name" field.
+func (m *TaskMutation) ResetRegistryKeyValueName() {
+	m.registry_key_value_name = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueName)
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (m *TaskMutation) SetRegistryKeyValueType(tkvt task.RegistryKeyValueType) {
+	m.registry_key_value_type = &tkvt
+}
+
+// RegistryKeyValueType returns the value of the "registry_key_value_type" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueType() (r task.RegistryKeyValueType, exists bool) {
+	v := m.registry_key_value_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueType returns the old "registry_key_value_type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueType(ctx context.Context) (v task.RegistryKeyValueType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueType: %w", err)
+	}
+	return oldValue.RegistryKeyValueType, nil
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (m *TaskMutation) ClearRegistryKeyValueType() {
+	m.registry_key_value_type = nil
+	m.clearedFields[task.FieldRegistryKeyValueType] = struct{}{}
+}
+
+// RegistryKeyValueTypeCleared returns if the "registry_key_value_type" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueTypeCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueType]
+	return ok
+}
+
+// ResetRegistryKeyValueType resets all changes to the "registry_key_value_type" field.
+func (m *TaskMutation) ResetRegistryKeyValueType() {
+	m.registry_key_value_type = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueType)
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (m *TaskMutation) SetRegistryKeyValueData(s string) {
+	m.registry_key_value_data = &s
+}
+
+// RegistryKeyValueData returns the value of the "registry_key_value_data" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueData() (r string, exists bool) {
+	v := m.registry_key_value_data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueData returns the old "registry_key_value_data" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueData(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueData: %w", err)
+	}
+	return oldValue.RegistryKeyValueData, nil
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (m *TaskMutation) ClearRegistryKeyValueData() {
+	m.registry_key_value_data = nil
+	m.clearedFields[task.FieldRegistryKeyValueData] = struct{}{}
+}
+
+// RegistryKeyValueDataCleared returns if the "registry_key_value_data" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueDataCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueData]
+	return ok
+}
+
+// ResetRegistryKeyValueData resets all changes to the "registry_key_value_data" field.
+func (m *TaskMutation) ResetRegistryKeyValueData() {
+	m.registry_key_value_data = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueData)
 }
 
 // SetWhen sets the "when" field.
@@ -20126,21 +20276,30 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 9)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
 	if m._type != nil {
 		fields = append(fields, task.FieldType)
 	}
-	if m.execute != nil {
-		fields = append(fields, task.FieldExecute)
-	}
 	if m.package_id != nil {
 		fields = append(fields, task.FieldPackageID)
 	}
 	if m.package_name != nil {
 		fields = append(fields, task.FieldPackageName)
+	}
+	if m.registry_key != nil {
+		fields = append(fields, task.FieldRegistryKey)
+	}
+	if m.registry_key_value_name != nil {
+		fields = append(fields, task.FieldRegistryKeyValueName)
+	}
+	if m.registry_key_value_type != nil {
+		fields = append(fields, task.FieldRegistryKeyValueType)
+	}
+	if m.registry_key_value_data != nil {
+		fields = append(fields, task.FieldRegistryKeyValueData)
 	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
@@ -20157,12 +20316,18 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case task.FieldType:
 		return m.GetType()
-	case task.FieldExecute:
-		return m.Execute()
 	case task.FieldPackageID:
 		return m.PackageID()
 	case task.FieldPackageName:
 		return m.PackageName()
+	case task.FieldRegistryKey:
+		return m.RegistryKey()
+	case task.FieldRegistryKeyValueName:
+		return m.RegistryKeyValueName()
+	case task.FieldRegistryKeyValueType:
+		return m.RegistryKeyValueType()
+	case task.FieldRegistryKeyValueData:
+		return m.RegistryKeyValueData()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -20178,12 +20343,18 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldName(ctx)
 	case task.FieldType:
 		return m.OldType(ctx)
-	case task.FieldExecute:
-		return m.OldExecute(ctx)
 	case task.FieldPackageID:
 		return m.OldPackageID(ctx)
 	case task.FieldPackageName:
 		return m.OldPackageName(ctx)
+	case task.FieldRegistryKey:
+		return m.OldRegistryKey(ctx)
+	case task.FieldRegistryKeyValueName:
+		return m.OldRegistryKeyValueName(ctx)
+	case task.FieldRegistryKeyValueType:
+		return m.OldRegistryKeyValueType(ctx)
+	case task.FieldRegistryKeyValueData:
+		return m.OldRegistryKeyValueData(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -20209,13 +20380,6 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetType(v)
 		return nil
-	case task.FieldExecute:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExecute(v)
-		return nil
 	case task.FieldPackageID:
 		v, ok := value.(string)
 		if !ok {
@@ -20229,6 +20393,34 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPackageName(v)
+		return nil
+	case task.FieldRegistryKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKey(v)
+		return nil
+	case task.FieldRegistryKeyValueName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueName(v)
+		return nil
+	case task.FieldRegistryKeyValueType:
+		v, ok := value.(task.RegistryKeyValueType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueType(v)
+		return nil
+	case task.FieldRegistryKeyValueData:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueData(v)
 		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
@@ -20267,14 +20459,23 @@ func (m *TaskMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *TaskMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(task.FieldExecute) {
-		fields = append(fields, task.FieldExecute)
-	}
 	if m.FieldCleared(task.FieldPackageID) {
 		fields = append(fields, task.FieldPackageID)
 	}
 	if m.FieldCleared(task.FieldPackageName) {
 		fields = append(fields, task.FieldPackageName)
+	}
+	if m.FieldCleared(task.FieldRegistryKey) {
+		fields = append(fields, task.FieldRegistryKey)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueName) {
+		fields = append(fields, task.FieldRegistryKeyValueName)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueType) {
+		fields = append(fields, task.FieldRegistryKeyValueType)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueData) {
+		fields = append(fields, task.FieldRegistryKeyValueData)
 	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
@@ -20293,14 +20494,23 @@ func (m *TaskMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *TaskMutation) ClearField(name string) error {
 	switch name {
-	case task.FieldExecute:
-		m.ClearExecute()
-		return nil
 	case task.FieldPackageID:
 		m.ClearPackageID()
 		return nil
 	case task.FieldPackageName:
 		m.ClearPackageName()
+		return nil
+	case task.FieldRegistryKey:
+		m.ClearRegistryKey()
+		return nil
+	case task.FieldRegistryKeyValueName:
+		m.ClearRegistryKeyValueName()
+		return nil
+	case task.FieldRegistryKeyValueType:
+		m.ClearRegistryKeyValueType()
+		return nil
+	case task.FieldRegistryKeyValueData:
+		m.ClearRegistryKeyValueData()
 		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
@@ -20319,14 +20529,23 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldType:
 		m.ResetType()
 		return nil
-	case task.FieldExecute:
-		m.ResetExecute()
-		return nil
 	case task.FieldPackageID:
 		m.ResetPackageID()
 		return nil
 	case task.FieldPackageName:
 		m.ResetPackageName()
+		return nil
+	case task.FieldRegistryKey:
+		m.ResetRegistryKey()
+		return nil
+	case task.FieldRegistryKeyValueName:
+		m.ResetRegistryKeyValueName()
+		return nil
+	case task.FieldRegistryKeyValueType:
+		m.ResetRegistryKeyValueType()
+		return nil
+	case task.FieldRegistryKeyValueData:
+		m.ResetRegistryKeyValueData()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()

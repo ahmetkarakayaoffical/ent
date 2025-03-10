@@ -220,18 +220,26 @@ func init() {
 	taskDescName := taskFields[0].Descriptor()
 	// task.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	task.NameValidator = taskDescName.Validators[0].(func(string) error)
-	// taskDescExecute is the schema descriptor for execute field.
-	taskDescExecute := taskFields[2].Descriptor()
-	// task.DefaultExecute holds the default value on creation for the execute field.
-	task.DefaultExecute = taskDescExecute.Default.(string)
 	// taskDescPackageID is the schema descriptor for package_id field.
-	taskDescPackageID := taskFields[3].Descriptor()
+	taskDescPackageID := taskFields[2].Descriptor()
 	// task.DefaultPackageID holds the default value on creation for the package_id field.
 	task.DefaultPackageID = taskDescPackageID.Default.(string)
 	// taskDescPackageName is the schema descriptor for package_name field.
-	taskDescPackageName := taskFields[4].Descriptor()
+	taskDescPackageName := taskFields[3].Descriptor()
 	// task.DefaultPackageName holds the default value on creation for the package_name field.
 	task.DefaultPackageName = taskDescPackageName.Default.(string)
+	// taskDescRegistryKey is the schema descriptor for registry_key field.
+	taskDescRegistryKey := taskFields[4].Descriptor()
+	// task.DefaultRegistryKey holds the default value on creation for the registry_key field.
+	task.DefaultRegistryKey = taskDescRegistryKey.Default.(string)
+	// taskDescRegistryKeyValueName is the schema descriptor for registry_key_value_name field.
+	taskDescRegistryKeyValueName := taskFields[5].Descriptor()
+	// task.DefaultRegistryKeyValueName holds the default value on creation for the registry_key_value_name field.
+	task.DefaultRegistryKeyValueName = taskDescRegistryKeyValueName.Default.(string)
+	// taskDescRegistryKeyValueData is the schema descriptor for registry_key_value_data field.
+	taskDescRegistryKeyValueData := taskFields[7].Descriptor()
+	// task.DefaultRegistryKeyValueData holds the default value on creation for the registry_key_value_data field.
+	task.DefaultRegistryKeyValueData = taskDescRegistryKeyValueData.Default.(string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

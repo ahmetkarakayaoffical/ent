@@ -59,26 +59,6 @@ func (tu *TaskUpdate) SetNillableType(t *task.Type) *TaskUpdate {
 	return tu
 }
 
-// SetExecute sets the "execute" field.
-func (tu *TaskUpdate) SetExecute(s string) *TaskUpdate {
-	tu.mutation.SetExecute(s)
-	return tu
-}
-
-// SetNillableExecute sets the "execute" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableExecute(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetExecute(*s)
-	}
-	return tu
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (tu *TaskUpdate) ClearExecute() *TaskUpdate {
-	tu.mutation.ClearExecute()
-	return tu
-}
-
 // SetPackageID sets the "package_id" field.
 func (tu *TaskUpdate) SetPackageID(s string) *TaskUpdate {
 	tu.mutation.SetPackageID(s)
@@ -116,6 +96,86 @@ func (tu *TaskUpdate) SetNillablePackageName(s *string) *TaskUpdate {
 // ClearPackageName clears the value of the "package_name" field.
 func (tu *TaskUpdate) ClearPackageName() *TaskUpdate {
 	tu.mutation.ClearPackageName()
+	return tu
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (tu *TaskUpdate) SetRegistryKey(s string) *TaskUpdate {
+	tu.mutation.SetRegistryKey(s)
+	return tu
+}
+
+// SetNillableRegistryKey sets the "registry_key" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryKey(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetRegistryKey(*s)
+	}
+	return tu
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (tu *TaskUpdate) ClearRegistryKey() *TaskUpdate {
+	tu.mutation.ClearRegistryKey()
+	return tu
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (tu *TaskUpdate) SetRegistryKeyValueName(s string) *TaskUpdate {
+	tu.mutation.SetRegistryKeyValueName(s)
+	return tu
+}
+
+// SetNillableRegistryKeyValueName sets the "registry_key_value_name" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryKeyValueName(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetRegistryKeyValueName(*s)
+	}
+	return tu
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (tu *TaskUpdate) ClearRegistryKeyValueName() *TaskUpdate {
+	tu.mutation.ClearRegistryKeyValueName()
+	return tu
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (tu *TaskUpdate) SetRegistryKeyValueType(tkvt task.RegistryKeyValueType) *TaskUpdate {
+	tu.mutation.SetRegistryKeyValueType(tkvt)
+	return tu
+}
+
+// SetNillableRegistryKeyValueType sets the "registry_key_value_type" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryKeyValueType(tkvt *task.RegistryKeyValueType) *TaskUpdate {
+	if tkvt != nil {
+		tu.SetRegistryKeyValueType(*tkvt)
+	}
+	return tu
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (tu *TaskUpdate) ClearRegistryKeyValueType() *TaskUpdate {
+	tu.mutation.ClearRegistryKeyValueType()
+	return tu
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (tu *TaskUpdate) SetRegistryKeyValueData(s string) *TaskUpdate {
+	tu.mutation.SetRegistryKeyValueData(s)
+	return tu
+}
+
+// SetNillableRegistryKeyValueData sets the "registry_key_value_data" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableRegistryKeyValueData(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetRegistryKeyValueData(*s)
+	}
+	return tu
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (tu *TaskUpdate) ClearRegistryKeyValueData() *TaskUpdate {
+	tu.mutation.ClearRegistryKeyValueData()
 	return tu
 }
 
@@ -244,6 +304,11 @@ func (tu *TaskUpdate) check() error {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Task.type": %w`, err)}
 		}
 	}
+	if v, ok := tu.mutation.RegistryKeyValueType(); ok {
+		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
+			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -271,12 +336,6 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.GetType(); ok {
 		_spec.SetField(task.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := tu.mutation.Execute(); ok {
-		_spec.SetField(task.FieldExecute, field.TypeString, value)
-	}
-	if tu.mutation.ExecuteCleared() {
-		_spec.ClearField(task.FieldExecute, field.TypeString)
-	}
 	if value, ok := tu.mutation.PackageID(); ok {
 		_spec.SetField(task.FieldPackageID, field.TypeString, value)
 	}
@@ -288,6 +347,30 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.PackageNameCleared() {
 		_spec.ClearField(task.FieldPackageName, field.TypeString)
+	}
+	if value, ok := tu.mutation.RegistryKey(); ok {
+		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)
+	}
+	if tu.mutation.RegistryKeyCleared() {
+		_spec.ClearField(task.FieldRegistryKey, field.TypeString)
+	}
+	if value, ok := tu.mutation.RegistryKeyValueName(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueName, field.TypeString, value)
+	}
+	if tu.mutation.RegistryKeyValueNameCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueName, field.TypeString)
+	}
+	if value, ok := tu.mutation.RegistryKeyValueType(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueType, field.TypeEnum, value)
+	}
+	if tu.mutation.RegistryKeyValueTypeCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueType, field.TypeEnum)
+	}
+	if value, ok := tu.mutation.RegistryKeyValueData(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueData, field.TypeString, value)
+	}
+	if tu.mutation.RegistryKeyValueDataCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -419,26 +502,6 @@ func (tuo *TaskUpdateOne) SetNillableType(t *task.Type) *TaskUpdateOne {
 	return tuo
 }
 
-// SetExecute sets the "execute" field.
-func (tuo *TaskUpdateOne) SetExecute(s string) *TaskUpdateOne {
-	tuo.mutation.SetExecute(s)
-	return tuo
-}
-
-// SetNillableExecute sets the "execute" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableExecute(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetExecute(*s)
-	}
-	return tuo
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (tuo *TaskUpdateOne) ClearExecute() *TaskUpdateOne {
-	tuo.mutation.ClearExecute()
-	return tuo
-}
-
 // SetPackageID sets the "package_id" field.
 func (tuo *TaskUpdateOne) SetPackageID(s string) *TaskUpdateOne {
 	tuo.mutation.SetPackageID(s)
@@ -476,6 +539,86 @@ func (tuo *TaskUpdateOne) SetNillablePackageName(s *string) *TaskUpdateOne {
 // ClearPackageName clears the value of the "package_name" field.
 func (tuo *TaskUpdateOne) ClearPackageName() *TaskUpdateOne {
 	tuo.mutation.ClearPackageName()
+	return tuo
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (tuo *TaskUpdateOne) SetRegistryKey(s string) *TaskUpdateOne {
+	tuo.mutation.SetRegistryKey(s)
+	return tuo
+}
+
+// SetNillableRegistryKey sets the "registry_key" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryKey(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetRegistryKey(*s)
+	}
+	return tuo
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (tuo *TaskUpdateOne) ClearRegistryKey() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryKey()
+	return tuo
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (tuo *TaskUpdateOne) SetRegistryKeyValueName(s string) *TaskUpdateOne {
+	tuo.mutation.SetRegistryKeyValueName(s)
+	return tuo
+}
+
+// SetNillableRegistryKeyValueName sets the "registry_key_value_name" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryKeyValueName(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetRegistryKeyValueName(*s)
+	}
+	return tuo
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (tuo *TaskUpdateOne) ClearRegistryKeyValueName() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryKeyValueName()
+	return tuo
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (tuo *TaskUpdateOne) SetRegistryKeyValueType(tkvt task.RegistryKeyValueType) *TaskUpdateOne {
+	tuo.mutation.SetRegistryKeyValueType(tkvt)
+	return tuo
+}
+
+// SetNillableRegistryKeyValueType sets the "registry_key_value_type" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryKeyValueType(tkvt *task.RegistryKeyValueType) *TaskUpdateOne {
+	if tkvt != nil {
+		tuo.SetRegistryKeyValueType(*tkvt)
+	}
+	return tuo
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (tuo *TaskUpdateOne) ClearRegistryKeyValueType() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryKeyValueType()
+	return tuo
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (tuo *TaskUpdateOne) SetRegistryKeyValueData(s string) *TaskUpdateOne {
+	tuo.mutation.SetRegistryKeyValueData(s)
+	return tuo
+}
+
+// SetNillableRegistryKeyValueData sets the "registry_key_value_data" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableRegistryKeyValueData(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetRegistryKeyValueData(*s)
+	}
+	return tuo
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (tuo *TaskUpdateOne) ClearRegistryKeyValueData() *TaskUpdateOne {
+	tuo.mutation.ClearRegistryKeyValueData()
 	return tuo
 }
 
@@ -617,6 +760,11 @@ func (tuo *TaskUpdateOne) check() error {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Task.type": %w`, err)}
 		}
 	}
+	if v, ok := tuo.mutation.RegistryKeyValueType(); ok {
+		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
+			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -661,12 +809,6 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if value, ok := tuo.mutation.GetType(); ok {
 		_spec.SetField(task.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := tuo.mutation.Execute(); ok {
-		_spec.SetField(task.FieldExecute, field.TypeString, value)
-	}
-	if tuo.mutation.ExecuteCleared() {
-		_spec.ClearField(task.FieldExecute, field.TypeString)
-	}
 	if value, ok := tuo.mutation.PackageID(); ok {
 		_spec.SetField(task.FieldPackageID, field.TypeString, value)
 	}
@@ -678,6 +820,30 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.PackageNameCleared() {
 		_spec.ClearField(task.FieldPackageName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.RegistryKey(); ok {
+		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)
+	}
+	if tuo.mutation.RegistryKeyCleared() {
+		_spec.ClearField(task.FieldRegistryKey, field.TypeString)
+	}
+	if value, ok := tuo.mutation.RegistryKeyValueName(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueName, field.TypeString, value)
+	}
+	if tuo.mutation.RegistryKeyValueNameCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.RegistryKeyValueType(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueType, field.TypeEnum, value)
+	}
+	if tuo.mutation.RegistryKeyValueTypeCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueType, field.TypeEnum)
+	}
+	if value, ok := tuo.mutation.RegistryKeyValueData(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueData, field.TypeString, value)
+	}
+	if tuo.mutation.RegistryKeyValueDataCleared() {
+		_spec.ClearField(task.FieldRegistryKeyValueData, field.TypeString)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

@@ -36,20 +36,6 @@ func (tc *TaskCreate) SetType(t task.Type) *TaskCreate {
 	return tc
 }
 
-// SetExecute sets the "execute" field.
-func (tc *TaskCreate) SetExecute(s string) *TaskCreate {
-	tc.mutation.SetExecute(s)
-	return tc
-}
-
-// SetNillableExecute sets the "execute" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableExecute(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetExecute(*s)
-	}
-	return tc
-}
-
 // SetPackageID sets the "package_id" field.
 func (tc *TaskCreate) SetPackageID(s string) *TaskCreate {
 	tc.mutation.SetPackageID(s)
@@ -74,6 +60,62 @@ func (tc *TaskCreate) SetPackageName(s string) *TaskCreate {
 func (tc *TaskCreate) SetNillablePackageName(s *string) *TaskCreate {
 	if s != nil {
 		tc.SetPackageName(*s)
+	}
+	return tc
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (tc *TaskCreate) SetRegistryKey(s string) *TaskCreate {
+	tc.mutation.SetRegistryKey(s)
+	return tc
+}
+
+// SetNillableRegistryKey sets the "registry_key" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryKey(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetRegistryKey(*s)
+	}
+	return tc
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (tc *TaskCreate) SetRegistryKeyValueName(s string) *TaskCreate {
+	tc.mutation.SetRegistryKeyValueName(s)
+	return tc
+}
+
+// SetNillableRegistryKeyValueName sets the "registry_key_value_name" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryKeyValueName(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetRegistryKeyValueName(*s)
+	}
+	return tc
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (tc *TaskCreate) SetRegistryKeyValueType(tkvt task.RegistryKeyValueType) *TaskCreate {
+	tc.mutation.SetRegistryKeyValueType(tkvt)
+	return tc
+}
+
+// SetNillableRegistryKeyValueType sets the "registry_key_value_type" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryKeyValueType(tkvt *task.RegistryKeyValueType) *TaskCreate {
+	if tkvt != nil {
+		tc.SetRegistryKeyValueType(*tkvt)
+	}
+	return tc
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (tc *TaskCreate) SetRegistryKeyValueData(s string) *TaskCreate {
+	tc.mutation.SetRegistryKeyValueData(s)
+	return tc
+}
+
+// SetNillableRegistryKeyValueData sets the "registry_key_value_data" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableRegistryKeyValueData(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetRegistryKeyValueData(*s)
 	}
 	return tc
 }
@@ -161,10 +203,6 @@ func (tc *TaskCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (tc *TaskCreate) defaults() {
-	if _, ok := tc.mutation.Execute(); !ok {
-		v := task.DefaultExecute
-		tc.mutation.SetExecute(v)
-	}
 	if _, ok := tc.mutation.PackageID(); !ok {
 		v := task.DefaultPackageID
 		tc.mutation.SetPackageID(v)
@@ -172,6 +210,18 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.PackageName(); !ok {
 		v := task.DefaultPackageName
 		tc.mutation.SetPackageName(v)
+	}
+	if _, ok := tc.mutation.RegistryKey(); !ok {
+		v := task.DefaultRegistryKey
+		tc.mutation.SetRegistryKey(v)
+	}
+	if _, ok := tc.mutation.RegistryKeyValueName(); !ok {
+		v := task.DefaultRegistryKeyValueName
+		tc.mutation.SetRegistryKeyValueName(v)
+	}
+	if _, ok := tc.mutation.RegistryKeyValueData(); !ok {
+		v := task.DefaultRegistryKeyValueData
+		tc.mutation.SetRegistryKeyValueData(v)
 	}
 }
 
@@ -191,6 +241,11 @@ func (tc *TaskCreate) check() error {
 	if v, ok := tc.mutation.GetType(); ok {
 		if err := task.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Task.type": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.RegistryKeyValueType(); ok {
+		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
+			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
 		}
 	}
 	return nil
@@ -228,10 +283,6 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if value, ok := tc.mutation.Execute(); ok {
-		_spec.SetField(task.FieldExecute, field.TypeString, value)
-		_node.Execute = value
-	}
 	if value, ok := tc.mutation.PackageID(); ok {
 		_spec.SetField(task.FieldPackageID, field.TypeString, value)
 		_node.PackageID = value
@@ -239,6 +290,22 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.PackageName(); ok {
 		_spec.SetField(task.FieldPackageName, field.TypeString, value)
 		_node.PackageName = value
+	}
+	if value, ok := tc.mutation.RegistryKey(); ok {
+		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)
+		_node.RegistryKey = value
+	}
+	if value, ok := tc.mutation.RegistryKeyValueName(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueName, field.TypeString, value)
+		_node.RegistryKeyValueName = value
+	}
+	if value, ok := tc.mutation.RegistryKeyValueType(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueType, field.TypeEnum, value)
+		_node.RegistryKeyValueType = value
+	}
+	if value, ok := tc.mutation.RegistryKeyValueData(); ok {
+		_spec.SetField(task.FieldRegistryKeyValueData, field.TypeString, value)
+		_node.RegistryKeyValueData = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -353,24 +420,6 @@ func (u *TaskUpsert) UpdateType() *TaskUpsert {
 	return u
 }
 
-// SetExecute sets the "execute" field.
-func (u *TaskUpsert) SetExecute(v string) *TaskUpsert {
-	u.Set(task.FieldExecute, v)
-	return u
-}
-
-// UpdateExecute sets the "execute" field to the value that was provided on create.
-func (u *TaskUpsert) UpdateExecute() *TaskUpsert {
-	u.SetExcluded(task.FieldExecute)
-	return u
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (u *TaskUpsert) ClearExecute() *TaskUpsert {
-	u.SetNull(task.FieldExecute)
-	return u
-}
-
 // SetPackageID sets the "package_id" field.
 func (u *TaskUpsert) SetPackageID(v string) *TaskUpsert {
 	u.Set(task.FieldPackageID, v)
@@ -404,6 +453,78 @@ func (u *TaskUpsert) UpdatePackageName() *TaskUpsert {
 // ClearPackageName clears the value of the "package_name" field.
 func (u *TaskUpsert) ClearPackageName() *TaskUpsert {
 	u.SetNull(task.FieldPackageName)
+	return u
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (u *TaskUpsert) SetRegistryKey(v string) *TaskUpsert {
+	u.Set(task.FieldRegistryKey, v)
+	return u
+}
+
+// UpdateRegistryKey sets the "registry_key" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryKey() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryKey)
+	return u
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (u *TaskUpsert) ClearRegistryKey() *TaskUpsert {
+	u.SetNull(task.FieldRegistryKey)
+	return u
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (u *TaskUpsert) SetRegistryKeyValueName(v string) *TaskUpsert {
+	u.Set(task.FieldRegistryKeyValueName, v)
+	return u
+}
+
+// UpdateRegistryKeyValueName sets the "registry_key_value_name" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryKeyValueName() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryKeyValueName)
+	return u
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (u *TaskUpsert) ClearRegistryKeyValueName() *TaskUpsert {
+	u.SetNull(task.FieldRegistryKeyValueName)
+	return u
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (u *TaskUpsert) SetRegistryKeyValueType(v task.RegistryKeyValueType) *TaskUpsert {
+	u.Set(task.FieldRegistryKeyValueType, v)
+	return u
+}
+
+// UpdateRegistryKeyValueType sets the "registry_key_value_type" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryKeyValueType() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryKeyValueType)
+	return u
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (u *TaskUpsert) ClearRegistryKeyValueType() *TaskUpsert {
+	u.SetNull(task.FieldRegistryKeyValueType)
+	return u
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (u *TaskUpsert) SetRegistryKeyValueData(v string) *TaskUpsert {
+	u.Set(task.FieldRegistryKeyValueData, v)
+	return u
+}
+
+// UpdateRegistryKeyValueData sets the "registry_key_value_data" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateRegistryKeyValueData() *TaskUpsert {
+	u.SetExcluded(task.FieldRegistryKeyValueData)
+	return u
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (u *TaskUpsert) ClearRegistryKeyValueData() *TaskUpsert {
+	u.SetNull(task.FieldRegistryKeyValueData)
 	return u
 }
 
@@ -493,27 +614,6 @@ func (u *TaskUpsertOne) UpdateType() *TaskUpsertOne {
 	})
 }
 
-// SetExecute sets the "execute" field.
-func (u *TaskUpsertOne) SetExecute(v string) *TaskUpsertOne {
-	return u.Update(func(s *TaskUpsert) {
-		s.SetExecute(v)
-	})
-}
-
-// UpdateExecute sets the "execute" field to the value that was provided on create.
-func (u *TaskUpsertOne) UpdateExecute() *TaskUpsertOne {
-	return u.Update(func(s *TaskUpsert) {
-		s.UpdateExecute()
-	})
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (u *TaskUpsertOne) ClearExecute() *TaskUpsertOne {
-	return u.Update(func(s *TaskUpsert) {
-		s.ClearExecute()
-	})
-}
-
 // SetPackageID sets the "package_id" field.
 func (u *TaskUpsertOne) SetPackageID(v string) *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
@@ -553,6 +653,90 @@ func (u *TaskUpsertOne) UpdatePackageName() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearPackageName() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageName()
+	})
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (u *TaskUpsertOne) SetRegistryKey(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKey(v)
+	})
+}
+
+// UpdateRegistryKey sets the "registry_key" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryKey() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKey()
+	})
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (u *TaskUpsertOne) ClearRegistryKey() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKey()
+	})
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (u *TaskUpsertOne) SetRegistryKeyValueName(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueName(v)
+	})
+}
+
+// UpdateRegistryKeyValueName sets the "registry_key_value_name" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryKeyValueName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueName()
+	})
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (u *TaskUpsertOne) ClearRegistryKeyValueName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueName()
+	})
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (u *TaskUpsertOne) SetRegistryKeyValueType(v task.RegistryKeyValueType) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueType(v)
+	})
+}
+
+// UpdateRegistryKeyValueType sets the "registry_key_value_type" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryKeyValueType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueType()
+	})
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (u *TaskUpsertOne) ClearRegistryKeyValueType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueType()
+	})
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (u *TaskUpsertOne) SetRegistryKeyValueData(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueData(v)
+	})
+}
+
+// UpdateRegistryKeyValueData sets the "registry_key_value_data" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateRegistryKeyValueData() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueData()
+	})
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (u *TaskUpsertOne) ClearRegistryKeyValueData() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueData()
 	})
 }
 
@@ -809,27 +993,6 @@ func (u *TaskUpsertBulk) UpdateType() *TaskUpsertBulk {
 	})
 }
 
-// SetExecute sets the "execute" field.
-func (u *TaskUpsertBulk) SetExecute(v string) *TaskUpsertBulk {
-	return u.Update(func(s *TaskUpsert) {
-		s.SetExecute(v)
-	})
-}
-
-// UpdateExecute sets the "execute" field to the value that was provided on create.
-func (u *TaskUpsertBulk) UpdateExecute() *TaskUpsertBulk {
-	return u.Update(func(s *TaskUpsert) {
-		s.UpdateExecute()
-	})
-}
-
-// ClearExecute clears the value of the "execute" field.
-func (u *TaskUpsertBulk) ClearExecute() *TaskUpsertBulk {
-	return u.Update(func(s *TaskUpsert) {
-		s.ClearExecute()
-	})
-}
-
 // SetPackageID sets the "package_id" field.
 func (u *TaskUpsertBulk) SetPackageID(v string) *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
@@ -869,6 +1032,90 @@ func (u *TaskUpsertBulk) UpdatePackageName() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearPackageName() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageName()
+	})
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (u *TaskUpsertBulk) SetRegistryKey(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKey(v)
+	})
+}
+
+// UpdateRegistryKey sets the "registry_key" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryKey() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKey()
+	})
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (u *TaskUpsertBulk) ClearRegistryKey() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKey()
+	})
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (u *TaskUpsertBulk) SetRegistryKeyValueName(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueName(v)
+	})
+}
+
+// UpdateRegistryKeyValueName sets the "registry_key_value_name" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryKeyValueName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueName()
+	})
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (u *TaskUpsertBulk) ClearRegistryKeyValueName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueName()
+	})
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (u *TaskUpsertBulk) SetRegistryKeyValueType(v task.RegistryKeyValueType) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueType(v)
+	})
+}
+
+// UpdateRegistryKeyValueType sets the "registry_key_value_type" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryKeyValueType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueType()
+	})
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (u *TaskUpsertBulk) ClearRegistryKeyValueType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueType()
+	})
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (u *TaskUpsertBulk) SetRegistryKeyValueData(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetRegistryKeyValueData(v)
+	})
+}
+
+// UpdateRegistryKeyValueData sets the "registry_key_value_data" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateRegistryKeyValueData() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateRegistryKeyValueData()
+	})
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (u *TaskUpsertBulk) ClearRegistryKeyValueData() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearRegistryKeyValueData()
 	})
 }
 

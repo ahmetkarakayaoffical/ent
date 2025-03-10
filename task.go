@@ -22,12 +22,18 @@ type Task struct {
 	Name string `json:"name,omitempty"`
 	// Type holds the value of the "type" field.
 	Type task.Type `json:"type,omitempty"`
-	// Execute holds the value of the "execute" field.
-	Execute string `json:"execute,omitempty"`
 	// PackageID holds the value of the "package_id" field.
 	PackageID string `json:"package_id,omitempty"`
 	// PackageName holds the value of the "package_name" field.
 	PackageName string `json:"package_name,omitempty"`
+	// RegistryKey holds the value of the "registry_key" field.
+	RegistryKey string `json:"registry_key,omitempty"`
+	// RegistryKeyValueName holds the value of the "registry_key_value_name" field.
+	RegistryKeyValueName string `json:"registry_key_value_name,omitempty"`
+	// RegistryKeyValueType holds the value of the "registry_key_value_type" field.
+	RegistryKeyValueType task.RegistryKeyValueType `json:"registry_key_value_type,omitempty"`
+	// RegistryKeyValueData holds the value of the "registry_key_value_data" field.
+	RegistryKeyValueData string `json:"registry_key_value_data,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -75,7 +81,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldExecute, task.FieldPackageID, task.FieldPackageName:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -114,12 +120,6 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.Type = task.Type(value.String)
 			}
-		case task.FieldExecute:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field execute", values[i])
-			} else if value.Valid {
-				t.Execute = value.String
-			}
 		case task.FieldPackageID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field package_id", values[i])
@@ -131,6 +131,30 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field package_name", values[i])
 			} else if value.Valid {
 				t.PackageName = value.String
+			}
+		case task.FieldRegistryKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_key", values[i])
+			} else if value.Valid {
+				t.RegistryKey = value.String
+			}
+		case task.FieldRegistryKeyValueName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_key_value_name", values[i])
+			} else if value.Valid {
+				t.RegistryKeyValueName = value.String
+			}
+		case task.FieldRegistryKeyValueType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_key_value_type", values[i])
+			} else if value.Valid {
+				t.RegistryKeyValueType = task.RegistryKeyValueType(value.String)
+			}
+		case task.FieldRegistryKeyValueData:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field registry_key_value_data", values[i])
+			} else if value.Valid {
+				t.RegistryKeyValueData = value.String
 			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -197,14 +221,23 @@ func (t *Task) String() string {
 	builder.WriteString("type=")
 	builder.WriteString(fmt.Sprintf("%v", t.Type))
 	builder.WriteString(", ")
-	builder.WriteString("execute=")
-	builder.WriteString(t.Execute)
-	builder.WriteString(", ")
 	builder.WriteString("package_id=")
 	builder.WriteString(t.PackageID)
 	builder.WriteString(", ")
 	builder.WriteString("package_name=")
 	builder.WriteString(t.PackageName)
+	builder.WriteString(", ")
+	builder.WriteString("registry_key=")
+	builder.WriteString(t.RegistryKey)
+	builder.WriteString(", ")
+	builder.WriteString("registry_key_value_name=")
+	builder.WriteString(t.RegistryKeyValueName)
+	builder.WriteString(", ")
+	builder.WriteString("registry_key_value_type=")
+	builder.WriteString(fmt.Sprintf("%v", t.RegistryKeyValueType))
+	builder.WriteString(", ")
+	builder.WriteString("registry_key_value_data=")
+	builder.WriteString(t.RegistryKeyValueData)
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

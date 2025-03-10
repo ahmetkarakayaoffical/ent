@@ -569,10 +569,13 @@ var (
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "registry", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"}},
-		{Name: "execute", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"}},
 		{Name: "package_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key_value_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key_value_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"String", "Binary", "DWord", "QWord", "Multistring", "ExpandString"}},
+		{Name: "registry_key_value_data", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -584,7 +587,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[7]},
+				Columns:    []*schema.Column{TasksColumns[10]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
