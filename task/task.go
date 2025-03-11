@@ -160,7 +160,7 @@ const (
 	RegistryKeyValueTypeBinary       RegistryKeyValueType = "Binary"
 	RegistryKeyValueTypeDWord        RegistryKeyValueType = "DWord"
 	RegistryKeyValueTypeQWord        RegistryKeyValueType = "QWord"
-	RegistryKeyValueTypeMultistring  RegistryKeyValueType = "Multistring"
+	RegistryKeyValueTypeMultiString  RegistryKeyValueType = "MultiString"
 	RegistryKeyValueTypeExpandString RegistryKeyValueType = "ExpandString"
 )
 
@@ -171,7 +171,7 @@ func (rkvt RegistryKeyValueType) String() string {
 // RegistryKeyValueTypeValidator is a validator for the "registry_key_value_type" field enum values. It is called by the builders before save.
 func RegistryKeyValueTypeValidator(rkvt RegistryKeyValueType) error {
 	switch rkvt {
-	case RegistryKeyValueTypeString, RegistryKeyValueTypeBinary, RegistryKeyValueTypeDWord, RegistryKeyValueTypeQWord, RegistryKeyValueTypeMultistring, RegistryKeyValueTypeExpandString:
+	case RegistryKeyValueTypeString, RegistryKeyValueTypeBinary, RegistryKeyValueTypeDWord, RegistryKeyValueTypeQWord, RegistryKeyValueTypeMultiString, RegistryKeyValueTypeExpandString:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for registry_key_value_type field: %q", rkvt)

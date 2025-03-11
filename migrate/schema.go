@@ -574,7 +574,7 @@ var (
 		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_key", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_key_value_name", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "registry_key_value_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"String", "Binary", "DWord", "QWord", "Multistring", "ExpandString"}},
+		{Name: "registry_key_value_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"String", "Binary", "DWord", "QWord", "MultiString", "ExpandString"}},
 		{Name: "registry_key_value_data", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_hex", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "registry_force", Type: field.TypeBool, Nullable: true, Default: false},
