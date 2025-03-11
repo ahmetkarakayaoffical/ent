@@ -38,6 +38,22 @@ type Task struct {
 	RegistryHex bool `json:"registry_hex,omitempty"`
 	// RegistryForce holds the value of the "registry_force" field.
 	RegistryForce bool `json:"registry_force,omitempty"`
+	// LocalUserUsername holds the value of the "local_user_username" field.
+	LocalUserUsername string `json:"local_user_username,omitempty"`
+	// LocalUserDescription holds the value of the "local_user_description" field.
+	LocalUserDescription string `json:"local_user_description,omitempty"`
+	// LocalUserDisable holds the value of the "local_user_disable" field.
+	LocalUserDisable bool `json:"local_user_disable,omitempty"`
+	// LocalUserFullname holds the value of the "local_user_fullname" field.
+	LocalUserFullname string `json:"local_user_fullname,omitempty"`
+	// LocalUserPassword holds the value of the "local_user_password" field.
+	LocalUserPassword string `json:"local_user_password,omitempty"`
+	// LocalUserPasswordChangeNotAllowed holds the value of the "local_user_password_change_not_allowed" field.
+	LocalUserPasswordChangeNotAllowed bool `json:"local_user_password_change_not_allowed,omitempty"`
+	// LocalUserPasswordChangeRequired holds the value of the "local_user_password_change_required" field.
+	LocalUserPasswordChangeRequired bool `json:"local_user_password_change_required,omitempty"`
+	// LocalUserPasswordNeverExpires holds the value of the "local_user_password_never_expires" field.
+	LocalUserPasswordNeverExpires bool `json:"local_user_password_never_expires,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -83,11 +99,11 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldRegistryHex, task.FieldRegistryForce:
+		case task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -173,6 +189,54 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field registry_force", values[i])
 			} else if value.Valid {
 				t.RegistryForce = value.Bool
+			}
+		case task.FieldLocalUserUsername:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_username", values[i])
+			} else if value.Valid {
+				t.LocalUserUsername = value.String
+			}
+		case task.FieldLocalUserDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_description", values[i])
+			} else if value.Valid {
+				t.LocalUserDescription = value.String
+			}
+		case task.FieldLocalUserDisable:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_disable", values[i])
+			} else if value.Valid {
+				t.LocalUserDisable = value.Bool
+			}
+		case task.FieldLocalUserFullname:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_fullname", values[i])
+			} else if value.Valid {
+				t.LocalUserFullname = value.String
+			}
+		case task.FieldLocalUserPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_password", values[i])
+			} else if value.Valid {
+				t.LocalUserPassword = value.String
+			}
+		case task.FieldLocalUserPasswordChangeNotAllowed:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_password_change_not_allowed", values[i])
+			} else if value.Valid {
+				t.LocalUserPasswordChangeNotAllowed = value.Bool
+			}
+		case task.FieldLocalUserPasswordChangeRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_password_change_required", values[i])
+			} else if value.Valid {
+				t.LocalUserPasswordChangeRequired = value.Bool
+			}
+		case task.FieldLocalUserPasswordNeverExpires:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_password_never_expires", values[i])
+			} else if value.Valid {
+				t.LocalUserPasswordNeverExpires = value.Bool
 			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -262,6 +326,30 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("registry_force=")
 	builder.WriteString(fmt.Sprintf("%v", t.RegistryForce))
+	builder.WriteString(", ")
+	builder.WriteString("local_user_username=")
+	builder.WriteString(t.LocalUserUsername)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_description=")
+	builder.WriteString(t.LocalUserDescription)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_disable=")
+	builder.WriteString(fmt.Sprintf("%v", t.LocalUserDisable))
+	builder.WriteString(", ")
+	builder.WriteString("local_user_fullname=")
+	builder.WriteString(t.LocalUserFullname)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_password=")
+	builder.WriteString(t.LocalUserPassword)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_password_change_not_allowed=")
+	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordChangeNotAllowed))
+	builder.WriteString(", ")
+	builder.WriteString("local_user_password_change_required=")
+	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordChangeRequired))
+	builder.WriteString(", ")
+	builder.WriteString("local_user_password_never_expires=")
+	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordNeverExpires))
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

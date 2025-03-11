@@ -19613,29 +19613,37 @@ func (m *TagMutation) ResetEdge(name string) error {
 // TaskMutation represents an operation that mutates the Task nodes in the graph.
 type TaskMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *int
-	name                    *string
-	_type                   *task.Type
-	package_id              *string
-	package_name            *string
-	registry_key            *string
-	registry_key_value_name *string
-	registry_key_value_type *task.RegistryKeyValueType
-	registry_key_value_data *string
-	registry_hex            *bool
-	registry_force          *bool
-	when                    *time.Time
-	clearedFields           map[string]struct{}
-	tags                    map[int]struct{}
-	removedtags             map[int]struct{}
-	clearedtags             bool
-	profile                 *int
-	clearedprofile          bool
-	done                    bool
-	oldValue                func(context.Context) (*Task, error)
-	predicates              []predicate.Task
+	op                                     Op
+	typ                                    string
+	id                                     *int
+	name                                   *string
+	_type                                  *task.Type
+	package_id                             *string
+	package_name                           *string
+	registry_key                           *string
+	registry_key_value_name                *string
+	registry_key_value_type                *task.RegistryKeyValueType
+	registry_key_value_data                *string
+	registry_hex                           *bool
+	registry_force                         *bool
+	local_user_username                    *string
+	local_user_description                 *string
+	local_user_disable                     *bool
+	local_user_fullname                    *string
+	local_user_password                    *string
+	local_user_password_change_not_allowed *bool
+	local_user_password_change_required    *bool
+	local_user_password_never_expires      *bool
+	when                                   *time.Time
+	clearedFields                          map[string]struct{}
+	tags                                   map[int]struct{}
+	removedtags                            map[int]struct{}
+	clearedtags                            bool
+	profile                                *int
+	clearedprofile                         bool
+	done                                   bool
+	oldValue                               func(context.Context) (*Task, error)
+	predicates                             []predicate.Task
 }
 
 var _ ent.Mutation = (*TaskMutation)(nil)
@@ -20200,6 +20208,398 @@ func (m *TaskMutation) ResetRegistryForce() {
 	delete(m.clearedFields, task.FieldRegistryForce)
 }
 
+// SetLocalUserUsername sets the "local_user_username" field.
+func (m *TaskMutation) SetLocalUserUsername(s string) {
+	m.local_user_username = &s
+}
+
+// LocalUserUsername returns the value of the "local_user_username" field in the mutation.
+func (m *TaskMutation) LocalUserUsername() (r string, exists bool) {
+	v := m.local_user_username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserUsername returns the old "local_user_username" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserUsername is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserUsername: %w", err)
+	}
+	return oldValue.LocalUserUsername, nil
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (m *TaskMutation) ClearLocalUserUsername() {
+	m.local_user_username = nil
+	m.clearedFields[task.FieldLocalUserUsername] = struct{}{}
+}
+
+// LocalUserUsernameCleared returns if the "local_user_username" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserUsernameCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserUsername]
+	return ok
+}
+
+// ResetLocalUserUsername resets all changes to the "local_user_username" field.
+func (m *TaskMutation) ResetLocalUserUsername() {
+	m.local_user_username = nil
+	delete(m.clearedFields, task.FieldLocalUserUsername)
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (m *TaskMutation) SetLocalUserDescription(s string) {
+	m.local_user_description = &s
+}
+
+// LocalUserDescription returns the value of the "local_user_description" field in the mutation.
+func (m *TaskMutation) LocalUserDescription() (r string, exists bool) {
+	v := m.local_user_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserDescription returns the old "local_user_description" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserDescription: %w", err)
+	}
+	return oldValue.LocalUserDescription, nil
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (m *TaskMutation) ClearLocalUserDescription() {
+	m.local_user_description = nil
+	m.clearedFields[task.FieldLocalUserDescription] = struct{}{}
+}
+
+// LocalUserDescriptionCleared returns if the "local_user_description" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserDescriptionCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserDescription]
+	return ok
+}
+
+// ResetLocalUserDescription resets all changes to the "local_user_description" field.
+func (m *TaskMutation) ResetLocalUserDescription() {
+	m.local_user_description = nil
+	delete(m.clearedFields, task.FieldLocalUserDescription)
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (m *TaskMutation) SetLocalUserDisable(b bool) {
+	m.local_user_disable = &b
+}
+
+// LocalUserDisable returns the value of the "local_user_disable" field in the mutation.
+func (m *TaskMutation) LocalUserDisable() (r bool, exists bool) {
+	v := m.local_user_disable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserDisable returns the old "local_user_disable" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserDisable(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserDisable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserDisable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserDisable: %w", err)
+	}
+	return oldValue.LocalUserDisable, nil
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (m *TaskMutation) ClearLocalUserDisable() {
+	m.local_user_disable = nil
+	m.clearedFields[task.FieldLocalUserDisable] = struct{}{}
+}
+
+// LocalUserDisableCleared returns if the "local_user_disable" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserDisableCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserDisable]
+	return ok
+}
+
+// ResetLocalUserDisable resets all changes to the "local_user_disable" field.
+func (m *TaskMutation) ResetLocalUserDisable() {
+	m.local_user_disable = nil
+	delete(m.clearedFields, task.FieldLocalUserDisable)
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (m *TaskMutation) SetLocalUserFullname(s string) {
+	m.local_user_fullname = &s
+}
+
+// LocalUserFullname returns the value of the "local_user_fullname" field in the mutation.
+func (m *TaskMutation) LocalUserFullname() (r string, exists bool) {
+	v := m.local_user_fullname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserFullname returns the old "local_user_fullname" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserFullname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserFullname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserFullname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserFullname: %w", err)
+	}
+	return oldValue.LocalUserFullname, nil
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (m *TaskMutation) ClearLocalUserFullname() {
+	m.local_user_fullname = nil
+	m.clearedFields[task.FieldLocalUserFullname] = struct{}{}
+}
+
+// LocalUserFullnameCleared returns if the "local_user_fullname" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserFullnameCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserFullname]
+	return ok
+}
+
+// ResetLocalUserFullname resets all changes to the "local_user_fullname" field.
+func (m *TaskMutation) ResetLocalUserFullname() {
+	m.local_user_fullname = nil
+	delete(m.clearedFields, task.FieldLocalUserFullname)
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (m *TaskMutation) SetLocalUserPassword(s string) {
+	m.local_user_password = &s
+}
+
+// LocalUserPassword returns the value of the "local_user_password" field in the mutation.
+func (m *TaskMutation) LocalUserPassword() (r string, exists bool) {
+	v := m.local_user_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPassword returns the old "local_user_password" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPassword: %w", err)
+	}
+	return oldValue.LocalUserPassword, nil
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (m *TaskMutation) ClearLocalUserPassword() {
+	m.local_user_password = nil
+	m.clearedFields[task.FieldLocalUserPassword] = struct{}{}
+}
+
+// LocalUserPasswordCleared returns if the "local_user_password" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPassword]
+	return ok
+}
+
+// ResetLocalUserPassword resets all changes to the "local_user_password" field.
+func (m *TaskMutation) ResetLocalUserPassword() {
+	m.local_user_password = nil
+	delete(m.clearedFields, task.FieldLocalUserPassword)
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) SetLocalUserPasswordChangeNotAllowed(b bool) {
+	m.local_user_password_change_not_allowed = &b
+}
+
+// LocalUserPasswordChangeNotAllowed returns the value of the "local_user_password_change_not_allowed" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordChangeNotAllowed() (r bool, exists bool) {
+	v := m.local_user_password_change_not_allowed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordChangeNotAllowed returns the old "local_user_password_change_not_allowed" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordChangeNotAllowed(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordChangeNotAllowed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordChangeNotAllowed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordChangeNotAllowed: %w", err)
+	}
+	return oldValue.LocalUserPasswordChangeNotAllowed, nil
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) ClearLocalUserPasswordChangeNotAllowed() {
+	m.local_user_password_change_not_allowed = nil
+	m.clearedFields[task.FieldLocalUserPasswordChangeNotAllowed] = struct{}{}
+}
+
+// LocalUserPasswordChangeNotAllowedCleared returns if the "local_user_password_change_not_allowed" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordChangeNotAllowedCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordChangeNotAllowed]
+	return ok
+}
+
+// ResetLocalUserPasswordChangeNotAllowed resets all changes to the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) ResetLocalUserPasswordChangeNotAllowed() {
+	m.local_user_password_change_not_allowed = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordChangeNotAllowed)
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (m *TaskMutation) SetLocalUserPasswordChangeRequired(b bool) {
+	m.local_user_password_change_required = &b
+}
+
+// LocalUserPasswordChangeRequired returns the value of the "local_user_password_change_required" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordChangeRequired() (r bool, exists bool) {
+	v := m.local_user_password_change_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordChangeRequired returns the old "local_user_password_change_required" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordChangeRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordChangeRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordChangeRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordChangeRequired: %w", err)
+	}
+	return oldValue.LocalUserPasswordChangeRequired, nil
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (m *TaskMutation) ClearLocalUserPasswordChangeRequired() {
+	m.local_user_password_change_required = nil
+	m.clearedFields[task.FieldLocalUserPasswordChangeRequired] = struct{}{}
+}
+
+// LocalUserPasswordChangeRequiredCleared returns if the "local_user_password_change_required" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordChangeRequiredCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordChangeRequired]
+	return ok
+}
+
+// ResetLocalUserPasswordChangeRequired resets all changes to the "local_user_password_change_required" field.
+func (m *TaskMutation) ResetLocalUserPasswordChangeRequired() {
+	m.local_user_password_change_required = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordChangeRequired)
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (m *TaskMutation) SetLocalUserPasswordNeverExpires(b bool) {
+	m.local_user_password_never_expires = &b
+}
+
+// LocalUserPasswordNeverExpires returns the value of the "local_user_password_never_expires" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordNeverExpires() (r bool, exists bool) {
+	v := m.local_user_password_never_expires
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordNeverExpires returns the old "local_user_password_never_expires" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordNeverExpires(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordNeverExpires is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordNeverExpires requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordNeverExpires: %w", err)
+	}
+	return oldValue.LocalUserPasswordNeverExpires, nil
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (m *TaskMutation) ClearLocalUserPasswordNeverExpires() {
+	m.local_user_password_never_expires = nil
+	m.clearedFields[task.FieldLocalUserPasswordNeverExpires] = struct{}{}
+}
+
+// LocalUserPasswordNeverExpiresCleared returns if the "local_user_password_never_expires" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordNeverExpiresCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordNeverExpires]
+	return ok
+}
+
+// ResetLocalUserPasswordNeverExpires resets all changes to the "local_user_password_never_expires" field.
+func (m *TaskMutation) ResetLocalUserPasswordNeverExpires() {
+	m.local_user_password_never_expires = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordNeverExpires)
+}
+
 // SetWhen sets the "when" field.
 func (m *TaskMutation) SetWhen(t time.Time) {
 	m.when = &t
@@ -20376,7 +20776,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 19)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -20406,6 +20806,30 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.registry_force != nil {
 		fields = append(fields, task.FieldRegistryForce)
+	}
+	if m.local_user_username != nil {
+		fields = append(fields, task.FieldLocalUserUsername)
+	}
+	if m.local_user_description != nil {
+		fields = append(fields, task.FieldLocalUserDescription)
+	}
+	if m.local_user_disable != nil {
+		fields = append(fields, task.FieldLocalUserDisable)
+	}
+	if m.local_user_fullname != nil {
+		fields = append(fields, task.FieldLocalUserFullname)
+	}
+	if m.local_user_password != nil {
+		fields = append(fields, task.FieldLocalUserPassword)
+	}
+	if m.local_user_password_change_not_allowed != nil {
+		fields = append(fields, task.FieldLocalUserPasswordChangeNotAllowed)
+	}
+	if m.local_user_password_change_required != nil {
+		fields = append(fields, task.FieldLocalUserPasswordChangeRequired)
+	}
+	if m.local_user_password_never_expires != nil {
+		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
 	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
@@ -20438,6 +20862,22 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.RegistryHex()
 	case task.FieldRegistryForce:
 		return m.RegistryForce()
+	case task.FieldLocalUserUsername:
+		return m.LocalUserUsername()
+	case task.FieldLocalUserDescription:
+		return m.LocalUserDescription()
+	case task.FieldLocalUserDisable:
+		return m.LocalUserDisable()
+	case task.FieldLocalUserFullname:
+		return m.LocalUserFullname()
+	case task.FieldLocalUserPassword:
+		return m.LocalUserPassword()
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		return m.LocalUserPasswordChangeNotAllowed()
+	case task.FieldLocalUserPasswordChangeRequired:
+		return m.LocalUserPasswordChangeRequired()
+	case task.FieldLocalUserPasswordNeverExpires:
+		return m.LocalUserPasswordNeverExpires()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -20469,6 +20909,22 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldRegistryHex(ctx)
 	case task.FieldRegistryForce:
 		return m.OldRegistryForce(ctx)
+	case task.FieldLocalUserUsername:
+		return m.OldLocalUserUsername(ctx)
+	case task.FieldLocalUserDescription:
+		return m.OldLocalUserDescription(ctx)
+	case task.FieldLocalUserDisable:
+		return m.OldLocalUserDisable(ctx)
+	case task.FieldLocalUserFullname:
+		return m.OldLocalUserFullname(ctx)
+	case task.FieldLocalUserPassword:
+		return m.OldLocalUserPassword(ctx)
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		return m.OldLocalUserPasswordChangeNotAllowed(ctx)
+	case task.FieldLocalUserPasswordChangeRequired:
+		return m.OldLocalUserPasswordChangeRequired(ctx)
+	case task.FieldLocalUserPasswordNeverExpires:
+		return m.OldLocalUserPasswordNeverExpires(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -20550,6 +21006,62 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRegistryForce(v)
 		return nil
+	case task.FieldLocalUserUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserUsername(v)
+		return nil
+	case task.FieldLocalUserDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserDescription(v)
+		return nil
+	case task.FieldLocalUserDisable:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserDisable(v)
+		return nil
+	case task.FieldLocalUserFullname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserFullname(v)
+		return nil
+	case task.FieldLocalUserPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPassword(v)
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordChangeNotAllowed(v)
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordChangeRequired(v)
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordNeverExpires(v)
+		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -20611,6 +21123,30 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldRegistryForce) {
 		fields = append(fields, task.FieldRegistryForce)
 	}
+	if m.FieldCleared(task.FieldLocalUserUsername) {
+		fields = append(fields, task.FieldLocalUserUsername)
+	}
+	if m.FieldCleared(task.FieldLocalUserDescription) {
+		fields = append(fields, task.FieldLocalUserDescription)
+	}
+	if m.FieldCleared(task.FieldLocalUserDisable) {
+		fields = append(fields, task.FieldLocalUserDisable)
+	}
+	if m.FieldCleared(task.FieldLocalUserFullname) {
+		fields = append(fields, task.FieldLocalUserFullname)
+	}
+	if m.FieldCleared(task.FieldLocalUserPassword) {
+		fields = append(fields, task.FieldLocalUserPassword)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordChangeNotAllowed) {
+		fields = append(fields, task.FieldLocalUserPasswordChangeNotAllowed)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordChangeRequired) {
+		fields = append(fields, task.FieldLocalUserPasswordChangeRequired)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordNeverExpires) {
+		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
+	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -20652,6 +21188,30 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldRegistryForce:
 		m.ClearRegistryForce()
 		return nil
+	case task.FieldLocalUserUsername:
+		m.ClearLocalUserUsername()
+		return nil
+	case task.FieldLocalUserDescription:
+		m.ClearLocalUserDescription()
+		return nil
+	case task.FieldLocalUserDisable:
+		m.ClearLocalUserDisable()
+		return nil
+	case task.FieldLocalUserFullname:
+		m.ClearLocalUserFullname()
+		return nil
+	case task.FieldLocalUserPassword:
+		m.ClearLocalUserPassword()
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		m.ClearLocalUserPasswordChangeNotAllowed()
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		m.ClearLocalUserPasswordChangeRequired()
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		m.ClearLocalUserPasswordNeverExpires()
+		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
@@ -20692,6 +21252,30 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldRegistryForce:
 		m.ResetRegistryForce()
+		return nil
+	case task.FieldLocalUserUsername:
+		m.ResetLocalUserUsername()
+		return nil
+	case task.FieldLocalUserDescription:
+		m.ResetLocalUserDescription()
+		return nil
+	case task.FieldLocalUserDisable:
+		m.ResetLocalUserDisable()
+		return nil
+	case task.FieldLocalUserFullname:
+		m.ResetLocalUserFullname()
+		return nil
+	case task.FieldLocalUserPassword:
+		m.ResetLocalUserPassword()
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		m.ResetLocalUserPasswordChangeNotAllowed()
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		m.ResetLocalUserPasswordChangeRequired()
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		m.ResetLocalUserPasswordNeverExpires()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()

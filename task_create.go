@@ -148,6 +148,118 @@ func (tc *TaskCreate) SetNillableRegistryForce(b *bool) *TaskCreate {
 	return tc
 }
 
+// SetLocalUserUsername sets the "local_user_username" field.
+func (tc *TaskCreate) SetLocalUserUsername(s string) *TaskCreate {
+	tc.mutation.SetLocalUserUsername(s)
+	return tc
+}
+
+// SetNillableLocalUserUsername sets the "local_user_username" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserUsername(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserUsername(*s)
+	}
+	return tc
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (tc *TaskCreate) SetLocalUserDescription(s string) *TaskCreate {
+	tc.mutation.SetLocalUserDescription(s)
+	return tc
+}
+
+// SetNillableLocalUserDescription sets the "local_user_description" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserDescription(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserDescription(*s)
+	}
+	return tc
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (tc *TaskCreate) SetLocalUserDisable(b bool) *TaskCreate {
+	tc.mutation.SetLocalUserDisable(b)
+	return tc
+}
+
+// SetNillableLocalUserDisable sets the "local_user_disable" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserDisable(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalUserDisable(*b)
+	}
+	return tc
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (tc *TaskCreate) SetLocalUserFullname(s string) *TaskCreate {
+	tc.mutation.SetLocalUserFullname(s)
+	return tc
+}
+
+// SetNillableLocalUserFullname sets the "local_user_fullname" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserFullname(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserFullname(*s)
+	}
+	return tc
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (tc *TaskCreate) SetLocalUserPassword(s string) *TaskCreate {
+	tc.mutation.SetLocalUserPassword(s)
+	return tc
+}
+
+// SetNillableLocalUserPassword sets the "local_user_password" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserPassword(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserPassword(*s)
+	}
+	return tc
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (tc *TaskCreate) SetLocalUserPasswordChangeNotAllowed(b bool) *TaskCreate {
+	tc.mutation.SetLocalUserPasswordChangeNotAllowed(b)
+	return tc
+}
+
+// SetNillableLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserPasswordChangeNotAllowed(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalUserPasswordChangeNotAllowed(*b)
+	}
+	return tc
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (tc *TaskCreate) SetLocalUserPasswordChangeRequired(b bool) *TaskCreate {
+	tc.mutation.SetLocalUserPasswordChangeRequired(b)
+	return tc
+}
+
+// SetNillableLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserPasswordChangeRequired(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalUserPasswordChangeRequired(*b)
+	}
+	return tc
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (tc *TaskCreate) SetLocalUserPasswordNeverExpires(b bool) *TaskCreate {
+	tc.mutation.SetLocalUserPasswordNeverExpires(b)
+	return tc
+}
+
+// SetNillableLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserPasswordNeverExpires(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalUserPasswordNeverExpires(*b)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -259,6 +371,38 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultRegistryForce
 		tc.mutation.SetRegistryForce(v)
 	}
+	if _, ok := tc.mutation.LocalUserUsername(); !ok {
+		v := task.DefaultLocalUserUsername
+		tc.mutation.SetLocalUserUsername(v)
+	}
+	if _, ok := tc.mutation.LocalUserDescription(); !ok {
+		v := task.DefaultLocalUserDescription
+		tc.mutation.SetLocalUserDescription(v)
+	}
+	if _, ok := tc.mutation.LocalUserDisable(); !ok {
+		v := task.DefaultLocalUserDisable
+		tc.mutation.SetLocalUserDisable(v)
+	}
+	if _, ok := tc.mutation.LocalUserFullname(); !ok {
+		v := task.DefaultLocalUserFullname
+		tc.mutation.SetLocalUserFullname(v)
+	}
+	if _, ok := tc.mutation.LocalUserPassword(); !ok {
+		v := task.DefaultLocalUserPassword
+		tc.mutation.SetLocalUserPassword(v)
+	}
+	if _, ok := tc.mutation.LocalUserPasswordChangeNotAllowed(); !ok {
+		v := task.DefaultLocalUserPasswordChangeNotAllowed
+		tc.mutation.SetLocalUserPasswordChangeNotAllowed(v)
+	}
+	if _, ok := tc.mutation.LocalUserPasswordChangeRequired(); !ok {
+		v := task.DefaultLocalUserPasswordChangeRequired
+		tc.mutation.SetLocalUserPasswordChangeRequired(v)
+	}
+	if _, ok := tc.mutation.LocalUserPasswordNeverExpires(); !ok {
+		v := task.DefaultLocalUserPasswordNeverExpires
+		tc.mutation.SetLocalUserPasswordNeverExpires(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -350,6 +494,38 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.RegistryForce(); ok {
 		_spec.SetField(task.FieldRegistryForce, field.TypeBool, value)
 		_node.RegistryForce = value
+	}
+	if value, ok := tc.mutation.LocalUserUsername(); ok {
+		_spec.SetField(task.FieldLocalUserUsername, field.TypeString, value)
+		_node.LocalUserUsername = value
+	}
+	if value, ok := tc.mutation.LocalUserDescription(); ok {
+		_spec.SetField(task.FieldLocalUserDescription, field.TypeString, value)
+		_node.LocalUserDescription = value
+	}
+	if value, ok := tc.mutation.LocalUserDisable(); ok {
+		_spec.SetField(task.FieldLocalUserDisable, field.TypeBool, value)
+		_node.LocalUserDisable = value
+	}
+	if value, ok := tc.mutation.LocalUserFullname(); ok {
+		_spec.SetField(task.FieldLocalUserFullname, field.TypeString, value)
+		_node.LocalUserFullname = value
+	}
+	if value, ok := tc.mutation.LocalUserPassword(); ok {
+		_spec.SetField(task.FieldLocalUserPassword, field.TypeString, value)
+		_node.LocalUserPassword = value
+	}
+	if value, ok := tc.mutation.LocalUserPasswordChangeNotAllowed(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeNotAllowed, field.TypeBool, value)
+		_node.LocalUserPasswordChangeNotAllowed = value
+	}
+	if value, ok := tc.mutation.LocalUserPasswordChangeRequired(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeRequired, field.TypeBool, value)
+		_node.LocalUserPasswordChangeRequired = value
+	}
+	if value, ok := tc.mutation.LocalUserPasswordNeverExpires(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool, value)
+		_node.LocalUserPasswordNeverExpires = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -608,6 +784,150 @@ func (u *TaskUpsert) ClearRegistryForce() *TaskUpsert {
 	return u
 }
 
+// SetLocalUserUsername sets the "local_user_username" field.
+func (u *TaskUpsert) SetLocalUserUsername(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserUsername, v)
+	return u
+}
+
+// UpdateLocalUserUsername sets the "local_user_username" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserUsername() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserUsername)
+	return u
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (u *TaskUpsert) ClearLocalUserUsername() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserUsername)
+	return u
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (u *TaskUpsert) SetLocalUserDescription(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserDescription, v)
+	return u
+}
+
+// UpdateLocalUserDescription sets the "local_user_description" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserDescription() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserDescription)
+	return u
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (u *TaskUpsert) ClearLocalUserDescription() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserDescription)
+	return u
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (u *TaskUpsert) SetLocalUserDisable(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalUserDisable, v)
+	return u
+}
+
+// UpdateLocalUserDisable sets the "local_user_disable" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserDisable() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserDisable)
+	return u
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (u *TaskUpsert) ClearLocalUserDisable() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserDisable)
+	return u
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (u *TaskUpsert) SetLocalUserFullname(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserFullname, v)
+	return u
+}
+
+// UpdateLocalUserFullname sets the "local_user_fullname" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserFullname() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserFullname)
+	return u
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (u *TaskUpsert) ClearLocalUserFullname() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserFullname)
+	return u
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (u *TaskUpsert) SetLocalUserPassword(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserPassword, v)
+	return u
+}
+
+// UpdateLocalUserPassword sets the "local_user_password" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserPassword() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserPassword)
+	return u
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (u *TaskUpsert) ClearLocalUserPassword() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserPassword)
+	return u
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsert) SetLocalUserPasswordChangeNotAllowed(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalUserPasswordChangeNotAllowed, v)
+	return u
+}
+
+// UpdateLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserPasswordChangeNotAllowed() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserPasswordChangeNotAllowed)
+	return u
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsert) ClearLocalUserPasswordChangeNotAllowed() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserPasswordChangeNotAllowed)
+	return u
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (u *TaskUpsert) SetLocalUserPasswordChangeRequired(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalUserPasswordChangeRequired, v)
+	return u
+}
+
+// UpdateLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserPasswordChangeRequired() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserPasswordChangeRequired)
+	return u
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (u *TaskUpsert) ClearLocalUserPasswordChangeRequired() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserPasswordChangeRequired)
+	return u
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (u *TaskUpsert) SetLocalUserPasswordNeverExpires(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalUserPasswordNeverExpires, v)
+	return u
+}
+
+// UpdateLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserPasswordNeverExpires() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserPasswordNeverExpires)
+	return u
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (u *TaskUpsert) ClearLocalUserPasswordNeverExpires() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserPasswordNeverExpires)
+	return u
+}
+
 // SetWhen sets the "when" field.
 func (u *TaskUpsert) SetWhen(v time.Time) *TaskUpsert {
 	u.Set(task.FieldWhen, v)
@@ -859,6 +1179,174 @@ func (u *TaskUpsertOne) UpdateRegistryForce() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearRegistryForce() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryForce()
+	})
+}
+
+// SetLocalUserUsername sets the "local_user_username" field.
+func (u *TaskUpsertOne) SetLocalUserUsername(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserUsername(v)
+	})
+}
+
+// UpdateLocalUserUsername sets the "local_user_username" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserUsername() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserUsername()
+	})
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (u *TaskUpsertOne) ClearLocalUserUsername() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserUsername()
+	})
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (u *TaskUpsertOne) SetLocalUserDescription(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserDescription(v)
+	})
+}
+
+// UpdateLocalUserDescription sets the "local_user_description" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserDescription() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserDescription()
+	})
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (u *TaskUpsertOne) ClearLocalUserDescription() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserDescription()
+	})
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (u *TaskUpsertOne) SetLocalUserDisable(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserDisable(v)
+	})
+}
+
+// UpdateLocalUserDisable sets the "local_user_disable" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserDisable() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserDisable()
+	})
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (u *TaskUpsertOne) ClearLocalUserDisable() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserDisable()
+	})
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (u *TaskUpsertOne) SetLocalUserFullname(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserFullname(v)
+	})
+}
+
+// UpdateLocalUserFullname sets the "local_user_fullname" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserFullname() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserFullname()
+	})
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (u *TaskUpsertOne) ClearLocalUserFullname() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserFullname()
+	})
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (u *TaskUpsertOne) SetLocalUserPassword(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPassword(v)
+	})
+}
+
+// UpdateLocalUserPassword sets the "local_user_password" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserPassword() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPassword()
+	})
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (u *TaskUpsertOne) ClearLocalUserPassword() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPassword()
+	})
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsertOne) SetLocalUserPasswordChangeNotAllowed(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordChangeNotAllowed(v)
+	})
+}
+
+// UpdateLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserPasswordChangeNotAllowed() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordChangeNotAllowed()
+	})
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsertOne) ClearLocalUserPasswordChangeNotAllowed() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordChangeNotAllowed()
+	})
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (u *TaskUpsertOne) SetLocalUserPasswordChangeRequired(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordChangeRequired(v)
+	})
+}
+
+// UpdateLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserPasswordChangeRequired() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordChangeRequired()
+	})
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (u *TaskUpsertOne) ClearLocalUserPasswordChangeRequired() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordChangeRequired()
+	})
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (u *TaskUpsertOne) SetLocalUserPasswordNeverExpires(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordNeverExpires(v)
+	})
+}
+
+// UpdateLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserPasswordNeverExpires() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordNeverExpires()
+	})
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (u *TaskUpsertOne) ClearLocalUserPasswordNeverExpires() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordNeverExpires()
 	})
 }
 
@@ -1280,6 +1768,174 @@ func (u *TaskUpsertBulk) UpdateRegistryForce() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearRegistryForce() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearRegistryForce()
+	})
+}
+
+// SetLocalUserUsername sets the "local_user_username" field.
+func (u *TaskUpsertBulk) SetLocalUserUsername(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserUsername(v)
+	})
+}
+
+// UpdateLocalUserUsername sets the "local_user_username" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserUsername() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserUsername()
+	})
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (u *TaskUpsertBulk) ClearLocalUserUsername() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserUsername()
+	})
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (u *TaskUpsertBulk) SetLocalUserDescription(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserDescription(v)
+	})
+}
+
+// UpdateLocalUserDescription sets the "local_user_description" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserDescription() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserDescription()
+	})
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (u *TaskUpsertBulk) ClearLocalUserDescription() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserDescription()
+	})
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (u *TaskUpsertBulk) SetLocalUserDisable(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserDisable(v)
+	})
+}
+
+// UpdateLocalUserDisable sets the "local_user_disable" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserDisable() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserDisable()
+	})
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (u *TaskUpsertBulk) ClearLocalUserDisable() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserDisable()
+	})
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (u *TaskUpsertBulk) SetLocalUserFullname(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserFullname(v)
+	})
+}
+
+// UpdateLocalUserFullname sets the "local_user_fullname" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserFullname() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserFullname()
+	})
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (u *TaskUpsertBulk) ClearLocalUserFullname() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserFullname()
+	})
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (u *TaskUpsertBulk) SetLocalUserPassword(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPassword(v)
+	})
+}
+
+// UpdateLocalUserPassword sets the "local_user_password" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserPassword() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPassword()
+	})
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (u *TaskUpsertBulk) ClearLocalUserPassword() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPassword()
+	})
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsertBulk) SetLocalUserPasswordChangeNotAllowed(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordChangeNotAllowed(v)
+	})
+}
+
+// UpdateLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserPasswordChangeNotAllowed() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordChangeNotAllowed()
+	})
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (u *TaskUpsertBulk) ClearLocalUserPasswordChangeNotAllowed() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordChangeNotAllowed()
+	})
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (u *TaskUpsertBulk) SetLocalUserPasswordChangeRequired(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordChangeRequired(v)
+	})
+}
+
+// UpdateLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserPasswordChangeRequired() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordChangeRequired()
+	})
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (u *TaskUpsertBulk) ClearLocalUserPasswordChangeRequired() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordChangeRequired()
+	})
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (u *TaskUpsertBulk) SetLocalUserPasswordNeverExpires(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserPasswordNeverExpires(v)
+	})
+}
+
+// UpdateLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserPasswordNeverExpires() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserPasswordNeverExpires()
+	})
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (u *TaskUpsertBulk) ClearLocalUserPasswordNeverExpires() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserPasswordNeverExpires()
 	})
 }
 

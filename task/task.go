@@ -34,6 +34,22 @@ const (
 	FieldRegistryHex = "registry_hex"
 	// FieldRegistryForce holds the string denoting the registry_force field in the database.
 	FieldRegistryForce = "registry_force"
+	// FieldLocalUserUsername holds the string denoting the local_user_username field in the database.
+	FieldLocalUserUsername = "local_user_username"
+	// FieldLocalUserDescription holds the string denoting the local_user_description field in the database.
+	FieldLocalUserDescription = "local_user_description"
+	// FieldLocalUserDisable holds the string denoting the local_user_disable field in the database.
+	FieldLocalUserDisable = "local_user_disable"
+	// FieldLocalUserFullname holds the string denoting the local_user_fullname field in the database.
+	FieldLocalUserFullname = "local_user_fullname"
+	// FieldLocalUserPassword holds the string denoting the local_user_password field in the database.
+	FieldLocalUserPassword = "local_user_password"
+	// FieldLocalUserPasswordChangeNotAllowed holds the string denoting the local_user_password_change_not_allowed field in the database.
+	FieldLocalUserPasswordChangeNotAllowed = "local_user_password_change_not_allowed"
+	// FieldLocalUserPasswordChangeRequired holds the string denoting the local_user_password_change_required field in the database.
+	FieldLocalUserPasswordChangeRequired = "local_user_password_change_required"
+	// FieldLocalUserPasswordNeverExpires holds the string denoting the local_user_password_never_expires field in the database.
+	FieldLocalUserPasswordNeverExpires = "local_user_password_never_expires"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -71,6 +87,14 @@ var Columns = []string{
 	FieldRegistryKeyValueData,
 	FieldRegistryHex,
 	FieldRegistryForce,
+	FieldLocalUserUsername,
+	FieldLocalUserDescription,
+	FieldLocalUserDisable,
+	FieldLocalUserFullname,
+	FieldLocalUserPassword,
+	FieldLocalUserPasswordChangeNotAllowed,
+	FieldLocalUserPasswordChangeRequired,
+	FieldLocalUserPasswordNeverExpires,
 	FieldWhen,
 }
 
@@ -112,6 +136,22 @@ var (
 	DefaultRegistryHex bool
 	// DefaultRegistryForce holds the default value on creation for the "registry_force" field.
 	DefaultRegistryForce bool
+	// DefaultLocalUserUsername holds the default value on creation for the "local_user_username" field.
+	DefaultLocalUserUsername string
+	// DefaultLocalUserDescription holds the default value on creation for the "local_user_description" field.
+	DefaultLocalUserDescription string
+	// DefaultLocalUserDisable holds the default value on creation for the "local_user_disable" field.
+	DefaultLocalUserDisable bool
+	// DefaultLocalUserFullname holds the default value on creation for the "local_user_fullname" field.
+	DefaultLocalUserFullname string
+	// DefaultLocalUserPassword holds the default value on creation for the "local_user_password" field.
+	DefaultLocalUserPassword string
+	// DefaultLocalUserPasswordChangeNotAllowed holds the default value on creation for the "local_user_password_change_not_allowed" field.
+	DefaultLocalUserPasswordChangeNotAllowed bool
+	// DefaultLocalUserPasswordChangeRequired holds the default value on creation for the "local_user_password_change_required" field.
+	DefaultLocalUserPasswordChangeRequired bool
+	// DefaultLocalUserPasswordNeverExpires holds the default value on creation for the "local_user_password_never_expires" field.
+	DefaultLocalUserPasswordNeverExpires bool
 )
 
 // Type defines the type for the "type" enum field.
@@ -127,14 +167,8 @@ const (
 	TypeAddRegistryKeyValue           Type = "add_registry_key_value"
 	TypeRemoveRegistryKey             Type = "remove_registry_key"
 	TypeRemoveRegistryKeyValue        Type = "remove_registry_key_value"
-	TypeEnvironment                   Type = "environment"
-	TypePackage                       Type = "package"
-	TypeRemoteFile                    Type = "remote_file"
-	TypeLocalUser                     Type = "local_user"
-	TypeLocalGroup                    Type = "local_group"
-	TypeExecuteCommand                Type = "execute_command"
-	TypeReboot                        Type = "reboot"
-	TypePoweroff                      Type = "poweroff"
+	TypeAddLocalUser                  Type = "add_local_user"
+	TypeRemoveLocalUser               Type = "remove_local_user"
 )
 
 func (_type Type) String() string {
@@ -144,7 +178,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeEnvironment, TypePackage, TypeRemoteFile, TypeLocalUser, TypeLocalGroup, TypeExecuteCommand, TypeReboot, TypePoweroff:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
@@ -234,6 +268,46 @@ func ByRegistryHex(opts ...sql.OrderTermOption) OrderOption {
 // ByRegistryForce orders the results by the registry_force field.
 func ByRegistryForce(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRegistryForce, opts...).ToFunc()
+}
+
+// ByLocalUserUsername orders the results by the local_user_username field.
+func ByLocalUserUsername(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserUsername, opts...).ToFunc()
+}
+
+// ByLocalUserDescription orders the results by the local_user_description field.
+func ByLocalUserDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserDescription, opts...).ToFunc()
+}
+
+// ByLocalUserDisable orders the results by the local_user_disable field.
+func ByLocalUserDisable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserDisable, opts...).ToFunc()
+}
+
+// ByLocalUserFullname orders the results by the local_user_fullname field.
+func ByLocalUserFullname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserFullname, opts...).ToFunc()
+}
+
+// ByLocalUserPassword orders the results by the local_user_password field.
+func ByLocalUserPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPassword, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordChangeNotAllowed orders the results by the local_user_password_change_not_allowed field.
+func ByLocalUserPasswordChangeNotAllowed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordChangeNotAllowed, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordChangeRequired orders the results by the local_user_password_change_required field.
+func ByLocalUserPasswordChangeRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordChangeRequired, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordNeverExpires orders the results by the local_user_password_never_expires field.
+func ByLocalUserPasswordNeverExpires(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordNeverExpires, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

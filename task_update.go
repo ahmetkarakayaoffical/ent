@@ -219,6 +219,166 @@ func (tu *TaskUpdate) ClearRegistryForce() *TaskUpdate {
 	return tu
 }
 
+// SetLocalUserUsername sets the "local_user_username" field.
+func (tu *TaskUpdate) SetLocalUserUsername(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserUsername(s)
+	return tu
+}
+
+// SetNillableLocalUserUsername sets the "local_user_username" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserUsername(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserUsername(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (tu *TaskUpdate) ClearLocalUserUsername() *TaskUpdate {
+	tu.mutation.ClearLocalUserUsername()
+	return tu
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (tu *TaskUpdate) SetLocalUserDescription(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserDescription(s)
+	return tu
+}
+
+// SetNillableLocalUserDescription sets the "local_user_description" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserDescription(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserDescription(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (tu *TaskUpdate) ClearLocalUserDescription() *TaskUpdate {
+	tu.mutation.ClearLocalUserDescription()
+	return tu
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (tu *TaskUpdate) SetLocalUserDisable(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserDisable(b)
+	return tu
+}
+
+// SetNillableLocalUserDisable sets the "local_user_disable" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserDisable(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserDisable(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (tu *TaskUpdate) ClearLocalUserDisable() *TaskUpdate {
+	tu.mutation.ClearLocalUserDisable()
+	return tu
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (tu *TaskUpdate) SetLocalUserFullname(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserFullname(s)
+	return tu
+}
+
+// SetNillableLocalUserFullname sets the "local_user_fullname" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserFullname(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserFullname(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (tu *TaskUpdate) ClearLocalUserFullname() *TaskUpdate {
+	tu.mutation.ClearLocalUserFullname()
+	return tu
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (tu *TaskUpdate) SetLocalUserPassword(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserPassword(s)
+	return tu
+}
+
+// SetNillableLocalUserPassword sets the "local_user_password" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPassword(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserPassword(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (tu *TaskUpdate) ClearLocalUserPassword() *TaskUpdate {
+	tu.mutation.ClearLocalUserPassword()
+	return tu
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (tu *TaskUpdate) SetLocalUserPasswordChangeNotAllowed(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserPasswordChangeNotAllowed(b)
+	return tu
+}
+
+// SetNillableLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordChangeNotAllowed(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserPasswordChangeNotAllowed(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordChangeNotAllowed() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordChangeNotAllowed()
+	return tu
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (tu *TaskUpdate) SetLocalUserPasswordChangeRequired(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserPasswordChangeRequired(b)
+	return tu
+}
+
+// SetNillableLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordChangeRequired(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserPasswordChangeRequired(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordChangeRequired() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordChangeRequired()
+	return tu
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (tu *TaskUpdate) SetLocalUserPasswordNeverExpires(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserPasswordNeverExpires(b)
+	return tu
+}
+
+// SetNillableLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordNeverExpires(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserPasswordNeverExpires(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordNeverExpires() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordNeverExpires()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -423,6 +583,54 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.RegistryForceCleared() {
 		_spec.ClearField(task.FieldRegistryForce, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserUsername(); ok {
+		_spec.SetField(task.FieldLocalUserUsername, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserUsernameCleared() {
+		_spec.ClearField(task.FieldLocalUserUsername, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserDescription(); ok {
+		_spec.SetField(task.FieldLocalUserDescription, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserDescriptionCleared() {
+		_spec.ClearField(task.FieldLocalUserDescription, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserDisable(); ok {
+		_spec.SetField(task.FieldLocalUserDisable, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserDisableCleared() {
+		_spec.ClearField(task.FieldLocalUserDisable, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserFullname(); ok {
+		_spec.SetField(task.FieldLocalUserFullname, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserFullnameCleared() {
+		_spec.ClearField(task.FieldLocalUserFullname, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserPassword(); ok {
+		_spec.SetField(task.FieldLocalUserPassword, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserPasswordCleared() {
+		_spec.ClearField(task.FieldLocalUserPassword, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordChangeNotAllowed(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeNotAllowed, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserPasswordChangeNotAllowedCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordChangeNotAllowed, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordChangeRequired(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeRequired, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserPasswordChangeRequiredCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordChangeRequired, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordNeverExpires(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserPasswordNeverExpiresCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -714,6 +922,166 @@ func (tuo *TaskUpdateOne) ClearRegistryForce() *TaskUpdateOne {
 	return tuo
 }
 
+// SetLocalUserUsername sets the "local_user_username" field.
+func (tuo *TaskUpdateOne) SetLocalUserUsername(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserUsername(s)
+	return tuo
+}
+
+// SetNillableLocalUserUsername sets the "local_user_username" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserUsername(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserUsername(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (tuo *TaskUpdateOne) ClearLocalUserUsername() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserUsername()
+	return tuo
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (tuo *TaskUpdateOne) SetLocalUserDescription(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserDescription(s)
+	return tuo
+}
+
+// SetNillableLocalUserDescription sets the "local_user_description" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserDescription(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserDescription(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (tuo *TaskUpdateOne) ClearLocalUserDescription() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserDescription()
+	return tuo
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (tuo *TaskUpdateOne) SetLocalUserDisable(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserDisable(b)
+	return tuo
+}
+
+// SetNillableLocalUserDisable sets the "local_user_disable" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserDisable(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserDisable(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (tuo *TaskUpdateOne) ClearLocalUserDisable() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserDisable()
+	return tuo
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (tuo *TaskUpdateOne) SetLocalUserFullname(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserFullname(s)
+	return tuo
+}
+
+// SetNillableLocalUserFullname sets the "local_user_fullname" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserFullname(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserFullname(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (tuo *TaskUpdateOne) ClearLocalUserFullname() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserFullname()
+	return tuo
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (tuo *TaskUpdateOne) SetLocalUserPassword(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPassword(s)
+	return tuo
+}
+
+// SetNillableLocalUserPassword sets the "local_user_password" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPassword(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserPassword(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPassword() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPassword()
+	return tuo
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordChangeNotAllowed(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPasswordChangeNotAllowed(b)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordChangeNotAllowed(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserPasswordChangeNotAllowed(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordChangeNotAllowed() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordChangeNotAllowed()
+	return tuo
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordChangeRequired(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPasswordChangeRequired(b)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordChangeRequired(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserPasswordChangeRequired(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordChangeRequired() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordChangeRequired()
+	return tuo
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordNeverExpires(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPasswordNeverExpires(b)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordNeverExpires(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserPasswordNeverExpires(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordNeverExpires() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordNeverExpires()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -948,6 +1316,54 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.RegistryForceCleared() {
 		_spec.ClearField(task.FieldRegistryForce, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserUsername(); ok {
+		_spec.SetField(task.FieldLocalUserUsername, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserUsernameCleared() {
+		_spec.ClearField(task.FieldLocalUserUsername, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserDescription(); ok {
+		_spec.SetField(task.FieldLocalUserDescription, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserDescriptionCleared() {
+		_spec.ClearField(task.FieldLocalUserDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserDisable(); ok {
+		_spec.SetField(task.FieldLocalUserDisable, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserDisableCleared() {
+		_spec.ClearField(task.FieldLocalUserDisable, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserFullname(); ok {
+		_spec.SetField(task.FieldLocalUserFullname, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserFullnameCleared() {
+		_spec.ClearField(task.FieldLocalUserFullname, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserPassword(); ok {
+		_spec.SetField(task.FieldLocalUserPassword, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserPasswordCleared() {
+		_spec.ClearField(task.FieldLocalUserPassword, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordChangeNotAllowed(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeNotAllowed, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserPasswordChangeNotAllowedCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordChangeNotAllowed, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordChangeRequired(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordChangeRequired, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserPasswordChangeRequiredCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordChangeRequired, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordNeverExpires(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserPasswordNeverExpiresCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

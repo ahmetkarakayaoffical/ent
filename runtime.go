@@ -248,6 +248,38 @@ func init() {
 	taskDescRegistryForce := taskFields[9].Descriptor()
 	// task.DefaultRegistryForce holds the default value on creation for the registry_force field.
 	task.DefaultRegistryForce = taskDescRegistryForce.Default.(bool)
+	// taskDescLocalUserUsername is the schema descriptor for local_user_username field.
+	taskDescLocalUserUsername := taskFields[10].Descriptor()
+	// task.DefaultLocalUserUsername holds the default value on creation for the local_user_username field.
+	task.DefaultLocalUserUsername = taskDescLocalUserUsername.Default.(string)
+	// taskDescLocalUserDescription is the schema descriptor for local_user_description field.
+	taskDescLocalUserDescription := taskFields[11].Descriptor()
+	// task.DefaultLocalUserDescription holds the default value on creation for the local_user_description field.
+	task.DefaultLocalUserDescription = taskDescLocalUserDescription.Default.(string)
+	// taskDescLocalUserDisable is the schema descriptor for local_user_disable field.
+	taskDescLocalUserDisable := taskFields[12].Descriptor()
+	// task.DefaultLocalUserDisable holds the default value on creation for the local_user_disable field.
+	task.DefaultLocalUserDisable = taskDescLocalUserDisable.Default.(bool)
+	// taskDescLocalUserFullname is the schema descriptor for local_user_fullname field.
+	taskDescLocalUserFullname := taskFields[13].Descriptor()
+	// task.DefaultLocalUserFullname holds the default value on creation for the local_user_fullname field.
+	task.DefaultLocalUserFullname = taskDescLocalUserFullname.Default.(string)
+	// taskDescLocalUserPassword is the schema descriptor for local_user_password field.
+	taskDescLocalUserPassword := taskFields[14].Descriptor()
+	// task.DefaultLocalUserPassword holds the default value on creation for the local_user_password field.
+	task.DefaultLocalUserPassword = taskDescLocalUserPassword.Default.(string)
+	// taskDescLocalUserPasswordChangeNotAllowed is the schema descriptor for local_user_password_change_not_allowed field.
+	taskDescLocalUserPasswordChangeNotAllowed := taskFields[15].Descriptor()
+	// task.DefaultLocalUserPasswordChangeNotAllowed holds the default value on creation for the local_user_password_change_not_allowed field.
+	task.DefaultLocalUserPasswordChangeNotAllowed = taskDescLocalUserPasswordChangeNotAllowed.Default.(bool)
+	// taskDescLocalUserPasswordChangeRequired is the schema descriptor for local_user_password_change_required field.
+	taskDescLocalUserPasswordChangeRequired := taskFields[16].Descriptor()
+	// task.DefaultLocalUserPasswordChangeRequired holds the default value on creation for the local_user_password_change_required field.
+	task.DefaultLocalUserPasswordChangeRequired = taskDescLocalUserPasswordChangeRequired.Default.(bool)
+	// taskDescLocalUserPasswordNeverExpires is the schema descriptor for local_user_password_never_expires field.
+	taskDescLocalUserPasswordNeverExpires := taskFields[17].Descriptor()
+	// task.DefaultLocalUserPasswordNeverExpires holds the default value on creation for the local_user_password_never_expires field.
+	task.DefaultLocalUserPasswordNeverExpires = taskDescLocalUserPasswordNeverExpires.Default.(bool)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

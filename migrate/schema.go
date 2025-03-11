@@ -569,7 +569,7 @@ var (
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "environment", "package", "remote_file", "local_user", "local_group", "execute_command", "reboot", "poweroff"}},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user"}},
 		{Name: "package_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_key", Type: field.TypeString, Nullable: true, Default: ""},
@@ -578,6 +578,14 @@ var (
 		{Name: "registry_key_value_data", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_hex", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "registry_force", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_username", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_disable", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_fullname", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_password", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_password_change_not_allowed", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_password_change_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "local_user_password_never_expires", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -589,7 +597,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[12]},
+				Columns:    []*schema.Column{TasksColumns[20]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
