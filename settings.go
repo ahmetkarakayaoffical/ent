@@ -74,6 +74,8 @@ type Settings struct {
 	AgentReportFrequenceInMinutes int `json:"agent_report_frequence_in_minutes,omitempty"`
 	// RequestVncPin holds the value of the "request_vnc_pin" field.
 	RequestVncPin bool `json:"request_vnc_pin,omitempty"`
+	// ProfilesApplicationFrequenceInMinutes holds the value of the "profiles_application_frequence_in_minutes" field.
+	ProfilesApplicationFrequenceInMinutes int `json:"profiles_application_frequence_in_minutes,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettingsQuery when eager-loading is set.
 	Edges        SettingsEdges `json:"edges"`
@@ -108,7 +110,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin:
 			values[i] = new(sql.NullBool)
-		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes:
+		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes, settings.FieldProfilesApplicationFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
 		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize, settings.FieldUpdateChannel:
 			values[i] = new(sql.NullString)
@@ -305,6 +307,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.RequestVncPin = value.Bool
 			}
+		case settings.FieldProfilesApplicationFrequenceInMinutes:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field profiles_application_frequence_in_minutes", values[i])
+			} else if value.Valid {
+				s.ProfilesApplicationFrequenceInMinutes = int(value.Int64)
+			}
 		case settings.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settings_tag", value)
@@ -436,6 +444,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("request_vnc_pin=")
 	builder.WriteString(fmt.Sprintf("%v", s.RequestVncPin))
+	builder.WriteString(", ")
+	builder.WriteString("profiles_application_frequence_in_minutes=")
+	builder.WriteString(fmt.Sprintf("%v", s.ProfilesApplicationFrequenceInMinutes))
 	builder.WriteByte(')')
 	return builder.String()
 }

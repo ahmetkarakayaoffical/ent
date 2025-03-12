@@ -208,6 +208,10 @@ func init() {
 	settingsDescRequestVncPin := settingsFields[27].Descriptor()
 	// settings.DefaultRequestVncPin holds the default value on creation for the request_vnc_pin field.
 	settings.DefaultRequestVncPin = settingsDescRequestVncPin.Default.(bool)
+	// settingsDescProfilesApplicationFrequenceInMinutes is the schema descriptor for profiles_application_frequence_in_minutes field.
+	settingsDescProfilesApplicationFrequenceInMinutes := settingsFields[28].Descriptor()
+	// settings.DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the profiles_application_frequence_in_minutes field.
+	settings.DefaultProfilesApplicationFrequenceInMinutes = settingsDescProfilesApplicationFrequenceInMinutes.Default.(int)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.
