@@ -475,7 +475,7 @@ var (
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 		{Name: "agent_report_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
 		{Name: "request_vnc_pin", Type: field.TypeBool, Nullable: true, Default: true},
-		{Name: "profiles_application_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
+		{Name: "profiles_application_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 30},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
