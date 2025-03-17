@@ -34,9 +34,11 @@ type ProfileEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Agents holds the value of the agents edge.
+	Agents []*Agent `json:"agents,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
@@ -55,6 +57,15 @@ func (e ProfileEdges) TasksOrErr() ([]*Task, error) {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// AgentsOrErr returns the Agents value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProfileEdges) AgentsOrErr() ([]*Agent, error) {
+	if e.loadedTypes[2] {
+		return e.Agents, nil
+	}
+	return nil, &NotLoadedError{edge: "agents"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -128,6 +139,11 @@ func (pr *Profile) QueryTags() *TagQuery {
 // QueryTasks queries the "tasks" edge of the Profile entity.
 func (pr *Profile) QueryTasks() *TaskQuery {
 	return NewProfileClient(pr.config).QueryTasks(pr)
+}
+
+// QueryAgents queries the "agents" edge of the Profile entity.
+func (pr *Profile) QueryAgents() *AgentQuery {
+	return NewProfileClient(pr.config).QueryAgents(pr)
 }
 
 // Update returns a builder for updating this Profile.

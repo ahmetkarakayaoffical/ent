@@ -24,6 +24,10 @@ const (
 	EdgeTags = "tags"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeAgents holds the string denoting the agents edge name in mutations.
+	EdgeAgents = "agents"
+	// AgentFieldID holds the string denoting the ID field of the Agent.
+	AgentFieldID = "oid"
 	// Table holds the table name of the profile in the database.
 	Table = "profiles"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -38,6 +42,11 @@ const (
 	TasksInverseTable = "tasks"
 	// TasksColumn is the table column denoting the tasks relation/edge.
 	TasksColumn = "profile_tasks"
+	// AgentsTable is the table that holds the agents relation/edge. The primary key declared below.
+	AgentsTable = "profile_agents"
+	// AgentsInverseTable is the table name for the Agent entity.
+	// It exists in this package in order to avoid circular dependency with the "agent" package.
+	AgentsInverseTable = "agents"
 )
 
 // Columns holds all SQL columns for profile fields.
@@ -52,6 +61,9 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"profile_id", "tag_id"}
+	// AgentsPrimaryKey and AgentsColumn2 are the table columns denoting the
+	// primary key for the agents relation (M2M).
+	AgentsPrimaryKey = []string{"profile_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -146,6 +158,20 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByAgentsCount orders the results by agents count.
+func ByAgentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAgentsStep(), opts...)
+	}
+}
+
+// ByAgents orders the results by agents terms.
+func ByAgents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAgentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -158,5 +184,12 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+	)
+}
+func newAgentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AgentsInverseTable, AgentFieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AgentsTable, AgentsPrimaryKey...),
 	)
 }

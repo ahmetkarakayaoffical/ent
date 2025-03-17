@@ -84,6 +84,8 @@ const (
 	EdgeWingetcfgexclusions = "wingetcfgexclusions"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
 	EdgeRelease = "release"
+	// EdgeProfile holds the string denoting the profile edge name in mutations.
+	EdgeProfile = "profile"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -116,6 +118,8 @@ const (
 	WingetConfigExclusionFieldID = "id"
 	// ReleaseFieldID holds the string denoting the ID field of the Release.
 	ReleaseFieldID = "id"
+	// ProfileFieldID holds the string denoting the ID field of the Profile.
+	ProfileFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -228,6 +232,11 @@ const (
 	ReleaseInverseTable = "releases"
 	// ReleaseColumn is the table column denoting the release relation/edge.
 	ReleaseColumn = "release_agents"
+	// ProfileTable is the table that holds the profile relation/edge. The primary key declared below.
+	ProfileTable = "profile_agents"
+	// ProfileInverseTable is the table name for the Profile entity.
+	// It exists in this package in order to avoid circular dependency with the "profile" package.
+	ProfileInverseTable = "profiles"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -264,6 +273,9 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"agent_id", "tag_id"}
+	// ProfilePrimaryKey and ProfileColumn2 are the table columns denoting the
+	// primary key for the profile relation (M2M).
+	ProfilePrimaryKey = []string{"profile_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -632,6 +644,20 @@ func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newReleaseStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByProfileCount orders the results by profile count.
+func ByProfileCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProfileStep(), opts...)
+	}
+}
+
+// ByProfile orders the results by profile terms.
+func ByProfile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProfileStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -742,5 +768,12 @@ func newReleaseStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReleaseInverseTable, ReleaseFieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
+	)
+}
+func newProfileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProfileInverseTable, ProfileFieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProfileTable, ProfilePrimaryKey...),
 	)
 }

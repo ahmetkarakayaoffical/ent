@@ -724,6 +724,31 @@ var (
 			},
 		},
 	}
+	// ProfileAgentsColumns holds the columns for the "profile_agents" table.
+	ProfileAgentsColumns = []*schema.Column{
+		{Name: "profile_id", Type: field.TypeInt},
+		{Name: "agent_id", Type: field.TypeString},
+	}
+	// ProfileAgentsTable holds the schema information for the "profile_agents" table.
+	ProfileAgentsTable = &schema.Table{
+		Name:       "profile_agents",
+		Columns:    ProfileAgentsColumns,
+		PrimaryKey: []*schema.Column{ProfileAgentsColumns[0], ProfileAgentsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profile_agents_profile_id",
+				Columns:    []*schema.Column{ProfileAgentsColumns[0]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "profile_agents_agent_id",
+				Columns:    []*schema.Column{ProfileAgentsColumns[1]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -754,6 +779,7 @@ var (
 		WingetConfigExclusionsTable,
 		AgentTagsTable,
 		ProfileTagsTable,
+		ProfileAgentsTable,
 	}
 )
 
@@ -783,4 +809,6 @@ func init() {
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
+	ProfileAgentsTable.ForeignKeys[0].RefTable = ProfilesTable
+	ProfileAgentsTable.ForeignKeys[1].RefTable = AgentsTable
 }

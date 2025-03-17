@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
@@ -108,6 +109,21 @@ func (pu *ProfileUpdate) AddTasks(t ...*Task) *ProfileUpdate {
 	return pu.AddTaskIDs(ids...)
 }
 
+// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
+func (pu *ProfileUpdate) AddAgentIDs(ids ...string) *ProfileUpdate {
+	pu.mutation.AddAgentIDs(ids...)
+	return pu
+}
+
+// AddAgents adds the "agents" edges to the Agent entity.
+func (pu *ProfileUpdate) AddAgents(a ...*Agent) *ProfileUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.AddAgentIDs(ids...)
+}
+
 // Mutation returns the ProfileMutation object of the builder.
 func (pu *ProfileUpdate) Mutation() *ProfileMutation {
 	return pu.mutation
@@ -153,6 +169,27 @@ func (pu *ProfileUpdate) RemoveTasks(t ...*Task) *ProfileUpdate {
 		ids[i] = t[i].ID
 	}
 	return pu.RemoveTaskIDs(ids...)
+}
+
+// ClearAgents clears all "agents" edges to the Agent entity.
+func (pu *ProfileUpdate) ClearAgents() *ProfileUpdate {
+	pu.mutation.ClearAgents()
+	return pu
+}
+
+// RemoveAgentIDs removes the "agents" edge to Agent entities by IDs.
+func (pu *ProfileUpdate) RemoveAgentIDs(ids ...string) *ProfileUpdate {
+	pu.mutation.RemoveAgentIDs(ids...)
+	return pu
+}
+
+// RemoveAgents removes "agents" edges to Agent entities.
+func (pu *ProfileUpdate) RemoveAgents(a ...*Agent) *ProfileUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.RemoveAgentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -317,6 +354,51 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.AgentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !pu.mutation.AgentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.AgentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(pu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -417,6 +499,21 @@ func (puo *ProfileUpdateOne) AddTasks(t ...*Task) *ProfileUpdateOne {
 	return puo.AddTaskIDs(ids...)
 }
 
+// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
+func (puo *ProfileUpdateOne) AddAgentIDs(ids ...string) *ProfileUpdateOne {
+	puo.mutation.AddAgentIDs(ids...)
+	return puo
+}
+
+// AddAgents adds the "agents" edges to the Agent entity.
+func (puo *ProfileUpdateOne) AddAgents(a ...*Agent) *ProfileUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.AddAgentIDs(ids...)
+}
+
 // Mutation returns the ProfileMutation object of the builder.
 func (puo *ProfileUpdateOne) Mutation() *ProfileMutation {
 	return puo.mutation
@@ -462,6 +559,27 @@ func (puo *ProfileUpdateOne) RemoveTasks(t ...*Task) *ProfileUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return puo.RemoveTaskIDs(ids...)
+}
+
+// ClearAgents clears all "agents" edges to the Agent entity.
+func (puo *ProfileUpdateOne) ClearAgents() *ProfileUpdateOne {
+	puo.mutation.ClearAgents()
+	return puo
+}
+
+// RemoveAgentIDs removes the "agents" edge to Agent entities by IDs.
+func (puo *ProfileUpdateOne) RemoveAgentIDs(ids ...string) *ProfileUpdateOne {
+	puo.mutation.RemoveAgentIDs(ids...)
+	return puo
+}
+
+// RemoveAgents removes "agents" edges to Agent entities.
+func (puo *ProfileUpdateOne) RemoveAgents(a ...*Agent) *ProfileUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.RemoveAgentIDs(ids...)
 }
 
 // Where appends a list predicates to the ProfileUpdate builder.
@@ -649,6 +767,51 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.AgentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !puo.mutation.AgentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.AgentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   profile.AgentsTable,
+			Columns: profile.AgentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

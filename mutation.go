@@ -146,6 +146,9 @@ type AgentMutation struct {
 	clearedwingetcfgexclusions bool
 	release                    *int
 	clearedrelease             bool
+	profile                    map[int]struct{}
+	removedprofile             map[int]struct{}
+	clearedprofile             bool
 	done                       bool
 	oldValue                   func(context.Context) (*Agent, error)
 	predicates                 []predicate.Agent
@@ -1923,6 +1926,60 @@ func (m *AgentMutation) ResetRelease() {
 	m.clearedrelease = false
 }
 
+// AddProfileIDs adds the "profile" edge to the Profile entity by ids.
+func (m *AgentMutation) AddProfileIDs(ids ...int) {
+	if m.profile == nil {
+		m.profile = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.profile[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *AgentMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *AgentMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// RemoveProfileIDs removes the "profile" edge to the Profile entity by IDs.
+func (m *AgentMutation) RemoveProfileIDs(ids ...int) {
+	if m.removedprofile == nil {
+		m.removedprofile = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.profile, ids[i])
+		m.removedprofile[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfile returns the removed IDs of the "profile" edge to the Profile entity.
+func (m *AgentMutation) RemovedProfileIDs() (ids []int) {
+	for id := range m.removedprofile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+func (m *AgentMutation) ProfileIDs() (ids []int) {
+	for id := range m.profile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *AgentMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+	m.removedprofile = nil
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -2455,7 +2512,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2503,6 +2560,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.release != nil {
 		edges = append(edges, agent.EdgeRelease)
+	}
+	if m.profile != nil {
+		edges = append(edges, agent.EdgeProfile)
 	}
 	return edges
 }
@@ -2597,13 +2657,19 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 		if id := m.release; id != nil {
 			return []ent.Value{*id}
 		}
+	case agent.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.profile))
+		for id := range m.profile {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -2636,6 +2702,9 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedwingetcfgexclusions != nil {
 		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
+	if m.removedprofile != nil {
+		edges = append(edges, agent.EdgeProfile)
 	}
 	return edges
 }
@@ -2710,13 +2779,19 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.removedprofile))
+		for id := range m.removedprofile {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2765,6 +2840,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedrelease {
 		edges = append(edges, agent.EdgeRelease)
 	}
+	if m.clearedprofile {
+		edges = append(edges, agent.EdgeProfile)
+	}
 	return edges
 }
 
@@ -2804,6 +2882,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedwingetcfgexclusions
 	case agent.EdgeRelease:
 		return m.clearedrelease
+	case agent.EdgeProfile:
+		return m.clearedprofile
 	}
 	return false
 }
@@ -2882,6 +2962,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeRelease:
 		m.ResetRelease()
+		return nil
+	case agent.EdgeProfile:
+		m.ResetProfile()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -11132,6 +11215,9 @@ type ProfileMutation struct {
 	tasks         map[int]struct{}
 	removedtasks  map[int]struct{}
 	clearedtasks  bool
+	agents        map[string]struct{}
+	removedagents map[string]struct{}
+	clearedagents bool
 	done          bool
 	oldValue      func(context.Context) (*Profile, error)
 	predicates    []predicate.Profile
@@ -11464,6 +11550,60 @@ func (m *ProfileMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddAgentIDs adds the "agents" edge to the Agent entity by ids.
+func (m *ProfileMutation) AddAgentIDs(ids ...string) {
+	if m.agents == nil {
+		m.agents = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.agents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAgents clears the "agents" edge to the Agent entity.
+func (m *ProfileMutation) ClearAgents() {
+	m.clearedagents = true
+}
+
+// AgentsCleared reports if the "agents" edge to the Agent entity was cleared.
+func (m *ProfileMutation) AgentsCleared() bool {
+	return m.clearedagents
+}
+
+// RemoveAgentIDs removes the "agents" edge to the Agent entity by IDs.
+func (m *ProfileMutation) RemoveAgentIDs(ids ...string) {
+	if m.removedagents == nil {
+		m.removedagents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.agents, ids[i])
+		m.removedagents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAgents returns the removed IDs of the "agents" edge to the Agent entity.
+func (m *ProfileMutation) RemovedAgentsIDs() (ids []string) {
+	for id := range m.removedagents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AgentsIDs returns the "agents" edge IDs in the mutation.
+func (m *ProfileMutation) AgentsIDs() (ids []string) {
+	for id := range m.agents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAgents resets all changes to the "agents" edge.
+func (m *ProfileMutation) ResetAgents() {
+	m.agents = nil
+	m.clearedagents = false
+	m.removedagents = nil
+}
+
 // Where appends a list predicates to the ProfileMutation builder.
 func (m *ProfileMutation) Where(ps ...predicate.Profile) {
 	m.predicates = append(m.predicates, ps...)
@@ -11640,12 +11780,15 @@ func (m *ProfileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProfileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.tags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
 	if m.tasks != nil {
 		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.agents != nil {
+		edges = append(edges, profile.EdgeAgents)
 	}
 	return edges
 }
@@ -11666,18 +11809,27 @@ func (m *ProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case profile.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.agents))
+		for id := range m.agents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProfileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedtags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.removedagents != nil {
+		edges = append(edges, profile.EdgeAgents)
 	}
 	return edges
 }
@@ -11698,18 +11850,27 @@ func (m *ProfileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case profile.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.removedagents))
+		for id := range m.removedagents {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProfileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedtags {
 		edges = append(edges, profile.EdgeTags)
 	}
 	if m.clearedtasks {
 		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.clearedagents {
+		edges = append(edges, profile.EdgeAgents)
 	}
 	return edges
 }
@@ -11722,6 +11883,8 @@ func (m *ProfileMutation) EdgeCleared(name string) bool {
 		return m.clearedtags
 	case profile.EdgeTasks:
 		return m.clearedtasks
+	case profile.EdgeAgents:
+		return m.clearedagents
 	}
 	return false
 }
@@ -11743,6 +11906,9 @@ func (m *ProfileMutation) ResetEdge(name string) error {
 		return nil
 	case profile.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case profile.EdgeAgents:
+		m.ResetAgents()
 		return nil
 	}
 	return fmt.Errorf("unknown Profile edge %s", name)

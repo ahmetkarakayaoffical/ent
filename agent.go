@@ -101,9 +101,11 @@ type AgentEdges struct {
 	Wingetcfgexclusions []*WingetConfigExclusion `json:"wingetcfgexclusions,omitempty"`
 	// Release holds the value of the release edge.
 	Release *Release `json:"release,omitempty"`
+	// Profile holds the value of the profile edge.
+	Profile []*Profile `json:"profile,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -258,6 +260,15 @@ func (e AgentEdges) ReleaseOrErr() (*Release, error) {
 		return nil, &NotFoundError{label: release.Label}
 	}
 	return nil, &NotLoadedError{edge: "release"}
+}
+
+// ProfileOrErr returns the Profile value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) ProfileOrErr() ([]*Profile, error) {
+	if e.loadedTypes[16] {
+		return e.Profile, nil
+	}
+	return nil, &NotLoadedError{edge: "profile"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -506,6 +517,11 @@ func (a *Agent) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
 // QueryRelease queries the "release" edge of the Agent entity.
 func (a *Agent) QueryRelease() *ReleaseQuery {
 	return NewAgentClient(a.config).QueryRelease(a)
+}
+
+// QueryProfile queries the "profile" edge of the Agent entity.
+func (a *Agent) QueryProfile() *ProfileQuery {
+	return NewAgentClient(a.config).QueryProfile(a)
 }
 
 // Update returns a builder for updating this Agent.

@@ -214,6 +214,29 @@ func HasTasksWith(preds ...predicate.Task) predicate.Profile {
 	})
 }
 
+// HasAgents applies the HasEdge predicate on the "agents" edge.
+func HasAgents() predicate.Profile {
+	return predicate.Profile(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AgentsTable, AgentsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAgentsWith applies the HasEdge predicate on the "agents" edge with a given conditions (other predicates).
+func HasAgentsWith(preds ...predicate.Agent) predicate.Profile {
+	return predicate.Profile(func(s *sql.Selector) {
+		step := newAgentsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Profile) predicate.Profile {
 	return predicate.Profile(sql.AndPredicates(predicates...))

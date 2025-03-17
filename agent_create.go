@@ -23,6 +23,7 @@ import (
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
@@ -555,6 +556,21 @@ func (ac *AgentCreate) SetRelease(r *Release) *AgentCreate {
 	return ac.SetReleaseID(r.ID)
 }
 
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (ac *AgentCreate) AddProfileIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddProfileIDs(ids...)
+	return ac
+}
+
+// AddProfile adds the "profile" edges to the Profile entity.
+func (ac *AgentCreate) AddProfile(p ...*Profile) *AgentCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddProfileIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (ac *AgentCreate) Mutation() *AgentMutation {
 	return ac.mutation
@@ -1045,6 +1061,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.release_agents = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
