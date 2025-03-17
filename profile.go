@@ -35,7 +35,7 @@ type ProfileEdges struct {
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Issues holds the value of the issues edge.
-	Issues []*ProfileIssue `json:"issues,omitempty"`
+	Issues []*Agent `json:"issues,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
@@ -61,7 +61,7 @@ func (e ProfileEdges) TasksOrErr() ([]*Task, error) {
 
 // IssuesOrErr returns the Issues value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProfileEdges) IssuesOrErr() ([]*ProfileIssue, error) {
+func (e ProfileEdges) IssuesOrErr() ([]*Agent, error) {
 	if e.loadedTypes[2] {
 		return e.Issues, nil
 	}
@@ -142,7 +142,7 @@ func (pr *Profile) QueryTasks() *TaskQuery {
 }
 
 // QueryIssues queries the "issues" edge of the Profile entity.
-func (pr *Profile) QueryIssues() *ProfileIssueQuery {
+func (pr *Profile) QueryIssues() *AgentQuery {
 	return NewProfileClient(pr.config).QueryIssues(pr)
 }
 

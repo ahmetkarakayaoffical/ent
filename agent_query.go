@@ -24,7 +24,7 @@ import (
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
-	"github.com/open-uem/ent/profileissue"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
@@ -56,7 +56,7 @@ type AgentQuery struct {
 	withMetadata            *MetadataQuery
 	withWingetcfgexclusions *WingetConfigExclusionQuery
 	withRelease             *ReleaseQuery
-	withProfileissue        *ProfileIssueQuery
+	withProfile             *ProfileQuery
 	withFKs                 bool
 	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -447,9 +447,9 @@ func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 	return query
 }
 
-// QueryProfileissue chains the current query on the "profileissue" edge.
-func (aq *AgentQuery) QueryProfileissue() *ProfileIssueQuery {
-	query := (&ProfileIssueClient{config: aq.config}).Query()
+// QueryProfile chains the current query on the "profile" edge.
+func (aq *AgentQuery) QueryProfile() *ProfileQuery {
+	query := (&ProfileClient{config: aq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := aq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -460,8 +460,8 @@ func (aq *AgentQuery) QueryProfileissue() *ProfileIssueQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, selector),
-			sqlgraph.To(profileissue.Table, profileissue.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, agent.ProfileissueTable, agent.ProfileissueColumn),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, agent.ProfileTable, agent.ProfilePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -677,7 +677,7 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withMetadata:            aq.withMetadata.Clone(),
 		withWingetcfgexclusions: aq.withWingetcfgexclusions.Clone(),
 		withRelease:             aq.withRelease.Clone(),
-		withProfileissue:        aq.withProfileissue.Clone(),
+		withProfile:             aq.withProfile.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -861,14 +861,14 @@ func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
 	return aq
 }
 
-// WithProfileissue tells the query-builder to eager-load the nodes that are connected to
-// the "profileissue" edge. The optional arguments are used to configure the query builder of the edge.
-func (aq *AgentQuery) WithProfileissue(opts ...func(*ProfileIssueQuery)) *AgentQuery {
-	query := (&ProfileIssueClient{config: aq.config}).Query()
+// WithProfile tells the query-builder to eager-load the nodes that are connected to
+// the "profile" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithProfile(opts ...func(*ProfileQuery)) *AgentQuery {
+	query := (&ProfileClient{config: aq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	aq.withProfileissue = query
+	aq.withProfile = query
 	return aq
 }
 
@@ -968,7 +968,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withMetadata != nil,
 			aq.withWingetcfgexclusions != nil,
 			aq.withRelease != nil,
-			aq.withProfileissue != nil,
+			aq.withProfile != nil,
 		}
 	)
 	if aq.withRelease != nil {
@@ -1107,10 +1107,10 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			return nil, err
 		}
 	}
-	if query := aq.withProfileissue; query != nil {
-		if err := aq.loadProfileissue(ctx, query, nodes,
-			func(n *Agent) { n.Edges.Profileissue = []*ProfileIssue{} },
-			func(n *Agent, e *ProfileIssue) { n.Edges.Profileissue = append(n.Edges.Profileissue, e) }); err != nil {
+	if query := aq.withProfile; query != nil {
+		if err := aq.loadProfile(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Profile = []*Profile{} },
+			func(n *Agent, e *Profile) { n.Edges.Profile = append(n.Edges.Profile, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1632,34 +1632,64 @@ func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, node
 	}
 	return nil
 }
-func (aq *AgentQuery) loadProfileissue(ctx context.Context, query *ProfileIssueQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *ProfileIssue)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Agent)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (aq *AgentQuery) loadProfile(ctx context.Context, query *ProfileQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Profile)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Agent)
+	nids := make(map[int]map[*Agent]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.ProfileIssue(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(agent.ProfileissueColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(agent.ProfileTable)
+		s.Join(joinT).On(s.C(profile.FieldID), joinT.C(agent.ProfilePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(agent.ProfilePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(agent.ProfilePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Agent]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Profile](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.profile_issue_agents
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "profile_issue_agents" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "profile_issue_agents" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "profile" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

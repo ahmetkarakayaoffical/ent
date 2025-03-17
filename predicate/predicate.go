@@ -48,9 +48,6 @@ type Printer func(*sql.Selector)
 // Profile is the predicate function for profile builders.
 type Profile func(*sql.Selector)
 
-// ProfileIssue is the predicate function for profileissue builders.
-type ProfileIssue func(*sql.Selector)
-
 // Release is the predicate function for release builders.
 type Release func(*sql.Selector)
 

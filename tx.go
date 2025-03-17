@@ -40,8 +40,6 @@ type Tx struct {
 	Printer *PrinterClient
 	// Profile is the client for interacting with the Profile builders.
 	Profile *ProfileClient
-	// ProfileIssue is the client for interacting with the ProfileIssue builders.
-	ProfileIssue *ProfileIssueClient
 	// Release is the client for interacting with the Release builders.
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
@@ -211,7 +209,6 @@ func (tx *Tx) init() {
 	tx.OrgMetadata = NewOrgMetadataClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
 	tx.Profile = NewProfileClient(tx.config)
-	tx.ProfileIssue = NewProfileIssueClient(tx.config)
 	tx.Release = NewReleaseClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
 	tx.Server = NewServerClient(tx.config)

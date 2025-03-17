@@ -23,7 +23,7 @@ import (
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
-	"github.com/open-uem/ent/profileissue"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
@@ -662,19 +662,19 @@ func (au *AgentUpdate) SetRelease(r *Release) *AgentUpdate {
 	return au.SetReleaseID(r.ID)
 }
 
-// AddProfileissueIDs adds the "profileissue" edge to the ProfileIssue entity by IDs.
-func (au *AgentUpdate) AddProfileissueIDs(ids ...int) *AgentUpdate {
-	au.mutation.AddProfileissueIDs(ids...)
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (au *AgentUpdate) AddProfileIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddProfileIDs(ids...)
 	return au
 }
 
-// AddProfileissue adds the "profileissue" edges to the ProfileIssue entity.
-func (au *AgentUpdate) AddProfileissue(p ...*ProfileIssue) *AgentUpdate {
+// AddProfile adds the "profile" edges to the Profile entity.
+func (au *AgentUpdate) AddProfile(p ...*Profile) *AgentUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return au.AddProfileissueIDs(ids...)
+	return au.AddProfileIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -943,25 +943,25 @@ func (au *AgentUpdate) ClearRelease() *AgentUpdate {
 	return au
 }
 
-// ClearProfileissue clears all "profileissue" edges to the ProfileIssue entity.
-func (au *AgentUpdate) ClearProfileissue() *AgentUpdate {
-	au.mutation.ClearProfileissue()
+// ClearProfile clears all "profile" edges to the Profile entity.
+func (au *AgentUpdate) ClearProfile() *AgentUpdate {
+	au.mutation.ClearProfile()
 	return au
 }
 
-// RemoveProfileissueIDs removes the "profileissue" edge to ProfileIssue entities by IDs.
-func (au *AgentUpdate) RemoveProfileissueIDs(ids ...int) *AgentUpdate {
-	au.mutation.RemoveProfileissueIDs(ids...)
+// RemoveProfileIDs removes the "profile" edge to Profile entities by IDs.
+func (au *AgentUpdate) RemoveProfileIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemoveProfileIDs(ids...)
 	return au
 }
 
-// RemoveProfileissue removes "profileissue" edges to ProfileIssue entities.
-func (au *AgentUpdate) RemoveProfileissue(p ...*ProfileIssue) *AgentUpdate {
+// RemoveProfile removes "profile" edges to Profile entities.
+func (au *AgentUpdate) RemoveProfile(p ...*Profile) *AgentUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return au.RemoveProfileissueIDs(ids...)
+	return au.RemoveProfileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1771,28 +1771,28 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ProfileissueCleared() {
+	if au.mutation.ProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedProfileissueIDs(); len(nodes) > 0 && !au.mutation.ProfileissueCleared() {
+	if nodes := au.mutation.RemovedProfileIDs(); len(nodes) > 0 && !au.mutation.ProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1800,15 +1800,15 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.ProfileissueIDs(); len(nodes) > 0 {
+	if nodes := au.mutation.ProfileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2454,19 +2454,19 @@ func (auo *AgentUpdateOne) SetRelease(r *Release) *AgentUpdateOne {
 	return auo.SetReleaseID(r.ID)
 }
 
-// AddProfileissueIDs adds the "profileissue" edge to the ProfileIssue entity by IDs.
-func (auo *AgentUpdateOne) AddProfileissueIDs(ids ...int) *AgentUpdateOne {
-	auo.mutation.AddProfileissueIDs(ids...)
+// AddProfileIDs adds the "profile" edge to the Profile entity by IDs.
+func (auo *AgentUpdateOne) AddProfileIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddProfileIDs(ids...)
 	return auo
 }
 
-// AddProfileissue adds the "profileissue" edges to the ProfileIssue entity.
-func (auo *AgentUpdateOne) AddProfileissue(p ...*ProfileIssue) *AgentUpdateOne {
+// AddProfile adds the "profile" edges to the Profile entity.
+func (auo *AgentUpdateOne) AddProfile(p ...*Profile) *AgentUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return auo.AddProfileissueIDs(ids...)
+	return auo.AddProfileIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -2735,25 +2735,25 @@ func (auo *AgentUpdateOne) ClearRelease() *AgentUpdateOne {
 	return auo
 }
 
-// ClearProfileissue clears all "profileissue" edges to the ProfileIssue entity.
-func (auo *AgentUpdateOne) ClearProfileissue() *AgentUpdateOne {
-	auo.mutation.ClearProfileissue()
+// ClearProfile clears all "profile" edges to the Profile entity.
+func (auo *AgentUpdateOne) ClearProfile() *AgentUpdateOne {
+	auo.mutation.ClearProfile()
 	return auo
 }
 
-// RemoveProfileissueIDs removes the "profileissue" edge to ProfileIssue entities by IDs.
-func (auo *AgentUpdateOne) RemoveProfileissueIDs(ids ...int) *AgentUpdateOne {
-	auo.mutation.RemoveProfileissueIDs(ids...)
+// RemoveProfileIDs removes the "profile" edge to Profile entities by IDs.
+func (auo *AgentUpdateOne) RemoveProfileIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemoveProfileIDs(ids...)
 	return auo
 }
 
-// RemoveProfileissue removes "profileissue" edges to ProfileIssue entities.
-func (auo *AgentUpdateOne) RemoveProfileissue(p ...*ProfileIssue) *AgentUpdateOne {
+// RemoveProfile removes "profile" edges to Profile entities.
+func (auo *AgentUpdateOne) RemoveProfile(p ...*Profile) *AgentUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return auo.RemoveProfileissueIDs(ids...)
+	return auo.RemoveProfileIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -3593,28 +3593,28 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.ProfileissueCleared() {
+	if auo.mutation.ProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedProfileissueIDs(); len(nodes) > 0 && !auo.mutation.ProfileissueCleared() {
+	if nodes := auo.mutation.RemovedProfileIDs(); len(nodes) > 0 && !auo.mutation.ProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -3622,15 +3622,15 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.ProfileissueIDs(); len(nodes) > 0 {
+	if nodes := auo.mutation.ProfileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   agent.ProfileissueTable,
-			Columns: []string{agent.ProfileissueColumn},
+			Table:   agent.ProfileTable,
+			Columns: agent.ProfilePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

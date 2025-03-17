@@ -84,8 +84,8 @@ const (
 	EdgeWingetcfgexclusions = "wingetcfgexclusions"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
 	EdgeRelease = "release"
-	// EdgeProfileissue holds the string denoting the profileissue edge name in mutations.
-	EdgeProfileissue = "profileissue"
+	// EdgeProfile holds the string denoting the profile edge name in mutations.
+	EdgeProfile = "profile"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -118,8 +118,8 @@ const (
 	WingetConfigExclusionFieldID = "id"
 	// ReleaseFieldID holds the string denoting the ID field of the Release.
 	ReleaseFieldID = "id"
-	// ProfileIssueFieldID holds the string denoting the ID field of the ProfileIssue.
-	ProfileIssueFieldID = "id"
+	// ProfileFieldID holds the string denoting the ID field of the Profile.
+	ProfileFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -232,13 +232,11 @@ const (
 	ReleaseInverseTable = "releases"
 	// ReleaseColumn is the table column denoting the release relation/edge.
 	ReleaseColumn = "release_agents"
-	// ProfileissueTable is the table that holds the profileissue relation/edge.
-	ProfileissueTable = "profile_issues"
-	// ProfileissueInverseTable is the table name for the ProfileIssue entity.
-	// It exists in this package in order to avoid circular dependency with the "profileissue" package.
-	ProfileissueInverseTable = "profile_issues"
-	// ProfileissueColumn is the table column denoting the profileissue relation/edge.
-	ProfileissueColumn = "profile_issue_agents"
+	// ProfileTable is the table that holds the profile relation/edge. The primary key declared below.
+	ProfileTable = "profile_issues"
+	// ProfileInverseTable is the table name for the Profile entity.
+	// It exists in this package in order to avoid circular dependency with the "profile" package.
+	ProfileInverseTable = "profiles"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -275,6 +273,9 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"agent_id", "tag_id"}
+	// ProfilePrimaryKey and ProfileColumn2 are the table columns denoting the
+	// primary key for the profile relation (M2M).
+	ProfilePrimaryKey = []string{"profile_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -644,17 +645,17 @@ func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByProfileissueCount orders the results by profileissue count.
-func ByProfileissueCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProfileCount orders the results by profile count.
+func ByProfileCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProfileissueStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newProfileStep(), opts...)
 	}
 }
 
-// ByProfileissue orders the results by profileissue terms.
-func ByProfileissue(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByProfile orders the results by profile terms.
+func ByProfile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProfileissueStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProfileStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newComputerStep() *sqlgraph.Step {
@@ -769,10 +770,10 @@ func newReleaseStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, ReleaseTable, ReleaseColumn),
 	)
 }
-func newProfileissueStep() *sqlgraph.Step {
+func newProfileStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProfileissueInverseTable, ProfileIssueFieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, ProfileissueTable, ProfileissueColumn),
+		sqlgraph.To(ProfileInverseTable, ProfileFieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProfileTable, ProfilePrimaryKey...),
 	)
 }

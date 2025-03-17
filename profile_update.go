@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -109,17 +109,17 @@ func (pu *ProfileUpdate) AddTasks(t ...*Task) *ProfileUpdate {
 	return pu.AddTaskIDs(ids...)
 }
 
-// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by IDs.
-func (pu *ProfileUpdate) AddIssueIDs(ids ...int) *ProfileUpdate {
+// AddIssueIDs adds the "issues" edge to the Agent entity by IDs.
+func (pu *ProfileUpdate) AddIssueIDs(ids ...string) *ProfileUpdate {
 	pu.mutation.AddIssueIDs(ids...)
 	return pu
 }
 
-// AddIssues adds the "issues" edges to the ProfileIssue entity.
-func (pu *ProfileUpdate) AddIssues(p ...*ProfileIssue) *ProfileUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+// AddIssues adds the "issues" edges to the Agent entity.
+func (pu *ProfileUpdate) AddIssues(a ...*Agent) *ProfileUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
 	return pu.AddIssueIDs(ids...)
 }
@@ -171,23 +171,23 @@ func (pu *ProfileUpdate) RemoveTasks(t ...*Task) *ProfileUpdate {
 	return pu.RemoveTaskIDs(ids...)
 }
 
-// ClearIssues clears all "issues" edges to the ProfileIssue entity.
+// ClearIssues clears all "issues" edges to the Agent entity.
 func (pu *ProfileUpdate) ClearIssues() *ProfileUpdate {
 	pu.mutation.ClearIssues()
 	return pu
 }
 
-// RemoveIssueIDs removes the "issues" edge to ProfileIssue entities by IDs.
-func (pu *ProfileUpdate) RemoveIssueIDs(ids ...int) *ProfileUpdate {
+// RemoveIssueIDs removes the "issues" edge to Agent entities by IDs.
+func (pu *ProfileUpdate) RemoveIssueIDs(ids ...string) *ProfileUpdate {
 	pu.mutation.RemoveIssueIDs(ids...)
 	return pu
 }
 
-// RemoveIssues removes "issues" edges to ProfileIssue entities.
-func (pu *ProfileUpdate) RemoveIssues(p ...*ProfileIssue) *ProfileUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+// RemoveIssues removes "issues" edges to Agent entities.
+func (pu *ProfileUpdate) RemoveIssues(a ...*Agent) *ProfileUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
 	return pu.RemoveIssueIDs(ids...)
 }
@@ -356,26 +356,26 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.IssuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedIssuesIDs(); len(nodes) > 0 && !pu.mutation.IssuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -385,13 +385,13 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := pu.mutation.IssuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -499,17 +499,17 @@ func (puo *ProfileUpdateOne) AddTasks(t ...*Task) *ProfileUpdateOne {
 	return puo.AddTaskIDs(ids...)
 }
 
-// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by IDs.
-func (puo *ProfileUpdateOne) AddIssueIDs(ids ...int) *ProfileUpdateOne {
+// AddIssueIDs adds the "issues" edge to the Agent entity by IDs.
+func (puo *ProfileUpdateOne) AddIssueIDs(ids ...string) *ProfileUpdateOne {
 	puo.mutation.AddIssueIDs(ids...)
 	return puo
 }
 
-// AddIssues adds the "issues" edges to the ProfileIssue entity.
-func (puo *ProfileUpdateOne) AddIssues(p ...*ProfileIssue) *ProfileUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+// AddIssues adds the "issues" edges to the Agent entity.
+func (puo *ProfileUpdateOne) AddIssues(a ...*Agent) *ProfileUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
 	return puo.AddIssueIDs(ids...)
 }
@@ -561,23 +561,23 @@ func (puo *ProfileUpdateOne) RemoveTasks(t ...*Task) *ProfileUpdateOne {
 	return puo.RemoveTaskIDs(ids...)
 }
 
-// ClearIssues clears all "issues" edges to the ProfileIssue entity.
+// ClearIssues clears all "issues" edges to the Agent entity.
 func (puo *ProfileUpdateOne) ClearIssues() *ProfileUpdateOne {
 	puo.mutation.ClearIssues()
 	return puo
 }
 
-// RemoveIssueIDs removes the "issues" edge to ProfileIssue entities by IDs.
-func (puo *ProfileUpdateOne) RemoveIssueIDs(ids ...int) *ProfileUpdateOne {
+// RemoveIssueIDs removes the "issues" edge to Agent entities by IDs.
+func (puo *ProfileUpdateOne) RemoveIssueIDs(ids ...string) *ProfileUpdateOne {
 	puo.mutation.RemoveIssueIDs(ids...)
 	return puo
 }
 
-// RemoveIssues removes "issues" edges to ProfileIssue entities.
-func (puo *ProfileUpdateOne) RemoveIssues(p ...*ProfileIssue) *ProfileUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+// RemoveIssues removes "issues" edges to Agent entities.
+func (puo *ProfileUpdateOne) RemoveIssues(a ...*Agent) *ProfileUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
 	return puo.RemoveIssueIDs(ids...)
 }
@@ -776,26 +776,26 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 	}
 	if puo.mutation.IssuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedIssuesIDs(); len(nodes) > 0 && !puo.mutation.IssuesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -805,13 +805,13 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 	}
 	if nodes := puo.mutation.IssuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: []string{profile.IssuesColumn},
+			Columns: profile.IssuesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

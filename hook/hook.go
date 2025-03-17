@@ -177,18 +177,6 @@ func (f ProfileFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProfileMutation", m)
 }
 
-// The ProfileIssueFunc type is an adapter to allow the use of ordinary
-// function as ProfileIssue mutator.
-type ProfileIssueFunc func(context.Context, *ent.ProfileIssueMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ProfileIssueFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ProfileIssueMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProfileIssueMutation", m)
-}
-
 // The ReleaseFunc type is an adapter to allow the use of ordinary
 // function as Release mutator.
 type ReleaseFunc func(context.Context, *ent.ReleaseMutation) (ent.Value, error)

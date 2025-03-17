@@ -10,7 +10,6 @@ import (
 	"github.com/open-uem/ent/logicaldisk"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
@@ -125,14 +124,6 @@ func init() {
 	profileDescApplyToAll := profileFields[1].Descriptor()
 	// profile.DefaultApplyToAll holds the default value on creation for the apply_to_all field.
 	profile.DefaultApplyToAll = profileDescApplyToAll.Default.(bool)
-	profileissueFields := schema.ProfileIssue{}.Fields()
-	_ = profileissueFields
-	// profileissueDescWhen is the schema descriptor for when field.
-	profileissueDescWhen := profileissueFields[1].Descriptor()
-	// profileissue.DefaultWhen holds the default value on creation for the when field.
-	profileissue.DefaultWhen = profileissueDescWhen.Default.(func() time.Time)
-	// profileissue.UpdateDefaultWhen holds the default value on update for the when field.
-	profileissue.UpdateDefaultWhen = profileissueDescWhen.UpdateDefault.(func() time.Time)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.
