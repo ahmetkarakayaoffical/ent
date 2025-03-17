@@ -284,6 +284,26 @@ func init() {
 	taskDescLocalUserPasswordNeverExpires := taskFields[17].Descriptor()
 	// task.DefaultLocalUserPasswordNeverExpires holds the default value on creation for the local_user_password_never_expires field.
 	task.DefaultLocalUserPasswordNeverExpires = taskDescLocalUserPasswordNeverExpires.Default.(bool)
+	// taskDescLocalGroupName is the schema descriptor for local_group_name field.
+	taskDescLocalGroupName := taskFields[18].Descriptor()
+	// task.DefaultLocalGroupName holds the default value on creation for the local_group_name field.
+	task.DefaultLocalGroupName = taskDescLocalGroupName.Default.(string)
+	// taskDescLocalGroupDescription is the schema descriptor for local_group_description field.
+	taskDescLocalGroupDescription := taskFields[19].Descriptor()
+	// task.DefaultLocalGroupDescription holds the default value on creation for the local_group_description field.
+	task.DefaultLocalGroupDescription = taskDescLocalGroupDescription.Default.(string)
+	// taskDescLocalGroupMembers is the schema descriptor for local_group_members field.
+	taskDescLocalGroupMembers := taskFields[20].Descriptor()
+	// task.DefaultLocalGroupMembers holds the default value on creation for the local_group_members field.
+	task.DefaultLocalGroupMembers = taskDescLocalGroupMembers.Default.(string)
+	// taskDescLocalGroupMembersToInclude is the schema descriptor for local_group_members_to_include field.
+	taskDescLocalGroupMembersToInclude := taskFields[21].Descriptor()
+	// task.DefaultLocalGroupMembersToInclude holds the default value on creation for the local_group_members_to_include field.
+	task.DefaultLocalGroupMembersToInclude = taskDescLocalGroupMembersToInclude.Default.(string)
+	// taskDescLocalGroupMembersToExclude is the schema descriptor for local_group_members_to_exclude field.
+	taskDescLocalGroupMembersToExclude := taskFields[22].Descriptor()
+	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
+	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

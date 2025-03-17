@@ -260,6 +260,76 @@ func (tc *TaskCreate) SetNillableLocalUserPasswordNeverExpires(b *bool) *TaskCre
 	return tc
 }
 
+// SetLocalGroupName sets the "local_group_name" field.
+func (tc *TaskCreate) SetLocalGroupName(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupName(s)
+	return tc
+}
+
+// SetNillableLocalGroupName sets the "local_group_name" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupName(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupName(*s)
+	}
+	return tc
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (tc *TaskCreate) SetLocalGroupDescription(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupDescription(s)
+	return tc
+}
+
+// SetNillableLocalGroupDescription sets the "local_group_description" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupDescription(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupDescription(*s)
+	}
+	return tc
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (tc *TaskCreate) SetLocalGroupMembers(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupMembers(s)
+	return tc
+}
+
+// SetNillableLocalGroupMembers sets the "local_group_members" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupMembers(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupMembers(*s)
+	}
+	return tc
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (tc *TaskCreate) SetLocalGroupMembersToInclude(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupMembersToInclude(s)
+	return tc
+}
+
+// SetNillableLocalGroupMembersToInclude sets the "local_group_members_to_include" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupMembersToInclude(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupMembersToInclude(*s)
+	}
+	return tc
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (tc *TaskCreate) SetLocalGroupMembersToExclude(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupMembersToExclude(s)
+	return tc
+}
+
+// SetNillableLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupMembersToExclude(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupMembersToExclude(*s)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -403,6 +473,26 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultLocalUserPasswordNeverExpires
 		tc.mutation.SetLocalUserPasswordNeverExpires(v)
 	}
+	if _, ok := tc.mutation.LocalGroupName(); !ok {
+		v := task.DefaultLocalGroupName
+		tc.mutation.SetLocalGroupName(v)
+	}
+	if _, ok := tc.mutation.LocalGroupDescription(); !ok {
+		v := task.DefaultLocalGroupDescription
+		tc.mutation.SetLocalGroupDescription(v)
+	}
+	if _, ok := tc.mutation.LocalGroupMembers(); !ok {
+		v := task.DefaultLocalGroupMembers
+		tc.mutation.SetLocalGroupMembers(v)
+	}
+	if _, ok := tc.mutation.LocalGroupMembersToInclude(); !ok {
+		v := task.DefaultLocalGroupMembersToInclude
+		tc.mutation.SetLocalGroupMembersToInclude(v)
+	}
+	if _, ok := tc.mutation.LocalGroupMembersToExclude(); !ok {
+		v := task.DefaultLocalGroupMembersToExclude
+		tc.mutation.SetLocalGroupMembersToExclude(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -526,6 +616,26 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.LocalUserPasswordNeverExpires(); ok {
 		_spec.SetField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool, value)
 		_node.LocalUserPasswordNeverExpires = value
+	}
+	if value, ok := tc.mutation.LocalGroupName(); ok {
+		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
+		_node.LocalGroupName = value
+	}
+	if value, ok := tc.mutation.LocalGroupDescription(); ok {
+		_spec.SetField(task.FieldLocalGroupDescription, field.TypeString, value)
+		_node.LocalGroupDescription = value
+	}
+	if value, ok := tc.mutation.LocalGroupMembers(); ok {
+		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)
+		_node.LocalGroupMembers = value
+	}
+	if value, ok := tc.mutation.LocalGroupMembersToInclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToInclude, field.TypeString, value)
+		_node.LocalGroupMembersToInclude = value
+	}
+	if value, ok := tc.mutation.LocalGroupMembersToExclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToExclude, field.TypeString, value)
+		_node.LocalGroupMembersToExclude = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -925,6 +1035,96 @@ func (u *TaskUpsert) UpdateLocalUserPasswordNeverExpires() *TaskUpsert {
 // ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
 func (u *TaskUpsert) ClearLocalUserPasswordNeverExpires() *TaskUpsert {
 	u.SetNull(task.FieldLocalUserPasswordNeverExpires)
+	return u
+}
+
+// SetLocalGroupName sets the "local_group_name" field.
+func (u *TaskUpsert) SetLocalGroupName(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupName, v)
+	return u
+}
+
+// UpdateLocalGroupName sets the "local_group_name" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupName() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupName)
+	return u
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (u *TaskUpsert) ClearLocalGroupName() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupName)
+	return u
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (u *TaskUpsert) SetLocalGroupDescription(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupDescription, v)
+	return u
+}
+
+// UpdateLocalGroupDescription sets the "local_group_description" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupDescription() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupDescription)
+	return u
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (u *TaskUpsert) ClearLocalGroupDescription() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupDescription)
+	return u
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (u *TaskUpsert) SetLocalGroupMembers(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupMembers, v)
+	return u
+}
+
+// UpdateLocalGroupMembers sets the "local_group_members" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupMembers() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupMembers)
+	return u
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (u *TaskUpsert) ClearLocalGroupMembers() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupMembers)
+	return u
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (u *TaskUpsert) SetLocalGroupMembersToInclude(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupMembersToInclude, v)
+	return u
+}
+
+// UpdateLocalGroupMembersToInclude sets the "local_group_members_to_include" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupMembersToInclude() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupMembersToInclude)
+	return u
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (u *TaskUpsert) ClearLocalGroupMembersToInclude() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupMembersToInclude)
+	return u
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (u *TaskUpsert) SetLocalGroupMembersToExclude(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupMembersToExclude, v)
+	return u
+}
+
+// UpdateLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupMembersToExclude() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupMembersToExclude)
+	return u
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (u *TaskUpsert) ClearLocalGroupMembersToExclude() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupMembersToExclude)
 	return u
 }
 
@@ -1347,6 +1547,111 @@ func (u *TaskUpsertOne) UpdateLocalUserPasswordNeverExpires() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearLocalUserPasswordNeverExpires() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalUserPasswordNeverExpires()
+	})
+}
+
+// SetLocalGroupName sets the "local_group_name" field.
+func (u *TaskUpsertOne) SetLocalGroupName(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupName(v)
+	})
+}
+
+// UpdateLocalGroupName sets the "local_group_name" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupName()
+	})
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (u *TaskUpsertOne) ClearLocalGroupName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupName()
+	})
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (u *TaskUpsertOne) SetLocalGroupDescription(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupDescription(v)
+	})
+}
+
+// UpdateLocalGroupDescription sets the "local_group_description" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupDescription() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupDescription()
+	})
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (u *TaskUpsertOne) ClearLocalGroupDescription() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupDescription()
+	})
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (u *TaskUpsertOne) SetLocalGroupMembers(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembers(v)
+	})
+}
+
+// UpdateLocalGroupMembers sets the "local_group_members" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupMembers() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembers()
+	})
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (u *TaskUpsertOne) ClearLocalGroupMembers() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembers()
+	})
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (u *TaskUpsertOne) SetLocalGroupMembersToInclude(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembersToInclude(v)
+	})
+}
+
+// UpdateLocalGroupMembersToInclude sets the "local_group_members_to_include" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupMembersToInclude() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembersToInclude()
+	})
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (u *TaskUpsertOne) ClearLocalGroupMembersToInclude() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembersToInclude()
+	})
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (u *TaskUpsertOne) SetLocalGroupMembersToExclude(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembersToExclude(v)
+	})
+}
+
+// UpdateLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupMembersToExclude() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembersToExclude()
+	})
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (u *TaskUpsertOne) ClearLocalGroupMembersToExclude() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembersToExclude()
 	})
 }
 
@@ -1936,6 +2241,111 @@ func (u *TaskUpsertBulk) UpdateLocalUserPasswordNeverExpires() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearLocalUserPasswordNeverExpires() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalUserPasswordNeverExpires()
+	})
+}
+
+// SetLocalGroupName sets the "local_group_name" field.
+func (u *TaskUpsertBulk) SetLocalGroupName(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupName(v)
+	})
+}
+
+// UpdateLocalGroupName sets the "local_group_name" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupName()
+	})
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (u *TaskUpsertBulk) ClearLocalGroupName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupName()
+	})
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (u *TaskUpsertBulk) SetLocalGroupDescription(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupDescription(v)
+	})
+}
+
+// UpdateLocalGroupDescription sets the "local_group_description" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupDescription() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupDescription()
+	})
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (u *TaskUpsertBulk) ClearLocalGroupDescription() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupDescription()
+	})
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (u *TaskUpsertBulk) SetLocalGroupMembers(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembers(v)
+	})
+}
+
+// UpdateLocalGroupMembers sets the "local_group_members" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupMembers() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembers()
+	})
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (u *TaskUpsertBulk) ClearLocalGroupMembers() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembers()
+	})
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (u *TaskUpsertBulk) SetLocalGroupMembersToInclude(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembersToInclude(v)
+	})
+}
+
+// UpdateLocalGroupMembersToInclude sets the "local_group_members_to_include" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupMembersToInclude() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembersToInclude()
+	})
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (u *TaskUpsertBulk) ClearLocalGroupMembersToInclude() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembersToInclude()
+	})
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (u *TaskUpsertBulk) SetLocalGroupMembersToExclude(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupMembersToExclude(v)
+	})
+}
+
+// UpdateLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupMembersToExclude() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupMembersToExclude()
+	})
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (u *TaskUpsertBulk) ClearLocalGroupMembersToExclude() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupMembersToExclude()
 	})
 }
 

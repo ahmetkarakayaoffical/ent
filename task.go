@@ -54,6 +54,16 @@ type Task struct {
 	LocalUserPasswordChangeRequired bool `json:"local_user_password_change_required,omitempty"`
 	// LocalUserPasswordNeverExpires holds the value of the "local_user_password_never_expires" field.
 	LocalUserPasswordNeverExpires bool `json:"local_user_password_never_expires,omitempty"`
+	// LocalGroupName holds the value of the "local_group_name" field.
+	LocalGroupName string `json:"local_group_name,omitempty"`
+	// LocalGroupDescription holds the value of the "local_group_description" field.
+	LocalGroupDescription string `json:"local_group_description,omitempty"`
+	// LocalGroupMembers holds the value of the "local_group_members" field.
+	LocalGroupMembers string `json:"local_group_members,omitempty"`
+	// LocalGroupMembersToInclude holds the value of the "local_group_members_to_include" field.
+	LocalGroupMembersToInclude string `json:"local_group_members_to_include,omitempty"`
+	// LocalGroupMembersToExclude holds the value of the "local_group_members_to_exclude" field.
+	LocalGroupMembersToExclude string `json:"local_group_members_to_exclude,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -103,7 +113,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -238,6 +248,36 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.LocalUserPasswordNeverExpires = value.Bool
 			}
+		case task.FieldLocalGroupName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_group_name", values[i])
+			} else if value.Valid {
+				t.LocalGroupName = value.String
+			}
+		case task.FieldLocalGroupDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_group_description", values[i])
+			} else if value.Valid {
+				t.LocalGroupDescription = value.String
+			}
+		case task.FieldLocalGroupMembers:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_group_members", values[i])
+			} else if value.Valid {
+				t.LocalGroupMembers = value.String
+			}
+		case task.FieldLocalGroupMembersToInclude:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_group_members_to_include", values[i])
+			} else if value.Valid {
+				t.LocalGroupMembersToInclude = value.String
+			}
+		case task.FieldLocalGroupMembersToExclude:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_group_members_to_exclude", values[i])
+			} else if value.Valid {
+				t.LocalGroupMembersToExclude = value.String
+			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field when", values[i])
@@ -350,6 +390,21 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_never_expires=")
 	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordNeverExpires))
+	builder.WriteString(", ")
+	builder.WriteString("local_group_name=")
+	builder.WriteString(t.LocalGroupName)
+	builder.WriteString(", ")
+	builder.WriteString("local_group_description=")
+	builder.WriteString(t.LocalGroupDescription)
+	builder.WriteString(", ")
+	builder.WriteString("local_group_members=")
+	builder.WriteString(t.LocalGroupMembers)
+	builder.WriteString(", ")
+	builder.WriteString("local_group_members_to_include=")
+	builder.WriteString(t.LocalGroupMembersToInclude)
+	builder.WriteString(", ")
+	builder.WriteString("local_group_members_to_exclude=")
+	builder.WriteString(t.LocalGroupMembersToExclude)
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

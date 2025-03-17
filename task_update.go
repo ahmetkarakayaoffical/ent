@@ -379,6 +379,106 @@ func (tu *TaskUpdate) ClearLocalUserPasswordNeverExpires() *TaskUpdate {
 	return tu
 }
 
+// SetLocalGroupName sets the "local_group_name" field.
+func (tu *TaskUpdate) SetLocalGroupName(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupName(s)
+	return tu
+}
+
+// SetNillableLocalGroupName sets the "local_group_name" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupName(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupName(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (tu *TaskUpdate) ClearLocalGroupName() *TaskUpdate {
+	tu.mutation.ClearLocalGroupName()
+	return tu
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (tu *TaskUpdate) SetLocalGroupDescription(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupDescription(s)
+	return tu
+}
+
+// SetNillableLocalGroupDescription sets the "local_group_description" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupDescription(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupDescription(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (tu *TaskUpdate) ClearLocalGroupDescription() *TaskUpdate {
+	tu.mutation.ClearLocalGroupDescription()
+	return tu
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (tu *TaskUpdate) SetLocalGroupMembers(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupMembers(s)
+	return tu
+}
+
+// SetNillableLocalGroupMembers sets the "local_group_members" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupMembers(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupMembers(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (tu *TaskUpdate) ClearLocalGroupMembers() *TaskUpdate {
+	tu.mutation.ClearLocalGroupMembers()
+	return tu
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (tu *TaskUpdate) SetLocalGroupMembersToInclude(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupMembersToInclude(s)
+	return tu
+}
+
+// SetNillableLocalGroupMembersToInclude sets the "local_group_members_to_include" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupMembersToInclude(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupMembersToInclude(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (tu *TaskUpdate) ClearLocalGroupMembersToInclude() *TaskUpdate {
+	tu.mutation.ClearLocalGroupMembersToInclude()
+	return tu
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (tu *TaskUpdate) SetLocalGroupMembersToExclude(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupMembersToExclude(s)
+	return tu
+}
+
+// SetNillableLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupMembersToExclude(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupMembersToExclude(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (tu *TaskUpdate) ClearLocalGroupMembersToExclude() *TaskUpdate {
+	tu.mutation.ClearLocalGroupMembersToExclude()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -631,6 +731,36 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalGroupName(); ok {
+		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupNameCleared() {
+		_spec.ClearField(task.FieldLocalGroupName, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalGroupDescription(); ok {
+		_spec.SetField(task.FieldLocalGroupDescription, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupDescriptionCleared() {
+		_spec.ClearField(task.FieldLocalGroupDescription, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalGroupMembers(); ok {
+		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupMembersCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembers, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalGroupMembersToInclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToInclude, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupMembersToIncludeCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembersToInclude, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalGroupMembersToExclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToExclude, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupMembersToExcludeCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1082,6 +1212,106 @@ func (tuo *TaskUpdateOne) ClearLocalUserPasswordNeverExpires() *TaskUpdateOne {
 	return tuo
 }
 
+// SetLocalGroupName sets the "local_group_name" field.
+func (tuo *TaskUpdateOne) SetLocalGroupName(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupName(s)
+	return tuo
+}
+
+// SetNillableLocalGroupName sets the "local_group_name" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupName(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupName(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupName() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupName()
+	return tuo
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (tuo *TaskUpdateOne) SetLocalGroupDescription(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupDescription(s)
+	return tuo
+}
+
+// SetNillableLocalGroupDescription sets the "local_group_description" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupDescription(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupDescription(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupDescription() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupDescription()
+	return tuo
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (tuo *TaskUpdateOne) SetLocalGroupMembers(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupMembers(s)
+	return tuo
+}
+
+// SetNillableLocalGroupMembers sets the "local_group_members" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupMembers(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupMembers(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupMembers() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupMembers()
+	return tuo
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (tuo *TaskUpdateOne) SetLocalGroupMembersToInclude(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupMembersToInclude(s)
+	return tuo
+}
+
+// SetNillableLocalGroupMembersToInclude sets the "local_group_members_to_include" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupMembersToInclude(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupMembersToInclude(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupMembersToInclude() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupMembersToInclude()
+	return tuo
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (tuo *TaskUpdateOne) SetLocalGroupMembersToExclude(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupMembersToExclude(s)
+	return tuo
+}
+
+// SetNillableLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupMembersToExclude(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupMembersToExclude(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupMembersToExclude() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupMembersToExclude()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -1364,6 +1594,36 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalGroupName(); ok {
+		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupNameCleared() {
+		_spec.ClearField(task.FieldLocalGroupName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalGroupDescription(); ok {
+		_spec.SetField(task.FieldLocalGroupDescription, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupDescriptionCleared() {
+		_spec.ClearField(task.FieldLocalGroupDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalGroupMembers(); ok {
+		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupMembersCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembers, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalGroupMembersToInclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToInclude, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupMembersToIncludeCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembersToInclude, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalGroupMembersToExclude(); ok {
+		_spec.SetField(task.FieldLocalGroupMembersToExclude, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupMembersToExcludeCleared() {
+		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

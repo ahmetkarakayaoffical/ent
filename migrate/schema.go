@@ -587,6 +587,11 @@ var (
 		{Name: "local_user_password_change_not_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "local_user_password_change_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "local_user_password_never_expires", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_group_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members_to_include", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members_to_exclude", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -598,7 +603,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[20]},
+				Columns:    []*schema.Column{TasksColumns[25]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

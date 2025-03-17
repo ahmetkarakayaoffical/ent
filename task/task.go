@@ -50,6 +50,16 @@ const (
 	FieldLocalUserPasswordChangeRequired = "local_user_password_change_required"
 	// FieldLocalUserPasswordNeverExpires holds the string denoting the local_user_password_never_expires field in the database.
 	FieldLocalUserPasswordNeverExpires = "local_user_password_never_expires"
+	// FieldLocalGroupName holds the string denoting the local_group_name field in the database.
+	FieldLocalGroupName = "local_group_name"
+	// FieldLocalGroupDescription holds the string denoting the local_group_description field in the database.
+	FieldLocalGroupDescription = "local_group_description"
+	// FieldLocalGroupMembers holds the string denoting the local_group_members field in the database.
+	FieldLocalGroupMembers = "local_group_members"
+	// FieldLocalGroupMembersToInclude holds the string denoting the local_group_members_to_include field in the database.
+	FieldLocalGroupMembersToInclude = "local_group_members_to_include"
+	// FieldLocalGroupMembersToExclude holds the string denoting the local_group_members_to_exclude field in the database.
+	FieldLocalGroupMembersToExclude = "local_group_members_to_exclude"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -95,6 +105,11 @@ var Columns = []string{
 	FieldLocalUserPasswordChangeNotAllowed,
 	FieldLocalUserPasswordChangeRequired,
 	FieldLocalUserPasswordNeverExpires,
+	FieldLocalGroupName,
+	FieldLocalGroupDescription,
+	FieldLocalGroupMembers,
+	FieldLocalGroupMembersToInclude,
+	FieldLocalGroupMembersToExclude,
 	FieldWhen,
 }
 
@@ -152,6 +167,16 @@ var (
 	DefaultLocalUserPasswordChangeRequired bool
 	// DefaultLocalUserPasswordNeverExpires holds the default value on creation for the "local_user_password_never_expires" field.
 	DefaultLocalUserPasswordNeverExpires bool
+	// DefaultLocalGroupName holds the default value on creation for the "local_group_name" field.
+	DefaultLocalGroupName string
+	// DefaultLocalGroupDescription holds the default value on creation for the "local_group_description" field.
+	DefaultLocalGroupDescription string
+	// DefaultLocalGroupMembers holds the default value on creation for the "local_group_members" field.
+	DefaultLocalGroupMembers string
+	// DefaultLocalGroupMembersToInclude holds the default value on creation for the "local_group_members_to_include" field.
+	DefaultLocalGroupMembersToInclude string
+	// DefaultLocalGroupMembersToExclude holds the default value on creation for the "local_group_members_to_exclude" field.
+	DefaultLocalGroupMembersToExclude string
 )
 
 // Type defines the type for the "type" enum field.
@@ -312,6 +337,31 @@ func ByLocalUserPasswordChangeRequired(opts ...sql.OrderTermOption) OrderOption 
 // ByLocalUserPasswordNeverExpires orders the results by the local_user_password_never_expires field.
 func ByLocalUserPasswordNeverExpires(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalUserPasswordNeverExpires, opts...).ToFunc()
+}
+
+// ByLocalGroupName orders the results by the local_group_name field.
+func ByLocalGroupName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupName, opts...).ToFunc()
+}
+
+// ByLocalGroupDescription orders the results by the local_group_description field.
+func ByLocalGroupDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupDescription, opts...).ToFunc()
+}
+
+// ByLocalGroupMembers orders the results by the local_group_members field.
+func ByLocalGroupMembers(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupMembers, opts...).ToFunc()
+}
+
+// ByLocalGroupMembersToInclude orders the results by the local_group_members_to_include field.
+func ByLocalGroupMembersToInclude(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupMembersToInclude, opts...).ToFunc()
+}
+
+// ByLocalGroupMembersToExclude orders the results by the local_group_members_to_exclude field.
+func ByLocalGroupMembersToExclude(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupMembersToExclude, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.
