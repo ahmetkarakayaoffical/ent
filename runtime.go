@@ -130,7 +130,7 @@ func init() {
 	// profileissueDescWhen is the schema descriptor for when field.
 	profileissueDescWhen := profileissueFields[1].Descriptor()
 	// profileissue.DefaultWhen holds the default value on creation for the when field.
-	profileissue.DefaultWhen = profileissueDescWhen.Default.(time.Time)
+	profileissue.DefaultWhen = profileissueDescWhen.Default.(func() time.Time)
 	// profileissue.UpdateDefaultWhen holds the default value on update for the when field.
 	profileissue.UpdateDefaultWhen = profileissueDescWhen.UpdateDefault.(func() time.Time)
 	revocationFields := schema.Revocation{}.Fields()

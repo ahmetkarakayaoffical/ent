@@ -126,7 +126,7 @@ func (pic *ProfileIssueCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (pic *ProfileIssueCreate) defaults() {
 	if _, ok := pic.mutation.When(); !ok {
-		v := profileissue.DefaultWhen
+		v := profileissue.DefaultWhen()
 		pic.mutation.SetWhen(v)
 	}
 }

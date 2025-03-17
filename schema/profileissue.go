@@ -17,7 +17,7 @@ type ProfileIssue struct {
 func (ProfileIssue) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("error").Optional(),
-		field.Time("when").Optional().Default(time.Now()).UpdateDefault(time.Now()),
+		field.Time("when").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}
 }
 

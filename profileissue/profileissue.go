@@ -73,7 +73,7 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultWhen holds the default value on creation for the "when" field.
-	DefaultWhen time.Time
+	DefaultWhen func() time.Time
 	// UpdateDefaultWhen holds the default value on update for the "when" field.
 	UpdateDefaultWhen func() time.Time
 )
