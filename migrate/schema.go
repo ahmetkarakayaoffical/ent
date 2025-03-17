@@ -585,7 +585,7 @@ var (
 		{Name: "local_user_fullname", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_user_password", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_user_password_change_not_allowed", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "local_user_password_change_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "local_user_password_change_required", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "local_user_password_never_expires", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "local_group_name", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_description", Type: field.TypeString, Nullable: true, Default: ""},

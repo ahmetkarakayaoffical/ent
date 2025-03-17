@@ -30,7 +30,7 @@ func (Task) Fields() []ent.Field {
 		field.String("local_user_fullname").Optional().Default(""),
 		field.String("local_user_password").Optional().Default(""),
 		field.Bool("local_user_password_change_not_allowed").Optional().Default(false),
-		field.Bool("local_user_password_change_required").Optional().Default(true),
+		field.Bool("local_user_password_change_required").Optional().Default(false),
 		field.Bool("local_user_password_never_expires").Optional().Default(false),
 		field.String("local_group_name").Optional().Default(""),
 		field.String("local_group_description").Optional().Default(""),
