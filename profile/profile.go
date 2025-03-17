@@ -24,10 +24,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
-	// EdgeAgents holds the string denoting the agents edge name in mutations.
-	EdgeAgents = "agents"
-	// AgentFieldID holds the string denoting the ID field of the Agent.
-	AgentFieldID = "oid"
+	// EdgeIssues holds the string denoting the issues edge name in mutations.
+	EdgeIssues = "issues"
 	// Table holds the table name of the profile in the database.
 	Table = "profiles"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -42,11 +40,13 @@ const (
 	TasksInverseTable = "tasks"
 	// TasksColumn is the table column denoting the tasks relation/edge.
 	TasksColumn = "profile_tasks"
-	// AgentsTable is the table that holds the agents relation/edge. The primary key declared below.
-	AgentsTable = "profile_agents"
-	// AgentsInverseTable is the table name for the Agent entity.
-	// It exists in this package in order to avoid circular dependency with the "agent" package.
-	AgentsInverseTable = "agents"
+	// IssuesTable is the table that holds the issues relation/edge.
+	IssuesTable = "profile_issues"
+	// IssuesInverseTable is the table name for the ProfileIssue entity.
+	// It exists in this package in order to avoid circular dependency with the "profileissue" package.
+	IssuesInverseTable = "profile_issues"
+	// IssuesColumn is the table column denoting the issues relation/edge.
+	IssuesColumn = "profile_issues"
 )
 
 // Columns holds all SQL columns for profile fields.
@@ -61,9 +61,6 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"profile_id", "tag_id"}
-	// AgentsPrimaryKey and AgentsColumn2 are the table columns denoting the
-	// primary key for the agents relation (M2M).
-	AgentsPrimaryKey = []string{"profile_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -159,17 +156,17 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByAgentsCount orders the results by agents count.
-func ByAgentsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByIssuesCount orders the results by issues count.
+func ByIssuesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newAgentsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newIssuesStep(), opts...)
 	}
 }
 
-// ByAgents orders the results by agents terms.
-func ByAgents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByIssues orders the results by issues terms.
+func ByIssues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newAgentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newIssuesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newTagsStep() *sqlgraph.Step {
@@ -186,10 +183,10 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
 	)
 }
-func newAgentsStep() *sqlgraph.Step {
+func newIssuesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(AgentsInverseTable, AgentFieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, AgentsTable, AgentsPrimaryKey...),
+		sqlgraph.To(IssuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IssuesTable, IssuesColumn),
 	)
 }

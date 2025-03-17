@@ -25,6 +25,6 @@ func (Profile) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("tags", Tag.Type),
 		edge.To("tasks", Task.Type),
-		edge.To("agents", Agent.Type),
+		edge.To("issues", ProfileIssue.Type),
 	}
 }

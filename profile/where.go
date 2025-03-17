@@ -214,21 +214,21 @@ func HasTasksWith(preds ...predicate.Task) predicate.Profile {
 	})
 }
 
-// HasAgents applies the HasEdge predicate on the "agents" edge.
-func HasAgents() predicate.Profile {
+// HasIssues applies the HasEdge predicate on the "issues" edge.
+func HasIssues() predicate.Profile {
 	return predicate.Profile(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, AgentsTable, AgentsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, IssuesTable, IssuesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasAgentsWith applies the HasEdge predicate on the "agents" edge with a given conditions (other predicates).
-func HasAgentsWith(preds ...predicate.Agent) predicate.Profile {
+// HasIssuesWith applies the HasEdge predicate on the "issues" edge with a given conditions (other predicates).
+func HasIssuesWith(preds ...predicate.ProfileIssue) predicate.Profile {
 	return predicate.Profile(func(s *sql.Selector) {
-		step := newAgentsStep()
+		step := newIssuesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

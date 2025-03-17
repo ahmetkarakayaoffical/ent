@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -88,19 +88,19 @@ func (pc *ProfileCreate) AddTasks(t ...*Task) *ProfileCreate {
 	return pc.AddTaskIDs(ids...)
 }
 
-// AddAgentIDs adds the "agents" edge to the Agent entity by IDs.
-func (pc *ProfileCreate) AddAgentIDs(ids ...string) *ProfileCreate {
-	pc.mutation.AddAgentIDs(ids...)
+// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by IDs.
+func (pc *ProfileCreate) AddIssueIDs(ids ...int) *ProfileCreate {
+	pc.mutation.AddIssueIDs(ids...)
 	return pc
 }
 
-// AddAgents adds the "agents" edges to the Agent entity.
-func (pc *ProfileCreate) AddAgents(a ...*Agent) *ProfileCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+// AddIssues adds the "issues" edges to the ProfileIssue entity.
+func (pc *ProfileCreate) AddIssues(p ...*ProfileIssue) *ProfileCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return pc.AddAgentIDs(ids...)
+	return pc.AddIssueIDs(ids...)
 }
 
 // Mutation returns the ProfileMutation object of the builder.
@@ -237,15 +237,15 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.AgentsIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.IssuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   profile.AgentsTable,
-			Columns: profile.AgentsPrimaryKey,
+			Table:   profile.IssuesTable,
+			Columns: []string{profile.IssuesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

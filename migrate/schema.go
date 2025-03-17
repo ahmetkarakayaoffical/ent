@@ -343,6 +343,34 @@ var (
 		Columns:    ProfilesColumns,
 		PrimaryKey: []*schema.Column{ProfilesColumns[0]},
 	}
+	// ProfileIssuesColumns holds the columns for the "profile_issues" table.
+	ProfileIssuesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "error", Type: field.TypeString, Nullable: true},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "profile_issues", Type: field.TypeInt, Nullable: true},
+		{Name: "profile_issue_agents", Type: field.TypeString, Nullable: true},
+	}
+	// ProfileIssuesTable holds the schema information for the "profile_issues" table.
+	ProfileIssuesTable = &schema.Table{
+		Name:       "profile_issues",
+		Columns:    ProfileIssuesColumns,
+		PrimaryKey: []*schema.Column{ProfileIssuesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profile_issues_profiles_issues",
+				Columns:    []*schema.Column{ProfileIssuesColumns[3]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "profile_issues_agents_agents",
+				Columns:    []*schema.Column{ProfileIssuesColumns[4]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -724,31 +752,6 @@ var (
 			},
 		},
 	}
-	// ProfileAgentsColumns holds the columns for the "profile_agents" table.
-	ProfileAgentsColumns = []*schema.Column{
-		{Name: "profile_id", Type: field.TypeInt},
-		{Name: "agent_id", Type: field.TypeString},
-	}
-	// ProfileAgentsTable holds the schema information for the "profile_agents" table.
-	ProfileAgentsTable = &schema.Table{
-		Name:       "profile_agents",
-		Columns:    ProfileAgentsColumns,
-		PrimaryKey: []*schema.Column{ProfileAgentsColumns[0], ProfileAgentsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "profile_agents_profile_id",
-				Columns:    []*schema.Column{ProfileAgentsColumns[0]},
-				RefColumns: []*schema.Column{ProfilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "profile_agents_agent_id",
-				Columns:    []*schema.Column{ProfileAgentsColumns[1]},
-				RefColumns: []*schema.Column{AgentsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -765,6 +768,7 @@ var (
 		OrgMetadataTable,
 		PrintersTable,
 		ProfilesTable,
+		ProfileIssuesTable,
 		ReleasesTable,
 		RevocationsTable,
 		ServersTable,
@@ -779,7 +783,6 @@ var (
 		WingetConfigExclusionsTable,
 		AgentTagsTable,
 		ProfileTagsTable,
-		ProfileAgentsTable,
 	}
 )
 
@@ -796,6 +799,8 @@ func init() {
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
+	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
+	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
@@ -809,6 +814,4 @@ func init() {
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
-	ProfileAgentsTable.ForeignKeys[0].RefTable = ProfilesTable
-	ProfileAgentsTable.ForeignKeys[1].RefTable = AgentsTable
 }
