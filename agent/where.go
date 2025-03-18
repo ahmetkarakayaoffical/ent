@@ -1623,21 +1623,21 @@ func HasReleaseWith(preds ...predicate.Release) predicate.Agent {
 	})
 }
 
-// HasProfile applies the HasEdge predicate on the "profile" edge.
-func HasProfile() predicate.Agent {
+// HasProfileissue applies the HasEdge predicate on the "profileissue" edge.
+func HasProfileissue() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProfileTable, ProfilePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, true, ProfileissueTable, ProfileissueColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProfileWith applies the HasEdge predicate on the "profile" edge with a given conditions (other predicates).
-func HasProfileWith(preds ...predicate.Profile) predicate.Agent {
+// HasProfileissueWith applies the HasEdge predicate on the "profileissue" edge with a given conditions (other predicates).
+func HasProfileissueWith(preds ...predicate.ProfileIssue) predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
-		step := newProfileStep()
+		step := newProfileissueStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

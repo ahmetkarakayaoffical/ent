@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -88,17 +88,17 @@ func (pc *ProfileCreate) AddTasks(t ...*Task) *ProfileCreate {
 	return pc.AddTaskIDs(ids...)
 }
 
-// AddIssueIDs adds the "issues" edge to the Agent entity by IDs.
-func (pc *ProfileCreate) AddIssueIDs(ids ...string) *ProfileCreate {
+// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by IDs.
+func (pc *ProfileCreate) AddIssueIDs(ids ...int) *ProfileCreate {
 	pc.mutation.AddIssueIDs(ids...)
 	return pc
 }
 
-// AddIssues adds the "issues" edges to the Agent entity.
-func (pc *ProfileCreate) AddIssues(a ...*Agent) *ProfileCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+// AddIssues adds the "issues" edges to the ProfileIssue entity.
+func (pc *ProfileCreate) AddIssues(p ...*ProfileIssue) *ProfileCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
 	return pc.AddIssueIDs(ids...)
 }
@@ -239,13 +239,13 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 	}
 	if nodes := pc.mutation.IssuesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   profile.IssuesTable,
-			Columns: profile.IssuesPrimaryKey,
+			Columns: []string{profile.IssuesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

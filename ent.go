@@ -26,6 +26,7 @@ import (
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/server"
@@ -112,6 +113,7 @@ func checkColumn(table, column string) error {
 			orgmetadata.Table:           orgmetadata.ValidColumn,
 			printer.Table:               printer.ValidColumn,
 			profile.Table:               profile.ValidColumn,
+			profileissue.Table:          profileissue.ValidColumn,
 			release.Table:               release.ValidColumn,
 			revocation.Table:            revocation.ValidColumn,
 			server.Table:                server.ValidColumn,

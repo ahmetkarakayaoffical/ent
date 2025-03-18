@@ -26,6 +26,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/server"
@@ -63,6 +64,7 @@ const (
 	TypeOrgMetadata           = "OrgMetadata"
 	TypePrinter               = "Printer"
 	TypeProfile               = "Profile"
+	TypeProfileIssue          = "ProfileIssue"
 	TypeRelease               = "Release"
 	TypeRevocation            = "Revocation"
 	TypeServer                = "Server"
@@ -146,9 +148,9 @@ type AgentMutation struct {
 	clearedwingetcfgexclusions bool
 	release                    *int
 	clearedrelease             bool
-	profile                    map[int]struct{}
-	removedprofile             map[int]struct{}
-	clearedprofile             bool
+	profileissue               map[int]struct{}
+	removedprofileissue        map[int]struct{}
+	clearedprofileissue        bool
 	done                       bool
 	oldValue                   func(context.Context) (*Agent, error)
 	predicates                 []predicate.Agent
@@ -1926,58 +1928,58 @@ func (m *AgentMutation) ResetRelease() {
 	m.clearedrelease = false
 }
 
-// AddProfileIDs adds the "profile" edge to the Profile entity by ids.
-func (m *AgentMutation) AddProfileIDs(ids ...int) {
-	if m.profile == nil {
-		m.profile = make(map[int]struct{})
+// AddProfileissueIDs adds the "profileissue" edge to the ProfileIssue entity by ids.
+func (m *AgentMutation) AddProfileissueIDs(ids ...int) {
+	if m.profileissue == nil {
+		m.profileissue = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.profile[ids[i]] = struct{}{}
+		m.profileissue[ids[i]] = struct{}{}
 	}
 }
 
-// ClearProfile clears the "profile" edge to the Profile entity.
-func (m *AgentMutation) ClearProfile() {
-	m.clearedprofile = true
+// ClearProfileissue clears the "profileissue" edge to the ProfileIssue entity.
+func (m *AgentMutation) ClearProfileissue() {
+	m.clearedprofileissue = true
 }
 
-// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
-func (m *AgentMutation) ProfileCleared() bool {
-	return m.clearedprofile
+// ProfileissueCleared reports if the "profileissue" edge to the ProfileIssue entity was cleared.
+func (m *AgentMutation) ProfileissueCleared() bool {
+	return m.clearedprofileissue
 }
 
-// RemoveProfileIDs removes the "profile" edge to the Profile entity by IDs.
-func (m *AgentMutation) RemoveProfileIDs(ids ...int) {
-	if m.removedprofile == nil {
-		m.removedprofile = make(map[int]struct{})
+// RemoveProfileissueIDs removes the "profileissue" edge to the ProfileIssue entity by IDs.
+func (m *AgentMutation) RemoveProfileissueIDs(ids ...int) {
+	if m.removedprofileissue == nil {
+		m.removedprofileissue = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.profile, ids[i])
-		m.removedprofile[ids[i]] = struct{}{}
+		delete(m.profileissue, ids[i])
+		m.removedprofileissue[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedProfile returns the removed IDs of the "profile" edge to the Profile entity.
-func (m *AgentMutation) RemovedProfileIDs() (ids []int) {
-	for id := range m.removedprofile {
+// RemovedProfileissue returns the removed IDs of the "profileissue" edge to the ProfileIssue entity.
+func (m *AgentMutation) RemovedProfileissueIDs() (ids []int) {
+	for id := range m.removedprofileissue {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ProfileIDs returns the "profile" edge IDs in the mutation.
-func (m *AgentMutation) ProfileIDs() (ids []int) {
-	for id := range m.profile {
+// ProfileissueIDs returns the "profileissue" edge IDs in the mutation.
+func (m *AgentMutation) ProfileissueIDs() (ids []int) {
+	for id := range m.profileissue {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetProfile resets all changes to the "profile" edge.
-func (m *AgentMutation) ResetProfile() {
-	m.profile = nil
-	m.clearedprofile = false
-	m.removedprofile = nil
+// ResetProfileissue resets all changes to the "profileissue" edge.
+func (m *AgentMutation) ResetProfileissue() {
+	m.profileissue = nil
+	m.clearedprofileissue = false
+	m.removedprofileissue = nil
 }
 
 // Where appends a list predicates to the AgentMutation builder.
@@ -2561,8 +2563,8 @@ func (m *AgentMutation) AddedEdges() []string {
 	if m.release != nil {
 		edges = append(edges, agent.EdgeRelease)
 	}
-	if m.profile != nil {
-		edges = append(edges, agent.EdgeProfile)
+	if m.profileissue != nil {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2657,9 +2659,9 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 		if id := m.release; id != nil {
 			return []ent.Value{*id}
 		}
-	case agent.EdgeProfile:
-		ids := make([]ent.Value, 0, len(m.profile))
-		for id := range m.profile {
+	case agent.EdgeProfileissue:
+		ids := make([]ent.Value, 0, len(m.profileissue))
+		for id := range m.profileissue {
 			ids = append(ids, id)
 		}
 		return ids
@@ -2703,8 +2705,8 @@ func (m *AgentMutation) RemovedEdges() []string {
 	if m.removedwingetcfgexclusions != nil {
 		edges = append(edges, agent.EdgeWingetcfgexclusions)
 	}
-	if m.removedprofile != nil {
-		edges = append(edges, agent.EdgeProfile)
+	if m.removedprofileissue != nil {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2779,9 +2781,9 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case agent.EdgeProfile:
-		ids := make([]ent.Value, 0, len(m.removedprofile))
-		for id := range m.removedprofile {
+	case agent.EdgeProfileissue:
+		ids := make([]ent.Value, 0, len(m.removedprofileissue))
+		for id := range m.removedprofileissue {
 			ids = append(ids, id)
 		}
 		return ids
@@ -2840,8 +2842,8 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedrelease {
 		edges = append(edges, agent.EdgeRelease)
 	}
-	if m.clearedprofile {
-		edges = append(edges, agent.EdgeProfile)
+	if m.clearedprofileissue {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2882,8 +2884,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedwingetcfgexclusions
 	case agent.EdgeRelease:
 		return m.clearedrelease
-	case agent.EdgeProfile:
-		return m.clearedprofile
+	case agent.EdgeProfileissue:
+		return m.clearedprofileissue
 	}
 	return false
 }
@@ -2963,8 +2965,8 @@ func (m *AgentMutation) ResetEdge(name string) error {
 	case agent.EdgeRelease:
 		m.ResetRelease()
 		return nil
-	case agent.EdgeProfile:
-		m.ResetProfile()
+	case agent.EdgeProfileissue:
+		m.ResetProfileissue()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -11215,8 +11217,8 @@ type ProfileMutation struct {
 	tasks         map[int]struct{}
 	removedtasks  map[int]struct{}
 	clearedtasks  bool
-	issues        map[string]struct{}
-	removedissues map[string]struct{}
+	issues        map[int]struct{}
+	removedissues map[int]struct{}
 	clearedissues bool
 	done          bool
 	oldValue      func(context.Context) (*Profile, error)
@@ -11550,30 +11552,30 @@ func (m *ProfileMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
-// AddIssueIDs adds the "issues" edge to the Agent entity by ids.
-func (m *ProfileMutation) AddIssueIDs(ids ...string) {
+// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by ids.
+func (m *ProfileMutation) AddIssueIDs(ids ...int) {
 	if m.issues == nil {
-		m.issues = make(map[string]struct{})
+		m.issues = make(map[int]struct{})
 	}
 	for i := range ids {
 		m.issues[ids[i]] = struct{}{}
 	}
 }
 
-// ClearIssues clears the "issues" edge to the Agent entity.
+// ClearIssues clears the "issues" edge to the ProfileIssue entity.
 func (m *ProfileMutation) ClearIssues() {
 	m.clearedissues = true
 }
 
-// IssuesCleared reports if the "issues" edge to the Agent entity was cleared.
+// IssuesCleared reports if the "issues" edge to the ProfileIssue entity was cleared.
 func (m *ProfileMutation) IssuesCleared() bool {
 	return m.clearedissues
 }
 
-// RemoveIssueIDs removes the "issues" edge to the Agent entity by IDs.
-func (m *ProfileMutation) RemoveIssueIDs(ids ...string) {
+// RemoveIssueIDs removes the "issues" edge to the ProfileIssue entity by IDs.
+func (m *ProfileMutation) RemoveIssueIDs(ids ...int) {
 	if m.removedissues == nil {
-		m.removedissues = make(map[string]struct{})
+		m.removedissues = make(map[int]struct{})
 	}
 	for i := range ids {
 		delete(m.issues, ids[i])
@@ -11581,8 +11583,8 @@ func (m *ProfileMutation) RemoveIssueIDs(ids ...string) {
 	}
 }
 
-// RemovedIssues returns the removed IDs of the "issues" edge to the Agent entity.
-func (m *ProfileMutation) RemovedIssuesIDs() (ids []string) {
+// RemovedIssues returns the removed IDs of the "issues" edge to the ProfileIssue entity.
+func (m *ProfileMutation) RemovedIssuesIDs() (ids []int) {
 	for id := range m.removedissues {
 		ids = append(ids, id)
 	}
@@ -11590,7 +11592,7 @@ func (m *ProfileMutation) RemovedIssuesIDs() (ids []string) {
 }
 
 // IssuesIDs returns the "issues" edge IDs in the mutation.
-func (m *ProfileMutation) IssuesIDs() (ids []string) {
+func (m *ProfileMutation) IssuesIDs() (ids []int) {
 	for id := range m.issues {
 		ids = append(ids, id)
 	}
@@ -11912,6 +11914,553 @@ func (m *ProfileMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Profile edge %s", name)
+}
+
+// ProfileIssueMutation represents an operation that mutates the ProfileIssue nodes in the graph.
+type ProfileIssueMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	error          *string
+	when           *time.Time
+	clearedFields  map[string]struct{}
+	profile        *int
+	clearedprofile bool
+	agents         *string
+	clearedagents  bool
+	done           bool
+	oldValue       func(context.Context) (*ProfileIssue, error)
+	predicates     []predicate.ProfileIssue
+}
+
+var _ ent.Mutation = (*ProfileIssueMutation)(nil)
+
+// profileissueOption allows management of the mutation configuration using functional options.
+type profileissueOption func(*ProfileIssueMutation)
+
+// newProfileIssueMutation creates new mutation for the ProfileIssue entity.
+func newProfileIssueMutation(c config, op Op, opts ...profileissueOption) *ProfileIssueMutation {
+	m := &ProfileIssueMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProfileIssue,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProfileIssueID sets the ID field of the mutation.
+func withProfileIssueID(id int) profileissueOption {
+	return func(m *ProfileIssueMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProfileIssue
+		)
+		m.oldValue = func(ctx context.Context) (*ProfileIssue, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProfileIssue.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProfileIssue sets the old ProfileIssue of the mutation.
+func withProfileIssue(node *ProfileIssue) profileissueOption {
+	return func(m *ProfileIssueMutation) {
+		m.oldValue = func(context.Context) (*ProfileIssue, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProfileIssueMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProfileIssueMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProfileIssueMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProfileIssueMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProfileIssue.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetError sets the "error" field.
+func (m *ProfileIssueMutation) SetError(s string) {
+	m.error = &s
+}
+
+// Error returns the value of the "error" field in the mutation.
+func (m *ProfileIssueMutation) Error() (r string, exists bool) {
+	v := m.error
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldError returns the old "error" field's value of the ProfileIssue entity.
+// If the ProfileIssue object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileIssueMutation) OldError(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldError is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldError requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldError: %w", err)
+	}
+	return oldValue.Error, nil
+}
+
+// ClearError clears the value of the "error" field.
+func (m *ProfileIssueMutation) ClearError() {
+	m.error = nil
+	m.clearedFields[profileissue.FieldError] = struct{}{}
+}
+
+// ErrorCleared returns if the "error" field was cleared in this mutation.
+func (m *ProfileIssueMutation) ErrorCleared() bool {
+	_, ok := m.clearedFields[profileissue.FieldError]
+	return ok
+}
+
+// ResetError resets all changes to the "error" field.
+func (m *ProfileIssueMutation) ResetError() {
+	m.error = nil
+	delete(m.clearedFields, profileissue.FieldError)
+}
+
+// SetWhen sets the "when" field.
+func (m *ProfileIssueMutation) SetWhen(t time.Time) {
+	m.when = &t
+}
+
+// When returns the value of the "when" field in the mutation.
+func (m *ProfileIssueMutation) When() (r time.Time, exists bool) {
+	v := m.when
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWhen returns the old "when" field's value of the ProfileIssue entity.
+// If the ProfileIssue object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileIssueMutation) OldWhen(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWhen is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWhen requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWhen: %w", err)
+	}
+	return oldValue.When, nil
+}
+
+// ClearWhen clears the value of the "when" field.
+func (m *ProfileIssueMutation) ClearWhen() {
+	m.when = nil
+	m.clearedFields[profileissue.FieldWhen] = struct{}{}
+}
+
+// WhenCleared returns if the "when" field was cleared in this mutation.
+func (m *ProfileIssueMutation) WhenCleared() bool {
+	_, ok := m.clearedFields[profileissue.FieldWhen]
+	return ok
+}
+
+// ResetWhen resets all changes to the "when" field.
+func (m *ProfileIssueMutation) ResetWhen() {
+	m.when = nil
+	delete(m.clearedFields, profileissue.FieldWhen)
+}
+
+// SetProfileID sets the "profile" edge to the Profile entity by id.
+func (m *ProfileIssueMutation) SetProfileID(id int) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *ProfileIssueMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *ProfileIssueMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *ProfileIssueMutation) ProfileID() (id int, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *ProfileIssueMutation) ProfileIDs() (ids []int) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *ProfileIssueMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// SetAgentsID sets the "agents" edge to the Agent entity by id.
+func (m *ProfileIssueMutation) SetAgentsID(id string) {
+	m.agents = &id
+}
+
+// ClearAgents clears the "agents" edge to the Agent entity.
+func (m *ProfileIssueMutation) ClearAgents() {
+	m.clearedagents = true
+}
+
+// AgentsCleared reports if the "agents" edge to the Agent entity was cleared.
+func (m *ProfileIssueMutation) AgentsCleared() bool {
+	return m.clearedagents
+}
+
+// AgentsID returns the "agents" edge ID in the mutation.
+func (m *ProfileIssueMutation) AgentsID() (id string, exists bool) {
+	if m.agents != nil {
+		return *m.agents, true
+	}
+	return
+}
+
+// AgentsIDs returns the "agents" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AgentsID instead. It exists only for internal usage by the builders.
+func (m *ProfileIssueMutation) AgentsIDs() (ids []string) {
+	if id := m.agents; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAgents resets all changes to the "agents" edge.
+func (m *ProfileIssueMutation) ResetAgents() {
+	m.agents = nil
+	m.clearedagents = false
+}
+
+// Where appends a list predicates to the ProfileIssueMutation builder.
+func (m *ProfileIssueMutation) Where(ps ...predicate.ProfileIssue) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProfileIssueMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProfileIssueMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProfileIssue, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProfileIssueMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProfileIssueMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProfileIssue).
+func (m *ProfileIssueMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProfileIssueMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.error != nil {
+		fields = append(fields, profileissue.FieldError)
+	}
+	if m.when != nil {
+		fields = append(fields, profileissue.FieldWhen)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProfileIssueMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case profileissue.FieldError:
+		return m.Error()
+	case profileissue.FieldWhen:
+		return m.When()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProfileIssueMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case profileissue.FieldError:
+		return m.OldError(ctx)
+	case profileissue.FieldWhen:
+		return m.OldWhen(ctx)
+	}
+	return nil, fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileIssueMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case profileissue.FieldError:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetError(v)
+		return nil
+	case profileissue.FieldWhen:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWhen(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProfileIssueMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProfileIssueMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileIssueMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProfileIssue numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProfileIssueMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(profileissue.FieldError) {
+		fields = append(fields, profileissue.FieldError)
+	}
+	if m.FieldCleared(profileissue.FieldWhen) {
+		fields = append(fields, profileissue.FieldWhen)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProfileIssueMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProfileIssueMutation) ClearField(name string) error {
+	switch name {
+	case profileissue.FieldError:
+		m.ClearError()
+		return nil
+	case profileissue.FieldWhen:
+		m.ClearWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProfileIssueMutation) ResetField(name string) error {
+	switch name {
+	case profileissue.FieldError:
+		m.ResetError()
+		return nil
+	case profileissue.FieldWhen:
+		m.ResetWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProfileIssueMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.profile != nil {
+		edges = append(edges, profileissue.EdgeProfile)
+	}
+	if m.agents != nil {
+		edges = append(edges, profileissue.EdgeAgents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProfileIssueMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case profileissue.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	case profileissue.EdgeAgents:
+		if id := m.agents; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProfileIssueMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProfileIssueMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProfileIssueMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedprofile {
+		edges = append(edges, profileissue.EdgeProfile)
+	}
+	if m.clearedagents {
+		edges = append(edges, profileissue.EdgeAgents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProfileIssueMutation) EdgeCleared(name string) bool {
+	switch name {
+	case profileissue.EdgeProfile:
+		return m.clearedprofile
+	case profileissue.EdgeAgents:
+		return m.clearedagents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProfileIssueMutation) ClearEdge(name string) error {
+	switch name {
+	case profileissue.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	case profileissue.EdgeAgents:
+		m.ClearAgents()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProfileIssueMutation) ResetEdge(name string) error {
+	switch name {
+	case profileissue.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case profileissue.EdgeAgents:
+		m.ResetAgents()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue edge %s", name)
 }
 
 // ReleaseMutation represents an operation that mutates the Release nodes in the graph.

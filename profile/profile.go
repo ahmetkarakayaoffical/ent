@@ -26,8 +26,6 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeIssues holds the string denoting the issues edge name in mutations.
 	EdgeIssues = "issues"
-	// AgentFieldID holds the string denoting the ID field of the Agent.
-	AgentFieldID = "oid"
 	// Table holds the table name of the profile in the database.
 	Table = "profiles"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -42,11 +40,13 @@ const (
 	TasksInverseTable = "tasks"
 	// TasksColumn is the table column denoting the tasks relation/edge.
 	TasksColumn = "profile_tasks"
-	// IssuesTable is the table that holds the issues relation/edge. The primary key declared below.
+	// IssuesTable is the table that holds the issues relation/edge.
 	IssuesTable = "profile_issues"
-	// IssuesInverseTable is the table name for the Agent entity.
-	// It exists in this package in order to avoid circular dependency with the "agent" package.
-	IssuesInverseTable = "agents"
+	// IssuesInverseTable is the table name for the ProfileIssue entity.
+	// It exists in this package in order to avoid circular dependency with the "profileissue" package.
+	IssuesInverseTable = "profile_issues"
+	// IssuesColumn is the table column denoting the issues relation/edge.
+	IssuesColumn = "profile_issues"
 )
 
 // Columns holds all SQL columns for profile fields.
@@ -61,9 +61,6 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"profile_id", "tag_id"}
-	// IssuesPrimaryKey and IssuesColumn2 are the table columns denoting the
-	// primary key for the issues relation (M2M).
-	IssuesPrimaryKey = []string{"profile_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -189,7 +186,7 @@ func newTasksStep() *sqlgraph.Step {
 func newIssuesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(IssuesInverseTable, AgentFieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, IssuesTable, IssuesPrimaryKey...),
+		sqlgraph.To(IssuesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IssuesTable, IssuesColumn),
 	)
 }
