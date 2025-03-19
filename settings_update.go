@@ -624,6 +624,33 @@ func (su *SettingsUpdate) ClearRequestVncPin() *SettingsUpdate {
 	return su
 }
 
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (su *SettingsUpdate) SetProfilesApplicationFrequenceInMinutes(i int) *SettingsUpdate {
+	su.mutation.ResetProfilesApplicationFrequenceInMinutes()
+	su.mutation.SetProfilesApplicationFrequenceInMinutes(i)
+	return su
+}
+
+// SetNillableProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableProfilesApplicationFrequenceInMinutes(i *int) *SettingsUpdate {
+	if i != nil {
+		su.SetProfilesApplicationFrequenceInMinutes(*i)
+	}
+	return su
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds i to the "profiles_application_frequence_in_minutes" field.
+func (su *SettingsUpdate) AddProfilesApplicationFrequenceInMinutes(i int) *SettingsUpdate {
+	su.mutation.AddProfilesApplicationFrequenceInMinutes(i)
+	return su
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (su *SettingsUpdate) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpdate {
+	su.mutation.ClearProfilesApplicationFrequenceInMinutes()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -890,6 +917,15 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.RequestVncPinCleared() {
 		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
+	}
+	if value, ok := su.mutation.ProfilesApplicationFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedProfilesApplicationFrequenceInMinutes(); ok {
+		_spec.AddField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
+	}
+	if su.mutation.ProfilesApplicationFrequenceInMinutesCleared() {
+		_spec.ClearField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1536,6 +1572,33 @@ func (suo *SettingsUpdateOne) ClearRequestVncPin() *SettingsUpdateOne {
 	return suo
 }
 
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) SetProfilesApplicationFrequenceInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.ResetProfilesApplicationFrequenceInMinutes()
+	suo.mutation.SetProfilesApplicationFrequenceInMinutes(i)
+	return suo
+}
+
+// SetNillableProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableProfilesApplicationFrequenceInMinutes(i *int) *SettingsUpdateOne {
+	if i != nil {
+		suo.SetProfilesApplicationFrequenceInMinutes(*i)
+	}
+	return suo
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds i to the "profiles_application_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) AddProfilesApplicationFrequenceInMinutes(i int) *SettingsUpdateOne {
+	suo.mutation.AddProfilesApplicationFrequenceInMinutes(i)
+	return suo
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (suo *SettingsUpdateOne) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpdateOne {
+	suo.mutation.ClearProfilesApplicationFrequenceInMinutes()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -1832,6 +1895,15 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.RequestVncPinCleared() {
 		_spec.ClearField(settings.FieldRequestVncPin, field.TypeBool)
+	}
+	if value, ok := suo.mutation.ProfilesApplicationFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedProfilesApplicationFrequenceInMinutes(); ok {
+		_spec.AddField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
+	}
+	if suo.mutation.ProfilesApplicationFrequenceInMinutesCleared() {
+		_spec.ClearField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

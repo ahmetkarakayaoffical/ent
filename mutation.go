@@ -25,6 +25,8 @@ import (
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/server"
@@ -33,8 +35,10 @@ import (
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 const (
@@ -46,100 +50,110 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAgent           = "Agent"
-	TypeAntivirus       = "Antivirus"
-	TypeApp             = "App"
-	TypeCertificate     = "Certificate"
-	TypeComputer        = "Computer"
-	TypeDeployment      = "Deployment"
-	TypeLogicalDisk     = "LogicalDisk"
-	TypeMetadata        = "Metadata"
-	TypeMonitor         = "Monitor"
-	TypeNetworkAdapter  = "NetworkAdapter"
-	TypeOperatingSystem = "OperatingSystem"
-	TypeOrgMetadata     = "OrgMetadata"
-	TypePrinter         = "Printer"
-	TypeRelease         = "Release"
-	TypeRevocation      = "Revocation"
-	TypeServer          = "Server"
-	TypeSessions        = "Sessions"
-	TypeSettings        = "Settings"
-	TypeShare           = "Share"
-	TypeSystemUpdate    = "SystemUpdate"
-	TypeTag             = "Tag"
-	TypeUpdate          = "Update"
-	TypeUser            = "User"
+	TypeAgent                 = "Agent"
+	TypeAntivirus             = "Antivirus"
+	TypeApp                   = "App"
+	TypeCertificate           = "Certificate"
+	TypeComputer              = "Computer"
+	TypeDeployment            = "Deployment"
+	TypeLogicalDisk           = "LogicalDisk"
+	TypeMetadata              = "Metadata"
+	TypeMonitor               = "Monitor"
+	TypeNetworkAdapter        = "NetworkAdapter"
+	TypeOperatingSystem       = "OperatingSystem"
+	TypeOrgMetadata           = "OrgMetadata"
+	TypePrinter               = "Printer"
+	TypeProfile               = "Profile"
+	TypeProfileIssue          = "ProfileIssue"
+	TypeRelease               = "Release"
+	TypeRevocation            = "Revocation"
+	TypeServer                = "Server"
+	TypeSessions              = "Sessions"
+	TypeSettings              = "Settings"
+	TypeShare                 = "Share"
+	TypeSystemUpdate          = "SystemUpdate"
+	TypeTag                   = "Tag"
+	TypeTask                  = "Task"
+	TypeUpdate                = "Update"
+	TypeUser                  = "User"
+	TypeWingetConfigExclusion = "WingetConfigExclusion"
 )
 
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
 type AgentMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	os                      *string
-	hostname                *string
-	ip                      *string
-	mac                     *string
-	first_contact           *time.Time
-	last_contact            *time.Time
-	vnc                     *string
-	notes                   *string
-	update_task_status      *string
-	update_task_description *string
-	update_task_result      *string
-	update_task_execution   *time.Time
-	update_task_version     *string
-	vnc_proxy_port          *string
-	sftp_port               *string
-	agent_status            *agent.AgentStatus
-	certificate_ready       *bool
-	restart_required        *bool
-	is_remote               *bool
-	clearedFields           map[string]struct{}
-	computer                *int
-	clearedcomputer         bool
-	operatingsystem         *int
-	clearedoperatingsystem  bool
-	systemupdate            *int
-	clearedsystemupdate     bool
-	antivirus               *int
-	clearedantivirus        bool
-	logicaldisks            map[int]struct{}
-	removedlogicaldisks     map[int]struct{}
-	clearedlogicaldisks     bool
-	apps                    map[int]struct{}
-	removedapps             map[int]struct{}
-	clearedapps             bool
-	monitors                map[int]struct{}
-	removedmonitors         map[int]struct{}
-	clearedmonitors         bool
-	shares                  map[int]struct{}
-	removedshares           map[int]struct{}
-	clearedshares           bool
-	printers                map[int]struct{}
-	removedprinters         map[int]struct{}
-	clearedprinters         bool
-	networkadapters         map[int]struct{}
-	removednetworkadapters  map[int]struct{}
-	clearednetworkadapters  bool
-	deployments             map[int]struct{}
-	removeddeployments      map[int]struct{}
-	cleareddeployments      bool
-	updates                 map[int]struct{}
-	removedupdates          map[int]struct{}
-	clearedupdates          bool
-	tags                    map[int]struct{}
-	removedtags             map[int]struct{}
-	clearedtags             bool
-	metadata                map[int]struct{}
-	removedmetadata         map[int]struct{}
-	clearedmetadata         bool
-	release                 *int
-	clearedrelease          bool
-	done                    bool
-	oldValue                func(context.Context) (*Agent, error)
-	predicates              []predicate.Agent
+	op                         Op
+	typ                        string
+	id                         *string
+	os                         *string
+	hostname                   *string
+	ip                         *string
+	mac                        *string
+	first_contact              *time.Time
+	last_contact               *time.Time
+	vnc                        *string
+	notes                      *string
+	update_task_status         *string
+	update_task_description    *string
+	update_task_result         *string
+	update_task_execution      *time.Time
+	update_task_version        *string
+	vnc_proxy_port             *string
+	sftp_port                  *string
+	agent_status               *agent.AgentStatus
+	certificate_ready          *bool
+	restart_required           *bool
+	is_remote                  *bool
+	clearedFields              map[string]struct{}
+	computer                   *int
+	clearedcomputer            bool
+	operatingsystem            *int
+	clearedoperatingsystem     bool
+	systemupdate               *int
+	clearedsystemupdate        bool
+	antivirus                  *int
+	clearedantivirus           bool
+	logicaldisks               map[int]struct{}
+	removedlogicaldisks        map[int]struct{}
+	clearedlogicaldisks        bool
+	apps                       map[int]struct{}
+	removedapps                map[int]struct{}
+	clearedapps                bool
+	monitors                   map[int]struct{}
+	removedmonitors            map[int]struct{}
+	clearedmonitors            bool
+	shares                     map[int]struct{}
+	removedshares              map[int]struct{}
+	clearedshares              bool
+	printers                   map[int]struct{}
+	removedprinters            map[int]struct{}
+	clearedprinters            bool
+	networkadapters            map[int]struct{}
+	removednetworkadapters     map[int]struct{}
+	clearednetworkadapters     bool
+	deployments                map[int]struct{}
+	removeddeployments         map[int]struct{}
+	cleareddeployments         bool
+	updates                    map[int]struct{}
+	removedupdates             map[int]struct{}
+	clearedupdates             bool
+	tags                       map[int]struct{}
+	removedtags                map[int]struct{}
+	clearedtags                bool
+	metadata                   map[int]struct{}
+	removedmetadata            map[int]struct{}
+	clearedmetadata            bool
+	wingetcfgexclusions        map[int]struct{}
+	removedwingetcfgexclusions map[int]struct{}
+	clearedwingetcfgexclusions bool
+	release                    *int
+	clearedrelease             bool
+	profileissue               map[int]struct{}
+	removedprofileissue        map[int]struct{}
+	clearedprofileissue        bool
+	done                       bool
+	oldValue                   func(context.Context) (*Agent, error)
+	predicates                 []predicate.Agent
 }
 
 var _ ent.Mutation = (*AgentMutation)(nil)
@@ -1821,6 +1835,60 @@ func (m *AgentMutation) ResetMetadata() {
 	m.removedmetadata = nil
 }
 
+// AddWingetcfgexclusionIDs adds the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by ids.
+func (m *AgentMutation) AddWingetcfgexclusionIDs(ids ...int) {
+	if m.wingetcfgexclusions == nil {
+		m.wingetcfgexclusions = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.wingetcfgexclusions[ids[i]] = struct{}{}
+	}
+}
+
+// ClearWingetcfgexclusions clears the "wingetcfgexclusions" edge to the WingetConfigExclusion entity.
+func (m *AgentMutation) ClearWingetcfgexclusions() {
+	m.clearedwingetcfgexclusions = true
+}
+
+// WingetcfgexclusionsCleared reports if the "wingetcfgexclusions" edge to the WingetConfigExclusion entity was cleared.
+func (m *AgentMutation) WingetcfgexclusionsCleared() bool {
+	return m.clearedwingetcfgexclusions
+}
+
+// RemoveWingetcfgexclusionIDs removes the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by IDs.
+func (m *AgentMutation) RemoveWingetcfgexclusionIDs(ids ...int) {
+	if m.removedwingetcfgexclusions == nil {
+		m.removedwingetcfgexclusions = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.wingetcfgexclusions, ids[i])
+		m.removedwingetcfgexclusions[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedWingetcfgexclusions returns the removed IDs of the "wingetcfgexclusions" edge to the WingetConfigExclusion entity.
+func (m *AgentMutation) RemovedWingetcfgexclusionsIDs() (ids []int) {
+	for id := range m.removedwingetcfgexclusions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// WingetcfgexclusionsIDs returns the "wingetcfgexclusions" edge IDs in the mutation.
+func (m *AgentMutation) WingetcfgexclusionsIDs() (ids []int) {
+	for id := range m.wingetcfgexclusions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetWingetcfgexclusions resets all changes to the "wingetcfgexclusions" edge.
+func (m *AgentMutation) ResetWingetcfgexclusions() {
+	m.wingetcfgexclusions = nil
+	m.clearedwingetcfgexclusions = false
+	m.removedwingetcfgexclusions = nil
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by id.
 func (m *AgentMutation) SetReleaseID(id int) {
 	m.release = &id
@@ -1858,6 +1926,60 @@ func (m *AgentMutation) ReleaseIDs() (ids []int) {
 func (m *AgentMutation) ResetRelease() {
 	m.release = nil
 	m.clearedrelease = false
+}
+
+// AddProfileissueIDs adds the "profileissue" edge to the ProfileIssue entity by ids.
+func (m *AgentMutation) AddProfileissueIDs(ids ...int) {
+	if m.profileissue == nil {
+		m.profileissue = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.profileissue[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfileissue clears the "profileissue" edge to the ProfileIssue entity.
+func (m *AgentMutation) ClearProfileissue() {
+	m.clearedprofileissue = true
+}
+
+// ProfileissueCleared reports if the "profileissue" edge to the ProfileIssue entity was cleared.
+func (m *AgentMutation) ProfileissueCleared() bool {
+	return m.clearedprofileissue
+}
+
+// RemoveProfileissueIDs removes the "profileissue" edge to the ProfileIssue entity by IDs.
+func (m *AgentMutation) RemoveProfileissueIDs(ids ...int) {
+	if m.removedprofileissue == nil {
+		m.removedprofileissue = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.profileissue, ids[i])
+		m.removedprofileissue[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfileissue returns the removed IDs of the "profileissue" edge to the ProfileIssue entity.
+func (m *AgentMutation) RemovedProfileissueIDs() (ids []int) {
+	for id := range m.removedprofileissue {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfileissueIDs returns the "profileissue" edge IDs in the mutation.
+func (m *AgentMutation) ProfileissueIDs() (ids []int) {
+	for id := range m.profileissue {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfileissue resets all changes to the "profileissue" edge.
+func (m *AgentMutation) ResetProfileissue() {
+	m.profileissue = nil
+	m.clearedprofileissue = false
+	m.removedprofileissue = nil
 }
 
 // Where appends a list predicates to the AgentMutation builder.
@@ -2392,7 +2514,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 17)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2435,8 +2557,14 @@ func (m *AgentMutation) AddedEdges() []string {
 	if m.metadata != nil {
 		edges = append(edges, agent.EdgeMetadata)
 	}
+	if m.wingetcfgexclusions != nil {
+		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
 	if m.release != nil {
 		edges = append(edges, agent.EdgeRelease)
+	}
+	if m.profileissue != nil {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2521,17 +2649,29 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeWingetcfgexclusions:
+		ids := make([]ent.Value, 0, len(m.wingetcfgexclusions))
+		for id := range m.wingetcfgexclusions {
+			ids = append(ids, id)
+		}
+		return ids
 	case agent.EdgeRelease:
 		if id := m.release; id != nil {
 			return []ent.Value{*id}
 		}
+	case agent.EdgeProfileissue:
+		ids := make([]ent.Value, 0, len(m.profileissue))
+		for id := range m.profileissue {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 17)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -2561,6 +2701,12 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedmetadata != nil {
 		edges = append(edges, agent.EdgeMetadata)
+	}
+	if m.removedwingetcfgexclusions != nil {
+		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
+	if m.removedprofileissue != nil {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2629,13 +2775,25 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeWingetcfgexclusions:
+		ids := make([]ent.Value, 0, len(m.removedwingetcfgexclusions))
+		for id := range m.removedwingetcfgexclusions {
+			ids = append(ids, id)
+		}
+		return ids
+	case agent.EdgeProfileissue:
+		ids := make([]ent.Value, 0, len(m.removedprofileissue))
+		for id := range m.removedprofileissue {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 17)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2678,8 +2836,14 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedmetadata {
 		edges = append(edges, agent.EdgeMetadata)
 	}
+	if m.clearedwingetcfgexclusions {
+		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
 	if m.clearedrelease {
 		edges = append(edges, agent.EdgeRelease)
+	}
+	if m.clearedprofileissue {
+		edges = append(edges, agent.EdgeProfileissue)
 	}
 	return edges
 }
@@ -2716,8 +2880,12 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedtags
 	case agent.EdgeMetadata:
 		return m.clearedmetadata
+	case agent.EdgeWingetcfgexclusions:
+		return m.clearedwingetcfgexclusions
 	case agent.EdgeRelease:
 		return m.clearedrelease
+	case agent.EdgeProfileissue:
+		return m.clearedprofileissue
 	}
 	return false
 }
@@ -2791,8 +2959,14 @@ func (m *AgentMutation) ResetEdge(name string) error {
 	case agent.EdgeMetadata:
 		m.ResetMetadata()
 		return nil
+	case agent.EdgeWingetcfgexclusions:
+		m.ResetWingetcfgexclusions()
+		return nil
 	case agent.EdgeRelease:
 		m.ResetRelease()
+		return nil
+	case agent.EdgeProfileissue:
+		m.ResetProfileissue()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -5384,6 +5558,7 @@ type DeploymentMutation struct {
 	version       *string
 	installed     *time.Time
 	updated       *time.Time
+	by_profile    *bool
 	clearedFields map[string]struct{}
 	owner         *string
 	clearedowner  bool
@@ -5709,6 +5884,55 @@ func (m *DeploymentMutation) ResetUpdated() {
 	delete(m.clearedFields, deployment.FieldUpdated)
 }
 
+// SetByProfile sets the "by_profile" field.
+func (m *DeploymentMutation) SetByProfile(b bool) {
+	m.by_profile = &b
+}
+
+// ByProfile returns the value of the "by_profile" field in the mutation.
+func (m *DeploymentMutation) ByProfile() (r bool, exists bool) {
+	v := m.by_profile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldByProfile returns the old "by_profile" field's value of the Deployment entity.
+// If the Deployment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeploymentMutation) OldByProfile(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldByProfile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldByProfile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldByProfile: %w", err)
+	}
+	return oldValue.ByProfile, nil
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (m *DeploymentMutation) ClearByProfile() {
+	m.by_profile = nil
+	m.clearedFields[deployment.FieldByProfile] = struct{}{}
+}
+
+// ByProfileCleared returns if the "by_profile" field was cleared in this mutation.
+func (m *DeploymentMutation) ByProfileCleared() bool {
+	_, ok := m.clearedFields[deployment.FieldByProfile]
+	return ok
+}
+
+// ResetByProfile resets all changes to the "by_profile" field.
+func (m *DeploymentMutation) ResetByProfile() {
+	m.by_profile = nil
+	delete(m.clearedFields, deployment.FieldByProfile)
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by id.
 func (m *DeploymentMutation) SetOwnerID(id string) {
 	m.owner = &id
@@ -5782,7 +6006,7 @@ func (m *DeploymentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DeploymentMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.package_id != nil {
 		fields = append(fields, deployment.FieldPackageID)
 	}
@@ -5797,6 +6021,9 @@ func (m *DeploymentMutation) Fields() []string {
 	}
 	if m.updated != nil {
 		fields = append(fields, deployment.FieldUpdated)
+	}
+	if m.by_profile != nil {
+		fields = append(fields, deployment.FieldByProfile)
 	}
 	return fields
 }
@@ -5816,6 +6043,8 @@ func (m *DeploymentMutation) Field(name string) (ent.Value, bool) {
 		return m.Installed()
 	case deployment.FieldUpdated:
 		return m.Updated()
+	case deployment.FieldByProfile:
+		return m.ByProfile()
 	}
 	return nil, false
 }
@@ -5835,6 +6064,8 @@ func (m *DeploymentMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldInstalled(ctx)
 	case deployment.FieldUpdated:
 		return m.OldUpdated(ctx)
+	case deployment.FieldByProfile:
+		return m.OldByProfile(ctx)
 	}
 	return nil, fmt.Errorf("unknown Deployment field %s", name)
 }
@@ -5879,6 +6110,13 @@ func (m *DeploymentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdated(v)
 		return nil
+	case deployment.FieldByProfile:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetByProfile(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Deployment field %s", name)
 }
@@ -5918,6 +6156,9 @@ func (m *DeploymentMutation) ClearedFields() []string {
 	if m.FieldCleared(deployment.FieldUpdated) {
 		fields = append(fields, deployment.FieldUpdated)
 	}
+	if m.FieldCleared(deployment.FieldByProfile) {
+		fields = append(fields, deployment.FieldByProfile)
+	}
 	return fields
 }
 
@@ -5941,6 +6182,9 @@ func (m *DeploymentMutation) ClearField(name string) error {
 	case deployment.FieldUpdated:
 		m.ClearUpdated()
 		return nil
+	case deployment.FieldByProfile:
+		m.ClearByProfile()
+		return nil
 	}
 	return fmt.Errorf("unknown Deployment nullable field %s", name)
 }
@@ -5963,6 +6207,9 @@ func (m *DeploymentMutation) ResetField(name string) error {
 		return nil
 	case deployment.FieldUpdated:
 		m.ResetUpdated()
+		return nil
+	case deployment.FieldByProfile:
+		m.ResetByProfile()
 		return nil
 	}
 	return fmt.Errorf("unknown Deployment field %s", name)
@@ -10954,6 +11201,1268 @@ func (m *PrinterMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Printer edge %s", name)
 }
 
+// ProfileMutation represents an operation that mutates the Profile nodes in the graph.
+type ProfileMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	name          *string
+	apply_to_all  *bool
+	_type         *profile.Type
+	clearedFields map[string]struct{}
+	tags          map[int]struct{}
+	removedtags   map[int]struct{}
+	clearedtags   bool
+	tasks         map[int]struct{}
+	removedtasks  map[int]struct{}
+	clearedtasks  bool
+	issues        map[int]struct{}
+	removedissues map[int]struct{}
+	clearedissues bool
+	done          bool
+	oldValue      func(context.Context) (*Profile, error)
+	predicates    []predicate.Profile
+}
+
+var _ ent.Mutation = (*ProfileMutation)(nil)
+
+// profileOption allows management of the mutation configuration using functional options.
+type profileOption func(*ProfileMutation)
+
+// newProfileMutation creates new mutation for the Profile entity.
+func newProfileMutation(c config, op Op, opts ...profileOption) *ProfileMutation {
+	m := &ProfileMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProfile,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProfileID sets the ID field of the mutation.
+func withProfileID(id int) profileOption {
+	return func(m *ProfileMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Profile
+		)
+		m.oldValue = func(ctx context.Context) (*Profile, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Profile.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProfile sets the old Profile of the mutation.
+func withProfile(node *Profile) profileOption {
+	return func(m *ProfileMutation) {
+		m.oldValue = func(context.Context) (*Profile, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProfileMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProfileMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProfileMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProfileMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Profile.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *ProfileMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ProfileMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ProfileMutation) ResetName() {
+	m.name = nil
+}
+
+// SetApplyToAll sets the "apply_to_all" field.
+func (m *ProfileMutation) SetApplyToAll(b bool) {
+	m.apply_to_all = &b
+}
+
+// ApplyToAll returns the value of the "apply_to_all" field in the mutation.
+func (m *ProfileMutation) ApplyToAll() (r bool, exists bool) {
+	v := m.apply_to_all
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApplyToAll returns the old "apply_to_all" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldApplyToAll(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApplyToAll is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApplyToAll requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApplyToAll: %w", err)
+	}
+	return oldValue.ApplyToAll, nil
+}
+
+// ResetApplyToAll resets all changes to the "apply_to_all" field.
+func (m *ProfileMutation) ResetApplyToAll() {
+	m.apply_to_all = nil
+}
+
+// SetType sets the "type" field.
+func (m *ProfileMutation) SetType(pr profile.Type) {
+	m._type = &pr
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ProfileMutation) GetType() (r profile.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldType(ctx context.Context) (v profile.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *ProfileMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[profile.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *ProfileMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[profile.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ProfileMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, profile.FieldType)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by ids.
+func (m *ProfileMutation) AddTagIDs(ids ...int) {
+	if m.tags == nil {
+		m.tags = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.tags[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTags clears the "tags" edge to the Tag entity.
+func (m *ProfileMutation) ClearTags() {
+	m.clearedtags = true
+}
+
+// TagsCleared reports if the "tags" edge to the Tag entity was cleared.
+func (m *ProfileMutation) TagsCleared() bool {
+	return m.clearedtags
+}
+
+// RemoveTagIDs removes the "tags" edge to the Tag entity by IDs.
+func (m *ProfileMutation) RemoveTagIDs(ids ...int) {
+	if m.removedtags == nil {
+		m.removedtags = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.tags, ids[i])
+		m.removedtags[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTags returns the removed IDs of the "tags" edge to the Tag entity.
+func (m *ProfileMutation) RemovedTagsIDs() (ids []int) {
+	for id := range m.removedtags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TagsIDs returns the "tags" edge IDs in the mutation.
+func (m *ProfileMutation) TagsIDs() (ids []int) {
+	for id := range m.tags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTags resets all changes to the "tags" edge.
+func (m *ProfileMutation) ResetTags() {
+	m.tags = nil
+	m.clearedtags = false
+	m.removedtags = nil
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by ids.
+func (m *ProfileMutation) AddTaskIDs(ids ...int) {
+	if m.tasks == nil {
+		m.tasks = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.tasks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTasks clears the "tasks" edge to the Task entity.
+func (m *ProfileMutation) ClearTasks() {
+	m.clearedtasks = true
+}
+
+// TasksCleared reports if the "tasks" edge to the Task entity was cleared.
+func (m *ProfileMutation) TasksCleared() bool {
+	return m.clearedtasks
+}
+
+// RemoveTaskIDs removes the "tasks" edge to the Task entity by IDs.
+func (m *ProfileMutation) RemoveTaskIDs(ids ...int) {
+	if m.removedtasks == nil {
+		m.removedtasks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.tasks, ids[i])
+		m.removedtasks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTasks returns the removed IDs of the "tasks" edge to the Task entity.
+func (m *ProfileMutation) RemovedTasksIDs() (ids []int) {
+	for id := range m.removedtasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TasksIDs returns the "tasks" edge IDs in the mutation.
+func (m *ProfileMutation) TasksIDs() (ids []int) {
+	for id := range m.tasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTasks resets all changes to the "tasks" edge.
+func (m *ProfileMutation) ResetTasks() {
+	m.tasks = nil
+	m.clearedtasks = false
+	m.removedtasks = nil
+}
+
+// AddIssueIDs adds the "issues" edge to the ProfileIssue entity by ids.
+func (m *ProfileMutation) AddIssueIDs(ids ...int) {
+	if m.issues == nil {
+		m.issues = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.issues[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIssues clears the "issues" edge to the ProfileIssue entity.
+func (m *ProfileMutation) ClearIssues() {
+	m.clearedissues = true
+}
+
+// IssuesCleared reports if the "issues" edge to the ProfileIssue entity was cleared.
+func (m *ProfileMutation) IssuesCleared() bool {
+	return m.clearedissues
+}
+
+// RemoveIssueIDs removes the "issues" edge to the ProfileIssue entity by IDs.
+func (m *ProfileMutation) RemoveIssueIDs(ids ...int) {
+	if m.removedissues == nil {
+		m.removedissues = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.issues, ids[i])
+		m.removedissues[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIssues returns the removed IDs of the "issues" edge to the ProfileIssue entity.
+func (m *ProfileMutation) RemovedIssuesIDs() (ids []int) {
+	for id := range m.removedissues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IssuesIDs returns the "issues" edge IDs in the mutation.
+func (m *ProfileMutation) IssuesIDs() (ids []int) {
+	for id := range m.issues {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIssues resets all changes to the "issues" edge.
+func (m *ProfileMutation) ResetIssues() {
+	m.issues = nil
+	m.clearedissues = false
+	m.removedissues = nil
+}
+
+// Where appends a list predicates to the ProfileMutation builder.
+func (m *ProfileMutation) Where(ps ...predicate.Profile) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProfileMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProfileMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Profile, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProfileMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProfileMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Profile).
+func (m *ProfileMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProfileMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.name != nil {
+		fields = append(fields, profile.FieldName)
+	}
+	if m.apply_to_all != nil {
+		fields = append(fields, profile.FieldApplyToAll)
+	}
+	if m._type != nil {
+		fields = append(fields, profile.FieldType)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProfileMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case profile.FieldName:
+		return m.Name()
+	case profile.FieldApplyToAll:
+		return m.ApplyToAll()
+	case profile.FieldType:
+		return m.GetType()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProfileMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case profile.FieldName:
+		return m.OldName(ctx)
+	case profile.FieldApplyToAll:
+		return m.OldApplyToAll(ctx)
+	case profile.FieldType:
+		return m.OldType(ctx)
+	}
+	return nil, fmt.Errorf("unknown Profile field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case profile.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case profile.FieldApplyToAll:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApplyToAll(v)
+		return nil
+	case profile.FieldType:
+		v, ok := value.(profile.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Profile field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProfileMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProfileMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Profile numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProfileMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(profile.FieldType) {
+		fields = append(fields, profile.FieldType)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProfileMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProfileMutation) ClearField(name string) error {
+	switch name {
+	case profile.FieldType:
+		m.ClearType()
+		return nil
+	}
+	return fmt.Errorf("unknown Profile nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProfileMutation) ResetField(name string) error {
+	switch name {
+	case profile.FieldName:
+		m.ResetName()
+		return nil
+	case profile.FieldApplyToAll:
+		m.ResetApplyToAll()
+		return nil
+	case profile.FieldType:
+		m.ResetType()
+		return nil
+	}
+	return fmt.Errorf("unknown Profile field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProfileMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.tags != nil {
+		edges = append(edges, profile.EdgeTags)
+	}
+	if m.tasks != nil {
+		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.issues != nil {
+		edges = append(edges, profile.EdgeIssues)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProfileMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case profile.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.tags))
+		for id := range m.tags {
+			ids = append(ids, id)
+		}
+		return ids
+	case profile.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.tasks))
+		for id := range m.tasks {
+			ids = append(ids, id)
+		}
+		return ids
+	case profile.EdgeIssues:
+		ids := make([]ent.Value, 0, len(m.issues))
+		for id := range m.issues {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProfileMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedtags != nil {
+		edges = append(edges, profile.EdgeTags)
+	}
+	if m.removedtasks != nil {
+		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.removedissues != nil {
+		edges = append(edges, profile.EdgeIssues)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProfileMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case profile.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.removedtags))
+		for id := range m.removedtags {
+			ids = append(ids, id)
+		}
+		return ids
+	case profile.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.removedtasks))
+		for id := range m.removedtasks {
+			ids = append(ids, id)
+		}
+		return ids
+	case profile.EdgeIssues:
+		ids := make([]ent.Value, 0, len(m.removedissues))
+		for id := range m.removedissues {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProfileMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedtags {
+		edges = append(edges, profile.EdgeTags)
+	}
+	if m.clearedtasks {
+		edges = append(edges, profile.EdgeTasks)
+	}
+	if m.clearedissues {
+		edges = append(edges, profile.EdgeIssues)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProfileMutation) EdgeCleared(name string) bool {
+	switch name {
+	case profile.EdgeTags:
+		return m.clearedtags
+	case profile.EdgeTasks:
+		return m.clearedtasks
+	case profile.EdgeIssues:
+		return m.clearedissues
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProfileMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Profile unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProfileMutation) ResetEdge(name string) error {
+	switch name {
+	case profile.EdgeTags:
+		m.ResetTags()
+		return nil
+	case profile.EdgeTasks:
+		m.ResetTasks()
+		return nil
+	case profile.EdgeIssues:
+		m.ResetIssues()
+		return nil
+	}
+	return fmt.Errorf("unknown Profile edge %s", name)
+}
+
+// ProfileIssueMutation represents an operation that mutates the ProfileIssue nodes in the graph.
+type ProfileIssueMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	error          *string
+	when           *time.Time
+	clearedFields  map[string]struct{}
+	profile        *int
+	clearedprofile bool
+	agents         *string
+	clearedagents  bool
+	done           bool
+	oldValue       func(context.Context) (*ProfileIssue, error)
+	predicates     []predicate.ProfileIssue
+}
+
+var _ ent.Mutation = (*ProfileIssueMutation)(nil)
+
+// profileissueOption allows management of the mutation configuration using functional options.
+type profileissueOption func(*ProfileIssueMutation)
+
+// newProfileIssueMutation creates new mutation for the ProfileIssue entity.
+func newProfileIssueMutation(c config, op Op, opts ...profileissueOption) *ProfileIssueMutation {
+	m := &ProfileIssueMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProfileIssue,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProfileIssueID sets the ID field of the mutation.
+func withProfileIssueID(id int) profileissueOption {
+	return func(m *ProfileIssueMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProfileIssue
+		)
+		m.oldValue = func(ctx context.Context) (*ProfileIssue, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProfileIssue.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProfileIssue sets the old ProfileIssue of the mutation.
+func withProfileIssue(node *ProfileIssue) profileissueOption {
+	return func(m *ProfileIssueMutation) {
+		m.oldValue = func(context.Context) (*ProfileIssue, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProfileIssueMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProfileIssueMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProfileIssueMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProfileIssueMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProfileIssue.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetError sets the "error" field.
+func (m *ProfileIssueMutation) SetError(s string) {
+	m.error = &s
+}
+
+// Error returns the value of the "error" field in the mutation.
+func (m *ProfileIssueMutation) Error() (r string, exists bool) {
+	v := m.error
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldError returns the old "error" field's value of the ProfileIssue entity.
+// If the ProfileIssue object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileIssueMutation) OldError(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldError is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldError requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldError: %w", err)
+	}
+	return oldValue.Error, nil
+}
+
+// ClearError clears the value of the "error" field.
+func (m *ProfileIssueMutation) ClearError() {
+	m.error = nil
+	m.clearedFields[profileissue.FieldError] = struct{}{}
+}
+
+// ErrorCleared returns if the "error" field was cleared in this mutation.
+func (m *ProfileIssueMutation) ErrorCleared() bool {
+	_, ok := m.clearedFields[profileissue.FieldError]
+	return ok
+}
+
+// ResetError resets all changes to the "error" field.
+func (m *ProfileIssueMutation) ResetError() {
+	m.error = nil
+	delete(m.clearedFields, profileissue.FieldError)
+}
+
+// SetWhen sets the "when" field.
+func (m *ProfileIssueMutation) SetWhen(t time.Time) {
+	m.when = &t
+}
+
+// When returns the value of the "when" field in the mutation.
+func (m *ProfileIssueMutation) When() (r time.Time, exists bool) {
+	v := m.when
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWhen returns the old "when" field's value of the ProfileIssue entity.
+// If the ProfileIssue object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileIssueMutation) OldWhen(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWhen is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWhen requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWhen: %w", err)
+	}
+	return oldValue.When, nil
+}
+
+// ClearWhen clears the value of the "when" field.
+func (m *ProfileIssueMutation) ClearWhen() {
+	m.when = nil
+	m.clearedFields[profileissue.FieldWhen] = struct{}{}
+}
+
+// WhenCleared returns if the "when" field was cleared in this mutation.
+func (m *ProfileIssueMutation) WhenCleared() bool {
+	_, ok := m.clearedFields[profileissue.FieldWhen]
+	return ok
+}
+
+// ResetWhen resets all changes to the "when" field.
+func (m *ProfileIssueMutation) ResetWhen() {
+	m.when = nil
+	delete(m.clearedFields, profileissue.FieldWhen)
+}
+
+// SetProfileID sets the "profile" edge to the Profile entity by id.
+func (m *ProfileIssueMutation) SetProfileID(id int) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *ProfileIssueMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *ProfileIssueMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *ProfileIssueMutation) ProfileID() (id int, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *ProfileIssueMutation) ProfileIDs() (ids []int) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *ProfileIssueMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// SetAgentsID sets the "agents" edge to the Agent entity by id.
+func (m *ProfileIssueMutation) SetAgentsID(id string) {
+	m.agents = &id
+}
+
+// ClearAgents clears the "agents" edge to the Agent entity.
+func (m *ProfileIssueMutation) ClearAgents() {
+	m.clearedagents = true
+}
+
+// AgentsCleared reports if the "agents" edge to the Agent entity was cleared.
+func (m *ProfileIssueMutation) AgentsCleared() bool {
+	return m.clearedagents
+}
+
+// AgentsID returns the "agents" edge ID in the mutation.
+func (m *ProfileIssueMutation) AgentsID() (id string, exists bool) {
+	if m.agents != nil {
+		return *m.agents, true
+	}
+	return
+}
+
+// AgentsIDs returns the "agents" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AgentsID instead. It exists only for internal usage by the builders.
+func (m *ProfileIssueMutation) AgentsIDs() (ids []string) {
+	if id := m.agents; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAgents resets all changes to the "agents" edge.
+func (m *ProfileIssueMutation) ResetAgents() {
+	m.agents = nil
+	m.clearedagents = false
+}
+
+// Where appends a list predicates to the ProfileIssueMutation builder.
+func (m *ProfileIssueMutation) Where(ps ...predicate.ProfileIssue) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProfileIssueMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProfileIssueMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProfileIssue, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProfileIssueMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProfileIssueMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProfileIssue).
+func (m *ProfileIssueMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProfileIssueMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.error != nil {
+		fields = append(fields, profileissue.FieldError)
+	}
+	if m.when != nil {
+		fields = append(fields, profileissue.FieldWhen)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProfileIssueMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case profileissue.FieldError:
+		return m.Error()
+	case profileissue.FieldWhen:
+		return m.When()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProfileIssueMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case profileissue.FieldError:
+		return m.OldError(ctx)
+	case profileissue.FieldWhen:
+		return m.OldWhen(ctx)
+	}
+	return nil, fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileIssueMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case profileissue.FieldError:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetError(v)
+		return nil
+	case profileissue.FieldWhen:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWhen(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProfileIssueMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProfileIssueMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProfileIssueMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProfileIssue numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProfileIssueMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(profileissue.FieldError) {
+		fields = append(fields, profileissue.FieldError)
+	}
+	if m.FieldCleared(profileissue.FieldWhen) {
+		fields = append(fields, profileissue.FieldWhen)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProfileIssueMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProfileIssueMutation) ClearField(name string) error {
+	switch name {
+	case profileissue.FieldError:
+		m.ClearError()
+		return nil
+	case profileissue.FieldWhen:
+		m.ClearWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProfileIssueMutation) ResetField(name string) error {
+	switch name {
+	case profileissue.FieldError:
+		m.ResetError()
+		return nil
+	case profileissue.FieldWhen:
+		m.ResetWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProfileIssueMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.profile != nil {
+		edges = append(edges, profileissue.EdgeProfile)
+	}
+	if m.agents != nil {
+		edges = append(edges, profileissue.EdgeAgents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProfileIssueMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case profileissue.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	case profileissue.EdgeAgents:
+		if id := m.agents; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProfileIssueMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProfileIssueMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProfileIssueMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedprofile {
+		edges = append(edges, profileissue.EdgeProfile)
+	}
+	if m.clearedagents {
+		edges = append(edges, profileissue.EdgeAgents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProfileIssueMutation) EdgeCleared(name string) bool {
+	switch name {
+	case profileissue.EdgeProfile:
+		return m.clearedprofile
+	case profileissue.EdgeAgents:
+		return m.clearedagents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProfileIssueMutation) ClearEdge(name string) error {
+	switch name {
+	case profileissue.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	case profileissue.EdgeAgents:
+		m.ClearAgents()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProfileIssueMutation) ResetEdge(name string) error {
+	switch name {
+	case profileissue.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case profileissue.EdgeAgents:
+		m.ResetAgents()
+		return nil
+	}
+	return fmt.Errorf("unknown ProfileIssue edge %s", name)
+}
+
 // ReleaseMutation represents an operation that mutates the Release nodes in the graph.
 type ReleaseMutation struct {
 	config
@@ -14374,49 +15883,51 @@ func (m *SessionsMutation) ResetEdge(name string) error {
 // SettingsMutation represents an operation that mutates the Settings nodes in the graph.
 type SettingsMutation struct {
 	config
-	op                                   Op
-	typ                                  string
-	id                                   *int
-	language                             *string
-	organization                         *string
-	postal_address                       *string
-	postal_code                          *string
-	locality                             *string
-	province                             *string
-	state                                *string
-	country                              *string
-	smtp_server                          *string
-	smtp_port                            *int
-	addsmtp_port                         *int
-	smtp_user                            *string
-	smtp_password                        *string
-	smtp_auth                            *string
-	smtp_tls                             *bool
-	smtp_starttls                        *bool
-	nats_server                          *string
-	nats_port                            *string
-	message_from                         *string
-	max_upload_size                      *string
-	user_cert_years_valid                *int
-	adduser_cert_years_valid             *int
-	nats_request_timeout_seconds         *int
-	addnats_request_timeout_seconds      *int
-	refresh_time_in_minutes              *int
-	addrefresh_time_in_minutes           *int
-	session_lifetime_in_minutes          *int
-	addsession_lifetime_in_minutes       *int
-	update_channel                       *string
-	created                              *time.Time
-	modified                             *time.Time
-	agent_report_frequence_in_minutes    *int
-	addagent_report_frequence_in_minutes *int
-	request_vnc_pin                      *bool
-	clearedFields                        map[string]struct{}
-	tag                                  *int
-	clearedtag                           bool
-	done                                 bool
-	oldValue                             func(context.Context) (*Settings, error)
-	predicates                           []predicate.Settings
+	op                                           Op
+	typ                                          string
+	id                                           *int
+	language                                     *string
+	organization                                 *string
+	postal_address                               *string
+	postal_code                                  *string
+	locality                                     *string
+	province                                     *string
+	state                                        *string
+	country                                      *string
+	smtp_server                                  *string
+	smtp_port                                    *int
+	addsmtp_port                                 *int
+	smtp_user                                    *string
+	smtp_password                                *string
+	smtp_auth                                    *string
+	smtp_tls                                     *bool
+	smtp_starttls                                *bool
+	nats_server                                  *string
+	nats_port                                    *string
+	message_from                                 *string
+	max_upload_size                              *string
+	user_cert_years_valid                        *int
+	adduser_cert_years_valid                     *int
+	nats_request_timeout_seconds                 *int
+	addnats_request_timeout_seconds              *int
+	refresh_time_in_minutes                      *int
+	addrefresh_time_in_minutes                   *int
+	session_lifetime_in_minutes                  *int
+	addsession_lifetime_in_minutes               *int
+	update_channel                               *string
+	created                                      *time.Time
+	modified                                     *time.Time
+	agent_report_frequence_in_minutes            *int
+	addagent_report_frequence_in_minutes         *int
+	request_vnc_pin                              *bool
+	profiles_application_frequence_in_minutes    *int
+	addprofiles_application_frequence_in_minutes *int
+	clearedFields                                map[string]struct{}
+	tag                                          *int
+	clearedtag                                   bool
+	done                                         bool
+	oldValue                                     func(context.Context) (*Settings, error)
+	predicates                                   []predicate.Settings
 }
 
 var _ ent.Mutation = (*SettingsMutation)(nil)
@@ -16015,6 +17526,76 @@ func (m *SettingsMutation) ResetRequestVncPin() {
 	delete(m.clearedFields, settings.FieldRequestVncPin)
 }
 
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (m *SettingsMutation) SetProfilesApplicationFrequenceInMinutes(i int) {
+	m.profiles_application_frequence_in_minutes = &i
+	m.addprofiles_application_frequence_in_minutes = nil
+}
+
+// ProfilesApplicationFrequenceInMinutes returns the value of the "profiles_application_frequence_in_minutes" field in the mutation.
+func (m *SettingsMutation) ProfilesApplicationFrequenceInMinutes() (r int, exists bool) {
+	v := m.profiles_application_frequence_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProfilesApplicationFrequenceInMinutes returns the old "profiles_application_frequence_in_minutes" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldProfilesApplicationFrequenceInMinutes(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProfilesApplicationFrequenceInMinutes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProfilesApplicationFrequenceInMinutes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProfilesApplicationFrequenceInMinutes: %w", err)
+	}
+	return oldValue.ProfilesApplicationFrequenceInMinutes, nil
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds i to the "profiles_application_frequence_in_minutes" field.
+func (m *SettingsMutation) AddProfilesApplicationFrequenceInMinutes(i int) {
+	if m.addprofiles_application_frequence_in_minutes != nil {
+		*m.addprofiles_application_frequence_in_minutes += i
+	} else {
+		m.addprofiles_application_frequence_in_minutes = &i
+	}
+}
+
+// AddedProfilesApplicationFrequenceInMinutes returns the value that was added to the "profiles_application_frequence_in_minutes" field in this mutation.
+func (m *SettingsMutation) AddedProfilesApplicationFrequenceInMinutes() (r int, exists bool) {
+	v := m.addprofiles_application_frequence_in_minutes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (m *SettingsMutation) ClearProfilesApplicationFrequenceInMinutes() {
+	m.profiles_application_frequence_in_minutes = nil
+	m.addprofiles_application_frequence_in_minutes = nil
+	m.clearedFields[settings.FieldProfilesApplicationFrequenceInMinutes] = struct{}{}
+}
+
+// ProfilesApplicationFrequenceInMinutesCleared returns if the "profiles_application_frequence_in_minutes" field was cleared in this mutation.
+func (m *SettingsMutation) ProfilesApplicationFrequenceInMinutesCleared() bool {
+	_, ok := m.clearedFields[settings.FieldProfilesApplicationFrequenceInMinutes]
+	return ok
+}
+
+// ResetProfilesApplicationFrequenceInMinutes resets all changes to the "profiles_application_frequence_in_minutes" field.
+func (m *SettingsMutation) ResetProfilesApplicationFrequenceInMinutes() {
+	m.profiles_application_frequence_in_minutes = nil
+	m.addprofiles_application_frequence_in_minutes = nil
+	delete(m.clearedFields, settings.FieldProfilesApplicationFrequenceInMinutes)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -16088,7 +17669,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 29)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -16173,6 +17754,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.request_vnc_pin != nil {
 		fields = append(fields, settings.FieldRequestVncPin)
 	}
+	if m.profiles_application_frequence_in_minutes != nil {
+		fields = append(fields, settings.FieldProfilesApplicationFrequenceInMinutes)
+	}
 	return fields
 }
 
@@ -16237,6 +17821,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.AgentReportFrequenceInMinutes()
 	case settings.FieldRequestVncPin:
 		return m.RequestVncPin()
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		return m.ProfilesApplicationFrequenceInMinutes()
 	}
 	return nil, false
 }
@@ -16302,6 +17888,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldAgentReportFrequenceInMinutes(ctx)
 	case settings.FieldRequestVncPin:
 		return m.OldRequestVncPin(ctx)
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		return m.OldProfilesApplicationFrequenceInMinutes(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -16507,6 +18095,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRequestVncPin(v)
 		return nil
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProfilesApplicationFrequenceInMinutes(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -16533,6 +18128,9 @@ func (m *SettingsMutation) AddedFields() []string {
 	if m.addagent_report_frequence_in_minutes != nil {
 		fields = append(fields, settings.FieldAgentReportFrequenceInMinutes)
 	}
+	if m.addprofiles_application_frequence_in_minutes != nil {
+		fields = append(fields, settings.FieldProfilesApplicationFrequenceInMinutes)
+	}
 	return fields
 }
 
@@ -16553,6 +18151,8 @@ func (m *SettingsMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedSessionLifetimeInMinutes()
 	case settings.FieldAgentReportFrequenceInMinutes:
 		return m.AddedAgentReportFrequenceInMinutes()
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		return m.AddedProfilesApplicationFrequenceInMinutes()
 	}
 	return nil, false
 }
@@ -16603,6 +18203,13 @@ func (m *SettingsMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAgentReportFrequenceInMinutes(v)
+		return nil
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddProfilesApplicationFrequenceInMinutes(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Settings numeric field %s", name)
@@ -16695,6 +18302,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(settings.FieldRequestVncPin) {
 		fields = append(fields, settings.FieldRequestVncPin)
+	}
+	if m.FieldCleared(settings.FieldProfilesApplicationFrequenceInMinutes) {
+		fields = append(fields, settings.FieldProfilesApplicationFrequenceInMinutes)
 	}
 	return fields
 }
@@ -16794,6 +18404,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldRequestVncPin:
 		m.ClearRequestVncPin()
 		return nil
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		m.ClearProfilesApplicationFrequenceInMinutes()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -16885,6 +18498,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldRequestVncPin:
 		m.ResetRequestVncPin()
+		return nil
+	case settings.FieldProfilesApplicationFrequenceInMinutes:
+		m.ResetProfilesApplicationFrequenceInMinutes()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
@@ -18060,6 +19676,9 @@ type TagMutation struct {
 	children        map[int]struct{}
 	removedchildren map[int]struct{}
 	clearedchildren bool
+	profile         map[int]struct{}
+	removedprofile  map[int]struct{}
+	clearedprofile  bool
 	done            bool
 	oldValue        func(context.Context) (*Tag, error)
 	predicates      []predicate.Tag
@@ -18431,6 +20050,60 @@ func (m *TagMutation) ResetChildren() {
 	m.removedchildren = nil
 }
 
+// AddProfileIDs adds the "profile" edge to the Profile entity by ids.
+func (m *TagMutation) AddProfileIDs(ids ...int) {
+	if m.profile == nil {
+		m.profile = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.profile[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *TagMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *TagMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// RemoveProfileIDs removes the "profile" edge to the Profile entity by IDs.
+func (m *TagMutation) RemoveProfileIDs(ids ...int) {
+	if m.removedprofile == nil {
+		m.removedprofile = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.profile, ids[i])
+		m.removedprofile[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfile returns the removed IDs of the "profile" edge to the Profile entity.
+func (m *TagMutation) RemovedProfileIDs() (ids []int) {
+	for id := range m.removedprofile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+func (m *TagMutation) ProfileIDs() (ids []int) {
+	for id := range m.profile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *TagMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+	m.removedprofile = nil
+}
+
 // Where appends a list predicates to the TagMutation builder.
 func (m *TagMutation) Where(ps ...predicate.Tag) {
 	m.predicates = append(m.predicates, ps...)
@@ -18607,7 +20280,7 @@ func (m *TagMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TagMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.owner != nil {
 		edges = append(edges, tag.EdgeOwner)
 	}
@@ -18616,6 +20289,9 @@ func (m *TagMutation) AddedEdges() []string {
 	}
 	if m.children != nil {
 		edges = append(edges, tag.EdgeChildren)
+	}
+	if m.profile != nil {
+		edges = append(edges, tag.EdgeProfile)
 	}
 	return edges
 }
@@ -18640,18 +20316,27 @@ func (m *TagMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case tag.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.profile))
+		for id := range m.profile {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TagMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedowner != nil {
 		edges = append(edges, tag.EdgeOwner)
 	}
 	if m.removedchildren != nil {
 		edges = append(edges, tag.EdgeChildren)
+	}
+	if m.removedprofile != nil {
+		edges = append(edges, tag.EdgeProfile)
 	}
 	return edges
 }
@@ -18672,13 +20357,19 @@ func (m *TagMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case tag.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.removedprofile))
+		for id := range m.removedprofile {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TagMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedowner {
 		edges = append(edges, tag.EdgeOwner)
 	}
@@ -18687,6 +20378,9 @@ func (m *TagMutation) ClearedEdges() []string {
 	}
 	if m.clearedchildren {
 		edges = append(edges, tag.EdgeChildren)
+	}
+	if m.clearedprofile {
+		edges = append(edges, tag.EdgeProfile)
 	}
 	return edges
 }
@@ -18701,6 +20395,8 @@ func (m *TagMutation) EdgeCleared(name string) bool {
 		return m.clearedparent
 	case tag.EdgeChildren:
 		return m.clearedchildren
+	case tag.EdgeProfile:
+		return m.clearedprofile
 	}
 	return false
 }
@@ -18729,8 +20425,2152 @@ func (m *TagMutation) ResetEdge(name string) error {
 	case tag.EdgeChildren:
 		m.ResetChildren()
 		return nil
+	case tag.EdgeProfile:
+		m.ResetProfile()
+		return nil
 	}
 	return fmt.Errorf("unknown Tag edge %s", name)
+}
+
+// TaskMutation represents an operation that mutates the Task nodes in the graph.
+type TaskMutation struct {
+	config
+	op                                     Op
+	typ                                    string
+	id                                     *int
+	name                                   *string
+	_type                                  *task.Type
+	package_id                             *string
+	package_name                           *string
+	registry_key                           *string
+	registry_key_value_name                *string
+	registry_key_value_type                *task.RegistryKeyValueType
+	registry_key_value_data                *string
+	registry_hex                           *bool
+	registry_force                         *bool
+	local_user_username                    *string
+	local_user_description                 *string
+	local_user_disable                     *bool
+	local_user_fullname                    *string
+	local_user_password                    *string
+	local_user_password_change_not_allowed *bool
+	local_user_password_change_required    *bool
+	local_user_password_never_expires      *bool
+	local_group_name                       *string
+	local_group_description                *string
+	local_group_members                    *string
+	local_group_members_to_include         *string
+	local_group_members_to_exclude         *string
+	when                                   *time.Time
+	clearedFields                          map[string]struct{}
+	tags                                   map[int]struct{}
+	removedtags                            map[int]struct{}
+	clearedtags                            bool
+	profile                                *int
+	clearedprofile                         bool
+	done                                   bool
+	oldValue                               func(context.Context) (*Task, error)
+	predicates                             []predicate.Task
+}
+
+var _ ent.Mutation = (*TaskMutation)(nil)
+
+// taskOption allows management of the mutation configuration using functional options.
+type taskOption func(*TaskMutation)
+
+// newTaskMutation creates new mutation for the Task entity.
+func newTaskMutation(c config, op Op, opts ...taskOption) *TaskMutation {
+	m := &TaskMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTask,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTaskID sets the ID field of the mutation.
+func withTaskID(id int) taskOption {
+	return func(m *TaskMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Task
+		)
+		m.oldValue = func(ctx context.Context) (*Task, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Task.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTask sets the old Task of the mutation.
+func withTask(node *Task) taskOption {
+	return func(m *TaskMutation) {
+		m.oldValue = func(context.Context) (*Task, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TaskMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TaskMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TaskMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TaskMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Task.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *TaskMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *TaskMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *TaskMutation) ResetName() {
+	m.name = nil
+}
+
+// SetType sets the "type" field.
+func (m *TaskMutation) SetType(t task.Type) {
+	m._type = &t
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *TaskMutation) GetType() (r task.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldType(ctx context.Context) (v task.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *TaskMutation) ResetType() {
+	m._type = nil
+}
+
+// SetPackageID sets the "package_id" field.
+func (m *TaskMutation) SetPackageID(s string) {
+	m.package_id = &s
+}
+
+// PackageID returns the value of the "package_id" field in the mutation.
+func (m *TaskMutation) PackageID() (r string, exists bool) {
+	v := m.package_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageID returns the old "package_id" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldPackageID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageID: %w", err)
+	}
+	return oldValue.PackageID, nil
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (m *TaskMutation) ClearPackageID() {
+	m.package_id = nil
+	m.clearedFields[task.FieldPackageID] = struct{}{}
+}
+
+// PackageIDCleared returns if the "package_id" field was cleared in this mutation.
+func (m *TaskMutation) PackageIDCleared() bool {
+	_, ok := m.clearedFields[task.FieldPackageID]
+	return ok
+}
+
+// ResetPackageID resets all changes to the "package_id" field.
+func (m *TaskMutation) ResetPackageID() {
+	m.package_id = nil
+	delete(m.clearedFields, task.FieldPackageID)
+}
+
+// SetPackageName sets the "package_name" field.
+func (m *TaskMutation) SetPackageName(s string) {
+	m.package_name = &s
+}
+
+// PackageName returns the value of the "package_name" field in the mutation.
+func (m *TaskMutation) PackageName() (r string, exists bool) {
+	v := m.package_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageName returns the old "package_name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldPackageName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageName: %w", err)
+	}
+	return oldValue.PackageName, nil
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (m *TaskMutation) ClearPackageName() {
+	m.package_name = nil
+	m.clearedFields[task.FieldPackageName] = struct{}{}
+}
+
+// PackageNameCleared returns if the "package_name" field was cleared in this mutation.
+func (m *TaskMutation) PackageNameCleared() bool {
+	_, ok := m.clearedFields[task.FieldPackageName]
+	return ok
+}
+
+// ResetPackageName resets all changes to the "package_name" field.
+func (m *TaskMutation) ResetPackageName() {
+	m.package_name = nil
+	delete(m.clearedFields, task.FieldPackageName)
+}
+
+// SetRegistryKey sets the "registry_key" field.
+func (m *TaskMutation) SetRegistryKey(s string) {
+	m.registry_key = &s
+}
+
+// RegistryKey returns the value of the "registry_key" field in the mutation.
+func (m *TaskMutation) RegistryKey() (r string, exists bool) {
+	v := m.registry_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKey returns the old "registry_key" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKey: %w", err)
+	}
+	return oldValue.RegistryKey, nil
+}
+
+// ClearRegistryKey clears the value of the "registry_key" field.
+func (m *TaskMutation) ClearRegistryKey() {
+	m.registry_key = nil
+	m.clearedFields[task.FieldRegistryKey] = struct{}{}
+}
+
+// RegistryKeyCleared returns if the "registry_key" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKey]
+	return ok
+}
+
+// ResetRegistryKey resets all changes to the "registry_key" field.
+func (m *TaskMutation) ResetRegistryKey() {
+	m.registry_key = nil
+	delete(m.clearedFields, task.FieldRegistryKey)
+}
+
+// SetRegistryKeyValueName sets the "registry_key_value_name" field.
+func (m *TaskMutation) SetRegistryKeyValueName(s string) {
+	m.registry_key_value_name = &s
+}
+
+// RegistryKeyValueName returns the value of the "registry_key_value_name" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueName() (r string, exists bool) {
+	v := m.registry_key_value_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueName returns the old "registry_key_value_name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueName: %w", err)
+	}
+	return oldValue.RegistryKeyValueName, nil
+}
+
+// ClearRegistryKeyValueName clears the value of the "registry_key_value_name" field.
+func (m *TaskMutation) ClearRegistryKeyValueName() {
+	m.registry_key_value_name = nil
+	m.clearedFields[task.FieldRegistryKeyValueName] = struct{}{}
+}
+
+// RegistryKeyValueNameCleared returns if the "registry_key_value_name" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueNameCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueName]
+	return ok
+}
+
+// ResetRegistryKeyValueName resets all changes to the "registry_key_value_name" field.
+func (m *TaskMutation) ResetRegistryKeyValueName() {
+	m.registry_key_value_name = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueName)
+}
+
+// SetRegistryKeyValueType sets the "registry_key_value_type" field.
+func (m *TaskMutation) SetRegistryKeyValueType(tkvt task.RegistryKeyValueType) {
+	m.registry_key_value_type = &tkvt
+}
+
+// RegistryKeyValueType returns the value of the "registry_key_value_type" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueType() (r task.RegistryKeyValueType, exists bool) {
+	v := m.registry_key_value_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueType returns the old "registry_key_value_type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueType(ctx context.Context) (v task.RegistryKeyValueType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueType: %w", err)
+	}
+	return oldValue.RegistryKeyValueType, nil
+}
+
+// ClearRegistryKeyValueType clears the value of the "registry_key_value_type" field.
+func (m *TaskMutation) ClearRegistryKeyValueType() {
+	m.registry_key_value_type = nil
+	m.clearedFields[task.FieldRegistryKeyValueType] = struct{}{}
+}
+
+// RegistryKeyValueTypeCleared returns if the "registry_key_value_type" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueTypeCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueType]
+	return ok
+}
+
+// ResetRegistryKeyValueType resets all changes to the "registry_key_value_type" field.
+func (m *TaskMutation) ResetRegistryKeyValueType() {
+	m.registry_key_value_type = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueType)
+}
+
+// SetRegistryKeyValueData sets the "registry_key_value_data" field.
+func (m *TaskMutation) SetRegistryKeyValueData(s string) {
+	m.registry_key_value_data = &s
+}
+
+// RegistryKeyValueData returns the value of the "registry_key_value_data" field in the mutation.
+func (m *TaskMutation) RegistryKeyValueData() (r string, exists bool) {
+	v := m.registry_key_value_data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryKeyValueData returns the old "registry_key_value_data" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryKeyValueData(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryKeyValueData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryKeyValueData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryKeyValueData: %w", err)
+	}
+	return oldValue.RegistryKeyValueData, nil
+}
+
+// ClearRegistryKeyValueData clears the value of the "registry_key_value_data" field.
+func (m *TaskMutation) ClearRegistryKeyValueData() {
+	m.registry_key_value_data = nil
+	m.clearedFields[task.FieldRegistryKeyValueData] = struct{}{}
+}
+
+// RegistryKeyValueDataCleared returns if the "registry_key_value_data" field was cleared in this mutation.
+func (m *TaskMutation) RegistryKeyValueDataCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryKeyValueData]
+	return ok
+}
+
+// ResetRegistryKeyValueData resets all changes to the "registry_key_value_data" field.
+func (m *TaskMutation) ResetRegistryKeyValueData() {
+	m.registry_key_value_data = nil
+	delete(m.clearedFields, task.FieldRegistryKeyValueData)
+}
+
+// SetRegistryHex sets the "registry_hex" field.
+func (m *TaskMutation) SetRegistryHex(b bool) {
+	m.registry_hex = &b
+}
+
+// RegistryHex returns the value of the "registry_hex" field in the mutation.
+func (m *TaskMutation) RegistryHex() (r bool, exists bool) {
+	v := m.registry_hex
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryHex returns the old "registry_hex" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryHex(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryHex is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryHex requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryHex: %w", err)
+	}
+	return oldValue.RegistryHex, nil
+}
+
+// ClearRegistryHex clears the value of the "registry_hex" field.
+func (m *TaskMutation) ClearRegistryHex() {
+	m.registry_hex = nil
+	m.clearedFields[task.FieldRegistryHex] = struct{}{}
+}
+
+// RegistryHexCleared returns if the "registry_hex" field was cleared in this mutation.
+func (m *TaskMutation) RegistryHexCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryHex]
+	return ok
+}
+
+// ResetRegistryHex resets all changes to the "registry_hex" field.
+func (m *TaskMutation) ResetRegistryHex() {
+	m.registry_hex = nil
+	delete(m.clearedFields, task.FieldRegistryHex)
+}
+
+// SetRegistryForce sets the "registry_force" field.
+func (m *TaskMutation) SetRegistryForce(b bool) {
+	m.registry_force = &b
+}
+
+// RegistryForce returns the value of the "registry_force" field in the mutation.
+func (m *TaskMutation) RegistryForce() (r bool, exists bool) {
+	v := m.registry_force
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegistryForce returns the old "registry_force" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldRegistryForce(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegistryForce is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegistryForce requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegistryForce: %w", err)
+	}
+	return oldValue.RegistryForce, nil
+}
+
+// ClearRegistryForce clears the value of the "registry_force" field.
+func (m *TaskMutation) ClearRegistryForce() {
+	m.registry_force = nil
+	m.clearedFields[task.FieldRegistryForce] = struct{}{}
+}
+
+// RegistryForceCleared returns if the "registry_force" field was cleared in this mutation.
+func (m *TaskMutation) RegistryForceCleared() bool {
+	_, ok := m.clearedFields[task.FieldRegistryForce]
+	return ok
+}
+
+// ResetRegistryForce resets all changes to the "registry_force" field.
+func (m *TaskMutation) ResetRegistryForce() {
+	m.registry_force = nil
+	delete(m.clearedFields, task.FieldRegistryForce)
+}
+
+// SetLocalUserUsername sets the "local_user_username" field.
+func (m *TaskMutation) SetLocalUserUsername(s string) {
+	m.local_user_username = &s
+}
+
+// LocalUserUsername returns the value of the "local_user_username" field in the mutation.
+func (m *TaskMutation) LocalUserUsername() (r string, exists bool) {
+	v := m.local_user_username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserUsername returns the old "local_user_username" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserUsername is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserUsername: %w", err)
+	}
+	return oldValue.LocalUserUsername, nil
+}
+
+// ClearLocalUserUsername clears the value of the "local_user_username" field.
+func (m *TaskMutation) ClearLocalUserUsername() {
+	m.local_user_username = nil
+	m.clearedFields[task.FieldLocalUserUsername] = struct{}{}
+}
+
+// LocalUserUsernameCleared returns if the "local_user_username" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserUsernameCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserUsername]
+	return ok
+}
+
+// ResetLocalUserUsername resets all changes to the "local_user_username" field.
+func (m *TaskMutation) ResetLocalUserUsername() {
+	m.local_user_username = nil
+	delete(m.clearedFields, task.FieldLocalUserUsername)
+}
+
+// SetLocalUserDescription sets the "local_user_description" field.
+func (m *TaskMutation) SetLocalUserDescription(s string) {
+	m.local_user_description = &s
+}
+
+// LocalUserDescription returns the value of the "local_user_description" field in the mutation.
+func (m *TaskMutation) LocalUserDescription() (r string, exists bool) {
+	v := m.local_user_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserDescription returns the old "local_user_description" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserDescription: %w", err)
+	}
+	return oldValue.LocalUserDescription, nil
+}
+
+// ClearLocalUserDescription clears the value of the "local_user_description" field.
+func (m *TaskMutation) ClearLocalUserDescription() {
+	m.local_user_description = nil
+	m.clearedFields[task.FieldLocalUserDescription] = struct{}{}
+}
+
+// LocalUserDescriptionCleared returns if the "local_user_description" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserDescriptionCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserDescription]
+	return ok
+}
+
+// ResetLocalUserDescription resets all changes to the "local_user_description" field.
+func (m *TaskMutation) ResetLocalUserDescription() {
+	m.local_user_description = nil
+	delete(m.clearedFields, task.FieldLocalUserDescription)
+}
+
+// SetLocalUserDisable sets the "local_user_disable" field.
+func (m *TaskMutation) SetLocalUserDisable(b bool) {
+	m.local_user_disable = &b
+}
+
+// LocalUserDisable returns the value of the "local_user_disable" field in the mutation.
+func (m *TaskMutation) LocalUserDisable() (r bool, exists bool) {
+	v := m.local_user_disable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserDisable returns the old "local_user_disable" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserDisable(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserDisable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserDisable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserDisable: %w", err)
+	}
+	return oldValue.LocalUserDisable, nil
+}
+
+// ClearLocalUserDisable clears the value of the "local_user_disable" field.
+func (m *TaskMutation) ClearLocalUserDisable() {
+	m.local_user_disable = nil
+	m.clearedFields[task.FieldLocalUserDisable] = struct{}{}
+}
+
+// LocalUserDisableCleared returns if the "local_user_disable" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserDisableCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserDisable]
+	return ok
+}
+
+// ResetLocalUserDisable resets all changes to the "local_user_disable" field.
+func (m *TaskMutation) ResetLocalUserDisable() {
+	m.local_user_disable = nil
+	delete(m.clearedFields, task.FieldLocalUserDisable)
+}
+
+// SetLocalUserFullname sets the "local_user_fullname" field.
+func (m *TaskMutation) SetLocalUserFullname(s string) {
+	m.local_user_fullname = &s
+}
+
+// LocalUserFullname returns the value of the "local_user_fullname" field in the mutation.
+func (m *TaskMutation) LocalUserFullname() (r string, exists bool) {
+	v := m.local_user_fullname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserFullname returns the old "local_user_fullname" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserFullname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserFullname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserFullname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserFullname: %w", err)
+	}
+	return oldValue.LocalUserFullname, nil
+}
+
+// ClearLocalUserFullname clears the value of the "local_user_fullname" field.
+func (m *TaskMutation) ClearLocalUserFullname() {
+	m.local_user_fullname = nil
+	m.clearedFields[task.FieldLocalUserFullname] = struct{}{}
+}
+
+// LocalUserFullnameCleared returns if the "local_user_fullname" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserFullnameCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserFullname]
+	return ok
+}
+
+// ResetLocalUserFullname resets all changes to the "local_user_fullname" field.
+func (m *TaskMutation) ResetLocalUserFullname() {
+	m.local_user_fullname = nil
+	delete(m.clearedFields, task.FieldLocalUserFullname)
+}
+
+// SetLocalUserPassword sets the "local_user_password" field.
+func (m *TaskMutation) SetLocalUserPassword(s string) {
+	m.local_user_password = &s
+}
+
+// LocalUserPassword returns the value of the "local_user_password" field in the mutation.
+func (m *TaskMutation) LocalUserPassword() (r string, exists bool) {
+	v := m.local_user_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPassword returns the old "local_user_password" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPassword: %w", err)
+	}
+	return oldValue.LocalUserPassword, nil
+}
+
+// ClearLocalUserPassword clears the value of the "local_user_password" field.
+func (m *TaskMutation) ClearLocalUserPassword() {
+	m.local_user_password = nil
+	m.clearedFields[task.FieldLocalUserPassword] = struct{}{}
+}
+
+// LocalUserPasswordCleared returns if the "local_user_password" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPassword]
+	return ok
+}
+
+// ResetLocalUserPassword resets all changes to the "local_user_password" field.
+func (m *TaskMutation) ResetLocalUserPassword() {
+	m.local_user_password = nil
+	delete(m.clearedFields, task.FieldLocalUserPassword)
+}
+
+// SetLocalUserPasswordChangeNotAllowed sets the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) SetLocalUserPasswordChangeNotAllowed(b bool) {
+	m.local_user_password_change_not_allowed = &b
+}
+
+// LocalUserPasswordChangeNotAllowed returns the value of the "local_user_password_change_not_allowed" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordChangeNotAllowed() (r bool, exists bool) {
+	v := m.local_user_password_change_not_allowed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordChangeNotAllowed returns the old "local_user_password_change_not_allowed" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordChangeNotAllowed(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordChangeNotAllowed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordChangeNotAllowed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordChangeNotAllowed: %w", err)
+	}
+	return oldValue.LocalUserPasswordChangeNotAllowed, nil
+}
+
+// ClearLocalUserPasswordChangeNotAllowed clears the value of the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) ClearLocalUserPasswordChangeNotAllowed() {
+	m.local_user_password_change_not_allowed = nil
+	m.clearedFields[task.FieldLocalUserPasswordChangeNotAllowed] = struct{}{}
+}
+
+// LocalUserPasswordChangeNotAllowedCleared returns if the "local_user_password_change_not_allowed" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordChangeNotAllowedCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordChangeNotAllowed]
+	return ok
+}
+
+// ResetLocalUserPasswordChangeNotAllowed resets all changes to the "local_user_password_change_not_allowed" field.
+func (m *TaskMutation) ResetLocalUserPasswordChangeNotAllowed() {
+	m.local_user_password_change_not_allowed = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordChangeNotAllowed)
+}
+
+// SetLocalUserPasswordChangeRequired sets the "local_user_password_change_required" field.
+func (m *TaskMutation) SetLocalUserPasswordChangeRequired(b bool) {
+	m.local_user_password_change_required = &b
+}
+
+// LocalUserPasswordChangeRequired returns the value of the "local_user_password_change_required" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordChangeRequired() (r bool, exists bool) {
+	v := m.local_user_password_change_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordChangeRequired returns the old "local_user_password_change_required" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordChangeRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordChangeRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordChangeRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordChangeRequired: %w", err)
+	}
+	return oldValue.LocalUserPasswordChangeRequired, nil
+}
+
+// ClearLocalUserPasswordChangeRequired clears the value of the "local_user_password_change_required" field.
+func (m *TaskMutation) ClearLocalUserPasswordChangeRequired() {
+	m.local_user_password_change_required = nil
+	m.clearedFields[task.FieldLocalUserPasswordChangeRequired] = struct{}{}
+}
+
+// LocalUserPasswordChangeRequiredCleared returns if the "local_user_password_change_required" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordChangeRequiredCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordChangeRequired]
+	return ok
+}
+
+// ResetLocalUserPasswordChangeRequired resets all changes to the "local_user_password_change_required" field.
+func (m *TaskMutation) ResetLocalUserPasswordChangeRequired() {
+	m.local_user_password_change_required = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordChangeRequired)
+}
+
+// SetLocalUserPasswordNeverExpires sets the "local_user_password_never_expires" field.
+func (m *TaskMutation) SetLocalUserPasswordNeverExpires(b bool) {
+	m.local_user_password_never_expires = &b
+}
+
+// LocalUserPasswordNeverExpires returns the value of the "local_user_password_never_expires" field in the mutation.
+func (m *TaskMutation) LocalUserPasswordNeverExpires() (r bool, exists bool) {
+	v := m.local_user_password_never_expires
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserPasswordNeverExpires returns the old "local_user_password_never_expires" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserPasswordNeverExpires(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserPasswordNeverExpires is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserPasswordNeverExpires requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserPasswordNeverExpires: %w", err)
+	}
+	return oldValue.LocalUserPasswordNeverExpires, nil
+}
+
+// ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
+func (m *TaskMutation) ClearLocalUserPasswordNeverExpires() {
+	m.local_user_password_never_expires = nil
+	m.clearedFields[task.FieldLocalUserPasswordNeverExpires] = struct{}{}
+}
+
+// LocalUserPasswordNeverExpiresCleared returns if the "local_user_password_never_expires" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserPasswordNeverExpiresCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserPasswordNeverExpires]
+	return ok
+}
+
+// ResetLocalUserPasswordNeverExpires resets all changes to the "local_user_password_never_expires" field.
+func (m *TaskMutation) ResetLocalUserPasswordNeverExpires() {
+	m.local_user_password_never_expires = nil
+	delete(m.clearedFields, task.FieldLocalUserPasswordNeverExpires)
+}
+
+// SetLocalGroupName sets the "local_group_name" field.
+func (m *TaskMutation) SetLocalGroupName(s string) {
+	m.local_group_name = &s
+}
+
+// LocalGroupName returns the value of the "local_group_name" field in the mutation.
+func (m *TaskMutation) LocalGroupName() (r string, exists bool) {
+	v := m.local_group_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupName returns the old "local_group_name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupName: %w", err)
+	}
+	return oldValue.LocalGroupName, nil
+}
+
+// ClearLocalGroupName clears the value of the "local_group_name" field.
+func (m *TaskMutation) ClearLocalGroupName() {
+	m.local_group_name = nil
+	m.clearedFields[task.FieldLocalGroupName] = struct{}{}
+}
+
+// LocalGroupNameCleared returns if the "local_group_name" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupNameCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupName]
+	return ok
+}
+
+// ResetLocalGroupName resets all changes to the "local_group_name" field.
+func (m *TaskMutation) ResetLocalGroupName() {
+	m.local_group_name = nil
+	delete(m.clearedFields, task.FieldLocalGroupName)
+}
+
+// SetLocalGroupDescription sets the "local_group_description" field.
+func (m *TaskMutation) SetLocalGroupDescription(s string) {
+	m.local_group_description = &s
+}
+
+// LocalGroupDescription returns the value of the "local_group_description" field in the mutation.
+func (m *TaskMutation) LocalGroupDescription() (r string, exists bool) {
+	v := m.local_group_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupDescription returns the old "local_group_description" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupDescription: %w", err)
+	}
+	return oldValue.LocalGroupDescription, nil
+}
+
+// ClearLocalGroupDescription clears the value of the "local_group_description" field.
+func (m *TaskMutation) ClearLocalGroupDescription() {
+	m.local_group_description = nil
+	m.clearedFields[task.FieldLocalGroupDescription] = struct{}{}
+}
+
+// LocalGroupDescriptionCleared returns if the "local_group_description" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupDescriptionCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupDescription]
+	return ok
+}
+
+// ResetLocalGroupDescription resets all changes to the "local_group_description" field.
+func (m *TaskMutation) ResetLocalGroupDescription() {
+	m.local_group_description = nil
+	delete(m.clearedFields, task.FieldLocalGroupDescription)
+}
+
+// SetLocalGroupMembers sets the "local_group_members" field.
+func (m *TaskMutation) SetLocalGroupMembers(s string) {
+	m.local_group_members = &s
+}
+
+// LocalGroupMembers returns the value of the "local_group_members" field in the mutation.
+func (m *TaskMutation) LocalGroupMembers() (r string, exists bool) {
+	v := m.local_group_members
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupMembers returns the old "local_group_members" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupMembers(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupMembers is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupMembers requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupMembers: %w", err)
+	}
+	return oldValue.LocalGroupMembers, nil
+}
+
+// ClearLocalGroupMembers clears the value of the "local_group_members" field.
+func (m *TaskMutation) ClearLocalGroupMembers() {
+	m.local_group_members = nil
+	m.clearedFields[task.FieldLocalGroupMembers] = struct{}{}
+}
+
+// LocalGroupMembersCleared returns if the "local_group_members" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupMembersCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupMembers]
+	return ok
+}
+
+// ResetLocalGroupMembers resets all changes to the "local_group_members" field.
+func (m *TaskMutation) ResetLocalGroupMembers() {
+	m.local_group_members = nil
+	delete(m.clearedFields, task.FieldLocalGroupMembers)
+}
+
+// SetLocalGroupMembersToInclude sets the "local_group_members_to_include" field.
+func (m *TaskMutation) SetLocalGroupMembersToInclude(s string) {
+	m.local_group_members_to_include = &s
+}
+
+// LocalGroupMembersToInclude returns the value of the "local_group_members_to_include" field in the mutation.
+func (m *TaskMutation) LocalGroupMembersToInclude() (r string, exists bool) {
+	v := m.local_group_members_to_include
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupMembersToInclude returns the old "local_group_members_to_include" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupMembersToInclude(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupMembersToInclude is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupMembersToInclude requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupMembersToInclude: %w", err)
+	}
+	return oldValue.LocalGroupMembersToInclude, nil
+}
+
+// ClearLocalGroupMembersToInclude clears the value of the "local_group_members_to_include" field.
+func (m *TaskMutation) ClearLocalGroupMembersToInclude() {
+	m.local_group_members_to_include = nil
+	m.clearedFields[task.FieldLocalGroupMembersToInclude] = struct{}{}
+}
+
+// LocalGroupMembersToIncludeCleared returns if the "local_group_members_to_include" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupMembersToIncludeCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupMembersToInclude]
+	return ok
+}
+
+// ResetLocalGroupMembersToInclude resets all changes to the "local_group_members_to_include" field.
+func (m *TaskMutation) ResetLocalGroupMembersToInclude() {
+	m.local_group_members_to_include = nil
+	delete(m.clearedFields, task.FieldLocalGroupMembersToInclude)
+}
+
+// SetLocalGroupMembersToExclude sets the "local_group_members_to_exclude" field.
+func (m *TaskMutation) SetLocalGroupMembersToExclude(s string) {
+	m.local_group_members_to_exclude = &s
+}
+
+// LocalGroupMembersToExclude returns the value of the "local_group_members_to_exclude" field in the mutation.
+func (m *TaskMutation) LocalGroupMembersToExclude() (r string, exists bool) {
+	v := m.local_group_members_to_exclude
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupMembersToExclude returns the old "local_group_members_to_exclude" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupMembersToExclude(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupMembersToExclude is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupMembersToExclude requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupMembersToExclude: %w", err)
+	}
+	return oldValue.LocalGroupMembersToExclude, nil
+}
+
+// ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
+func (m *TaskMutation) ClearLocalGroupMembersToExclude() {
+	m.local_group_members_to_exclude = nil
+	m.clearedFields[task.FieldLocalGroupMembersToExclude] = struct{}{}
+}
+
+// LocalGroupMembersToExcludeCleared returns if the "local_group_members_to_exclude" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupMembersToExcludeCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupMembersToExclude]
+	return ok
+}
+
+// ResetLocalGroupMembersToExclude resets all changes to the "local_group_members_to_exclude" field.
+func (m *TaskMutation) ResetLocalGroupMembersToExclude() {
+	m.local_group_members_to_exclude = nil
+	delete(m.clearedFields, task.FieldLocalGroupMembersToExclude)
+}
+
+// SetWhen sets the "when" field.
+func (m *TaskMutation) SetWhen(t time.Time) {
+	m.when = &t
+}
+
+// When returns the value of the "when" field in the mutation.
+func (m *TaskMutation) When() (r time.Time, exists bool) {
+	v := m.when
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWhen returns the old "when" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldWhen(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWhen is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWhen requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWhen: %w", err)
+	}
+	return oldValue.When, nil
+}
+
+// ClearWhen clears the value of the "when" field.
+func (m *TaskMutation) ClearWhen() {
+	m.when = nil
+	m.clearedFields[task.FieldWhen] = struct{}{}
+}
+
+// WhenCleared returns if the "when" field was cleared in this mutation.
+func (m *TaskMutation) WhenCleared() bool {
+	_, ok := m.clearedFields[task.FieldWhen]
+	return ok
+}
+
+// ResetWhen resets all changes to the "when" field.
+func (m *TaskMutation) ResetWhen() {
+	m.when = nil
+	delete(m.clearedFields, task.FieldWhen)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by ids.
+func (m *TaskMutation) AddTagIDs(ids ...int) {
+	if m.tags == nil {
+		m.tags = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.tags[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTags clears the "tags" edge to the Tag entity.
+func (m *TaskMutation) ClearTags() {
+	m.clearedtags = true
+}
+
+// TagsCleared reports if the "tags" edge to the Tag entity was cleared.
+func (m *TaskMutation) TagsCleared() bool {
+	return m.clearedtags
+}
+
+// RemoveTagIDs removes the "tags" edge to the Tag entity by IDs.
+func (m *TaskMutation) RemoveTagIDs(ids ...int) {
+	if m.removedtags == nil {
+		m.removedtags = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.tags, ids[i])
+		m.removedtags[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTags returns the removed IDs of the "tags" edge to the Tag entity.
+func (m *TaskMutation) RemovedTagsIDs() (ids []int) {
+	for id := range m.removedtags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TagsIDs returns the "tags" edge IDs in the mutation.
+func (m *TaskMutation) TagsIDs() (ids []int) {
+	for id := range m.tags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTags resets all changes to the "tags" edge.
+func (m *TaskMutation) ResetTags() {
+	m.tags = nil
+	m.clearedtags = false
+	m.removedtags = nil
+}
+
+// SetProfileID sets the "profile" edge to the Profile entity by id.
+func (m *TaskMutation) SetProfileID(id int) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *TaskMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *TaskMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *TaskMutation) ProfileID() (id int, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *TaskMutation) ProfileIDs() (ids []int) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *TaskMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// Where appends a list predicates to the TaskMutation builder.
+func (m *TaskMutation) Where(ps ...predicate.Task) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TaskMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TaskMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Task, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TaskMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TaskMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Task).
+func (m *TaskMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TaskMutation) Fields() []string {
+	fields := make([]string, 0, 24)
+	if m.name != nil {
+		fields = append(fields, task.FieldName)
+	}
+	if m._type != nil {
+		fields = append(fields, task.FieldType)
+	}
+	if m.package_id != nil {
+		fields = append(fields, task.FieldPackageID)
+	}
+	if m.package_name != nil {
+		fields = append(fields, task.FieldPackageName)
+	}
+	if m.registry_key != nil {
+		fields = append(fields, task.FieldRegistryKey)
+	}
+	if m.registry_key_value_name != nil {
+		fields = append(fields, task.FieldRegistryKeyValueName)
+	}
+	if m.registry_key_value_type != nil {
+		fields = append(fields, task.FieldRegistryKeyValueType)
+	}
+	if m.registry_key_value_data != nil {
+		fields = append(fields, task.FieldRegistryKeyValueData)
+	}
+	if m.registry_hex != nil {
+		fields = append(fields, task.FieldRegistryHex)
+	}
+	if m.registry_force != nil {
+		fields = append(fields, task.FieldRegistryForce)
+	}
+	if m.local_user_username != nil {
+		fields = append(fields, task.FieldLocalUserUsername)
+	}
+	if m.local_user_description != nil {
+		fields = append(fields, task.FieldLocalUserDescription)
+	}
+	if m.local_user_disable != nil {
+		fields = append(fields, task.FieldLocalUserDisable)
+	}
+	if m.local_user_fullname != nil {
+		fields = append(fields, task.FieldLocalUserFullname)
+	}
+	if m.local_user_password != nil {
+		fields = append(fields, task.FieldLocalUserPassword)
+	}
+	if m.local_user_password_change_not_allowed != nil {
+		fields = append(fields, task.FieldLocalUserPasswordChangeNotAllowed)
+	}
+	if m.local_user_password_change_required != nil {
+		fields = append(fields, task.FieldLocalUserPasswordChangeRequired)
+	}
+	if m.local_user_password_never_expires != nil {
+		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
+	}
+	if m.local_group_name != nil {
+		fields = append(fields, task.FieldLocalGroupName)
+	}
+	if m.local_group_description != nil {
+		fields = append(fields, task.FieldLocalGroupDescription)
+	}
+	if m.local_group_members != nil {
+		fields = append(fields, task.FieldLocalGroupMembers)
+	}
+	if m.local_group_members_to_include != nil {
+		fields = append(fields, task.FieldLocalGroupMembersToInclude)
+	}
+	if m.local_group_members_to_exclude != nil {
+		fields = append(fields, task.FieldLocalGroupMembersToExclude)
+	}
+	if m.when != nil {
+		fields = append(fields, task.FieldWhen)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TaskMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case task.FieldName:
+		return m.Name()
+	case task.FieldType:
+		return m.GetType()
+	case task.FieldPackageID:
+		return m.PackageID()
+	case task.FieldPackageName:
+		return m.PackageName()
+	case task.FieldRegistryKey:
+		return m.RegistryKey()
+	case task.FieldRegistryKeyValueName:
+		return m.RegistryKeyValueName()
+	case task.FieldRegistryKeyValueType:
+		return m.RegistryKeyValueType()
+	case task.FieldRegistryKeyValueData:
+		return m.RegistryKeyValueData()
+	case task.FieldRegistryHex:
+		return m.RegistryHex()
+	case task.FieldRegistryForce:
+		return m.RegistryForce()
+	case task.FieldLocalUserUsername:
+		return m.LocalUserUsername()
+	case task.FieldLocalUserDescription:
+		return m.LocalUserDescription()
+	case task.FieldLocalUserDisable:
+		return m.LocalUserDisable()
+	case task.FieldLocalUserFullname:
+		return m.LocalUserFullname()
+	case task.FieldLocalUserPassword:
+		return m.LocalUserPassword()
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		return m.LocalUserPasswordChangeNotAllowed()
+	case task.FieldLocalUserPasswordChangeRequired:
+		return m.LocalUserPasswordChangeRequired()
+	case task.FieldLocalUserPasswordNeverExpires:
+		return m.LocalUserPasswordNeverExpires()
+	case task.FieldLocalGroupName:
+		return m.LocalGroupName()
+	case task.FieldLocalGroupDescription:
+		return m.LocalGroupDescription()
+	case task.FieldLocalGroupMembers:
+		return m.LocalGroupMembers()
+	case task.FieldLocalGroupMembersToInclude:
+		return m.LocalGroupMembersToInclude()
+	case task.FieldLocalGroupMembersToExclude:
+		return m.LocalGroupMembersToExclude()
+	case task.FieldWhen:
+		return m.When()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case task.FieldName:
+		return m.OldName(ctx)
+	case task.FieldType:
+		return m.OldType(ctx)
+	case task.FieldPackageID:
+		return m.OldPackageID(ctx)
+	case task.FieldPackageName:
+		return m.OldPackageName(ctx)
+	case task.FieldRegistryKey:
+		return m.OldRegistryKey(ctx)
+	case task.FieldRegistryKeyValueName:
+		return m.OldRegistryKeyValueName(ctx)
+	case task.FieldRegistryKeyValueType:
+		return m.OldRegistryKeyValueType(ctx)
+	case task.FieldRegistryKeyValueData:
+		return m.OldRegistryKeyValueData(ctx)
+	case task.FieldRegistryHex:
+		return m.OldRegistryHex(ctx)
+	case task.FieldRegistryForce:
+		return m.OldRegistryForce(ctx)
+	case task.FieldLocalUserUsername:
+		return m.OldLocalUserUsername(ctx)
+	case task.FieldLocalUserDescription:
+		return m.OldLocalUserDescription(ctx)
+	case task.FieldLocalUserDisable:
+		return m.OldLocalUserDisable(ctx)
+	case task.FieldLocalUserFullname:
+		return m.OldLocalUserFullname(ctx)
+	case task.FieldLocalUserPassword:
+		return m.OldLocalUserPassword(ctx)
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		return m.OldLocalUserPasswordChangeNotAllowed(ctx)
+	case task.FieldLocalUserPasswordChangeRequired:
+		return m.OldLocalUserPasswordChangeRequired(ctx)
+	case task.FieldLocalUserPasswordNeverExpires:
+		return m.OldLocalUserPasswordNeverExpires(ctx)
+	case task.FieldLocalGroupName:
+		return m.OldLocalGroupName(ctx)
+	case task.FieldLocalGroupDescription:
+		return m.OldLocalGroupDescription(ctx)
+	case task.FieldLocalGroupMembers:
+		return m.OldLocalGroupMembers(ctx)
+	case task.FieldLocalGroupMembersToInclude:
+		return m.OldLocalGroupMembersToInclude(ctx)
+	case task.FieldLocalGroupMembersToExclude:
+		return m.OldLocalGroupMembersToExclude(ctx)
+	case task.FieldWhen:
+		return m.OldWhen(ctx)
+	}
+	return nil, fmt.Errorf("unknown Task field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TaskMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case task.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case task.FieldType:
+		v, ok := value.(task.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case task.FieldPackageID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageID(v)
+		return nil
+	case task.FieldPackageName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageName(v)
+		return nil
+	case task.FieldRegistryKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKey(v)
+		return nil
+	case task.FieldRegistryKeyValueName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueName(v)
+		return nil
+	case task.FieldRegistryKeyValueType:
+		v, ok := value.(task.RegistryKeyValueType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueType(v)
+		return nil
+	case task.FieldRegistryKeyValueData:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryKeyValueData(v)
+		return nil
+	case task.FieldRegistryHex:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryHex(v)
+		return nil
+	case task.FieldRegistryForce:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegistryForce(v)
+		return nil
+	case task.FieldLocalUserUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserUsername(v)
+		return nil
+	case task.FieldLocalUserDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserDescription(v)
+		return nil
+	case task.FieldLocalUserDisable:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserDisable(v)
+		return nil
+	case task.FieldLocalUserFullname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserFullname(v)
+		return nil
+	case task.FieldLocalUserPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPassword(v)
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordChangeNotAllowed(v)
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordChangeRequired(v)
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserPasswordNeverExpires(v)
+		return nil
+	case task.FieldLocalGroupName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupName(v)
+		return nil
+	case task.FieldLocalGroupDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupDescription(v)
+		return nil
+	case task.FieldLocalGroupMembers:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupMembers(v)
+		return nil
+	case task.FieldLocalGroupMembersToInclude:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupMembersToInclude(v)
+		return nil
+	case task.FieldLocalGroupMembersToExclude:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupMembersToExclude(v)
+		return nil
+	case task.FieldWhen:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWhen(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Task field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TaskMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TaskMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Task numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TaskMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(task.FieldPackageID) {
+		fields = append(fields, task.FieldPackageID)
+	}
+	if m.FieldCleared(task.FieldPackageName) {
+		fields = append(fields, task.FieldPackageName)
+	}
+	if m.FieldCleared(task.FieldRegistryKey) {
+		fields = append(fields, task.FieldRegistryKey)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueName) {
+		fields = append(fields, task.FieldRegistryKeyValueName)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueType) {
+		fields = append(fields, task.FieldRegistryKeyValueType)
+	}
+	if m.FieldCleared(task.FieldRegistryKeyValueData) {
+		fields = append(fields, task.FieldRegistryKeyValueData)
+	}
+	if m.FieldCleared(task.FieldRegistryHex) {
+		fields = append(fields, task.FieldRegistryHex)
+	}
+	if m.FieldCleared(task.FieldRegistryForce) {
+		fields = append(fields, task.FieldRegistryForce)
+	}
+	if m.FieldCleared(task.FieldLocalUserUsername) {
+		fields = append(fields, task.FieldLocalUserUsername)
+	}
+	if m.FieldCleared(task.FieldLocalUserDescription) {
+		fields = append(fields, task.FieldLocalUserDescription)
+	}
+	if m.FieldCleared(task.FieldLocalUserDisable) {
+		fields = append(fields, task.FieldLocalUserDisable)
+	}
+	if m.FieldCleared(task.FieldLocalUserFullname) {
+		fields = append(fields, task.FieldLocalUserFullname)
+	}
+	if m.FieldCleared(task.FieldLocalUserPassword) {
+		fields = append(fields, task.FieldLocalUserPassword)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordChangeNotAllowed) {
+		fields = append(fields, task.FieldLocalUserPasswordChangeNotAllowed)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordChangeRequired) {
+		fields = append(fields, task.FieldLocalUserPasswordChangeRequired)
+	}
+	if m.FieldCleared(task.FieldLocalUserPasswordNeverExpires) {
+		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
+	}
+	if m.FieldCleared(task.FieldLocalGroupName) {
+		fields = append(fields, task.FieldLocalGroupName)
+	}
+	if m.FieldCleared(task.FieldLocalGroupDescription) {
+		fields = append(fields, task.FieldLocalGroupDescription)
+	}
+	if m.FieldCleared(task.FieldLocalGroupMembers) {
+		fields = append(fields, task.FieldLocalGroupMembers)
+	}
+	if m.FieldCleared(task.FieldLocalGroupMembersToInclude) {
+		fields = append(fields, task.FieldLocalGroupMembersToInclude)
+	}
+	if m.FieldCleared(task.FieldLocalGroupMembersToExclude) {
+		fields = append(fields, task.FieldLocalGroupMembersToExclude)
+	}
+	if m.FieldCleared(task.FieldWhen) {
+		fields = append(fields, task.FieldWhen)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TaskMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TaskMutation) ClearField(name string) error {
+	switch name {
+	case task.FieldPackageID:
+		m.ClearPackageID()
+		return nil
+	case task.FieldPackageName:
+		m.ClearPackageName()
+		return nil
+	case task.FieldRegistryKey:
+		m.ClearRegistryKey()
+		return nil
+	case task.FieldRegistryKeyValueName:
+		m.ClearRegistryKeyValueName()
+		return nil
+	case task.FieldRegistryKeyValueType:
+		m.ClearRegistryKeyValueType()
+		return nil
+	case task.FieldRegistryKeyValueData:
+		m.ClearRegistryKeyValueData()
+		return nil
+	case task.FieldRegistryHex:
+		m.ClearRegistryHex()
+		return nil
+	case task.FieldRegistryForce:
+		m.ClearRegistryForce()
+		return nil
+	case task.FieldLocalUserUsername:
+		m.ClearLocalUserUsername()
+		return nil
+	case task.FieldLocalUserDescription:
+		m.ClearLocalUserDescription()
+		return nil
+	case task.FieldLocalUserDisable:
+		m.ClearLocalUserDisable()
+		return nil
+	case task.FieldLocalUserFullname:
+		m.ClearLocalUserFullname()
+		return nil
+	case task.FieldLocalUserPassword:
+		m.ClearLocalUserPassword()
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		m.ClearLocalUserPasswordChangeNotAllowed()
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		m.ClearLocalUserPasswordChangeRequired()
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		m.ClearLocalUserPasswordNeverExpires()
+		return nil
+	case task.FieldLocalGroupName:
+		m.ClearLocalGroupName()
+		return nil
+	case task.FieldLocalGroupDescription:
+		m.ClearLocalGroupDescription()
+		return nil
+	case task.FieldLocalGroupMembers:
+		m.ClearLocalGroupMembers()
+		return nil
+	case task.FieldLocalGroupMembersToInclude:
+		m.ClearLocalGroupMembersToInclude()
+		return nil
+	case task.FieldLocalGroupMembersToExclude:
+		m.ClearLocalGroupMembersToExclude()
+		return nil
+	case task.FieldWhen:
+		m.ClearWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown Task nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TaskMutation) ResetField(name string) error {
+	switch name {
+	case task.FieldName:
+		m.ResetName()
+		return nil
+	case task.FieldType:
+		m.ResetType()
+		return nil
+	case task.FieldPackageID:
+		m.ResetPackageID()
+		return nil
+	case task.FieldPackageName:
+		m.ResetPackageName()
+		return nil
+	case task.FieldRegistryKey:
+		m.ResetRegistryKey()
+		return nil
+	case task.FieldRegistryKeyValueName:
+		m.ResetRegistryKeyValueName()
+		return nil
+	case task.FieldRegistryKeyValueType:
+		m.ResetRegistryKeyValueType()
+		return nil
+	case task.FieldRegistryKeyValueData:
+		m.ResetRegistryKeyValueData()
+		return nil
+	case task.FieldRegistryHex:
+		m.ResetRegistryHex()
+		return nil
+	case task.FieldRegistryForce:
+		m.ResetRegistryForce()
+		return nil
+	case task.FieldLocalUserUsername:
+		m.ResetLocalUserUsername()
+		return nil
+	case task.FieldLocalUserDescription:
+		m.ResetLocalUserDescription()
+		return nil
+	case task.FieldLocalUserDisable:
+		m.ResetLocalUserDisable()
+		return nil
+	case task.FieldLocalUserFullname:
+		m.ResetLocalUserFullname()
+		return nil
+	case task.FieldLocalUserPassword:
+		m.ResetLocalUserPassword()
+		return nil
+	case task.FieldLocalUserPasswordChangeNotAllowed:
+		m.ResetLocalUserPasswordChangeNotAllowed()
+		return nil
+	case task.FieldLocalUserPasswordChangeRequired:
+		m.ResetLocalUserPasswordChangeRequired()
+		return nil
+	case task.FieldLocalUserPasswordNeverExpires:
+		m.ResetLocalUserPasswordNeverExpires()
+		return nil
+	case task.FieldLocalGroupName:
+		m.ResetLocalGroupName()
+		return nil
+	case task.FieldLocalGroupDescription:
+		m.ResetLocalGroupDescription()
+		return nil
+	case task.FieldLocalGroupMembers:
+		m.ResetLocalGroupMembers()
+		return nil
+	case task.FieldLocalGroupMembersToInclude:
+		m.ResetLocalGroupMembersToInclude()
+		return nil
+	case task.FieldLocalGroupMembersToExclude:
+		m.ResetLocalGroupMembersToExclude()
+		return nil
+	case task.FieldWhen:
+		m.ResetWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown Task field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TaskMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.tags != nil {
+		edges = append(edges, task.EdgeTags)
+	}
+	if m.profile != nil {
+		edges = append(edges, task.EdgeProfile)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TaskMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case task.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.tags))
+		for id := range m.tags {
+			ids = append(ids, id)
+		}
+		return ids
+	case task.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TaskMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedtags != nil {
+		edges = append(edges, task.EdgeTags)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case task.EdgeTags:
+		ids := make([]ent.Value, 0, len(m.removedtags))
+		for id := range m.removedtags {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TaskMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedtags {
+		edges = append(edges, task.EdgeTags)
+	}
+	if m.clearedprofile {
+		edges = append(edges, task.EdgeProfile)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TaskMutation) EdgeCleared(name string) bool {
+	switch name {
+	case task.EdgeTags:
+		return m.clearedtags
+	case task.EdgeProfile:
+		return m.clearedprofile
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TaskMutation) ClearEdge(name string) error {
+	switch name {
+	case task.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown Task unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TaskMutation) ResetEdge(name string) error {
+	switch name {
+	case task.EdgeTags:
+		m.ResetTags()
+		return nil
+	case task.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown Task edge %s", name)
 }
 
 // UpdateMutation represents an operation that mutates the Update nodes in the graph.
@@ -20301,4 +24141,473 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)
+}
+
+// WingetConfigExclusionMutation represents an operation that mutates the WingetConfigExclusion nodes in the graph.
+type WingetConfigExclusionMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	package_id    *string
+	when          *time.Time
+	clearedFields map[string]struct{}
+	owner         *string
+	clearedowner  bool
+	done          bool
+	oldValue      func(context.Context) (*WingetConfigExclusion, error)
+	predicates    []predicate.WingetConfigExclusion
+}
+
+var _ ent.Mutation = (*WingetConfigExclusionMutation)(nil)
+
+// wingetconfigexclusionOption allows management of the mutation configuration using functional options.
+type wingetconfigexclusionOption func(*WingetConfigExclusionMutation)
+
+// newWingetConfigExclusionMutation creates new mutation for the WingetConfigExclusion entity.
+func newWingetConfigExclusionMutation(c config, op Op, opts ...wingetconfigexclusionOption) *WingetConfigExclusionMutation {
+	m := &WingetConfigExclusionMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeWingetConfigExclusion,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withWingetConfigExclusionID sets the ID field of the mutation.
+func withWingetConfigExclusionID(id int) wingetconfigexclusionOption {
+	return func(m *WingetConfigExclusionMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *WingetConfigExclusion
+		)
+		m.oldValue = func(ctx context.Context) (*WingetConfigExclusion, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().WingetConfigExclusion.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withWingetConfigExclusion sets the old WingetConfigExclusion of the mutation.
+func withWingetConfigExclusion(node *WingetConfigExclusion) wingetconfigexclusionOption {
+	return func(m *WingetConfigExclusionMutation) {
+		m.oldValue = func(context.Context) (*WingetConfigExclusion, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m WingetConfigExclusionMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m WingetConfigExclusionMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *WingetConfigExclusionMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *WingetConfigExclusionMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().WingetConfigExclusion.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPackageID sets the "package_id" field.
+func (m *WingetConfigExclusionMutation) SetPackageID(s string) {
+	m.package_id = &s
+}
+
+// PackageID returns the value of the "package_id" field in the mutation.
+func (m *WingetConfigExclusionMutation) PackageID() (r string, exists bool) {
+	v := m.package_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageID returns the old "package_id" field's value of the WingetConfigExclusion entity.
+// If the WingetConfigExclusion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WingetConfigExclusionMutation) OldPackageID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageID: %w", err)
+	}
+	return oldValue.PackageID, nil
+}
+
+// ResetPackageID resets all changes to the "package_id" field.
+func (m *WingetConfigExclusionMutation) ResetPackageID() {
+	m.package_id = nil
+}
+
+// SetWhen sets the "when" field.
+func (m *WingetConfigExclusionMutation) SetWhen(t time.Time) {
+	m.when = &t
+}
+
+// When returns the value of the "when" field in the mutation.
+func (m *WingetConfigExclusionMutation) When() (r time.Time, exists bool) {
+	v := m.when
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWhen returns the old "when" field's value of the WingetConfigExclusion entity.
+// If the WingetConfigExclusion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WingetConfigExclusionMutation) OldWhen(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWhen is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWhen requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWhen: %w", err)
+	}
+	return oldValue.When, nil
+}
+
+// ClearWhen clears the value of the "when" field.
+func (m *WingetConfigExclusionMutation) ClearWhen() {
+	m.when = nil
+	m.clearedFields[wingetconfigexclusion.FieldWhen] = struct{}{}
+}
+
+// WhenCleared returns if the "when" field was cleared in this mutation.
+func (m *WingetConfigExclusionMutation) WhenCleared() bool {
+	_, ok := m.clearedFields[wingetconfigexclusion.FieldWhen]
+	return ok
+}
+
+// ResetWhen resets all changes to the "when" field.
+func (m *WingetConfigExclusionMutation) ResetWhen() {
+	m.when = nil
+	delete(m.clearedFields, wingetconfigexclusion.FieldWhen)
+}
+
+// SetOwnerID sets the "owner" edge to the Agent entity by id.
+func (m *WingetConfigExclusionMutation) SetOwnerID(id string) {
+	m.owner = &id
+}
+
+// ClearOwner clears the "owner" edge to the Agent entity.
+func (m *WingetConfigExclusionMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
+func (m *WingetConfigExclusionMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *WingetConfigExclusionMutation) OwnerID() (id string, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *WingetConfigExclusionMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *WingetConfigExclusionMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// Where appends a list predicates to the WingetConfigExclusionMutation builder.
+func (m *WingetConfigExclusionMutation) Where(ps ...predicate.WingetConfigExclusion) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the WingetConfigExclusionMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *WingetConfigExclusionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.WingetConfigExclusion, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *WingetConfigExclusionMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *WingetConfigExclusionMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (WingetConfigExclusion).
+func (m *WingetConfigExclusionMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *WingetConfigExclusionMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.package_id != nil {
+		fields = append(fields, wingetconfigexclusion.FieldPackageID)
+	}
+	if m.when != nil {
+		fields = append(fields, wingetconfigexclusion.FieldWhen)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *WingetConfigExclusionMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case wingetconfigexclusion.FieldPackageID:
+		return m.PackageID()
+	case wingetconfigexclusion.FieldWhen:
+		return m.When()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *WingetConfigExclusionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case wingetconfigexclusion.FieldPackageID:
+		return m.OldPackageID(ctx)
+	case wingetconfigexclusion.FieldWhen:
+		return m.OldWhen(ctx)
+	}
+	return nil, fmt.Errorf("unknown WingetConfigExclusion field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *WingetConfigExclusionMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case wingetconfigexclusion.FieldPackageID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageID(v)
+		return nil
+	case wingetconfigexclusion.FieldWhen:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWhen(v)
+		return nil
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *WingetConfigExclusionMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *WingetConfigExclusionMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *WingetConfigExclusionMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *WingetConfigExclusionMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(wingetconfigexclusion.FieldWhen) {
+		fields = append(fields, wingetconfigexclusion.FieldWhen)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *WingetConfigExclusionMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *WingetConfigExclusionMutation) ClearField(name string) error {
+	switch name {
+	case wingetconfigexclusion.FieldWhen:
+		m.ClearWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *WingetConfigExclusionMutation) ResetField(name string) error {
+	switch name {
+	case wingetconfigexclusion.FieldPackageID:
+		m.ResetPackageID()
+		return nil
+	case wingetconfigexclusion.FieldWhen:
+		m.ResetWhen()
+		return nil
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *WingetConfigExclusionMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, wingetconfigexclusion.EdgeOwner)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *WingetConfigExclusionMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case wingetconfigexclusion.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *WingetConfigExclusionMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *WingetConfigExclusionMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *WingetConfigExclusionMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, wingetconfigexclusion.EdgeOwner)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *WingetConfigExclusionMutation) EdgeCleared(name string) bool {
+	switch name {
+	case wingetconfigexclusion.EdgeOwner:
+		return m.clearedowner
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *WingetConfigExclusionMutation) ClearEdge(name string) error {
+	switch name {
+	case wingetconfigexclusion.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *WingetConfigExclusionMutation) ResetEdge(name string) error {
+	switch name {
+	case wingetconfigexclusion.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown WingetConfigExclusion edge %s", name)
 }

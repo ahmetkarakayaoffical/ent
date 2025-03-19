@@ -70,6 +70,8 @@ const (
 	FieldAgentReportFrequenceInMinutes = "agent_report_frequence_in_minutes"
 	// FieldRequestVncPin holds the string denoting the request_vnc_pin field in the database.
 	FieldRequestVncPin = "request_vnc_pin"
+	// FieldProfilesApplicationFrequenceInMinutes holds the string denoting the profiles_application_frequence_in_minutes field in the database.
+	FieldProfilesApplicationFrequenceInMinutes = "profiles_application_frequence_in_minutes"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -114,6 +116,7 @@ var Columns = []string{
 	FieldModified,
 	FieldAgentReportFrequenceInMinutes,
 	FieldRequestVncPin,
+	FieldProfilesApplicationFrequenceInMinutes,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -170,6 +173,8 @@ var (
 	DefaultAgentReportFrequenceInMinutes int
 	// DefaultRequestVncPin holds the default value on creation for the "request_vnc_pin" field.
 	DefaultRequestVncPin bool
+	// DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the "profiles_application_frequence_in_minutes" field.
+	DefaultProfilesApplicationFrequenceInMinutes int
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -318,6 +323,11 @@ func ByAgentReportFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
 // ByRequestVncPin orders the results by the request_vnc_pin field.
 func ByRequestVncPin(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRequestVncPin, opts...).ToFunc()
+}
+
+// ByProfilesApplicationFrequenceInMinutes orders the results by the profiles_application_frequence_in_minutes field.
+func ByProfilesApplicationFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProfilesApplicationFrequenceInMinutes, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.

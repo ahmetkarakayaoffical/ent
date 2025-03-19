@@ -28,6 +28,8 @@ import (
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/server"
@@ -36,8 +38,10 @@ import (
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // Client is the client that holds all ent builders.
@@ -71,6 +75,10 @@ type Client struct {
 	OrgMetadata *OrgMetadataClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
+	// Profile is the client for interacting with the Profile builders.
+	Profile *ProfileClient
+	// ProfileIssue is the client for interacting with the ProfileIssue builders.
+	ProfileIssue *ProfileIssueClient
 	// Release is the client for interacting with the Release builders.
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
@@ -87,10 +95,14 @@ type Client struct {
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
 	Tag *TagClient
+	// Task is the client for interacting with the Task builders.
+	Task *TaskClient
 	// Update is the client for interacting with the Update builders.
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// WingetConfigExclusion is the client for interacting with the WingetConfigExclusion builders.
+	WingetConfigExclusion *WingetConfigExclusionClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -115,6 +127,8 @@ func (c *Client) init() {
 	c.OperatingSystem = NewOperatingSystemClient(c.config)
 	c.OrgMetadata = NewOrgMetadataClient(c.config)
 	c.Printer = NewPrinterClient(c.config)
+	c.Profile = NewProfileClient(c.config)
+	c.ProfileIssue = NewProfileIssueClient(c.config)
 	c.Release = NewReleaseClient(c.config)
 	c.Revocation = NewRevocationClient(c.config)
 	c.Server = NewServerClient(c.config)
@@ -123,8 +137,10 @@ func (c *Client) init() {
 	c.Share = NewShareClient(c.config)
 	c.SystemUpdate = NewSystemUpdateClient(c.config)
 	c.Tag = NewTagClient(c.config)
+	c.Task = NewTaskClient(c.config)
 	c.Update = NewUpdateClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.WingetConfigExclusion = NewWingetConfigExclusionClient(c.config)
 }
 
 type (
@@ -215,31 +231,35 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		Antivirus:       NewAntivirusClient(cfg),
-		App:             NewAppClient(cfg),
-		Certificate:     NewCertificateClient(cfg),
-		Computer:        NewComputerClient(cfg),
-		Deployment:      NewDeploymentClient(cfg),
-		LogicalDisk:     NewLogicalDiskClient(cfg),
-		Metadata:        NewMetadataClient(cfg),
-		Monitor:         NewMonitorClient(cfg),
-		NetworkAdapter:  NewNetworkAdapterClient(cfg),
-		OperatingSystem: NewOperatingSystemClient(cfg),
-		OrgMetadata:     NewOrgMetadataClient(cfg),
-		Printer:         NewPrinterClient(cfg),
-		Release:         NewReleaseClient(cfg),
-		Revocation:      NewRevocationClient(cfg),
-		Server:          NewServerClient(cfg),
-		Sessions:        NewSessionsClient(cfg),
-		Settings:        NewSettingsClient(cfg),
-		Share:           NewShareClient(cfg),
-		SystemUpdate:    NewSystemUpdateClient(cfg),
-		Tag:             NewTagClient(cfg),
-		Update:          NewUpdateClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		Antivirus:             NewAntivirusClient(cfg),
+		App:                   NewAppClient(cfg),
+		Certificate:           NewCertificateClient(cfg),
+		Computer:              NewComputerClient(cfg),
+		Deployment:            NewDeploymentClient(cfg),
+		LogicalDisk:           NewLogicalDiskClient(cfg),
+		Metadata:              NewMetadataClient(cfg),
+		Monitor:               NewMonitorClient(cfg),
+		NetworkAdapter:        NewNetworkAdapterClient(cfg),
+		OperatingSystem:       NewOperatingSystemClient(cfg),
+		OrgMetadata:           NewOrgMetadataClient(cfg),
+		Printer:               NewPrinterClient(cfg),
+		Profile:               NewProfileClient(cfg),
+		ProfileIssue:          NewProfileIssueClient(cfg),
+		Release:               NewReleaseClient(cfg),
+		Revocation:            NewRevocationClient(cfg),
+		Server:                NewServerClient(cfg),
+		Sessions:              NewSessionsClient(cfg),
+		Settings:              NewSettingsClient(cfg),
+		Share:                 NewShareClient(cfg),
+		SystemUpdate:          NewSystemUpdateClient(cfg),
+		Tag:                   NewTagClient(cfg),
+		Task:                  NewTaskClient(cfg),
+		Update:                NewUpdateClient(cfg),
+		User:                  NewUserClient(cfg),
+		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
 	}, nil
 }
 
@@ -257,31 +277,35 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		Antivirus:       NewAntivirusClient(cfg),
-		App:             NewAppClient(cfg),
-		Certificate:     NewCertificateClient(cfg),
-		Computer:        NewComputerClient(cfg),
-		Deployment:      NewDeploymentClient(cfg),
-		LogicalDisk:     NewLogicalDiskClient(cfg),
-		Metadata:        NewMetadataClient(cfg),
-		Monitor:         NewMonitorClient(cfg),
-		NetworkAdapter:  NewNetworkAdapterClient(cfg),
-		OperatingSystem: NewOperatingSystemClient(cfg),
-		OrgMetadata:     NewOrgMetadataClient(cfg),
-		Printer:         NewPrinterClient(cfg),
-		Release:         NewReleaseClient(cfg),
-		Revocation:      NewRevocationClient(cfg),
-		Server:          NewServerClient(cfg),
-		Sessions:        NewSessionsClient(cfg),
-		Settings:        NewSettingsClient(cfg),
-		Share:           NewShareClient(cfg),
-		SystemUpdate:    NewSystemUpdateClient(cfg),
-		Tag:             NewTagClient(cfg),
-		Update:          NewUpdateClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		Antivirus:             NewAntivirusClient(cfg),
+		App:                   NewAppClient(cfg),
+		Certificate:           NewCertificateClient(cfg),
+		Computer:              NewComputerClient(cfg),
+		Deployment:            NewDeploymentClient(cfg),
+		LogicalDisk:           NewLogicalDiskClient(cfg),
+		Metadata:              NewMetadataClient(cfg),
+		Monitor:               NewMonitorClient(cfg),
+		NetworkAdapter:        NewNetworkAdapterClient(cfg),
+		OperatingSystem:       NewOperatingSystemClient(cfg),
+		OrgMetadata:           NewOrgMetadataClient(cfg),
+		Printer:               NewPrinterClient(cfg),
+		Profile:               NewProfileClient(cfg),
+		ProfileIssue:          NewProfileIssueClient(cfg),
+		Release:               NewReleaseClient(cfg),
+		Revocation:            NewRevocationClient(cfg),
+		Server:                NewServerClient(cfg),
+		Sessions:              NewSessionsClient(cfg),
+		Settings:              NewSettingsClient(cfg),
+		Share:                 NewShareClient(cfg),
+		SystemUpdate:          NewSystemUpdateClient(cfg),
+		Tag:                   NewTagClient(cfg),
+		Task:                  NewTaskClient(cfg),
+		Update:                NewUpdateClient(cfg),
+		User:                  NewUserClient(cfg),
+		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
 	}, nil
 }
 
@@ -313,8 +337,9 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Server, c.Sessions,
-		c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
+		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
+		c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -326,8 +351,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Release, c.Revocation, c.Server, c.Sessions,
-		c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Update, c.User,
+		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
+		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
+		c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -362,6 +388,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrgMetadata.mutate(ctx, m)
 	case *PrinterMutation:
 		return c.Printer.mutate(ctx, m)
+	case *ProfileMutation:
+		return c.Profile.mutate(ctx, m)
+	case *ProfileIssueMutation:
+		return c.ProfileIssue.mutate(ctx, m)
 	case *ReleaseMutation:
 		return c.Release.mutate(ctx, m)
 	case *RevocationMutation:
@@ -378,10 +408,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.SystemUpdate.mutate(ctx, m)
 	case *TagMutation:
 		return c.Tag.mutate(ctx, m)
+	case *TaskMutation:
+		return c.Task.mutate(ctx, m)
 	case *UpdateMutation:
 		return c.Update.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *WingetConfigExclusionMutation:
+		return c.WingetConfigExclusion.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -719,6 +753,22 @@ func (c *AgentClient) QueryMetadata(a *Agent) *MetadataQuery {
 	return query
 }
 
+// QueryWingetcfgexclusions queries the wingetcfgexclusions edge of a Agent.
+func (c *AgentClient) QueryWingetcfgexclusions(a *Agent) *WingetConfigExclusionQuery {
+	query := (&WingetConfigExclusionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.WingetcfgexclusionsTable, agent.WingetcfgexclusionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRelease queries the release edge of a Agent.
 func (c *AgentClient) QueryRelease(a *Agent) *ReleaseQuery {
 	query := (&ReleaseClient{config: c.config}).Query()
@@ -728,6 +778,22 @@ func (c *AgentClient) QueryRelease(a *Agent) *ReleaseQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(release.Table, release.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfileissue queries the profileissue edge of a Agent.
+func (c *AgentClient) QueryProfileissue(a *Agent) *ProfileIssueQuery {
+	query := (&ProfileIssueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(profileissue.Table, profileissue.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, agent.ProfileissueTable, agent.ProfileissueColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2548,6 +2614,352 @@ func (c *PrinterClient) mutate(ctx context.Context, m *PrinterMutation) (Value, 
 	}
 }
 
+// ProfileClient is a client for the Profile schema.
+type ProfileClient struct {
+	config
+}
+
+// NewProfileClient returns a client for the Profile from the given config.
+func NewProfileClient(c config) *ProfileClient {
+	return &ProfileClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `profile.Hooks(f(g(h())))`.
+func (c *ProfileClient) Use(hooks ...Hook) {
+	c.hooks.Profile = append(c.hooks.Profile, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `profile.Intercept(f(g(h())))`.
+func (c *ProfileClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Profile = append(c.inters.Profile, interceptors...)
+}
+
+// Create returns a builder for creating a Profile entity.
+func (c *ProfileClient) Create() *ProfileCreate {
+	mutation := newProfileMutation(c.config, OpCreate)
+	return &ProfileCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Profile entities.
+func (c *ProfileClient) CreateBulk(builders ...*ProfileCreate) *ProfileCreateBulk {
+	return &ProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProfileClient) MapCreateBulk(slice any, setFunc func(*ProfileCreate, int)) *ProfileCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProfileCreateBulk{err: fmt.Errorf("calling to ProfileClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProfileCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Profile.
+func (c *ProfileClient) Update() *ProfileUpdate {
+	mutation := newProfileMutation(c.config, OpUpdate)
+	return &ProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProfileClient) UpdateOne(pr *Profile) *ProfileUpdateOne {
+	mutation := newProfileMutation(c.config, OpUpdateOne, withProfile(pr))
+	return &ProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProfileClient) UpdateOneID(id int) *ProfileUpdateOne {
+	mutation := newProfileMutation(c.config, OpUpdateOne, withProfileID(id))
+	return &ProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Profile.
+func (c *ProfileClient) Delete() *ProfileDelete {
+	mutation := newProfileMutation(c.config, OpDelete)
+	return &ProfileDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProfileClient) DeleteOne(pr *Profile) *ProfileDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProfileClient) DeleteOneID(id int) *ProfileDeleteOne {
+	builder := c.Delete().Where(profile.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProfileDeleteOne{builder}
+}
+
+// Query returns a query builder for Profile.
+func (c *ProfileClient) Query() *ProfileQuery {
+	return &ProfileQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProfile},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Profile entity by its id.
+func (c *ProfileClient) Get(ctx context.Context, id int) (*Profile, error) {
+	return c.Query().Where(profile.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProfileClient) GetX(ctx context.Context, id int) *Profile {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTags queries the tags edge of a Profile.
+func (c *ProfileClient) QueryTags(pr *Profile) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profile.Table, profile.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, profile.TagsTable, profile.TagsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Profile.
+func (c *ProfileClient) QueryTasks(pr *Profile) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profile.Table, profile.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, profile.TasksTable, profile.TasksColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIssues queries the issues edge of a Profile.
+func (c *ProfileClient) QueryIssues(pr *Profile) *ProfileIssueQuery {
+	query := (&ProfileIssueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profile.Table, profile.FieldID, id),
+			sqlgraph.To(profileissue.Table, profileissue.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, profile.IssuesTable, profile.IssuesColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProfileClient) Hooks() []Hook {
+	return c.hooks.Profile
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProfileClient) Interceptors() []Interceptor {
+	return c.inters.Profile
+}
+
+func (c *ProfileClient) mutate(ctx context.Context, m *ProfileMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProfileCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProfileDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Profile mutation op: %q", m.Op())
+	}
+}
+
+// ProfileIssueClient is a client for the ProfileIssue schema.
+type ProfileIssueClient struct {
+	config
+}
+
+// NewProfileIssueClient returns a client for the ProfileIssue from the given config.
+func NewProfileIssueClient(c config) *ProfileIssueClient {
+	return &ProfileIssueClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `profileissue.Hooks(f(g(h())))`.
+func (c *ProfileIssueClient) Use(hooks ...Hook) {
+	c.hooks.ProfileIssue = append(c.hooks.ProfileIssue, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `profileissue.Intercept(f(g(h())))`.
+func (c *ProfileIssueClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProfileIssue = append(c.inters.ProfileIssue, interceptors...)
+}
+
+// Create returns a builder for creating a ProfileIssue entity.
+func (c *ProfileIssueClient) Create() *ProfileIssueCreate {
+	mutation := newProfileIssueMutation(c.config, OpCreate)
+	return &ProfileIssueCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProfileIssue entities.
+func (c *ProfileIssueClient) CreateBulk(builders ...*ProfileIssueCreate) *ProfileIssueCreateBulk {
+	return &ProfileIssueCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProfileIssueClient) MapCreateBulk(slice any, setFunc func(*ProfileIssueCreate, int)) *ProfileIssueCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProfileIssueCreateBulk{err: fmt.Errorf("calling to ProfileIssueClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProfileIssueCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProfileIssueCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProfileIssue.
+func (c *ProfileIssueClient) Update() *ProfileIssueUpdate {
+	mutation := newProfileIssueMutation(c.config, OpUpdate)
+	return &ProfileIssueUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProfileIssueClient) UpdateOne(pi *ProfileIssue) *ProfileIssueUpdateOne {
+	mutation := newProfileIssueMutation(c.config, OpUpdateOne, withProfileIssue(pi))
+	return &ProfileIssueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProfileIssueClient) UpdateOneID(id int) *ProfileIssueUpdateOne {
+	mutation := newProfileIssueMutation(c.config, OpUpdateOne, withProfileIssueID(id))
+	return &ProfileIssueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProfileIssue.
+func (c *ProfileIssueClient) Delete() *ProfileIssueDelete {
+	mutation := newProfileIssueMutation(c.config, OpDelete)
+	return &ProfileIssueDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProfileIssueClient) DeleteOne(pi *ProfileIssue) *ProfileIssueDeleteOne {
+	return c.DeleteOneID(pi.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProfileIssueClient) DeleteOneID(id int) *ProfileIssueDeleteOne {
+	builder := c.Delete().Where(profileissue.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProfileIssueDeleteOne{builder}
+}
+
+// Query returns a query builder for ProfileIssue.
+func (c *ProfileIssueClient) Query() *ProfileIssueQuery {
+	return &ProfileIssueQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProfileIssue},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProfileIssue entity by its id.
+func (c *ProfileIssueClient) Get(ctx context.Context, id int) (*ProfileIssue, error) {
+	return c.Query().Where(profileissue.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProfileIssueClient) GetX(ctx context.Context, id int) *ProfileIssue {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProfile queries the profile edge of a ProfileIssue.
+func (c *ProfileIssueClient) QueryProfile(pi *ProfileIssue) *ProfileQuery {
+	query := (&ProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pi.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profileissue.Table, profileissue.FieldID, id),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, profileissue.ProfileTable, profileissue.ProfileColumn),
+		)
+		fromV = sqlgraph.Neighbors(pi.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAgents queries the agents edge of a ProfileIssue.
+func (c *ProfileIssueClient) QueryAgents(pi *ProfileIssue) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pi.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profileissue.Table, profileissue.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, profileissue.AgentsTable, profileissue.AgentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(pi.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProfileIssueClient) Hooks() []Hook {
+	return c.hooks.ProfileIssue
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProfileIssueClient) Interceptors() []Interceptor {
+	return c.inters.ProfileIssue
+}
+
+func (c *ProfileIssueClient) mutate(ctx context.Context, m *ProfileIssueMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProfileIssueCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProfileIssueUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProfileIssueUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProfileIssueDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ProfileIssue mutation op: %q", m.Op())
+	}
+}
+
 // ReleaseClient is a client for the Release schema.
 type ReleaseClient struct {
 	config
@@ -3715,6 +4127,22 @@ func (c *TagClient) QueryChildren(t *Tag) *TagQuery {
 	return query
 }
 
+// QueryProfile queries the profile edge of a Tag.
+func (c *TagClient) QueryProfile(t *Tag) *ProfileQuery {
+	query := (&ProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, id),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, tag.ProfileTable, tag.ProfilePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TagClient) Hooks() []Hook {
 	return c.hooks.Tag
@@ -3737,6 +4165,171 @@ func (c *TagClient) mutate(ctx context.Context, m *TagMutation) (Value, error) {
 		return (&TagDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Tag mutation op: %q", m.Op())
+	}
+}
+
+// TaskClient is a client for the Task schema.
+type TaskClient struct {
+	config
+}
+
+// NewTaskClient returns a client for the Task from the given config.
+func NewTaskClient(c config) *TaskClient {
+	return &TaskClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `task.Hooks(f(g(h())))`.
+func (c *TaskClient) Use(hooks ...Hook) {
+	c.hooks.Task = append(c.hooks.Task, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `task.Intercept(f(g(h())))`.
+func (c *TaskClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Task = append(c.inters.Task, interceptors...)
+}
+
+// Create returns a builder for creating a Task entity.
+func (c *TaskClient) Create() *TaskCreate {
+	mutation := newTaskMutation(c.config, OpCreate)
+	return &TaskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Task entities.
+func (c *TaskClient) CreateBulk(builders ...*TaskCreate) *TaskCreateBulk {
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TaskClient) MapCreateBulk(slice any, setFunc func(*TaskCreate, int)) *TaskCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TaskCreateBulk{err: fmt.Errorf("calling to TaskClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TaskCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Task.
+func (c *TaskClient) Update() *TaskUpdate {
+	mutation := newTaskMutation(c.config, OpUpdate)
+	return &TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TaskClient) UpdateOne(t *Task) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTask(t))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TaskClient) UpdateOneID(id int) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTaskID(id))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Task.
+func (c *TaskClient) Delete() *TaskDelete {
+	mutation := newTaskMutation(c.config, OpDelete)
+	return &TaskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TaskClient) DeleteOne(t *Task) *TaskDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TaskClient) DeleteOneID(id int) *TaskDeleteOne {
+	builder := c.Delete().Where(task.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TaskDeleteOne{builder}
+}
+
+// Query returns a query builder for Task.
+func (c *TaskClient) Query() *TaskQuery {
+	return &TaskQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTask},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Task entity by its id.
+func (c *TaskClient) Get(ctx context.Context, id int) (*Task, error) {
+	return c.Query().Where(task.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TaskClient) GetX(ctx context.Context, id int) *Task {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTags queries the tags edge of a Task.
+func (c *TaskClient) QueryTags(t *Task) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, task.TagsTable, task.TagsColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a Task.
+func (c *TaskClient) QueryProfile(t *Task) *ProfileQuery {
+	query := (&ProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.ProfileTable, task.ProfileColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TaskClient) Hooks() []Hook {
+	return c.hooks.Task
+}
+
+// Interceptors returns the client interceptors.
+func (c *TaskClient) Interceptors() []Interceptor {
+	return c.inters.Task
+}
+
+func (c *TaskClient) mutate(ctx context.Context, m *TaskMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TaskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TaskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Task mutation op: %q", m.Op())
 	}
 }
 
@@ -4038,18 +4631,167 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
+// WingetConfigExclusionClient is a client for the WingetConfigExclusion schema.
+type WingetConfigExclusionClient struct {
+	config
+}
+
+// NewWingetConfigExclusionClient returns a client for the WingetConfigExclusion from the given config.
+func NewWingetConfigExclusionClient(c config) *WingetConfigExclusionClient {
+	return &WingetConfigExclusionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `wingetconfigexclusion.Hooks(f(g(h())))`.
+func (c *WingetConfigExclusionClient) Use(hooks ...Hook) {
+	c.hooks.WingetConfigExclusion = append(c.hooks.WingetConfigExclusion, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `wingetconfigexclusion.Intercept(f(g(h())))`.
+func (c *WingetConfigExclusionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WingetConfigExclusion = append(c.inters.WingetConfigExclusion, interceptors...)
+}
+
+// Create returns a builder for creating a WingetConfigExclusion entity.
+func (c *WingetConfigExclusionClient) Create() *WingetConfigExclusionCreate {
+	mutation := newWingetConfigExclusionMutation(c.config, OpCreate)
+	return &WingetConfigExclusionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WingetConfigExclusion entities.
+func (c *WingetConfigExclusionClient) CreateBulk(builders ...*WingetConfigExclusionCreate) *WingetConfigExclusionCreateBulk {
+	return &WingetConfigExclusionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WingetConfigExclusionClient) MapCreateBulk(slice any, setFunc func(*WingetConfigExclusionCreate, int)) *WingetConfigExclusionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WingetConfigExclusionCreateBulk{err: fmt.Errorf("calling to WingetConfigExclusionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WingetConfigExclusionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WingetConfigExclusionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Update() *WingetConfigExclusionUpdate {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdate)
+	return &WingetConfigExclusionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WingetConfigExclusionClient) UpdateOne(wce *WingetConfigExclusion) *WingetConfigExclusionUpdateOne {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdateOne, withWingetConfigExclusion(wce))
+	return &WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WingetConfigExclusionClient) UpdateOneID(id int) *WingetConfigExclusionUpdateOne {
+	mutation := newWingetConfigExclusionMutation(c.config, OpUpdateOne, withWingetConfigExclusionID(id))
+	return &WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Delete() *WingetConfigExclusionDelete {
+	mutation := newWingetConfigExclusionMutation(c.config, OpDelete)
+	return &WingetConfigExclusionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WingetConfigExclusionClient) DeleteOne(wce *WingetConfigExclusion) *WingetConfigExclusionDeleteOne {
+	return c.DeleteOneID(wce.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WingetConfigExclusionClient) DeleteOneID(id int) *WingetConfigExclusionDeleteOne {
+	builder := c.Delete().Where(wingetconfigexclusion.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WingetConfigExclusionDeleteOne{builder}
+}
+
+// Query returns a query builder for WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) Query() *WingetConfigExclusionQuery {
+	return &WingetConfigExclusionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWingetConfigExclusion},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WingetConfigExclusion entity by its id.
+func (c *WingetConfigExclusionClient) Get(ctx context.Context, id int) (*WingetConfigExclusion, error) {
+	return c.Query().Where(wingetconfigexclusion.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WingetConfigExclusionClient) GetX(ctx context.Context, id int) *WingetConfigExclusion {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WingetConfigExclusion.
+func (c *WingetConfigExclusionClient) QueryOwner(wce *WingetConfigExclusion) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := wce.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, wingetconfigexclusion.OwnerTable, wingetconfigexclusion.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(wce.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WingetConfigExclusionClient) Hooks() []Hook {
+	return c.hooks.WingetConfigExclusion
+}
+
+// Interceptors returns the client interceptors.
+func (c *WingetConfigExclusionClient) Interceptors() []Interceptor {
+	return c.inters.WingetConfigExclusion
+}
+
+func (c *WingetConfigExclusionClient) mutate(ctx context.Context, m *WingetConfigExclusionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WingetConfigExclusionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WingetConfigExclusionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WingetConfigExclusionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WingetConfigExclusionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown WingetConfigExclusion mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
-		Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag, Update,
-		User []ent.Hook
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
+		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
+		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Release,
-		Revocation, Server, Sessions, Settings, Share, SystemUpdate, Tag, Update,
-		User []ent.Interceptor
+		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
+		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
+		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )

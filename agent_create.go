@@ -23,11 +23,13 @@ import (
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // AgentCreate is the builder for creating a Agent entity.
@@ -520,6 +522,21 @@ func (ac *AgentCreate) AddMetadata(m ...*Metadata) *AgentCreate {
 	return ac.AddMetadatumIDs(ids...)
 }
 
+// AddWingetcfgexclusionIDs adds the "wingetcfgexclusions" edge to the WingetConfigExclusion entity by IDs.
+func (ac *AgentCreate) AddWingetcfgexclusionIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddWingetcfgexclusionIDs(ids...)
+	return ac
+}
+
+// AddWingetcfgexclusions adds the "wingetcfgexclusions" edges to the WingetConfigExclusion entity.
+func (ac *AgentCreate) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *AgentCreate {
+	ids := make([]int, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return ac.AddWingetcfgexclusionIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (ac *AgentCreate) SetReleaseID(id int) *AgentCreate {
 	ac.mutation.SetReleaseID(id)
@@ -537,6 +554,21 @@ func (ac *AgentCreate) SetNillableReleaseID(id *int) *AgentCreate {
 // SetRelease sets the "release" edge to the Release entity.
 func (ac *AgentCreate) SetRelease(r *Release) *AgentCreate {
 	return ac.SetReleaseID(r.ID)
+}
+
+// AddProfileissueIDs adds the "profileissue" edge to the ProfileIssue entity by IDs.
+func (ac *AgentCreate) AddProfileissueIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddProfileissueIDs(ids...)
+	return ac
+}
+
+// AddProfileissue adds the "profileissue" edges to the ProfileIssue entity.
+func (ac *AgentCreate) AddProfileissue(p ...*ProfileIssue) *AgentCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddProfileissueIDs(ids...)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -998,6 +1030,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := ac.mutation.WingetcfgexclusionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.WingetcfgexclusionsTable,
+			Columns: []string{agent.WingetcfgexclusionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := ac.mutation.ReleaseIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1013,6 +1061,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.release_agents = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ProfileissueIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   agent.ProfileissueTable,
+			Columns: []string{agent.ProfileissueColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

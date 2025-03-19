@@ -55,6 +55,8 @@ func (Agent) Edges() []ent.Edge {
 		edge.To("updates", Update.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.To("tags", Tag.Type),
 		edge.To("metadata", Metadata.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("wingetcfgexclusions", WingetConfigExclusion.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 		edge.From("release", Release.Type).Ref("agents").Unique(),
+		edge.From("profileissue", ProfileIssue.Type).Ref("agents"),
 	}
 }

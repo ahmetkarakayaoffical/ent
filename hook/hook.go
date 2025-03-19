@@ -165,6 +165,30 @@ func (f PrinterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PrinterMutation", m)
 }
 
+// The ProfileFunc type is an adapter to allow the use of ordinary
+// function as Profile mutator.
+type ProfileFunc func(context.Context, *ent.ProfileMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProfileFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProfileMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProfileMutation", m)
+}
+
+// The ProfileIssueFunc type is an adapter to allow the use of ordinary
+// function as ProfileIssue mutator.
+type ProfileIssueFunc func(context.Context, *ent.ProfileIssueMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProfileIssueFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProfileIssueMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProfileIssueMutation", m)
+}
+
 // The ReleaseFunc type is an adapter to allow the use of ordinary
 // function as Release mutator.
 type ReleaseFunc func(context.Context, *ent.ReleaseMutation) (ent.Value, error)
@@ -261,6 +285,18 @@ func (f TagFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TagMutation", m)
 }
 
+// The TaskFunc type is an adapter to allow the use of ordinary
+// function as Task mutator.
+type TaskFunc func(context.Context, *ent.TaskMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TaskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TaskMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TaskMutation", m)
+}
+
 // The UpdateFunc type is an adapter to allow the use of ordinary
 // function as Update mutator.
 type UpdateFunc func(context.Context, *ent.UpdateMutation) (ent.Value, error)
@@ -283,6 +319,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+}
+
+// The WingetConfigExclusionFunc type is an adapter to allow the use of ordinary
+// function as WingetConfigExclusion mutator.
+type WingetConfigExclusionFunc func(context.Context, *ent.WingetConfigExclusionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WingetConfigExclusionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.WingetConfigExclusionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.WingetConfigExclusionMutation", m)
 }
 
 // Condition is a hook condition function.

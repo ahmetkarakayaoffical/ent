@@ -9,12 +9,16 @@ import (
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/profile"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/revocation"
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/user"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -95,6 +99,10 @@ func init() {
 	deployment.DefaultUpdated = deploymentDescUpdated.Default.(func() time.Time)
 	// deployment.UpdateDefaultUpdated holds the default value on update for the updated field.
 	deployment.UpdateDefaultUpdated = deploymentDescUpdated.UpdateDefault.(func() time.Time)
+	// deploymentDescByProfile is the schema descriptor for by_profile field.
+	deploymentDescByProfile := deploymentFields[5].Descriptor()
+	// deployment.DefaultByProfile holds the default value on creation for the by_profile field.
+	deployment.DefaultByProfile = deploymentDescByProfile.Default.(bool)
 	logicaldiskFields := schema.LogicalDisk{}.Fields()
 	_ = logicaldiskFields
 	// logicaldiskDescUsage is the schema descriptor for usage field.
@@ -107,6 +115,24 @@ func init() {
 	orgmetadataDescName := orgmetadataFields[0].Descriptor()
 	// orgmetadata.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	orgmetadata.NameValidator = orgmetadataDescName.Validators[0].(func(string) error)
+	profileFields := schema.Profile{}.Fields()
+	_ = profileFields
+	// profileDescName is the schema descriptor for name field.
+	profileDescName := profileFields[0].Descriptor()
+	// profile.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	profile.NameValidator = profileDescName.Validators[0].(func(string) error)
+	// profileDescApplyToAll is the schema descriptor for apply_to_all field.
+	profileDescApplyToAll := profileFields[1].Descriptor()
+	// profile.DefaultApplyToAll holds the default value on creation for the apply_to_all field.
+	profile.DefaultApplyToAll = profileDescApplyToAll.Default.(bool)
+	profileissueFields := schema.ProfileIssue{}.Fields()
+	_ = profileissueFields
+	// profileissueDescWhen is the schema descriptor for when field.
+	profileissueDescWhen := profileissueFields[1].Descriptor()
+	// profileissue.DefaultWhen holds the default value on creation for the when field.
+	profileissue.DefaultWhen = profileissueDescWhen.Default.(func() time.Time)
+	// profileissue.UpdateDefaultWhen holds the default value on update for the when field.
+	profileissue.UpdateDefaultWhen = profileissueDescWhen.UpdateDefault.(func() time.Time)
 	revocationFields := schema.Revocation{}.Fields()
 	_ = revocationFields
 	// revocationDescReason is the schema descriptor for reason field.
@@ -191,12 +217,102 @@ func init() {
 	settingsDescRequestVncPin := settingsFields[27].Descriptor()
 	// settings.DefaultRequestVncPin holds the default value on creation for the request_vnc_pin field.
 	settings.DefaultRequestVncPin = settingsDescRequestVncPin.Default.(bool)
+	// settingsDescProfilesApplicationFrequenceInMinutes is the schema descriptor for profiles_application_frequence_in_minutes field.
+	settingsDescProfilesApplicationFrequenceInMinutes := settingsFields[28].Descriptor()
+	// settings.DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the profiles_application_frequence_in_minutes field.
+	settings.DefaultProfilesApplicationFrequenceInMinutes = settingsDescProfilesApplicationFrequenceInMinutes.Default.(int)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.
 	tagDescTag := tagFields[0].Descriptor()
 	// tag.TagValidator is a validator for the "tag" field. It is called by the builders before save.
 	tag.TagValidator = tagDescTag.Validators[0].(func(string) error)
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescName is the schema descriptor for name field.
+	taskDescName := taskFields[0].Descriptor()
+	// task.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	task.NameValidator = taskDescName.Validators[0].(func(string) error)
+	// taskDescPackageID is the schema descriptor for package_id field.
+	taskDescPackageID := taskFields[2].Descriptor()
+	// task.DefaultPackageID holds the default value on creation for the package_id field.
+	task.DefaultPackageID = taskDescPackageID.Default.(string)
+	// taskDescPackageName is the schema descriptor for package_name field.
+	taskDescPackageName := taskFields[3].Descriptor()
+	// task.DefaultPackageName holds the default value on creation for the package_name field.
+	task.DefaultPackageName = taskDescPackageName.Default.(string)
+	// taskDescRegistryKey is the schema descriptor for registry_key field.
+	taskDescRegistryKey := taskFields[4].Descriptor()
+	// task.DefaultRegistryKey holds the default value on creation for the registry_key field.
+	task.DefaultRegistryKey = taskDescRegistryKey.Default.(string)
+	// taskDescRegistryKeyValueName is the schema descriptor for registry_key_value_name field.
+	taskDescRegistryKeyValueName := taskFields[5].Descriptor()
+	// task.DefaultRegistryKeyValueName holds the default value on creation for the registry_key_value_name field.
+	task.DefaultRegistryKeyValueName = taskDescRegistryKeyValueName.Default.(string)
+	// taskDescRegistryKeyValueData is the schema descriptor for registry_key_value_data field.
+	taskDescRegistryKeyValueData := taskFields[7].Descriptor()
+	// task.DefaultRegistryKeyValueData holds the default value on creation for the registry_key_value_data field.
+	task.DefaultRegistryKeyValueData = taskDescRegistryKeyValueData.Default.(string)
+	// taskDescRegistryHex is the schema descriptor for registry_hex field.
+	taskDescRegistryHex := taskFields[8].Descriptor()
+	// task.DefaultRegistryHex holds the default value on creation for the registry_hex field.
+	task.DefaultRegistryHex = taskDescRegistryHex.Default.(bool)
+	// taskDescRegistryForce is the schema descriptor for registry_force field.
+	taskDescRegistryForce := taskFields[9].Descriptor()
+	// task.DefaultRegistryForce holds the default value on creation for the registry_force field.
+	task.DefaultRegistryForce = taskDescRegistryForce.Default.(bool)
+	// taskDescLocalUserUsername is the schema descriptor for local_user_username field.
+	taskDescLocalUserUsername := taskFields[10].Descriptor()
+	// task.DefaultLocalUserUsername holds the default value on creation for the local_user_username field.
+	task.DefaultLocalUserUsername = taskDescLocalUserUsername.Default.(string)
+	// taskDescLocalUserDescription is the schema descriptor for local_user_description field.
+	taskDescLocalUserDescription := taskFields[11].Descriptor()
+	// task.DefaultLocalUserDescription holds the default value on creation for the local_user_description field.
+	task.DefaultLocalUserDescription = taskDescLocalUserDescription.Default.(string)
+	// taskDescLocalUserDisable is the schema descriptor for local_user_disable field.
+	taskDescLocalUserDisable := taskFields[12].Descriptor()
+	// task.DefaultLocalUserDisable holds the default value on creation for the local_user_disable field.
+	task.DefaultLocalUserDisable = taskDescLocalUserDisable.Default.(bool)
+	// taskDescLocalUserFullname is the schema descriptor for local_user_fullname field.
+	taskDescLocalUserFullname := taskFields[13].Descriptor()
+	// task.DefaultLocalUserFullname holds the default value on creation for the local_user_fullname field.
+	task.DefaultLocalUserFullname = taskDescLocalUserFullname.Default.(string)
+	// taskDescLocalUserPassword is the schema descriptor for local_user_password field.
+	taskDescLocalUserPassword := taskFields[14].Descriptor()
+	// task.DefaultLocalUserPassword holds the default value on creation for the local_user_password field.
+	task.DefaultLocalUserPassword = taskDescLocalUserPassword.Default.(string)
+	// taskDescLocalUserPasswordChangeNotAllowed is the schema descriptor for local_user_password_change_not_allowed field.
+	taskDescLocalUserPasswordChangeNotAllowed := taskFields[15].Descriptor()
+	// task.DefaultLocalUserPasswordChangeNotAllowed holds the default value on creation for the local_user_password_change_not_allowed field.
+	task.DefaultLocalUserPasswordChangeNotAllowed = taskDescLocalUserPasswordChangeNotAllowed.Default.(bool)
+	// taskDescLocalUserPasswordChangeRequired is the schema descriptor for local_user_password_change_required field.
+	taskDescLocalUserPasswordChangeRequired := taskFields[16].Descriptor()
+	// task.DefaultLocalUserPasswordChangeRequired holds the default value on creation for the local_user_password_change_required field.
+	task.DefaultLocalUserPasswordChangeRequired = taskDescLocalUserPasswordChangeRequired.Default.(bool)
+	// taskDescLocalUserPasswordNeverExpires is the schema descriptor for local_user_password_never_expires field.
+	taskDescLocalUserPasswordNeverExpires := taskFields[17].Descriptor()
+	// task.DefaultLocalUserPasswordNeverExpires holds the default value on creation for the local_user_password_never_expires field.
+	task.DefaultLocalUserPasswordNeverExpires = taskDescLocalUserPasswordNeverExpires.Default.(bool)
+	// taskDescLocalGroupName is the schema descriptor for local_group_name field.
+	taskDescLocalGroupName := taskFields[18].Descriptor()
+	// task.DefaultLocalGroupName holds the default value on creation for the local_group_name field.
+	task.DefaultLocalGroupName = taskDescLocalGroupName.Default.(string)
+	// taskDescLocalGroupDescription is the schema descriptor for local_group_description field.
+	taskDescLocalGroupDescription := taskFields[19].Descriptor()
+	// task.DefaultLocalGroupDescription holds the default value on creation for the local_group_description field.
+	task.DefaultLocalGroupDescription = taskDescLocalGroupDescription.Default.(string)
+	// taskDescLocalGroupMembers is the schema descriptor for local_group_members field.
+	taskDescLocalGroupMembers := taskFields[20].Descriptor()
+	// task.DefaultLocalGroupMembers holds the default value on creation for the local_group_members field.
+	task.DefaultLocalGroupMembers = taskDescLocalGroupMembers.Default.(string)
+	// taskDescLocalGroupMembersToInclude is the schema descriptor for local_group_members_to_include field.
+	taskDescLocalGroupMembersToInclude := taskFields[21].Descriptor()
+	// task.DefaultLocalGroupMembersToInclude holds the default value on creation for the local_group_members_to_include field.
+	task.DefaultLocalGroupMembersToInclude = taskDescLocalGroupMembersToInclude.Default.(string)
+	// taskDescLocalGroupMembersToExclude is the schema descriptor for local_group_members_to_exclude field.
+	taskDescLocalGroupMembersToExclude := taskFields[22].Descriptor()
+	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
+	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.
@@ -221,4 +337,10 @@ func init() {
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	user.IDValidator = userDescID.Validators[0].(func(string) error)
+	wingetconfigexclusionFields := schema.WingetConfigExclusion{}.Fields()
+	_ = wingetconfigexclusionFields
+	// wingetconfigexclusionDescWhen is the schema descriptor for when field.
+	wingetconfigexclusionDescWhen := wingetconfigexclusionFields[1].Descriptor()
+	// wingetconfigexclusion.DefaultWhen holds the default value on creation for the when field.
+	wingetconfigexclusion.DefaultWhen = wingetconfigexclusionDescWhen.Default.(func() time.Time)
 }

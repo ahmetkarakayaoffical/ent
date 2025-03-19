@@ -415,6 +415,20 @@ func (sc *SettingsCreate) SetNillableRequestVncPin(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (sc *SettingsCreate) SetProfilesApplicationFrequenceInMinutes(i int) *SettingsCreate {
+	sc.mutation.SetProfilesApplicationFrequenceInMinutes(i)
+	return sc
+}
+
+// SetNillableProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableProfilesApplicationFrequenceInMinutes(i *int) *SettingsCreate {
+	if i != nil {
+		sc.SetProfilesApplicationFrequenceInMinutes(*i)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -528,6 +542,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.RequestVncPin(); !ok {
 		v := settings.DefaultRequestVncPin
 		sc.mutation.SetRequestVncPin(v)
+	}
+	if _, ok := sc.mutation.ProfilesApplicationFrequenceInMinutes(); !ok {
+		v := settings.DefaultProfilesApplicationFrequenceInMinutes
+		sc.mutation.SetProfilesApplicationFrequenceInMinutes(v)
 	}
 }
 
@@ -671,6 +689,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.RequestVncPin(); ok {
 		_spec.SetField(settings.FieldRequestVncPin, field.TypeBool, value)
 		_node.RequestVncPin = value
+	}
+	if value, ok := sc.mutation.ProfilesApplicationFrequenceInMinutes(); ok {
+		_spec.SetField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
+		_node.ProfilesApplicationFrequenceInMinutes = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1278,6 +1300,30 @@ func (u *SettingsUpsert) UpdateRequestVncPin() *SettingsUpsert {
 // ClearRequestVncPin clears the value of the "request_vnc_pin" field.
 func (u *SettingsUpsert) ClearRequestVncPin() *SettingsUpsert {
 	u.SetNull(settings.FieldRequestVncPin)
+	return u
+}
+
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsert) SetProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsert {
+	u.Set(settings.FieldProfilesApplicationFrequenceInMinutes, v)
+	return u
+}
+
+// UpdateProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateProfilesApplicationFrequenceInMinutes() *SettingsUpsert {
+	u.SetExcluded(settings.FieldProfilesApplicationFrequenceInMinutes)
+	return u
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds v to the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsert) AddProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsert {
+	u.Add(settings.FieldProfilesApplicationFrequenceInMinutes, v)
+	return u
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsert) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsert {
+	u.SetNull(settings.FieldProfilesApplicationFrequenceInMinutes)
 	return u
 }
 
@@ -1948,6 +1994,34 @@ func (u *SettingsUpsertOne) UpdateRequestVncPin() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearRequestVncPin() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearRequestVncPin()
+	})
+}
+
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) SetProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetProfilesApplicationFrequenceInMinutes(v)
+	})
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds v to the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) AddProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddProfilesApplicationFrequenceInMinutes(v)
+	})
+}
+
+// UpdateProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateProfilesApplicationFrequenceInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateProfilesApplicationFrequenceInMinutes()
+	})
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertOne) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearProfilesApplicationFrequenceInMinutes()
 	})
 }
 
@@ -2782,6 +2856,34 @@ func (u *SettingsUpsertBulk) UpdateRequestVncPin() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearRequestVncPin() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearRequestVncPin()
+	})
+}
+
+// SetProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) SetProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetProfilesApplicationFrequenceInMinutes(v)
+	})
+}
+
+// AddProfilesApplicationFrequenceInMinutes adds v to the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) AddProfilesApplicationFrequenceInMinutes(v int) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.AddProfilesApplicationFrequenceInMinutes(v)
+	})
+}
+
+// UpdateProfilesApplicationFrequenceInMinutes sets the "profiles_application_frequence_in_minutes" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateProfilesApplicationFrequenceInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateProfilesApplicationFrequenceInMinutes()
+	})
+}
+
+// ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
+func (u *SettingsUpsertBulk) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearProfilesApplicationFrequenceInMinutes()
 	})
 }
 

@@ -139,6 +139,7 @@ var (
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "installed", Type: field.TypeTime, Nullable: true},
 		{Name: "updated", Type: field.TypeTime, Nullable: true},
+		{Name: "by_profile", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "agent_deployments", Type: field.TypeString},
 	}
 	// DeploymentsTable holds the schema information for the "deployments" table.
@@ -149,7 +150,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "deployments_agents_deployments",
-				Columns:    []*schema.Column{DeploymentsColumns[6]},
+				Columns:    []*schema.Column{DeploymentsColumns[7]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -329,6 +330,47 @@ var (
 			},
 		},
 	}
+	// ProfilesColumns holds the columns for the "profiles" table.
+	ProfilesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "apply_to_all", Type: field.TypeBool, Default: false},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"winget"}, Default: "winget"},
+	}
+	// ProfilesTable holds the schema information for the "profiles" table.
+	ProfilesTable = &schema.Table{
+		Name:       "profiles",
+		Columns:    ProfilesColumns,
+		PrimaryKey: []*schema.Column{ProfilesColumns[0]},
+	}
+	// ProfileIssuesColumns holds the columns for the "profile_issues" table.
+	ProfileIssuesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "error", Type: field.TypeString, Nullable: true},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "profile_issues", Type: field.TypeInt, Nullable: true},
+		{Name: "profile_issue_agents", Type: field.TypeString, Nullable: true},
+	}
+	// ProfileIssuesTable holds the schema information for the "profile_issues" table.
+	ProfileIssuesTable = &schema.Table{
+		Name:       "profile_issues",
+		Columns:    ProfileIssuesColumns,
+		PrimaryKey: []*schema.Column{ProfileIssuesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profile_issues_profiles_issues",
+				Columns:    []*schema.Column{ProfileIssuesColumns[3]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "profile_issues_agents_agents",
+				Columns:    []*schema.Column{ProfileIssuesColumns[4]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// ReleasesColumns holds the columns for the "releases" table.
 	ReleasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -461,6 +503,7 @@ var (
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 		{Name: "agent_report_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
 		{Name: "request_vnc_pin", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "profiles_application_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 30},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
@@ -471,7 +514,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[29]},
+				Columns:    []*schema.Column{SettingsColumns[30]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -529,6 +572,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString},
 		{Name: "tag_children", Type: field.TypeInt, Nullable: true},
+		{Name: "task_tags", Type: field.TypeInt, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
 	TagsTable = &schema.Table{
@@ -540,6 +584,55 @@ var (
 				Symbol:     "tags_tags_children",
 				Columns:    []*schema.Column{TagsColumns[4]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tags_tasks_tags",
+				Columns:    []*schema.Column{TagsColumns[5]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user", "add_local_group", "remove_local_group", "add_users_to_local_group", "remove_users_from_local_group"}},
+		{Name: "package_id", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key_value_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_key_value_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"String", "Binary", "DWord", "QWord", "MultiString", "ExpandString"}},
+		{Name: "registry_key_value_data", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "registry_hex", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "registry_force", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_username", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_disable", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_fullname", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_password", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_password_change_not_allowed", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_password_change_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_user_password_never_expires", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "local_group_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members_to_include", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_group_members_to_exclude", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_profiles_tasks",
+				Columns:    []*schema.Column{TasksColumns[25]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -593,6 +686,27 @@ var (
 			},
 		},
 	}
+	// WingetConfigExclusionsColumns holds the columns for the "winget_config_exclusions" table.
+	WingetConfigExclusionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "package_id", Type: field.TypeString},
+		{Name: "when", Type: field.TypeTime, Nullable: true},
+		{Name: "agent_wingetcfgexclusions", Type: field.TypeString},
+	}
+	// WingetConfigExclusionsTable holds the schema information for the "winget_config_exclusions" table.
+	WingetConfigExclusionsTable = &schema.Table{
+		Name:       "winget_config_exclusions",
+		Columns:    WingetConfigExclusionsColumns,
+		PrimaryKey: []*schema.Column{WingetConfigExclusionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "winget_config_exclusions_agents_wingetcfgexclusions",
+				Columns:    []*schema.Column{WingetConfigExclusionsColumns[3]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// AgentTagsColumns holds the columns for the "agent_tags" table.
 	AgentTagsColumns = []*schema.Column{
 		{Name: "agent_id", Type: field.TypeString},
@@ -618,6 +732,31 @@ var (
 			},
 		},
 	}
+	// ProfileTagsColumns holds the columns for the "profile_tags" table.
+	ProfileTagsColumns = []*schema.Column{
+		{Name: "profile_id", Type: field.TypeInt},
+		{Name: "tag_id", Type: field.TypeInt},
+	}
+	// ProfileTagsTable holds the schema information for the "profile_tags" table.
+	ProfileTagsTable = &schema.Table{
+		Name:       "profile_tags",
+		Columns:    ProfileTagsColumns,
+		PrimaryKey: []*schema.Column{ProfileTagsColumns[0], ProfileTagsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profile_tags_profile_id",
+				Columns:    []*schema.Column{ProfileTagsColumns[0]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "profile_tags_tag_id",
+				Columns:    []*schema.Column{ProfileTagsColumns[1]},
+				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -633,6 +772,8 @@ var (
 		OperatingSystemsTable,
 		OrgMetadataTable,
 		PrintersTable,
+		ProfilesTable,
+		ProfileIssuesTable,
 		ReleasesTable,
 		RevocationsTable,
 		ServersTable,
@@ -641,9 +782,12 @@ var (
 		SharesTable,
 		SystemUpdatesTable,
 		TagsTable,
+		TasksTable,
 		UpdatesTable,
 		UsersTable,
+		WingetConfigExclusionsTable,
 		AgentTagsTable,
+		ProfileTagsTable,
 	}
 )
 
@@ -660,12 +804,19 @@ func init() {
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
+	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
+	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	TagsTable.ForeignKeys[0].RefTable = TagsTable
+	TagsTable.ForeignKeys[1].RefTable = TasksTable
+	TasksTable.ForeignKeys[0].RefTable = ProfilesTable
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
+	WingetConfigExclusionsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[0].RefTable = AgentsTable
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
+	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
+	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
 }

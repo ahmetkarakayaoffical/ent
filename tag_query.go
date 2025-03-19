@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
 )
 
@@ -27,6 +28,7 @@ type TagQuery struct {
 	withOwner    *AgentQuery
 	withParent   *TagQuery
 	withChildren *TagQuery
+	withProfile  *ProfileQuery
 	withFKs      bool
 	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -124,6 +126,28 @@ func (tq *TagQuery) QueryChildren() *TagQuery {
 			sqlgraph.From(tag.Table, tag.FieldID, selector),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, tag.ChildrenTable, tag.ChildrenColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProfile chains the current query on the "profile" edge.
+func (tq *TagQuery) QueryProfile() *ProfileQuery {
+	query := (&ProfileClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, selector),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, tag.ProfileTable, tag.ProfilePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -326,6 +350,7 @@ func (tq *TagQuery) Clone() *TagQuery {
 		withOwner:    tq.withOwner.Clone(),
 		withParent:   tq.withParent.Clone(),
 		withChildren: tq.withChildren.Clone(),
+		withProfile:  tq.withProfile.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -363,6 +388,17 @@ func (tq *TagQuery) WithChildren(opts ...func(*TagQuery)) *TagQuery {
 		opt(query)
 	}
 	tq.withChildren = query
+	return tq
+}
+
+// WithProfile tells the query-builder to eager-load the nodes that are connected to
+// the "profile" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TagQuery) WithProfile(opts ...func(*ProfileQuery)) *TagQuery {
+	query := (&ProfileClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withProfile = query
 	return tq
 }
 
@@ -445,10 +481,11 @@ func (tq *TagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tag, err
 		nodes       = []*Tag{}
 		withFKs     = tq.withFKs
 		_spec       = tq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			tq.withOwner != nil,
 			tq.withParent != nil,
 			tq.withChildren != nil,
+			tq.withProfile != nil,
 		}
 	)
 	if tq.withParent != nil {
@@ -495,6 +532,13 @@ func (tq *TagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tag, err
 		if err := tq.loadChildren(ctx, query, nodes,
 			func(n *Tag) { n.Edges.Children = []*Tag{} },
 			func(n *Tag, e *Tag) { n.Edges.Children = append(n.Edges.Children, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withProfile; query != nil {
+		if err := tq.loadProfile(ctx, query, nodes,
+			func(n *Tag) { n.Edges.Profile = []*Profile{} },
+			func(n *Tag, e *Profile) { n.Edges.Profile = append(n.Edges.Profile, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -622,6 +666,67 @@ func (tq *TagQuery) loadChildren(ctx context.Context, query *TagQuery, nodes []*
 			return fmt.Errorf(`unexpected referenced foreign-key "tag_children" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (tq *TagQuery) loadProfile(ctx context.Context, query *ProfileQuery, nodes []*Tag, init func(*Tag), assign func(*Tag, *Profile)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Tag)
+	nids := make(map[int]map[*Tag]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(tag.ProfileTable)
+		s.Join(joinT).On(s.C(profile.FieldID), joinT.C(tag.ProfilePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(tag.ProfilePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(tag.ProfilePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Tag]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Profile](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "profile" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

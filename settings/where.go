@@ -195,6 +195,11 @@ func RequestVncPin(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldRequestVncPin, v))
 }
 
+// ProfilesApplicationFrequenceInMinutes applies equality check predicate on the "profiles_application_frequence_in_minutes" field. It's identical to ProfilesApplicationFrequenceInMinutesEQ.
+func ProfilesApplicationFrequenceInMinutes(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -1928,6 +1933,56 @@ func RequestVncPinIsNil() predicate.Settings {
 // RequestVncPinNotNil applies the NotNil predicate on the "request_vnc_pin" field.
 func RequestVncPinNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldRequestVncPin))
+}
+
+// ProfilesApplicationFrequenceInMinutesEQ applies the EQ predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesNEQ applies the NEQ predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesNEQ(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesIn applies the In predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldIn(FieldProfilesApplicationFrequenceInMinutes, vs...))
+}
+
+// ProfilesApplicationFrequenceInMinutesNotIn applies the NotIn predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesNotIn(vs ...int) predicate.Settings {
+	return predicate.Settings(sql.FieldNotIn(FieldProfilesApplicationFrequenceInMinutes, vs...))
+}
+
+// ProfilesApplicationFrequenceInMinutesGT applies the GT predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesGT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGT(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesGTE applies the GTE predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesGTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldGTE(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesLT applies the LT predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesLT(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLT(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesLTE applies the LTE predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesLTE(v int) predicate.Settings {
+	return predicate.Settings(sql.FieldLTE(FieldProfilesApplicationFrequenceInMinutes, v))
+}
+
+// ProfilesApplicationFrequenceInMinutesIsNil applies the IsNil predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldProfilesApplicationFrequenceInMinutes))
+}
+
+// ProfilesApplicationFrequenceInMinutesNotNil applies the NotNil predicate on the "profiles_application_frequence_in_minutes" field.
+func ProfilesApplicationFrequenceInMinutesNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldProfilesApplicationFrequenceInMinutes))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.

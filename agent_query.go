@@ -24,37 +24,41 @@ import (
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
+	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
+	"github.com/open-uem/ent/wingetconfigexclusion"
 )
 
 // AgentQuery is the builder for querying Agent entities.
 type AgentQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []agent.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Agent
-	withComputer        *ComputerQuery
-	withOperatingsystem *OperatingSystemQuery
-	withSystemupdate    *SystemUpdateQuery
-	withAntivirus       *AntivirusQuery
-	withLogicaldisks    *LogicalDiskQuery
-	withApps            *AppQuery
-	withMonitors        *MonitorQuery
-	withShares          *ShareQuery
-	withPrinters        *PrinterQuery
-	withNetworkadapters *NetworkAdapterQuery
-	withDeployments     *DeploymentQuery
-	withUpdates         *UpdateQuery
-	withTags            *TagQuery
-	withMetadata        *MetadataQuery
-	withRelease         *ReleaseQuery
-	withFKs             bool
-	modifiers           []func(*sql.Selector)
+	ctx                     *QueryContext
+	order                   []agent.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.Agent
+	withComputer            *ComputerQuery
+	withOperatingsystem     *OperatingSystemQuery
+	withSystemupdate        *SystemUpdateQuery
+	withAntivirus           *AntivirusQuery
+	withLogicaldisks        *LogicalDiskQuery
+	withApps                *AppQuery
+	withMonitors            *MonitorQuery
+	withShares              *ShareQuery
+	withPrinters            *PrinterQuery
+	withNetworkadapters     *NetworkAdapterQuery
+	withDeployments         *DeploymentQuery
+	withUpdates             *UpdateQuery
+	withTags                *TagQuery
+	withMetadata            *MetadataQuery
+	withWingetcfgexclusions *WingetConfigExclusionQuery
+	withRelease             *ReleaseQuery
+	withProfileissue        *ProfileIssueQuery
+	withFKs                 bool
+	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -399,6 +403,28 @@ func (aq *AgentQuery) QueryMetadata() *MetadataQuery {
 	return query
 }
 
+// QueryWingetcfgexclusions chains the current query on the "wingetcfgexclusions" edge.
+func (aq *AgentQuery) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
+	query := (&WingetConfigExclusionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.WingetcfgexclusionsTable, agent.WingetcfgexclusionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryRelease chains the current query on the "release" edge.
 func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 	query := (&ReleaseClient{config: aq.config}).Query()
@@ -414,6 +440,28 @@ func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, selector),
 			sqlgraph.To(release.Table, release.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, agent.ReleaseTable, agent.ReleaseColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProfileissue chains the current query on the "profileissue" edge.
+func (aq *AgentQuery) QueryProfileissue() *ProfileIssueQuery {
+	query := (&ProfileIssueClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(profileissue.Table, profileissue.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, agent.ProfileissueTable, agent.ProfileissueColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -608,26 +656,28 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		return nil
 	}
 	return &AgentQuery{
-		config:              aq.config,
-		ctx:                 aq.ctx.Clone(),
-		order:               append([]agent.OrderOption{}, aq.order...),
-		inters:              append([]Interceptor{}, aq.inters...),
-		predicates:          append([]predicate.Agent{}, aq.predicates...),
-		withComputer:        aq.withComputer.Clone(),
-		withOperatingsystem: aq.withOperatingsystem.Clone(),
-		withSystemupdate:    aq.withSystemupdate.Clone(),
-		withAntivirus:       aq.withAntivirus.Clone(),
-		withLogicaldisks:    aq.withLogicaldisks.Clone(),
-		withApps:            aq.withApps.Clone(),
-		withMonitors:        aq.withMonitors.Clone(),
-		withShares:          aq.withShares.Clone(),
-		withPrinters:        aq.withPrinters.Clone(),
-		withNetworkadapters: aq.withNetworkadapters.Clone(),
-		withDeployments:     aq.withDeployments.Clone(),
-		withUpdates:         aq.withUpdates.Clone(),
-		withTags:            aq.withTags.Clone(),
-		withMetadata:        aq.withMetadata.Clone(),
-		withRelease:         aq.withRelease.Clone(),
+		config:                  aq.config,
+		ctx:                     aq.ctx.Clone(),
+		order:                   append([]agent.OrderOption{}, aq.order...),
+		inters:                  append([]Interceptor{}, aq.inters...),
+		predicates:              append([]predicate.Agent{}, aq.predicates...),
+		withComputer:            aq.withComputer.Clone(),
+		withOperatingsystem:     aq.withOperatingsystem.Clone(),
+		withSystemupdate:        aq.withSystemupdate.Clone(),
+		withAntivirus:           aq.withAntivirus.Clone(),
+		withLogicaldisks:        aq.withLogicaldisks.Clone(),
+		withApps:                aq.withApps.Clone(),
+		withMonitors:            aq.withMonitors.Clone(),
+		withShares:              aq.withShares.Clone(),
+		withPrinters:            aq.withPrinters.Clone(),
+		withNetworkadapters:     aq.withNetworkadapters.Clone(),
+		withDeployments:         aq.withDeployments.Clone(),
+		withUpdates:             aq.withUpdates.Clone(),
+		withTags:                aq.withTags.Clone(),
+		withMetadata:            aq.withMetadata.Clone(),
+		withWingetcfgexclusions: aq.withWingetcfgexclusions.Clone(),
+		withRelease:             aq.withRelease.Clone(),
+		withProfileissue:        aq.withProfileissue.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -789,6 +839,17 @@ func (aq *AgentQuery) WithMetadata(opts ...func(*MetadataQuery)) *AgentQuery {
 	return aq
 }
 
+// WithWingetcfgexclusions tells the query-builder to eager-load the nodes that are connected to
+// the "wingetcfgexclusions" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithWingetcfgexclusions(opts ...func(*WingetConfigExclusionQuery)) *AgentQuery {
+	query := (&WingetConfigExclusionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withWingetcfgexclusions = query
+	return aq
+}
+
 // WithRelease tells the query-builder to eager-load the nodes that are connected to
 // the "release" edge. The optional arguments are used to configure the query builder of the edge.
 func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
@@ -797,6 +858,17 @@ func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
 		opt(query)
 	}
 	aq.withRelease = query
+	return aq
+}
+
+// WithProfileissue tells the query-builder to eager-load the nodes that are connected to
+// the "profileissue" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithProfileissue(opts ...func(*ProfileIssueQuery)) *AgentQuery {
+	query := (&ProfileIssueClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withProfileissue = query
 	return aq
 }
 
@@ -879,7 +951,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [17]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -894,7 +966,9 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withUpdates != nil,
 			aq.withTags != nil,
 			aq.withMetadata != nil,
+			aq.withWingetcfgexclusions != nil,
 			aq.withRelease != nil,
+			aq.withProfileissue != nil,
 		}
 	)
 	if aq.withRelease != nil {
@@ -1018,9 +1092,25 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			return nil, err
 		}
 	}
+	if query := aq.withWingetcfgexclusions; query != nil {
+		if err := aq.loadWingetcfgexclusions(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Wingetcfgexclusions = []*WingetConfigExclusion{} },
+			func(n *Agent, e *WingetConfigExclusion) {
+				n.Edges.Wingetcfgexclusions = append(n.Edges.Wingetcfgexclusions, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := aq.withRelease; query != nil {
 		if err := aq.loadRelease(ctx, query, nodes, nil,
 			func(n *Agent, e *Release) { n.Edges.Release = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withProfileissue; query != nil {
+		if err := aq.loadProfileissue(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Profileissue = []*ProfileIssue{} },
+			func(n *Agent, e *ProfileIssue) { n.Edges.Profileissue = append(n.Edges.Profileissue, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1479,6 +1569,37 @@ func (aq *AgentQuery) loadMetadata(ctx context.Context, query *MetadataQuery, no
 	}
 	return nil
 }
+func (aq *AgentQuery) loadWingetcfgexclusions(ctx context.Context, query *WingetConfigExclusionQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *WingetConfigExclusion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.WingetConfigExclusion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.WingetcfgexclusionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.agent_wingetcfgexclusions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_wingetcfgexclusions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_wingetcfgexclusions" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Release)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Agent)
@@ -1508,6 +1629,37 @@ func (aq *AgentQuery) loadRelease(ctx context.Context, query *ReleaseQuery, node
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (aq *AgentQuery) loadProfileissue(ctx context.Context, query *ProfileIssueQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *ProfileIssue)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProfileIssue(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.ProfileissueColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.profile_issue_agents
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "profile_issue_agents" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "profile_issue_agents" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

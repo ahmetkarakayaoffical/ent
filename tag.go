@@ -26,6 +26,7 @@ type Tag struct {
 	// The values are being populated by the TagQuery when eager-loading is set.
 	Edges        TagEdges `json:"edges"`
 	tag_children *int
+	task_tags    *int
 	selectValues sql.SelectValues
 }
 
@@ -37,9 +38,11 @@ type TagEdges struct {
 	Parent *Tag `json:"parent,omitempty"`
 	// Children holds the value of the children edge.
 	Children []*Tag `json:"children,omitempty"`
+	// Profile holds the value of the profile edge.
+	Profile []*Profile `json:"profile,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -71,6 +74,15 @@ func (e TagEdges) ChildrenOrErr() ([]*Tag, error) {
 	return nil, &NotLoadedError{edge: "children"}
 }
 
+// ProfileOrErr returns the Profile value or an error if the edge
+// was not loaded in eager-loading.
+func (e TagEdges) ProfileOrErr() ([]*Profile, error) {
+	if e.loadedTypes[3] {
+		return e.Profile, nil
+	}
+	return nil, &NotLoadedError{edge: "profile"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -81,6 +93,8 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 		case tag.FieldTag, tag.FieldDescription, tag.FieldColor:
 			values[i] = new(sql.NullString)
 		case tag.ForeignKeys[0]: // tag_children
+			values[i] = new(sql.NullInt64)
+		case tag.ForeignKeys[1]: // task_tags
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -128,6 +142,13 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 				t.tag_children = new(int)
 				*t.tag_children = int(value.Int64)
 			}
+		case tag.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field task_tags", value)
+			} else if value.Valid {
+				t.task_tags = new(int)
+				*t.task_tags = int(value.Int64)
+			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
 		}
@@ -154,6 +175,11 @@ func (t *Tag) QueryParent() *TagQuery {
 // QueryChildren queries the "children" edge of the Tag entity.
 func (t *Tag) QueryChildren() *TagQuery {
 	return NewTagClient(t.config).QueryChildren(t)
+}
+
+// QueryProfile queries the "profile" edge of the Tag entity.
+func (t *Tag) QueryProfile() *ProfileQuery {
+	return NewTagClient(t.config).QueryProfile(t)
 }
 
 // Update returns a builder for updating this Tag.

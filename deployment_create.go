@@ -77,6 +77,20 @@ func (dc *DeploymentCreate) SetNillableUpdated(t *time.Time) *DeploymentCreate {
 	return dc
 }
 
+// SetByProfile sets the "by_profile" field.
+func (dc *DeploymentCreate) SetByProfile(b bool) *DeploymentCreate {
+	dc.mutation.SetByProfile(b)
+	return dc
+}
+
+// SetNillableByProfile sets the "by_profile" field if the given value is not nil.
+func (dc *DeploymentCreate) SetNillableByProfile(b *bool) *DeploymentCreate {
+	if b != nil {
+		dc.SetByProfile(*b)
+	}
+	return dc
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (dc *DeploymentCreate) SetOwnerID(id string) *DeploymentCreate {
 	dc.mutation.SetOwnerID(id)
@@ -130,6 +144,10 @@ func (dc *DeploymentCreate) defaults() {
 	if _, ok := dc.mutation.Updated(); !ok {
 		v := deployment.DefaultUpdated()
 		dc.mutation.SetUpdated(v)
+	}
+	if _, ok := dc.mutation.ByProfile(); !ok {
+		v := deployment.DefaultByProfile
+		dc.mutation.SetByProfile(v)
 	}
 }
 
@@ -190,6 +208,10 @@ func (dc *DeploymentCreate) createSpec() (*Deployment, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.Updated(); ok {
 		_spec.SetField(deployment.FieldUpdated, field.TypeTime, value)
 		_node.Updated = value
+	}
+	if value, ok := dc.mutation.ByProfile(); ok {
+		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)
+		_node.ByProfile = value
 	}
 	if nodes := dc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -338,6 +360,24 @@ func (u *DeploymentUpsert) ClearUpdated() *DeploymentUpsert {
 	return u
 }
 
+// SetByProfile sets the "by_profile" field.
+func (u *DeploymentUpsert) SetByProfile(v bool) *DeploymentUpsert {
+	u.Set(deployment.FieldByProfile, v)
+	return u
+}
+
+// UpdateByProfile sets the "by_profile" field to the value that was provided on create.
+func (u *DeploymentUpsert) UpdateByProfile() *DeploymentUpsert {
+	u.SetExcluded(deployment.FieldByProfile)
+	return u
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (u *DeploymentUpsert) ClearByProfile() *DeploymentUpsert {
+	u.SetNull(deployment.FieldByProfile)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -466,6 +506,27 @@ func (u *DeploymentUpsertOne) UpdateUpdated() *DeploymentUpsertOne {
 func (u *DeploymentUpsertOne) ClearUpdated() *DeploymentUpsertOne {
 	return u.Update(func(s *DeploymentUpsert) {
 		s.ClearUpdated()
+	})
+}
+
+// SetByProfile sets the "by_profile" field.
+func (u *DeploymentUpsertOne) SetByProfile(v bool) *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.SetByProfile(v)
+	})
+}
+
+// UpdateByProfile sets the "by_profile" field to the value that was provided on create.
+func (u *DeploymentUpsertOne) UpdateByProfile() *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.UpdateByProfile()
+	})
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (u *DeploymentUpsertOne) ClearByProfile() *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.ClearByProfile()
 	})
 }
 
@@ -761,6 +822,27 @@ func (u *DeploymentUpsertBulk) UpdateUpdated() *DeploymentUpsertBulk {
 func (u *DeploymentUpsertBulk) ClearUpdated() *DeploymentUpsertBulk {
 	return u.Update(func(s *DeploymentUpsert) {
 		s.ClearUpdated()
+	})
+}
+
+// SetByProfile sets the "by_profile" field.
+func (u *DeploymentUpsertBulk) SetByProfile(v bool) *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.SetByProfile(v)
+	})
+}
+
+// UpdateByProfile sets the "by_profile" field to the value that was provided on create.
+func (u *DeploymentUpsertBulk) UpdateByProfile() *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.UpdateByProfile()
+	})
+}
+
+// ClearByProfile clears the value of the "by_profile" field.
+func (u *DeploymentUpsertBulk) ClearByProfile() *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.ClearByProfile()
 	})
 }
 

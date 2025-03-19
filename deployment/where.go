@@ -80,6 +80,11 @@ func Updated(v time.Time) predicate.Deployment {
 	return predicate.Deployment(sql.FieldEQ(FieldUpdated, v))
 }
 
+// ByProfile applies equality check predicate on the "by_profile" field. It's identical to ByProfileEQ.
+func ByProfile(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldEQ(FieldByProfile, v))
+}
+
 // PackageIDEQ applies the EQ predicate on the "package_id" field.
 func PackageIDEQ(v string) predicate.Deployment {
 	return predicate.Deployment(sql.FieldEQ(FieldPackageID, v))
@@ -383,6 +388,26 @@ func UpdatedIsNil() predicate.Deployment {
 // UpdatedNotNil applies the NotNil predicate on the "updated" field.
 func UpdatedNotNil() predicate.Deployment {
 	return predicate.Deployment(sql.FieldNotNull(FieldUpdated))
+}
+
+// ByProfileEQ applies the EQ predicate on the "by_profile" field.
+func ByProfileEQ(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldEQ(FieldByProfile, v))
+}
+
+// ByProfileNEQ applies the NEQ predicate on the "by_profile" field.
+func ByProfileNEQ(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldNEQ(FieldByProfile, v))
+}
+
+// ByProfileIsNil applies the IsNil predicate on the "by_profile" field.
+func ByProfileIsNil() predicate.Deployment {
+	return predicate.Deployment(sql.FieldIsNull(FieldByProfile))
+}
+
+// ByProfileNotNil applies the NotNil predicate on the "by_profile" field.
+func ByProfileNotNil() predicate.Deployment {
+	return predicate.Deployment(sql.FieldNotNull(FieldByProfile))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
