@@ -155,6 +155,11 @@ func IsRemote(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldIsRemote, v))
 }
 
+// DebugMode applies equality check predicate on the "debug_mode" field. It's identical to DebugModeEQ.
+func DebugMode(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldDebugMode, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1253,6 +1258,26 @@ func IsRemoteIsNil() predicate.Agent {
 // IsRemoteNotNil applies the NotNil predicate on the "is_remote" field.
 func IsRemoteNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldIsRemote))
+}
+
+// DebugModeEQ applies the EQ predicate on the "debug_mode" field.
+func DebugModeEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldDebugMode, v))
+}
+
+// DebugModeNEQ applies the NEQ predicate on the "debug_mode" field.
+func DebugModeNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldDebugMode, v))
+}
+
+// DebugModeIsNil applies the IsNil predicate on the "debug_mode" field.
+func DebugModeIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldDebugMode))
+}
+
+// DebugModeNotNil applies the NotNil predicate on the "debug_mode" field.
+func DebugModeNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldDebugMode))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

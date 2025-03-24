@@ -104,6 +104,7 @@ type AgentMutation struct {
 	certificate_ready          *bool
 	restart_required           *bool
 	is_remote                  *bool
+	debug_mode                 *bool
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1139,6 +1140,55 @@ func (m *AgentMutation) ResetIsRemote() {
 	delete(m.clearedFields, agent.FieldIsRemote)
 }
 
+// SetDebugMode sets the "debug_mode" field.
+func (m *AgentMutation) SetDebugMode(b bool) {
+	m.debug_mode = &b
+}
+
+// DebugMode returns the value of the "debug_mode" field in the mutation.
+func (m *AgentMutation) DebugMode() (r bool, exists bool) {
+	v := m.debug_mode
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDebugMode returns the old "debug_mode" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldDebugMode(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDebugMode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDebugMode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDebugMode: %w", err)
+	}
+	return oldValue.DebugMode, nil
+}
+
+// ClearDebugMode clears the value of the "debug_mode" field.
+func (m *AgentMutation) ClearDebugMode() {
+	m.debug_mode = nil
+	m.clearedFields[agent.FieldDebugMode] = struct{}{}
+}
+
+// DebugModeCleared returns if the "debug_mode" field was cleared in this mutation.
+func (m *AgentMutation) DebugModeCleared() bool {
+	_, ok := m.clearedFields[agent.FieldDebugMode]
+	return ok
+}
+
+// ResetDebugMode resets all changes to the "debug_mode" field.
+func (m *AgentMutation) ResetDebugMode() {
+	m.debug_mode = nil
+	delete(m.clearedFields, agent.FieldDebugMode)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2016,7 +2066,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2074,6 +2124,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.is_remote != nil {
 		fields = append(fields, agent.FieldIsRemote)
 	}
+	if m.debug_mode != nil {
+		fields = append(fields, agent.FieldDebugMode)
+	}
 	return fields
 }
 
@@ -2120,6 +2173,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.RestartRequired()
 	case agent.FieldIsRemote:
 		return m.IsRemote()
+	case agent.FieldDebugMode:
+		return m.DebugMode()
 	}
 	return nil, false
 }
@@ -2167,6 +2222,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldRestartRequired(ctx)
 	case agent.FieldIsRemote:
 		return m.OldIsRemote(ctx)
+	case agent.FieldDebugMode:
+		return m.OldDebugMode(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2309,6 +2366,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsRemote(v)
 		return nil
+	case agent.FieldDebugMode:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDebugMode(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2384,6 +2448,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldIsRemote) {
 		fields = append(fields, agent.FieldIsRemote)
 	}
+	if m.FieldCleared(agent.FieldDebugMode) {
+		fields = append(fields, agent.FieldDebugMode)
+	}
 	return fields
 }
 
@@ -2442,6 +2509,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldIsRemote:
 		m.ClearIsRemote()
+		return nil
+	case agent.FieldDebugMode:
+		m.ClearDebugMode()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2507,6 +2577,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldIsRemote:
 		m.ResetIsRemote()
+		return nil
+	case agent.FieldDebugMode:
+		m.ResetDebugMode()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

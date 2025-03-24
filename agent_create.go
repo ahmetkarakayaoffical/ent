@@ -290,6 +290,20 @@ func (ac *AgentCreate) SetNillableIsRemote(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetDebugMode sets the "debug_mode" field.
+func (ac *AgentCreate) SetDebugMode(b bool) *AgentCreate {
+	ac.mutation.SetDebugMode(b)
+	return ac
+}
+
+// SetNillableDebugMode sets the "debug_mode" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableDebugMode(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetDebugMode(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -658,6 +672,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultIsRemote
 		ac.mutation.SetIsRemote(v)
 	}
+	if _, ok := ac.mutation.DebugMode(); !ok {
+		v := agent.DefaultDebugMode
+		ac.mutation.SetDebugMode(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -805,6 +823,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.IsRemote(); ok {
 		_spec.SetField(agent.FieldIsRemote, field.TypeBool, value)
 		_node.IsRemote = value
+	}
+	if value, ok := ac.mutation.DebugMode(); ok {
+		_spec.SetField(agent.FieldDebugMode, field.TypeBool, value)
+		_node.DebugMode = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1449,6 +1471,24 @@ func (u *AgentUpsert) ClearIsRemote() *AgentUpsert {
 	return u
 }
 
+// SetDebugMode sets the "debug_mode" field.
+func (u *AgentUpsert) SetDebugMode(v bool) *AgentUpsert {
+	u.Set(agent.FieldDebugMode, v)
+	return u
+}
+
+// UpdateDebugMode sets the "debug_mode" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateDebugMode() *AgentUpsert {
+	u.SetExcluded(agent.FieldDebugMode)
+	return u
+}
+
+// ClearDebugMode clears the value of the "debug_mode" field.
+func (u *AgentUpsert) ClearDebugMode() *AgentUpsert {
+	u.SetNull(agent.FieldDebugMode)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1865,6 +1905,27 @@ func (u *AgentUpsertOne) UpdateIsRemote() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearIsRemote() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearIsRemote()
+	})
+}
+
+// SetDebugMode sets the "debug_mode" field.
+func (u *AgentUpsertOne) SetDebugMode(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetDebugMode(v)
+	})
+}
+
+// UpdateDebugMode sets the "debug_mode" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateDebugMode() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateDebugMode()
+	})
+}
+
+// ClearDebugMode clears the value of the "debug_mode" field.
+func (u *AgentUpsertOne) ClearDebugMode() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearDebugMode()
 	})
 }
 
@@ -2451,6 +2512,27 @@ func (u *AgentUpsertBulk) UpdateIsRemote() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearIsRemote() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearIsRemote()
+	})
+}
+
+// SetDebugMode sets the "debug_mode" field.
+func (u *AgentUpsertBulk) SetDebugMode(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetDebugMode(v)
+	})
+}
+
+// UpdateDebugMode sets the "debug_mode" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateDebugMode() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateDebugMode()
+	})
+}
+
+// ClearDebugMode clears the value of the "debug_mode" field.
+func (u *AgentUpsertBulk) ClearDebugMode() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearDebugMode()
 	})
 }
 
