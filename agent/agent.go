@@ -52,6 +52,8 @@ const (
 	FieldRestartRequired = "restart_required"
 	// FieldIsRemote holds the string denoting the is_remote field in the database.
 	FieldIsRemote = "is_remote"
+	// FieldDebugMode holds the string denoting the debug_mode field in the database.
+	FieldDebugMode = "debug_mode"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -263,6 +265,7 @@ var Columns = []string{
 	FieldCertificateReady,
 	FieldRestartRequired,
 	FieldIsRemote,
+	FieldDebugMode,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -321,6 +324,8 @@ var (
 	DefaultRestartRequired bool
 	// DefaultIsRemote holds the default value on creation for the "is_remote" field.
 	DefaultIsRemote bool
+	// DefaultDebugMode holds the default value on creation for the "debug_mode" field.
+	DefaultDebugMode bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -453,6 +458,11 @@ func ByRestartRequired(opts ...sql.OrderTermOption) OrderOption {
 // ByIsRemote orders the results by the is_remote field.
 func ByIsRemote(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsRemote, opts...).ToFunc()
+}
+
+// ByDebugMode orders the results by the debug_mode field.
+func ByDebugMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDebugMode, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

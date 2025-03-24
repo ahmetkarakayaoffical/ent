@@ -83,6 +83,10 @@ func init() {
 	agentDescIsRemote := agentFields[19].Descriptor()
 	// agent.DefaultIsRemote holds the default value on creation for the is_remote field.
 	agent.DefaultIsRemote = agentDescIsRemote.Default.(bool)
+	// agentDescDebugMode is the schema descriptor for debug_mode field.
+	agentDescDebugMode := agentFields[20].Descriptor()
+	// agent.DefaultDebugMode holds the default value on creation for the debug_mode field.
+	agent.DefaultDebugMode = agentDescDebugMode.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
