@@ -15,6 +15,7 @@ import (
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
+	"github.com/open-uem/ent/softwarepackage"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/user"
@@ -225,6 +226,16 @@ func init() {
 	settingsDescProfilesApplicationFrequenceInMinutes := settingsFields[28].Descriptor()
 	// settings.DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the profiles_application_frequence_in_minutes field.
 	settings.DefaultProfilesApplicationFrequenceInMinutes = settingsDescProfilesApplicationFrequenceInMinutes.Default.(int)
+	softwarepackageFields := schema.SoftwarePackage{}.Fields()
+	_ = softwarepackageFields
+	// softwarepackageDescPackageID is the schema descriptor for package_id field.
+	softwarepackageDescPackageID := softwarepackageFields[0].Descriptor()
+	// softwarepackage.PackageIDValidator is a validator for the "package_id" field. It is called by the builders before save.
+	softwarepackage.PackageIDValidator = softwarepackageDescPackageID.Validators[0].(func(string) error)
+	// softwarepackageDescName is the schema descriptor for name field.
+	softwarepackageDescName := softwarepackageFields[1].Descriptor()
+	// softwarepackage.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	softwarepackage.NameValidator = softwarepackageDescName.Validators[0].(func(string) error)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.
