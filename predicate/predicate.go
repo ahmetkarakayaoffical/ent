@@ -69,9 +69,6 @@ type Settings func(*sql.Selector)
 // Share is the predicate function for share builders.
 type Share func(*sql.Selector)
 
-// SoftwarePackage is the predicate function for softwarepackage builders.
-type SoftwarePackage func(*sql.Selector)
-
 // SystemUpdate is the predicate function for systemupdate builders.
 type SystemUpdate func(*sql.Selector)
 

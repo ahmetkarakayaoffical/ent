@@ -36,7 +36,6 @@ import (
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/share"
-	"github.com/open-uem/ent/softwarepackage"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
@@ -92,8 +91,6 @@ type Client struct {
 	Settings *SettingsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
-	// SoftwarePackage is the client for interacting with the SoftwarePackage builders.
-	SoftwarePackage *SoftwarePackageClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
@@ -138,7 +135,6 @@ func (c *Client) init() {
 	c.Sessions = NewSessionsClient(c.config)
 	c.Settings = NewSettingsClient(c.config)
 	c.Share = NewShareClient(c.config)
-	c.SoftwarePackage = NewSoftwarePackageClient(c.config)
 	c.SystemUpdate = NewSystemUpdateClient(c.config)
 	c.Tag = NewTagClient(c.config)
 	c.Task = NewTaskClient(c.config)
@@ -258,7 +254,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
 		Share:                 NewShareClient(cfg),
-		SoftwarePackage:       NewSoftwarePackageClient(cfg),
 		SystemUpdate:          NewSystemUpdateClient(cfg),
 		Tag:                   NewTagClient(cfg),
 		Task:                  NewTaskClient(cfg),
@@ -305,7 +300,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
 		Share:                 NewShareClient(cfg),
-		SoftwarePackage:       NewSoftwarePackageClient(cfg),
 		SystemUpdate:          NewSystemUpdateClient(cfg),
 		Tag:                   NewTagClient(cfg),
 		Task:                  NewTaskClient(cfg),
@@ -344,8 +338,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
 		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
-		c.Server, c.Sessions, c.Settings, c.Share, c.SoftwarePackage, c.SystemUpdate,
-		c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
+		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
+		c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -358,8 +352,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
 		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
-		c.Server, c.Sessions, c.Settings, c.Share, c.SoftwarePackage, c.SystemUpdate,
-		c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
+		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
+		c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -410,8 +404,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Settings.mutate(ctx, m)
 	case *ShareMutation:
 		return c.Share.mutate(ctx, m)
-	case *SoftwarePackageMutation:
-		return c.SoftwarePackage.mutate(ctx, m)
 	case *SystemUpdateMutation:
 		return c.SystemUpdate.mutate(ctx, m)
 	case *TagMutation:
@@ -3830,139 +3822,6 @@ func (c *ShareClient) mutate(ctx context.Context, m *ShareMutation) (Value, erro
 	}
 }
 
-// SoftwarePackageClient is a client for the SoftwarePackage schema.
-type SoftwarePackageClient struct {
-	config
-}
-
-// NewSoftwarePackageClient returns a client for the SoftwarePackage from the given config.
-func NewSoftwarePackageClient(c config) *SoftwarePackageClient {
-	return &SoftwarePackageClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `softwarepackage.Hooks(f(g(h())))`.
-func (c *SoftwarePackageClient) Use(hooks ...Hook) {
-	c.hooks.SoftwarePackage = append(c.hooks.SoftwarePackage, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `softwarepackage.Intercept(f(g(h())))`.
-func (c *SoftwarePackageClient) Intercept(interceptors ...Interceptor) {
-	c.inters.SoftwarePackage = append(c.inters.SoftwarePackage, interceptors...)
-}
-
-// Create returns a builder for creating a SoftwarePackage entity.
-func (c *SoftwarePackageClient) Create() *SoftwarePackageCreate {
-	mutation := newSoftwarePackageMutation(c.config, OpCreate)
-	return &SoftwarePackageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of SoftwarePackage entities.
-func (c *SoftwarePackageClient) CreateBulk(builders ...*SoftwarePackageCreate) *SoftwarePackageCreateBulk {
-	return &SoftwarePackageCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *SoftwarePackageClient) MapCreateBulk(slice any, setFunc func(*SoftwarePackageCreate, int)) *SoftwarePackageCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &SoftwarePackageCreateBulk{err: fmt.Errorf("calling to SoftwarePackageClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*SoftwarePackageCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &SoftwarePackageCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for SoftwarePackage.
-func (c *SoftwarePackageClient) Update() *SoftwarePackageUpdate {
-	mutation := newSoftwarePackageMutation(c.config, OpUpdate)
-	return &SoftwarePackageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *SoftwarePackageClient) UpdateOne(sp *SoftwarePackage) *SoftwarePackageUpdateOne {
-	mutation := newSoftwarePackageMutation(c.config, OpUpdateOne, withSoftwarePackage(sp))
-	return &SoftwarePackageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *SoftwarePackageClient) UpdateOneID(id int) *SoftwarePackageUpdateOne {
-	mutation := newSoftwarePackageMutation(c.config, OpUpdateOne, withSoftwarePackageID(id))
-	return &SoftwarePackageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for SoftwarePackage.
-func (c *SoftwarePackageClient) Delete() *SoftwarePackageDelete {
-	mutation := newSoftwarePackageMutation(c.config, OpDelete)
-	return &SoftwarePackageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *SoftwarePackageClient) DeleteOne(sp *SoftwarePackage) *SoftwarePackageDeleteOne {
-	return c.DeleteOneID(sp.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *SoftwarePackageClient) DeleteOneID(id int) *SoftwarePackageDeleteOne {
-	builder := c.Delete().Where(softwarepackage.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &SoftwarePackageDeleteOne{builder}
-}
-
-// Query returns a query builder for SoftwarePackage.
-func (c *SoftwarePackageClient) Query() *SoftwarePackageQuery {
-	return &SoftwarePackageQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeSoftwarePackage},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a SoftwarePackage entity by its id.
-func (c *SoftwarePackageClient) Get(ctx context.Context, id int) (*SoftwarePackage, error) {
-	return c.Query().Where(softwarepackage.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *SoftwarePackageClient) GetX(ctx context.Context, id int) *SoftwarePackage {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *SoftwarePackageClient) Hooks() []Hook {
-	return c.hooks.SoftwarePackage
-}
-
-// Interceptors returns the client interceptors.
-func (c *SoftwarePackageClient) Interceptors() []Interceptor {
-	return c.inters.SoftwarePackage
-}
-
-func (c *SoftwarePackageClient) mutate(ctx context.Context, m *SoftwarePackageMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&SoftwarePackageCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&SoftwarePackageUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&SoftwarePackageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&SoftwarePackageDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown SoftwarePackage mutation op: %q", m.Op())
-	}
-}
-
 // SystemUpdateClient is a client for the SystemUpdate schema.
 type SystemUpdateClient struct {
 	config
@@ -4927,14 +4786,12 @@ type (
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
 		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
 		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
-		SoftwarePackage, SystemUpdate, Tag, Task, Update, User,
-		WingetConfigExclusion []ent.Hook
+		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
 		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
 		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
-		SoftwarePackage, SystemUpdate, Tag, Task, Update, User,
-		WingetConfigExclusion []ent.Interceptor
+		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )

@@ -543,19 +543,6 @@ var (
 			},
 		},
 	}
-	// SoftwarePackagesColumns holds the columns for the "software_packages" table.
-	SoftwarePackagesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "package_id", Type: field.TypeString},
-		{Name: "name", Type: field.TypeString},
-		{Name: "source", Type: field.TypeEnum, Enums: []string{"winget", "flatpak"}},
-	}
-	// SoftwarePackagesTable holds the schema information for the "software_packages" table.
-	SoftwarePackagesTable = &schema.Table{
-		Name:       "software_packages",
-		Columns:    SoftwarePackagesColumns,
-		PrimaryKey: []*schema.Column{SoftwarePackagesColumns[0]},
-	}
 	// SystemUpdatesColumns holds the columns for the "system_updates" table.
 	SystemUpdatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -794,7 +781,6 @@ var (
 		SessionsTable,
 		SettingsTable,
 		SharesTable,
-		SoftwarePackagesTable,
 		SystemUpdatesTable,
 		TagsTable,
 		TasksTable,

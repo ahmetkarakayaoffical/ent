@@ -54,8 +54,6 @@ type Tx struct {
 	Settings *SettingsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
-	// SoftwarePackage is the client for interacting with the SoftwarePackage builders.
-	SoftwarePackage *SoftwarePackageClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
@@ -220,7 +218,6 @@ func (tx *Tx) init() {
 	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Settings = NewSettingsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)
-	tx.SoftwarePackage = NewSoftwarePackageClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
 	tx.Tag = NewTagClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
