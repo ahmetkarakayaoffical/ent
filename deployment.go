@@ -28,6 +28,8 @@ type Deployment struct {
 	Installed time.Time `json:"installed,omitempty"`
 	// Updated holds the value of the "updated" field.
 	Updated time.Time `json:"updated,omitempty"`
+	// Failed holds the value of the "failed" field.
+	Failed bool `json:"failed,omitempty"`
 	// ByProfile holds the value of the "by_profile" field.
 	ByProfile bool `json:"by_profile,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -62,7 +64,7 @@ func (*Deployment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case deployment.FieldByProfile:
+		case deployment.FieldFailed, deployment.FieldByProfile:
 			values[i] = new(sql.NullBool)
 		case deployment.FieldID:
 			values[i] = new(sql.NullInt64)
@@ -122,6 +124,12 @@ func (d *Deployment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated", values[i])
 			} else if value.Valid {
 				d.Updated = value.Time
+			}
+		case deployment.FieldFailed:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field failed", values[i])
+			} else if value.Valid {
+				d.Failed = value.Bool
 			}
 		case deployment.FieldByProfile:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -191,6 +199,9 @@ func (d *Deployment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated=")
 	builder.WriteString(d.Updated.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("failed=")
+	builder.WriteString(fmt.Sprintf("%v", d.Failed))
 	builder.WriteString(", ")
 	builder.WriteString("by_profile=")
 	builder.WriteString(fmt.Sprintf("%v", d.ByProfile))

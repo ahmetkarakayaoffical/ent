@@ -140,6 +140,7 @@ var (
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "installed", Type: field.TypeTime, Nullable: true},
 		{Name: "updated", Type: field.TypeTime, Nullable: true},
+		{Name: "failed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "by_profile", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "agent_deployments", Type: field.TypeString},
 	}
@@ -151,7 +152,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "deployments_agents_deployments",
-				Columns:    []*schema.Column{DeploymentsColumns[7]},
+				Columns:    []*schema.Column{DeploymentsColumns[8]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

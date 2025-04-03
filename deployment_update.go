@@ -110,6 +110,26 @@ func (du *DeploymentUpdate) ClearUpdated() *DeploymentUpdate {
 	return du
 }
 
+// SetFailed sets the "failed" field.
+func (du *DeploymentUpdate) SetFailed(b bool) *DeploymentUpdate {
+	du.mutation.SetFailed(b)
+	return du
+}
+
+// SetNillableFailed sets the "failed" field if the given value is not nil.
+func (du *DeploymentUpdate) SetNillableFailed(b *bool) *DeploymentUpdate {
+	if b != nil {
+		du.SetFailed(*b)
+	}
+	return du
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (du *DeploymentUpdate) ClearFailed() *DeploymentUpdate {
+	du.mutation.ClearFailed()
+	return du
+}
+
 // SetByProfile sets the "by_profile" field.
 func (du *DeploymentUpdate) SetByProfile(b bool) *DeploymentUpdate {
 	du.mutation.SetByProfile(b)
@@ -237,6 +257,12 @@ func (du *DeploymentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.UpdatedCleared() {
 		_spec.ClearField(deployment.FieldUpdated, field.TypeTime)
+	}
+	if value, ok := du.mutation.Failed(); ok {
+		_spec.SetField(deployment.FieldFailed, field.TypeBool, value)
+	}
+	if du.mutation.FailedCleared() {
+		_spec.ClearField(deployment.FieldFailed, field.TypeBool)
 	}
 	if value, ok := du.mutation.ByProfile(); ok {
 		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)
@@ -372,6 +398,26 @@ func (duo *DeploymentUpdateOne) SetUpdated(t time.Time) *DeploymentUpdateOne {
 // ClearUpdated clears the value of the "updated" field.
 func (duo *DeploymentUpdateOne) ClearUpdated() *DeploymentUpdateOne {
 	duo.mutation.ClearUpdated()
+	return duo
+}
+
+// SetFailed sets the "failed" field.
+func (duo *DeploymentUpdateOne) SetFailed(b bool) *DeploymentUpdateOne {
+	duo.mutation.SetFailed(b)
+	return duo
+}
+
+// SetNillableFailed sets the "failed" field if the given value is not nil.
+func (duo *DeploymentUpdateOne) SetNillableFailed(b *bool) *DeploymentUpdateOne {
+	if b != nil {
+		duo.SetFailed(*b)
+	}
+	return duo
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (duo *DeploymentUpdateOne) ClearFailed() *DeploymentUpdateOne {
+	duo.mutation.ClearFailed()
 	return duo
 }
 
@@ -532,6 +578,12 @@ func (duo *DeploymentUpdateOne) sqlSave(ctx context.Context) (_node *Deployment,
 	}
 	if duo.mutation.UpdatedCleared() {
 		_spec.ClearField(deployment.FieldUpdated, field.TypeTime)
+	}
+	if value, ok := duo.mutation.Failed(); ok {
+		_spec.SetField(deployment.FieldFailed, field.TypeBool, value)
+	}
+	if duo.mutation.FailedCleared() {
+		_spec.ClearField(deployment.FieldFailed, field.TypeBool)
 	}
 	if value, ok := duo.mutation.ByProfile(); ok {
 		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)

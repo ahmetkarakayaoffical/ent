@@ -21,6 +21,7 @@ func (Deployment) Fields() []ent.Field {
 		field.String("version").Optional(),
 		field.Time("installed").Optional().Default(time.Now),
 		field.Time("updated").Optional().Default(time.Now).UpdateDefault(time.Now),
+		field.Bool("failed").Optional().Default(false),
 		field.Bool("by_profile").Optional().Default(false),
 	}
 }

@@ -5631,6 +5631,7 @@ type DeploymentMutation struct {
 	version       *string
 	installed     *time.Time
 	updated       *time.Time
+	failed        *bool
 	by_profile    *bool
 	clearedFields map[string]struct{}
 	owner         *string
@@ -5957,6 +5958,55 @@ func (m *DeploymentMutation) ResetUpdated() {
 	delete(m.clearedFields, deployment.FieldUpdated)
 }
 
+// SetFailed sets the "failed" field.
+func (m *DeploymentMutation) SetFailed(b bool) {
+	m.failed = &b
+}
+
+// Failed returns the value of the "failed" field in the mutation.
+func (m *DeploymentMutation) Failed() (r bool, exists bool) {
+	v := m.failed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFailed returns the old "failed" field's value of the Deployment entity.
+// If the Deployment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeploymentMutation) OldFailed(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFailed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFailed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFailed: %w", err)
+	}
+	return oldValue.Failed, nil
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (m *DeploymentMutation) ClearFailed() {
+	m.failed = nil
+	m.clearedFields[deployment.FieldFailed] = struct{}{}
+}
+
+// FailedCleared returns if the "failed" field was cleared in this mutation.
+func (m *DeploymentMutation) FailedCleared() bool {
+	_, ok := m.clearedFields[deployment.FieldFailed]
+	return ok
+}
+
+// ResetFailed resets all changes to the "failed" field.
+func (m *DeploymentMutation) ResetFailed() {
+	m.failed = nil
+	delete(m.clearedFields, deployment.FieldFailed)
+}
+
 // SetByProfile sets the "by_profile" field.
 func (m *DeploymentMutation) SetByProfile(b bool) {
 	m.by_profile = &b
@@ -6079,7 +6129,7 @@ func (m *DeploymentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DeploymentMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.package_id != nil {
 		fields = append(fields, deployment.FieldPackageID)
 	}
@@ -6094,6 +6144,9 @@ func (m *DeploymentMutation) Fields() []string {
 	}
 	if m.updated != nil {
 		fields = append(fields, deployment.FieldUpdated)
+	}
+	if m.failed != nil {
+		fields = append(fields, deployment.FieldFailed)
 	}
 	if m.by_profile != nil {
 		fields = append(fields, deployment.FieldByProfile)
@@ -6116,6 +6169,8 @@ func (m *DeploymentMutation) Field(name string) (ent.Value, bool) {
 		return m.Installed()
 	case deployment.FieldUpdated:
 		return m.Updated()
+	case deployment.FieldFailed:
+		return m.Failed()
 	case deployment.FieldByProfile:
 		return m.ByProfile()
 	}
@@ -6137,6 +6192,8 @@ func (m *DeploymentMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldInstalled(ctx)
 	case deployment.FieldUpdated:
 		return m.OldUpdated(ctx)
+	case deployment.FieldFailed:
+		return m.OldFailed(ctx)
 	case deployment.FieldByProfile:
 		return m.OldByProfile(ctx)
 	}
@@ -6182,6 +6239,13 @@ func (m *DeploymentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdated(v)
+		return nil
+	case deployment.FieldFailed:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFailed(v)
 		return nil
 	case deployment.FieldByProfile:
 		v, ok := value.(bool)
@@ -6229,6 +6293,9 @@ func (m *DeploymentMutation) ClearedFields() []string {
 	if m.FieldCleared(deployment.FieldUpdated) {
 		fields = append(fields, deployment.FieldUpdated)
 	}
+	if m.FieldCleared(deployment.FieldFailed) {
+		fields = append(fields, deployment.FieldFailed)
+	}
 	if m.FieldCleared(deployment.FieldByProfile) {
 		fields = append(fields, deployment.FieldByProfile)
 	}
@@ -6255,6 +6322,9 @@ func (m *DeploymentMutation) ClearField(name string) error {
 	case deployment.FieldUpdated:
 		m.ClearUpdated()
 		return nil
+	case deployment.FieldFailed:
+		m.ClearFailed()
+		return nil
 	case deployment.FieldByProfile:
 		m.ClearByProfile()
 		return nil
@@ -6280,6 +6350,9 @@ func (m *DeploymentMutation) ResetField(name string) error {
 		return nil
 	case deployment.FieldUpdated:
 		m.ResetUpdated()
+		return nil
+	case deployment.FieldFailed:
+		m.ResetFailed()
 		return nil
 	case deployment.FieldByProfile:
 		m.ResetByProfile()

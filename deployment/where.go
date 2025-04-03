@@ -80,6 +80,11 @@ func Updated(v time.Time) predicate.Deployment {
 	return predicate.Deployment(sql.FieldEQ(FieldUpdated, v))
 }
 
+// Failed applies equality check predicate on the "failed" field. It's identical to FailedEQ.
+func Failed(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldEQ(FieldFailed, v))
+}
+
 // ByProfile applies equality check predicate on the "by_profile" field. It's identical to ByProfileEQ.
 func ByProfile(v bool) predicate.Deployment {
 	return predicate.Deployment(sql.FieldEQ(FieldByProfile, v))
@@ -388,6 +393,26 @@ func UpdatedIsNil() predicate.Deployment {
 // UpdatedNotNil applies the NotNil predicate on the "updated" field.
 func UpdatedNotNil() predicate.Deployment {
 	return predicate.Deployment(sql.FieldNotNull(FieldUpdated))
+}
+
+// FailedEQ applies the EQ predicate on the "failed" field.
+func FailedEQ(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldEQ(FieldFailed, v))
+}
+
+// FailedNEQ applies the NEQ predicate on the "failed" field.
+func FailedNEQ(v bool) predicate.Deployment {
+	return predicate.Deployment(sql.FieldNEQ(FieldFailed, v))
+}
+
+// FailedIsNil applies the IsNil predicate on the "failed" field.
+func FailedIsNil() predicate.Deployment {
+	return predicate.Deployment(sql.FieldIsNull(FieldFailed))
+}
+
+// FailedNotNil applies the NotNil predicate on the "failed" field.
+func FailedNotNil() predicate.Deployment {
+	return predicate.Deployment(sql.FieldNotNull(FieldFailed))
 }
 
 // ByProfileEQ applies the EQ predicate on the "by_profile" field.

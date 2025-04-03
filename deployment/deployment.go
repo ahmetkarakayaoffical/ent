@@ -24,6 +24,8 @@ const (
 	FieldInstalled = "installed"
 	// FieldUpdated holds the string denoting the updated field in the database.
 	FieldUpdated = "updated"
+	// FieldFailed holds the string denoting the failed field in the database.
+	FieldFailed = "failed"
 	// FieldByProfile holds the string denoting the by_profile field in the database.
 	FieldByProfile = "by_profile"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -49,6 +51,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldInstalled,
 	FieldUpdated,
+	FieldFailed,
 	FieldByProfile,
 }
 
@@ -80,6 +83,8 @@ var (
 	DefaultUpdated func() time.Time
 	// UpdateDefaultUpdated holds the default value on update for the "updated" field.
 	UpdateDefaultUpdated func() time.Time
+	// DefaultFailed holds the default value on creation for the "failed" field.
+	DefaultFailed bool
 	// DefaultByProfile holds the default value on creation for the "by_profile" field.
 	DefaultByProfile bool
 )
@@ -115,6 +120,11 @@ func ByInstalled(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdated orders the results by the updated field.
 func ByUpdated(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdated, opts...).ToFunc()
+}
+
+// ByFailed orders the results by the failed field.
+func ByFailed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFailed, opts...).ToFunc()
 }
 
 // ByByProfile orders the results by the by_profile field.
