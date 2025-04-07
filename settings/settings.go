@@ -72,6 +72,10 @@ const (
 	FieldRequestVncPin = "request_vnc_pin"
 	// FieldProfilesApplicationFrequenceInMinutes holds the string denoting the profiles_application_frequence_in_minutes field in the database.
 	FieldProfilesApplicationFrequenceInMinutes = "profiles_application_frequence_in_minutes"
+	// FieldUseWinget holds the string denoting the use_winget field in the database.
+	FieldUseWinget = "use_winget"
+	// FieldUseFlatpak holds the string denoting the use_flatpak field in the database.
+	FieldUseFlatpak = "use_flatpak"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -117,6 +121,8 @@ var Columns = []string{
 	FieldAgentReportFrequenceInMinutes,
 	FieldRequestVncPin,
 	FieldProfilesApplicationFrequenceInMinutes,
+	FieldUseWinget,
+	FieldUseFlatpak,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -175,6 +181,10 @@ var (
 	DefaultRequestVncPin bool
 	// DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the "profiles_application_frequence_in_minutes" field.
 	DefaultProfilesApplicationFrequenceInMinutes int
+	// DefaultUseWinget holds the default value on creation for the "use_winget" field.
+	DefaultUseWinget bool
+	// DefaultUseFlatpak holds the default value on creation for the "use_flatpak" field.
+	DefaultUseFlatpak bool
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -328,6 +338,16 @@ func ByRequestVncPin(opts ...sql.OrderTermOption) OrderOption {
 // ByProfilesApplicationFrequenceInMinutes orders the results by the profiles_application_frequence_in_minutes field.
 func ByProfilesApplicationFrequenceInMinutes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProfilesApplicationFrequenceInMinutes, opts...).ToFunc()
+}
+
+// ByUseWinget orders the results by the use_winget field.
+func ByUseWinget(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUseWinget, opts...).ToFunc()
+}
+
+// ByUseFlatpak orders the results by the use_flatpak field.
+func ByUseFlatpak(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUseFlatpak, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.

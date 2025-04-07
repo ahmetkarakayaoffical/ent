@@ -429,6 +429,34 @@ func (sc *SettingsCreate) SetNillableProfilesApplicationFrequenceInMinutes(i *in
 	return sc
 }
 
+// SetUseWinget sets the "use_winget" field.
+func (sc *SettingsCreate) SetUseWinget(b bool) *SettingsCreate {
+	sc.mutation.SetUseWinget(b)
+	return sc
+}
+
+// SetNillableUseWinget sets the "use_winget" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableUseWinget(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetUseWinget(*b)
+	}
+	return sc
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (sc *SettingsCreate) SetUseFlatpak(b bool) *SettingsCreate {
+	sc.mutation.SetUseFlatpak(b)
+	return sc
+}
+
+// SetNillableUseFlatpak sets the "use_flatpak" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableUseFlatpak(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetUseFlatpak(*b)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -546,6 +574,14 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.ProfilesApplicationFrequenceInMinutes(); !ok {
 		v := settings.DefaultProfilesApplicationFrequenceInMinutes
 		sc.mutation.SetProfilesApplicationFrequenceInMinutes(v)
+	}
+	if _, ok := sc.mutation.UseWinget(); !ok {
+		v := settings.DefaultUseWinget
+		sc.mutation.SetUseWinget(v)
+	}
+	if _, ok := sc.mutation.UseFlatpak(); !ok {
+		v := settings.DefaultUseFlatpak
+		sc.mutation.SetUseFlatpak(v)
 	}
 }
 
@@ -693,6 +729,14 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.ProfilesApplicationFrequenceInMinutes(); ok {
 		_spec.SetField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt, value)
 		_node.ProfilesApplicationFrequenceInMinutes = value
+	}
+	if value, ok := sc.mutation.UseWinget(); ok {
+		_spec.SetField(settings.FieldUseWinget, field.TypeBool, value)
+		_node.UseWinget = value
+	}
+	if value, ok := sc.mutation.UseFlatpak(); ok {
+		_spec.SetField(settings.FieldUseFlatpak, field.TypeBool, value)
+		_node.UseFlatpak = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1324,6 +1368,42 @@ func (u *SettingsUpsert) AddProfilesApplicationFrequenceInMinutes(v int) *Settin
 // ClearProfilesApplicationFrequenceInMinutes clears the value of the "profiles_application_frequence_in_minutes" field.
 func (u *SettingsUpsert) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsert {
 	u.SetNull(settings.FieldProfilesApplicationFrequenceInMinutes)
+	return u
+}
+
+// SetUseWinget sets the "use_winget" field.
+func (u *SettingsUpsert) SetUseWinget(v bool) *SettingsUpsert {
+	u.Set(settings.FieldUseWinget, v)
+	return u
+}
+
+// UpdateUseWinget sets the "use_winget" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateUseWinget() *SettingsUpsert {
+	u.SetExcluded(settings.FieldUseWinget)
+	return u
+}
+
+// ClearUseWinget clears the value of the "use_winget" field.
+func (u *SettingsUpsert) ClearUseWinget() *SettingsUpsert {
+	u.SetNull(settings.FieldUseWinget)
+	return u
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (u *SettingsUpsert) SetUseFlatpak(v bool) *SettingsUpsert {
+	u.Set(settings.FieldUseFlatpak, v)
+	return u
+}
+
+// UpdateUseFlatpak sets the "use_flatpak" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateUseFlatpak() *SettingsUpsert {
+	u.SetExcluded(settings.FieldUseFlatpak)
+	return u
+}
+
+// ClearUseFlatpak clears the value of the "use_flatpak" field.
+func (u *SettingsUpsert) ClearUseFlatpak() *SettingsUpsert {
+	u.SetNull(settings.FieldUseFlatpak)
 	return u
 }
 
@@ -2022,6 +2102,48 @@ func (u *SettingsUpsertOne) UpdateProfilesApplicationFrequenceInMinutes() *Setti
 func (u *SettingsUpsertOne) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearProfilesApplicationFrequenceInMinutes()
+	})
+}
+
+// SetUseWinget sets the "use_winget" field.
+func (u *SettingsUpsertOne) SetUseWinget(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseWinget(v)
+	})
+}
+
+// UpdateUseWinget sets the "use_winget" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateUseWinget() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseWinget()
+	})
+}
+
+// ClearUseWinget clears the value of the "use_winget" field.
+func (u *SettingsUpsertOne) ClearUseWinget() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseWinget()
+	})
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (u *SettingsUpsertOne) SetUseFlatpak(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseFlatpak(v)
+	})
+}
+
+// UpdateUseFlatpak sets the "use_flatpak" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateUseFlatpak() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseFlatpak()
+	})
+}
+
+// ClearUseFlatpak clears the value of the "use_flatpak" field.
+func (u *SettingsUpsertOne) ClearUseFlatpak() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseFlatpak()
 	})
 }
 
@@ -2884,6 +3006,48 @@ func (u *SettingsUpsertBulk) UpdateProfilesApplicationFrequenceInMinutes() *Sett
 func (u *SettingsUpsertBulk) ClearProfilesApplicationFrequenceInMinutes() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearProfilesApplicationFrequenceInMinutes()
+	})
+}
+
+// SetUseWinget sets the "use_winget" field.
+func (u *SettingsUpsertBulk) SetUseWinget(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseWinget(v)
+	})
+}
+
+// UpdateUseWinget sets the "use_winget" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateUseWinget() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseWinget()
+	})
+}
+
+// ClearUseWinget clears the value of the "use_winget" field.
+func (u *SettingsUpsertBulk) ClearUseWinget() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseWinget()
+	})
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (u *SettingsUpsertBulk) SetUseFlatpak(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseFlatpak(v)
+	})
+}
+
+// UpdateUseFlatpak sets the "use_flatpak" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateUseFlatpak() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseFlatpak()
+	})
+}
+
+// ClearUseFlatpak clears the value of the "use_flatpak" field.
+func (u *SettingsUpsertBulk) ClearUseFlatpak() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseFlatpak()
 	})
 }
 

@@ -506,6 +506,8 @@ var (
 		{Name: "agent_report_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 60},
 		{Name: "request_vnc_pin", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "profiles_application_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 30},
+		{Name: "use_winget", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "use_flatpak", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
@@ -516,7 +518,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[30]},
+				Columns:    []*schema.Column{SettingsColumns[32]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

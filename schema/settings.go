@@ -45,6 +45,8 @@ func (Settings) Fields() []ent.Field {
 		field.Int("agent_report_frequence_in_minutes").Optional().Default(60),
 		field.Bool("request_vnc_pin").Optional().Default(true),
 		field.Int("profiles_application_frequence_in_minutes").Optional().Default(30),
+		field.Bool("use_winget").Optional().Default(true),
+		field.Bool("use_flatpak").Optional().Default(true),
 	}
 }
 

@@ -651,6 +651,46 @@ func (su *SettingsUpdate) ClearProfilesApplicationFrequenceInMinutes() *Settings
 	return su
 }
 
+// SetUseWinget sets the "use_winget" field.
+func (su *SettingsUpdate) SetUseWinget(b bool) *SettingsUpdate {
+	su.mutation.SetUseWinget(b)
+	return su
+}
+
+// SetNillableUseWinget sets the "use_winget" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableUseWinget(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetUseWinget(*b)
+	}
+	return su
+}
+
+// ClearUseWinget clears the value of the "use_winget" field.
+func (su *SettingsUpdate) ClearUseWinget() *SettingsUpdate {
+	su.mutation.ClearUseWinget()
+	return su
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (su *SettingsUpdate) SetUseFlatpak(b bool) *SettingsUpdate {
+	su.mutation.SetUseFlatpak(b)
+	return su
+}
+
+// SetNillableUseFlatpak sets the "use_flatpak" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableUseFlatpak(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetUseFlatpak(*b)
+	}
+	return su
+}
+
+// ClearUseFlatpak clears the value of the "use_flatpak" field.
+func (su *SettingsUpdate) ClearUseFlatpak() *SettingsUpdate {
+	su.mutation.ClearUseFlatpak()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -926,6 +966,18 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ProfilesApplicationFrequenceInMinutesCleared() {
 		_spec.ClearField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt)
+	}
+	if value, ok := su.mutation.UseWinget(); ok {
+		_spec.SetField(settings.FieldUseWinget, field.TypeBool, value)
+	}
+	if su.mutation.UseWingetCleared() {
+		_spec.ClearField(settings.FieldUseWinget, field.TypeBool)
+	}
+	if value, ok := su.mutation.UseFlatpak(); ok {
+		_spec.SetField(settings.FieldUseFlatpak, field.TypeBool, value)
+	}
+	if su.mutation.UseFlatpakCleared() {
+		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1599,6 +1651,46 @@ func (suo *SettingsUpdateOne) ClearProfilesApplicationFrequenceInMinutes() *Sett
 	return suo
 }
 
+// SetUseWinget sets the "use_winget" field.
+func (suo *SettingsUpdateOne) SetUseWinget(b bool) *SettingsUpdateOne {
+	suo.mutation.SetUseWinget(b)
+	return suo
+}
+
+// SetNillableUseWinget sets the "use_winget" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableUseWinget(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetUseWinget(*b)
+	}
+	return suo
+}
+
+// ClearUseWinget clears the value of the "use_winget" field.
+func (suo *SettingsUpdateOne) ClearUseWinget() *SettingsUpdateOne {
+	suo.mutation.ClearUseWinget()
+	return suo
+}
+
+// SetUseFlatpak sets the "use_flatpak" field.
+func (suo *SettingsUpdateOne) SetUseFlatpak(b bool) *SettingsUpdateOne {
+	suo.mutation.SetUseFlatpak(b)
+	return suo
+}
+
+// SetNillableUseFlatpak sets the "use_flatpak" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableUseFlatpak(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetUseFlatpak(*b)
+	}
+	return suo
+}
+
+// ClearUseFlatpak clears the value of the "use_flatpak" field.
+func (suo *SettingsUpdateOne) ClearUseFlatpak() *SettingsUpdateOne {
+	suo.mutation.ClearUseFlatpak()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -1904,6 +1996,18 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.ProfilesApplicationFrequenceInMinutesCleared() {
 		_spec.ClearField(settings.FieldProfilesApplicationFrequenceInMinutes, field.TypeInt)
+	}
+	if value, ok := suo.mutation.UseWinget(); ok {
+		_spec.SetField(settings.FieldUseWinget, field.TypeBool, value)
+	}
+	if suo.mutation.UseWingetCleared() {
+		_spec.ClearField(settings.FieldUseWinget, field.TypeBool)
+	}
+	if value, ok := suo.mutation.UseFlatpak(); ok {
+		_spec.SetField(settings.FieldUseFlatpak, field.TypeBool, value)
+	}
+	if suo.mutation.UseFlatpakCleared() {
+		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

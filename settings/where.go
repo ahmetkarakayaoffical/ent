@@ -200,6 +200,16 @@ func ProfilesApplicationFrequenceInMinutes(v int) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldProfilesApplicationFrequenceInMinutes, v))
 }
 
+// UseWinget applies equality check predicate on the "use_winget" field. It's identical to UseWingetEQ.
+func UseWinget(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseWinget, v))
+}
+
+// UseFlatpak applies equality check predicate on the "use_flatpak" field. It's identical to UseFlatpakEQ.
+func UseFlatpak(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseFlatpak, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -1983,6 +1993,46 @@ func ProfilesApplicationFrequenceInMinutesIsNil() predicate.Settings {
 // ProfilesApplicationFrequenceInMinutesNotNil applies the NotNil predicate on the "profiles_application_frequence_in_minutes" field.
 func ProfilesApplicationFrequenceInMinutesNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldProfilesApplicationFrequenceInMinutes))
+}
+
+// UseWingetEQ applies the EQ predicate on the "use_winget" field.
+func UseWingetEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseWinget, v))
+}
+
+// UseWingetNEQ applies the NEQ predicate on the "use_winget" field.
+func UseWingetNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldUseWinget, v))
+}
+
+// UseWingetIsNil applies the IsNil predicate on the "use_winget" field.
+func UseWingetIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldUseWinget))
+}
+
+// UseWingetNotNil applies the NotNil predicate on the "use_winget" field.
+func UseWingetNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldUseWinget))
+}
+
+// UseFlatpakEQ applies the EQ predicate on the "use_flatpak" field.
+func UseFlatpakEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseFlatpak, v))
+}
+
+// UseFlatpakNEQ applies the NEQ predicate on the "use_flatpak" field.
+func UseFlatpakNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldUseFlatpak, v))
+}
+
+// UseFlatpakIsNil applies the IsNil predicate on the "use_flatpak" field.
+func UseFlatpakIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldUseFlatpak))
+}
+
+// UseFlatpakNotNil applies the NotNil predicate on the "use_flatpak" field.
+func UseFlatpakNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldUseFlatpak))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.
