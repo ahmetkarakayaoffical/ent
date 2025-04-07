@@ -103,8 +103,12 @@ func init() {
 	deployment.DefaultUpdated = deploymentDescUpdated.Default.(func() time.Time)
 	// deployment.UpdateDefaultUpdated holds the default value on update for the updated field.
 	deployment.UpdateDefaultUpdated = deploymentDescUpdated.UpdateDefault.(func() time.Time)
+	// deploymentDescFailed is the schema descriptor for failed field.
+	deploymentDescFailed := deploymentFields[5].Descriptor()
+	// deployment.DefaultFailed holds the default value on creation for the failed field.
+	deployment.DefaultFailed = deploymentDescFailed.Default.(bool)
 	// deploymentDescByProfile is the schema descriptor for by_profile field.
-	deploymentDescByProfile := deploymentFields[5].Descriptor()
+	deploymentDescByProfile := deploymentFields[6].Descriptor()
 	// deployment.DefaultByProfile holds the default value on creation for the by_profile field.
 	deployment.DefaultByProfile = deploymentDescByProfile.Default.(bool)
 	logicaldiskFields := schema.LogicalDisk{}.Fields()
@@ -225,6 +229,14 @@ func init() {
 	settingsDescProfilesApplicationFrequenceInMinutes := settingsFields[28].Descriptor()
 	// settings.DefaultProfilesApplicationFrequenceInMinutes holds the default value on creation for the profiles_application_frequence_in_minutes field.
 	settings.DefaultProfilesApplicationFrequenceInMinutes = settingsDescProfilesApplicationFrequenceInMinutes.Default.(int)
+	// settingsDescUseWinget is the schema descriptor for use_winget field.
+	settingsDescUseWinget := settingsFields[29].Descriptor()
+	// settings.DefaultUseWinget holds the default value on creation for the use_winget field.
+	settings.DefaultUseWinget = settingsDescUseWinget.Default.(bool)
+	// settingsDescUseFlatpak is the schema descriptor for use_flatpak field.
+	settingsDescUseFlatpak := settingsFields[30].Descriptor()
+	// settings.DefaultUseFlatpak holds the default value on creation for the use_flatpak field.
+	settings.DefaultUseFlatpak = settingsDescUseFlatpak.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

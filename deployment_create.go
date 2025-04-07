@@ -77,6 +77,20 @@ func (dc *DeploymentCreate) SetNillableUpdated(t *time.Time) *DeploymentCreate {
 	return dc
 }
 
+// SetFailed sets the "failed" field.
+func (dc *DeploymentCreate) SetFailed(b bool) *DeploymentCreate {
+	dc.mutation.SetFailed(b)
+	return dc
+}
+
+// SetNillableFailed sets the "failed" field if the given value is not nil.
+func (dc *DeploymentCreate) SetNillableFailed(b *bool) *DeploymentCreate {
+	if b != nil {
+		dc.SetFailed(*b)
+	}
+	return dc
+}
+
 // SetByProfile sets the "by_profile" field.
 func (dc *DeploymentCreate) SetByProfile(b bool) *DeploymentCreate {
 	dc.mutation.SetByProfile(b)
@@ -145,6 +159,10 @@ func (dc *DeploymentCreate) defaults() {
 		v := deployment.DefaultUpdated()
 		dc.mutation.SetUpdated(v)
 	}
+	if _, ok := dc.mutation.Failed(); !ok {
+		v := deployment.DefaultFailed
+		dc.mutation.SetFailed(v)
+	}
 	if _, ok := dc.mutation.ByProfile(); !ok {
 		v := deployment.DefaultByProfile
 		dc.mutation.SetByProfile(v)
@@ -208,6 +226,10 @@ func (dc *DeploymentCreate) createSpec() (*Deployment, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.Updated(); ok {
 		_spec.SetField(deployment.FieldUpdated, field.TypeTime, value)
 		_node.Updated = value
+	}
+	if value, ok := dc.mutation.Failed(); ok {
+		_spec.SetField(deployment.FieldFailed, field.TypeBool, value)
+		_node.Failed = value
 	}
 	if value, ok := dc.mutation.ByProfile(); ok {
 		_spec.SetField(deployment.FieldByProfile, field.TypeBool, value)
@@ -360,6 +382,24 @@ func (u *DeploymentUpsert) ClearUpdated() *DeploymentUpsert {
 	return u
 }
 
+// SetFailed sets the "failed" field.
+func (u *DeploymentUpsert) SetFailed(v bool) *DeploymentUpsert {
+	u.Set(deployment.FieldFailed, v)
+	return u
+}
+
+// UpdateFailed sets the "failed" field to the value that was provided on create.
+func (u *DeploymentUpsert) UpdateFailed() *DeploymentUpsert {
+	u.SetExcluded(deployment.FieldFailed)
+	return u
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (u *DeploymentUpsert) ClearFailed() *DeploymentUpsert {
+	u.SetNull(deployment.FieldFailed)
+	return u
+}
+
 // SetByProfile sets the "by_profile" field.
 func (u *DeploymentUpsert) SetByProfile(v bool) *DeploymentUpsert {
 	u.Set(deployment.FieldByProfile, v)
@@ -506,6 +546,27 @@ func (u *DeploymentUpsertOne) UpdateUpdated() *DeploymentUpsertOne {
 func (u *DeploymentUpsertOne) ClearUpdated() *DeploymentUpsertOne {
 	return u.Update(func(s *DeploymentUpsert) {
 		s.ClearUpdated()
+	})
+}
+
+// SetFailed sets the "failed" field.
+func (u *DeploymentUpsertOne) SetFailed(v bool) *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.SetFailed(v)
+	})
+}
+
+// UpdateFailed sets the "failed" field to the value that was provided on create.
+func (u *DeploymentUpsertOne) UpdateFailed() *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.UpdateFailed()
+	})
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (u *DeploymentUpsertOne) ClearFailed() *DeploymentUpsertOne {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.ClearFailed()
 	})
 }
 
@@ -822,6 +883,27 @@ func (u *DeploymentUpsertBulk) UpdateUpdated() *DeploymentUpsertBulk {
 func (u *DeploymentUpsertBulk) ClearUpdated() *DeploymentUpsertBulk {
 	return u.Update(func(s *DeploymentUpsert) {
 		s.ClearUpdated()
+	})
+}
+
+// SetFailed sets the "failed" field.
+func (u *DeploymentUpsertBulk) SetFailed(v bool) *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.SetFailed(v)
+	})
+}
+
+// UpdateFailed sets the "failed" field to the value that was provided on create.
+func (u *DeploymentUpsertBulk) UpdateFailed() *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.UpdateFailed()
+	})
+}
+
+// ClearFailed clears the value of the "failed" field.
+func (u *DeploymentUpsertBulk) ClearFailed() *DeploymentUpsertBulk {
+	return u.Update(func(s *DeploymentUpsert) {
+		s.ClearFailed()
 	})
 }
 

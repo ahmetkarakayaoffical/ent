@@ -76,6 +76,10 @@ type Settings struct {
 	RequestVncPin bool `json:"request_vnc_pin,omitempty"`
 	// ProfilesApplicationFrequenceInMinutes holds the value of the "profiles_application_frequence_in_minutes" field.
 	ProfilesApplicationFrequenceInMinutes int `json:"profiles_application_frequence_in_minutes,omitempty"`
+	// UseWinget holds the value of the "use_winget" field.
+	UseWinget bool `json:"use_winget,omitempty"`
+	// UseFlatpak holds the value of the "use_flatpak" field.
+	UseFlatpak bool `json:"use_flatpak,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettingsQuery when eager-loading is set.
 	Edges        SettingsEdges `json:"edges"`
@@ -108,7 +112,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin:
+		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin, settings.FieldUseWinget, settings.FieldUseFlatpak:
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes, settings.FieldProfilesApplicationFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
@@ -313,6 +317,18 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ProfilesApplicationFrequenceInMinutes = int(value.Int64)
 			}
+		case settings.FieldUseWinget:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field use_winget", values[i])
+			} else if value.Valid {
+				s.UseWinget = value.Bool
+			}
+		case settings.FieldUseFlatpak:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field use_flatpak", values[i])
+			} else if value.Valid {
+				s.UseFlatpak = value.Bool
+			}
 		case settings.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settings_tag", value)
@@ -447,6 +463,12 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("profiles_application_frequence_in_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", s.ProfilesApplicationFrequenceInMinutes))
+	builder.WriteString(", ")
+	builder.WriteString("use_winget=")
+	builder.WriteString(fmt.Sprintf("%v", s.UseWinget))
+	builder.WriteString(", ")
+	builder.WriteString("use_flatpak=")
+	builder.WriteString(fmt.Sprintf("%v", s.UseFlatpak))
 	builder.WriteByte(')')
 	return builder.String()
 }
