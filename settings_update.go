@@ -691,6 +691,26 @@ func (su *SettingsUpdate) ClearUseFlatpak() *SettingsUpdate {
 	return su
 }
 
+// SetDisableSftp sets the "disable_sftp" field.
+func (su *SettingsUpdate) SetDisableSftp(b bool) *SettingsUpdate {
+	su.mutation.SetDisableSftp(b)
+	return su
+}
+
+// SetNillableDisableSftp sets the "disable_sftp" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableDisableSftp(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetDisableSftp(*b)
+	}
+	return su
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (su *SettingsUpdate) ClearDisableSftp() *SettingsUpdate {
+	su.mutation.ClearDisableSftp()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -978,6 +998,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.UseFlatpakCleared() {
 		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
+	}
+	if value, ok := su.mutation.DisableSftp(); ok {
+		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
+	}
+	if su.mutation.DisableSftpCleared() {
+		_spec.ClearField(settings.FieldDisableSftp, field.TypeBool)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1691,6 +1717,26 @@ func (suo *SettingsUpdateOne) ClearUseFlatpak() *SettingsUpdateOne {
 	return suo
 }
 
+// SetDisableSftp sets the "disable_sftp" field.
+func (suo *SettingsUpdateOne) SetDisableSftp(b bool) *SettingsUpdateOne {
+	suo.mutation.SetDisableSftp(b)
+	return suo
+}
+
+// SetNillableDisableSftp sets the "disable_sftp" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableDisableSftp(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetDisableSftp(*b)
+	}
+	return suo
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (suo *SettingsUpdateOne) ClearDisableSftp() *SettingsUpdateOne {
+	suo.mutation.ClearDisableSftp()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -2008,6 +2054,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.UseFlatpakCleared() {
 		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
+	}
+	if value, ok := suo.mutation.DisableSftp(); ok {
+		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
+	}
+	if suo.mutation.DisableSftpCleared() {
+		_spec.ClearField(settings.FieldDisableSftp, field.TypeBool)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

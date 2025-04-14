@@ -47,6 +47,7 @@ func (Settings) Fields() []ent.Field {
 		field.Int("profiles_application_frequence_in_minutes").Optional().Default(30),
 		field.Bool("use_winget").Optional().Default(true),
 		field.Bool("use_flatpak").Optional().Default(true),
+		field.Bool("disable_sftp").Optional().Default(false),
 	}
 }
 

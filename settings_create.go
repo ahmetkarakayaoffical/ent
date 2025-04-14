@@ -457,6 +457,20 @@ func (sc *SettingsCreate) SetNillableUseFlatpak(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetDisableSftp sets the "disable_sftp" field.
+func (sc *SettingsCreate) SetDisableSftp(b bool) *SettingsCreate {
+	sc.mutation.SetDisableSftp(b)
+	return sc
+}
+
+// SetNillableDisableSftp sets the "disable_sftp" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableDisableSftp(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetDisableSftp(*b)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -582,6 +596,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.UseFlatpak(); !ok {
 		v := settings.DefaultUseFlatpak
 		sc.mutation.SetUseFlatpak(v)
+	}
+	if _, ok := sc.mutation.DisableSftp(); !ok {
+		v := settings.DefaultDisableSftp
+		sc.mutation.SetDisableSftp(v)
 	}
 }
 
@@ -737,6 +755,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.UseFlatpak(); ok {
 		_spec.SetField(settings.FieldUseFlatpak, field.TypeBool, value)
 		_node.UseFlatpak = value
+	}
+	if value, ok := sc.mutation.DisableSftp(); ok {
+		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
+		_node.DisableSftp = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1404,6 +1426,24 @@ func (u *SettingsUpsert) UpdateUseFlatpak() *SettingsUpsert {
 // ClearUseFlatpak clears the value of the "use_flatpak" field.
 func (u *SettingsUpsert) ClearUseFlatpak() *SettingsUpsert {
 	u.SetNull(settings.FieldUseFlatpak)
+	return u
+}
+
+// SetDisableSftp sets the "disable_sftp" field.
+func (u *SettingsUpsert) SetDisableSftp(v bool) *SettingsUpsert {
+	u.Set(settings.FieldDisableSftp, v)
+	return u
+}
+
+// UpdateDisableSftp sets the "disable_sftp" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateDisableSftp() *SettingsUpsert {
+	u.SetExcluded(settings.FieldDisableSftp)
+	return u
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (u *SettingsUpsert) ClearDisableSftp() *SettingsUpsert {
+	u.SetNull(settings.FieldDisableSftp)
 	return u
 }
 
@@ -2144,6 +2184,27 @@ func (u *SettingsUpsertOne) UpdateUseFlatpak() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearUseFlatpak() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearUseFlatpak()
+	})
+}
+
+// SetDisableSftp sets the "disable_sftp" field.
+func (u *SettingsUpsertOne) SetDisableSftp(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDisableSftp(v)
+	})
+}
+
+// UpdateDisableSftp sets the "disable_sftp" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateDisableSftp() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDisableSftp()
+	})
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (u *SettingsUpsertOne) ClearDisableSftp() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDisableSftp()
 	})
 }
 
@@ -3048,6 +3109,27 @@ func (u *SettingsUpsertBulk) UpdateUseFlatpak() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearUseFlatpak() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearUseFlatpak()
+	})
+}
+
+// SetDisableSftp sets the "disable_sftp" field.
+func (u *SettingsUpsertBulk) SetDisableSftp(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDisableSftp(v)
+	})
+}
+
+// UpdateDisableSftp sets the "disable_sftp" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateDisableSftp() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDisableSftp()
+	})
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (u *SettingsUpsertBulk) ClearDisableSftp() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDisableSftp()
 	})
 }
 

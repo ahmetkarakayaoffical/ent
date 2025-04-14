@@ -16070,6 +16070,7 @@ type SettingsMutation struct {
 	addprofiles_application_frequence_in_minutes *int
 	use_winget                                   *bool
 	use_flatpak                                  *bool
+	disable_sftp                                 *bool
 	clearedFields                                map[string]struct{}
 	tag                                          *int
 	clearedtag                                   bool
@@ -17842,6 +17843,55 @@ func (m *SettingsMutation) ResetUseFlatpak() {
 	delete(m.clearedFields, settings.FieldUseFlatpak)
 }
 
+// SetDisableSftp sets the "disable_sftp" field.
+func (m *SettingsMutation) SetDisableSftp(b bool) {
+	m.disable_sftp = &b
+}
+
+// DisableSftp returns the value of the "disable_sftp" field in the mutation.
+func (m *SettingsMutation) DisableSftp() (r bool, exists bool) {
+	v := m.disable_sftp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableSftp returns the old "disable_sftp" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldDisableSftp(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableSftp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableSftp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableSftp: %w", err)
+	}
+	return oldValue.DisableSftp, nil
+}
+
+// ClearDisableSftp clears the value of the "disable_sftp" field.
+func (m *SettingsMutation) ClearDisableSftp() {
+	m.disable_sftp = nil
+	m.clearedFields[settings.FieldDisableSftp] = struct{}{}
+}
+
+// DisableSftpCleared returns if the "disable_sftp" field was cleared in this mutation.
+func (m *SettingsMutation) DisableSftpCleared() bool {
+	_, ok := m.clearedFields[settings.FieldDisableSftp]
+	return ok
+}
+
+// ResetDisableSftp resets all changes to the "disable_sftp" field.
+func (m *SettingsMutation) ResetDisableSftp() {
+	m.disable_sftp = nil
+	delete(m.clearedFields, settings.FieldDisableSftp)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -17915,7 +17965,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 32)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -18009,6 +18059,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.use_flatpak != nil {
 		fields = append(fields, settings.FieldUseFlatpak)
 	}
+	if m.disable_sftp != nil {
+		fields = append(fields, settings.FieldDisableSftp)
+	}
 	return fields
 }
 
@@ -18079,6 +18132,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.UseWinget()
 	case settings.FieldUseFlatpak:
 		return m.UseFlatpak()
+	case settings.FieldDisableSftp:
+		return m.DisableSftp()
 	}
 	return nil, false
 }
@@ -18150,6 +18205,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUseWinget(ctx)
 	case settings.FieldUseFlatpak:
 		return m.OldUseFlatpak(ctx)
+	case settings.FieldDisableSftp:
+		return m.OldDisableSftp(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18376,6 +18433,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUseFlatpak(v)
 		return nil
+	case settings.FieldDisableSftp:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableSftp(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18586,6 +18650,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldUseFlatpak) {
 		fields = append(fields, settings.FieldUseFlatpak)
 	}
+	if m.FieldCleared(settings.FieldDisableSftp) {
+		fields = append(fields, settings.FieldDisableSftp)
+	}
 	return fields
 }
 
@@ -18693,6 +18760,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldUseFlatpak:
 		m.ClearUseFlatpak()
 		return nil
+	case settings.FieldDisableSftp:
+		m.ClearDisableSftp()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -18793,6 +18863,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldUseFlatpak:
 		m.ResetUseFlatpak()
+		return nil
+	case settings.FieldDisableSftp:
+		m.ResetDisableSftp()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

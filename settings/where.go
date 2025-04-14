@@ -210,6 +210,11 @@ func UseFlatpak(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldUseFlatpak, v))
 }
 
+// DisableSftp applies equality check predicate on the "disable_sftp" field. It's identical to DisableSftpEQ.
+func DisableSftp(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDisableSftp, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -2033,6 +2038,26 @@ func UseFlatpakIsNil() predicate.Settings {
 // UseFlatpakNotNil applies the NotNil predicate on the "use_flatpak" field.
 func UseFlatpakNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldUseFlatpak))
+}
+
+// DisableSftpEQ applies the EQ predicate on the "disable_sftp" field.
+func DisableSftpEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDisableSftp, v))
+}
+
+// DisableSftpNEQ applies the NEQ predicate on the "disable_sftp" field.
+func DisableSftpNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldDisableSftp, v))
+}
+
+// DisableSftpIsNil applies the IsNil predicate on the "disable_sftp" field.
+func DisableSftpIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldDisableSftp))
+}
+
+// DisableSftpNotNil applies the NotNil predicate on the "disable_sftp" field.
+func DisableSftpNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldDisableSftp))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.

@@ -237,6 +237,10 @@ func init() {
 	settingsDescUseFlatpak := settingsFields[30].Descriptor()
 	// settings.DefaultUseFlatpak holds the default value on creation for the use_flatpak field.
 	settings.DefaultUseFlatpak = settingsDescUseFlatpak.Default.(bool)
+	// settingsDescDisableSftp is the schema descriptor for disable_sftp field.
+	settingsDescDisableSftp := settingsFields[31].Descriptor()
+	// settings.DefaultDisableSftp holds the default value on creation for the disable_sftp field.
+	settings.DefaultDisableSftp = settingsDescDisableSftp.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

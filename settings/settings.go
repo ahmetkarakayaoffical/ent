@@ -76,6 +76,8 @@ const (
 	FieldUseWinget = "use_winget"
 	// FieldUseFlatpak holds the string denoting the use_flatpak field in the database.
 	FieldUseFlatpak = "use_flatpak"
+	// FieldDisableSftp holds the string denoting the disable_sftp field in the database.
+	FieldDisableSftp = "disable_sftp"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -123,6 +125,7 @@ var Columns = []string{
 	FieldProfilesApplicationFrequenceInMinutes,
 	FieldUseWinget,
 	FieldUseFlatpak,
+	FieldDisableSftp,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -185,6 +188,8 @@ var (
 	DefaultUseWinget bool
 	// DefaultUseFlatpak holds the default value on creation for the "use_flatpak" field.
 	DefaultUseFlatpak bool
+	// DefaultDisableSftp holds the default value on creation for the "disable_sftp" field.
+	DefaultDisableSftp bool
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -348,6 +353,11 @@ func ByUseWinget(opts ...sql.OrderTermOption) OrderOption {
 // ByUseFlatpak orders the results by the use_flatpak field.
 func ByUseFlatpak(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUseFlatpak, opts...).ToFunc()
+}
+
+// ByDisableSftp orders the results by the disable_sftp field.
+func ByDisableSftp(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisableSftp, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.
