@@ -16071,6 +16071,7 @@ type SettingsMutation struct {
 	use_winget                                   *bool
 	use_flatpak                                  *bool
 	disable_sftp                                 *bool
+	disable_remote_assistance                    *bool
 	clearedFields                                map[string]struct{}
 	tag                                          *int
 	clearedtag                                   bool
@@ -17892,6 +17893,55 @@ func (m *SettingsMutation) ResetDisableSftp() {
 	delete(m.clearedFields, settings.FieldDisableSftp)
 }
 
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (m *SettingsMutation) SetDisableRemoteAssistance(b bool) {
+	m.disable_remote_assistance = &b
+}
+
+// DisableRemoteAssistance returns the value of the "disable_remote_assistance" field in the mutation.
+func (m *SettingsMutation) DisableRemoteAssistance() (r bool, exists bool) {
+	v := m.disable_remote_assistance
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableRemoteAssistance returns the old "disable_remote_assistance" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldDisableRemoteAssistance(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableRemoteAssistance is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableRemoteAssistance requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableRemoteAssistance: %w", err)
+	}
+	return oldValue.DisableRemoteAssistance, nil
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (m *SettingsMutation) ClearDisableRemoteAssistance() {
+	m.disable_remote_assistance = nil
+	m.clearedFields[settings.FieldDisableRemoteAssistance] = struct{}{}
+}
+
+// DisableRemoteAssistanceCleared returns if the "disable_remote_assistance" field was cleared in this mutation.
+func (m *SettingsMutation) DisableRemoteAssistanceCleared() bool {
+	_, ok := m.clearedFields[settings.FieldDisableRemoteAssistance]
+	return ok
+}
+
+// ResetDisableRemoteAssistance resets all changes to the "disable_remote_assistance" field.
+func (m *SettingsMutation) ResetDisableRemoteAssistance() {
+	m.disable_remote_assistance = nil
+	delete(m.clearedFields, settings.FieldDisableRemoteAssistance)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -17965,7 +18015,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 32)
+	fields := make([]string, 0, 33)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -18062,6 +18112,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.disable_sftp != nil {
 		fields = append(fields, settings.FieldDisableSftp)
 	}
+	if m.disable_remote_assistance != nil {
+		fields = append(fields, settings.FieldDisableRemoteAssistance)
+	}
 	return fields
 }
 
@@ -18134,6 +18187,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.UseFlatpak()
 	case settings.FieldDisableSftp:
 		return m.DisableSftp()
+	case settings.FieldDisableRemoteAssistance:
+		return m.DisableRemoteAssistance()
 	}
 	return nil, false
 }
@@ -18207,6 +18262,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUseFlatpak(ctx)
 	case settings.FieldDisableSftp:
 		return m.OldDisableSftp(ctx)
+	case settings.FieldDisableRemoteAssistance:
+		return m.OldDisableRemoteAssistance(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18440,6 +18497,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDisableSftp(v)
 		return nil
+	case settings.FieldDisableRemoteAssistance:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableRemoteAssistance(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18653,6 +18717,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldDisableSftp) {
 		fields = append(fields, settings.FieldDisableSftp)
 	}
+	if m.FieldCleared(settings.FieldDisableRemoteAssistance) {
+		fields = append(fields, settings.FieldDisableRemoteAssistance)
+	}
 	return fields
 }
 
@@ -18763,6 +18830,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldDisableSftp:
 		m.ClearDisableSftp()
 		return nil
+	case settings.FieldDisableRemoteAssistance:
+		m.ClearDisableRemoteAssistance()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -18866,6 +18936,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldDisableSftp:
 		m.ResetDisableSftp()
+		return nil
+	case settings.FieldDisableRemoteAssistance:
+		m.ResetDisableRemoteAssistance()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

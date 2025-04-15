@@ -241,6 +241,10 @@ func init() {
 	settingsDescDisableSftp := settingsFields[31].Descriptor()
 	// settings.DefaultDisableSftp holds the default value on creation for the disable_sftp field.
 	settings.DefaultDisableSftp = settingsDescDisableSftp.Default.(bool)
+	// settingsDescDisableRemoteAssistance is the schema descriptor for disable_remote_assistance field.
+	settingsDescDisableRemoteAssistance := settingsFields[32].Descriptor()
+	// settings.DefaultDisableRemoteAssistance holds the default value on creation for the disable_remote_assistance field.
+	settings.DefaultDisableRemoteAssistance = settingsDescDisableRemoteAssistance.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

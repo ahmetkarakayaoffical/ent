@@ -711,6 +711,26 @@ func (su *SettingsUpdate) ClearDisableSftp() *SettingsUpdate {
 	return su
 }
 
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (su *SettingsUpdate) SetDisableRemoteAssistance(b bool) *SettingsUpdate {
+	su.mutation.SetDisableRemoteAssistance(b)
+	return su
+}
+
+// SetNillableDisableRemoteAssistance sets the "disable_remote_assistance" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableDisableRemoteAssistance(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetDisableRemoteAssistance(*b)
+	}
+	return su
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (su *SettingsUpdate) ClearDisableRemoteAssistance() *SettingsUpdate {
+	su.mutation.ClearDisableRemoteAssistance()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -1004,6 +1024,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DisableSftpCleared() {
 		_spec.ClearField(settings.FieldDisableSftp, field.TypeBool)
+	}
+	if value, ok := su.mutation.DisableRemoteAssistance(); ok {
+		_spec.SetField(settings.FieldDisableRemoteAssistance, field.TypeBool, value)
+	}
+	if su.mutation.DisableRemoteAssistanceCleared() {
+		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1737,6 +1763,26 @@ func (suo *SettingsUpdateOne) ClearDisableSftp() *SettingsUpdateOne {
 	return suo
 }
 
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (suo *SettingsUpdateOne) SetDisableRemoteAssistance(b bool) *SettingsUpdateOne {
+	suo.mutation.SetDisableRemoteAssistance(b)
+	return suo
+}
+
+// SetNillableDisableRemoteAssistance sets the "disable_remote_assistance" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableDisableRemoteAssistance(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetDisableRemoteAssistance(*b)
+	}
+	return suo
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (suo *SettingsUpdateOne) ClearDisableRemoteAssistance() *SettingsUpdateOne {
+	suo.mutation.ClearDisableRemoteAssistance()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -2060,6 +2106,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.DisableSftpCleared() {
 		_spec.ClearField(settings.FieldDisableSftp, field.TypeBool)
+	}
+	if value, ok := suo.mutation.DisableRemoteAssistance(); ok {
+		_spec.SetField(settings.FieldDisableRemoteAssistance, field.TypeBool, value)
+	}
+	if suo.mutation.DisableRemoteAssistanceCleared() {
+		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

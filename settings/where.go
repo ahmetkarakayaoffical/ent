@@ -215,6 +215,11 @@ func DisableSftp(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldDisableSftp, v))
 }
 
+// DisableRemoteAssistance applies equality check predicate on the "disable_remote_assistance" field. It's identical to DisableRemoteAssistanceEQ.
+func DisableRemoteAssistance(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistance, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -2058,6 +2063,26 @@ func DisableSftpIsNil() predicate.Settings {
 // DisableSftpNotNil applies the NotNil predicate on the "disable_sftp" field.
 func DisableSftpNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldDisableSftp))
+}
+
+// DisableRemoteAssistanceEQ applies the EQ predicate on the "disable_remote_assistance" field.
+func DisableRemoteAssistanceEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistance, v))
+}
+
+// DisableRemoteAssistanceNEQ applies the NEQ predicate on the "disable_remote_assistance" field.
+func DisableRemoteAssistanceNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldDisableRemoteAssistance, v))
+}
+
+// DisableRemoteAssistanceIsNil applies the IsNil predicate on the "disable_remote_assistance" field.
+func DisableRemoteAssistanceIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldDisableRemoteAssistance))
+}
+
+// DisableRemoteAssistanceNotNil applies the NotNil predicate on the "disable_remote_assistance" field.
+func DisableRemoteAssistanceNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldDisableRemoteAssistance))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.

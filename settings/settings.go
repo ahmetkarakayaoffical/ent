@@ -78,6 +78,8 @@ const (
 	FieldUseFlatpak = "use_flatpak"
 	// FieldDisableSftp holds the string denoting the disable_sftp field in the database.
 	FieldDisableSftp = "disable_sftp"
+	// FieldDisableRemoteAssistance holds the string denoting the disable_remote_assistance field in the database.
+	FieldDisableRemoteAssistance = "disable_remote_assistance"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -126,6 +128,7 @@ var Columns = []string{
 	FieldUseWinget,
 	FieldUseFlatpak,
 	FieldDisableSftp,
+	FieldDisableRemoteAssistance,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -190,6 +193,8 @@ var (
 	DefaultUseFlatpak bool
 	// DefaultDisableSftp holds the default value on creation for the "disable_sftp" field.
 	DefaultDisableSftp bool
+	// DefaultDisableRemoteAssistance holds the default value on creation for the "disable_remote_assistance" field.
+	DefaultDisableRemoteAssistance bool
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -358,6 +363,11 @@ func ByUseFlatpak(opts ...sql.OrderTermOption) OrderOption {
 // ByDisableSftp orders the results by the disable_sftp field.
 func ByDisableSftp(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisableSftp, opts...).ToFunc()
+}
+
+// ByDisableRemoteAssistance orders the results by the disable_remote_assistance field.
+func ByDisableRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisableRemoteAssistance, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.

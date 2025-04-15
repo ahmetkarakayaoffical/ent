@@ -471,6 +471,20 @@ func (sc *SettingsCreate) SetNillableDisableSftp(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (sc *SettingsCreate) SetDisableRemoteAssistance(b bool) *SettingsCreate {
+	sc.mutation.SetDisableRemoteAssistance(b)
+	return sc
+}
+
+// SetNillableDisableRemoteAssistance sets the "disable_remote_assistance" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableDisableRemoteAssistance(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetDisableRemoteAssistance(*b)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -600,6 +614,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.DisableSftp(); !ok {
 		v := settings.DefaultDisableSftp
 		sc.mutation.SetDisableSftp(v)
+	}
+	if _, ok := sc.mutation.DisableRemoteAssistance(); !ok {
+		v := settings.DefaultDisableRemoteAssistance
+		sc.mutation.SetDisableRemoteAssistance(v)
 	}
 }
 
@@ -759,6 +777,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DisableSftp(); ok {
 		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
 		_node.DisableSftp = value
+	}
+	if value, ok := sc.mutation.DisableRemoteAssistance(); ok {
+		_spec.SetField(settings.FieldDisableRemoteAssistance, field.TypeBool, value)
+		_node.DisableRemoteAssistance = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1444,6 +1466,24 @@ func (u *SettingsUpsert) UpdateDisableSftp() *SettingsUpsert {
 // ClearDisableSftp clears the value of the "disable_sftp" field.
 func (u *SettingsUpsert) ClearDisableSftp() *SettingsUpsert {
 	u.SetNull(settings.FieldDisableSftp)
+	return u
+}
+
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (u *SettingsUpsert) SetDisableRemoteAssistance(v bool) *SettingsUpsert {
+	u.Set(settings.FieldDisableRemoteAssistance, v)
+	return u
+}
+
+// UpdateDisableRemoteAssistance sets the "disable_remote_assistance" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateDisableRemoteAssistance() *SettingsUpsert {
+	u.SetExcluded(settings.FieldDisableRemoteAssistance)
+	return u
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (u *SettingsUpsert) ClearDisableRemoteAssistance() *SettingsUpsert {
+	u.SetNull(settings.FieldDisableRemoteAssistance)
 	return u
 }
 
@@ -2205,6 +2245,27 @@ func (u *SettingsUpsertOne) UpdateDisableSftp() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearDisableSftp() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableSftp()
+	})
+}
+
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (u *SettingsUpsertOne) SetDisableRemoteAssistance(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDisableRemoteAssistance(v)
+	})
+}
+
+// UpdateDisableRemoteAssistance sets the "disable_remote_assistance" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateDisableRemoteAssistance() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDisableRemoteAssistance()
+	})
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (u *SettingsUpsertOne) ClearDisableRemoteAssistance() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDisableRemoteAssistance()
 	})
 }
 
@@ -3130,6 +3191,27 @@ func (u *SettingsUpsertBulk) UpdateDisableSftp() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearDisableSftp() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableSftp()
+	})
+}
+
+// SetDisableRemoteAssistance sets the "disable_remote_assistance" field.
+func (u *SettingsUpsertBulk) SetDisableRemoteAssistance(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDisableRemoteAssistance(v)
+	})
+}
+
+// UpdateDisableRemoteAssistance sets the "disable_remote_assistance" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateDisableRemoteAssistance() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDisableRemoteAssistance()
+	})
+}
+
+// ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
+func (u *SettingsUpsertBulk) ClearDisableRemoteAssistance() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDisableRemoteAssistance()
 	})
 }
 

@@ -48,6 +48,7 @@ func (Settings) Fields() []ent.Field {
 		field.Bool("use_winget").Optional().Default(true),
 		field.Bool("use_flatpak").Optional().Default(true),
 		field.Bool("disable_sftp").Optional().Default(false),
+		field.Bool("disable_remote_assistance").Optional().Default(false),
 	}
 }
 

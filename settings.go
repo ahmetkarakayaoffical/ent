@@ -82,6 +82,8 @@ type Settings struct {
 	UseFlatpak bool `json:"use_flatpak,omitempty"`
 	// DisableSftp holds the value of the "disable_sftp" field.
 	DisableSftp bool `json:"disable_sftp,omitempty"`
+	// DisableRemoteAssistance holds the value of the "disable_remote_assistance" field.
+	DisableRemoteAssistance bool `json:"disable_remote_assistance,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettingsQuery when eager-loading is set.
 	Edges        SettingsEdges `json:"edges"`
@@ -114,7 +116,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin, settings.FieldUseWinget, settings.FieldUseFlatpak, settings.FieldDisableSftp:
+		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin, settings.FieldUseWinget, settings.FieldUseFlatpak, settings.FieldDisableSftp, settings.FieldDisableRemoteAssistance:
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes, settings.FieldProfilesApplicationFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
@@ -337,6 +339,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DisableSftp = value.Bool
 			}
+		case settings.FieldDisableRemoteAssistance:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field disable_remote_assistance", values[i])
+			} else if value.Valid {
+				s.DisableRemoteAssistance = value.Bool
+			}
 		case settings.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settings_tag", value)
@@ -480,6 +488,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("disable_sftp=")
 	builder.WriteString(fmt.Sprintf("%v", s.DisableSftp))
+	builder.WriteString(", ")
+	builder.WriteString("disable_remote_assistance=")
+	builder.WriteString(fmt.Sprintf("%v", s.DisableRemoteAssistance))
 	builder.WriteByte(')')
 	return builder.String()
 }
