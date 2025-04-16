@@ -66,6 +66,8 @@ type Agent struct {
 	SftpService bool `json:"sftp_service,omitempty"`
 	// RemoteAssistance holds the value of the "remote_assistance" field.
 	RemoteAssistance bool `json:"remote_assistance,omitempty"`
+	// SettingsModified holds the value of the "settings_modified" field.
+	SettingsModified time.Time `json:"settings_modified,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
@@ -286,7 +288,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus:
 			values[i] = new(sql.NullString)
-		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution:
+		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution, agent.FieldSettingsModified:
 			values[i] = new(sql.NullTime)
 		case agent.ForeignKeys[0]: // release_agents
 			values[i] = new(sql.NullInt64)
@@ -442,6 +444,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field remote_assistance", values[i])
 			} else if value.Valid {
 				a.RemoteAssistance = value.Bool
+			}
+		case agent.FieldSettingsModified:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field settings_modified", values[i])
+			} else if value.Valid {
+				a.SettingsModified = value.Time
 			}
 		case agent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -636,6 +644,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("remote_assistance=")
 	builder.WriteString(fmt.Sprintf("%v", a.RemoteAssistance))
+	builder.WriteString(", ")
+	builder.WriteString("settings_modified=")
+	builder.WriteString(a.SettingsModified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

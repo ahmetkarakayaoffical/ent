@@ -332,6 +332,20 @@ func (ac *AgentCreate) SetNillableRemoteAssistance(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetSettingsModified sets the "settings_modified" field.
+func (ac *AgentCreate) SetSettingsModified(t time.Time) *AgentCreate {
+	ac.mutation.SetSettingsModified(t)
+	return ac
+}
+
+// SetNillableSettingsModified sets the "settings_modified" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableSettingsModified(t *time.Time) *AgentCreate {
+	if t != nil {
+		ac.SetSettingsModified(*t)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -712,6 +726,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultRemoteAssistance
 		ac.mutation.SetRemoteAssistance(v)
 	}
+	if _, ok := ac.mutation.SettingsModified(); !ok {
+		v := agent.DefaultSettingsModified()
+		ac.mutation.SetSettingsModified(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -871,6 +889,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.RemoteAssistance(); ok {
 		_spec.SetField(agent.FieldRemoteAssistance, field.TypeBool, value)
 		_node.RemoteAssistance = value
+	}
+	if value, ok := ac.mutation.SettingsModified(); ok {
+		_spec.SetField(agent.FieldSettingsModified, field.TypeTime, value)
+		_node.SettingsModified = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1569,6 +1591,24 @@ func (u *AgentUpsert) ClearRemoteAssistance() *AgentUpsert {
 	return u
 }
 
+// SetSettingsModified sets the "settings_modified" field.
+func (u *AgentUpsert) SetSettingsModified(v time.Time) *AgentUpsert {
+	u.Set(agent.FieldSettingsModified, v)
+	return u
+}
+
+// UpdateSettingsModified sets the "settings_modified" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateSettingsModified() *AgentUpsert {
+	u.SetExcluded(agent.FieldSettingsModified)
+	return u
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (u *AgentUpsert) ClearSettingsModified() *AgentUpsert {
+	u.SetNull(agent.FieldSettingsModified)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -2048,6 +2088,27 @@ func (u *AgentUpsertOne) UpdateRemoteAssistance() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearRemoteAssistance() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearRemoteAssistance()
+	})
+}
+
+// SetSettingsModified sets the "settings_modified" field.
+func (u *AgentUpsertOne) SetSettingsModified(v time.Time) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSettingsModified(v)
+	})
+}
+
+// UpdateSettingsModified sets the "settings_modified" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateSettingsModified() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSettingsModified()
+	})
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (u *AgentUpsertOne) ClearSettingsModified() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSettingsModified()
 	})
 }
 
@@ -2697,6 +2758,27 @@ func (u *AgentUpsertBulk) UpdateRemoteAssistance() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearRemoteAssistance() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearRemoteAssistance()
+	})
+}
+
+// SetSettingsModified sets the "settings_modified" field.
+func (u *AgentUpsertBulk) SetSettingsModified(v time.Time) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSettingsModified(v)
+	})
+}
+
+// UpdateSettingsModified sets the "settings_modified" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateSettingsModified() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSettingsModified()
+	})
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (u *AgentUpsertBulk) ClearSettingsModified() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSettingsModified()
 	})
 }
 

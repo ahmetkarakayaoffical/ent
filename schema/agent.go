@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
@@ -38,6 +40,7 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("debug_mode").Optional().Default(false),
 		field.Bool("sftp_service").Optional().Default(true),
 		field.Bool("remote_assistance").Optional().Default(true),
+		field.Time("settings_modified").Optional().Default(time.Now),
 	}
 }
 

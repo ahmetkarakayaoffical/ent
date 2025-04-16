@@ -170,6 +170,11 @@ func RemoteAssistance(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldRemoteAssistance, v))
 }
 
+// SettingsModified applies equality check predicate on the "settings_modified" field. It's identical to SettingsModifiedEQ.
+func SettingsModified(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSettingsModified, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1328,6 +1333,56 @@ func RemoteAssistanceIsNil() predicate.Agent {
 // RemoteAssistanceNotNil applies the NotNil predicate on the "remote_assistance" field.
 func RemoteAssistanceNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldRemoteAssistance))
+}
+
+// SettingsModifiedEQ applies the EQ predicate on the "settings_modified" field.
+func SettingsModifiedEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSettingsModified, v))
+}
+
+// SettingsModifiedNEQ applies the NEQ predicate on the "settings_modified" field.
+func SettingsModifiedNEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldSettingsModified, v))
+}
+
+// SettingsModifiedIn applies the In predicate on the "settings_modified" field.
+func SettingsModifiedIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldSettingsModified, vs...))
+}
+
+// SettingsModifiedNotIn applies the NotIn predicate on the "settings_modified" field.
+func SettingsModifiedNotIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldSettingsModified, vs...))
+}
+
+// SettingsModifiedGT applies the GT predicate on the "settings_modified" field.
+func SettingsModifiedGT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldSettingsModified, v))
+}
+
+// SettingsModifiedGTE applies the GTE predicate on the "settings_modified" field.
+func SettingsModifiedGTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldSettingsModified, v))
+}
+
+// SettingsModifiedLT applies the LT predicate on the "settings_modified" field.
+func SettingsModifiedLT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldSettingsModified, v))
+}
+
+// SettingsModifiedLTE applies the LTE predicate on the "settings_modified" field.
+func SettingsModifiedLTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldSettingsModified, v))
+}
+
+// SettingsModifiedIsNil applies the IsNil predicate on the "settings_modified" field.
+func SettingsModifiedIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldSettingsModified))
+}
+
+// SettingsModifiedNotNil applies the NotNil predicate on the "settings_modified" field.
+func SettingsModifiedNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldSettingsModified))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

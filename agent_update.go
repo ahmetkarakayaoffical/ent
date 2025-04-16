@@ -462,6 +462,26 @@ func (au *AgentUpdate) ClearRemoteAssistance() *AgentUpdate {
 	return au
 }
 
+// SetSettingsModified sets the "settings_modified" field.
+func (au *AgentUpdate) SetSettingsModified(t time.Time) *AgentUpdate {
+	au.mutation.SetSettingsModified(t)
+	return au
+}
+
+// SetNillableSettingsModified sets the "settings_modified" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableSettingsModified(t *time.Time) *AgentUpdate {
+	if t != nil {
+		au.SetSettingsModified(*t)
+	}
+	return au
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (au *AgentUpdate) ClearSettingsModified() *AgentUpdate {
+	au.mutation.ClearSettingsModified()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1208,6 +1228,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.RemoteAssistanceCleared() {
 		_spec.ClearField(agent.FieldRemoteAssistance, field.TypeBool)
+	}
+	if value, ok := au.mutation.SettingsModified(); ok {
+		_spec.SetField(agent.FieldSettingsModified, field.TypeTime, value)
+	}
+	if au.mutation.SettingsModifiedCleared() {
+		_spec.ClearField(agent.FieldSettingsModified, field.TypeTime)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2332,6 +2358,26 @@ func (auo *AgentUpdateOne) ClearRemoteAssistance() *AgentUpdateOne {
 	return auo
 }
 
+// SetSettingsModified sets the "settings_modified" field.
+func (auo *AgentUpdateOne) SetSettingsModified(t time.Time) *AgentUpdateOne {
+	auo.mutation.SetSettingsModified(t)
+	return auo
+}
+
+// SetNillableSettingsModified sets the "settings_modified" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableSettingsModified(t *time.Time) *AgentUpdateOne {
+	if t != nil {
+		auo.SetSettingsModified(*t)
+	}
+	return auo
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (auo *AgentUpdateOne) ClearSettingsModified() *AgentUpdateOne {
+	auo.mutation.ClearSettingsModified()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3108,6 +3154,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.RemoteAssistanceCleared() {
 		_spec.ClearField(agent.FieldRemoteAssistance, field.TypeBool)
+	}
+	if value, ok := auo.mutation.SettingsModified(); ok {
+		_spec.SetField(agent.FieldSettingsModified, field.TypeTime, value)
+	}
+	if auo.mutation.SettingsModifiedCleared() {
+		_spec.ClearField(agent.FieldSettingsModified, field.TypeTime)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

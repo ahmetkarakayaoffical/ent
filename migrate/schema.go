@@ -33,6 +33,7 @@ var (
 		{Name: "debug_mode", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sftp_service", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "remote_assistance", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "settings_modified", Type: field.TypeTime, Nullable: true},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -43,7 +44,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[23]},
+				Columns:    []*schema.Column{AgentsColumns[24]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -512,6 +513,8 @@ var (
 		{Name: "use_flatpak", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "disable_sftp", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "disable_remote_assistance", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "disable_sftp_modified", Type: field.TypeTime, Nullable: true},
+		{Name: "disable_remote_assistance_modified", Type: field.TypeTime, Nullable: true},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
@@ -522,7 +525,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[34]},
+				Columns:    []*schema.Column{SettingsColumns[36]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

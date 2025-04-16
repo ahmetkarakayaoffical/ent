@@ -4,6 +4,7 @@ package agent
 
 import (
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -58,6 +59,8 @@ const (
 	FieldSftpService = "sftp_service"
 	// FieldRemoteAssistance holds the string denoting the remote_assistance field in the database.
 	FieldRemoteAssistance = "remote_assistance"
+	// FieldSettingsModified holds the string denoting the settings_modified field in the database.
+	FieldSettingsModified = "settings_modified"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -272,6 +275,7 @@ var Columns = []string{
 	FieldDebugMode,
 	FieldSftpService,
 	FieldRemoteAssistance,
+	FieldSettingsModified,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -336,6 +340,8 @@ var (
 	DefaultSftpService bool
 	// DefaultRemoteAssistance holds the default value on creation for the "remote_assistance" field.
 	DefaultRemoteAssistance bool
+	// DefaultSettingsModified holds the default value on creation for the "settings_modified" field.
+	DefaultSettingsModified func() time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -483,6 +489,11 @@ func BySftpService(opts ...sql.OrderTermOption) OrderOption {
 // ByRemoteAssistance orders the results by the remote_assistance field.
 func ByRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemoteAssistance, opts...).ToFunc()
+}
+
+// BySettingsModified orders the results by the settings_modified field.
+func BySettingsModified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSettingsModified, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

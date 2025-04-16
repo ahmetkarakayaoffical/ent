@@ -107,6 +107,7 @@ type AgentMutation struct {
 	debug_mode                 *bool
 	sftp_service               *bool
 	remote_assistance          *bool
+	settings_modified          *time.Time
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1289,6 +1290,55 @@ func (m *AgentMutation) ResetRemoteAssistance() {
 	delete(m.clearedFields, agent.FieldRemoteAssistance)
 }
 
+// SetSettingsModified sets the "settings_modified" field.
+func (m *AgentMutation) SetSettingsModified(t time.Time) {
+	m.settings_modified = &t
+}
+
+// SettingsModified returns the value of the "settings_modified" field in the mutation.
+func (m *AgentMutation) SettingsModified() (r time.Time, exists bool) {
+	v := m.settings_modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSettingsModified returns the old "settings_modified" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldSettingsModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSettingsModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSettingsModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSettingsModified: %w", err)
+	}
+	return oldValue.SettingsModified, nil
+}
+
+// ClearSettingsModified clears the value of the "settings_modified" field.
+func (m *AgentMutation) ClearSettingsModified() {
+	m.settings_modified = nil
+	m.clearedFields[agent.FieldSettingsModified] = struct{}{}
+}
+
+// SettingsModifiedCleared returns if the "settings_modified" field was cleared in this mutation.
+func (m *AgentMutation) SettingsModifiedCleared() bool {
+	_, ok := m.clearedFields[agent.FieldSettingsModified]
+	return ok
+}
+
+// ResetSettingsModified resets all changes to the "settings_modified" field.
+func (m *AgentMutation) ResetSettingsModified() {
+	m.settings_modified = nil
+	delete(m.clearedFields, agent.FieldSettingsModified)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2166,7 +2216,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2233,6 +2283,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.remote_assistance != nil {
 		fields = append(fields, agent.FieldRemoteAssistance)
 	}
+	if m.settings_modified != nil {
+		fields = append(fields, agent.FieldSettingsModified)
+	}
 	return fields
 }
 
@@ -2285,6 +2338,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.SftpService()
 	case agent.FieldRemoteAssistance:
 		return m.RemoteAssistance()
+	case agent.FieldSettingsModified:
+		return m.SettingsModified()
 	}
 	return nil, false
 }
@@ -2338,6 +2393,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldSftpService(ctx)
 	case agent.FieldRemoteAssistance:
 		return m.OldRemoteAssistance(ctx)
+	case agent.FieldSettingsModified:
+		return m.OldSettingsModified(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2501,6 +2558,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRemoteAssistance(v)
 		return nil
+	case agent.FieldSettingsModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSettingsModified(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2585,6 +2649,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldRemoteAssistance) {
 		fields = append(fields, agent.FieldRemoteAssistance)
 	}
+	if m.FieldCleared(agent.FieldSettingsModified) {
+		fields = append(fields, agent.FieldSettingsModified)
+	}
 	return fields
 }
 
@@ -2652,6 +2719,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldRemoteAssistance:
 		m.ClearRemoteAssistance()
+		return nil
+	case agent.FieldSettingsModified:
+		m.ClearSettingsModified()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2726,6 +2796,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldRemoteAssistance:
 		m.ResetRemoteAssistance()
+		return nil
+	case agent.FieldSettingsModified:
+		m.ResetSettingsModified()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
@@ -16218,6 +16291,8 @@ type SettingsMutation struct {
 	use_flatpak                                  *bool
 	disable_sftp                                 *bool
 	disable_remote_assistance                    *bool
+	disable_sftp_modified                        *time.Time
+	disable_remote_assistance_modified           *time.Time
 	clearedFields                                map[string]struct{}
 	tag                                          *int
 	clearedtag                                   bool
@@ -18088,6 +18163,104 @@ func (m *SettingsMutation) ResetDisableRemoteAssistance() {
 	delete(m.clearedFields, settings.FieldDisableRemoteAssistance)
 }
 
+// SetDisableSftpModified sets the "disable_sftp_modified" field.
+func (m *SettingsMutation) SetDisableSftpModified(t time.Time) {
+	m.disable_sftp_modified = &t
+}
+
+// DisableSftpModified returns the value of the "disable_sftp_modified" field in the mutation.
+func (m *SettingsMutation) DisableSftpModified() (r time.Time, exists bool) {
+	v := m.disable_sftp_modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableSftpModified returns the old "disable_sftp_modified" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldDisableSftpModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableSftpModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableSftpModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableSftpModified: %w", err)
+	}
+	return oldValue.DisableSftpModified, nil
+}
+
+// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
+func (m *SettingsMutation) ClearDisableSftpModified() {
+	m.disable_sftp_modified = nil
+	m.clearedFields[settings.FieldDisableSftpModified] = struct{}{}
+}
+
+// DisableSftpModifiedCleared returns if the "disable_sftp_modified" field was cleared in this mutation.
+func (m *SettingsMutation) DisableSftpModifiedCleared() bool {
+	_, ok := m.clearedFields[settings.FieldDisableSftpModified]
+	return ok
+}
+
+// ResetDisableSftpModified resets all changes to the "disable_sftp_modified" field.
+func (m *SettingsMutation) ResetDisableSftpModified() {
+	m.disable_sftp_modified = nil
+	delete(m.clearedFields, settings.FieldDisableSftpModified)
+}
+
+// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
+func (m *SettingsMutation) SetDisableRemoteAssistanceModified(t time.Time) {
+	m.disable_remote_assistance_modified = &t
+}
+
+// DisableRemoteAssistanceModified returns the value of the "disable_remote_assistance_modified" field in the mutation.
+func (m *SettingsMutation) DisableRemoteAssistanceModified() (r time.Time, exists bool) {
+	v := m.disable_remote_assistance_modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableRemoteAssistanceModified returns the old "disable_remote_assistance_modified" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldDisableRemoteAssistanceModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableRemoteAssistanceModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableRemoteAssistanceModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableRemoteAssistanceModified: %w", err)
+	}
+	return oldValue.DisableRemoteAssistanceModified, nil
+}
+
+// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
+func (m *SettingsMutation) ClearDisableRemoteAssistanceModified() {
+	m.disable_remote_assistance_modified = nil
+	m.clearedFields[settings.FieldDisableRemoteAssistanceModified] = struct{}{}
+}
+
+// DisableRemoteAssistanceModifiedCleared returns if the "disable_remote_assistance_modified" field was cleared in this mutation.
+func (m *SettingsMutation) DisableRemoteAssistanceModifiedCleared() bool {
+	_, ok := m.clearedFields[settings.FieldDisableRemoteAssistanceModified]
+	return ok
+}
+
+// ResetDisableRemoteAssistanceModified resets all changes to the "disable_remote_assistance_modified" field.
+func (m *SettingsMutation) ResetDisableRemoteAssistanceModified() {
+	m.disable_remote_assistance_modified = nil
+	delete(m.clearedFields, settings.FieldDisableRemoteAssistanceModified)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -18161,7 +18334,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 33)
+	fields := make([]string, 0, 35)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -18261,6 +18434,12 @@ func (m *SettingsMutation) Fields() []string {
 	if m.disable_remote_assistance != nil {
 		fields = append(fields, settings.FieldDisableRemoteAssistance)
 	}
+	if m.disable_sftp_modified != nil {
+		fields = append(fields, settings.FieldDisableSftpModified)
+	}
+	if m.disable_remote_assistance_modified != nil {
+		fields = append(fields, settings.FieldDisableRemoteAssistanceModified)
+	}
 	return fields
 }
 
@@ -18335,6 +18514,10 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.DisableSftp()
 	case settings.FieldDisableRemoteAssistance:
 		return m.DisableRemoteAssistance()
+	case settings.FieldDisableSftpModified:
+		return m.DisableSftpModified()
+	case settings.FieldDisableRemoteAssistanceModified:
+		return m.DisableRemoteAssistanceModified()
 	}
 	return nil, false
 }
@@ -18410,6 +18593,10 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisableSftp(ctx)
 	case settings.FieldDisableRemoteAssistance:
 		return m.OldDisableRemoteAssistance(ctx)
+	case settings.FieldDisableSftpModified:
+		return m.OldDisableSftpModified(ctx)
+	case settings.FieldDisableRemoteAssistanceModified:
+		return m.OldDisableRemoteAssistanceModified(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18650,6 +18837,20 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDisableRemoteAssistance(v)
 		return nil
+	case settings.FieldDisableSftpModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableSftpModified(v)
+		return nil
+	case settings.FieldDisableRemoteAssistanceModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableRemoteAssistanceModified(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -18866,6 +19067,12 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldDisableRemoteAssistance) {
 		fields = append(fields, settings.FieldDisableRemoteAssistance)
 	}
+	if m.FieldCleared(settings.FieldDisableSftpModified) {
+		fields = append(fields, settings.FieldDisableSftpModified)
+	}
+	if m.FieldCleared(settings.FieldDisableRemoteAssistanceModified) {
+		fields = append(fields, settings.FieldDisableRemoteAssistanceModified)
+	}
 	return fields
 }
 
@@ -18979,6 +19186,12 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldDisableRemoteAssistance:
 		m.ClearDisableRemoteAssistance()
 		return nil
+	case settings.FieldDisableSftpModified:
+		m.ClearDisableSftpModified()
+		return nil
+	case settings.FieldDisableRemoteAssistanceModified:
+		m.ClearDisableRemoteAssistanceModified()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -19085,6 +19298,12 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldDisableRemoteAssistance:
 		m.ResetDisableRemoteAssistance()
+		return nil
+	case settings.FieldDisableSftpModified:
+		m.ResetDisableSftpModified()
+		return nil
+	case settings.FieldDisableRemoteAssistanceModified:
+		m.ResetDisableRemoteAssistanceModified()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
