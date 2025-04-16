@@ -160,6 +160,16 @@ func DebugMode(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldDebugMode, v))
 }
 
+// SftpService applies equality check predicate on the "sftp_service" field. It's identical to SftpServiceEQ.
+func SftpService(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSftpService, v))
+}
+
+// RemoteAssistance applies equality check predicate on the "remote_assistance" field. It's identical to RemoteAssistanceEQ.
+func RemoteAssistance(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldRemoteAssistance, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1278,6 +1288,46 @@ func DebugModeIsNil() predicate.Agent {
 // DebugModeNotNil applies the NotNil predicate on the "debug_mode" field.
 func DebugModeNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldDebugMode))
+}
+
+// SftpServiceEQ applies the EQ predicate on the "sftp_service" field.
+func SftpServiceEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldSftpService, v))
+}
+
+// SftpServiceNEQ applies the NEQ predicate on the "sftp_service" field.
+func SftpServiceNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldSftpService, v))
+}
+
+// SftpServiceIsNil applies the IsNil predicate on the "sftp_service" field.
+func SftpServiceIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldSftpService))
+}
+
+// SftpServiceNotNil applies the NotNil predicate on the "sftp_service" field.
+func SftpServiceNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldSftpService))
+}
+
+// RemoteAssistanceEQ applies the EQ predicate on the "remote_assistance" field.
+func RemoteAssistanceEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldRemoteAssistance, v))
+}
+
+// RemoteAssistanceNEQ applies the NEQ predicate on the "remote_assistance" field.
+func RemoteAssistanceNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldRemoteAssistance, v))
+}
+
+// RemoteAssistanceIsNil applies the IsNil predicate on the "remote_assistance" field.
+func RemoteAssistanceIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldRemoteAssistance))
+}
+
+// RemoteAssistanceNotNil applies the NotNil predicate on the "remote_assistance" field.
+func RemoteAssistanceNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldRemoteAssistance))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

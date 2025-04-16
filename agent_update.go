@@ -422,6 +422,46 @@ func (au *AgentUpdate) ClearDebugMode() *AgentUpdate {
 	return au
 }
 
+// SetSftpService sets the "sftp_service" field.
+func (au *AgentUpdate) SetSftpService(b bool) *AgentUpdate {
+	au.mutation.SetSftpService(b)
+	return au
+}
+
+// SetNillableSftpService sets the "sftp_service" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableSftpService(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetSftpService(*b)
+	}
+	return au
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (au *AgentUpdate) ClearSftpService() *AgentUpdate {
+	au.mutation.ClearSftpService()
+	return au
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (au *AgentUpdate) SetRemoteAssistance(b bool) *AgentUpdate {
+	au.mutation.SetRemoteAssistance(b)
+	return au
+}
+
+// SetNillableRemoteAssistance sets the "remote_assistance" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableRemoteAssistance(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetRemoteAssistance(*b)
+	}
+	return au
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (au *AgentUpdate) ClearRemoteAssistance() *AgentUpdate {
+	au.mutation.ClearRemoteAssistance()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1156,6 +1196,18 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.DebugModeCleared() {
 		_spec.ClearField(agent.FieldDebugMode, field.TypeBool)
+	}
+	if value, ok := au.mutation.SftpService(); ok {
+		_spec.SetField(agent.FieldSftpService, field.TypeBool, value)
+	}
+	if au.mutation.SftpServiceCleared() {
+		_spec.ClearField(agent.FieldSftpService, field.TypeBool)
+	}
+	if value, ok := au.mutation.RemoteAssistance(); ok {
+		_spec.SetField(agent.FieldRemoteAssistance, field.TypeBool, value)
+	}
+	if au.mutation.RemoteAssistanceCleared() {
+		_spec.ClearField(agent.FieldRemoteAssistance, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2240,6 +2292,46 @@ func (auo *AgentUpdateOne) ClearDebugMode() *AgentUpdateOne {
 	return auo
 }
 
+// SetSftpService sets the "sftp_service" field.
+func (auo *AgentUpdateOne) SetSftpService(b bool) *AgentUpdateOne {
+	auo.mutation.SetSftpService(b)
+	return auo
+}
+
+// SetNillableSftpService sets the "sftp_service" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableSftpService(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetSftpService(*b)
+	}
+	return auo
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (auo *AgentUpdateOne) ClearSftpService() *AgentUpdateOne {
+	auo.mutation.ClearSftpService()
+	return auo
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (auo *AgentUpdateOne) SetRemoteAssistance(b bool) *AgentUpdateOne {
+	auo.mutation.SetRemoteAssistance(b)
+	return auo
+}
+
+// SetNillableRemoteAssistance sets the "remote_assistance" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableRemoteAssistance(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetRemoteAssistance(*b)
+	}
+	return auo
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (auo *AgentUpdateOne) ClearRemoteAssistance() *AgentUpdateOne {
+	auo.mutation.ClearRemoteAssistance()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3004,6 +3096,18 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.DebugModeCleared() {
 		_spec.ClearField(agent.FieldDebugMode, field.TypeBool)
+	}
+	if value, ok := auo.mutation.SftpService(); ok {
+		_spec.SetField(agent.FieldSftpService, field.TypeBool, value)
+	}
+	if auo.mutation.SftpServiceCleared() {
+		_spec.ClearField(agent.FieldSftpService, field.TypeBool)
+	}
+	if value, ok := auo.mutation.RemoteAssistance(); ok {
+		_spec.SetField(agent.FieldRemoteAssistance, field.TypeBool, value)
+	}
+	if auo.mutation.RemoteAssistanceCleared() {
+		_spec.ClearField(agent.FieldRemoteAssistance, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

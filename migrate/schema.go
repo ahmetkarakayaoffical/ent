@@ -31,6 +31,8 @@ var (
 		{Name: "restart_required", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "is_remote", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "debug_mode", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "sftp_service", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "remote_assistance", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -41,7 +43,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[21]},
+				Columns:    []*schema.Column{AgentsColumns[23]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

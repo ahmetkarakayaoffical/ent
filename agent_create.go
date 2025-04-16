@@ -304,6 +304,34 @@ func (ac *AgentCreate) SetNillableDebugMode(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetSftpService sets the "sftp_service" field.
+func (ac *AgentCreate) SetSftpService(b bool) *AgentCreate {
+	ac.mutation.SetSftpService(b)
+	return ac
+}
+
+// SetNillableSftpService sets the "sftp_service" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableSftpService(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetSftpService(*b)
+	}
+	return ac
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (ac *AgentCreate) SetRemoteAssistance(b bool) *AgentCreate {
+	ac.mutation.SetRemoteAssistance(b)
+	return ac
+}
+
+// SetNillableRemoteAssistance sets the "remote_assistance" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableRemoteAssistance(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetRemoteAssistance(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -676,6 +704,14 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultDebugMode
 		ac.mutation.SetDebugMode(v)
 	}
+	if _, ok := ac.mutation.SftpService(); !ok {
+		v := agent.DefaultSftpService
+		ac.mutation.SetSftpService(v)
+	}
+	if _, ok := ac.mutation.RemoteAssistance(); !ok {
+		v := agent.DefaultRemoteAssistance
+		ac.mutation.SetRemoteAssistance(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -827,6 +863,14 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.DebugMode(); ok {
 		_spec.SetField(agent.FieldDebugMode, field.TypeBool, value)
 		_node.DebugMode = value
+	}
+	if value, ok := ac.mutation.SftpService(); ok {
+		_spec.SetField(agent.FieldSftpService, field.TypeBool, value)
+		_node.SftpService = value
+	}
+	if value, ok := ac.mutation.RemoteAssistance(); ok {
+		_spec.SetField(agent.FieldRemoteAssistance, field.TypeBool, value)
+		_node.RemoteAssistance = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1489,6 +1533,42 @@ func (u *AgentUpsert) ClearDebugMode() *AgentUpsert {
 	return u
 }
 
+// SetSftpService sets the "sftp_service" field.
+func (u *AgentUpsert) SetSftpService(v bool) *AgentUpsert {
+	u.Set(agent.FieldSftpService, v)
+	return u
+}
+
+// UpdateSftpService sets the "sftp_service" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateSftpService() *AgentUpsert {
+	u.SetExcluded(agent.FieldSftpService)
+	return u
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (u *AgentUpsert) ClearSftpService() *AgentUpsert {
+	u.SetNull(agent.FieldSftpService)
+	return u
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (u *AgentUpsert) SetRemoteAssistance(v bool) *AgentUpsert {
+	u.Set(agent.FieldRemoteAssistance, v)
+	return u
+}
+
+// UpdateRemoteAssistance sets the "remote_assistance" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateRemoteAssistance() *AgentUpsert {
+	u.SetExcluded(agent.FieldRemoteAssistance)
+	return u
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (u *AgentUpsert) ClearRemoteAssistance() *AgentUpsert {
+	u.SetNull(agent.FieldRemoteAssistance)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1926,6 +2006,48 @@ func (u *AgentUpsertOne) UpdateDebugMode() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearDebugMode() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearDebugMode()
+	})
+}
+
+// SetSftpService sets the "sftp_service" field.
+func (u *AgentUpsertOne) SetSftpService(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSftpService(v)
+	})
+}
+
+// UpdateSftpService sets the "sftp_service" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateSftpService() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSftpService()
+	})
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (u *AgentUpsertOne) ClearSftpService() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSftpService()
+	})
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (u *AgentUpsertOne) SetRemoteAssistance(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetRemoteAssistance(v)
+	})
+}
+
+// UpdateRemoteAssistance sets the "remote_assistance" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateRemoteAssistance() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateRemoteAssistance()
+	})
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (u *AgentUpsertOne) ClearRemoteAssistance() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearRemoteAssistance()
 	})
 }
 
@@ -2533,6 +2655,48 @@ func (u *AgentUpsertBulk) UpdateDebugMode() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearDebugMode() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearDebugMode()
+	})
+}
+
+// SetSftpService sets the "sftp_service" field.
+func (u *AgentUpsertBulk) SetSftpService(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetSftpService(v)
+	})
+}
+
+// UpdateSftpService sets the "sftp_service" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateSftpService() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateSftpService()
+	})
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (u *AgentUpsertBulk) ClearSftpService() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearSftpService()
+	})
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (u *AgentUpsertBulk) SetRemoteAssistance(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetRemoteAssistance(v)
+	})
+}
+
+// UpdateRemoteAssistance sets the "remote_assistance" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateRemoteAssistance() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateRemoteAssistance()
+	})
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (u *AgentUpsertBulk) ClearRemoteAssistance() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearRemoteAssistance()
 	})
 }
 

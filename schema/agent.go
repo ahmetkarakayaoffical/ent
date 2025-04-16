@@ -36,6 +36,8 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("restart_required").Optional().Default(false),
 		field.Bool("is_remote").Optional().Default(false),
 		field.Bool("debug_mode").Optional().Default(false),
+		field.Bool("sftp_service").Optional().Default(true),
+		field.Bool("remote_assistance").Optional().Default(true),
 	}
 }
 

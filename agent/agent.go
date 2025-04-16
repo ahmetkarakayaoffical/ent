@@ -54,6 +54,10 @@ const (
 	FieldIsRemote = "is_remote"
 	// FieldDebugMode holds the string denoting the debug_mode field in the database.
 	FieldDebugMode = "debug_mode"
+	// FieldSftpService holds the string denoting the sftp_service field in the database.
+	FieldSftpService = "sftp_service"
+	// FieldRemoteAssistance holds the string denoting the remote_assistance field in the database.
+	FieldRemoteAssistance = "remote_assistance"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -266,6 +270,8 @@ var Columns = []string{
 	FieldRestartRequired,
 	FieldIsRemote,
 	FieldDebugMode,
+	FieldSftpService,
+	FieldRemoteAssistance,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -326,6 +332,10 @@ var (
 	DefaultIsRemote bool
 	// DefaultDebugMode holds the default value on creation for the "debug_mode" field.
 	DefaultDebugMode bool
+	// DefaultSftpService holds the default value on creation for the "sftp_service" field.
+	DefaultSftpService bool
+	// DefaultRemoteAssistance holds the default value on creation for the "remote_assistance" field.
+	DefaultRemoteAssistance bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -463,6 +473,16 @@ func ByIsRemote(opts ...sql.OrderTermOption) OrderOption {
 // ByDebugMode orders the results by the debug_mode field.
 func ByDebugMode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDebugMode, opts...).ToFunc()
+}
+
+// BySftpService orders the results by the sftp_service field.
+func BySftpService(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSftpService, opts...).ToFunc()
+}
+
+// ByRemoteAssistance orders the results by the remote_assistance field.
+func ByRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemoteAssistance, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

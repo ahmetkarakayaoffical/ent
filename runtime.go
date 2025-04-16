@@ -87,6 +87,14 @@ func init() {
 	agentDescDebugMode := agentFields[20].Descriptor()
 	// agent.DefaultDebugMode holds the default value on creation for the debug_mode field.
 	agent.DefaultDebugMode = agentDescDebugMode.Default.(bool)
+	// agentDescSftpService is the schema descriptor for sftp_service field.
+	agentDescSftpService := agentFields[21].Descriptor()
+	// agent.DefaultSftpService holds the default value on creation for the sftp_service field.
+	agent.DefaultSftpService = agentDescSftpService.Default.(bool)
+	// agentDescRemoteAssistance is the schema descriptor for remote_assistance field.
+	agentDescRemoteAssistance := agentFields[22].Descriptor()
+	// agent.DefaultRemoteAssistance holds the default value on creation for the remote_assistance field.
+	agent.DefaultRemoteAssistance = agentDescRemoteAssistance.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

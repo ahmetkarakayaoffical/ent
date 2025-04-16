@@ -105,6 +105,8 @@ type AgentMutation struct {
 	restart_required           *bool
 	is_remote                  *bool
 	debug_mode                 *bool
+	sftp_service               *bool
+	remote_assistance          *bool
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1189,6 +1191,104 @@ func (m *AgentMutation) ResetDebugMode() {
 	delete(m.clearedFields, agent.FieldDebugMode)
 }
 
+// SetSftpService sets the "sftp_service" field.
+func (m *AgentMutation) SetSftpService(b bool) {
+	m.sftp_service = &b
+}
+
+// SftpService returns the value of the "sftp_service" field in the mutation.
+func (m *AgentMutation) SftpService() (r bool, exists bool) {
+	v := m.sftp_service
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSftpService returns the old "sftp_service" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldSftpService(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSftpService is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSftpService requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSftpService: %w", err)
+	}
+	return oldValue.SftpService, nil
+}
+
+// ClearSftpService clears the value of the "sftp_service" field.
+func (m *AgentMutation) ClearSftpService() {
+	m.sftp_service = nil
+	m.clearedFields[agent.FieldSftpService] = struct{}{}
+}
+
+// SftpServiceCleared returns if the "sftp_service" field was cleared in this mutation.
+func (m *AgentMutation) SftpServiceCleared() bool {
+	_, ok := m.clearedFields[agent.FieldSftpService]
+	return ok
+}
+
+// ResetSftpService resets all changes to the "sftp_service" field.
+func (m *AgentMutation) ResetSftpService() {
+	m.sftp_service = nil
+	delete(m.clearedFields, agent.FieldSftpService)
+}
+
+// SetRemoteAssistance sets the "remote_assistance" field.
+func (m *AgentMutation) SetRemoteAssistance(b bool) {
+	m.remote_assistance = &b
+}
+
+// RemoteAssistance returns the value of the "remote_assistance" field in the mutation.
+func (m *AgentMutation) RemoteAssistance() (r bool, exists bool) {
+	v := m.remote_assistance
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRemoteAssistance returns the old "remote_assistance" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldRemoteAssistance(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRemoteAssistance is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRemoteAssistance requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRemoteAssistance: %w", err)
+	}
+	return oldValue.RemoteAssistance, nil
+}
+
+// ClearRemoteAssistance clears the value of the "remote_assistance" field.
+func (m *AgentMutation) ClearRemoteAssistance() {
+	m.remote_assistance = nil
+	m.clearedFields[agent.FieldRemoteAssistance] = struct{}{}
+}
+
+// RemoteAssistanceCleared returns if the "remote_assistance" field was cleared in this mutation.
+func (m *AgentMutation) RemoteAssistanceCleared() bool {
+	_, ok := m.clearedFields[agent.FieldRemoteAssistance]
+	return ok
+}
+
+// ResetRemoteAssistance resets all changes to the "remote_assistance" field.
+func (m *AgentMutation) ResetRemoteAssistance() {
+	m.remote_assistance = nil
+	delete(m.clearedFields, agent.FieldRemoteAssistance)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2066,7 +2166,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 22)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2127,6 +2227,12 @@ func (m *AgentMutation) Fields() []string {
 	if m.debug_mode != nil {
 		fields = append(fields, agent.FieldDebugMode)
 	}
+	if m.sftp_service != nil {
+		fields = append(fields, agent.FieldSftpService)
+	}
+	if m.remote_assistance != nil {
+		fields = append(fields, agent.FieldRemoteAssistance)
+	}
 	return fields
 }
 
@@ -2175,6 +2281,10 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.IsRemote()
 	case agent.FieldDebugMode:
 		return m.DebugMode()
+	case agent.FieldSftpService:
+		return m.SftpService()
+	case agent.FieldRemoteAssistance:
+		return m.RemoteAssistance()
 	}
 	return nil, false
 }
@@ -2224,6 +2334,10 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldIsRemote(ctx)
 	case agent.FieldDebugMode:
 		return m.OldDebugMode(ctx)
+	case agent.FieldSftpService:
+		return m.OldSftpService(ctx)
+	case agent.FieldRemoteAssistance:
+		return m.OldRemoteAssistance(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2373,6 +2487,20 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDebugMode(v)
 		return nil
+	case agent.FieldSftpService:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSftpService(v)
+		return nil
+	case agent.FieldRemoteAssistance:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRemoteAssistance(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2451,6 +2579,12 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldDebugMode) {
 		fields = append(fields, agent.FieldDebugMode)
 	}
+	if m.FieldCleared(agent.FieldSftpService) {
+		fields = append(fields, agent.FieldSftpService)
+	}
+	if m.FieldCleared(agent.FieldRemoteAssistance) {
+		fields = append(fields, agent.FieldRemoteAssistance)
+	}
 	return fields
 }
 
@@ -2512,6 +2646,12 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldDebugMode:
 		m.ClearDebugMode()
+		return nil
+	case agent.FieldSftpService:
+		m.ClearSftpService()
+		return nil
+	case agent.FieldRemoteAssistance:
+		m.ClearRemoteAssistance()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2580,6 +2720,12 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldDebugMode:
 		m.ResetDebugMode()
+		return nil
+	case agent.FieldSftpService:
+		m.ResetSftpService()
+		return nil
+	case agent.FieldRemoteAssistance:
+		m.ResetRemoteAssistance()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

@@ -62,6 +62,10 @@ type Agent struct {
 	IsRemote bool `json:"is_remote,omitempty"`
 	// DebugMode holds the value of the "debug_mode" field.
 	DebugMode bool `json:"debug_mode,omitempty"`
+	// SftpService holds the value of the "sftp_service" field.
+	SftpService bool `json:"sftp_service,omitempty"`
+	// RemoteAssistance holds the value of the "remote_assistance" field.
+	RemoteAssistance bool `json:"remote_assistance,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
@@ -278,7 +282,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case agent.FieldCertificateReady, agent.FieldRestartRequired, agent.FieldIsRemote, agent.FieldDebugMode:
+		case agent.FieldCertificateReady, agent.FieldRestartRequired, agent.FieldIsRemote, agent.FieldDebugMode, agent.FieldSftpService, agent.FieldRemoteAssistance:
 			values[i] = new(sql.NullBool)
 		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus:
 			values[i] = new(sql.NullString)
@@ -426,6 +430,18 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field debug_mode", values[i])
 			} else if value.Valid {
 				a.DebugMode = value.Bool
+			}
+		case agent.FieldSftpService:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sftp_service", values[i])
+			} else if value.Valid {
+				a.SftpService = value.Bool
+			}
+		case agent.FieldRemoteAssistance:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field remote_assistance", values[i])
+			} else if value.Valid {
+				a.RemoteAssistance = value.Bool
 			}
 		case agent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -614,6 +630,12 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("debug_mode=")
 	builder.WriteString(fmt.Sprintf("%v", a.DebugMode))
+	builder.WriteString(", ")
+	builder.WriteString("sftp_service=")
+	builder.WriteString(fmt.Sprintf("%v", a.SftpService))
+	builder.WriteString(", ")
+	builder.WriteString("remote_assistance=")
+	builder.WriteString(fmt.Sprintf("%v", a.RemoteAssistance))
 	builder.WriteByte(')')
 	return builder.String()
 }
