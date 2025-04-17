@@ -513,8 +513,6 @@ var (
 		{Name: "use_flatpak", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "disable_sftp", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "disable_remote_assistance", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "disable_sftp_modified", Type: field.TypeTime, Nullable: true},
-		{Name: "disable_remote_assistance_modified", Type: field.TypeTime, Nullable: true},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
@@ -525,7 +523,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[36]},
+				Columns:    []*schema.Column{SettingsColumns[34]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

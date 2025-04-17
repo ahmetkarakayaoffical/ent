@@ -80,10 +80,6 @@ const (
 	FieldDisableSftp = "disable_sftp"
 	// FieldDisableRemoteAssistance holds the string denoting the disable_remote_assistance field in the database.
 	FieldDisableRemoteAssistance = "disable_remote_assistance"
-	// FieldDisableSftpModified holds the string denoting the disable_sftp_modified field in the database.
-	FieldDisableSftpModified = "disable_sftp_modified"
-	// FieldDisableRemoteAssistanceModified holds the string denoting the disable_remote_assistance_modified field in the database.
-	FieldDisableRemoteAssistanceModified = "disable_remote_assistance_modified"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -133,8 +129,6 @@ var Columns = []string{
 	FieldUseFlatpak,
 	FieldDisableSftp,
 	FieldDisableRemoteAssistance,
-	FieldDisableSftpModified,
-	FieldDisableRemoteAssistanceModified,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -201,10 +195,6 @@ var (
 	DefaultDisableSftp bool
 	// DefaultDisableRemoteAssistance holds the default value on creation for the "disable_remote_assistance" field.
 	DefaultDisableRemoteAssistance bool
-	// DefaultDisableSftpModified holds the default value on creation for the "disable_sftp_modified" field.
-	DefaultDisableSftpModified func() time.Time
-	// DefaultDisableRemoteAssistanceModified holds the default value on creation for the "disable_remote_assistance_modified" field.
-	DefaultDisableRemoteAssistanceModified func() time.Time
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -378,16 +368,6 @@ func ByDisableSftp(opts ...sql.OrderTermOption) OrderOption {
 // ByDisableRemoteAssistance orders the results by the disable_remote_assistance field.
 func ByDisableRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisableRemoteAssistance, opts...).ToFunc()
-}
-
-// ByDisableSftpModified orders the results by the disable_sftp_modified field.
-func ByDisableSftpModified(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisableSftpModified, opts...).ToFunc()
-}
-
-// ByDisableRemoteAssistanceModified orders the results by the disable_remote_assistance_modified field.
-func ByDisableRemoteAssistanceModified(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDisableRemoteAssistanceModified, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.

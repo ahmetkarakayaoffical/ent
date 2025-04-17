@@ -485,34 +485,6 @@ func (sc *SettingsCreate) SetNillableDisableRemoteAssistance(b *bool) *SettingsC
 	return sc
 }
 
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (sc *SettingsCreate) SetDisableSftpModified(t time.Time) *SettingsCreate {
-	sc.mutation.SetDisableSftpModified(t)
-	return sc
-}
-
-// SetNillableDisableSftpModified sets the "disable_sftp_modified" field if the given value is not nil.
-func (sc *SettingsCreate) SetNillableDisableSftpModified(t *time.Time) *SettingsCreate {
-	if t != nil {
-		sc.SetDisableSftpModified(*t)
-	}
-	return sc
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (sc *SettingsCreate) SetDisableRemoteAssistanceModified(t time.Time) *SettingsCreate {
-	sc.mutation.SetDisableRemoteAssistanceModified(t)
-	return sc
-}
-
-// SetNillableDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field if the given value is not nil.
-func (sc *SettingsCreate) SetNillableDisableRemoteAssistanceModified(t *time.Time) *SettingsCreate {
-	if t != nil {
-		sc.SetDisableRemoteAssistanceModified(*t)
-	}
-	return sc
-}
-
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -646,14 +618,6 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.DisableRemoteAssistance(); !ok {
 		v := settings.DefaultDisableRemoteAssistance
 		sc.mutation.SetDisableRemoteAssistance(v)
-	}
-	if _, ok := sc.mutation.DisableSftpModified(); !ok {
-		v := settings.DefaultDisableSftpModified()
-		sc.mutation.SetDisableSftpModified(v)
-	}
-	if _, ok := sc.mutation.DisableRemoteAssistanceModified(); !ok {
-		v := settings.DefaultDisableRemoteAssistanceModified()
-		sc.mutation.SetDisableRemoteAssistanceModified(v)
 	}
 }
 
@@ -817,14 +781,6 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DisableRemoteAssistance(); ok {
 		_spec.SetField(settings.FieldDisableRemoteAssistance, field.TypeBool, value)
 		_node.DisableRemoteAssistance = value
-	}
-	if value, ok := sc.mutation.DisableSftpModified(); ok {
-		_spec.SetField(settings.FieldDisableSftpModified, field.TypeTime, value)
-		_node.DisableSftpModified = value
-	}
-	if value, ok := sc.mutation.DisableRemoteAssistanceModified(); ok {
-		_spec.SetField(settings.FieldDisableRemoteAssistanceModified, field.TypeTime, value)
-		_node.DisableRemoteAssistanceModified = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1528,42 +1484,6 @@ func (u *SettingsUpsert) UpdateDisableRemoteAssistance() *SettingsUpsert {
 // ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
 func (u *SettingsUpsert) ClearDisableRemoteAssistance() *SettingsUpsert {
 	u.SetNull(settings.FieldDisableRemoteAssistance)
-	return u
-}
-
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (u *SettingsUpsert) SetDisableSftpModified(v time.Time) *SettingsUpsert {
-	u.Set(settings.FieldDisableSftpModified, v)
-	return u
-}
-
-// UpdateDisableSftpModified sets the "disable_sftp_modified" field to the value that was provided on create.
-func (u *SettingsUpsert) UpdateDisableSftpModified() *SettingsUpsert {
-	u.SetExcluded(settings.FieldDisableSftpModified)
-	return u
-}
-
-// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
-func (u *SettingsUpsert) ClearDisableSftpModified() *SettingsUpsert {
-	u.SetNull(settings.FieldDisableSftpModified)
-	return u
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsert) SetDisableRemoteAssistanceModified(v time.Time) *SettingsUpsert {
-	u.Set(settings.FieldDisableRemoteAssistanceModified, v)
-	return u
-}
-
-// UpdateDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field to the value that was provided on create.
-func (u *SettingsUpsert) UpdateDisableRemoteAssistanceModified() *SettingsUpsert {
-	u.SetExcluded(settings.FieldDisableRemoteAssistanceModified)
-	return u
-}
-
-// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsert) ClearDisableRemoteAssistanceModified() *SettingsUpsert {
-	u.SetNull(settings.FieldDisableRemoteAssistanceModified)
 	return u
 }
 
@@ -2346,48 +2266,6 @@ func (u *SettingsUpsertOne) UpdateDisableRemoteAssistance() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearDisableRemoteAssistance() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableRemoteAssistance()
-	})
-}
-
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (u *SettingsUpsertOne) SetDisableSftpModified(v time.Time) *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.SetDisableSftpModified(v)
-	})
-}
-
-// UpdateDisableSftpModified sets the "disable_sftp_modified" field to the value that was provided on create.
-func (u *SettingsUpsertOne) UpdateDisableSftpModified() *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.UpdateDisableSftpModified()
-	})
-}
-
-// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
-func (u *SettingsUpsertOne) ClearDisableSftpModified() *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.ClearDisableSftpModified()
-	})
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsertOne) SetDisableRemoteAssistanceModified(v time.Time) *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.SetDisableRemoteAssistanceModified(v)
-	})
-}
-
-// UpdateDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field to the value that was provided on create.
-func (u *SettingsUpsertOne) UpdateDisableRemoteAssistanceModified() *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.UpdateDisableRemoteAssistanceModified()
-	})
-}
-
-// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsertOne) ClearDisableRemoteAssistanceModified() *SettingsUpsertOne {
-	return u.Update(func(s *SettingsUpsert) {
-		s.ClearDisableRemoteAssistanceModified()
 	})
 }
 
@@ -3334,48 +3212,6 @@ func (u *SettingsUpsertBulk) UpdateDisableRemoteAssistance() *SettingsUpsertBulk
 func (u *SettingsUpsertBulk) ClearDisableRemoteAssistance() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableRemoteAssistance()
-	})
-}
-
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (u *SettingsUpsertBulk) SetDisableSftpModified(v time.Time) *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.SetDisableSftpModified(v)
-	})
-}
-
-// UpdateDisableSftpModified sets the "disable_sftp_modified" field to the value that was provided on create.
-func (u *SettingsUpsertBulk) UpdateDisableSftpModified() *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.UpdateDisableSftpModified()
-	})
-}
-
-// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
-func (u *SettingsUpsertBulk) ClearDisableSftpModified() *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.ClearDisableSftpModified()
-	})
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsertBulk) SetDisableRemoteAssistanceModified(v time.Time) *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.SetDisableRemoteAssistanceModified(v)
-	})
-}
-
-// UpdateDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field to the value that was provided on create.
-func (u *SettingsUpsertBulk) UpdateDisableRemoteAssistanceModified() *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.UpdateDisableRemoteAssistanceModified()
-	})
-}
-
-// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
-func (u *SettingsUpsertBulk) ClearDisableRemoteAssistanceModified() *SettingsUpsertBulk {
-	return u.Update(func(s *SettingsUpsert) {
-		s.ClearDisableRemoteAssistanceModified()
 	})
 }
 

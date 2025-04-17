@@ -731,46 +731,6 @@ func (su *SettingsUpdate) ClearDisableRemoteAssistance() *SettingsUpdate {
 	return su
 }
 
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (su *SettingsUpdate) SetDisableSftpModified(t time.Time) *SettingsUpdate {
-	su.mutation.SetDisableSftpModified(t)
-	return su
-}
-
-// SetNillableDisableSftpModified sets the "disable_sftp_modified" field if the given value is not nil.
-func (su *SettingsUpdate) SetNillableDisableSftpModified(t *time.Time) *SettingsUpdate {
-	if t != nil {
-		su.SetDisableSftpModified(*t)
-	}
-	return su
-}
-
-// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
-func (su *SettingsUpdate) ClearDisableSftpModified() *SettingsUpdate {
-	su.mutation.ClearDisableSftpModified()
-	return su
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (su *SettingsUpdate) SetDisableRemoteAssistanceModified(t time.Time) *SettingsUpdate {
-	su.mutation.SetDisableRemoteAssistanceModified(t)
-	return su
-}
-
-// SetNillableDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field if the given value is not nil.
-func (su *SettingsUpdate) SetNillableDisableRemoteAssistanceModified(t *time.Time) *SettingsUpdate {
-	if t != nil {
-		su.SetDisableRemoteAssistanceModified(*t)
-	}
-	return su
-}
-
-// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
-func (su *SettingsUpdate) ClearDisableRemoteAssistanceModified() *SettingsUpdate {
-	su.mutation.ClearDisableRemoteAssistanceModified()
-	return su
-}
-
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -1070,18 +1030,6 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DisableRemoteAssistanceCleared() {
 		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
-	}
-	if value, ok := su.mutation.DisableSftpModified(); ok {
-		_spec.SetField(settings.FieldDisableSftpModified, field.TypeTime, value)
-	}
-	if su.mutation.DisableSftpModifiedCleared() {
-		_spec.ClearField(settings.FieldDisableSftpModified, field.TypeTime)
-	}
-	if value, ok := su.mutation.DisableRemoteAssistanceModified(); ok {
-		_spec.SetField(settings.FieldDisableRemoteAssistanceModified, field.TypeTime, value)
-	}
-	if su.mutation.DisableRemoteAssistanceModifiedCleared() {
-		_spec.ClearField(settings.FieldDisableRemoteAssistanceModified, field.TypeTime)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1835,46 +1783,6 @@ func (suo *SettingsUpdateOne) ClearDisableRemoteAssistance() *SettingsUpdateOne 
 	return suo
 }
 
-// SetDisableSftpModified sets the "disable_sftp_modified" field.
-func (suo *SettingsUpdateOne) SetDisableSftpModified(t time.Time) *SettingsUpdateOne {
-	suo.mutation.SetDisableSftpModified(t)
-	return suo
-}
-
-// SetNillableDisableSftpModified sets the "disable_sftp_modified" field if the given value is not nil.
-func (suo *SettingsUpdateOne) SetNillableDisableSftpModified(t *time.Time) *SettingsUpdateOne {
-	if t != nil {
-		suo.SetDisableSftpModified(*t)
-	}
-	return suo
-}
-
-// ClearDisableSftpModified clears the value of the "disable_sftp_modified" field.
-func (suo *SettingsUpdateOne) ClearDisableSftpModified() *SettingsUpdateOne {
-	suo.mutation.ClearDisableSftpModified()
-	return suo
-}
-
-// SetDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field.
-func (suo *SettingsUpdateOne) SetDisableRemoteAssistanceModified(t time.Time) *SettingsUpdateOne {
-	suo.mutation.SetDisableRemoteAssistanceModified(t)
-	return suo
-}
-
-// SetNillableDisableRemoteAssistanceModified sets the "disable_remote_assistance_modified" field if the given value is not nil.
-func (suo *SettingsUpdateOne) SetNillableDisableRemoteAssistanceModified(t *time.Time) *SettingsUpdateOne {
-	if t != nil {
-		suo.SetDisableRemoteAssistanceModified(*t)
-	}
-	return suo
-}
-
-// ClearDisableRemoteAssistanceModified clears the value of the "disable_remote_assistance_modified" field.
-func (suo *SettingsUpdateOne) ClearDisableRemoteAssistanceModified() *SettingsUpdateOne {
-	suo.mutation.ClearDisableRemoteAssistanceModified()
-	return suo
-}
-
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -2204,18 +2112,6 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.DisableRemoteAssistanceCleared() {
 		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
-	}
-	if value, ok := suo.mutation.DisableSftpModified(); ok {
-		_spec.SetField(settings.FieldDisableSftpModified, field.TypeTime, value)
-	}
-	if suo.mutation.DisableSftpModifiedCleared() {
-		_spec.ClearField(settings.FieldDisableSftpModified, field.TypeTime)
-	}
-	if value, ok := suo.mutation.DisableRemoteAssistanceModified(); ok {
-		_spec.SetField(settings.FieldDisableRemoteAssistanceModified, field.TypeTime, value)
-	}
-	if suo.mutation.DisableRemoteAssistanceModifiedCleared() {
-		_spec.ClearField(settings.FieldDisableRemoteAssistanceModified, field.TypeTime)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -84,10 +84,6 @@ type Settings struct {
 	DisableSftp bool `json:"disable_sftp,omitempty"`
 	// DisableRemoteAssistance holds the value of the "disable_remote_assistance" field.
 	DisableRemoteAssistance bool `json:"disable_remote_assistance,omitempty"`
-	// DisableSftpModified holds the value of the "disable_sftp_modified" field.
-	DisableSftpModified time.Time `json:"disable_sftp_modified,omitempty"`
-	// DisableRemoteAssistanceModified holds the value of the "disable_remote_assistance_modified" field.
-	DisableRemoteAssistanceModified time.Time `json:"disable_remote_assistance_modified,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettingsQuery when eager-loading is set.
 	Edges        SettingsEdges `json:"edges"`
@@ -126,7 +122,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case settings.FieldLanguage, settings.FieldOrganization, settings.FieldPostalAddress, settings.FieldPostalCode, settings.FieldLocality, settings.FieldProvince, settings.FieldState, settings.FieldCountry, settings.FieldSMTPServer, settings.FieldSMTPUser, settings.FieldSMTPPassword, settings.FieldSMTPAuth, settings.FieldNatsServer, settings.FieldNatsPort, settings.FieldMessageFrom, settings.FieldMaxUploadSize, settings.FieldUpdateChannel:
 			values[i] = new(sql.NullString)
-		case settings.FieldCreated, settings.FieldModified, settings.FieldDisableSftpModified, settings.FieldDisableRemoteAssistanceModified:
+		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
 		case settings.ForeignKeys[0]: // settings_tag
 			values[i] = new(sql.NullInt64)
@@ -349,18 +345,6 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DisableRemoteAssistance = value.Bool
 			}
-		case settings.FieldDisableSftpModified:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field disable_sftp_modified", values[i])
-			} else if value.Valid {
-				s.DisableSftpModified = value.Time
-			}
-		case settings.FieldDisableRemoteAssistanceModified:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field disable_remote_assistance_modified", values[i])
-			} else if value.Valid {
-				s.DisableRemoteAssistanceModified = value.Time
-			}
 		case settings.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settings_tag", value)
@@ -507,12 +491,6 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("disable_remote_assistance=")
 	builder.WriteString(fmt.Sprintf("%v", s.DisableRemoteAssistance))
-	builder.WriteString(", ")
-	builder.WriteString("disable_sftp_modified=")
-	builder.WriteString(s.DisableSftpModified.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("disable_remote_assistance_modified=")
-	builder.WriteString(s.DisableRemoteAssistanceModified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

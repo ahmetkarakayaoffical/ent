@@ -220,16 +220,6 @@ func DisableRemoteAssistance(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistance, v))
 }
 
-// DisableSftpModified applies equality check predicate on the "disable_sftp_modified" field. It's identical to DisableSftpModifiedEQ.
-func DisableSftpModified(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldEQ(FieldDisableSftpModified, v))
-}
-
-// DisableRemoteAssistanceModified applies equality check predicate on the "disable_remote_assistance_modified" field. It's identical to DisableRemoteAssistanceModifiedEQ.
-func DisableRemoteAssistanceModified(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistanceModified, v))
-}
-
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -2093,106 +2083,6 @@ func DisableRemoteAssistanceIsNil() predicate.Settings {
 // DisableRemoteAssistanceNotNil applies the NotNil predicate on the "disable_remote_assistance" field.
 func DisableRemoteAssistanceNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldDisableRemoteAssistance))
-}
-
-// DisableSftpModifiedEQ applies the EQ predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedEQ(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldEQ(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedNEQ applies the NEQ predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedNEQ(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldNEQ(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedIn applies the In predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedIn(vs ...time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldIn(FieldDisableSftpModified, vs...))
-}
-
-// DisableSftpModifiedNotIn applies the NotIn predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedNotIn(vs ...time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldNotIn(FieldDisableSftpModified, vs...))
-}
-
-// DisableSftpModifiedGT applies the GT predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedGT(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldGT(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedGTE applies the GTE predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedGTE(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldGTE(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedLT applies the LT predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedLT(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldLT(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedLTE applies the LTE predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedLTE(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldLTE(FieldDisableSftpModified, v))
-}
-
-// DisableSftpModifiedIsNil applies the IsNil predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedIsNil() predicate.Settings {
-	return predicate.Settings(sql.FieldIsNull(FieldDisableSftpModified))
-}
-
-// DisableSftpModifiedNotNil applies the NotNil predicate on the "disable_sftp_modified" field.
-func DisableSftpModifiedNotNil() predicate.Settings {
-	return predicate.Settings(sql.FieldNotNull(FieldDisableSftpModified))
-}
-
-// DisableRemoteAssistanceModifiedEQ applies the EQ predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedEQ(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedNEQ applies the NEQ predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedNEQ(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldNEQ(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedIn applies the In predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedIn(vs ...time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldIn(FieldDisableRemoteAssistanceModified, vs...))
-}
-
-// DisableRemoteAssistanceModifiedNotIn applies the NotIn predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedNotIn(vs ...time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldNotIn(FieldDisableRemoteAssistanceModified, vs...))
-}
-
-// DisableRemoteAssistanceModifiedGT applies the GT predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedGT(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldGT(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedGTE applies the GTE predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedGTE(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldGTE(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedLT applies the LT predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedLT(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldLT(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedLTE applies the LTE predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedLTE(v time.Time) predicate.Settings {
-	return predicate.Settings(sql.FieldLTE(FieldDisableRemoteAssistanceModified, v))
-}
-
-// DisableRemoteAssistanceModifiedIsNil applies the IsNil predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedIsNil() predicate.Settings {
-	return predicate.Settings(sql.FieldIsNull(FieldDisableRemoteAssistanceModified))
-}
-
-// DisableRemoteAssistanceModifiedNotNil applies the NotNil predicate on the "disable_remote_assistance_modified" field.
-func DisableRemoteAssistanceModifiedNotNil() predicate.Settings {
-	return predicate.Settings(sql.FieldNotNull(FieldDisableRemoteAssistanceModified))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.
