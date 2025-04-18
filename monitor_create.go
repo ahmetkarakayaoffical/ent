@@ -64,6 +64,34 @@ func (mc *MonitorCreate) SetNillableSerial(s *string) *MonitorCreate {
 	return mc
 }
 
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (mc *MonitorCreate) SetWeekOfManufacture(s string) *MonitorCreate {
+	mc.mutation.SetWeekOfManufacture(s)
+	return mc
+}
+
+// SetNillableWeekOfManufacture sets the "week_of_manufacture" field if the given value is not nil.
+func (mc *MonitorCreate) SetNillableWeekOfManufacture(s *string) *MonitorCreate {
+	if s != nil {
+		mc.SetWeekOfManufacture(*s)
+	}
+	return mc
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (mc *MonitorCreate) SetYearOfManufacture(s string) *MonitorCreate {
+	mc.mutation.SetYearOfManufacture(s)
+	return mc
+}
+
+// SetNillableYearOfManufacture sets the "year_of_manufacture" field if the given value is not nil.
+func (mc *MonitorCreate) SetNillableYearOfManufacture(s *string) *MonitorCreate {
+	if s != nil {
+		mc.SetYearOfManufacture(*s)
+	}
+	return mc
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (mc *MonitorCreate) SetOwnerID(id string) *MonitorCreate {
 	mc.mutation.SetOwnerID(id)
@@ -150,6 +178,14 @@ func (mc *MonitorCreate) createSpec() (*Monitor, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Serial(); ok {
 		_spec.SetField(monitor.FieldSerial, field.TypeString, value)
 		_node.Serial = value
+	}
+	if value, ok := mc.mutation.WeekOfManufacture(); ok {
+		_spec.SetField(monitor.FieldWeekOfManufacture, field.TypeString, value)
+		_node.WeekOfManufacture = value
+	}
+	if value, ok := mc.mutation.YearOfManufacture(); ok {
+		_spec.SetField(monitor.FieldYearOfManufacture, field.TypeString, value)
+		_node.YearOfManufacture = value
 	}
 	if nodes := mc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -274,6 +310,42 @@ func (u *MonitorUpsert) ClearSerial() *MonitorUpsert {
 	return u
 }
 
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (u *MonitorUpsert) SetWeekOfManufacture(v string) *MonitorUpsert {
+	u.Set(monitor.FieldWeekOfManufacture, v)
+	return u
+}
+
+// UpdateWeekOfManufacture sets the "week_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsert) UpdateWeekOfManufacture() *MonitorUpsert {
+	u.SetExcluded(monitor.FieldWeekOfManufacture)
+	return u
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (u *MonitorUpsert) ClearWeekOfManufacture() *MonitorUpsert {
+	u.SetNull(monitor.FieldWeekOfManufacture)
+	return u
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (u *MonitorUpsert) SetYearOfManufacture(v string) *MonitorUpsert {
+	u.Set(monitor.FieldYearOfManufacture, v)
+	return u
+}
+
+// UpdateYearOfManufacture sets the "year_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsert) UpdateYearOfManufacture() *MonitorUpsert {
+	u.SetExcluded(monitor.FieldYearOfManufacture)
+	return u
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (u *MonitorUpsert) ClearYearOfManufacture() *MonitorUpsert {
+	u.SetNull(monitor.FieldYearOfManufacture)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -374,6 +446,48 @@ func (u *MonitorUpsertOne) UpdateSerial() *MonitorUpsertOne {
 func (u *MonitorUpsertOne) ClearSerial() *MonitorUpsertOne {
 	return u.Update(func(s *MonitorUpsert) {
 		s.ClearSerial()
+	})
+}
+
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (u *MonitorUpsertOne) SetWeekOfManufacture(v string) *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.SetWeekOfManufacture(v)
+	})
+}
+
+// UpdateWeekOfManufacture sets the "week_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsertOne) UpdateWeekOfManufacture() *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.UpdateWeekOfManufacture()
+	})
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (u *MonitorUpsertOne) ClearWeekOfManufacture() *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.ClearWeekOfManufacture()
+	})
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (u *MonitorUpsertOne) SetYearOfManufacture(v string) *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.SetYearOfManufacture(v)
+	})
+}
+
+// UpdateYearOfManufacture sets the "year_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsertOne) UpdateYearOfManufacture() *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.UpdateYearOfManufacture()
+	})
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (u *MonitorUpsertOne) ClearYearOfManufacture() *MonitorUpsertOne {
+	return u.Update(func(s *MonitorUpsert) {
+		s.ClearYearOfManufacture()
 	})
 }
 
@@ -640,6 +754,48 @@ func (u *MonitorUpsertBulk) UpdateSerial() *MonitorUpsertBulk {
 func (u *MonitorUpsertBulk) ClearSerial() *MonitorUpsertBulk {
 	return u.Update(func(s *MonitorUpsert) {
 		s.ClearSerial()
+	})
+}
+
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (u *MonitorUpsertBulk) SetWeekOfManufacture(v string) *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.SetWeekOfManufacture(v)
+	})
+}
+
+// UpdateWeekOfManufacture sets the "week_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsertBulk) UpdateWeekOfManufacture() *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.UpdateWeekOfManufacture()
+	})
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (u *MonitorUpsertBulk) ClearWeekOfManufacture() *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.ClearWeekOfManufacture()
+	})
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (u *MonitorUpsertBulk) SetYearOfManufacture(v string) *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.SetYearOfManufacture(v)
+	})
+}
+
+// UpdateYearOfManufacture sets the "year_of_manufacture" field to the value that was provided on create.
+func (u *MonitorUpsertBulk) UpdateYearOfManufacture() *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.UpdateYearOfManufacture()
+	})
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (u *MonitorUpsertBulk) ClearYearOfManufacture() *MonitorUpsertBulk {
+	return u.Update(func(s *MonitorUpsert) {
+		s.ClearYearOfManufacture()
 	})
 }
 

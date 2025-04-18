@@ -187,6 +187,30 @@ var (
 			},
 		},
 	}
+	// MemorySlotsColumns holds the columns for the "memory_slots" table.
+	MemorySlotsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "slot", Type: field.TypeString, Nullable: true},
+		{Name: "size", Type: field.TypeString, Nullable: true},
+		{Name: "type", Type: field.TypeString, Nullable: true},
+		{Name: "serial_number", Type: field.TypeString, Nullable: true},
+		{Name: "part_number", Type: field.TypeString, Nullable: true},
+		{Name: "agent_memoryslots", Type: field.TypeString},
+	}
+	// MemorySlotsTable holds the schema information for the "memory_slots" table.
+	MemorySlotsTable = &schema.Table{
+		Name:       "memory_slots",
+		Columns:    MemorySlotsColumns,
+		PrimaryKey: []*schema.Column{MemorySlotsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "memory_slots_agents_memoryslots",
+				Columns:    []*schema.Column{MemorySlotsColumns[6]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// MetadataColumns holds the columns for the "metadata" table.
 	MetadataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -227,6 +251,8 @@ var (
 		{Name: "manufacturer", Type: field.TypeString, Nullable: true},
 		{Name: "model", Type: field.TypeString, Nullable: true},
 		{Name: "serial", Type: field.TypeString, Nullable: true},
+		{Name: "week_of_manufacture", Type: field.TypeString, Nullable: true},
+		{Name: "year_of_manufacture", Type: field.TypeString, Nullable: true},
 		{Name: "agent_monitors", Type: field.TypeString},
 	}
 	// MonitorsTable holds the schema information for the "monitors" table.
@@ -237,7 +263,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "monitors_agents_monitors",
-				Columns:    []*schema.Column{MonitorsColumns[4]},
+				Columns:    []*schema.Column{MonitorsColumns[6]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -775,6 +801,7 @@ var (
 		ComputersTable,
 		DeploymentsTable,
 		LogicalDisksTable,
+		MemorySlotsTable,
 		MetadataTable,
 		MonitorsTable,
 		NetworkAdaptersTable,
@@ -807,6 +834,7 @@ func init() {
 	ComputersTable.ForeignKeys[0].RefTable = AgentsTable
 	DeploymentsTable.ForeignKeys[0].RefTable = AgentsTable
 	LogicalDisksTable.ForeignKeys[0].RefTable = AgentsTable
+	MemorySlotsTable.ForeignKeys[0].RefTable = AgentsTable
 	MetadataTable.ForeignKeys[0].RefTable = AgentsTable
 	MetadataTable.ForeignKeys[1].RefTable = OrgMetadataTable
 	MonitorsTable.ForeignKeys[0].RefTable = AgentsTable

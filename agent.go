@@ -107,13 +107,15 @@ type AgentEdges struct {
 	Metadata []*Metadata `json:"metadata,omitempty"`
 	// Wingetcfgexclusions holds the value of the wingetcfgexclusions edge.
 	Wingetcfgexclusions []*WingetConfigExclusion `json:"wingetcfgexclusions,omitempty"`
+	// Memoryslots holds the value of the memoryslots edge.
+	Memoryslots []*MemorySlot `json:"memoryslots,omitempty"`
 	// Release holds the value of the release edge.
 	Release *Release `json:"release,omitempty"`
 	// Profileissue holds the value of the profileissue edge.
 	Profileissue []*ProfileIssue `json:"profileissue,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [18]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -259,12 +261,21 @@ func (e AgentEdges) WingetcfgexclusionsOrErr() ([]*WingetConfigExclusion, error)
 	return nil, &NotLoadedError{edge: "wingetcfgexclusions"}
 }
 
+// MemoryslotsOrErr returns the Memoryslots value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) MemoryslotsOrErr() ([]*MemorySlot, error) {
+	if e.loadedTypes[15] {
+		return e.Memoryslots, nil
+	}
+	return nil, &NotLoadedError{edge: "memoryslots"}
+}
+
 // ReleaseOrErr returns the Release value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AgentEdges) ReleaseOrErr() (*Release, error) {
 	if e.Release != nil {
 		return e.Release, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: release.Label}
 	}
 	return nil, &NotLoadedError{edge: "release"}
@@ -273,7 +284,7 @@ func (e AgentEdges) ReleaseOrErr() (*Release, error) {
 // ProfileissueOrErr returns the Profileissue value or an error if the edge
 // was not loaded in eager-loading.
 func (e AgentEdges) ProfileissueOrErr() ([]*ProfileIssue, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Profileissue, nil
 	}
 	return nil, &NotLoadedError{edge: "profileissue"}
@@ -544,6 +555,11 @@ func (a *Agent) QueryMetadata() *MetadataQuery {
 // QueryWingetcfgexclusions queries the "wingetcfgexclusions" edge of the Agent entity.
 func (a *Agent) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
 	return NewAgentClient(a.config).QueryWingetcfgexclusions(a)
+}
+
+// QueryMemoryslots queries the "memoryslots" edge of the Agent entity.
+func (a *Agent) QueryMemoryslots() *MemorySlotQuery {
+	return NewAgentClient(a.config).QueryMemoryslots(a)
 }
 
 // QueryRelease queries the "release" edge of the Agent entity.

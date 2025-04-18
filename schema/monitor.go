@@ -17,6 +17,8 @@ func (Monitor) Fields() []ent.Field {
 		field.String("manufacturer").Optional(),
 		field.String("model").Optional(),
 		field.String("serial").Optional(),
+		field.String("week_of_manufacture").Optional(),
+		field.String("year_of_manufacture").Optional(),
 	}
 }
 

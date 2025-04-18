@@ -23,6 +23,10 @@ type Monitor struct {
 	Model string `json:"model,omitempty"`
 	// Serial holds the value of the "serial" field.
 	Serial string `json:"serial,omitempty"`
+	// WeekOfManufacture holds the value of the "week_of_manufacture" field.
+	WeekOfManufacture string `json:"week_of_manufacture,omitempty"`
+	// YearOfManufacture holds the value of the "year_of_manufacture" field.
+	YearOfManufacture string `json:"year_of_manufacture,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MonitorQuery when eager-loading is set.
 	Edges          MonitorEdges `json:"edges"`
@@ -57,7 +61,7 @@ func (*Monitor) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case monitor.FieldID:
 			values[i] = new(sql.NullInt64)
-		case monitor.FieldManufacturer, monitor.FieldModel, monitor.FieldSerial:
+		case monitor.FieldManufacturer, monitor.FieldModel, monitor.FieldSerial, monitor.FieldWeekOfManufacture, monitor.FieldYearOfManufacture:
 			values[i] = new(sql.NullString)
 		case monitor.ForeignKeys[0]: // agent_monitors
 			values[i] = new(sql.NullString)
@@ -99,6 +103,18 @@ func (m *Monitor) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field serial", values[i])
 			} else if value.Valid {
 				m.Serial = value.String
+			}
+		case monitor.FieldWeekOfManufacture:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field week_of_manufacture", values[i])
+			} else if value.Valid {
+				m.WeekOfManufacture = value.String
+			}
+		case monitor.FieldYearOfManufacture:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field year_of_manufacture", values[i])
+			} else if value.Valid {
+				m.YearOfManufacture = value.String
 			}
 		case monitor.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -156,6 +172,12 @@ func (m *Monitor) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("serial=")
 	builder.WriteString(m.Serial)
+	builder.WriteString(", ")
+	builder.WriteString("week_of_manufacture=")
+	builder.WriteString(m.WeekOfManufacture)
+	builder.WriteString(", ")
+	builder.WriteString("year_of_manufacture=")
+	builder.WriteString(m.YearOfManufacture)
 	builder.WriteByte(')')
 	return builder.String()
 }

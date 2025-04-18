@@ -93,6 +93,18 @@ func (f LogicalDiskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogicalDiskMutation", m)
 }
 
+// The MemorySlotFunc type is an adapter to allow the use of ordinary
+// function as MemorySlot mutator.
+type MemorySlotFunc func(context.Context, *ent.MemorySlotMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemorySlotFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemorySlotMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemorySlotMutation", m)
+}
+
 // The MetadataFunc type is an adapter to allow the use of ordinary
 // function as Metadata mutator.
 type MetadataFunc func(context.Context, *ent.MetadataMutation) (ent.Value, error)

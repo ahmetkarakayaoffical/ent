@@ -22,6 +22,7 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
+	"github.com/open-uem/ent/memoryslot"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
@@ -63,6 +64,8 @@ type Client struct {
 	Deployment *DeploymentClient
 	// LogicalDisk is the client for interacting with the LogicalDisk builders.
 	LogicalDisk *LogicalDiskClient
+	// MemorySlot is the client for interacting with the MemorySlot builders.
+	MemorySlot *MemorySlotClient
 	// Metadata is the client for interacting with the Metadata builders.
 	Metadata *MetadataClient
 	// Monitor is the client for interacting with the Monitor builders.
@@ -121,6 +124,7 @@ func (c *Client) init() {
 	c.Computer = NewComputerClient(c.config)
 	c.Deployment = NewDeploymentClient(c.config)
 	c.LogicalDisk = NewLogicalDiskClient(c.config)
+	c.MemorySlot = NewMemorySlotClient(c.config)
 	c.Metadata = NewMetadataClient(c.config)
 	c.Monitor = NewMonitorClient(c.config)
 	c.NetworkAdapter = NewNetworkAdapterClient(c.config)
@@ -240,6 +244,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Computer:              NewComputerClient(cfg),
 		Deployment:            NewDeploymentClient(cfg),
 		LogicalDisk:           NewLogicalDiskClient(cfg),
+		MemorySlot:            NewMemorySlotClient(cfg),
 		Metadata:              NewMetadataClient(cfg),
 		Monitor:               NewMonitorClient(cfg),
 		NetworkAdapter:        NewNetworkAdapterClient(cfg),
@@ -286,6 +291,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Computer:              NewComputerClient(cfg),
 		Deployment:            NewDeploymentClient(cfg),
 		LogicalDisk:           NewLogicalDiskClient(cfg),
+		MemorySlot:            NewMemorySlotClient(cfg),
 		Metadata:              NewMetadataClient(cfg),
 		Monitor:               NewMonitorClient(cfg),
 		NetworkAdapter:        NewNetworkAdapterClient(cfg),
@@ -336,10 +342,10 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
-		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
-		c.Update, c.User, c.WingetConfigExclusion,
+		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
+		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
+		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share,
+		c.SystemUpdate, c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -350,10 +356,10 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.Metadata, c.Monitor, c.NetworkAdapter, c.OperatingSystem,
-		c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue, c.Release, c.Revocation,
-		c.Server, c.Sessions, c.Settings, c.Share, c.SystemUpdate, c.Tag, c.Task,
-		c.Update, c.User, c.WingetConfigExclusion,
+		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
+		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
+		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share,
+		c.SystemUpdate, c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -376,6 +382,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Deployment.mutate(ctx, m)
 	case *LogicalDiskMutation:
 		return c.LogicalDisk.mutate(ctx, m)
+	case *MemorySlotMutation:
+		return c.MemorySlot.mutate(ctx, m)
 	case *MetadataMutation:
 		return c.Metadata.mutate(ctx, m)
 	case *MonitorMutation:
@@ -762,6 +770,22 @@ func (c *AgentClient) QueryWingetcfgexclusions(a *Agent) *WingetConfigExclusionQ
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(wingetconfigexclusion.Table, wingetconfigexclusion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, agent.WingetcfgexclusionsTable, agent.WingetcfgexclusionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemoryslots queries the memoryslots edge of a Agent.
+func (c *AgentClient) QueryMemoryslots(a *Agent) *MemorySlotQuery {
+	query := (&MemorySlotClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(memoryslot.Table, memoryslot.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.MemoryslotsTable, agent.MemoryslotsColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1701,6 +1725,155 @@ func (c *LogicalDiskClient) mutate(ctx context.Context, m *LogicalDiskMutation) 
 		return (&LogicalDiskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown LogicalDisk mutation op: %q", m.Op())
+	}
+}
+
+// MemorySlotClient is a client for the MemorySlot schema.
+type MemorySlotClient struct {
+	config
+}
+
+// NewMemorySlotClient returns a client for the MemorySlot from the given config.
+func NewMemorySlotClient(c config) *MemorySlotClient {
+	return &MemorySlotClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memoryslot.Hooks(f(g(h())))`.
+func (c *MemorySlotClient) Use(hooks ...Hook) {
+	c.hooks.MemorySlot = append(c.hooks.MemorySlot, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memoryslot.Intercept(f(g(h())))`.
+func (c *MemorySlotClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MemorySlot = append(c.inters.MemorySlot, interceptors...)
+}
+
+// Create returns a builder for creating a MemorySlot entity.
+func (c *MemorySlotClient) Create() *MemorySlotCreate {
+	mutation := newMemorySlotMutation(c.config, OpCreate)
+	return &MemorySlotCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MemorySlot entities.
+func (c *MemorySlotClient) CreateBulk(builders ...*MemorySlotCreate) *MemorySlotCreateBulk {
+	return &MemorySlotCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemorySlotClient) MapCreateBulk(slice any, setFunc func(*MemorySlotCreate, int)) *MemorySlotCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemorySlotCreateBulk{err: fmt.Errorf("calling to MemorySlotClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemorySlotCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemorySlotCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MemorySlot.
+func (c *MemorySlotClient) Update() *MemorySlotUpdate {
+	mutation := newMemorySlotMutation(c.config, OpUpdate)
+	return &MemorySlotUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemorySlotClient) UpdateOne(ms *MemorySlot) *MemorySlotUpdateOne {
+	mutation := newMemorySlotMutation(c.config, OpUpdateOne, withMemorySlot(ms))
+	return &MemorySlotUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemorySlotClient) UpdateOneID(id int) *MemorySlotUpdateOne {
+	mutation := newMemorySlotMutation(c.config, OpUpdateOne, withMemorySlotID(id))
+	return &MemorySlotUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MemorySlot.
+func (c *MemorySlotClient) Delete() *MemorySlotDelete {
+	mutation := newMemorySlotMutation(c.config, OpDelete)
+	return &MemorySlotDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemorySlotClient) DeleteOne(ms *MemorySlot) *MemorySlotDeleteOne {
+	return c.DeleteOneID(ms.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemorySlotClient) DeleteOneID(id int) *MemorySlotDeleteOne {
+	builder := c.Delete().Where(memoryslot.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemorySlotDeleteOne{builder}
+}
+
+// Query returns a query builder for MemorySlot.
+func (c *MemorySlotClient) Query() *MemorySlotQuery {
+	return &MemorySlotQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemorySlot},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MemorySlot entity by its id.
+func (c *MemorySlotClient) Get(ctx context.Context, id int) (*MemorySlot, error) {
+	return c.Query().Where(memoryslot.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemorySlotClient) GetX(ctx context.Context, id int) *MemorySlot {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a MemorySlot.
+func (c *MemorySlotClient) QueryOwner(ms *MemorySlot) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ms.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memoryslot.Table, memoryslot.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, memoryslot.OwnerTable, memoryslot.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(ms.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemorySlotClient) Hooks() []Hook {
+	return c.hooks.MemorySlot
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemorySlotClient) Interceptors() []Interceptor {
+	return c.inters.MemorySlot
+}
+
+func (c *MemorySlotClient) mutate(ctx context.Context, m *MemorySlotMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemorySlotCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemorySlotUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemorySlotUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemorySlotDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MemorySlot mutation op: %q", m.Op())
 	}
 }
 
@@ -4783,15 +4956,17 @@ func (c *WingetConfigExclusionClient) mutate(ctx context.Context, m *WingetConfi
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
-		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
-		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Hook
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
+		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
+		Printer, Profile, ProfileIssue, Release, Revocation, Server, Sessions,
+		Settings, Share, SystemUpdate, Tag, Task, Update, User,
+		WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk, Metadata,
-		Monitor, NetworkAdapter, OperatingSystem, OrgMetadata, Printer, Profile,
-		ProfileIssue, Release, Revocation, Server, Sessions, Settings, Share,
-		SystemUpdate, Tag, Task, Update, User, WingetConfigExclusion []ent.Interceptor
+		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
+		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
+		Printer, Profile, ProfileIssue, Release, Revocation, Server, Sessions,
+		Settings, Share, SystemUpdate, Tag, Task, Update, User,
+		WingetConfigExclusion []ent.Interceptor
 	}
 )

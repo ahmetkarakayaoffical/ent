@@ -18,6 +18,10 @@ const (
 	FieldModel = "model"
 	// FieldSerial holds the string denoting the serial field in the database.
 	FieldSerial = "serial"
+	// FieldWeekOfManufacture holds the string denoting the week_of_manufacture field in the database.
+	FieldWeekOfManufacture = "week_of_manufacture"
+	// FieldYearOfManufacture holds the string denoting the year_of_manufacture field in the database.
+	FieldYearOfManufacture = "year_of_manufacture"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
@@ -39,6 +43,8 @@ var Columns = []string{
 	FieldManufacturer,
 	FieldModel,
 	FieldSerial,
+	FieldWeekOfManufacture,
+	FieldYearOfManufacture,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "monitors"
@@ -83,6 +89,16 @@ func ByModel(opts ...sql.OrderTermOption) OrderOption {
 // BySerial orders the results by the serial field.
 func BySerial(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSerial, opts...).ToFunc()
+}
+
+// ByWeekOfManufacture orders the results by the week_of_manufacture field.
+func ByWeekOfManufacture(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeekOfManufacture, opts...).ToFunc()
+}
+
+// ByYearOfManufacture orders the results by the year_of_manufacture field.
+func ByYearOfManufacture(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldYearOfManufacture, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

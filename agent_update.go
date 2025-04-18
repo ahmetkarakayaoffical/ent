@@ -17,6 +17,7 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
+	"github.com/open-uem/ent/memoryslot"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
@@ -723,6 +724,21 @@ func (au *AgentUpdate) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *Agen
 	return au.AddWingetcfgexclusionIDs(ids...)
 }
 
+// AddMemoryslotIDs adds the "memoryslots" edge to the MemorySlot entity by IDs.
+func (au *AgentUpdate) AddMemoryslotIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddMemoryslotIDs(ids...)
+	return au
+}
+
+// AddMemoryslots adds the "memoryslots" edges to the MemorySlot entity.
+func (au *AgentUpdate) AddMemoryslots(m ...*MemorySlot) *AgentUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.AddMemoryslotIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (au *AgentUpdate) SetReleaseID(id int) *AgentUpdate {
 	au.mutation.SetReleaseID(id)
@@ -1015,6 +1031,27 @@ func (au *AgentUpdate) RemoveWingetcfgexclusions(w ...*WingetConfigExclusion) *A
 		ids[i] = w[i].ID
 	}
 	return au.RemoveWingetcfgexclusionIDs(ids...)
+}
+
+// ClearMemoryslots clears all "memoryslots" edges to the MemorySlot entity.
+func (au *AgentUpdate) ClearMemoryslots() *AgentUpdate {
+	au.mutation.ClearMemoryslots()
+	return au
+}
+
+// RemoveMemoryslotIDs removes the "memoryslots" edge to MemorySlot entities by IDs.
+func (au *AgentUpdate) RemoveMemoryslotIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemoveMemoryslotIDs(ids...)
+	return au
+}
+
+// RemoveMemoryslots removes "memoryslots" edges to MemorySlot entities.
+func (au *AgentUpdate) RemoveMemoryslots(m ...*MemorySlot) *AgentUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.RemoveMemoryslotIDs(ids...)
 }
 
 // ClearRelease clears the "release" edge to the Release entity.
@@ -1846,6 +1883,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.MemoryslotsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedMemoryslotsIDs(); len(nodes) > 0 && !au.mutation.MemoryslotsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.MemoryslotsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if au.mutation.ReleaseCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2619,6 +2701,21 @@ func (auo *AgentUpdateOne) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *
 	return auo.AddWingetcfgexclusionIDs(ids...)
 }
 
+// AddMemoryslotIDs adds the "memoryslots" edge to the MemorySlot entity by IDs.
+func (auo *AgentUpdateOne) AddMemoryslotIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddMemoryslotIDs(ids...)
+	return auo
+}
+
+// AddMemoryslots adds the "memoryslots" edges to the MemorySlot entity.
+func (auo *AgentUpdateOne) AddMemoryslots(m ...*MemorySlot) *AgentUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.AddMemoryslotIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (auo *AgentUpdateOne) SetReleaseID(id int) *AgentUpdateOne {
 	auo.mutation.SetReleaseID(id)
@@ -2911,6 +3008,27 @@ func (auo *AgentUpdateOne) RemoveWingetcfgexclusions(w ...*WingetConfigExclusion
 		ids[i] = w[i].ID
 	}
 	return auo.RemoveWingetcfgexclusionIDs(ids...)
+}
+
+// ClearMemoryslots clears all "memoryslots" edges to the MemorySlot entity.
+func (auo *AgentUpdateOne) ClearMemoryslots() *AgentUpdateOne {
+	auo.mutation.ClearMemoryslots()
+	return auo
+}
+
+// RemoveMemoryslotIDs removes the "memoryslots" edge to MemorySlot entities by IDs.
+func (auo *AgentUpdateOne) RemoveMemoryslotIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemoveMemoryslotIDs(ids...)
+	return auo
+}
+
+// RemoveMemoryslots removes "memoryslots" edges to MemorySlot entities.
+func (auo *AgentUpdateOne) RemoveMemoryslots(m ...*MemorySlot) *AgentUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.RemoveMemoryslotIDs(ids...)
 }
 
 // ClearRelease clears the "release" edge to the Release entity.
@@ -3765,6 +3883,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.MemoryslotsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedMemoryslotsIDs(); len(nodes) > 0 && !auo.mutation.MemoryslotsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.MemoryslotsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

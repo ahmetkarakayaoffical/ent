@@ -1730,6 +1730,29 @@ func HasWingetcfgexclusionsWith(preds ...predicate.WingetConfigExclusion) predic
 	})
 }
 
+// HasMemoryslots applies the HasEdge predicate on the "memoryslots" edge.
+func HasMemoryslots() predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MemoryslotsTable, MemoryslotsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMemoryslotsWith applies the HasEdge predicate on the "memoryslots" edge with a given conditions (other predicates).
+func HasMemoryslotsWith(preds ...predicate.MemorySlot) predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := newMemoryslotsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRelease applies the HasEdge predicate on the "release" edge.
 func HasRelease() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {

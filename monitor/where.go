@@ -68,6 +68,16 @@ func Serial(v string) predicate.Monitor {
 	return predicate.Monitor(sql.FieldEQ(FieldSerial, v))
 }
 
+// WeekOfManufacture applies equality check predicate on the "week_of_manufacture" field. It's identical to WeekOfManufactureEQ.
+func WeekOfManufacture(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEQ(FieldWeekOfManufacture, v))
+}
+
+// YearOfManufacture applies equality check predicate on the "year_of_manufacture" field. It's identical to YearOfManufactureEQ.
+func YearOfManufacture(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEQ(FieldYearOfManufacture, v))
+}
+
 // ManufacturerEQ applies the EQ predicate on the "manufacturer" field.
 func ManufacturerEQ(v string) predicate.Monitor {
 	return predicate.Monitor(sql.FieldEQ(FieldManufacturer, v))
@@ -291,6 +301,156 @@ func SerialEqualFold(v string) predicate.Monitor {
 // SerialContainsFold applies the ContainsFold predicate on the "serial" field.
 func SerialContainsFold(v string) predicate.Monitor {
 	return predicate.Monitor(sql.FieldContainsFold(FieldSerial, v))
+}
+
+// WeekOfManufactureEQ applies the EQ predicate on the "week_of_manufacture" field.
+func WeekOfManufactureEQ(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEQ(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureNEQ applies the NEQ predicate on the "week_of_manufacture" field.
+func WeekOfManufactureNEQ(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldNEQ(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureIn applies the In predicate on the "week_of_manufacture" field.
+func WeekOfManufactureIn(vs ...string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldIn(FieldWeekOfManufacture, vs...))
+}
+
+// WeekOfManufactureNotIn applies the NotIn predicate on the "week_of_manufacture" field.
+func WeekOfManufactureNotIn(vs ...string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldNotIn(FieldWeekOfManufacture, vs...))
+}
+
+// WeekOfManufactureGT applies the GT predicate on the "week_of_manufacture" field.
+func WeekOfManufactureGT(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldGT(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureGTE applies the GTE predicate on the "week_of_manufacture" field.
+func WeekOfManufactureGTE(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldGTE(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureLT applies the LT predicate on the "week_of_manufacture" field.
+func WeekOfManufactureLT(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldLT(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureLTE applies the LTE predicate on the "week_of_manufacture" field.
+func WeekOfManufactureLTE(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldLTE(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureContains applies the Contains predicate on the "week_of_manufacture" field.
+func WeekOfManufactureContains(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldContains(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureHasPrefix applies the HasPrefix predicate on the "week_of_manufacture" field.
+func WeekOfManufactureHasPrefix(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldHasPrefix(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureHasSuffix applies the HasSuffix predicate on the "week_of_manufacture" field.
+func WeekOfManufactureHasSuffix(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldHasSuffix(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureIsNil applies the IsNil predicate on the "week_of_manufacture" field.
+func WeekOfManufactureIsNil() predicate.Monitor {
+	return predicate.Monitor(sql.FieldIsNull(FieldWeekOfManufacture))
+}
+
+// WeekOfManufactureNotNil applies the NotNil predicate on the "week_of_manufacture" field.
+func WeekOfManufactureNotNil() predicate.Monitor {
+	return predicate.Monitor(sql.FieldNotNull(FieldWeekOfManufacture))
+}
+
+// WeekOfManufactureEqualFold applies the EqualFold predicate on the "week_of_manufacture" field.
+func WeekOfManufactureEqualFold(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEqualFold(FieldWeekOfManufacture, v))
+}
+
+// WeekOfManufactureContainsFold applies the ContainsFold predicate on the "week_of_manufacture" field.
+func WeekOfManufactureContainsFold(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldContainsFold(FieldWeekOfManufacture, v))
+}
+
+// YearOfManufactureEQ applies the EQ predicate on the "year_of_manufacture" field.
+func YearOfManufactureEQ(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEQ(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureNEQ applies the NEQ predicate on the "year_of_manufacture" field.
+func YearOfManufactureNEQ(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldNEQ(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureIn applies the In predicate on the "year_of_manufacture" field.
+func YearOfManufactureIn(vs ...string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldIn(FieldYearOfManufacture, vs...))
+}
+
+// YearOfManufactureNotIn applies the NotIn predicate on the "year_of_manufacture" field.
+func YearOfManufactureNotIn(vs ...string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldNotIn(FieldYearOfManufacture, vs...))
+}
+
+// YearOfManufactureGT applies the GT predicate on the "year_of_manufacture" field.
+func YearOfManufactureGT(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldGT(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureGTE applies the GTE predicate on the "year_of_manufacture" field.
+func YearOfManufactureGTE(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldGTE(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureLT applies the LT predicate on the "year_of_manufacture" field.
+func YearOfManufactureLT(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldLT(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureLTE applies the LTE predicate on the "year_of_manufacture" field.
+func YearOfManufactureLTE(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldLTE(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureContains applies the Contains predicate on the "year_of_manufacture" field.
+func YearOfManufactureContains(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldContains(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureHasPrefix applies the HasPrefix predicate on the "year_of_manufacture" field.
+func YearOfManufactureHasPrefix(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldHasPrefix(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureHasSuffix applies the HasSuffix predicate on the "year_of_manufacture" field.
+func YearOfManufactureHasSuffix(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldHasSuffix(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureIsNil applies the IsNil predicate on the "year_of_manufacture" field.
+func YearOfManufactureIsNil() predicate.Monitor {
+	return predicate.Monitor(sql.FieldIsNull(FieldYearOfManufacture))
+}
+
+// YearOfManufactureNotNil applies the NotNil predicate on the "year_of_manufacture" field.
+func YearOfManufactureNotNil() predicate.Monitor {
+	return predicate.Monitor(sql.FieldNotNull(FieldYearOfManufacture))
+}
+
+// YearOfManufactureEqualFold applies the EqualFold predicate on the "year_of_manufacture" field.
+func YearOfManufactureEqualFold(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldEqualFold(FieldYearOfManufacture, v))
+}
+
+// YearOfManufactureContainsFold applies the ContainsFold predicate on the "year_of_manufacture" field.
+func YearOfManufactureContainsFold(v string) predicate.Monitor {
+	return predicate.Monitor(sql.FieldContainsFold(FieldYearOfManufacture, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

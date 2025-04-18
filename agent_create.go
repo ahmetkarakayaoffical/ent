@@ -18,6 +18,7 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
+	"github.com/open-uem/ent/memoryslot"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
@@ -593,6 +594,21 @@ func (ac *AgentCreate) AddWingetcfgexclusions(w ...*WingetConfigExclusion) *Agen
 	return ac.AddWingetcfgexclusionIDs(ids...)
 }
 
+// AddMemoryslotIDs adds the "memoryslots" edge to the MemorySlot entity by IDs.
+func (ac *AgentCreate) AddMemoryslotIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddMemoryslotIDs(ids...)
+	return ac
+}
+
+// AddMemoryslots adds the "memoryslots" edges to the MemorySlot entity.
+func (ac *AgentCreate) AddMemoryslots(m ...*MemorySlot) *AgentCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ac.AddMemoryslotIDs(ids...)
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by ID.
 func (ac *AgentCreate) SetReleaseID(id int) *AgentCreate {
 	ac.mutation.SetReleaseID(id)
@@ -1127,6 +1143,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(wingetconfigexclusion.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.MemoryslotsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.MemoryslotsTable,
+			Columns: []string{agent.MemoryslotsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(memoryslot.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -91,6 +91,8 @@ const (
 	EdgeMetadata = "metadata"
 	// EdgeWingetcfgexclusions holds the string denoting the wingetcfgexclusions edge name in mutations.
 	EdgeWingetcfgexclusions = "wingetcfgexclusions"
+	// EdgeMemoryslots holds the string denoting the memoryslots edge name in mutations.
+	EdgeMemoryslots = "memoryslots"
 	// EdgeRelease holds the string denoting the release edge name in mutations.
 	EdgeRelease = "release"
 	// EdgeProfileissue holds the string denoting the profileissue edge name in mutations.
@@ -125,6 +127,8 @@ const (
 	MetadataFieldID = "id"
 	// WingetConfigExclusionFieldID holds the string denoting the ID field of the WingetConfigExclusion.
 	WingetConfigExclusionFieldID = "id"
+	// MemorySlotFieldID holds the string denoting the ID field of the MemorySlot.
+	MemorySlotFieldID = "id"
 	// ReleaseFieldID holds the string denoting the ID field of the Release.
 	ReleaseFieldID = "id"
 	// ProfileIssueFieldID holds the string denoting the ID field of the ProfileIssue.
@@ -234,6 +238,13 @@ const (
 	WingetcfgexclusionsInverseTable = "winget_config_exclusions"
 	// WingetcfgexclusionsColumn is the table column denoting the wingetcfgexclusions relation/edge.
 	WingetcfgexclusionsColumn = "agent_wingetcfgexclusions"
+	// MemoryslotsTable is the table that holds the memoryslots relation/edge.
+	MemoryslotsTable = "memory_slots"
+	// MemoryslotsInverseTable is the table name for the MemorySlot entity.
+	// It exists in this package in order to avoid circular dependency with the "memoryslot" package.
+	MemoryslotsInverseTable = "memory_slots"
+	// MemoryslotsColumn is the table column denoting the memoryslots relation/edge.
+	MemoryslotsColumn = "agent_memoryslots"
 	// ReleaseTable is the table that holds the release relation/edge.
 	ReleaseTable = "agents"
 	// ReleaseInverseTable is the table name for the Release entity.
@@ -678,6 +689,20 @@ func ByWingetcfgexclusions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByMemoryslotsCount orders the results by memoryslots count.
+func ByMemoryslotsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMemoryslotsStep(), opts...)
+	}
+}
+
+// ByMemoryslots orders the results by memoryslots terms.
+func ByMemoryslots(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMemoryslotsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByReleaseField orders the results by release field.
 func ByReleaseField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -801,6 +826,13 @@ func newWingetcfgexclusionsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WingetcfgexclusionsInverseTable, WingetConfigExclusionFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, WingetcfgexclusionsTable, WingetcfgexclusionsColumn),
+	)
+}
+func newMemoryslotsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MemoryslotsInverseTable, MemorySlotFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MemoryslotsTable, MemoryslotsColumn),
 	)
 }
 func newReleaseStep() *sqlgraph.Step {

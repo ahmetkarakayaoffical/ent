@@ -18,6 +18,7 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
+	"github.com/open-uem/ent/memoryslot"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
@@ -55,6 +56,7 @@ type AgentQuery struct {
 	withTags                *TagQuery
 	withMetadata            *MetadataQuery
 	withWingetcfgexclusions *WingetConfigExclusionQuery
+	withMemoryslots         *MemorySlotQuery
 	withRelease             *ReleaseQuery
 	withProfileissue        *ProfileIssueQuery
 	withFKs                 bool
@@ -425,6 +427,28 @@ func (aq *AgentQuery) QueryWingetcfgexclusions() *WingetConfigExclusionQuery {
 	return query
 }
 
+// QueryMemoryslots chains the current query on the "memoryslots" edge.
+func (aq *AgentQuery) QueryMemoryslots() *MemorySlotQuery {
+	query := (&MemorySlotClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(memoryslot.Table, memoryslot.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.MemoryslotsTable, agent.MemoryslotsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryRelease chains the current query on the "release" edge.
 func (aq *AgentQuery) QueryRelease() *ReleaseQuery {
 	query := (&ReleaseClient{config: aq.config}).Query()
@@ -676,6 +700,7 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withTags:                aq.withTags.Clone(),
 		withMetadata:            aq.withMetadata.Clone(),
 		withWingetcfgexclusions: aq.withWingetcfgexclusions.Clone(),
+		withMemoryslots:         aq.withMemoryslots.Clone(),
 		withRelease:             aq.withRelease.Clone(),
 		withProfileissue:        aq.withProfileissue.Clone(),
 		// clone intermediate query.
@@ -850,6 +875,17 @@ func (aq *AgentQuery) WithWingetcfgexclusions(opts ...func(*WingetConfigExclusio
 	return aq
 }
 
+// WithMemoryslots tells the query-builder to eager-load the nodes that are connected to
+// the "memoryslots" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithMemoryslots(opts ...func(*MemorySlotQuery)) *AgentQuery {
+	query := (&MemorySlotClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withMemoryslots = query
+	return aq
+}
+
 // WithRelease tells the query-builder to eager-load the nodes that are connected to
 // the "release" edge. The optional arguments are used to configure the query builder of the edge.
 func (aq *AgentQuery) WithRelease(opts ...func(*ReleaseQuery)) *AgentQuery {
@@ -951,7 +987,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [18]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -967,6 +1003,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withTags != nil,
 			aq.withMetadata != nil,
 			aq.withWingetcfgexclusions != nil,
+			aq.withMemoryslots != nil,
 			aq.withRelease != nil,
 			aq.withProfileissue != nil,
 		}
@@ -1098,6 +1135,13 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			func(n *Agent, e *WingetConfigExclusion) {
 				n.Edges.Wingetcfgexclusions = append(n.Edges.Wingetcfgexclusions, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withMemoryslots; query != nil {
+		if err := aq.loadMemoryslots(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Memoryslots = []*MemorySlot{} },
+			func(n *Agent, e *MemorySlot) { n.Edges.Memoryslots = append(n.Edges.Memoryslots, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1595,6 +1639,37 @@ func (aq *AgentQuery) loadWingetcfgexclusions(ctx context.Context, query *Winget
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "agent_wingetcfgexclusions" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (aq *AgentQuery) loadMemoryslots(ctx context.Context, query *MemorySlotQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *MemorySlot)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.MemorySlot(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.MemoryslotsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.agent_memoryslots
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_memoryslots" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_memoryslots" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

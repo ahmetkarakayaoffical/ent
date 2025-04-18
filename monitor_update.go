@@ -89,6 +89,46 @@ func (mu *MonitorUpdate) ClearSerial() *MonitorUpdate {
 	return mu
 }
 
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (mu *MonitorUpdate) SetWeekOfManufacture(s string) *MonitorUpdate {
+	mu.mutation.SetWeekOfManufacture(s)
+	return mu
+}
+
+// SetNillableWeekOfManufacture sets the "week_of_manufacture" field if the given value is not nil.
+func (mu *MonitorUpdate) SetNillableWeekOfManufacture(s *string) *MonitorUpdate {
+	if s != nil {
+		mu.SetWeekOfManufacture(*s)
+	}
+	return mu
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (mu *MonitorUpdate) ClearWeekOfManufacture() *MonitorUpdate {
+	mu.mutation.ClearWeekOfManufacture()
+	return mu
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (mu *MonitorUpdate) SetYearOfManufacture(s string) *MonitorUpdate {
+	mu.mutation.SetYearOfManufacture(s)
+	return mu
+}
+
+// SetNillableYearOfManufacture sets the "year_of_manufacture" field if the given value is not nil.
+func (mu *MonitorUpdate) SetNillableYearOfManufacture(s *string) *MonitorUpdate {
+	if s != nil {
+		mu.SetYearOfManufacture(*s)
+	}
+	return mu
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (mu *MonitorUpdate) ClearYearOfManufacture() *MonitorUpdate {
+	mu.mutation.ClearYearOfManufacture()
+	return mu
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (mu *MonitorUpdate) SetOwnerID(id string) *MonitorUpdate {
 	mu.mutation.SetOwnerID(id)
@@ -181,6 +221,18 @@ func (mu *MonitorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.SerialCleared() {
 		_spec.ClearField(monitor.FieldSerial, field.TypeString)
+	}
+	if value, ok := mu.mutation.WeekOfManufacture(); ok {
+		_spec.SetField(monitor.FieldWeekOfManufacture, field.TypeString, value)
+	}
+	if mu.mutation.WeekOfManufactureCleared() {
+		_spec.ClearField(monitor.FieldWeekOfManufacture, field.TypeString)
+	}
+	if value, ok := mu.mutation.YearOfManufacture(); ok {
+		_spec.SetField(monitor.FieldYearOfManufacture, field.TypeString, value)
+	}
+	if mu.mutation.YearOfManufactureCleared() {
+		_spec.ClearField(monitor.FieldYearOfManufacture, field.TypeString)
 	}
 	if mu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -290,6 +342,46 @@ func (muo *MonitorUpdateOne) SetNillableSerial(s *string) *MonitorUpdateOne {
 // ClearSerial clears the value of the "serial" field.
 func (muo *MonitorUpdateOne) ClearSerial() *MonitorUpdateOne {
 	muo.mutation.ClearSerial()
+	return muo
+}
+
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (muo *MonitorUpdateOne) SetWeekOfManufacture(s string) *MonitorUpdateOne {
+	muo.mutation.SetWeekOfManufacture(s)
+	return muo
+}
+
+// SetNillableWeekOfManufacture sets the "week_of_manufacture" field if the given value is not nil.
+func (muo *MonitorUpdateOne) SetNillableWeekOfManufacture(s *string) *MonitorUpdateOne {
+	if s != nil {
+		muo.SetWeekOfManufacture(*s)
+	}
+	return muo
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (muo *MonitorUpdateOne) ClearWeekOfManufacture() *MonitorUpdateOne {
+	muo.mutation.ClearWeekOfManufacture()
+	return muo
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (muo *MonitorUpdateOne) SetYearOfManufacture(s string) *MonitorUpdateOne {
+	muo.mutation.SetYearOfManufacture(s)
+	return muo
+}
+
+// SetNillableYearOfManufacture sets the "year_of_manufacture" field if the given value is not nil.
+func (muo *MonitorUpdateOne) SetNillableYearOfManufacture(s *string) *MonitorUpdateOne {
+	if s != nil {
+		muo.SetYearOfManufacture(*s)
+	}
+	return muo
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (muo *MonitorUpdateOne) ClearYearOfManufacture() *MonitorUpdateOne {
+	muo.mutation.ClearYearOfManufacture()
 	return muo
 }
 
@@ -415,6 +507,18 @@ func (muo *MonitorUpdateOne) sqlSave(ctx context.Context) (_node *Monitor, err e
 	}
 	if muo.mutation.SerialCleared() {
 		_spec.ClearField(monitor.FieldSerial, field.TypeString)
+	}
+	if value, ok := muo.mutation.WeekOfManufacture(); ok {
+		_spec.SetField(monitor.FieldWeekOfManufacture, field.TypeString, value)
+	}
+	if muo.mutation.WeekOfManufactureCleared() {
+		_spec.ClearField(monitor.FieldWeekOfManufacture, field.TypeString)
+	}
+	if value, ok := muo.mutation.YearOfManufacture(); ok {
+		_spec.SetField(monitor.FieldYearOfManufacture, field.TypeString, value)
+	}
+	if muo.mutation.YearOfManufactureCleared() {
+		_spec.ClearField(monitor.FieldYearOfManufacture, field.TypeString)
 	}
 	if muo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

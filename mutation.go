@@ -18,6 +18,7 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
+	"github.com/open-uem/ent/memoryslot"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
@@ -57,6 +58,7 @@ const (
 	TypeComputer              = "Computer"
 	TypeDeployment            = "Deployment"
 	TypeLogicalDisk           = "LogicalDisk"
+	TypeMemorySlot            = "MemorySlot"
 	TypeMetadata              = "Metadata"
 	TypeMonitor               = "Monitor"
 	TypeNetworkAdapter        = "NetworkAdapter"
@@ -150,6 +152,9 @@ type AgentMutation struct {
 	wingetcfgexclusions        map[int]struct{}
 	removedwingetcfgexclusions map[int]struct{}
 	clearedwingetcfgexclusions bool
+	memoryslots                map[int]struct{}
+	removedmemoryslots         map[int]struct{}
+	clearedmemoryslots         bool
 	release                    *int
 	clearedrelease             bool
 	profileissue               map[int]struct{}
@@ -2089,6 +2094,60 @@ func (m *AgentMutation) ResetWingetcfgexclusions() {
 	m.removedwingetcfgexclusions = nil
 }
 
+// AddMemoryslotIDs adds the "memoryslots" edge to the MemorySlot entity by ids.
+func (m *AgentMutation) AddMemoryslotIDs(ids ...int) {
+	if m.memoryslots == nil {
+		m.memoryslots = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.memoryslots[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemoryslots clears the "memoryslots" edge to the MemorySlot entity.
+func (m *AgentMutation) ClearMemoryslots() {
+	m.clearedmemoryslots = true
+}
+
+// MemoryslotsCleared reports if the "memoryslots" edge to the MemorySlot entity was cleared.
+func (m *AgentMutation) MemoryslotsCleared() bool {
+	return m.clearedmemoryslots
+}
+
+// RemoveMemoryslotIDs removes the "memoryslots" edge to the MemorySlot entity by IDs.
+func (m *AgentMutation) RemoveMemoryslotIDs(ids ...int) {
+	if m.removedmemoryslots == nil {
+		m.removedmemoryslots = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.memoryslots, ids[i])
+		m.removedmemoryslots[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemoryslots returns the removed IDs of the "memoryslots" edge to the MemorySlot entity.
+func (m *AgentMutation) RemovedMemoryslotsIDs() (ids []int) {
+	for id := range m.removedmemoryslots {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemoryslotsIDs returns the "memoryslots" edge IDs in the mutation.
+func (m *AgentMutation) MemoryslotsIDs() (ids []int) {
+	for id := range m.memoryslots {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemoryslots resets all changes to the "memoryslots" edge.
+func (m *AgentMutation) ResetMemoryslots() {
+	m.memoryslots = nil
+	m.clearedmemoryslots = false
+	m.removedmemoryslots = nil
+}
+
 // SetReleaseID sets the "release" edge to the Release entity by id.
 func (m *AgentMutation) SetReleaseID(id int) {
 	m.release = &id
@@ -2806,7 +2865,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2851,6 +2910,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.wingetcfgexclusions != nil {
 		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
+	if m.memoryslots != nil {
+		edges = append(edges, agent.EdgeMemoryslots)
 	}
 	if m.release != nil {
 		edges = append(edges, agent.EdgeRelease)
@@ -2947,6 +3009,12 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeMemoryslots:
+		ids := make([]ent.Value, 0, len(m.memoryslots))
+		for id := range m.memoryslots {
+			ids = append(ids, id)
+		}
+		return ids
 	case agent.EdgeRelease:
 		if id := m.release; id != nil {
 			return []ent.Value{*id}
@@ -2963,7 +3031,7 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -2996,6 +3064,9 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedwingetcfgexclusions != nil {
 		edges = append(edges, agent.EdgeWingetcfgexclusions)
+	}
+	if m.removedmemoryslots != nil {
+		edges = append(edges, agent.EdgeMemoryslots)
 	}
 	if m.removedprofileissue != nil {
 		edges = append(edges, agent.EdgeProfileissue)
@@ -3073,6 +3144,12 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeMemoryslots:
+		ids := make([]ent.Value, 0, len(m.removedmemoryslots))
+		for id := range m.removedmemoryslots {
+			ids = append(ids, id)
+		}
+		return ids
 	case agent.EdgeProfileissue:
 		ids := make([]ent.Value, 0, len(m.removedprofileissue))
 		for id := range m.removedprofileissue {
@@ -3085,7 +3162,7 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -3131,6 +3208,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedwingetcfgexclusions {
 		edges = append(edges, agent.EdgeWingetcfgexclusions)
 	}
+	if m.clearedmemoryslots {
+		edges = append(edges, agent.EdgeMemoryslots)
+	}
 	if m.clearedrelease {
 		edges = append(edges, agent.EdgeRelease)
 	}
@@ -3174,6 +3254,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedmetadata
 	case agent.EdgeWingetcfgexclusions:
 		return m.clearedwingetcfgexclusions
+	case agent.EdgeMemoryslots:
+		return m.clearedmemoryslots
 	case agent.EdgeRelease:
 		return m.clearedrelease
 	case agent.EdgeProfileissue:
@@ -3253,6 +3335,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeWingetcfgexclusions:
 		m.ResetWingetcfgexclusions()
+		return nil
+	case agent.EdgeMemoryslots:
+		m.ResetMemoryslots()
 		return nil
 	case agent.EdgeRelease:
 		m.ResetRelease()
@@ -7505,6 +7590,713 @@ func (m *LogicalDiskMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown LogicalDisk edge %s", name)
 }
 
+// MemorySlotMutation represents an operation that mutates the MemorySlot nodes in the graph.
+type MemorySlotMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	slot          *string
+	size          *string
+	_type         *string
+	serial_number *string
+	part_number   *string
+	clearedFields map[string]struct{}
+	owner         *string
+	clearedowner  bool
+	done          bool
+	oldValue      func(context.Context) (*MemorySlot, error)
+	predicates    []predicate.MemorySlot
+}
+
+var _ ent.Mutation = (*MemorySlotMutation)(nil)
+
+// memoryslotOption allows management of the mutation configuration using functional options.
+type memoryslotOption func(*MemorySlotMutation)
+
+// newMemorySlotMutation creates new mutation for the MemorySlot entity.
+func newMemorySlotMutation(c config, op Op, opts ...memoryslotOption) *MemorySlotMutation {
+	m := &MemorySlotMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMemorySlot,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMemorySlotID sets the ID field of the mutation.
+func withMemorySlotID(id int) memoryslotOption {
+	return func(m *MemorySlotMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MemorySlot
+		)
+		m.oldValue = func(ctx context.Context) (*MemorySlot, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MemorySlot.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMemorySlot sets the old MemorySlot of the mutation.
+func withMemorySlot(node *MemorySlot) memoryslotOption {
+	return func(m *MemorySlotMutation) {
+		m.oldValue = func(context.Context) (*MemorySlot, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MemorySlotMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MemorySlotMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MemorySlotMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MemorySlotMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MemorySlot.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetSlot sets the "slot" field.
+func (m *MemorySlotMutation) SetSlot(s string) {
+	m.slot = &s
+}
+
+// Slot returns the value of the "slot" field in the mutation.
+func (m *MemorySlotMutation) Slot() (r string, exists bool) {
+	v := m.slot
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSlot returns the old "slot" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldSlot(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSlot is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSlot requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSlot: %w", err)
+	}
+	return oldValue.Slot, nil
+}
+
+// ClearSlot clears the value of the "slot" field.
+func (m *MemorySlotMutation) ClearSlot() {
+	m.slot = nil
+	m.clearedFields[memoryslot.FieldSlot] = struct{}{}
+}
+
+// SlotCleared returns if the "slot" field was cleared in this mutation.
+func (m *MemorySlotMutation) SlotCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldSlot]
+	return ok
+}
+
+// ResetSlot resets all changes to the "slot" field.
+func (m *MemorySlotMutation) ResetSlot() {
+	m.slot = nil
+	delete(m.clearedFields, memoryslot.FieldSlot)
+}
+
+// SetSize sets the "size" field.
+func (m *MemorySlotMutation) SetSize(s string) {
+	m.size = &s
+}
+
+// Size returns the value of the "size" field in the mutation.
+func (m *MemorySlotMutation) Size() (r string, exists bool) {
+	v := m.size
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSize returns the old "size" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldSize(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSize is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSize requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSize: %w", err)
+	}
+	return oldValue.Size, nil
+}
+
+// ClearSize clears the value of the "size" field.
+func (m *MemorySlotMutation) ClearSize() {
+	m.size = nil
+	m.clearedFields[memoryslot.FieldSize] = struct{}{}
+}
+
+// SizeCleared returns if the "size" field was cleared in this mutation.
+func (m *MemorySlotMutation) SizeCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldSize]
+	return ok
+}
+
+// ResetSize resets all changes to the "size" field.
+func (m *MemorySlotMutation) ResetSize() {
+	m.size = nil
+	delete(m.clearedFields, memoryslot.FieldSize)
+}
+
+// SetType sets the "type" field.
+func (m *MemorySlotMutation) SetType(s string) {
+	m._type = &s
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *MemorySlotMutation) GetType() (r string, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *MemorySlotMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[memoryslot.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *MemorySlotMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *MemorySlotMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, memoryslot.FieldType)
+}
+
+// SetSerialNumber sets the "serial_number" field.
+func (m *MemorySlotMutation) SetSerialNumber(s string) {
+	m.serial_number = &s
+}
+
+// SerialNumber returns the value of the "serial_number" field in the mutation.
+func (m *MemorySlotMutation) SerialNumber() (r string, exists bool) {
+	v := m.serial_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSerialNumber returns the old "serial_number" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldSerialNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSerialNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSerialNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSerialNumber: %w", err)
+	}
+	return oldValue.SerialNumber, nil
+}
+
+// ClearSerialNumber clears the value of the "serial_number" field.
+func (m *MemorySlotMutation) ClearSerialNumber() {
+	m.serial_number = nil
+	m.clearedFields[memoryslot.FieldSerialNumber] = struct{}{}
+}
+
+// SerialNumberCleared returns if the "serial_number" field was cleared in this mutation.
+func (m *MemorySlotMutation) SerialNumberCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldSerialNumber]
+	return ok
+}
+
+// ResetSerialNumber resets all changes to the "serial_number" field.
+func (m *MemorySlotMutation) ResetSerialNumber() {
+	m.serial_number = nil
+	delete(m.clearedFields, memoryslot.FieldSerialNumber)
+}
+
+// SetPartNumber sets the "part_number" field.
+func (m *MemorySlotMutation) SetPartNumber(s string) {
+	m.part_number = &s
+}
+
+// PartNumber returns the value of the "part_number" field in the mutation.
+func (m *MemorySlotMutation) PartNumber() (r string, exists bool) {
+	v := m.part_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPartNumber returns the old "part_number" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldPartNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPartNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPartNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPartNumber: %w", err)
+	}
+	return oldValue.PartNumber, nil
+}
+
+// ClearPartNumber clears the value of the "part_number" field.
+func (m *MemorySlotMutation) ClearPartNumber() {
+	m.part_number = nil
+	m.clearedFields[memoryslot.FieldPartNumber] = struct{}{}
+}
+
+// PartNumberCleared returns if the "part_number" field was cleared in this mutation.
+func (m *MemorySlotMutation) PartNumberCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldPartNumber]
+	return ok
+}
+
+// ResetPartNumber resets all changes to the "part_number" field.
+func (m *MemorySlotMutation) ResetPartNumber() {
+	m.part_number = nil
+	delete(m.clearedFields, memoryslot.FieldPartNumber)
+}
+
+// SetOwnerID sets the "owner" edge to the Agent entity by id.
+func (m *MemorySlotMutation) SetOwnerID(id string) {
+	m.owner = &id
+}
+
+// ClearOwner clears the "owner" edge to the Agent entity.
+func (m *MemorySlotMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
+func (m *MemorySlotMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *MemorySlotMutation) OwnerID() (id string, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *MemorySlotMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *MemorySlotMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// Where appends a list predicates to the MemorySlotMutation builder.
+func (m *MemorySlotMutation) Where(ps ...predicate.MemorySlot) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MemorySlotMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MemorySlotMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MemorySlot, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MemorySlotMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MemorySlotMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MemorySlot).
+func (m *MemorySlotMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MemorySlotMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.slot != nil {
+		fields = append(fields, memoryslot.FieldSlot)
+	}
+	if m.size != nil {
+		fields = append(fields, memoryslot.FieldSize)
+	}
+	if m._type != nil {
+		fields = append(fields, memoryslot.FieldType)
+	}
+	if m.serial_number != nil {
+		fields = append(fields, memoryslot.FieldSerialNumber)
+	}
+	if m.part_number != nil {
+		fields = append(fields, memoryslot.FieldPartNumber)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MemorySlotMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case memoryslot.FieldSlot:
+		return m.Slot()
+	case memoryslot.FieldSize:
+		return m.Size()
+	case memoryslot.FieldType:
+		return m.GetType()
+	case memoryslot.FieldSerialNumber:
+		return m.SerialNumber()
+	case memoryslot.FieldPartNumber:
+		return m.PartNumber()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MemorySlotMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case memoryslot.FieldSlot:
+		return m.OldSlot(ctx)
+	case memoryslot.FieldSize:
+		return m.OldSize(ctx)
+	case memoryslot.FieldType:
+		return m.OldType(ctx)
+	case memoryslot.FieldSerialNumber:
+		return m.OldSerialNumber(ctx)
+	case memoryslot.FieldPartNumber:
+		return m.OldPartNumber(ctx)
+	}
+	return nil, fmt.Errorf("unknown MemorySlot field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemorySlotMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case memoryslot.FieldSlot:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSlot(v)
+		return nil
+	case memoryslot.FieldSize:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSize(v)
+		return nil
+	case memoryslot.FieldType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case memoryslot.FieldSerialNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSerialNumber(v)
+		return nil
+	case memoryslot.FieldPartNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPartNumber(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MemorySlot field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MemorySlotMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MemorySlotMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemorySlotMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown MemorySlot numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MemorySlotMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(memoryslot.FieldSlot) {
+		fields = append(fields, memoryslot.FieldSlot)
+	}
+	if m.FieldCleared(memoryslot.FieldSize) {
+		fields = append(fields, memoryslot.FieldSize)
+	}
+	if m.FieldCleared(memoryslot.FieldType) {
+		fields = append(fields, memoryslot.FieldType)
+	}
+	if m.FieldCleared(memoryslot.FieldSerialNumber) {
+		fields = append(fields, memoryslot.FieldSerialNumber)
+	}
+	if m.FieldCleared(memoryslot.FieldPartNumber) {
+		fields = append(fields, memoryslot.FieldPartNumber)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MemorySlotMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MemorySlotMutation) ClearField(name string) error {
+	switch name {
+	case memoryslot.FieldSlot:
+		m.ClearSlot()
+		return nil
+	case memoryslot.FieldSize:
+		m.ClearSize()
+		return nil
+	case memoryslot.FieldType:
+		m.ClearType()
+		return nil
+	case memoryslot.FieldSerialNumber:
+		m.ClearSerialNumber()
+		return nil
+	case memoryslot.FieldPartNumber:
+		m.ClearPartNumber()
+		return nil
+	}
+	return fmt.Errorf("unknown MemorySlot nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MemorySlotMutation) ResetField(name string) error {
+	switch name {
+	case memoryslot.FieldSlot:
+		m.ResetSlot()
+		return nil
+	case memoryslot.FieldSize:
+		m.ResetSize()
+		return nil
+	case memoryslot.FieldType:
+		m.ResetType()
+		return nil
+	case memoryslot.FieldSerialNumber:
+		m.ResetSerialNumber()
+		return nil
+	case memoryslot.FieldPartNumber:
+		m.ResetPartNumber()
+		return nil
+	}
+	return fmt.Errorf("unknown MemorySlot field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MemorySlotMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, memoryslot.EdgeOwner)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MemorySlotMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case memoryslot.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MemorySlotMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MemorySlotMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MemorySlotMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, memoryslot.EdgeOwner)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MemorySlotMutation) EdgeCleared(name string) bool {
+	switch name {
+	case memoryslot.EdgeOwner:
+		return m.clearedowner
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MemorySlotMutation) ClearEdge(name string) error {
+	switch name {
+	case memoryslot.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown MemorySlot unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MemorySlotMutation) ResetEdge(name string) error {
+	switch name {
+	case memoryslot.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown MemorySlot edge %s", name)
+}
+
 // MetadataMutation represents an operation that mutates the Metadata nodes in the graph.
 type MetadataMutation struct {
 	config
@@ -7960,18 +8752,20 @@ func (m *MetadataMutation) ResetEdge(name string) error {
 // MonitorMutation represents an operation that mutates the Monitor nodes in the graph.
 type MonitorMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	manufacturer  *string
-	model         *string
-	serial        *string
-	clearedFields map[string]struct{}
-	owner         *string
-	clearedowner  bool
-	done          bool
-	oldValue      func(context.Context) (*Monitor, error)
-	predicates    []predicate.Monitor
+	op                  Op
+	typ                 string
+	id                  *int
+	manufacturer        *string
+	model               *string
+	serial              *string
+	week_of_manufacture *string
+	year_of_manufacture *string
+	clearedFields       map[string]struct{}
+	owner               *string
+	clearedowner        bool
+	done                bool
+	oldValue            func(context.Context) (*Monitor, error)
+	predicates          []predicate.Monitor
 }
 
 var _ ent.Mutation = (*MonitorMutation)(nil)
@@ -8219,6 +9013,104 @@ func (m *MonitorMutation) ResetSerial() {
 	delete(m.clearedFields, monitor.FieldSerial)
 }
 
+// SetWeekOfManufacture sets the "week_of_manufacture" field.
+func (m *MonitorMutation) SetWeekOfManufacture(s string) {
+	m.week_of_manufacture = &s
+}
+
+// WeekOfManufacture returns the value of the "week_of_manufacture" field in the mutation.
+func (m *MonitorMutation) WeekOfManufacture() (r string, exists bool) {
+	v := m.week_of_manufacture
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeekOfManufacture returns the old "week_of_manufacture" field's value of the Monitor entity.
+// If the Monitor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MonitorMutation) OldWeekOfManufacture(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeekOfManufacture is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeekOfManufacture requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeekOfManufacture: %w", err)
+	}
+	return oldValue.WeekOfManufacture, nil
+}
+
+// ClearWeekOfManufacture clears the value of the "week_of_manufacture" field.
+func (m *MonitorMutation) ClearWeekOfManufacture() {
+	m.week_of_manufacture = nil
+	m.clearedFields[monitor.FieldWeekOfManufacture] = struct{}{}
+}
+
+// WeekOfManufactureCleared returns if the "week_of_manufacture" field was cleared in this mutation.
+func (m *MonitorMutation) WeekOfManufactureCleared() bool {
+	_, ok := m.clearedFields[monitor.FieldWeekOfManufacture]
+	return ok
+}
+
+// ResetWeekOfManufacture resets all changes to the "week_of_manufacture" field.
+func (m *MonitorMutation) ResetWeekOfManufacture() {
+	m.week_of_manufacture = nil
+	delete(m.clearedFields, monitor.FieldWeekOfManufacture)
+}
+
+// SetYearOfManufacture sets the "year_of_manufacture" field.
+func (m *MonitorMutation) SetYearOfManufacture(s string) {
+	m.year_of_manufacture = &s
+}
+
+// YearOfManufacture returns the value of the "year_of_manufacture" field in the mutation.
+func (m *MonitorMutation) YearOfManufacture() (r string, exists bool) {
+	v := m.year_of_manufacture
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldYearOfManufacture returns the old "year_of_manufacture" field's value of the Monitor entity.
+// If the Monitor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MonitorMutation) OldYearOfManufacture(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldYearOfManufacture is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldYearOfManufacture requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldYearOfManufacture: %w", err)
+	}
+	return oldValue.YearOfManufacture, nil
+}
+
+// ClearYearOfManufacture clears the value of the "year_of_manufacture" field.
+func (m *MonitorMutation) ClearYearOfManufacture() {
+	m.year_of_manufacture = nil
+	m.clearedFields[monitor.FieldYearOfManufacture] = struct{}{}
+}
+
+// YearOfManufactureCleared returns if the "year_of_manufacture" field was cleared in this mutation.
+func (m *MonitorMutation) YearOfManufactureCleared() bool {
+	_, ok := m.clearedFields[monitor.FieldYearOfManufacture]
+	return ok
+}
+
+// ResetYearOfManufacture resets all changes to the "year_of_manufacture" field.
+func (m *MonitorMutation) ResetYearOfManufacture() {
+	m.year_of_manufacture = nil
+	delete(m.clearedFields, monitor.FieldYearOfManufacture)
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by id.
 func (m *MonitorMutation) SetOwnerID(id string) {
 	m.owner = &id
@@ -8292,7 +9184,7 @@ func (m *MonitorMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MonitorMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 5)
 	if m.manufacturer != nil {
 		fields = append(fields, monitor.FieldManufacturer)
 	}
@@ -8301,6 +9193,12 @@ func (m *MonitorMutation) Fields() []string {
 	}
 	if m.serial != nil {
 		fields = append(fields, monitor.FieldSerial)
+	}
+	if m.week_of_manufacture != nil {
+		fields = append(fields, monitor.FieldWeekOfManufacture)
+	}
+	if m.year_of_manufacture != nil {
+		fields = append(fields, monitor.FieldYearOfManufacture)
 	}
 	return fields
 }
@@ -8316,6 +9214,10 @@ func (m *MonitorMutation) Field(name string) (ent.Value, bool) {
 		return m.Model()
 	case monitor.FieldSerial:
 		return m.Serial()
+	case monitor.FieldWeekOfManufacture:
+		return m.WeekOfManufacture()
+	case monitor.FieldYearOfManufacture:
+		return m.YearOfManufacture()
 	}
 	return nil, false
 }
@@ -8331,6 +9233,10 @@ func (m *MonitorMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldModel(ctx)
 	case monitor.FieldSerial:
 		return m.OldSerial(ctx)
+	case monitor.FieldWeekOfManufacture:
+		return m.OldWeekOfManufacture(ctx)
+	case monitor.FieldYearOfManufacture:
+		return m.OldYearOfManufacture(ctx)
 	}
 	return nil, fmt.Errorf("unknown Monitor field %s", name)
 }
@@ -8360,6 +9266,20 @@ func (m *MonitorMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSerial(v)
+		return nil
+	case monitor.FieldWeekOfManufacture:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeekOfManufacture(v)
+		return nil
+	case monitor.FieldYearOfManufacture:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetYearOfManufacture(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Monitor field %s", name)
@@ -8400,6 +9320,12 @@ func (m *MonitorMutation) ClearedFields() []string {
 	if m.FieldCleared(monitor.FieldSerial) {
 		fields = append(fields, monitor.FieldSerial)
 	}
+	if m.FieldCleared(monitor.FieldWeekOfManufacture) {
+		fields = append(fields, monitor.FieldWeekOfManufacture)
+	}
+	if m.FieldCleared(monitor.FieldYearOfManufacture) {
+		fields = append(fields, monitor.FieldYearOfManufacture)
+	}
 	return fields
 }
 
@@ -8423,6 +9349,12 @@ func (m *MonitorMutation) ClearField(name string) error {
 	case monitor.FieldSerial:
 		m.ClearSerial()
 		return nil
+	case monitor.FieldWeekOfManufacture:
+		m.ClearWeekOfManufacture()
+		return nil
+	case monitor.FieldYearOfManufacture:
+		m.ClearYearOfManufacture()
+		return nil
 	}
 	return fmt.Errorf("unknown Monitor nullable field %s", name)
 }
@@ -8439,6 +9371,12 @@ func (m *MonitorMutation) ResetField(name string) error {
 		return nil
 	case monitor.FieldSerial:
 		m.ResetSerial()
+		return nil
+	case monitor.FieldWeekOfManufacture:
+		m.ResetWeekOfManufacture()
+		return nil
+	case monitor.FieldYearOfManufacture:
+		m.ResetYearOfManufacture()
 		return nil
 	}
 	return fmt.Errorf("unknown Monitor field %s", name)
