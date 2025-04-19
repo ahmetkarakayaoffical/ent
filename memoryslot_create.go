@@ -92,6 +92,20 @@ func (msc *MemorySlotCreate) SetNillablePartNumber(s *string) *MemorySlotCreate 
 	return msc
 }
 
+// SetSpeed sets the "speed" field.
+func (msc *MemorySlotCreate) SetSpeed(s string) *MemorySlotCreate {
+	msc.mutation.SetSpeed(s)
+	return msc
+}
+
+// SetNillableSpeed sets the "speed" field if the given value is not nil.
+func (msc *MemorySlotCreate) SetNillableSpeed(s *string) *MemorySlotCreate {
+	if s != nil {
+		msc.SetSpeed(*s)
+	}
+	return msc
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msc *MemorySlotCreate) SetOwnerID(id string) *MemorySlotCreate {
 	msc.mutation.SetOwnerID(id)
@@ -186,6 +200,10 @@ func (msc *MemorySlotCreate) createSpec() (*MemorySlot, *sqlgraph.CreateSpec) {
 	if value, ok := msc.mutation.PartNumber(); ok {
 		_spec.SetField(memoryslot.FieldPartNumber, field.TypeString, value)
 		_node.PartNumber = value
+	}
+	if value, ok := msc.mutation.Speed(); ok {
+		_spec.SetField(memoryslot.FieldSpeed, field.TypeString, value)
+		_node.Speed = value
 	}
 	if nodes := msc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -346,6 +364,24 @@ func (u *MemorySlotUpsert) ClearPartNumber() *MemorySlotUpsert {
 	return u
 }
 
+// SetSpeed sets the "speed" field.
+func (u *MemorySlotUpsert) SetSpeed(v string) *MemorySlotUpsert {
+	u.Set(memoryslot.FieldSpeed, v)
+	return u
+}
+
+// UpdateSpeed sets the "speed" field to the value that was provided on create.
+func (u *MemorySlotUpsert) UpdateSpeed() *MemorySlotUpsert {
+	u.SetExcluded(memoryslot.FieldSpeed)
+	return u
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (u *MemorySlotUpsert) ClearSpeed() *MemorySlotUpsert {
+	u.SetNull(memoryslot.FieldSpeed)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -488,6 +524,27 @@ func (u *MemorySlotUpsertOne) UpdatePartNumber() *MemorySlotUpsertOne {
 func (u *MemorySlotUpsertOne) ClearPartNumber() *MemorySlotUpsertOne {
 	return u.Update(func(s *MemorySlotUpsert) {
 		s.ClearPartNumber()
+	})
+}
+
+// SetSpeed sets the "speed" field.
+func (u *MemorySlotUpsertOne) SetSpeed(v string) *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.SetSpeed(v)
+	})
+}
+
+// UpdateSpeed sets the "speed" field to the value that was provided on create.
+func (u *MemorySlotUpsertOne) UpdateSpeed() *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.UpdateSpeed()
+	})
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (u *MemorySlotUpsertOne) ClearSpeed() *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.ClearSpeed()
 	})
 }
 
@@ -796,6 +853,27 @@ func (u *MemorySlotUpsertBulk) UpdatePartNumber() *MemorySlotUpsertBulk {
 func (u *MemorySlotUpsertBulk) ClearPartNumber() *MemorySlotUpsertBulk {
 	return u.Update(func(s *MemorySlotUpsert) {
 		s.ClearPartNumber()
+	})
+}
+
+// SetSpeed sets the "speed" field.
+func (u *MemorySlotUpsertBulk) SetSpeed(v string) *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.SetSpeed(v)
+	})
+}
+
+// UpdateSpeed sets the "speed" field to the value that was provided on create.
+func (u *MemorySlotUpsertBulk) UpdateSpeed() *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.UpdateSpeed()
+	})
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (u *MemorySlotUpsertBulk) ClearSpeed() *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.ClearSpeed()
 	})
 }
 

@@ -129,6 +129,26 @@ func (msu *MemorySlotUpdate) ClearPartNumber() *MemorySlotUpdate {
 	return msu
 }
 
+// SetSpeed sets the "speed" field.
+func (msu *MemorySlotUpdate) SetSpeed(s string) *MemorySlotUpdate {
+	msu.mutation.SetSpeed(s)
+	return msu
+}
+
+// SetNillableSpeed sets the "speed" field if the given value is not nil.
+func (msu *MemorySlotUpdate) SetNillableSpeed(s *string) *MemorySlotUpdate {
+	if s != nil {
+		msu.SetSpeed(*s)
+	}
+	return msu
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (msu *MemorySlotUpdate) ClearSpeed() *MemorySlotUpdate {
+	msu.mutation.ClearSpeed()
+	return msu
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msu *MemorySlotUpdate) SetOwnerID(id string) *MemorySlotUpdate {
 	msu.mutation.SetOwnerID(id)
@@ -233,6 +253,12 @@ func (msu *MemorySlotUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if msu.mutation.PartNumberCleared() {
 		_spec.ClearField(memoryslot.FieldPartNumber, field.TypeString)
+	}
+	if value, ok := msu.mutation.Speed(); ok {
+		_spec.SetField(memoryslot.FieldSpeed, field.TypeString, value)
+	}
+	if msu.mutation.SpeedCleared() {
+		_spec.ClearField(memoryslot.FieldSpeed, field.TypeString)
 	}
 	if msu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +411,26 @@ func (msuo *MemorySlotUpdateOne) ClearPartNumber() *MemorySlotUpdateOne {
 	return msuo
 }
 
+// SetSpeed sets the "speed" field.
+func (msuo *MemorySlotUpdateOne) SetSpeed(s string) *MemorySlotUpdateOne {
+	msuo.mutation.SetSpeed(s)
+	return msuo
+}
+
+// SetNillableSpeed sets the "speed" field if the given value is not nil.
+func (msuo *MemorySlotUpdateOne) SetNillableSpeed(s *string) *MemorySlotUpdateOne {
+	if s != nil {
+		msuo.SetSpeed(*s)
+	}
+	return msuo
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (msuo *MemorySlotUpdateOne) ClearSpeed() *MemorySlotUpdateOne {
+	msuo.mutation.ClearSpeed()
+	return msuo
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msuo *MemorySlotUpdateOne) SetOwnerID(id string) *MemorySlotUpdateOne {
 	msuo.mutation.SetOwnerID(id)
@@ -519,6 +565,12 @@ func (msuo *MemorySlotUpdateOne) sqlSave(ctx context.Context) (_node *MemorySlot
 	}
 	if msuo.mutation.PartNumberCleared() {
 		_spec.ClearField(memoryslot.FieldPartNumber, field.TypeString)
+	}
+	if value, ok := msuo.mutation.Speed(); ok {
+		_spec.SetField(memoryslot.FieldSpeed, field.TypeString, value)
+	}
+	if msuo.mutation.SpeedCleared() {
+		_spec.ClearField(memoryslot.FieldSpeed, field.TypeString)
 	}
 	if msuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

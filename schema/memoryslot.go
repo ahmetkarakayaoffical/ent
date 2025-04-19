@@ -19,6 +19,7 @@ func (MemorySlot) Fields() []ent.Field {
 		field.String("type").Optional(),
 		field.String("serial_number").Optional(),
 		field.String("part_number").Optional(),
+		field.String("speed").Optional(),
 	}
 }
 

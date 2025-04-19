@@ -7601,6 +7601,7 @@ type MemorySlotMutation struct {
 	_type         *string
 	serial_number *string
 	part_number   *string
+	speed         *string
 	clearedFields map[string]struct{}
 	owner         *string
 	clearedowner  bool
@@ -7952,6 +7953,55 @@ func (m *MemorySlotMutation) ResetPartNumber() {
 	delete(m.clearedFields, memoryslot.FieldPartNumber)
 }
 
+// SetSpeed sets the "speed" field.
+func (m *MemorySlotMutation) SetSpeed(s string) {
+	m.speed = &s
+}
+
+// Speed returns the value of the "speed" field in the mutation.
+func (m *MemorySlotMutation) Speed() (r string, exists bool) {
+	v := m.speed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpeed returns the old "speed" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldSpeed(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpeed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpeed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpeed: %w", err)
+	}
+	return oldValue.Speed, nil
+}
+
+// ClearSpeed clears the value of the "speed" field.
+func (m *MemorySlotMutation) ClearSpeed() {
+	m.speed = nil
+	m.clearedFields[memoryslot.FieldSpeed] = struct{}{}
+}
+
+// SpeedCleared returns if the "speed" field was cleared in this mutation.
+func (m *MemorySlotMutation) SpeedCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldSpeed]
+	return ok
+}
+
+// ResetSpeed resets all changes to the "speed" field.
+func (m *MemorySlotMutation) ResetSpeed() {
+	m.speed = nil
+	delete(m.clearedFields, memoryslot.FieldSpeed)
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by id.
 func (m *MemorySlotMutation) SetOwnerID(id string) {
 	m.owner = &id
@@ -8025,7 +8075,7 @@ func (m *MemorySlotMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemorySlotMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.slot != nil {
 		fields = append(fields, memoryslot.FieldSlot)
 	}
@@ -8040,6 +8090,9 @@ func (m *MemorySlotMutation) Fields() []string {
 	}
 	if m.part_number != nil {
 		fields = append(fields, memoryslot.FieldPartNumber)
+	}
+	if m.speed != nil {
+		fields = append(fields, memoryslot.FieldSpeed)
 	}
 	return fields
 }
@@ -8059,6 +8112,8 @@ func (m *MemorySlotMutation) Field(name string) (ent.Value, bool) {
 		return m.SerialNumber()
 	case memoryslot.FieldPartNumber:
 		return m.PartNumber()
+	case memoryslot.FieldSpeed:
+		return m.Speed()
 	}
 	return nil, false
 }
@@ -8078,6 +8133,8 @@ func (m *MemorySlotMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSerialNumber(ctx)
 	case memoryslot.FieldPartNumber:
 		return m.OldPartNumber(ctx)
+	case memoryslot.FieldSpeed:
+		return m.OldSpeed(ctx)
 	}
 	return nil, fmt.Errorf("unknown MemorySlot field %s", name)
 }
@@ -8121,6 +8178,13 @@ func (m *MemorySlotMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPartNumber(v)
+		return nil
+	case memoryslot.FieldSpeed:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpeed(v)
 		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot field %s", name)
@@ -8167,6 +8231,9 @@ func (m *MemorySlotMutation) ClearedFields() []string {
 	if m.FieldCleared(memoryslot.FieldPartNumber) {
 		fields = append(fields, memoryslot.FieldPartNumber)
 	}
+	if m.FieldCleared(memoryslot.FieldSpeed) {
+		fields = append(fields, memoryslot.FieldSpeed)
+	}
 	return fields
 }
 
@@ -8196,6 +8263,9 @@ func (m *MemorySlotMutation) ClearField(name string) error {
 	case memoryslot.FieldPartNumber:
 		m.ClearPartNumber()
 		return nil
+	case memoryslot.FieldSpeed:
+		m.ClearSpeed()
+		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot nullable field %s", name)
 }
@@ -8218,6 +8288,9 @@ func (m *MemorySlotMutation) ResetField(name string) error {
 		return nil
 	case memoryslot.FieldPartNumber:
 		m.ResetPartNumber()
+		return nil
+	case memoryslot.FieldSpeed:
+		m.ResetSpeed()
 		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot field %s", name)

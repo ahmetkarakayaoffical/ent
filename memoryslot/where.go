@@ -78,6 +78,11 @@ func PartNumber(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldEQ(FieldPartNumber, v))
 }
 
+// Speed applies equality check predicate on the "speed" field. It's identical to SpeedEQ.
+func Speed(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEQ(FieldSpeed, v))
+}
+
 // SlotEQ applies the EQ predicate on the "slot" field.
 func SlotEQ(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldEQ(FieldSlot, v))
@@ -451,6 +456,81 @@ func PartNumberEqualFold(v string) predicate.MemorySlot {
 // PartNumberContainsFold applies the ContainsFold predicate on the "part_number" field.
 func PartNumberContainsFold(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldContainsFold(FieldPartNumber, v))
+}
+
+// SpeedEQ applies the EQ predicate on the "speed" field.
+func SpeedEQ(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEQ(FieldSpeed, v))
+}
+
+// SpeedNEQ applies the NEQ predicate on the "speed" field.
+func SpeedNEQ(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNEQ(FieldSpeed, v))
+}
+
+// SpeedIn applies the In predicate on the "speed" field.
+func SpeedIn(vs ...string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldIn(FieldSpeed, vs...))
+}
+
+// SpeedNotIn applies the NotIn predicate on the "speed" field.
+func SpeedNotIn(vs ...string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNotIn(FieldSpeed, vs...))
+}
+
+// SpeedGT applies the GT predicate on the "speed" field.
+func SpeedGT(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldGT(FieldSpeed, v))
+}
+
+// SpeedGTE applies the GTE predicate on the "speed" field.
+func SpeedGTE(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldGTE(FieldSpeed, v))
+}
+
+// SpeedLT applies the LT predicate on the "speed" field.
+func SpeedLT(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldLT(FieldSpeed, v))
+}
+
+// SpeedLTE applies the LTE predicate on the "speed" field.
+func SpeedLTE(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldLTE(FieldSpeed, v))
+}
+
+// SpeedContains applies the Contains predicate on the "speed" field.
+func SpeedContains(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldContains(FieldSpeed, v))
+}
+
+// SpeedHasPrefix applies the HasPrefix predicate on the "speed" field.
+func SpeedHasPrefix(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldHasPrefix(FieldSpeed, v))
+}
+
+// SpeedHasSuffix applies the HasSuffix predicate on the "speed" field.
+func SpeedHasSuffix(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldHasSuffix(FieldSpeed, v))
+}
+
+// SpeedIsNil applies the IsNil predicate on the "speed" field.
+func SpeedIsNil() predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldIsNull(FieldSpeed))
+}
+
+// SpeedNotNil applies the NotNil predicate on the "speed" field.
+func SpeedNotNil() predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNotNull(FieldSpeed))
+}
+
+// SpeedEqualFold applies the EqualFold predicate on the "speed" field.
+func SpeedEqualFold(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEqualFold(FieldSpeed, v))
+}
+
+// SpeedContainsFold applies the ContainsFold predicate on the "speed" field.
+func SpeedContainsFold(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldContainsFold(FieldSpeed, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
