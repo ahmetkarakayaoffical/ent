@@ -257,6 +257,10 @@ func init() {
 	settingsDescDisableRemoteAssistance := settingsFields[32].Descriptor()
 	// settings.DefaultDisableRemoteAssistance holds the default value on creation for the disable_remote_assistance field.
 	settings.DefaultDisableRemoteAssistance = settingsDescDisableRemoteAssistance.Default.(bool)
+	// settingsDescDetectRemoteAgents is the schema descriptor for detect_remote_agents field.
+	settingsDescDetectRemoteAgents := settingsFields[33].Descriptor()
+	// settings.DefaultDetectRemoteAgents holds the default value on creation for the detect_remote_agents field.
+	settings.DefaultDetectRemoteAgents = settingsDescDetectRemoteAgents.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

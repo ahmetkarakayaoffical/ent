@@ -17375,6 +17375,7 @@ type SettingsMutation struct {
 	use_flatpak                                  *bool
 	disable_sftp                                 *bool
 	disable_remote_assistance                    *bool
+	detect_remote_agents                         *bool
 	clearedFields                                map[string]struct{}
 	tag                                          *int
 	clearedtag                                   bool
@@ -19245,6 +19246,55 @@ func (m *SettingsMutation) ResetDisableRemoteAssistance() {
 	delete(m.clearedFields, settings.FieldDisableRemoteAssistance)
 }
 
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (m *SettingsMutation) SetDetectRemoteAgents(b bool) {
+	m.detect_remote_agents = &b
+}
+
+// DetectRemoteAgents returns the value of the "detect_remote_agents" field in the mutation.
+func (m *SettingsMutation) DetectRemoteAgents() (r bool, exists bool) {
+	v := m.detect_remote_agents
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDetectRemoteAgents returns the old "detect_remote_agents" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldDetectRemoteAgents(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDetectRemoteAgents is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDetectRemoteAgents requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDetectRemoteAgents: %w", err)
+	}
+	return oldValue.DetectRemoteAgents, nil
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (m *SettingsMutation) ClearDetectRemoteAgents() {
+	m.detect_remote_agents = nil
+	m.clearedFields[settings.FieldDetectRemoteAgents] = struct{}{}
+}
+
+// DetectRemoteAgentsCleared returns if the "detect_remote_agents" field was cleared in this mutation.
+func (m *SettingsMutation) DetectRemoteAgentsCleared() bool {
+	_, ok := m.clearedFields[settings.FieldDetectRemoteAgents]
+	return ok
+}
+
+// ResetDetectRemoteAgents resets all changes to the "detect_remote_agents" field.
+func (m *SettingsMutation) ResetDetectRemoteAgents() {
+	m.detect_remote_agents = nil
+	delete(m.clearedFields, settings.FieldDetectRemoteAgents)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -19318,7 +19368,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 33)
+	fields := make([]string, 0, 34)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -19418,6 +19468,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.disable_remote_assistance != nil {
 		fields = append(fields, settings.FieldDisableRemoteAssistance)
 	}
+	if m.detect_remote_agents != nil {
+		fields = append(fields, settings.FieldDetectRemoteAgents)
+	}
 	return fields
 }
 
@@ -19492,6 +19545,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.DisableSftp()
 	case settings.FieldDisableRemoteAssistance:
 		return m.DisableRemoteAssistance()
+	case settings.FieldDetectRemoteAgents:
+		return m.DetectRemoteAgents()
 	}
 	return nil, false
 }
@@ -19567,6 +19622,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisableSftp(ctx)
 	case settings.FieldDisableRemoteAssistance:
 		return m.OldDisableRemoteAssistance(ctx)
+	case settings.FieldDetectRemoteAgents:
+		return m.OldDetectRemoteAgents(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -19807,6 +19864,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDisableRemoteAssistance(v)
 		return nil
+	case settings.FieldDetectRemoteAgents:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDetectRemoteAgents(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -20023,6 +20087,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldDisableRemoteAssistance) {
 		fields = append(fields, settings.FieldDisableRemoteAssistance)
 	}
+	if m.FieldCleared(settings.FieldDetectRemoteAgents) {
+		fields = append(fields, settings.FieldDetectRemoteAgents)
+	}
 	return fields
 }
 
@@ -20136,6 +20203,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldDisableRemoteAssistance:
 		m.ClearDisableRemoteAssistance()
 		return nil
+	case settings.FieldDetectRemoteAgents:
+		m.ClearDetectRemoteAgents()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -20242,6 +20312,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldDisableRemoteAssistance:
 		m.ResetDisableRemoteAssistance()
+		return nil
+	case settings.FieldDetectRemoteAgents:
+		m.ResetDetectRemoteAgents()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

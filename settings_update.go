@@ -731,6 +731,26 @@ func (su *SettingsUpdate) ClearDisableRemoteAssistance() *SettingsUpdate {
 	return su
 }
 
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (su *SettingsUpdate) SetDetectRemoteAgents(b bool) *SettingsUpdate {
+	su.mutation.SetDetectRemoteAgents(b)
+	return su
+}
+
+// SetNillableDetectRemoteAgents sets the "detect_remote_agents" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableDetectRemoteAgents(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetDetectRemoteAgents(*b)
+	}
+	return su
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (su *SettingsUpdate) ClearDetectRemoteAgents() *SettingsUpdate {
+	su.mutation.ClearDetectRemoteAgents()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -1030,6 +1050,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DisableRemoteAssistanceCleared() {
 		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
+	}
+	if value, ok := su.mutation.DetectRemoteAgents(); ok {
+		_spec.SetField(settings.FieldDetectRemoteAgents, field.TypeBool, value)
+	}
+	if su.mutation.DetectRemoteAgentsCleared() {
+		_spec.ClearField(settings.FieldDetectRemoteAgents, field.TypeBool)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1783,6 +1809,26 @@ func (suo *SettingsUpdateOne) ClearDisableRemoteAssistance() *SettingsUpdateOne 
 	return suo
 }
 
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (suo *SettingsUpdateOne) SetDetectRemoteAgents(b bool) *SettingsUpdateOne {
+	suo.mutation.SetDetectRemoteAgents(b)
+	return suo
+}
+
+// SetNillableDetectRemoteAgents sets the "detect_remote_agents" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableDetectRemoteAgents(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetDetectRemoteAgents(*b)
+	}
+	return suo
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (suo *SettingsUpdateOne) ClearDetectRemoteAgents() *SettingsUpdateOne {
+	suo.mutation.ClearDetectRemoteAgents()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -2112,6 +2158,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.DisableRemoteAssistanceCleared() {
 		_spec.ClearField(settings.FieldDisableRemoteAssistance, field.TypeBool)
+	}
+	if value, ok := suo.mutation.DetectRemoteAgents(); ok {
+		_spec.SetField(settings.FieldDetectRemoteAgents, field.TypeBool, value)
+	}
+	if suo.mutation.DetectRemoteAgentsCleared() {
+		_spec.ClearField(settings.FieldDetectRemoteAgents, field.TypeBool)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

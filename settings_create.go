@@ -485,6 +485,20 @@ func (sc *SettingsCreate) SetNillableDisableRemoteAssistance(b *bool) *SettingsC
 	return sc
 }
 
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (sc *SettingsCreate) SetDetectRemoteAgents(b bool) *SettingsCreate {
+	sc.mutation.SetDetectRemoteAgents(b)
+	return sc
+}
+
+// SetNillableDetectRemoteAgents sets the "detect_remote_agents" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableDetectRemoteAgents(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetDetectRemoteAgents(*b)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -618,6 +632,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.DisableRemoteAssistance(); !ok {
 		v := settings.DefaultDisableRemoteAssistance
 		sc.mutation.SetDisableRemoteAssistance(v)
+	}
+	if _, ok := sc.mutation.DetectRemoteAgents(); !ok {
+		v := settings.DefaultDetectRemoteAgents
+		sc.mutation.SetDetectRemoteAgents(v)
 	}
 }
 
@@ -781,6 +799,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DisableRemoteAssistance(); ok {
 		_spec.SetField(settings.FieldDisableRemoteAssistance, field.TypeBool, value)
 		_node.DisableRemoteAssistance = value
+	}
+	if value, ok := sc.mutation.DetectRemoteAgents(); ok {
+		_spec.SetField(settings.FieldDetectRemoteAgents, field.TypeBool, value)
+		_node.DetectRemoteAgents = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1484,6 +1506,24 @@ func (u *SettingsUpsert) UpdateDisableRemoteAssistance() *SettingsUpsert {
 // ClearDisableRemoteAssistance clears the value of the "disable_remote_assistance" field.
 func (u *SettingsUpsert) ClearDisableRemoteAssistance() *SettingsUpsert {
 	u.SetNull(settings.FieldDisableRemoteAssistance)
+	return u
+}
+
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (u *SettingsUpsert) SetDetectRemoteAgents(v bool) *SettingsUpsert {
+	u.Set(settings.FieldDetectRemoteAgents, v)
+	return u
+}
+
+// UpdateDetectRemoteAgents sets the "detect_remote_agents" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateDetectRemoteAgents() *SettingsUpsert {
+	u.SetExcluded(settings.FieldDetectRemoteAgents)
+	return u
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (u *SettingsUpsert) ClearDetectRemoteAgents() *SettingsUpsert {
+	u.SetNull(settings.FieldDetectRemoteAgents)
 	return u
 }
 
@@ -2266,6 +2306,27 @@ func (u *SettingsUpsertOne) UpdateDisableRemoteAssistance() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearDisableRemoteAssistance() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableRemoteAssistance()
+	})
+}
+
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (u *SettingsUpsertOne) SetDetectRemoteAgents(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDetectRemoteAgents(v)
+	})
+}
+
+// UpdateDetectRemoteAgents sets the "detect_remote_agents" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateDetectRemoteAgents() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDetectRemoteAgents()
+	})
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (u *SettingsUpsertOne) ClearDetectRemoteAgents() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDetectRemoteAgents()
 	})
 }
 
@@ -3212,6 +3273,27 @@ func (u *SettingsUpsertBulk) UpdateDisableRemoteAssistance() *SettingsUpsertBulk
 func (u *SettingsUpsertBulk) ClearDisableRemoteAssistance() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDisableRemoteAssistance()
+	})
+}
+
+// SetDetectRemoteAgents sets the "detect_remote_agents" field.
+func (u *SettingsUpsertBulk) SetDetectRemoteAgents(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetDetectRemoteAgents(v)
+	})
+}
+
+// UpdateDetectRemoteAgents sets the "detect_remote_agents" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateDetectRemoteAgents() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateDetectRemoteAgents()
+	})
+}
+
+// ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
+func (u *SettingsUpsertBulk) ClearDetectRemoteAgents() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearDetectRemoteAgents()
 	})
 }
 

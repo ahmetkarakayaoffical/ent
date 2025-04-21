@@ -220,6 +220,11 @@ func DisableRemoteAssistance(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldDisableRemoteAssistance, v))
 }
 
+// DetectRemoteAgents applies equality check predicate on the "detect_remote_agents" field. It's identical to DetectRemoteAgentsEQ.
+func DetectRemoteAgents(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDetectRemoteAgents, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -2083,6 +2088,26 @@ func DisableRemoteAssistanceIsNil() predicate.Settings {
 // DisableRemoteAssistanceNotNil applies the NotNil predicate on the "disable_remote_assistance" field.
 func DisableRemoteAssistanceNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldDisableRemoteAssistance))
+}
+
+// DetectRemoteAgentsEQ applies the EQ predicate on the "detect_remote_agents" field.
+func DetectRemoteAgentsEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldDetectRemoteAgents, v))
+}
+
+// DetectRemoteAgentsNEQ applies the NEQ predicate on the "detect_remote_agents" field.
+func DetectRemoteAgentsNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldDetectRemoteAgents, v))
+}
+
+// DetectRemoteAgentsIsNil applies the IsNil predicate on the "detect_remote_agents" field.
+func DetectRemoteAgentsIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldDetectRemoteAgents))
+}
+
+// DetectRemoteAgentsNotNil applies the NotNil predicate on the "detect_remote_agents" field.
+func DetectRemoteAgentsNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldDetectRemoteAgents))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.
