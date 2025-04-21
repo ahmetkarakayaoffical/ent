@@ -149,6 +149,26 @@ func (msu *MemorySlotUpdate) ClearSpeed() *MemorySlotUpdate {
 	return msu
 }
 
+// SetManufacturer sets the "manufacturer" field.
+func (msu *MemorySlotUpdate) SetManufacturer(s string) *MemorySlotUpdate {
+	msu.mutation.SetManufacturer(s)
+	return msu
+}
+
+// SetNillableManufacturer sets the "manufacturer" field if the given value is not nil.
+func (msu *MemorySlotUpdate) SetNillableManufacturer(s *string) *MemorySlotUpdate {
+	if s != nil {
+		msu.SetManufacturer(*s)
+	}
+	return msu
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (msu *MemorySlotUpdate) ClearManufacturer() *MemorySlotUpdate {
+	msu.mutation.ClearManufacturer()
+	return msu
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msu *MemorySlotUpdate) SetOwnerID(id string) *MemorySlotUpdate {
 	msu.mutation.SetOwnerID(id)
@@ -259,6 +279,12 @@ func (msu *MemorySlotUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if msu.mutation.SpeedCleared() {
 		_spec.ClearField(memoryslot.FieldSpeed, field.TypeString)
+	}
+	if value, ok := msu.mutation.Manufacturer(); ok {
+		_spec.SetField(memoryslot.FieldManufacturer, field.TypeString, value)
+	}
+	if msu.mutation.ManufacturerCleared() {
+		_spec.ClearField(memoryslot.FieldManufacturer, field.TypeString)
 	}
 	if msu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -431,6 +457,26 @@ func (msuo *MemorySlotUpdateOne) ClearSpeed() *MemorySlotUpdateOne {
 	return msuo
 }
 
+// SetManufacturer sets the "manufacturer" field.
+func (msuo *MemorySlotUpdateOne) SetManufacturer(s string) *MemorySlotUpdateOne {
+	msuo.mutation.SetManufacturer(s)
+	return msuo
+}
+
+// SetNillableManufacturer sets the "manufacturer" field if the given value is not nil.
+func (msuo *MemorySlotUpdateOne) SetNillableManufacturer(s *string) *MemorySlotUpdateOne {
+	if s != nil {
+		msuo.SetManufacturer(*s)
+	}
+	return msuo
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (msuo *MemorySlotUpdateOne) ClearManufacturer() *MemorySlotUpdateOne {
+	msuo.mutation.ClearManufacturer()
+	return msuo
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msuo *MemorySlotUpdateOne) SetOwnerID(id string) *MemorySlotUpdateOne {
 	msuo.mutation.SetOwnerID(id)
@@ -571,6 +617,12 @@ func (msuo *MemorySlotUpdateOne) sqlSave(ctx context.Context) (_node *MemorySlot
 	}
 	if msuo.mutation.SpeedCleared() {
 		_spec.ClearField(memoryslot.FieldSpeed, field.TypeString)
+	}
+	if value, ok := msuo.mutation.Manufacturer(); ok {
+		_spec.SetField(memoryslot.FieldManufacturer, field.TypeString, value)
+	}
+	if msuo.mutation.ManufacturerCleared() {
+		_spec.ClearField(memoryslot.FieldManufacturer, field.TypeString)
 	}
 	if msuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

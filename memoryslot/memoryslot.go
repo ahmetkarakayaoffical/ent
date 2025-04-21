@@ -24,6 +24,8 @@ const (
 	FieldPartNumber = "part_number"
 	// FieldSpeed holds the string denoting the speed field in the database.
 	FieldSpeed = "speed"
+	// FieldManufacturer holds the string denoting the manufacturer field in the database.
+	FieldManufacturer = "manufacturer"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
@@ -48,6 +50,7 @@ var Columns = []string{
 	FieldSerialNumber,
 	FieldPartNumber,
 	FieldSpeed,
+	FieldManufacturer,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "memory_slots"
@@ -107,6 +110,11 @@ func ByPartNumber(opts ...sql.OrderTermOption) OrderOption {
 // BySpeed orders the results by the speed field.
 func BySpeed(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSpeed, opts...).ToFunc()
+}
+
+// ByManufacturer orders the results by the manufacturer field.
+func ByManufacturer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManufacturer, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

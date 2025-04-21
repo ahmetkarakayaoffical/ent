@@ -196,6 +196,7 @@ var (
 		{Name: "serial_number", Type: field.TypeString, Nullable: true},
 		{Name: "part_number", Type: field.TypeString, Nullable: true},
 		{Name: "speed", Type: field.TypeString, Nullable: true},
+		{Name: "manufacturer", Type: field.TypeString, Nullable: true},
 		{Name: "agent_memoryslots", Type: field.TypeString},
 	}
 	// MemorySlotsTable holds the schema information for the "memory_slots" table.
@@ -206,7 +207,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "memory_slots_agents_memoryslots",
-				Columns:    []*schema.Column{MemorySlotsColumns[7]},
+				Columns:    []*schema.Column{MemorySlotsColumns[8]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

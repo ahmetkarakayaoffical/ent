@@ -7602,6 +7602,7 @@ type MemorySlotMutation struct {
 	serial_number *string
 	part_number   *string
 	speed         *string
+	manufacturer  *string
 	clearedFields map[string]struct{}
 	owner         *string
 	clearedowner  bool
@@ -8002,6 +8003,55 @@ func (m *MemorySlotMutation) ResetSpeed() {
 	delete(m.clearedFields, memoryslot.FieldSpeed)
 }
 
+// SetManufacturer sets the "manufacturer" field.
+func (m *MemorySlotMutation) SetManufacturer(s string) {
+	m.manufacturer = &s
+}
+
+// Manufacturer returns the value of the "manufacturer" field in the mutation.
+func (m *MemorySlotMutation) Manufacturer() (r string, exists bool) {
+	v := m.manufacturer
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManufacturer returns the old "manufacturer" field's value of the MemorySlot entity.
+// If the MemorySlot object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemorySlotMutation) OldManufacturer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManufacturer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManufacturer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManufacturer: %w", err)
+	}
+	return oldValue.Manufacturer, nil
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (m *MemorySlotMutation) ClearManufacturer() {
+	m.manufacturer = nil
+	m.clearedFields[memoryslot.FieldManufacturer] = struct{}{}
+}
+
+// ManufacturerCleared returns if the "manufacturer" field was cleared in this mutation.
+func (m *MemorySlotMutation) ManufacturerCleared() bool {
+	_, ok := m.clearedFields[memoryslot.FieldManufacturer]
+	return ok
+}
+
+// ResetManufacturer resets all changes to the "manufacturer" field.
+func (m *MemorySlotMutation) ResetManufacturer() {
+	m.manufacturer = nil
+	delete(m.clearedFields, memoryslot.FieldManufacturer)
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by id.
 func (m *MemorySlotMutation) SetOwnerID(id string) {
 	m.owner = &id
@@ -8075,7 +8125,7 @@ func (m *MemorySlotMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemorySlotMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.slot != nil {
 		fields = append(fields, memoryslot.FieldSlot)
 	}
@@ -8093,6 +8143,9 @@ func (m *MemorySlotMutation) Fields() []string {
 	}
 	if m.speed != nil {
 		fields = append(fields, memoryslot.FieldSpeed)
+	}
+	if m.manufacturer != nil {
+		fields = append(fields, memoryslot.FieldManufacturer)
 	}
 	return fields
 }
@@ -8114,6 +8167,8 @@ func (m *MemorySlotMutation) Field(name string) (ent.Value, bool) {
 		return m.PartNumber()
 	case memoryslot.FieldSpeed:
 		return m.Speed()
+	case memoryslot.FieldManufacturer:
+		return m.Manufacturer()
 	}
 	return nil, false
 }
@@ -8135,6 +8190,8 @@ func (m *MemorySlotMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldPartNumber(ctx)
 	case memoryslot.FieldSpeed:
 		return m.OldSpeed(ctx)
+	case memoryslot.FieldManufacturer:
+		return m.OldManufacturer(ctx)
 	}
 	return nil, fmt.Errorf("unknown MemorySlot field %s", name)
 }
@@ -8186,6 +8243,13 @@ func (m *MemorySlotMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSpeed(v)
 		return nil
+	case memoryslot.FieldManufacturer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManufacturer(v)
+		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot field %s", name)
 }
@@ -8234,6 +8298,9 @@ func (m *MemorySlotMutation) ClearedFields() []string {
 	if m.FieldCleared(memoryslot.FieldSpeed) {
 		fields = append(fields, memoryslot.FieldSpeed)
 	}
+	if m.FieldCleared(memoryslot.FieldManufacturer) {
+		fields = append(fields, memoryslot.FieldManufacturer)
+	}
 	return fields
 }
 
@@ -8266,6 +8333,9 @@ func (m *MemorySlotMutation) ClearField(name string) error {
 	case memoryslot.FieldSpeed:
 		m.ClearSpeed()
 		return nil
+	case memoryslot.FieldManufacturer:
+		m.ClearManufacturer()
+		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot nullable field %s", name)
 }
@@ -8291,6 +8361,9 @@ func (m *MemorySlotMutation) ResetField(name string) error {
 		return nil
 	case memoryslot.FieldSpeed:
 		m.ResetSpeed()
+		return nil
+	case memoryslot.FieldManufacturer:
+		m.ResetManufacturer()
 		return nil
 	}
 	return fmt.Errorf("unknown MemorySlot field %s", name)

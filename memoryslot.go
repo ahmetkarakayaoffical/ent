@@ -29,6 +29,8 @@ type MemorySlot struct {
 	PartNumber string `json:"part_number,omitempty"`
 	// Speed holds the value of the "speed" field.
 	Speed string `json:"speed,omitempty"`
+	// Manufacturer holds the value of the "manufacturer" field.
+	Manufacturer string `json:"manufacturer,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemorySlotQuery when eager-loading is set.
 	Edges             MemorySlotEdges `json:"edges"`
@@ -63,7 +65,7 @@ func (*MemorySlot) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case memoryslot.FieldID:
 			values[i] = new(sql.NullInt64)
-		case memoryslot.FieldSlot, memoryslot.FieldSize, memoryslot.FieldType, memoryslot.FieldSerialNumber, memoryslot.FieldPartNumber, memoryslot.FieldSpeed:
+		case memoryslot.FieldSlot, memoryslot.FieldSize, memoryslot.FieldType, memoryslot.FieldSerialNumber, memoryslot.FieldPartNumber, memoryslot.FieldSpeed, memoryslot.FieldManufacturer:
 			values[i] = new(sql.NullString)
 		case memoryslot.ForeignKeys[0]: // agent_memoryslots
 			values[i] = new(sql.NullString)
@@ -123,6 +125,12 @@ func (ms *MemorySlot) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field speed", values[i])
 			} else if value.Valid {
 				ms.Speed = value.String
+			}
+		case memoryslot.FieldManufacturer:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field manufacturer", values[i])
+			} else if value.Valid {
+				ms.Manufacturer = value.String
 			}
 		case memoryslot.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -189,6 +197,9 @@ func (ms *MemorySlot) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("speed=")
 	builder.WriteString(ms.Speed)
+	builder.WriteString(", ")
+	builder.WriteString("manufacturer=")
+	builder.WriteString(ms.Manufacturer)
 	builder.WriteByte(')')
 	return builder.String()
 }

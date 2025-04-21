@@ -83,6 +83,11 @@ func Speed(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldEQ(FieldSpeed, v))
 }
 
+// Manufacturer applies equality check predicate on the "manufacturer" field. It's identical to ManufacturerEQ.
+func Manufacturer(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEQ(FieldManufacturer, v))
+}
+
 // SlotEQ applies the EQ predicate on the "slot" field.
 func SlotEQ(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldEQ(FieldSlot, v))
@@ -531,6 +536,81 @@ func SpeedEqualFold(v string) predicate.MemorySlot {
 // SpeedContainsFold applies the ContainsFold predicate on the "speed" field.
 func SpeedContainsFold(v string) predicate.MemorySlot {
 	return predicate.MemorySlot(sql.FieldContainsFold(FieldSpeed, v))
+}
+
+// ManufacturerEQ applies the EQ predicate on the "manufacturer" field.
+func ManufacturerEQ(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEQ(FieldManufacturer, v))
+}
+
+// ManufacturerNEQ applies the NEQ predicate on the "manufacturer" field.
+func ManufacturerNEQ(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNEQ(FieldManufacturer, v))
+}
+
+// ManufacturerIn applies the In predicate on the "manufacturer" field.
+func ManufacturerIn(vs ...string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldIn(FieldManufacturer, vs...))
+}
+
+// ManufacturerNotIn applies the NotIn predicate on the "manufacturer" field.
+func ManufacturerNotIn(vs ...string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNotIn(FieldManufacturer, vs...))
+}
+
+// ManufacturerGT applies the GT predicate on the "manufacturer" field.
+func ManufacturerGT(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldGT(FieldManufacturer, v))
+}
+
+// ManufacturerGTE applies the GTE predicate on the "manufacturer" field.
+func ManufacturerGTE(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldGTE(FieldManufacturer, v))
+}
+
+// ManufacturerLT applies the LT predicate on the "manufacturer" field.
+func ManufacturerLT(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldLT(FieldManufacturer, v))
+}
+
+// ManufacturerLTE applies the LTE predicate on the "manufacturer" field.
+func ManufacturerLTE(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldLTE(FieldManufacturer, v))
+}
+
+// ManufacturerContains applies the Contains predicate on the "manufacturer" field.
+func ManufacturerContains(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldContains(FieldManufacturer, v))
+}
+
+// ManufacturerHasPrefix applies the HasPrefix predicate on the "manufacturer" field.
+func ManufacturerHasPrefix(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldHasPrefix(FieldManufacturer, v))
+}
+
+// ManufacturerHasSuffix applies the HasSuffix predicate on the "manufacturer" field.
+func ManufacturerHasSuffix(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldHasSuffix(FieldManufacturer, v))
+}
+
+// ManufacturerIsNil applies the IsNil predicate on the "manufacturer" field.
+func ManufacturerIsNil() predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldIsNull(FieldManufacturer))
+}
+
+// ManufacturerNotNil applies the NotNil predicate on the "manufacturer" field.
+func ManufacturerNotNil() predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldNotNull(FieldManufacturer))
+}
+
+// ManufacturerEqualFold applies the EqualFold predicate on the "manufacturer" field.
+func ManufacturerEqualFold(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldEqualFold(FieldManufacturer, v))
+}
+
+// ManufacturerContainsFold applies the ContainsFold predicate on the "manufacturer" field.
+func ManufacturerContainsFold(v string) predicate.MemorySlot {
+	return predicate.MemorySlot(sql.FieldContainsFold(FieldManufacturer, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

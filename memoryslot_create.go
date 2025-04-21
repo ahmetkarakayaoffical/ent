@@ -106,6 +106,20 @@ func (msc *MemorySlotCreate) SetNillableSpeed(s *string) *MemorySlotCreate {
 	return msc
 }
 
+// SetManufacturer sets the "manufacturer" field.
+func (msc *MemorySlotCreate) SetManufacturer(s string) *MemorySlotCreate {
+	msc.mutation.SetManufacturer(s)
+	return msc
+}
+
+// SetNillableManufacturer sets the "manufacturer" field if the given value is not nil.
+func (msc *MemorySlotCreate) SetNillableManufacturer(s *string) *MemorySlotCreate {
+	if s != nil {
+		msc.SetManufacturer(*s)
+	}
+	return msc
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (msc *MemorySlotCreate) SetOwnerID(id string) *MemorySlotCreate {
 	msc.mutation.SetOwnerID(id)
@@ -204,6 +218,10 @@ func (msc *MemorySlotCreate) createSpec() (*MemorySlot, *sqlgraph.CreateSpec) {
 	if value, ok := msc.mutation.Speed(); ok {
 		_spec.SetField(memoryslot.FieldSpeed, field.TypeString, value)
 		_node.Speed = value
+	}
+	if value, ok := msc.mutation.Manufacturer(); ok {
+		_spec.SetField(memoryslot.FieldManufacturer, field.TypeString, value)
+		_node.Manufacturer = value
 	}
 	if nodes := msc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -382,6 +400,24 @@ func (u *MemorySlotUpsert) ClearSpeed() *MemorySlotUpsert {
 	return u
 }
 
+// SetManufacturer sets the "manufacturer" field.
+func (u *MemorySlotUpsert) SetManufacturer(v string) *MemorySlotUpsert {
+	u.Set(memoryslot.FieldManufacturer, v)
+	return u
+}
+
+// UpdateManufacturer sets the "manufacturer" field to the value that was provided on create.
+func (u *MemorySlotUpsert) UpdateManufacturer() *MemorySlotUpsert {
+	u.SetExcluded(memoryslot.FieldManufacturer)
+	return u
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (u *MemorySlotUpsert) ClearManufacturer() *MemorySlotUpsert {
+	u.SetNull(memoryslot.FieldManufacturer)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -545,6 +581,27 @@ func (u *MemorySlotUpsertOne) UpdateSpeed() *MemorySlotUpsertOne {
 func (u *MemorySlotUpsertOne) ClearSpeed() *MemorySlotUpsertOne {
 	return u.Update(func(s *MemorySlotUpsert) {
 		s.ClearSpeed()
+	})
+}
+
+// SetManufacturer sets the "manufacturer" field.
+func (u *MemorySlotUpsertOne) SetManufacturer(v string) *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.SetManufacturer(v)
+	})
+}
+
+// UpdateManufacturer sets the "manufacturer" field to the value that was provided on create.
+func (u *MemorySlotUpsertOne) UpdateManufacturer() *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.UpdateManufacturer()
+	})
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (u *MemorySlotUpsertOne) ClearManufacturer() *MemorySlotUpsertOne {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.ClearManufacturer()
 	})
 }
 
@@ -874,6 +931,27 @@ func (u *MemorySlotUpsertBulk) UpdateSpeed() *MemorySlotUpsertBulk {
 func (u *MemorySlotUpsertBulk) ClearSpeed() *MemorySlotUpsertBulk {
 	return u.Update(func(s *MemorySlotUpsert) {
 		s.ClearSpeed()
+	})
+}
+
+// SetManufacturer sets the "manufacturer" field.
+func (u *MemorySlotUpsertBulk) SetManufacturer(v string) *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.SetManufacturer(v)
+	})
+}
+
+// UpdateManufacturer sets the "manufacturer" field to the value that was provided on create.
+func (u *MemorySlotUpsertBulk) UpdateManufacturer() *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.UpdateManufacturer()
+	})
+}
+
+// ClearManufacturer clears the value of the "manufacturer" field.
+func (u *MemorySlotUpsertBulk) ClearManufacturer() *MemorySlotUpsertBulk {
+	return u.Update(func(s *MemorySlotUpsert) {
+		s.ClearManufacturer()
 	})
 }
 
