@@ -82,6 +82,8 @@ const (
 	FieldDisableRemoteAssistance = "disable_remote_assistance"
 	// FieldDetectRemoteAgents holds the string denoting the detect_remote_agents field in the database.
 	FieldDetectRemoteAgents = "detect_remote_agents"
+	// FieldAutoAdmitAgents holds the string denoting the auto_admit_agents field in the database.
+	FieldAutoAdmitAgents = "auto_admit_agents"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
 	// Table holds the table name of the settings in the database.
@@ -132,6 +134,7 @@ var Columns = []string{
 	FieldDisableSftp,
 	FieldDisableRemoteAssistance,
 	FieldDetectRemoteAgents,
+	FieldAutoAdmitAgents,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "settings"
@@ -200,6 +203,8 @@ var (
 	DefaultDisableRemoteAssistance bool
 	// DefaultDetectRemoteAgents holds the default value on creation for the "detect_remote_agents" field.
 	DefaultDetectRemoteAgents bool
+	// DefaultAutoAdmitAgents holds the default value on creation for the "auto_admit_agents" field.
+	DefaultAutoAdmitAgents bool
 )
 
 // OrderOption defines the ordering options for the Settings queries.
@@ -378,6 +383,11 @@ func ByDisableRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
 // ByDetectRemoteAgents orders the results by the detect_remote_agents field.
 func ByDetectRemoteAgents(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDetectRemoteAgents, opts...).ToFunc()
+}
+
+// ByAutoAdmitAgents orders the results by the auto_admit_agents field.
+func ByAutoAdmitAgents(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAutoAdmitAgents, opts...).ToFunc()
 }
 
 // ByTagField orders the results by tag field.

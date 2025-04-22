@@ -499,6 +499,20 @@ func (sc *SettingsCreate) SetNillableDetectRemoteAgents(b *bool) *SettingsCreate
 	return sc
 }
 
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (sc *SettingsCreate) SetAutoAdmitAgents(b bool) *SettingsCreate {
+	sc.mutation.SetAutoAdmitAgents(b)
+	return sc
+}
+
+// SetNillableAutoAdmitAgents sets the "auto_admit_agents" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableAutoAdmitAgents(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetAutoAdmitAgents(*b)
+	}
+	return sc
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (sc *SettingsCreate) SetTagID(id int) *SettingsCreate {
 	sc.mutation.SetTagID(id)
@@ -636,6 +650,10 @@ func (sc *SettingsCreate) defaults() {
 	if _, ok := sc.mutation.DetectRemoteAgents(); !ok {
 		v := settings.DefaultDetectRemoteAgents
 		sc.mutation.SetDetectRemoteAgents(v)
+	}
+	if _, ok := sc.mutation.AutoAdmitAgents(); !ok {
+		v := settings.DefaultAutoAdmitAgents
+		sc.mutation.SetAutoAdmitAgents(v)
 	}
 }
 
@@ -803,6 +821,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.DetectRemoteAgents(); ok {
 		_spec.SetField(settings.FieldDetectRemoteAgents, field.TypeBool, value)
 		_node.DetectRemoteAgents = value
+	}
+	if value, ok := sc.mutation.AutoAdmitAgents(); ok {
+		_spec.SetField(settings.FieldAutoAdmitAgents, field.TypeBool, value)
+		_node.AutoAdmitAgents = value
 	}
 	if nodes := sc.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1524,6 +1546,24 @@ func (u *SettingsUpsert) UpdateDetectRemoteAgents() *SettingsUpsert {
 // ClearDetectRemoteAgents clears the value of the "detect_remote_agents" field.
 func (u *SettingsUpsert) ClearDetectRemoteAgents() *SettingsUpsert {
 	u.SetNull(settings.FieldDetectRemoteAgents)
+	return u
+}
+
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (u *SettingsUpsert) SetAutoAdmitAgents(v bool) *SettingsUpsert {
+	u.Set(settings.FieldAutoAdmitAgents, v)
+	return u
+}
+
+// UpdateAutoAdmitAgents sets the "auto_admit_agents" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateAutoAdmitAgents() *SettingsUpsert {
+	u.SetExcluded(settings.FieldAutoAdmitAgents)
+	return u
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (u *SettingsUpsert) ClearAutoAdmitAgents() *SettingsUpsert {
+	u.SetNull(settings.FieldAutoAdmitAgents)
 	return u
 }
 
@@ -2327,6 +2367,27 @@ func (u *SettingsUpsertOne) UpdateDetectRemoteAgents() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearDetectRemoteAgents() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDetectRemoteAgents()
+	})
+}
+
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (u *SettingsUpsertOne) SetAutoAdmitAgents(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetAutoAdmitAgents(v)
+	})
+}
+
+// UpdateAutoAdmitAgents sets the "auto_admit_agents" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateAutoAdmitAgents() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateAutoAdmitAgents()
+	})
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (u *SettingsUpsertOne) ClearAutoAdmitAgents() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearAutoAdmitAgents()
 	})
 }
 
@@ -3294,6 +3355,27 @@ func (u *SettingsUpsertBulk) UpdateDetectRemoteAgents() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearDetectRemoteAgents() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearDetectRemoteAgents()
+	})
+}
+
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (u *SettingsUpsertBulk) SetAutoAdmitAgents(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetAutoAdmitAgents(v)
+	})
+}
+
+// UpdateAutoAdmitAgents sets the "auto_admit_agents" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateAutoAdmitAgents() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateAutoAdmitAgents()
+	})
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (u *SettingsUpsertBulk) ClearAutoAdmitAgents() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearAutoAdmitAgents()
 	})
 }
 

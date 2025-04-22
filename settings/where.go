@@ -225,6 +225,11 @@ func DetectRemoteAgents(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldDetectRemoteAgents, v))
 }
 
+// AutoAdmitAgents applies equality check predicate on the "auto_admit_agents" field. It's identical to AutoAdmitAgentsEQ.
+func AutoAdmitAgents(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldAutoAdmitAgents, v))
+}
+
 // LanguageEQ applies the EQ predicate on the "language" field.
 func LanguageEQ(v string) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldLanguage, v))
@@ -2108,6 +2113,26 @@ func DetectRemoteAgentsIsNil() predicate.Settings {
 // DetectRemoteAgentsNotNil applies the NotNil predicate on the "detect_remote_agents" field.
 func DetectRemoteAgentsNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldDetectRemoteAgents))
+}
+
+// AutoAdmitAgentsEQ applies the EQ predicate on the "auto_admit_agents" field.
+func AutoAdmitAgentsEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldAutoAdmitAgents, v))
+}
+
+// AutoAdmitAgentsNEQ applies the NEQ predicate on the "auto_admit_agents" field.
+func AutoAdmitAgentsNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldAutoAdmitAgents, v))
+}
+
+// AutoAdmitAgentsIsNil applies the IsNil predicate on the "auto_admit_agents" field.
+func AutoAdmitAgentsIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldAutoAdmitAgents))
+}
+
+// AutoAdmitAgentsNotNil applies the NotNil predicate on the "auto_admit_agents" field.
+func AutoAdmitAgentsNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldAutoAdmitAgents))
 }
 
 // HasTag applies the HasEdge predicate on the "tag" edge.

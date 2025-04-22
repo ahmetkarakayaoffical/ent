@@ -17376,6 +17376,7 @@ type SettingsMutation struct {
 	disable_sftp                                 *bool
 	disable_remote_assistance                    *bool
 	detect_remote_agents                         *bool
+	auto_admit_agents                            *bool
 	clearedFields                                map[string]struct{}
 	tag                                          *int
 	clearedtag                                   bool
@@ -19295,6 +19296,55 @@ func (m *SettingsMutation) ResetDetectRemoteAgents() {
 	delete(m.clearedFields, settings.FieldDetectRemoteAgents)
 }
 
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (m *SettingsMutation) SetAutoAdmitAgents(b bool) {
+	m.auto_admit_agents = &b
+}
+
+// AutoAdmitAgents returns the value of the "auto_admit_agents" field in the mutation.
+func (m *SettingsMutation) AutoAdmitAgents() (r bool, exists bool) {
+	v := m.auto_admit_agents
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoAdmitAgents returns the old "auto_admit_agents" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldAutoAdmitAgents(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoAdmitAgents is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoAdmitAgents requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoAdmitAgents: %w", err)
+	}
+	return oldValue.AutoAdmitAgents, nil
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (m *SettingsMutation) ClearAutoAdmitAgents() {
+	m.auto_admit_agents = nil
+	m.clearedFields[settings.FieldAutoAdmitAgents] = struct{}{}
+}
+
+// AutoAdmitAgentsCleared returns if the "auto_admit_agents" field was cleared in this mutation.
+func (m *SettingsMutation) AutoAdmitAgentsCleared() bool {
+	_, ok := m.clearedFields[settings.FieldAutoAdmitAgents]
+	return ok
+}
+
+// ResetAutoAdmitAgents resets all changes to the "auto_admit_agents" field.
+func (m *SettingsMutation) ResetAutoAdmitAgents() {
+	m.auto_admit_agents = nil
+	delete(m.clearedFields, settings.FieldAutoAdmitAgents)
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by id.
 func (m *SettingsMutation) SetTagID(id int) {
 	m.tag = &id
@@ -19368,7 +19418,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 35)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -19471,6 +19521,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.detect_remote_agents != nil {
 		fields = append(fields, settings.FieldDetectRemoteAgents)
 	}
+	if m.auto_admit_agents != nil {
+		fields = append(fields, settings.FieldAutoAdmitAgents)
+	}
 	return fields
 }
 
@@ -19547,6 +19600,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.DisableRemoteAssistance()
 	case settings.FieldDetectRemoteAgents:
 		return m.DetectRemoteAgents()
+	case settings.FieldAutoAdmitAgents:
+		return m.AutoAdmitAgents()
 	}
 	return nil, false
 }
@@ -19624,6 +19679,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisableRemoteAssistance(ctx)
 	case settings.FieldDetectRemoteAgents:
 		return m.OldDetectRemoteAgents(ctx)
+	case settings.FieldAutoAdmitAgents:
+		return m.OldAutoAdmitAgents(ctx)
 	}
 	return nil, fmt.Errorf("unknown Settings field %s", name)
 }
@@ -19871,6 +19928,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetectRemoteAgents(v)
 		return nil
+	case settings.FieldAutoAdmitAgents:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoAdmitAgents(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)
 }
@@ -20090,6 +20154,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldDetectRemoteAgents) {
 		fields = append(fields, settings.FieldDetectRemoteAgents)
 	}
+	if m.FieldCleared(settings.FieldAutoAdmitAgents) {
+		fields = append(fields, settings.FieldAutoAdmitAgents)
+	}
 	return fields
 }
 
@@ -20206,6 +20273,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldDetectRemoteAgents:
 		m.ClearDetectRemoteAgents()
 		return nil
+	case settings.FieldAutoAdmitAgents:
+		m.ClearAutoAdmitAgents()
+		return nil
 	}
 	return fmt.Errorf("unknown Settings nullable field %s", name)
 }
@@ -20315,6 +20385,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldDetectRemoteAgents:
 		m.ResetDetectRemoteAgents()
+		return nil
+	case settings.FieldAutoAdmitAgents:
+		m.ResetAutoAdmitAgents()
 		return nil
 	}
 	return fmt.Errorf("unknown Settings field %s", name)

@@ -542,6 +542,7 @@ var (
 		{Name: "disable_sftp", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "disable_remote_assistance", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "detect_remote_agents", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "auto_admit_agents", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
@@ -552,7 +553,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[35]},
+				Columns:    []*schema.Column{SettingsColumns[36]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

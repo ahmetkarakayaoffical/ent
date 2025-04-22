@@ -751,6 +751,26 @@ func (su *SettingsUpdate) ClearDetectRemoteAgents() *SettingsUpdate {
 	return su
 }
 
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (su *SettingsUpdate) SetAutoAdmitAgents(b bool) *SettingsUpdate {
+	su.mutation.SetAutoAdmitAgents(b)
+	return su
+}
+
+// SetNillableAutoAdmitAgents sets the "auto_admit_agents" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableAutoAdmitAgents(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetAutoAdmitAgents(*b)
+	}
+	return su
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (su *SettingsUpdate) ClearAutoAdmitAgents() *SettingsUpdate {
+	su.mutation.ClearAutoAdmitAgents()
+	return su
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (su *SettingsUpdate) SetTagID(id int) *SettingsUpdate {
 	su.mutation.SetTagID(id)
@@ -1056,6 +1076,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.DetectRemoteAgentsCleared() {
 		_spec.ClearField(settings.FieldDetectRemoteAgents, field.TypeBool)
+	}
+	if value, ok := su.mutation.AutoAdmitAgents(); ok {
+		_spec.SetField(settings.FieldAutoAdmitAgents, field.TypeBool, value)
+	}
+	if su.mutation.AutoAdmitAgentsCleared() {
+		_spec.ClearField(settings.FieldAutoAdmitAgents, field.TypeBool)
 	}
 	if su.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1829,6 +1855,26 @@ func (suo *SettingsUpdateOne) ClearDetectRemoteAgents() *SettingsUpdateOne {
 	return suo
 }
 
+// SetAutoAdmitAgents sets the "auto_admit_agents" field.
+func (suo *SettingsUpdateOne) SetAutoAdmitAgents(b bool) *SettingsUpdateOne {
+	suo.mutation.SetAutoAdmitAgents(b)
+	return suo
+}
+
+// SetNillableAutoAdmitAgents sets the "auto_admit_agents" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableAutoAdmitAgents(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetAutoAdmitAgents(*b)
+	}
+	return suo
+}
+
+// ClearAutoAdmitAgents clears the value of the "auto_admit_agents" field.
+func (suo *SettingsUpdateOne) ClearAutoAdmitAgents() *SettingsUpdateOne {
+	suo.mutation.ClearAutoAdmitAgents()
+	return suo
+}
+
 // SetTagID sets the "tag" edge to the Tag entity by ID.
 func (suo *SettingsUpdateOne) SetTagID(id int) *SettingsUpdateOne {
 	suo.mutation.SetTagID(id)
@@ -2164,6 +2210,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.DetectRemoteAgentsCleared() {
 		_spec.ClearField(settings.FieldDetectRemoteAgents, field.TypeBool)
+	}
+	if value, ok := suo.mutation.AutoAdmitAgents(); ok {
+		_spec.SetField(settings.FieldAutoAdmitAgents, field.TypeBool, value)
+	}
+	if suo.mutation.AutoAdmitAgentsCleared() {
+		_spec.ClearField(settings.FieldAutoAdmitAgents, field.TypeBool)
 	}
 	if suo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{

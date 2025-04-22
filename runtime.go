@@ -261,6 +261,10 @@ func init() {
 	settingsDescDetectRemoteAgents := settingsFields[33].Descriptor()
 	// settings.DefaultDetectRemoteAgents holds the default value on creation for the detect_remote_agents field.
 	settings.DefaultDetectRemoteAgents = settingsDescDetectRemoteAgents.Default.(bool)
+	// settingsDescAutoAdmitAgents is the schema descriptor for auto_admit_agents field.
+	settingsDescAutoAdmitAgents := settingsFields[34].Descriptor()
+	// settings.DefaultAutoAdmitAgents holds the default value on creation for the auto_admit_agents field.
+	settings.DefaultAutoAdmitAgents = settingsDescAutoAdmitAgents.Default.(bool)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.
