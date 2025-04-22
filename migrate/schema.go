@@ -26,7 +26,7 @@ var (
 		{Name: "update_task_version", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "vnc_proxy_port", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "sftp_port", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "agent_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled"}, Default: "WaitingForAdmission"},
+		{Name: "agent_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"WaitingForAdmission", "Enabled", "Disabled", "No contact"}, Default: "WaitingForAdmission"},
 		{Name: "certificate_ready", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "restart_required", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "is_remote", Type: field.TypeBool, Nullable: true, Default: false},

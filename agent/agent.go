@@ -368,6 +368,7 @@ const (
 	AgentStatusWaitingForAdmission AgentStatus = "WaitingForAdmission"
 	AgentStatusEnabled             AgentStatus = "Enabled"
 	AgentStatusDisabled            AgentStatus = "Disabled"
+	AgentStatusNoContact           AgentStatus = "No contact"
 )
 
 func (as AgentStatus) String() string {
@@ -377,7 +378,7 @@ func (as AgentStatus) String() string {
 // AgentStatusValidator is a validator for the "agent_status" field enum values. It is called by the builders before save.
 func AgentStatusValidator(as AgentStatus) error {
 	switch as {
-	case AgentStatusWaitingForAdmission, AgentStatusEnabled, AgentStatusDisabled:
+	case AgentStatusWaitingForAdmission, AgentStatusEnabled, AgentStatusDisabled, AgentStatusNoContact:
 		return nil
 	default:
 		return fmt.Errorf("agent: invalid enum value for agent_status field: %q", as)
