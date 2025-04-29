@@ -347,6 +347,7 @@ var (
 		{Name: "port", Type: field.TypeString, Nullable: true},
 		{Name: "is_default", Type: field.TypeBool, Nullable: true},
 		{Name: "is_network", Type: field.TypeBool, Nullable: true},
+		{Name: "is_shared", Type: field.TypeBool, Nullable: true},
 		{Name: "agent_printers", Type: field.TypeString},
 	}
 	// PrintersTable holds the schema information for the "printers" table.
@@ -357,7 +358,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "printers_agents_printers",
-				Columns:    []*schema.Column{PrintersColumns[5]},
+				Columns:    []*schema.Column{PrintersColumns[6]},
 				RefColumns: []*schema.Column{AgentsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

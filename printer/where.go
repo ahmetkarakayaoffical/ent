@@ -73,6 +73,11 @@ func IsNetwork(v bool) predicate.Printer {
 	return predicate.Printer(sql.FieldEQ(FieldIsNetwork, v))
 }
 
+// IsShared applies equality check predicate on the "is_shared" field. It's identical to IsSharedEQ.
+func IsShared(v bool) predicate.Printer {
+	return predicate.Printer(sql.FieldEQ(FieldIsShared, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Printer {
 	return predicate.Printer(sql.FieldEQ(FieldName, v))
@@ -251,6 +256,26 @@ func IsNetworkIsNil() predicate.Printer {
 // IsNetworkNotNil applies the NotNil predicate on the "is_network" field.
 func IsNetworkNotNil() predicate.Printer {
 	return predicate.Printer(sql.FieldNotNull(FieldIsNetwork))
+}
+
+// IsSharedEQ applies the EQ predicate on the "is_shared" field.
+func IsSharedEQ(v bool) predicate.Printer {
+	return predicate.Printer(sql.FieldEQ(FieldIsShared, v))
+}
+
+// IsSharedNEQ applies the NEQ predicate on the "is_shared" field.
+func IsSharedNEQ(v bool) predicate.Printer {
+	return predicate.Printer(sql.FieldNEQ(FieldIsShared, v))
+}
+
+// IsSharedIsNil applies the IsNil predicate on the "is_shared" field.
+func IsSharedIsNil() predicate.Printer {
+	return predicate.Printer(sql.FieldIsNull(FieldIsShared))
+}
+
+// IsSharedNotNil applies the NotNil predicate on the "is_shared" field.
+func IsSharedNotNil() predicate.Printer {
+	return predicate.Printer(sql.FieldNotNull(FieldIsShared))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

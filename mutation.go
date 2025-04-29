@@ -12045,6 +12045,7 @@ type PrinterMutation struct {
 	port          *string
 	is_default    *bool
 	is_network    *bool
+	is_shared     *bool
 	clearedFields map[string]struct{}
 	owner         *string
 	clearedowner  bool
@@ -12334,6 +12335,55 @@ func (m *PrinterMutation) ResetIsNetwork() {
 	delete(m.clearedFields, printer.FieldIsNetwork)
 }
 
+// SetIsShared sets the "is_shared" field.
+func (m *PrinterMutation) SetIsShared(b bool) {
+	m.is_shared = &b
+}
+
+// IsShared returns the value of the "is_shared" field in the mutation.
+func (m *PrinterMutation) IsShared() (r bool, exists bool) {
+	v := m.is_shared
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsShared returns the old "is_shared" field's value of the Printer entity.
+// If the Printer object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PrinterMutation) OldIsShared(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsShared is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsShared requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsShared: %w", err)
+	}
+	return oldValue.IsShared, nil
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (m *PrinterMutation) ClearIsShared() {
+	m.is_shared = nil
+	m.clearedFields[printer.FieldIsShared] = struct{}{}
+}
+
+// IsSharedCleared returns if the "is_shared" field was cleared in this mutation.
+func (m *PrinterMutation) IsSharedCleared() bool {
+	_, ok := m.clearedFields[printer.FieldIsShared]
+	return ok
+}
+
+// ResetIsShared resets all changes to the "is_shared" field.
+func (m *PrinterMutation) ResetIsShared() {
+	m.is_shared = nil
+	delete(m.clearedFields, printer.FieldIsShared)
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by id.
 func (m *PrinterMutation) SetOwnerID(id string) {
 	m.owner = &id
@@ -12407,7 +12457,7 @@ func (m *PrinterMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PrinterMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, printer.FieldName)
 	}
@@ -12419,6 +12469,9 @@ func (m *PrinterMutation) Fields() []string {
 	}
 	if m.is_network != nil {
 		fields = append(fields, printer.FieldIsNetwork)
+	}
+	if m.is_shared != nil {
+		fields = append(fields, printer.FieldIsShared)
 	}
 	return fields
 }
@@ -12436,6 +12489,8 @@ func (m *PrinterMutation) Field(name string) (ent.Value, bool) {
 		return m.IsDefault()
 	case printer.FieldIsNetwork:
 		return m.IsNetwork()
+	case printer.FieldIsShared:
+		return m.IsShared()
 	}
 	return nil, false
 }
@@ -12453,6 +12508,8 @@ func (m *PrinterMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldIsDefault(ctx)
 	case printer.FieldIsNetwork:
 		return m.OldIsNetwork(ctx)
+	case printer.FieldIsShared:
+		return m.OldIsShared(ctx)
 	}
 	return nil, fmt.Errorf("unknown Printer field %s", name)
 }
@@ -12489,6 +12546,13 @@ func (m *PrinterMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsNetwork(v)
+		return nil
+	case printer.FieldIsShared:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsShared(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Printer field %s", name)
@@ -12529,6 +12593,9 @@ func (m *PrinterMutation) ClearedFields() []string {
 	if m.FieldCleared(printer.FieldIsNetwork) {
 		fields = append(fields, printer.FieldIsNetwork)
 	}
+	if m.FieldCleared(printer.FieldIsShared) {
+		fields = append(fields, printer.FieldIsShared)
+	}
 	return fields
 }
 
@@ -12552,6 +12619,9 @@ func (m *PrinterMutation) ClearField(name string) error {
 	case printer.FieldIsNetwork:
 		m.ClearIsNetwork()
 		return nil
+	case printer.FieldIsShared:
+		m.ClearIsShared()
+		return nil
 	}
 	return fmt.Errorf("unknown Printer nullable field %s", name)
 }
@@ -12571,6 +12641,9 @@ func (m *PrinterMutation) ResetField(name string) error {
 		return nil
 	case printer.FieldIsNetwork:
 		m.ResetIsNetwork()
+		return nil
+	case printer.FieldIsShared:
+		m.ResetIsShared()
 		return nil
 	}
 	return fmt.Errorf("unknown Printer field %s", name)

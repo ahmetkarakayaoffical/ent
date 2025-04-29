@@ -25,6 +25,8 @@ type Printer struct {
 	IsDefault bool `json:"is_default,omitempty"`
 	// IsNetwork holds the value of the "is_network" field.
 	IsNetwork bool `json:"is_network,omitempty"`
+	// IsShared holds the value of the "is_shared" field.
+	IsShared bool `json:"is_shared,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrinterQuery when eager-loading is set.
 	Edges          PrinterEdges `json:"edges"`
@@ -57,7 +59,7 @@ func (*Printer) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case printer.FieldIsDefault, printer.FieldIsNetwork:
+		case printer.FieldIsDefault, printer.FieldIsNetwork, printer.FieldIsShared:
 			values[i] = new(sql.NullBool)
 		case printer.FieldID:
 			values[i] = new(sql.NullInt64)
@@ -109,6 +111,12 @@ func (pr *Printer) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_network", values[i])
 			} else if value.Valid {
 				pr.IsNetwork = value.Bool
+			}
+		case printer.FieldIsShared:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_shared", values[i])
+			} else if value.Valid {
+				pr.IsShared = value.Bool
 			}
 		case printer.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -169,6 +177,9 @@ func (pr *Printer) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_network=")
 	builder.WriteString(fmt.Sprintf("%v", pr.IsNetwork))
+	builder.WriteString(", ")
+	builder.WriteString("is_shared=")
+	builder.WriteString(fmt.Sprintf("%v", pr.IsShared))
 	builder.WriteByte(')')
 	return builder.String()
 }

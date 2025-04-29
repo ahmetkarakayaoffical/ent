@@ -70,6 +70,20 @@ func (pc *PrinterCreate) SetNillableIsNetwork(b *bool) *PrinterCreate {
 	return pc
 }
 
+// SetIsShared sets the "is_shared" field.
+func (pc *PrinterCreate) SetIsShared(b bool) *PrinterCreate {
+	pc.mutation.SetIsShared(b)
+	return pc
+}
+
+// SetNillableIsShared sets the "is_shared" field if the given value is not nil.
+func (pc *PrinterCreate) SetNillableIsShared(b *bool) *PrinterCreate {
+	if b != nil {
+		pc.SetIsShared(*b)
+	}
+	return pc
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (pc *PrinterCreate) SetOwnerID(id string) *PrinterCreate {
 	pc.mutation.SetOwnerID(id)
@@ -163,6 +177,10 @@ func (pc *PrinterCreate) createSpec() (*Printer, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.IsNetwork(); ok {
 		_spec.SetField(printer.FieldIsNetwork, field.TypeBool, value)
 		_node.IsNetwork = value
+	}
+	if value, ok := pc.mutation.IsShared(); ok {
+		_spec.SetField(printer.FieldIsShared, field.TypeBool, value)
+		_node.IsShared = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -299,6 +317,24 @@ func (u *PrinterUpsert) ClearIsNetwork() *PrinterUpsert {
 	return u
 }
 
+// SetIsShared sets the "is_shared" field.
+func (u *PrinterUpsert) SetIsShared(v bool) *PrinterUpsert {
+	u.Set(printer.FieldIsShared, v)
+	return u
+}
+
+// UpdateIsShared sets the "is_shared" field to the value that was provided on create.
+func (u *PrinterUpsert) UpdateIsShared() *PrinterUpsert {
+	u.SetExcluded(printer.FieldIsShared)
+	return u
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (u *PrinterUpsert) ClearIsShared() *PrinterUpsert {
+	u.SetNull(printer.FieldIsShared)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -413,6 +449,27 @@ func (u *PrinterUpsertOne) UpdateIsNetwork() *PrinterUpsertOne {
 func (u *PrinterUpsertOne) ClearIsNetwork() *PrinterUpsertOne {
 	return u.Update(func(s *PrinterUpsert) {
 		s.ClearIsNetwork()
+	})
+}
+
+// SetIsShared sets the "is_shared" field.
+func (u *PrinterUpsertOne) SetIsShared(v bool) *PrinterUpsertOne {
+	return u.Update(func(s *PrinterUpsert) {
+		s.SetIsShared(v)
+	})
+}
+
+// UpdateIsShared sets the "is_shared" field to the value that was provided on create.
+func (u *PrinterUpsertOne) UpdateIsShared() *PrinterUpsertOne {
+	return u.Update(func(s *PrinterUpsert) {
+		s.UpdateIsShared()
+	})
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (u *PrinterUpsertOne) ClearIsShared() *PrinterUpsertOne {
+	return u.Update(func(s *PrinterUpsert) {
+		s.ClearIsShared()
 	})
 }
 
@@ -693,6 +750,27 @@ func (u *PrinterUpsertBulk) UpdateIsNetwork() *PrinterUpsertBulk {
 func (u *PrinterUpsertBulk) ClearIsNetwork() *PrinterUpsertBulk {
 	return u.Update(func(s *PrinterUpsert) {
 		s.ClearIsNetwork()
+	})
+}
+
+// SetIsShared sets the "is_shared" field.
+func (u *PrinterUpsertBulk) SetIsShared(v bool) *PrinterUpsertBulk {
+	return u.Update(func(s *PrinterUpsert) {
+		s.SetIsShared(v)
+	})
+}
+
+// UpdateIsShared sets the "is_shared" field to the value that was provided on create.
+func (u *PrinterUpsertBulk) UpdateIsShared() *PrinterUpsertBulk {
+	return u.Update(func(s *PrinterUpsert) {
+		s.UpdateIsShared()
+	})
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (u *PrinterUpsertBulk) ClearIsShared() *PrinterUpsertBulk {
+	return u.Update(func(s *PrinterUpsert) {
+		s.ClearIsShared()
 	})
 }
 

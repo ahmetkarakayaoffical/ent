@@ -18,6 +18,7 @@ func (Printer) Fields() []ent.Field {
 		field.String("port").Optional(),
 		field.Bool("is_default").Optional(),
 		field.Bool("is_network").Optional(),
+		field.Bool("is_shared").Optional(),
 	}
 }
 

@@ -103,6 +103,26 @@ func (pu *PrinterUpdate) ClearIsNetwork() *PrinterUpdate {
 	return pu
 }
 
+// SetIsShared sets the "is_shared" field.
+func (pu *PrinterUpdate) SetIsShared(b bool) *PrinterUpdate {
+	pu.mutation.SetIsShared(b)
+	return pu
+}
+
+// SetNillableIsShared sets the "is_shared" field if the given value is not nil.
+func (pu *PrinterUpdate) SetNillableIsShared(b *bool) *PrinterUpdate {
+	if b != nil {
+		pu.SetIsShared(*b)
+	}
+	return pu
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (pu *PrinterUpdate) ClearIsShared() *PrinterUpdate {
+	pu.mutation.ClearIsShared()
+	return pu
+}
+
 // SetOwnerID sets the "owner" edge to the Agent entity by ID.
 func (pu *PrinterUpdate) SetOwnerID(id string) *PrinterUpdate {
 	pu.mutation.SetOwnerID(id)
@@ -198,6 +218,12 @@ func (pu *PrinterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.IsNetworkCleared() {
 		_spec.ClearField(printer.FieldIsNetwork, field.TypeBool)
+	}
+	if value, ok := pu.mutation.IsShared(); ok {
+		_spec.SetField(printer.FieldIsShared, field.TypeBool, value)
+	}
+	if pu.mutation.IsSharedCleared() {
+		_spec.ClearField(printer.FieldIsShared, field.TypeBool)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -321,6 +347,26 @@ func (puo *PrinterUpdateOne) SetNillableIsNetwork(b *bool) *PrinterUpdateOne {
 // ClearIsNetwork clears the value of the "is_network" field.
 func (puo *PrinterUpdateOne) ClearIsNetwork() *PrinterUpdateOne {
 	puo.mutation.ClearIsNetwork()
+	return puo
+}
+
+// SetIsShared sets the "is_shared" field.
+func (puo *PrinterUpdateOne) SetIsShared(b bool) *PrinterUpdateOne {
+	puo.mutation.SetIsShared(b)
+	return puo
+}
+
+// SetNillableIsShared sets the "is_shared" field if the given value is not nil.
+func (puo *PrinterUpdateOne) SetNillableIsShared(b *bool) *PrinterUpdateOne {
+	if b != nil {
+		puo.SetIsShared(*b)
+	}
+	return puo
+}
+
+// ClearIsShared clears the value of the "is_shared" field.
+func (puo *PrinterUpdateOne) ClearIsShared() *PrinterUpdateOne {
+	puo.mutation.ClearIsShared()
 	return puo
 }
 
@@ -449,6 +495,12 @@ func (puo *PrinterUpdateOne) sqlSave(ctx context.Context) (_node *Printer, err e
 	}
 	if puo.mutation.IsNetworkCleared() {
 		_spec.ClearField(printer.FieldIsNetwork, field.TypeBool)
+	}
+	if value, ok := puo.mutation.IsShared(); ok {
+		_spec.SetField(printer.FieldIsShared, field.TypeBool, value)
+	}
+	if puo.mutation.IsSharedCleared() {
+		_spec.ClearField(printer.FieldIsShared, field.TypeBool)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

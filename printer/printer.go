@@ -20,6 +20,8 @@ const (
 	FieldIsDefault = "is_default"
 	// FieldIsNetwork holds the string denoting the is_network field in the database.
 	FieldIsNetwork = "is_network"
+	// FieldIsShared holds the string denoting the is_shared field in the database.
+	FieldIsShared = "is_shared"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// AgentFieldID holds the string denoting the ID field of the Agent.
@@ -42,6 +44,7 @@ var Columns = []string{
 	FieldPort,
 	FieldIsDefault,
 	FieldIsNetwork,
+	FieldIsShared,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "printers"
@@ -91,6 +94,11 @@ func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
 // ByIsNetwork orders the results by the is_network field.
 func ByIsNetwork(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsNetwork, opts...).ToFunc()
+}
+
+// ByIsShared orders the results by the is_shared field.
+func ByIsShared(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsShared, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
