@@ -61,6 +61,10 @@ const (
 	FieldRemoteAssistance = "remote_assistance"
 	// FieldSettingsModified holds the string denoting the settings_modified field in the database.
 	FieldSettingsModified = "settings_modified"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldEndpointType holds the string denoting the endpoint_type field in the database.
+	FieldEndpointType = "endpoint_type"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -287,6 +291,8 @@ var Columns = []string{
 	FieldSftpService,
 	FieldRemoteAssistance,
 	FieldSettingsModified,
+	FieldDescription,
+	FieldEndpointType,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -353,6 +359,8 @@ var (
 	DefaultRemoteAssistance bool
 	// DefaultSettingsModified holds the default value on creation for the "settings_modified" field.
 	DefaultSettingsModified func() time.Time
+	// DefaultDescription holds the default value on creation for the "description" field.
+	DefaultDescription string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -382,6 +390,35 @@ func AgentStatusValidator(as AgentStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("agent: invalid enum value for agent_status field: %q", as)
+	}
+}
+
+// EndpointType defines the type for the "endpoint_type" enum field.
+type EndpointType string
+
+// EndpointTypeOther is the default value of the EndpointType enum.
+const DefaultEndpointType = EndpointTypeOther
+
+// EndpointType values.
+const (
+	EndpointTypeDesktopPC EndpointType = "DesktopPC"
+	EndpointTypeLaptop    EndpointType = "Laptop"
+	EndpointTypeServer    EndpointType = "Server"
+	EndpointTypeTablet    EndpointType = "Tablet"
+	EndpointTypeOther     EndpointType = "Other"
+)
+
+func (et EndpointType) String() string {
+	return string(et)
+}
+
+// EndpointTypeValidator is a validator for the "endpoint_type" field enum values. It is called by the builders before save.
+func EndpointTypeValidator(et EndpointType) error {
+	switch et {
+	case EndpointTypeDesktopPC, EndpointTypeLaptop, EndpointTypeServer, EndpointTypeTablet, EndpointTypeOther:
+		return nil
+	default:
+		return fmt.Errorf("agent: invalid enum value for endpoint_type field: %q", et)
 	}
 }
 
@@ -506,6 +543,16 @@ func ByRemoteAssistance(opts ...sql.OrderTermOption) OrderOption {
 // BySettingsModified orders the results by the settings_modified field.
 func BySettingsModified(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSettingsModified, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByEndpointType orders the results by the endpoint_type field.
+func ByEndpointType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndpointType, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

@@ -347,6 +347,34 @@ func (ac *AgentCreate) SetNillableSettingsModified(t *time.Time) *AgentCreate {
 	return ac
 }
 
+// SetDescription sets the "description" field.
+func (ac *AgentCreate) SetDescription(s string) *AgentCreate {
+	ac.mutation.SetDescription(s)
+	return ac
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableDescription(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetDescription(*s)
+	}
+	return ac
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (ac *AgentCreate) SetEndpointType(at agent.EndpointType) *AgentCreate {
+	ac.mutation.SetEndpointType(at)
+	return ac
+}
+
+// SetNillableEndpointType sets the "endpoint_type" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableEndpointType(at *agent.EndpointType) *AgentCreate {
+	if at != nil {
+		ac.SetEndpointType(*at)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -746,6 +774,14 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultSettingsModified()
 		ac.mutation.SetSettingsModified(v)
 	}
+	if _, ok := ac.mutation.Description(); !ok {
+		v := agent.DefaultDescription
+		ac.mutation.SetDescription(v)
+	}
+	if _, ok := ac.mutation.EndpointType(); !ok {
+		v := agent.DefaultEndpointType
+		ac.mutation.SetEndpointType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -775,6 +811,11 @@ func (ac *AgentCreate) check() error {
 	if v, ok := ac.mutation.AgentStatus(); ok {
 		if err := agent.AgentStatusValidator(v); err != nil {
 			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`ent: validator failed for field "Agent.agent_status": %w`, err)}
+		}
+	}
+	if v, ok := ac.mutation.EndpointType(); ok {
+		if err := agent.EndpointTypeValidator(v); err != nil {
+			return &ValidationError{Name: "endpoint_type", err: fmt.Errorf(`ent: validator failed for field "Agent.endpoint_type": %w`, err)}
 		}
 	}
 	if v, ok := ac.mutation.ID(); ok {
@@ -909,6 +950,14 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.SettingsModified(); ok {
 		_spec.SetField(agent.FieldSettingsModified, field.TypeTime, value)
 		_node.SettingsModified = value
+	}
+	if value, ok := ac.mutation.Description(); ok {
+		_spec.SetField(agent.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := ac.mutation.EndpointType(); ok {
+		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
+		_node.EndpointType = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1641,6 +1690,42 @@ func (u *AgentUpsert) ClearSettingsModified() *AgentUpsert {
 	return u
 }
 
+// SetDescription sets the "description" field.
+func (u *AgentUpsert) SetDescription(v string) *AgentUpsert {
+	u.Set(agent.FieldDescription, v)
+	return u
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateDescription() *AgentUpsert {
+	u.SetExcluded(agent.FieldDescription)
+	return u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *AgentUpsert) ClearDescription() *AgentUpsert {
+	u.SetNull(agent.FieldDescription)
+	return u
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (u *AgentUpsert) SetEndpointType(v agent.EndpointType) *AgentUpsert {
+	u.Set(agent.FieldEndpointType, v)
+	return u
+}
+
+// UpdateEndpointType sets the "endpoint_type" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateEndpointType() *AgentUpsert {
+	u.SetExcluded(agent.FieldEndpointType)
+	return u
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (u *AgentUpsert) ClearEndpointType() *AgentUpsert {
+	u.SetNull(agent.FieldEndpointType)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -2141,6 +2226,48 @@ func (u *AgentUpsertOne) UpdateSettingsModified() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearSettingsModified() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearSettingsModified()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *AgentUpsertOne) SetDescription(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateDescription() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *AgentUpsertOne) ClearDescription() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearDescription()
+	})
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (u *AgentUpsertOne) SetEndpointType(v agent.EndpointType) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetEndpointType(v)
+	})
+}
+
+// UpdateEndpointType sets the "endpoint_type" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateEndpointType() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateEndpointType()
+	})
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (u *AgentUpsertOne) ClearEndpointType() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearEndpointType()
 	})
 }
 
@@ -2811,6 +2938,48 @@ func (u *AgentUpsertBulk) UpdateSettingsModified() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearSettingsModified() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearSettingsModified()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *AgentUpsertBulk) SetDescription(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateDescription() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *AgentUpsertBulk) ClearDescription() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearDescription()
+	})
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (u *AgentUpsertBulk) SetEndpointType(v agent.EndpointType) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetEndpointType(v)
+	})
+}
+
+// UpdateEndpointType sets the "endpoint_type" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateEndpointType() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateEndpointType()
+	})
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (u *AgentUpsertBulk) ClearEndpointType() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearEndpointType()
 	})
 }
 

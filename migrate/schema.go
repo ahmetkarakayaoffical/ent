@@ -34,6 +34,8 @@ var (
 		{Name: "sftp_service", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "remote_assistance", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "settings_modified", Type: field.TypeTime, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "Other"}, Default: "Other"},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -44,7 +46,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[24]},
+				Columns:    []*schema.Column{AgentsColumns[26]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -110,6 +110,8 @@ type AgentMutation struct {
 	sftp_service               *bool
 	remote_assistance          *bool
 	settings_modified          *time.Time
+	description                *string
+	endpoint_type              *agent.EndpointType
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1344,6 +1346,104 @@ func (m *AgentMutation) ResetSettingsModified() {
 	delete(m.clearedFields, agent.FieldSettingsModified)
 }
 
+// SetDescription sets the "description" field.
+func (m *AgentMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *AgentMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *AgentMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[agent.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *AgentMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[agent.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *AgentMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, agent.FieldDescription)
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (m *AgentMutation) SetEndpointType(at agent.EndpointType) {
+	m.endpoint_type = &at
+}
+
+// EndpointType returns the value of the "endpoint_type" field in the mutation.
+func (m *AgentMutation) EndpointType() (r agent.EndpointType, exists bool) {
+	v := m.endpoint_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndpointType returns the old "endpoint_type" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldEndpointType(ctx context.Context) (v agent.EndpointType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndpointType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndpointType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndpointType: %w", err)
+	}
+	return oldValue.EndpointType, nil
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (m *AgentMutation) ClearEndpointType() {
+	m.endpoint_type = nil
+	m.clearedFields[agent.FieldEndpointType] = struct{}{}
+}
+
+// EndpointTypeCleared returns if the "endpoint_type" field was cleared in this mutation.
+func (m *AgentMutation) EndpointTypeCleared() bool {
+	_, ok := m.clearedFields[agent.FieldEndpointType]
+	return ok
+}
+
+// ResetEndpointType resets all changes to the "endpoint_type" field.
+func (m *AgentMutation) ResetEndpointType() {
+	m.endpoint_type = nil
+	delete(m.clearedFields, agent.FieldEndpointType)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2275,7 +2375,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 25)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2345,6 +2445,12 @@ func (m *AgentMutation) Fields() []string {
 	if m.settings_modified != nil {
 		fields = append(fields, agent.FieldSettingsModified)
 	}
+	if m.description != nil {
+		fields = append(fields, agent.FieldDescription)
+	}
+	if m.endpoint_type != nil {
+		fields = append(fields, agent.FieldEndpointType)
+	}
 	return fields
 }
 
@@ -2399,6 +2505,10 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.RemoteAssistance()
 	case agent.FieldSettingsModified:
 		return m.SettingsModified()
+	case agent.FieldDescription:
+		return m.Description()
+	case agent.FieldEndpointType:
+		return m.EndpointType()
 	}
 	return nil, false
 }
@@ -2454,6 +2564,10 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldRemoteAssistance(ctx)
 	case agent.FieldSettingsModified:
 		return m.OldSettingsModified(ctx)
+	case agent.FieldDescription:
+		return m.OldDescription(ctx)
+	case agent.FieldEndpointType:
+		return m.OldEndpointType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2624,6 +2738,20 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSettingsModified(v)
 		return nil
+	case agent.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case agent.FieldEndpointType:
+		v, ok := value.(agent.EndpointType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndpointType(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2711,6 +2839,12 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldSettingsModified) {
 		fields = append(fields, agent.FieldSettingsModified)
 	}
+	if m.FieldCleared(agent.FieldDescription) {
+		fields = append(fields, agent.FieldDescription)
+	}
+	if m.FieldCleared(agent.FieldEndpointType) {
+		fields = append(fields, agent.FieldEndpointType)
+	}
 	return fields
 }
 
@@ -2781,6 +2915,12 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldSettingsModified:
 		m.ClearSettingsModified()
+		return nil
+	case agent.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case agent.FieldEndpointType:
+		m.ClearEndpointType()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -2858,6 +2998,12 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldSettingsModified:
 		m.ResetSettingsModified()
+		return nil
+	case agent.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case agent.FieldEndpointType:
+		m.ResetEndpointType()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
