@@ -42,7 +42,7 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("remote_assistance").Optional().Default(true),
 		field.Time("settings_modified").Optional().Default(time.Now),
 		field.String("description").Optional().Default(""),
-		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "Other").Optional().Default("Other"),
+		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other").Optional().Default("Other"),
 	}
 }
 

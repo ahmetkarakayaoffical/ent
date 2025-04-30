@@ -35,7 +35,7 @@ var (
 		{Name: "remote_assistance", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "settings_modified", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "Other"}, Default: "Other"},
+		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other"}, Default: "Other"},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
