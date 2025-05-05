@@ -484,6 +484,46 @@ func (au *AgentUpdate) ClearSettingsModified() *AgentUpdate {
 	return au
 }
 
+// SetDescription sets the "description" field.
+func (au *AgentUpdate) SetDescription(s string) *AgentUpdate {
+	au.mutation.SetDescription(s)
+	return au
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableDescription(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetDescription(*s)
+	}
+	return au
+}
+
+// ClearDescription clears the value of the "description" field.
+func (au *AgentUpdate) ClearDescription() *AgentUpdate {
+	au.mutation.ClearDescription()
+	return au
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (au *AgentUpdate) SetEndpointType(at agent.EndpointType) *AgentUpdate {
+	au.mutation.SetEndpointType(at)
+	return au
+}
+
+// SetNillableEndpointType sets the "endpoint_type" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableEndpointType(at *agent.EndpointType) *AgentUpdate {
+	if at != nil {
+		au.SetEndpointType(*at)
+	}
+	return au
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (au *AgentUpdate) ClearEndpointType() *AgentUpdate {
+	au.mutation.ClearEndpointType()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1162,6 +1202,11 @@ func (au *AgentUpdate) check() error {
 			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`ent: validator failed for field "Agent.agent_status": %w`, err)}
 		}
 	}
+	if v, ok := au.mutation.EndpointType(); ok {
+		if err := agent.EndpointTypeValidator(v); err != nil {
+			return &ValidationError{Name: "endpoint_type", err: fmt.Errorf(`ent: validator failed for field "Agent.endpoint_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1308,6 +1353,18 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.SettingsModifiedCleared() {
 		_spec.ClearField(agent.FieldSettingsModified, field.TypeTime)
+	}
+	if value, ok := au.mutation.Description(); ok {
+		_spec.SetField(agent.FieldDescription, field.TypeString, value)
+	}
+	if au.mutation.DescriptionCleared() {
+		_spec.ClearField(agent.FieldDescription, field.TypeString)
+	}
+	if value, ok := au.mutation.EndpointType(); ok {
+		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
+	}
+	if au.mutation.EndpointTypeCleared() {
+		_spec.ClearField(agent.FieldEndpointType, field.TypeEnum)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2542,6 +2599,46 @@ func (auo *AgentUpdateOne) ClearSettingsModified() *AgentUpdateOne {
 	return auo
 }
 
+// SetDescription sets the "description" field.
+func (auo *AgentUpdateOne) SetDescription(s string) *AgentUpdateOne {
+	auo.mutation.SetDescription(s)
+	return auo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableDescription(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetDescription(*s)
+	}
+	return auo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (auo *AgentUpdateOne) ClearDescription() *AgentUpdateOne {
+	auo.mutation.ClearDescription()
+	return auo
+}
+
+// SetEndpointType sets the "endpoint_type" field.
+func (auo *AgentUpdateOne) SetEndpointType(at agent.EndpointType) *AgentUpdateOne {
+	auo.mutation.SetEndpointType(at)
+	return auo
+}
+
+// SetNillableEndpointType sets the "endpoint_type" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableEndpointType(at *agent.EndpointType) *AgentUpdateOne {
+	if at != nil {
+		auo.SetEndpointType(*at)
+	}
+	return auo
+}
+
+// ClearEndpointType clears the value of the "endpoint_type" field.
+func (auo *AgentUpdateOne) ClearEndpointType() *AgentUpdateOne {
+	auo.mutation.ClearEndpointType()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3233,6 +3330,11 @@ func (auo *AgentUpdateOne) check() error {
 			return &ValidationError{Name: "agent_status", err: fmt.Errorf(`ent: validator failed for field "Agent.agent_status": %w`, err)}
 		}
 	}
+	if v, ok := auo.mutation.EndpointType(); ok {
+		if err := agent.EndpointTypeValidator(v); err != nil {
+			return &ValidationError{Name: "endpoint_type", err: fmt.Errorf(`ent: validator failed for field "Agent.endpoint_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3396,6 +3498,18 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.SettingsModifiedCleared() {
 		_spec.ClearField(agent.FieldSettingsModified, field.TypeTime)
+	}
+	if value, ok := auo.mutation.Description(); ok {
+		_spec.SetField(agent.FieldDescription, field.TypeString, value)
+	}
+	if auo.mutation.DescriptionCleared() {
+		_spec.ClearField(agent.FieldDescription, field.TypeString)
+	}
+	if value, ok := auo.mutation.EndpointType(); ok {
+		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
+	}
+	if auo.mutation.EndpointTypeCleared() {
+		_spec.ClearField(agent.FieldEndpointType, field.TypeEnum)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

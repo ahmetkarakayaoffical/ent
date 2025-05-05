@@ -41,6 +41,8 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("sftp_service").Optional().Default(true),
 		field.Bool("remote_assistance").Optional().Default(true),
 		field.Time("settings_modified").Optional().Default(time.Now),
+		field.String("description").Optional().Default(""),
+		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other").Optional().Default("Other"),
 	}
 }
 

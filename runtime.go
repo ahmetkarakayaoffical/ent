@@ -99,6 +99,10 @@ func init() {
 	agentDescSettingsModified := agentFields[23].Descriptor()
 	// agent.DefaultSettingsModified holds the default value on creation for the settings_modified field.
 	agent.DefaultSettingsModified = agentDescSettingsModified.Default.(func() time.Time)
+	// agentDescDescription is the schema descriptor for description field.
+	agentDescDescription := agentFields[24].Descriptor()
+	// agent.DefaultDescription holds the default value on creation for the description field.
+	agent.DefaultDescription = agentDescDescription.Default.(string)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
