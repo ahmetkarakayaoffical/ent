@@ -19,6 +19,8 @@ type Site struct {
 	ID int `json:"id,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// IsDefault holds the value of the "is_default" field.
+	IsDefault bool `json:"is_default,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SiteQuery when eager-loading is set.
 	Edges        SiteEdges `json:"edges"`
@@ -62,6 +64,8 @@ func (*Site) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case site.FieldIsDefault:
+			values[i] = new(sql.NullBool)
 		case site.FieldID:
 			values[i] = new(sql.NullInt64)
 		case site.FieldDescription:
@@ -94,6 +98,12 @@ func (s *Site) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				s.Description = value.String
+			}
+		case site.FieldIsDefault:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_default", values[i])
+			} else if value.Valid {
+				s.IsDefault = value.Bool
 			}
 		case site.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -150,6 +160,9 @@ func (s *Site) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("description=")
 	builder.WriteString(s.Description)
+	builder.WriteString(", ")
+	builder.WriteString("is_default=")
+	builder.WriteString(fmt.Sprintf("%v", s.IsDefault))
 	builder.WriteByte(')')
 	return builder.String()
 }

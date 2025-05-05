@@ -21303,6 +21303,7 @@ type SiteMutation struct {
 	typ           string
 	id            *int
 	description   *string
+	is_default    *bool
 	clearedFields map[string]struct{}
 	tenant        *int
 	clearedtenant bool
@@ -21461,6 +21462,55 @@ func (m *SiteMutation) ResetDescription() {
 	delete(m.clearedFields, site.FieldDescription)
 }
 
+// SetIsDefault sets the "is_default" field.
+func (m *SiteMutation) SetIsDefault(b bool) {
+	m.is_default = &b
+}
+
+// IsDefault returns the value of the "is_default" field in the mutation.
+func (m *SiteMutation) IsDefault() (r bool, exists bool) {
+	v := m.is_default
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsDefault returns the old "is_default" field's value of the Site entity.
+// If the Site object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SiteMutation) OldIsDefault(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsDefault is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsDefault requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsDefault: %w", err)
+	}
+	return oldValue.IsDefault, nil
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (m *SiteMutation) ClearIsDefault() {
+	m.is_default = nil
+	m.clearedFields[site.FieldIsDefault] = struct{}{}
+}
+
+// IsDefaultCleared returns if the "is_default" field was cleared in this mutation.
+func (m *SiteMutation) IsDefaultCleared() bool {
+	_, ok := m.clearedFields[site.FieldIsDefault]
+	return ok
+}
+
+// ResetIsDefault resets all changes to the "is_default" field.
+func (m *SiteMutation) ResetIsDefault() {
+	m.is_default = nil
+	delete(m.clearedFields, site.FieldIsDefault)
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by id.
 func (m *SiteMutation) SetTenantID(id int) {
 	m.tenant = &id
@@ -21588,9 +21638,12 @@ func (m *SiteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SiteMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.description != nil {
 		fields = append(fields, site.FieldDescription)
+	}
+	if m.is_default != nil {
+		fields = append(fields, site.FieldIsDefault)
 	}
 	return fields
 }
@@ -21602,6 +21655,8 @@ func (m *SiteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case site.FieldDescription:
 		return m.Description()
+	case site.FieldIsDefault:
+		return m.IsDefault()
 	}
 	return nil, false
 }
@@ -21613,6 +21668,8 @@ func (m *SiteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case site.FieldDescription:
 		return m.OldDescription(ctx)
+	case site.FieldIsDefault:
+		return m.OldIsDefault(ctx)
 	}
 	return nil, fmt.Errorf("unknown Site field %s", name)
 }
@@ -21628,6 +21685,13 @@ func (m *SiteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case site.FieldIsDefault:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsDefault(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Site field %s", name)
@@ -21662,6 +21726,9 @@ func (m *SiteMutation) ClearedFields() []string {
 	if m.FieldCleared(site.FieldDescription) {
 		fields = append(fields, site.FieldDescription)
 	}
+	if m.FieldCleared(site.FieldIsDefault) {
+		fields = append(fields, site.FieldIsDefault)
+	}
 	return fields
 }
 
@@ -21679,6 +21746,9 @@ func (m *SiteMutation) ClearField(name string) error {
 	case site.FieldDescription:
 		m.ClearDescription()
 		return nil
+	case site.FieldIsDefault:
+		m.ClearIsDefault()
+		return nil
 	}
 	return fmt.Errorf("unknown Site nullable field %s", name)
 }
@@ -21689,6 +21759,9 @@ func (m *SiteMutation) ResetField(name string) error {
 	switch name {
 	case site.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case site.FieldIsDefault:
+		m.ResetIsDefault()
 		return nil
 	}
 	return fmt.Errorf("unknown Site field %s", name)
@@ -25273,6 +25346,7 @@ type TenantMutation struct {
 	typ           string
 	id            *int
 	description   *string
+	is_default    *bool
 	clearedFields map[string]struct{}
 	sites         map[int]struct{}
 	removedsites  map[int]struct{}
@@ -25429,6 +25503,55 @@ func (m *TenantMutation) ResetDescription() {
 	delete(m.clearedFields, tenant.FieldDescription)
 }
 
+// SetIsDefault sets the "is_default" field.
+func (m *TenantMutation) SetIsDefault(b bool) {
+	m.is_default = &b
+}
+
+// IsDefault returns the value of the "is_default" field in the mutation.
+func (m *TenantMutation) IsDefault() (r bool, exists bool) {
+	v := m.is_default
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsDefault returns the old "is_default" field's value of the Tenant entity.
+// If the Tenant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantMutation) OldIsDefault(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsDefault is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsDefault requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsDefault: %w", err)
+	}
+	return oldValue.IsDefault, nil
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (m *TenantMutation) ClearIsDefault() {
+	m.is_default = nil
+	m.clearedFields[tenant.FieldIsDefault] = struct{}{}
+}
+
+// IsDefaultCleared returns if the "is_default" field was cleared in this mutation.
+func (m *TenantMutation) IsDefaultCleared() bool {
+	_, ok := m.clearedFields[tenant.FieldIsDefault]
+	return ok
+}
+
+// ResetIsDefault resets all changes to the "is_default" field.
+func (m *TenantMutation) ResetIsDefault() {
+	m.is_default = nil
+	delete(m.clearedFields, tenant.FieldIsDefault)
+}
+
 // AddSiteIDs adds the "sites" edge to the Site entity by ids.
 func (m *TenantMutation) AddSiteIDs(ids ...int) {
 	if m.sites == nil {
@@ -25517,9 +25640,12 @@ func (m *TenantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TenantMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.description != nil {
 		fields = append(fields, tenant.FieldDescription)
+	}
+	if m.is_default != nil {
+		fields = append(fields, tenant.FieldIsDefault)
 	}
 	return fields
 }
@@ -25531,6 +25657,8 @@ func (m *TenantMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case tenant.FieldDescription:
 		return m.Description()
+	case tenant.FieldIsDefault:
+		return m.IsDefault()
 	}
 	return nil, false
 }
@@ -25542,6 +25670,8 @@ func (m *TenantMutation) OldField(ctx context.Context, name string) (ent.Value, 
 	switch name {
 	case tenant.FieldDescription:
 		return m.OldDescription(ctx)
+	case tenant.FieldIsDefault:
+		return m.OldIsDefault(ctx)
 	}
 	return nil, fmt.Errorf("unknown Tenant field %s", name)
 }
@@ -25557,6 +25687,13 @@ func (m *TenantMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case tenant.FieldIsDefault:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsDefault(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Tenant field %s", name)
@@ -25591,6 +25728,9 @@ func (m *TenantMutation) ClearedFields() []string {
 	if m.FieldCleared(tenant.FieldDescription) {
 		fields = append(fields, tenant.FieldDescription)
 	}
+	if m.FieldCleared(tenant.FieldIsDefault) {
+		fields = append(fields, tenant.FieldIsDefault)
+	}
 	return fields
 }
 
@@ -25608,6 +25748,9 @@ func (m *TenantMutation) ClearField(name string) error {
 	case tenant.FieldDescription:
 		m.ClearDescription()
 		return nil
+	case tenant.FieldIsDefault:
+		m.ClearIsDefault()
+		return nil
 	}
 	return fmt.Errorf("unknown Tenant nullable field %s", name)
 }
@@ -25618,6 +25761,9 @@ func (m *TenantMutation) ResetField(name string) error {
 	switch name {
 	case tenant.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case tenant.FieldIsDefault:
+		m.ResetIsDefault()
 		return nil
 	}
 	return fmt.Errorf("unknown Tenant field %s", name)

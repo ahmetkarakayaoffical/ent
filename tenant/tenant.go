@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldIsDefault holds the string denoting the is_default field in the database.
+	FieldIsDefault = "is_default"
 	// EdgeSites holds the string denoting the sites edge name in mutations.
 	EdgeSites = "sites"
 	// Table holds the table name of the tenant in the database.
@@ -31,6 +33,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDescription,
+	FieldIsDefault,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -54,6 +57,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByIsDefault orders the results by the is_default field.
+func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsDefault, opts...).ToFunc()
 }
 
 // BySitesCount orders the results by sites count.

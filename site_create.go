@@ -37,6 +37,20 @@ func (sc *SiteCreate) SetNillableDescription(s *string) *SiteCreate {
 	return sc
 }
 
+// SetIsDefault sets the "is_default" field.
+func (sc *SiteCreate) SetIsDefault(b bool) *SiteCreate {
+	sc.mutation.SetIsDefault(b)
+	return sc
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (sc *SiteCreate) SetNillableIsDefault(b *bool) *SiteCreate {
+	if b != nil {
+		sc.SetIsDefault(*b)
+	}
+	return sc
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (sc *SiteCreate) SetTenantID(id int) *SiteCreate {
 	sc.mutation.SetTenantID(id)
@@ -135,6 +149,10 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Description(); ok {
 		_spec.SetField(site.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := sc.mutation.IsDefault(); ok {
+		_spec.SetField(site.FieldIsDefault, field.TypeBool, value)
+		_node.IsDefault = value
 	}
 	if nodes := sc.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -239,6 +257,24 @@ func (u *SiteUpsert) ClearDescription() *SiteUpsert {
 	return u
 }
 
+// SetIsDefault sets the "is_default" field.
+func (u *SiteUpsert) SetIsDefault(v bool) *SiteUpsert {
+	u.Set(site.FieldIsDefault, v)
+	return u
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *SiteUpsert) UpdateIsDefault() *SiteUpsert {
+	u.SetExcluded(site.FieldIsDefault)
+	return u
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *SiteUpsert) ClearIsDefault() *SiteUpsert {
+	u.SetNull(site.FieldIsDefault)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -297,6 +333,27 @@ func (u *SiteUpsertOne) UpdateDescription() *SiteUpsertOne {
 func (u *SiteUpsertOne) ClearDescription() *SiteUpsertOne {
 	return u.Update(func(s *SiteUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetIsDefault sets the "is_default" field.
+func (u *SiteUpsertOne) SetIsDefault(v bool) *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetIsDefault(v)
+	})
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *SiteUpsertOne) UpdateIsDefault() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateIsDefault()
+	})
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *SiteUpsertOne) ClearIsDefault() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearIsDefault()
 	})
 }
 
@@ -521,6 +578,27 @@ func (u *SiteUpsertBulk) UpdateDescription() *SiteUpsertBulk {
 func (u *SiteUpsertBulk) ClearDescription() *SiteUpsertBulk {
 	return u.Update(func(s *SiteUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetIsDefault sets the "is_default" field.
+func (u *SiteUpsertBulk) SetIsDefault(v bool) *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetIsDefault(v)
+	})
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *SiteUpsertBulk) UpdateIsDefault() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateIsDefault()
+	})
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *SiteUpsertBulk) ClearIsDefault() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearIsDefault()
 	})
 }
 

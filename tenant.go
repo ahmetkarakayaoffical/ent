@@ -18,6 +18,8 @@ type Tenant struct {
 	ID int `json:"id,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// IsDefault holds the value of the "is_default" field.
+	IsDefault bool `json:"is_default,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TenantQuery when eager-loading is set.
 	Edges        TenantEdges `json:"edges"`
@@ -47,6 +49,8 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case tenant.FieldIsDefault:
+			values[i] = new(sql.NullBool)
 		case tenant.FieldID:
 			values[i] = new(sql.NullInt64)
 		case tenant.FieldDescription:
@@ -77,6 +81,12 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				t.Description = value.String
+			}
+		case tenant.FieldIsDefault:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_default", values[i])
+			} else if value.Valid {
+				t.IsDefault = value.Bool
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
@@ -121,6 +131,9 @@ func (t *Tenant) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
 	builder.WriteString("description=")
 	builder.WriteString(t.Description)
+	builder.WriteString(", ")
+	builder.WriteString("is_default=")
+	builder.WriteString(fmt.Sprintf("%v", t.IsDefault))
 	builder.WriteByte(')')
 	return builder.String()
 }

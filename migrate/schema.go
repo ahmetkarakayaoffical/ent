@@ -588,6 +588,7 @@ var (
 	SitesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_default", Type: field.TypeBool, Nullable: true},
 		{Name: "tenant_sites", Type: field.TypeInt, Nullable: true},
 	}
 	// SitesTable holds the schema information for the "sites" table.
@@ -598,7 +599,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sites_tenants_sites",
-				Columns:    []*schema.Column{SitesColumns[2]},
+				Columns:    []*schema.Column{SitesColumns[3]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -703,6 +704,7 @@ var (
 	TenantsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "is_default", Type: field.TypeBool, Nullable: true},
 	}
 	// TenantsTable holds the schema information for the "tenants" table.
 	TenantsTable = &schema.Table{

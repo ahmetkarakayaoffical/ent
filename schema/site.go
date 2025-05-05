@@ -16,6 +16,7 @@ type Site struct {
 func (Site) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("description").Optional(),
+		field.Bool("is_default").Optional(),
 	}
 }
 

@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldIsDefault holds the string denoting the is_default field in the database.
+	FieldIsDefault = "is_default"
 	// EdgeTenant holds the string denoting the tenant edge name in mutations.
 	EdgeTenant = "tenant"
 	// EdgeAgents holds the string denoting the agents edge name in mutations.
@@ -40,6 +42,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDescription,
+	FieldIsDefault,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "sites"
@@ -80,6 +83,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByIsDefault orders the results by the is_default field.
+func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsDefault, opts...).ToFunc()
 }
 
 // ByTenantField orders the results by tenant field.

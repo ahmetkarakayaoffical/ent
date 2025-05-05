@@ -58,6 +58,11 @@ func Description(v string) predicate.Site {
 	return predicate.Site(sql.FieldEQ(FieldDescription, v))
 }
 
+// IsDefault applies equality check predicate on the "is_default" field. It's identical to IsDefaultEQ.
+func IsDefault(v bool) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldIsDefault, v))
+}
+
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.Site {
 	return predicate.Site(sql.FieldEQ(FieldDescription, v))
@@ -131,6 +136,26 @@ func DescriptionEqualFold(v string) predicate.Site {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Site {
 	return predicate.Site(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// IsDefaultEQ applies the EQ predicate on the "is_default" field.
+func IsDefaultEQ(v bool) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldIsDefault, v))
+}
+
+// IsDefaultNEQ applies the NEQ predicate on the "is_default" field.
+func IsDefaultNEQ(v bool) predicate.Site {
+	return predicate.Site(sql.FieldNEQ(FieldIsDefault, v))
+}
+
+// IsDefaultIsNil applies the IsNil predicate on the "is_default" field.
+func IsDefaultIsNil() predicate.Site {
+	return predicate.Site(sql.FieldIsNull(FieldIsDefault))
+}
+
+// IsDefaultNotNil applies the NotNil predicate on the "is_default" field.
+func IsDefaultNotNil() predicate.Site {
+	return predicate.Site(sql.FieldNotNull(FieldIsDefault))
 }
 
 // HasTenant applies the HasEdge predicate on the "tenant" edge.

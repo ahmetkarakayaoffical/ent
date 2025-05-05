@@ -49,6 +49,26 @@ func (tu *TenantUpdate) ClearDescription() *TenantUpdate {
 	return tu
 }
 
+// SetIsDefault sets the "is_default" field.
+func (tu *TenantUpdate) SetIsDefault(b bool) *TenantUpdate {
+	tu.mutation.SetIsDefault(b)
+	return tu
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (tu *TenantUpdate) SetNillableIsDefault(b *bool) *TenantUpdate {
+	if b != nil {
+		tu.SetIsDefault(*b)
+	}
+	return tu
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (tu *TenantUpdate) ClearIsDefault() *TenantUpdate {
+	tu.mutation.ClearIsDefault()
+	return tu
+}
+
 // AddSiteIDs adds the "sites" edge to the Site entity by IDs.
 func (tu *TenantUpdate) AddSiteIDs(ids ...int) *TenantUpdate {
 	tu.mutation.AddSiteIDs(ids...)
@@ -138,6 +158,12 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.DescriptionCleared() {
 		_spec.ClearField(tenant.FieldDescription, field.TypeString)
 	}
+	if value, ok := tu.mutation.IsDefault(); ok {
+		_spec.SetField(tenant.FieldIsDefault, field.TypeBool, value)
+	}
+	if tu.mutation.IsDefaultCleared() {
+		_spec.ClearField(tenant.FieldIsDefault, field.TypeBool)
+	}
 	if tu.mutation.SitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -222,6 +248,26 @@ func (tuo *TenantUpdateOne) SetNillableDescription(s *string) *TenantUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (tuo *TenantUpdateOne) ClearDescription() *TenantUpdateOne {
 	tuo.mutation.ClearDescription()
+	return tuo
+}
+
+// SetIsDefault sets the "is_default" field.
+func (tuo *TenantUpdateOne) SetIsDefault(b bool) *TenantUpdateOne {
+	tuo.mutation.SetIsDefault(b)
+	return tuo
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (tuo *TenantUpdateOne) SetNillableIsDefault(b *bool) *TenantUpdateOne {
+	if b != nil {
+		tuo.SetIsDefault(*b)
+	}
+	return tuo
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (tuo *TenantUpdateOne) ClearIsDefault() *TenantUpdateOne {
+	tuo.mutation.ClearIsDefault()
 	return tuo
 }
 
@@ -343,6 +389,12 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 	}
 	if tuo.mutation.DescriptionCleared() {
 		_spec.ClearField(tenant.FieldDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.IsDefault(); ok {
+		_spec.SetField(tenant.FieldIsDefault, field.TypeBool, value)
+	}
+	if tuo.mutation.IsDefaultCleared() {
+		_spec.ClearField(tenant.FieldIsDefault, field.TypeBool)
 	}
 	if tuo.mutation.SitesCleared() {
 		edge := &sqlgraph.EdgeSpec{

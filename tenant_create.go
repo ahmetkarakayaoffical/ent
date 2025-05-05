@@ -36,6 +36,20 @@ func (tc *TenantCreate) SetNillableDescription(s *string) *TenantCreate {
 	return tc
 }
 
+// SetIsDefault sets the "is_default" field.
+func (tc *TenantCreate) SetIsDefault(b bool) *TenantCreate {
+	tc.mutation.SetIsDefault(b)
+	return tc
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (tc *TenantCreate) SetNillableIsDefault(b *bool) *TenantCreate {
+	if b != nil {
+		tc.SetIsDefault(*b)
+	}
+	return tc
+}
+
 // AddSiteIDs adds the "sites" edge to the Site entity by IDs.
 func (tc *TenantCreate) AddSiteIDs(ids ...int) *TenantCreate {
 	tc.mutation.AddSiteIDs(ids...)
@@ -115,6 +129,10 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Description(); ok {
 		_spec.SetField(tenant.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := tc.mutation.IsDefault(); ok {
+		_spec.SetField(tenant.FieldIsDefault, field.TypeBool, value)
+		_node.IsDefault = value
 	}
 	if nodes := tc.mutation.SitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -202,6 +220,24 @@ func (u *TenantUpsert) ClearDescription() *TenantUpsert {
 	return u
 }
 
+// SetIsDefault sets the "is_default" field.
+func (u *TenantUpsert) SetIsDefault(v bool) *TenantUpsert {
+	u.Set(tenant.FieldIsDefault, v)
+	return u
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *TenantUpsert) UpdateIsDefault() *TenantUpsert {
+	u.SetExcluded(tenant.FieldIsDefault)
+	return u
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *TenantUpsert) ClearIsDefault() *TenantUpsert {
+	u.SetNull(tenant.FieldIsDefault)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -260,6 +296,27 @@ func (u *TenantUpsertOne) UpdateDescription() *TenantUpsertOne {
 func (u *TenantUpsertOne) ClearDescription() *TenantUpsertOne {
 	return u.Update(func(s *TenantUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetIsDefault sets the "is_default" field.
+func (u *TenantUpsertOne) SetIsDefault(v bool) *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetIsDefault(v)
+	})
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *TenantUpsertOne) UpdateIsDefault() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateIsDefault()
+	})
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *TenantUpsertOne) ClearIsDefault() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearIsDefault()
 	})
 }
 
@@ -484,6 +541,27 @@ func (u *TenantUpsertBulk) UpdateDescription() *TenantUpsertBulk {
 func (u *TenantUpsertBulk) ClearDescription() *TenantUpsertBulk {
 	return u.Update(func(s *TenantUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetIsDefault sets the "is_default" field.
+func (u *TenantUpsertBulk) SetIsDefault(v bool) *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetIsDefault(v)
+	})
+}
+
+// UpdateIsDefault sets the "is_default" field to the value that was provided on create.
+func (u *TenantUpsertBulk) UpdateIsDefault() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateIsDefault()
+	})
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (u *TenantUpsertBulk) ClearIsDefault() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearIsDefault()
 	})
 }
 

@@ -50,6 +50,26 @@ func (su *SiteUpdate) ClearDescription() *SiteUpdate {
 	return su
 }
 
+// SetIsDefault sets the "is_default" field.
+func (su *SiteUpdate) SetIsDefault(b bool) *SiteUpdate {
+	su.mutation.SetIsDefault(b)
+	return su
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (su *SiteUpdate) SetNillableIsDefault(b *bool) *SiteUpdate {
+	if b != nil {
+		su.SetIsDefault(*b)
+	}
+	return su
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (su *SiteUpdate) ClearIsDefault() *SiteUpdate {
+	su.mutation.ClearIsDefault()
+	return su
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (su *SiteUpdate) SetTenantID(id int) *SiteUpdate {
 	su.mutation.SetTenantID(id)
@@ -164,6 +184,12 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DescriptionCleared() {
 		_spec.ClearField(site.FieldDescription, field.TypeString)
 	}
+	if value, ok := su.mutation.IsDefault(); ok {
+		_spec.SetField(site.FieldIsDefault, field.TypeBool, value)
+	}
+	if su.mutation.IsDefaultCleared() {
+		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
+	}
 	if su.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -277,6 +303,26 @@ func (suo *SiteUpdateOne) SetNillableDescription(s *string) *SiteUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (suo *SiteUpdateOne) ClearDescription() *SiteUpdateOne {
 	suo.mutation.ClearDescription()
+	return suo
+}
+
+// SetIsDefault sets the "is_default" field.
+func (suo *SiteUpdateOne) SetIsDefault(b bool) *SiteUpdateOne {
+	suo.mutation.SetIsDefault(b)
+	return suo
+}
+
+// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
+func (suo *SiteUpdateOne) SetNillableIsDefault(b *bool) *SiteUpdateOne {
+	if b != nil {
+		suo.SetIsDefault(*b)
+	}
+	return suo
+}
+
+// ClearIsDefault clears the value of the "is_default" field.
+func (suo *SiteUpdateOne) ClearIsDefault() *SiteUpdateOne {
+	suo.mutation.ClearIsDefault()
 	return suo
 }
 
@@ -423,6 +469,12 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if suo.mutation.DescriptionCleared() {
 		_spec.ClearField(site.FieldDescription, field.TypeString)
+	}
+	if value, ok := suo.mutation.IsDefault(); ok {
+		_spec.SetField(site.FieldIsDefault, field.TypeBool, value)
+	}
+	if suo.mutation.IsDefaultCleared() {
+		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
 	}
 	if suo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
