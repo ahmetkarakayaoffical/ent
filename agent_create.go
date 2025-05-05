@@ -27,6 +27,7 @@ import (
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
@@ -643,6 +644,21 @@ func (ac *AgentCreate) AddProfileissue(p ...*ProfileIssue) *AgentCreate {
 	return ac.AddProfileissueIDs(ids...)
 }
 
+// AddSiteIDs adds the "site" edge to the Site entity by IDs.
+func (ac *AgentCreate) AddSiteIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddSiteIDs(ids...)
+	return ac
+}
+
+// AddSite adds the "site" edges to the Site entity.
+func (ac *AgentCreate) AddSite(s ...*Site) *AgentCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ac.AddSiteIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (ac *AgentCreate) Mutation() *AgentMutation {
 	return ac.mutation
@@ -1192,6 +1208,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.SiteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   agent.SiteTable,
+			Columns: agent.SitePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

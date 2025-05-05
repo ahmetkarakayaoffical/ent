@@ -582,6 +582,26 @@ var (
 			},
 		},
 	}
+	// SitesColumns holds the columns for the "sites" table.
+	SitesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "tenant_sites", Type: field.TypeInt, Nullable: true},
+	}
+	// SitesTable holds the schema information for the "sites" table.
+	SitesTable = &schema.Table{
+		Name:       "sites",
+		Columns:    SitesColumns,
+		PrimaryKey: []*schema.Column{SitesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sites_tenants_sites",
+				Columns:    []*schema.Column{SitesColumns[2]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SystemUpdatesColumns holds the columns for the "system_updates" table.
 	SystemUpdatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -676,6 +696,17 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+	}
+	// TenantsColumns holds the columns for the "tenants" table.
+	TenantsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+	}
+	// TenantsTable holds the schema information for the "tenants" table.
+	TenantsTable = &schema.Table{
+		Name:       "tenants",
+		Columns:    TenantsColumns,
+		PrimaryKey: []*schema.Column{TenantsColumns[0]},
 	}
 	// UpdatesColumns holds the columns for the "updates" table.
 	UpdatesColumns = []*schema.Column{
@@ -797,6 +828,31 @@ var (
 			},
 		},
 	}
+	// SiteAgentsColumns holds the columns for the "site_agents" table.
+	SiteAgentsColumns = []*schema.Column{
+		{Name: "site_id", Type: field.TypeInt},
+		{Name: "agent_id", Type: field.TypeString},
+	}
+	// SiteAgentsTable holds the schema information for the "site_agents" table.
+	SiteAgentsTable = &schema.Table{
+		Name:       "site_agents",
+		Columns:    SiteAgentsColumns,
+		PrimaryKey: []*schema.Column{SiteAgentsColumns[0], SiteAgentsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "site_agents_site_id",
+				Columns:    []*schema.Column{SiteAgentsColumns[0]},
+				RefColumns: []*schema.Column{SitesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "site_agents_agent_id",
+				Columns:    []*schema.Column{SiteAgentsColumns[1]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -821,14 +877,17 @@ var (
 		SessionsTable,
 		SettingsTable,
 		SharesTable,
+		SitesTable,
 		SystemUpdatesTable,
 		TagsTable,
 		TasksTable,
+		TenantsTable,
 		UpdatesTable,
 		UsersTable,
 		WingetConfigExclusionsTable,
 		AgentTagsTable,
 		ProfileTagsTable,
+		SiteAgentsTable,
 	}
 )
 
@@ -851,6 +910,7 @@ func init() {
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
+	SitesTable.ForeignKeys[0].RefTable = TenantsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	TagsTable.ForeignKeys[0].RefTable = TagsTable
 	TagsTable.ForeignKeys[1].RefTable = TasksTable
@@ -861,4 +921,6 @@ func init() {
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
+	SiteAgentsTable.ForeignKeys[0].RefTable = SitesTable
+	SiteAgentsTable.ForeignKeys[1].RefTable = AgentsTable
 }

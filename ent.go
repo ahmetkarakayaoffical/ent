@@ -34,9 +34,11 @@ import (
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/share"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
+	"github.com/open-uem/ent/tenant"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
 	"github.com/open-uem/ent/wingetconfigexclusion"
@@ -122,9 +124,11 @@ func checkColumn(table, column string) error {
 			sessions.Table:              sessions.ValidColumn,
 			settings.Table:              settings.ValidColumn,
 			share.Table:                 share.ValidColumn,
+			site.Table:                  site.ValidColumn,
 			systemupdate.Table:          systemupdate.ValidColumn,
 			tag.Table:                   tag.ValidColumn,
 			task.Table:                  task.ValidColumn,
+			tenant.Table:                tenant.ValidColumn,
 			update.Table:                update.ValidColumn,
 			user.Table:                  user.ValidColumn,
 			wingetconfigexclusion.Table: wingetconfigexclusion.ValidColumn,

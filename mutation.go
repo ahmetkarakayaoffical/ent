@@ -34,9 +34,11 @@ import (
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/share"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
+	"github.com/open-uem/ent/tenant"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
 	"github.com/open-uem/ent/wingetconfigexclusion"
@@ -73,9 +75,11 @@ const (
 	TypeSessions              = "Sessions"
 	TypeSettings              = "Settings"
 	TypeShare                 = "Share"
+	TypeSite                  = "Site"
 	TypeSystemUpdate          = "SystemUpdate"
 	TypeTag                   = "Tag"
 	TypeTask                  = "Task"
+	TypeTenant                = "Tenant"
 	TypeUpdate                = "Update"
 	TypeUser                  = "User"
 	TypeWingetConfigExclusion = "WingetConfigExclusion"
@@ -160,6 +164,9 @@ type AgentMutation struct {
 	profileissue               map[int]struct{}
 	removedprofileissue        map[int]struct{}
 	clearedprofileissue        bool
+	site                       map[int]struct{}
+	removedsite                map[int]struct{}
+	clearedsite                bool
 	done                       bool
 	oldValue                   func(context.Context) (*Agent, error)
 	predicates                 []predicate.Agent
@@ -2241,6 +2248,60 @@ func (m *AgentMutation) ResetProfileissue() {
 	m.removedprofileissue = nil
 }
 
+// AddSiteIDs adds the "site" edge to the Site entity by ids.
+func (m *AgentMutation) AddSiteIDs(ids ...int) {
+	if m.site == nil {
+		m.site = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.site[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSite clears the "site" edge to the Site entity.
+func (m *AgentMutation) ClearSite() {
+	m.clearedsite = true
+}
+
+// SiteCleared reports if the "site" edge to the Site entity was cleared.
+func (m *AgentMutation) SiteCleared() bool {
+	return m.clearedsite
+}
+
+// RemoveSiteIDs removes the "site" edge to the Site entity by IDs.
+func (m *AgentMutation) RemoveSiteIDs(ids ...int) {
+	if m.removedsite == nil {
+		m.removedsite = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.site, ids[i])
+		m.removedsite[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSite returns the removed IDs of the "site" edge to the Site entity.
+func (m *AgentMutation) RemovedSiteIDs() (ids []int) {
+	for id := range m.removedsite {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SiteIDs returns the "site" edge IDs in the mutation.
+func (m *AgentMutation) SiteIDs() (ids []int) {
+	for id := range m.site {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSite resets all changes to the "site" edge.
+func (m *AgentMutation) ResetSite() {
+	m.site = nil
+	m.clearedsite = false
+	m.removedsite = nil
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -2865,7 +2926,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -2919,6 +2980,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.profileissue != nil {
 		edges = append(edges, agent.EdgeProfileissue)
+	}
+	if m.site != nil {
+		edges = append(edges, agent.EdgeSite)
 	}
 	return edges
 }
@@ -3025,13 +3089,19 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeSite:
+		ids := make([]ent.Value, 0, len(m.site))
+		for id := range m.site {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -3070,6 +3140,9 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedprofileissue != nil {
 		edges = append(edges, agent.EdgeProfileissue)
+	}
+	if m.removedsite != nil {
+		edges = append(edges, agent.EdgeSite)
 	}
 	return edges
 }
@@ -3156,13 +3229,19 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgeSite:
+		ids := make([]ent.Value, 0, len(m.removedsite))
+		for id := range m.removedsite {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -3217,6 +3296,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedprofileissue {
 		edges = append(edges, agent.EdgeProfileissue)
 	}
+	if m.clearedsite {
+		edges = append(edges, agent.EdgeSite)
+	}
 	return edges
 }
 
@@ -3260,6 +3342,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedrelease
 	case agent.EdgeProfileissue:
 		return m.clearedprofileissue
+	case agent.EdgeSite:
+		return m.clearedsite
 	}
 	return false
 }
@@ -3344,6 +3428,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeProfileissue:
 		m.ResetProfileissue()
+		return nil
+	case agent.EdgeSite:
+		m.ResetSite()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -21063,6 +21150,506 @@ func (m *ShareMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Share edge %s", name)
 }
 
+// SiteMutation represents an operation that mutates the Site nodes in the graph.
+type SiteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	description   *string
+	clearedFields map[string]struct{}
+	tenant        *int
+	clearedtenant bool
+	agents        map[string]struct{}
+	removedagents map[string]struct{}
+	clearedagents bool
+	done          bool
+	oldValue      func(context.Context) (*Site, error)
+	predicates    []predicate.Site
+}
+
+var _ ent.Mutation = (*SiteMutation)(nil)
+
+// siteOption allows management of the mutation configuration using functional options.
+type siteOption func(*SiteMutation)
+
+// newSiteMutation creates new mutation for the Site entity.
+func newSiteMutation(c config, op Op, opts ...siteOption) *SiteMutation {
+	m := &SiteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSite,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSiteID sets the ID field of the mutation.
+func withSiteID(id int) siteOption {
+	return func(m *SiteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Site
+		)
+		m.oldValue = func(ctx context.Context) (*Site, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Site.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSite sets the old Site of the mutation.
+func withSite(node *Site) siteOption {
+	return func(m *SiteMutation) {
+		m.oldValue = func(context.Context) (*Site, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SiteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SiteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SiteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SiteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Site.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetDescription sets the "description" field.
+func (m *SiteMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *SiteMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Site entity.
+// If the Site object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SiteMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *SiteMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[site.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *SiteMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[site.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *SiteMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, site.FieldDescription)
+}
+
+// SetTenantID sets the "tenant" edge to the Tenant entity by id.
+func (m *SiteMutation) SetTenantID(id int) {
+	m.tenant = &id
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (m *SiteMutation) ClearTenant() {
+	m.clearedtenant = true
+}
+
+// TenantCleared reports if the "tenant" edge to the Tenant entity was cleared.
+func (m *SiteMutation) TenantCleared() bool {
+	return m.clearedtenant
+}
+
+// TenantID returns the "tenant" edge ID in the mutation.
+func (m *SiteMutation) TenantID() (id int, exists bool) {
+	if m.tenant != nil {
+		return *m.tenant, true
+	}
+	return
+}
+
+// TenantIDs returns the "tenant" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TenantID instead. It exists only for internal usage by the builders.
+func (m *SiteMutation) TenantIDs() (ids []int) {
+	if id := m.tenant; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetTenant resets all changes to the "tenant" edge.
+func (m *SiteMutation) ResetTenant() {
+	m.tenant = nil
+	m.clearedtenant = false
+}
+
+// AddAgentIDs adds the "agents" edge to the Agent entity by ids.
+func (m *SiteMutation) AddAgentIDs(ids ...string) {
+	if m.agents == nil {
+		m.agents = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.agents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAgents clears the "agents" edge to the Agent entity.
+func (m *SiteMutation) ClearAgents() {
+	m.clearedagents = true
+}
+
+// AgentsCleared reports if the "agents" edge to the Agent entity was cleared.
+func (m *SiteMutation) AgentsCleared() bool {
+	return m.clearedagents
+}
+
+// RemoveAgentIDs removes the "agents" edge to the Agent entity by IDs.
+func (m *SiteMutation) RemoveAgentIDs(ids ...string) {
+	if m.removedagents == nil {
+		m.removedagents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.agents, ids[i])
+		m.removedagents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAgents returns the removed IDs of the "agents" edge to the Agent entity.
+func (m *SiteMutation) RemovedAgentsIDs() (ids []string) {
+	for id := range m.removedagents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AgentsIDs returns the "agents" edge IDs in the mutation.
+func (m *SiteMutation) AgentsIDs() (ids []string) {
+	for id := range m.agents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAgents resets all changes to the "agents" edge.
+func (m *SiteMutation) ResetAgents() {
+	m.agents = nil
+	m.clearedagents = false
+	m.removedagents = nil
+}
+
+// Where appends a list predicates to the SiteMutation builder.
+func (m *SiteMutation) Where(ps ...predicate.Site) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SiteMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SiteMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Site, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SiteMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SiteMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Site).
+func (m *SiteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SiteMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.description != nil {
+		fields = append(fields, site.FieldDescription)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SiteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case site.FieldDescription:
+		return m.Description()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SiteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case site.FieldDescription:
+		return m.OldDescription(ctx)
+	}
+	return nil, fmt.Errorf("unknown Site field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SiteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case site.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Site field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SiteMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SiteMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SiteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Site numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SiteMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(site.FieldDescription) {
+		fields = append(fields, site.FieldDescription)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SiteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SiteMutation) ClearField(name string) error {
+	switch name {
+	case site.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Site nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SiteMutation) ResetField(name string) error {
+	switch name {
+	case site.FieldDescription:
+		m.ResetDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Site field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SiteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.tenant != nil {
+		edges = append(edges, site.EdgeTenant)
+	}
+	if m.agents != nil {
+		edges = append(edges, site.EdgeAgents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SiteMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case site.EdgeTenant:
+		if id := m.tenant; id != nil {
+			return []ent.Value{*id}
+		}
+	case site.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.agents))
+		for id := range m.agents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SiteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedagents != nil {
+		edges = append(edges, site.EdgeAgents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SiteMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case site.EdgeAgents:
+		ids := make([]ent.Value, 0, len(m.removedagents))
+		for id := range m.removedagents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SiteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedtenant {
+		edges = append(edges, site.EdgeTenant)
+	}
+	if m.clearedagents {
+		edges = append(edges, site.EdgeAgents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SiteMutation) EdgeCleared(name string) bool {
+	switch name {
+	case site.EdgeTenant:
+		return m.clearedtenant
+	case site.EdgeAgents:
+		return m.clearedagents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SiteMutation) ClearEdge(name string) error {
+	switch name {
+	case site.EdgeTenant:
+		m.ClearTenant()
+		return nil
+	}
+	return fmt.Errorf("unknown Site unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SiteMutation) ResetEdge(name string) error {
+	switch name {
+	case site.EdgeTenant:
+		m.ResetTenant()
+		return nil
+	case site.EdgeAgents:
+		m.ResetAgents()
+		return nil
+	}
+	return fmt.Errorf("unknown Site edge %s", name)
+}
+
 // SystemUpdateMutation represents an operation that mutates the SystemUpdate nodes in the graph.
 type SystemUpdateMutation struct {
 	config
@@ -24531,6 +25118,447 @@ func (m *TaskMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Task edge %s", name)
+}
+
+// TenantMutation represents an operation that mutates the Tenant nodes in the graph.
+type TenantMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	description   *string
+	clearedFields map[string]struct{}
+	sites         map[int]struct{}
+	removedsites  map[int]struct{}
+	clearedsites  bool
+	done          bool
+	oldValue      func(context.Context) (*Tenant, error)
+	predicates    []predicate.Tenant
+}
+
+var _ ent.Mutation = (*TenantMutation)(nil)
+
+// tenantOption allows management of the mutation configuration using functional options.
+type tenantOption func(*TenantMutation)
+
+// newTenantMutation creates new mutation for the Tenant entity.
+func newTenantMutation(c config, op Op, opts ...tenantOption) *TenantMutation {
+	m := &TenantMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTenant,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTenantID sets the ID field of the mutation.
+func withTenantID(id int) tenantOption {
+	return func(m *TenantMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Tenant
+		)
+		m.oldValue = func(ctx context.Context) (*Tenant, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Tenant.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTenant sets the old Tenant of the mutation.
+func withTenant(node *Tenant) tenantOption {
+	return func(m *TenantMutation) {
+		m.oldValue = func(context.Context) (*Tenant, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TenantMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TenantMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TenantMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TenantMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Tenant.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetDescription sets the "description" field.
+func (m *TenantMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *TenantMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Tenant entity.
+// If the Tenant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *TenantMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[tenant.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *TenantMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[tenant.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *TenantMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, tenant.FieldDescription)
+}
+
+// AddSiteIDs adds the "sites" edge to the Site entity by ids.
+func (m *TenantMutation) AddSiteIDs(ids ...int) {
+	if m.sites == nil {
+		m.sites = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.sites[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSites clears the "sites" edge to the Site entity.
+func (m *TenantMutation) ClearSites() {
+	m.clearedsites = true
+}
+
+// SitesCleared reports if the "sites" edge to the Site entity was cleared.
+func (m *TenantMutation) SitesCleared() bool {
+	return m.clearedsites
+}
+
+// RemoveSiteIDs removes the "sites" edge to the Site entity by IDs.
+func (m *TenantMutation) RemoveSiteIDs(ids ...int) {
+	if m.removedsites == nil {
+		m.removedsites = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.sites, ids[i])
+		m.removedsites[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSites returns the removed IDs of the "sites" edge to the Site entity.
+func (m *TenantMutation) RemovedSitesIDs() (ids []int) {
+	for id := range m.removedsites {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SitesIDs returns the "sites" edge IDs in the mutation.
+func (m *TenantMutation) SitesIDs() (ids []int) {
+	for id := range m.sites {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSites resets all changes to the "sites" edge.
+func (m *TenantMutation) ResetSites() {
+	m.sites = nil
+	m.clearedsites = false
+	m.removedsites = nil
+}
+
+// Where appends a list predicates to the TenantMutation builder.
+func (m *TenantMutation) Where(ps ...predicate.Tenant) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TenantMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TenantMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Tenant, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TenantMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TenantMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Tenant).
+func (m *TenantMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TenantMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.description != nil {
+		fields = append(fields, tenant.FieldDescription)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TenantMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case tenant.FieldDescription:
+		return m.Description()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TenantMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case tenant.FieldDescription:
+		return m.OldDescription(ctx)
+	}
+	return nil, fmt.Errorf("unknown Tenant field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TenantMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case tenant.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Tenant field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TenantMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TenantMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TenantMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Tenant numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TenantMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(tenant.FieldDescription) {
+		fields = append(fields, tenant.FieldDescription)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TenantMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TenantMutation) ClearField(name string) error {
+	switch name {
+	case tenant.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Tenant nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TenantMutation) ResetField(name string) error {
+	switch name {
+	case tenant.FieldDescription:
+		m.ResetDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown Tenant field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TenantMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.sites != nil {
+		edges = append(edges, tenant.EdgeSites)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TenantMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case tenant.EdgeSites:
+		ids := make([]ent.Value, 0, len(m.sites))
+		for id := range m.sites {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TenantMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedsites != nil {
+		edges = append(edges, tenant.EdgeSites)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TenantMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case tenant.EdgeSites:
+		ids := make([]ent.Value, 0, len(m.removedsites))
+		for id := range m.removedsites {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TenantMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedsites {
+		edges = append(edges, tenant.EdgeSites)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TenantMutation) EdgeCleared(name string) bool {
+	switch name {
+	case tenant.EdgeSites:
+		return m.clearedsites
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TenantMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Tenant unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TenantMutation) ResetEdge(name string) error {
+	switch name {
+	case tenant.EdgeSites:
+		m.ResetSites()
+		return nil
+	}
+	return fmt.Errorf("unknown Tenant edge %s", name)
 }
 
 // UpdateMutation represents an operation that mutates the Update nodes in the graph.

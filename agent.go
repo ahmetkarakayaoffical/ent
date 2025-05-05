@@ -113,9 +113,11 @@ type AgentEdges struct {
 	Release *Release `json:"release,omitempty"`
 	// Profileissue holds the value of the profileissue edge.
 	Profileissue []*ProfileIssue `json:"profileissue,omitempty"`
+	// Site holds the value of the site edge.
+	Site []*Site `json:"site,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -288,6 +290,15 @@ func (e AgentEdges) ProfileissueOrErr() ([]*ProfileIssue, error) {
 		return e.Profileissue, nil
 	}
 	return nil, &NotLoadedError{edge: "profileissue"}
+}
+
+// SiteOrErr returns the Site value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) SiteOrErr() ([]*Site, error) {
+	if e.loadedTypes[18] {
+		return e.Site, nil
+	}
+	return nil, &NotLoadedError{edge: "site"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -570,6 +581,11 @@ func (a *Agent) QueryRelease() *ReleaseQuery {
 // QueryProfileissue queries the "profileissue" edge of the Agent entity.
 func (a *Agent) QueryProfileissue() *ProfileIssueQuery {
 	return NewAgentClient(a.config).QueryProfileissue(a)
+}
+
+// QuerySite queries the "site" edge of the Agent entity.
+func (a *Agent) QuerySite() *SiteQuery {
+	return NewAgentClient(a.config).QuerySite(a)
 }
 
 // Update returns a builder for updating this Agent.

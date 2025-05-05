@@ -56,12 +56,16 @@ type Tx struct {
 	Settings *SettingsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
+	// Site is the client for interacting with the Site builders.
+	Site *SiteClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
 	Tag *TagClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
+	// Tenant is the client for interacting with the Tenant builders.
+	Tenant *TenantClient
 	// Update is the client for interacting with the Update builders.
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
@@ -221,9 +225,11 @@ func (tx *Tx) init() {
 	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Settings = NewSettingsClient(tx.config)
 	tx.Share = NewShareClient(tx.config)
+	tx.Site = NewSiteClient(tx.config)
 	tx.SystemUpdate = NewSystemUpdateClient(tx.config)
 	tx.Tag = NewTagClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
+	tx.Tenant = NewTenantClient(tx.config)
 	tx.Update = NewUpdateClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.WingetConfigExclusion = NewWingetConfigExclusionClient(tx.config)

@@ -273,6 +273,18 @@ func (f ShareFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ShareMutation", m)
 }
 
+// The SiteFunc type is an adapter to allow the use of ordinary
+// function as Site mutator.
+type SiteFunc func(context.Context, *ent.SiteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SiteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SiteMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SiteMutation", m)
+}
+
 // The SystemUpdateFunc type is an adapter to allow the use of ordinary
 // function as SystemUpdate mutator.
 type SystemUpdateFunc func(context.Context, *ent.SystemUpdateMutation) (ent.Value, error)
@@ -307,6 +319,18 @@ func (f TaskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TaskMutation", m)
+}
+
+// The TenantFunc type is an adapter to allow the use of ordinary
+// function as Tenant mutator.
+type TenantFunc func(context.Context, *ent.TenantMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TenantFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TenantMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TenantMutation", m)
 }
 
 // The UpdateFunc type is an adapter to allow the use of ordinary

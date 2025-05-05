@@ -37,9 +37,11 @@ import (
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/share"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
+	"github.com/open-uem/ent/tenant"
 	"github.com/open-uem/ent/update"
 	"github.com/open-uem/ent/user"
 	"github.com/open-uem/ent/wingetconfigexclusion"
@@ -94,12 +96,16 @@ type Client struct {
 	Settings *SettingsClient
 	// Share is the client for interacting with the Share builders.
 	Share *ShareClient
+	// Site is the client for interacting with the Site builders.
+	Site *SiteClient
 	// SystemUpdate is the client for interacting with the SystemUpdate builders.
 	SystemUpdate *SystemUpdateClient
 	// Tag is the client for interacting with the Tag builders.
 	Tag *TagClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
+	// Tenant is the client for interacting with the Tenant builders.
+	Tenant *TenantClient
 	// Update is the client for interacting with the Update builders.
 	Update *UpdateClient
 	// User is the client for interacting with the User builders.
@@ -139,9 +145,11 @@ func (c *Client) init() {
 	c.Sessions = NewSessionsClient(c.config)
 	c.Settings = NewSettingsClient(c.config)
 	c.Share = NewShareClient(c.config)
+	c.Site = NewSiteClient(c.config)
 	c.SystemUpdate = NewSystemUpdateClient(c.config)
 	c.Tag = NewTagClient(c.config)
 	c.Task = NewTaskClient(c.config)
+	c.Tenant = NewTenantClient(c.config)
 	c.Update = NewUpdateClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.WingetConfigExclusion = NewWingetConfigExclusionClient(c.config)
@@ -259,9 +267,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
 		Share:                 NewShareClient(cfg),
+		Site:                  NewSiteClient(cfg),
 		SystemUpdate:          NewSystemUpdateClient(cfg),
 		Tag:                   NewTagClient(cfg),
 		Task:                  NewTaskClient(cfg),
+		Tenant:                NewTenantClient(cfg),
 		Update:                NewUpdateClient(cfg),
 		User:                  NewUserClient(cfg),
 		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
@@ -306,9 +316,11 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
 		Share:                 NewShareClient(cfg),
+		Site:                  NewSiteClient(cfg),
 		SystemUpdate:          NewSystemUpdateClient(cfg),
 		Tag:                   NewTagClient(cfg),
 		Task:                  NewTaskClient(cfg),
+		Tenant:                NewTenantClient(cfg),
 		Update:                NewUpdateClient(cfg),
 		User:                  NewUserClient(cfg),
 		WingetConfigExclusion: NewWingetConfigExclusionClient(cfg),
@@ -344,8 +356,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
 		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
-		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share,
-		c.SystemUpdate, c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
+		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share, c.Site,
+		c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update, c.User,
+		c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -358,8 +371,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
 		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
 		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
-		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share,
-		c.SystemUpdate, c.Tag, c.Task, c.Update, c.User, c.WingetConfigExclusion,
+		c.Release, c.Revocation, c.Server, c.Sessions, c.Settings, c.Share, c.Site,
+		c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update, c.User,
+		c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -412,12 +426,16 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Settings.mutate(ctx, m)
 	case *ShareMutation:
 		return c.Share.mutate(ctx, m)
+	case *SiteMutation:
+		return c.Site.mutate(ctx, m)
 	case *SystemUpdateMutation:
 		return c.SystemUpdate.mutate(ctx, m)
 	case *TagMutation:
 		return c.Tag.mutate(ctx, m)
 	case *TaskMutation:
 		return c.Task.mutate(ctx, m)
+	case *TenantMutation:
+		return c.Tenant.mutate(ctx, m)
 	case *UpdateMutation:
 		return c.Update.mutate(ctx, m)
 	case *UserMutation:
@@ -818,6 +836,22 @@ func (c *AgentClient) QueryProfileissue(a *Agent) *ProfileIssueQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(profileissue.Table, profileissue.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, agent.ProfileissueTable, agent.ProfileissueColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySite queries the site edge of a Agent.
+func (c *AgentClient) QuerySite(a *Agent) *SiteQuery {
+	query := (&SiteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(site.Table, site.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, agent.SiteTable, agent.SitePrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -3995,6 +4029,171 @@ func (c *ShareClient) mutate(ctx context.Context, m *ShareMutation) (Value, erro
 	}
 }
 
+// SiteClient is a client for the Site schema.
+type SiteClient struct {
+	config
+}
+
+// NewSiteClient returns a client for the Site from the given config.
+func NewSiteClient(c config) *SiteClient {
+	return &SiteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `site.Hooks(f(g(h())))`.
+func (c *SiteClient) Use(hooks ...Hook) {
+	c.hooks.Site = append(c.hooks.Site, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `site.Intercept(f(g(h())))`.
+func (c *SiteClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Site = append(c.inters.Site, interceptors...)
+}
+
+// Create returns a builder for creating a Site entity.
+func (c *SiteClient) Create() *SiteCreate {
+	mutation := newSiteMutation(c.config, OpCreate)
+	return &SiteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Site entities.
+func (c *SiteClient) CreateBulk(builders ...*SiteCreate) *SiteCreateBulk {
+	return &SiteCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SiteClient) MapCreateBulk(slice any, setFunc func(*SiteCreate, int)) *SiteCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SiteCreateBulk{err: fmt.Errorf("calling to SiteClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SiteCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SiteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Site.
+func (c *SiteClient) Update() *SiteUpdate {
+	mutation := newSiteMutation(c.config, OpUpdate)
+	return &SiteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SiteClient) UpdateOne(s *Site) *SiteUpdateOne {
+	mutation := newSiteMutation(c.config, OpUpdateOne, withSite(s))
+	return &SiteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SiteClient) UpdateOneID(id int) *SiteUpdateOne {
+	mutation := newSiteMutation(c.config, OpUpdateOne, withSiteID(id))
+	return &SiteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Site.
+func (c *SiteClient) Delete() *SiteDelete {
+	mutation := newSiteMutation(c.config, OpDelete)
+	return &SiteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SiteClient) DeleteOne(s *Site) *SiteDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SiteClient) DeleteOneID(id int) *SiteDeleteOne {
+	builder := c.Delete().Where(site.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SiteDeleteOne{builder}
+}
+
+// Query returns a query builder for Site.
+func (c *SiteClient) Query() *SiteQuery {
+	return &SiteQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSite},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Site entity by its id.
+func (c *SiteClient) Get(ctx context.Context, id int) (*Site, error) {
+	return c.Query().Where(site.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SiteClient) GetX(ctx context.Context, id int) *Site {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTenant queries the tenant edge of a Site.
+func (c *SiteClient) QueryTenant(s *Site) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(site.Table, site.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, site.TenantTable, site.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAgents queries the agents edge of a Site.
+func (c *SiteClient) QueryAgents(s *Site) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(site.Table, site.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, site.AgentsTable, site.AgentsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SiteClient) Hooks() []Hook {
+	return c.hooks.Site
+}
+
+// Interceptors returns the client interceptors.
+func (c *SiteClient) Interceptors() []Interceptor {
+	return c.inters.Site
+}
+
+func (c *SiteClient) mutate(ctx context.Context, m *SiteMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SiteCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SiteUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SiteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SiteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Site mutation op: %q", m.Op())
+	}
+}
+
 // SystemUpdateClient is a client for the SystemUpdate schema.
 type SystemUpdateClient struct {
 	config
@@ -4506,6 +4705,155 @@ func (c *TaskClient) mutate(ctx context.Context, m *TaskMutation) (Value, error)
 	}
 }
 
+// TenantClient is a client for the Tenant schema.
+type TenantClient struct {
+	config
+}
+
+// NewTenantClient returns a client for the Tenant from the given config.
+func NewTenantClient(c config) *TenantClient {
+	return &TenantClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `tenant.Hooks(f(g(h())))`.
+func (c *TenantClient) Use(hooks ...Hook) {
+	c.hooks.Tenant = append(c.hooks.Tenant, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `tenant.Intercept(f(g(h())))`.
+func (c *TenantClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Tenant = append(c.inters.Tenant, interceptors...)
+}
+
+// Create returns a builder for creating a Tenant entity.
+func (c *TenantClient) Create() *TenantCreate {
+	mutation := newTenantMutation(c.config, OpCreate)
+	return &TenantCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Tenant entities.
+func (c *TenantClient) CreateBulk(builders ...*TenantCreate) *TenantCreateBulk {
+	return &TenantCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TenantClient) MapCreateBulk(slice any, setFunc func(*TenantCreate, int)) *TenantCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TenantCreateBulk{err: fmt.Errorf("calling to TenantClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TenantCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TenantCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Tenant.
+func (c *TenantClient) Update() *TenantUpdate {
+	mutation := newTenantMutation(c.config, OpUpdate)
+	return &TenantUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TenantClient) UpdateOne(t *Tenant) *TenantUpdateOne {
+	mutation := newTenantMutation(c.config, OpUpdateOne, withTenant(t))
+	return &TenantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TenantClient) UpdateOneID(id int) *TenantUpdateOne {
+	mutation := newTenantMutation(c.config, OpUpdateOne, withTenantID(id))
+	return &TenantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Tenant.
+func (c *TenantClient) Delete() *TenantDelete {
+	mutation := newTenantMutation(c.config, OpDelete)
+	return &TenantDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TenantClient) DeleteOne(t *Tenant) *TenantDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TenantClient) DeleteOneID(id int) *TenantDeleteOne {
+	builder := c.Delete().Where(tenant.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TenantDeleteOne{builder}
+}
+
+// Query returns a query builder for Tenant.
+func (c *TenantClient) Query() *TenantQuery {
+	return &TenantQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTenant},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Tenant entity by its id.
+func (c *TenantClient) Get(ctx context.Context, id int) (*Tenant, error) {
+	return c.Query().Where(tenant.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TenantClient) GetX(ctx context.Context, id int) *Tenant {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QuerySites queries the sites edge of a Tenant.
+func (c *TenantClient) QuerySites(t *Tenant) *SiteQuery {
+	query := (&SiteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, id),
+			sqlgraph.To(site.Table, site.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.SitesTable, tenant.SitesColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TenantClient) Hooks() []Hook {
+	return c.hooks.Tenant
+}
+
+// Interceptors returns the client interceptors.
+func (c *TenantClient) Interceptors() []Interceptor {
+	return c.inters.Tenant
+}
+
+func (c *TenantClient) mutate(ctx context.Context, m *TenantMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TenantCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TenantUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TenantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TenantDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Tenant mutation op: %q", m.Op())
+	}
+}
+
 // UpdateClient is a client for the Update schema.
 type UpdateClient struct {
 	config
@@ -4959,14 +5307,14 @@ type (
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
 		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
 		Printer, Profile, ProfileIssue, Release, Revocation, Server, Sessions,
-		Settings, Share, SystemUpdate, Tag, Task, Update, User,
+		Settings, Share, Site, SystemUpdate, Tag, Task, Tenant, Update, User,
 		WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
 		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
 		Printer, Profile, ProfileIssue, Release, Revocation, Server, Sessions,
-		Settings, Share, SystemUpdate, Tag, Task, Update, User,
+		Settings, Share, Site, SystemUpdate, Tag, Task, Tenant, Update, User,
 		WingetConfigExclusion []ent.Interceptor
 	}
 )

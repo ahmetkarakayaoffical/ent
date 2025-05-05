@@ -72,6 +72,9 @@ type Settings func(*sql.Selector)
 // Share is the predicate function for share builders.
 type Share func(*sql.Selector)
 
+// Site is the predicate function for site builders.
+type Site func(*sql.Selector)
+
 // SystemUpdate is the predicate function for systemupdate builders.
 type SystemUpdate func(*sql.Selector)
 
@@ -80,6 +83,9 @@ type Tag func(*sql.Selector)
 
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)
+
+// Tenant is the predicate function for tenant builders.
+type Tenant func(*sql.Selector)
 
 // Update is the predicate function for update builders.
 type Update func(*sql.Selector)

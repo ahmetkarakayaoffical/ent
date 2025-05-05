@@ -97,6 +97,8 @@ const (
 	EdgeRelease = "release"
 	// EdgeProfileissue holds the string denoting the profileissue edge name in mutations.
 	EdgeProfileissue = "profileissue"
+	// EdgeSite holds the string denoting the site edge name in mutations.
+	EdgeSite = "site"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -133,6 +135,8 @@ const (
 	ReleaseFieldID = "id"
 	// ProfileIssueFieldID holds the string denoting the ID field of the ProfileIssue.
 	ProfileIssueFieldID = "id"
+	// SiteFieldID holds the string denoting the ID field of the Site.
+	SiteFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -259,6 +263,11 @@ const (
 	ProfileissueInverseTable = "profile_issues"
 	// ProfileissueColumn is the table column denoting the profileissue relation/edge.
 	ProfileissueColumn = "profile_issue_agents"
+	// SiteTable is the table that holds the site relation/edge. The primary key declared below.
+	SiteTable = "site_agents"
+	// SiteInverseTable is the table name for the Site entity.
+	// It exists in this package in order to avoid circular dependency with the "site" package.
+	SiteInverseTable = "sites"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -299,6 +308,9 @@ var (
 	// TagsPrimaryKey and TagsColumn2 are the table columns denoting the
 	// primary key for the tags relation (M2M).
 	TagsPrimaryKey = []string{"agent_id", "tag_id"}
+	// SitePrimaryKey and SiteColumn2 are the table columns denoting the
+	// primary key for the site relation (M2M).
+	SitePrimaryKey = []string{"site_id", "agent_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -724,6 +736,20 @@ func ByProfileissue(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProfileissueStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySiteCount orders the results by site count.
+func BySiteCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSiteStep(), opts...)
+	}
+}
+
+// BySite orders the results by site terms.
+func BySite(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSiteStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -848,5 +874,12 @@ func newProfileissueStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProfileissueInverseTable, ProfileIssueFieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, ProfileissueTable, ProfileissueColumn),
+	)
+}
+func newSiteStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SiteInverseTable, SiteFieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SiteTable, SitePrimaryKey...),
 	)
 }

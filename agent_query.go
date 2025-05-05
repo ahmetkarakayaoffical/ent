@@ -28,6 +28,7 @@ import (
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/share"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/update"
@@ -59,6 +60,7 @@ type AgentQuery struct {
 	withMemoryslots         *MemorySlotQuery
 	withRelease             *ReleaseQuery
 	withProfileissue        *ProfileIssueQuery
+	withSite                *SiteQuery
 	withFKs                 bool
 	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -493,6 +495,28 @@ func (aq *AgentQuery) QueryProfileissue() *ProfileIssueQuery {
 	return query
 }
 
+// QuerySite chains the current query on the "site" edge.
+func (aq *AgentQuery) QuerySite() *SiteQuery {
+	query := (&SiteClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(site.Table, site.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, agent.SiteTable, agent.SitePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Agent entity from the query.
 // Returns a *NotFoundError when no Agent was found.
 func (aq *AgentQuery) First(ctx context.Context) (*Agent, error) {
@@ -703,6 +727,7 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withMemoryslots:         aq.withMemoryslots.Clone(),
 		withRelease:             aq.withRelease.Clone(),
 		withProfileissue:        aq.withProfileissue.Clone(),
+		withSite:                aq.withSite.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -908,6 +933,17 @@ func (aq *AgentQuery) WithProfileissue(opts ...func(*ProfileIssueQuery)) *AgentQ
 	return aq
 }
 
+// WithSite tells the query-builder to eager-load the nodes that are connected to
+// the "site" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithSite(opts ...func(*SiteQuery)) *AgentQuery {
+	query := (&SiteClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withSite = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -987,7 +1023,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -1006,6 +1042,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withMemoryslots != nil,
 			aq.withRelease != nil,
 			aq.withProfileissue != nil,
+			aq.withSite != nil,
 		}
 	)
 	if aq.withRelease != nil {
@@ -1155,6 +1192,13 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		if err := aq.loadProfileissue(ctx, query, nodes,
 			func(n *Agent) { n.Edges.Profileissue = []*ProfileIssue{} },
 			func(n *Agent, e *ProfileIssue) { n.Edges.Profileissue = append(n.Edges.Profileissue, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withSite; query != nil {
+		if err := aq.loadSite(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Site = []*Site{} },
+			func(n *Agent, e *Site) { n.Edges.Site = append(n.Edges.Site, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1735,6 +1779,67 @@ func (aq *AgentQuery) loadProfileissue(ctx context.Context, query *ProfileIssueQ
 			return fmt.Errorf(`unexpected referenced foreign-key "profile_issue_agents" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (aq *AgentQuery) loadSite(ctx context.Context, query *SiteQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Site)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Agent)
+	nids := make(map[int]map[*Agent]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(agent.SiteTable)
+		s.Join(joinT).On(s.C(site.FieldID), joinT.C(agent.SitePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(agent.SitePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(agent.SitePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Agent]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Site](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "site" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
