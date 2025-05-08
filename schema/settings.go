@@ -58,5 +58,6 @@ func (Settings) Fields() []ent.Field {
 func (Settings) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("tag", Tag.Type).Unique(),
+		edge.From("tenant", Tenant.Type).Unique().Ref("settings"),
 	}
 }

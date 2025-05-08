@@ -10,8 +10,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
+	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/tenant"
 )
 
@@ -84,6 +87,55 @@ func (tu *TenantUpdate) AddSites(s ...*Site) *TenantUpdate {
 	return tu.AddSiteIDs(ids...)
 }
 
+// SetSettingsID sets the "settings" edge to the Settings entity by ID.
+func (tu *TenantUpdate) SetSettingsID(id int) *TenantUpdate {
+	tu.mutation.SetSettingsID(id)
+	return tu
+}
+
+// SetNillableSettingsID sets the "settings" edge to the Settings entity by ID if the given value is not nil.
+func (tu *TenantUpdate) SetNillableSettingsID(id *int) *TenantUpdate {
+	if id != nil {
+		tu = tu.SetSettingsID(*id)
+	}
+	return tu
+}
+
+// SetSettings sets the "settings" edge to the Settings entity.
+func (tu *TenantUpdate) SetSettings(s *Settings) *TenantUpdate {
+	return tu.SetSettingsID(s.ID)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (tu *TenantUpdate) AddTagIDs(ids ...int) *TenantUpdate {
+	tu.mutation.AddTagIDs(ids...)
+	return tu
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (tu *TenantUpdate) AddTags(t ...*Tag) *TenantUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tu.AddTagIDs(ids...)
+}
+
+// AddMetadatumIDs adds the "metadata" edge to the OrgMetadata entity by IDs.
+func (tu *TenantUpdate) AddMetadatumIDs(ids ...int) *TenantUpdate {
+	tu.mutation.AddMetadatumIDs(ids...)
+	return tu
+}
+
+// AddMetadata adds the "metadata" edges to the OrgMetadata entity.
+func (tu *TenantUpdate) AddMetadata(o ...*OrgMetadata) *TenantUpdate {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return tu.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the TenantMutation object of the builder.
 func (tu *TenantUpdate) Mutation() *TenantMutation {
 	return tu.mutation
@@ -108,6 +160,54 @@ func (tu *TenantUpdate) RemoveSites(s ...*Site) *TenantUpdate {
 		ids[i] = s[i].ID
 	}
 	return tu.RemoveSiteIDs(ids...)
+}
+
+// ClearSettings clears the "settings" edge to the Settings entity.
+func (tu *TenantUpdate) ClearSettings() *TenantUpdate {
+	tu.mutation.ClearSettings()
+	return tu
+}
+
+// ClearTags clears all "tags" edges to the Tag entity.
+func (tu *TenantUpdate) ClearTags() *TenantUpdate {
+	tu.mutation.ClearTags()
+	return tu
+}
+
+// RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
+func (tu *TenantUpdate) RemoveTagIDs(ids ...int) *TenantUpdate {
+	tu.mutation.RemoveTagIDs(ids...)
+	return tu
+}
+
+// RemoveTags removes "tags" edges to Tag entities.
+func (tu *TenantUpdate) RemoveTags(t ...*Tag) *TenantUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tu.RemoveTagIDs(ids...)
+}
+
+// ClearMetadata clears all "metadata" edges to the OrgMetadata entity.
+func (tu *TenantUpdate) ClearMetadata() *TenantUpdate {
+	tu.mutation.ClearMetadata()
+	return tu
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to OrgMetadata entities by IDs.
+func (tu *TenantUpdate) RemoveMetadatumIDs(ids ...int) *TenantUpdate {
+	tu.mutation.RemoveMetadatumIDs(ids...)
+	return tu
+}
+
+// RemoveMetadata removes "metadata" edges to OrgMetadata entities.
+func (tu *TenantUpdate) RemoveMetadata(o ...*OrgMetadata) *TenantUpdate {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return tu.RemoveMetadatumIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -209,6 +309,125 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.SettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   tenant.SettingsTable,
+			Columns: []string{tenant.SettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settings.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.SettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   tenant.SettingsTable,
+			Columns: []string{tenant.SettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settings.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedTagsIDs(); len(nodes) > 0 && !tu.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !tu.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -286,6 +505,55 @@ func (tuo *TenantUpdateOne) AddSites(s ...*Site) *TenantUpdateOne {
 	return tuo.AddSiteIDs(ids...)
 }
 
+// SetSettingsID sets the "settings" edge to the Settings entity by ID.
+func (tuo *TenantUpdateOne) SetSettingsID(id int) *TenantUpdateOne {
+	tuo.mutation.SetSettingsID(id)
+	return tuo
+}
+
+// SetNillableSettingsID sets the "settings" edge to the Settings entity by ID if the given value is not nil.
+func (tuo *TenantUpdateOne) SetNillableSettingsID(id *int) *TenantUpdateOne {
+	if id != nil {
+		tuo = tuo.SetSettingsID(*id)
+	}
+	return tuo
+}
+
+// SetSettings sets the "settings" edge to the Settings entity.
+func (tuo *TenantUpdateOne) SetSettings(s *Settings) *TenantUpdateOne {
+	return tuo.SetSettingsID(s.ID)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (tuo *TenantUpdateOne) AddTagIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.AddTagIDs(ids...)
+	return tuo
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (tuo *TenantUpdateOne) AddTags(t ...*Tag) *TenantUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tuo.AddTagIDs(ids...)
+}
+
+// AddMetadatumIDs adds the "metadata" edge to the OrgMetadata entity by IDs.
+func (tuo *TenantUpdateOne) AddMetadatumIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.AddMetadatumIDs(ids...)
+	return tuo
+}
+
+// AddMetadata adds the "metadata" edges to the OrgMetadata entity.
+func (tuo *TenantUpdateOne) AddMetadata(o ...*OrgMetadata) *TenantUpdateOne {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return tuo.AddMetadatumIDs(ids...)
+}
+
 // Mutation returns the TenantMutation object of the builder.
 func (tuo *TenantUpdateOne) Mutation() *TenantMutation {
 	return tuo.mutation
@@ -310,6 +578,54 @@ func (tuo *TenantUpdateOne) RemoveSites(s ...*Site) *TenantUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return tuo.RemoveSiteIDs(ids...)
+}
+
+// ClearSettings clears the "settings" edge to the Settings entity.
+func (tuo *TenantUpdateOne) ClearSettings() *TenantUpdateOne {
+	tuo.mutation.ClearSettings()
+	return tuo
+}
+
+// ClearTags clears all "tags" edges to the Tag entity.
+func (tuo *TenantUpdateOne) ClearTags() *TenantUpdateOne {
+	tuo.mutation.ClearTags()
+	return tuo
+}
+
+// RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
+func (tuo *TenantUpdateOne) RemoveTagIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.RemoveTagIDs(ids...)
+	return tuo
+}
+
+// RemoveTags removes "tags" edges to Tag entities.
+func (tuo *TenantUpdateOne) RemoveTags(t ...*Tag) *TenantUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tuo.RemoveTagIDs(ids...)
+}
+
+// ClearMetadata clears all "metadata" edges to the OrgMetadata entity.
+func (tuo *TenantUpdateOne) ClearMetadata() *TenantUpdateOne {
+	tuo.mutation.ClearMetadata()
+	return tuo
+}
+
+// RemoveMetadatumIDs removes the "metadata" edge to OrgMetadata entities by IDs.
+func (tuo *TenantUpdateOne) RemoveMetadatumIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.RemoveMetadatumIDs(ids...)
+	return tuo
+}
+
+// RemoveMetadata removes "metadata" edges to OrgMetadata entities.
+func (tuo *TenantUpdateOne) RemoveMetadata(o ...*OrgMetadata) *TenantUpdateOne {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return tuo.RemoveMetadatumIDs(ids...)
 }
 
 // Where appends a list predicates to the TenantUpdate builder.
@@ -434,6 +750,125 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.SettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   tenant.SettingsTable,
+			Columns: []string{tenant.SettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settings.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.SettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   tenant.SettingsTable,
+			Columns: []string{tenant.SettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settings.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !tuo.mutation.TagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedMetadataIDs(); len(nodes) > 0 && !tuo.mutation.MetadataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -16,6 +16,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // TagQuery is the builder for querying Tag entities.
@@ -29,6 +30,7 @@ type TagQuery struct {
 	withParent   *TagQuery
 	withChildren *TagQuery
 	withProfile  *ProfileQuery
+	withTenant   *TenantQuery
 	withFKs      bool
 	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -148,6 +150,28 @@ func (tq *TagQuery) QueryProfile() *ProfileQuery {
 			sqlgraph.From(tag.Table, tag.FieldID, selector),
 			sqlgraph.To(profile.Table, profile.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, tag.ProfileTable, tag.ProfilePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTenant chains the current query on the "tenant" edge.
+func (tq *TagQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, selector),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tag.TenantTable, tag.TenantColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -351,6 +375,7 @@ func (tq *TagQuery) Clone() *TagQuery {
 		withParent:   tq.withParent.Clone(),
 		withChildren: tq.withChildren.Clone(),
 		withProfile:  tq.withProfile.Clone(),
+		withTenant:   tq.withTenant.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -399,6 +424,17 @@ func (tq *TagQuery) WithProfile(opts ...func(*ProfileQuery)) *TagQuery {
 		opt(query)
 	}
 	tq.withProfile = query
+	return tq
+}
+
+// WithTenant tells the query-builder to eager-load the nodes that are connected to
+// the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TagQuery) WithTenant(opts ...func(*TenantQuery)) *TagQuery {
+	query := (&TenantClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withTenant = query
 	return tq
 }
 
@@ -481,14 +517,15 @@ func (tq *TagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tag, err
 		nodes       = []*Tag{}
 		withFKs     = tq.withFKs
 		_spec       = tq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			tq.withOwner != nil,
 			tq.withParent != nil,
 			tq.withChildren != nil,
 			tq.withProfile != nil,
+			tq.withTenant != nil,
 		}
 	)
-	if tq.withParent != nil {
+	if tq.withParent != nil || tq.withTenant != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -539,6 +576,12 @@ func (tq *TagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tag, err
 		if err := tq.loadProfile(ctx, query, nodes,
 			func(n *Tag) { n.Edges.Profile = []*Profile{} },
 			func(n *Tag, e *Profile) { n.Edges.Profile = append(n.Edges.Profile, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withTenant; query != nil {
+		if err := tq.loadTenant(ctx, query, nodes, nil,
+			func(n *Tag, e *Tenant) { n.Edges.Tenant = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -726,6 +769,38 @@ func (tq *TagQuery) loadProfile(ctx context.Context, query *ProfileQuery, nodes 
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (tq *TagQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*Tag, init func(*Tag), assign func(*Tag, *Tenant)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Tag)
+	for i := range nodes {
+		if nodes[i].tenant_tags == nil {
+			continue
+		}
+		fk := *nodes[i].tenant_tags
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(tenant.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "tenant_tags" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

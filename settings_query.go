@@ -14,6 +14,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // SettingsQuery is the builder for querying Settings entities.
@@ -24,6 +25,7 @@ type SettingsQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Settings
 	withTag    *TagQuery
+	withTenant *TenantQuery
 	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -77,6 +79,28 @@ func (sq *SettingsQuery) QueryTag() *TagQuery {
 			sqlgraph.From(settings.Table, settings.FieldID, selector),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, settings.TagTable, settings.TagColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTenant chains the current query on the "tenant" edge.
+func (sq *SettingsQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settings.Table, settings.FieldID, selector),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, settings.TenantTable, settings.TenantColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -277,6 +301,7 @@ func (sq *SettingsQuery) Clone() *SettingsQuery {
 		inters:     append([]Interceptor{}, sq.inters...),
 		predicates: append([]predicate.Settings{}, sq.predicates...),
 		withTag:    sq.withTag.Clone(),
+		withTenant: sq.withTenant.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -292,6 +317,17 @@ func (sq *SettingsQuery) WithTag(opts ...func(*TagQuery)) *SettingsQuery {
 		opt(query)
 	}
 	sq.withTag = query
+	return sq
+}
+
+// WithTenant tells the query-builder to eager-load the nodes that are connected to
+// the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettingsQuery) WithTenant(opts ...func(*TenantQuery)) *SettingsQuery {
+	query := (&TenantClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withTenant = query
 	return sq
 }
 
@@ -374,11 +410,12 @@ func (sq *SettingsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set
 		nodes       = []*Settings{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			sq.withTag != nil,
+			sq.withTenant != nil,
 		}
 	)
-	if sq.withTag != nil {
+	if sq.withTag != nil || sq.withTenant != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -411,6 +448,12 @@ func (sq *SettingsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Set
 			return nil, err
 		}
 	}
+	if query := sq.withTenant; query != nil {
+		if err := sq.loadTenant(ctx, query, nodes, nil,
+			func(n *Settings, e *Tenant) { n.Edges.Tenant = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
 }
 
@@ -439,6 +482,38 @@ func (sq *SettingsQuery) loadTag(ctx context.Context, query *TagQuery, nodes []*
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "settings_tag" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *SettingsQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*Settings, init func(*Settings), assign func(*Settings, *Tenant)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Settings)
+	for i := range nodes {
+		if nodes[i].tenant_settings == nil {
+			continue
+		}
+		fk := *nodes[i].tenant_settings
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(tenant.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "tenant_settings" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

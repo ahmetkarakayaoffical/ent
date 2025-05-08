@@ -335,12 +335,21 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "tenant_metadata", Type: field.TypeInt, Nullable: true},
 	}
 	// OrgMetadataTable holds the schema information for the "org_metadata" table.
 	OrgMetadataTable = &schema.Table{
 		Name:       "org_metadata",
 		Columns:    OrgMetadataColumns,
 		PrimaryKey: []*schema.Column{OrgMetadataColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_metadata_tenants_metadata",
+				Columns:    []*schema.Column{OrgMetadataColumns[3]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 	}
 	// PrintersColumns holds the columns for the "printers" table.
 	PrintersColumns = []*schema.Column{
@@ -547,6 +556,7 @@ var (
 		{Name: "detect_remote_agents", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "auto_admit_agents", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "settings_tag", Type: field.TypeInt, Nullable: true},
+		{Name: "tenant_settings", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// SettingsTable holds the schema information for the "settings" table.
 	SettingsTable = &schema.Table{
@@ -559,6 +569,12 @@ var (
 				Columns:    []*schema.Column{SettingsColumns[36]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "settings_tenants_settings",
+				Columns:    []*schema.Column{SettingsColumns[37]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -636,6 +652,7 @@ var (
 		{Name: "color", Type: field.TypeString},
 		{Name: "tag_children", Type: field.TypeInt, Nullable: true},
 		{Name: "task_tags", Type: field.TypeInt, Nullable: true},
+		{Name: "tenant_tags", Type: field.TypeInt, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
 	TagsTable = &schema.Table{
@@ -654,6 +671,12 @@ var (
 				Columns:    []*schema.Column{TagsColumns[5]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tags_tenants_tags",
+				Columns:    []*schema.Column{TagsColumns[6]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -908,16 +931,19 @@ func init() {
 	MonitorsTable.ForeignKeys[0].RefTable = AgentsTable
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
+	OrgMetadataTable.ForeignKeys[0].RefTable = TenantsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
+	SettingsTable.ForeignKeys[1].RefTable = TenantsTable
 	SharesTable.ForeignKeys[0].RefTable = AgentsTable
 	SitesTable.ForeignKeys[0].RefTable = TenantsTable
 	SystemUpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	TagsTable.ForeignKeys[0].RefTable = TagsTable
 	TagsTable.ForeignKeys[1].RefTable = TasksTable
+	TagsTable.ForeignKeys[2].RefTable = TenantsTable
 	TasksTable.ForeignKeys[0].RefTable = ProfilesTable
 	UpdatesTable.ForeignKeys[0].RefTable = AgentsTable
 	WingetConfigExclusionsTable.ForeignKeys[0].RefTable = AgentsTable

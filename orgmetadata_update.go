@@ -13,6 +13,7 @@ import (
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/tenant"
 )
 
 // OrgMetadataUpdate is the builder for updating OrgMetadata entities.
@@ -78,6 +79,25 @@ func (omu *OrgMetadataUpdate) AddMetadata(m ...*Metadata) *OrgMetadataUpdate {
 	return omu.AddMetadatumIDs(ids...)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (omu *OrgMetadataUpdate) SetTenantID(id int) *OrgMetadataUpdate {
+	omu.mutation.SetTenantID(id)
+	return omu
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (omu *OrgMetadataUpdate) SetNillableTenantID(id *int) *OrgMetadataUpdate {
+	if id != nil {
+		omu = omu.SetTenantID(*id)
+	}
+	return omu
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (omu *OrgMetadataUpdate) SetTenant(t *Tenant) *OrgMetadataUpdate {
+	return omu.SetTenantID(t.ID)
+}
+
 // Mutation returns the OrgMetadataMutation object of the builder.
 func (omu *OrgMetadataUpdate) Mutation() *OrgMetadataMutation {
 	return omu.mutation
@@ -102,6 +122,12 @@ func (omu *OrgMetadataUpdate) RemoveMetadata(m ...*Metadata) *OrgMetadataUpdate 
 		ids[i] = m[i].ID
 	}
 	return omu.RemoveMetadatumIDs(ids...)
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (omu *OrgMetadataUpdate) ClearTenant() *OrgMetadataUpdate {
+	omu.mutation.ClearTenant()
+	return omu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -213,6 +239,35 @@ func (omu *OrgMetadataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if omu.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   orgmetadata.TenantTable,
+			Columns: []string{orgmetadata.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omu.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   orgmetadata.TenantTable,
+			Columns: []string{orgmetadata.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(omu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, omu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -284,6 +339,25 @@ func (omuo *OrgMetadataUpdateOne) AddMetadata(m ...*Metadata) *OrgMetadataUpdate
 	return omuo.AddMetadatumIDs(ids...)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (omuo *OrgMetadataUpdateOne) SetTenantID(id int) *OrgMetadataUpdateOne {
+	omuo.mutation.SetTenantID(id)
+	return omuo
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (omuo *OrgMetadataUpdateOne) SetNillableTenantID(id *int) *OrgMetadataUpdateOne {
+	if id != nil {
+		omuo = omuo.SetTenantID(*id)
+	}
+	return omuo
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (omuo *OrgMetadataUpdateOne) SetTenant(t *Tenant) *OrgMetadataUpdateOne {
+	return omuo.SetTenantID(t.ID)
+}
+
 // Mutation returns the OrgMetadataMutation object of the builder.
 func (omuo *OrgMetadataUpdateOne) Mutation() *OrgMetadataMutation {
 	return omuo.mutation
@@ -308,6 +382,12 @@ func (omuo *OrgMetadataUpdateOne) RemoveMetadata(m ...*Metadata) *OrgMetadataUpd
 		ids[i] = m[i].ID
 	}
 	return omuo.RemoveMetadatumIDs(ids...)
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (omuo *OrgMetadataUpdateOne) ClearTenant() *OrgMetadataUpdateOne {
+	omuo.mutation.ClearTenant()
+	return omuo
 }
 
 // Where appends a list predicates to the OrgMetadataUpdate builder.
@@ -442,6 +522,35 @@ func (omuo *OrgMetadataUpdateOne) sqlSave(ctx context.Context) (_node *OrgMetada
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(metadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if omuo.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   orgmetadata.TenantTable,
+			Columns: []string{orgmetadata.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omuo.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   orgmetadata.TenantTable,
+			Columns: []string{orgmetadata.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

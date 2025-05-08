@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tenant"
 )
 
@@ -30,9 +31,15 @@ type Tenant struct {
 type TenantEdges struct {
 	// Sites holds the value of the sites edge.
 	Sites []*Site `json:"sites,omitempty"`
+	// Settings holds the value of the settings edge.
+	Settings *Settings `json:"settings,omitempty"`
+	// Tags holds the value of the tags edge.
+	Tags []*Tag `json:"tags,omitempty"`
+	// Metadata holds the value of the metadata edge.
+	Metadata []*OrgMetadata `json:"metadata,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [4]bool
 }
 
 // SitesOrErr returns the Sites value or an error if the edge
@@ -42,6 +49,35 @@ func (e TenantEdges) SitesOrErr() ([]*Site, error) {
 		return e.Sites, nil
 	}
 	return nil, &NotLoadedError{edge: "sites"}
+}
+
+// SettingsOrErr returns the Settings value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TenantEdges) SettingsOrErr() (*Settings, error) {
+	if e.Settings != nil {
+		return e.Settings, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: settings.Label}
+	}
+	return nil, &NotLoadedError{edge: "settings"}
+}
+
+// TagsOrErr returns the Tags value or an error if the edge
+// was not loaded in eager-loading.
+func (e TenantEdges) TagsOrErr() ([]*Tag, error) {
+	if e.loadedTypes[2] {
+		return e.Tags, nil
+	}
+	return nil, &NotLoadedError{edge: "tags"}
+}
+
+// MetadataOrErr returns the Metadata value or an error if the edge
+// was not loaded in eager-loading.
+func (e TenantEdges) MetadataOrErr() ([]*OrgMetadata, error) {
+	if e.loadedTypes[3] {
+		return e.Metadata, nil
+	}
+	return nil, &NotLoadedError{edge: "metadata"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -104,6 +140,21 @@ func (t *Tenant) Value(name string) (ent.Value, error) {
 // QuerySites queries the "sites" edge of the Tenant entity.
 func (t *Tenant) QuerySites() *SiteQuery {
 	return NewTenantClient(t.config).QuerySites(t)
+}
+
+// QuerySettings queries the "settings" edge of the Tenant entity.
+func (t *Tenant) QuerySettings() *SettingsQuery {
+	return NewTenantClient(t.config).QuerySettings(t)
+}
+
+// QueryTags queries the "tags" edge of the Tenant entity.
+func (t *Tenant) QueryTags() *TagQuery {
+	return NewTenantClient(t.config).QueryTags(t)
+}
+
+// QueryMetadata queries the "metadata" edge of the Tenant entity.
+func (t *Tenant) QueryMetadata() *OrgMetadataQuery {
+	return NewTenantClient(t.config).QueryMetadata(t)
 }
 
 // Update returns a builder for updating this Tenant.

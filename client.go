@@ -2647,6 +2647,22 @@ func (c *OrgMetadataClient) QueryMetadata(om *OrgMetadata) *MetadataQuery {
 	return query
 }
 
+// QueryTenant queries the tenant edge of a OrgMetadata.
+func (c *OrgMetadataClient) QueryTenant(om *OrgMetadata) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmetadata.Table, orgmetadata.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgmetadata.TenantTable, orgmetadata.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrgMetadataClient) Hooks() []Hook {
 	return c.hooks.OrgMetadata
@@ -3855,6 +3871,22 @@ func (c *SettingsClient) QueryTag(s *Settings) *TagQuery {
 	return query
 }
 
+// QueryTenant queries the tenant edge of a Settings.
+func (c *SettingsClient) QueryTenant(s *Settings) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settings.Table, settings.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, settings.TenantTable, settings.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SettingsClient) Hooks() []Hook {
 	return c.hooks.Settings
@@ -4515,6 +4547,22 @@ func (c *TagClient) QueryProfile(t *Tag) *ProfileQuery {
 	return query
 }
 
+// QueryTenant queries the tenant edge of a Tag.
+func (c *TagClient) QueryTenant(t *Tag) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tag.Table, tag.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tag.TenantTable, tag.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TagClient) Hooks() []Hook {
 	return c.hooks.Tag
@@ -4822,6 +4870,54 @@ func (c *TenantClient) QuerySites(t *Tenant) *SiteQuery {
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(site.Table, site.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, tenant.SitesTable, tenant.SitesColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettings queries the settings edge of a Tenant.
+func (c *TenantClient) QuerySettings(t *Tenant) *SettingsQuery {
+	query := (&SettingsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, id),
+			sqlgraph.To(settings.Table, settings.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, tenant.SettingsTable, tenant.SettingsColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTags queries the tags edge of a Tenant.
+func (c *TenantClient) QueryTags(t *Tenant) *TagQuery {
+	query := (&TagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, id),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.TagsTable, tenant.TagsColumn),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMetadata queries the metadata edge of a Tenant.
+func (c *TenantClient) QueryMetadata(t *Tenant) *OrgMetadataQuery {
+	query := (&OrgMetadataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, id),
+			sqlgraph.To(orgmetadata.Table, orgmetadata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.MetadataTable, tenant.MetadataColumn),
 		)
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil

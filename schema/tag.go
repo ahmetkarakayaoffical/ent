@@ -26,5 +26,6 @@ func (Tag) Edges() []ent.Edge {
 		edge.From("owner", Agent.Type).Ref("tags"),
 		edge.To("children", Tag.Type).From("parent").Unique(),
 		edge.From("profile", Profile.Type).Ref("tags"),
+		edge.From("tenant", Tenant.Type).Unique().Ref("tags"),
 	}
 }

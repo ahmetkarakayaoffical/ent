@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // SettingsCreate is the builder for creating a Settings entity.
@@ -532,6 +533,25 @@ func (sc *SettingsCreate) SetTag(t *Tag) *SettingsCreate {
 	return sc.SetTagID(t.ID)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (sc *SettingsCreate) SetTenantID(id int) *SettingsCreate {
+	sc.mutation.SetTenantID(id)
+	return sc
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (sc *SettingsCreate) SetNillableTenantID(id *int) *SettingsCreate {
+	if id != nil {
+		sc = sc.SetTenantID(*id)
+	}
+	return sc
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (sc *SettingsCreate) SetTenant(t *Tenant) *SettingsCreate {
+	return sc.SetTenantID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (sc *SettingsCreate) Mutation() *SettingsMutation {
 	return sc.mutation
@@ -841,6 +861,23 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.settings_tag = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settings.TenantTable,
+			Columns: []string{settings.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.tenant_settings = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

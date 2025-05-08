@@ -18,6 +18,12 @@ const (
 	FieldIsDefault = "is_default"
 	// EdgeSites holds the string denoting the sites edge name in mutations.
 	EdgeSites = "sites"
+	// EdgeSettings holds the string denoting the settings edge name in mutations.
+	EdgeSettings = "settings"
+	// EdgeTags holds the string denoting the tags edge name in mutations.
+	EdgeTags = "tags"
+	// EdgeMetadata holds the string denoting the metadata edge name in mutations.
+	EdgeMetadata = "metadata"
 	// Table holds the table name of the tenant in the database.
 	Table = "tenants"
 	// SitesTable is the table that holds the sites relation/edge.
@@ -27,6 +33,27 @@ const (
 	SitesInverseTable = "sites"
 	// SitesColumn is the table column denoting the sites relation/edge.
 	SitesColumn = "tenant_sites"
+	// SettingsTable is the table that holds the settings relation/edge.
+	SettingsTable = "settings"
+	// SettingsInverseTable is the table name for the Settings entity.
+	// It exists in this package in order to avoid circular dependency with the "settings" package.
+	SettingsInverseTable = "settings"
+	// SettingsColumn is the table column denoting the settings relation/edge.
+	SettingsColumn = "tenant_settings"
+	// TagsTable is the table that holds the tags relation/edge.
+	TagsTable = "tags"
+	// TagsInverseTable is the table name for the Tag entity.
+	// It exists in this package in order to avoid circular dependency with the "tag" package.
+	TagsInverseTable = "tags"
+	// TagsColumn is the table column denoting the tags relation/edge.
+	TagsColumn = "tenant_tags"
+	// MetadataTable is the table that holds the metadata relation/edge.
+	MetadataTable = "org_metadata"
+	// MetadataInverseTable is the table name for the OrgMetadata entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmetadata" package.
+	MetadataInverseTable = "org_metadata"
+	// MetadataColumn is the table column denoting the metadata relation/edge.
+	MetadataColumn = "tenant_metadata"
 )
 
 // Columns holds all SQL columns for tenant fields.
@@ -77,10 +104,66 @@ func BySites(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSitesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySettingsField orders the results by settings field.
+func BySettingsField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettingsStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTagsCount orders the results by tags count.
+func ByTagsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTagsStep(), opts...)
+	}
+}
+
+// ByTags orders the results by tags terms.
+func ByTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMetadataCount orders the results by metadata count.
+func ByMetadataCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMetadataStep(), opts...)
+	}
+}
+
+// ByMetadata orders the results by metadata terms.
+func ByMetadata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMetadataStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newSitesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SitesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SitesTable, SitesColumn),
+	)
+}
+func newSettingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SettingsTable, SettingsColumn),
+	)
+}
+func newTagsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TagsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TagsTable, TagsColumn),
+	)
+}
+func newMetadataStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MetadataInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
 	)
 }

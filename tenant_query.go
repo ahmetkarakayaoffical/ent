@@ -12,20 +12,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
+	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/tenant"
 )
 
 // TenantQuery is the builder for querying Tenant entities.
 type TenantQuery struct {
 	config
-	ctx        *QueryContext
-	order      []tenant.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Tenant
-	withSites  *SiteQuery
-	modifiers  []func(*sql.Selector)
+	ctx          *QueryContext
+	order        []tenant.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.Tenant
+	withSites    *SiteQuery
+	withSettings *SettingsQuery
+	withTags     *TagQuery
+	withMetadata *OrgMetadataQuery
+	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,6 +83,72 @@ func (tq *TenantQuery) QuerySites() *SiteQuery {
 			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
 			sqlgraph.To(site.Table, site.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, tenant.SitesTable, tenant.SitesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySettings chains the current query on the "settings" edge.
+func (tq *TenantQuery) QuerySettings() *SettingsQuery {
+	query := (&SettingsClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
+			sqlgraph.To(settings.Table, settings.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, tenant.SettingsTable, tenant.SettingsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTags chains the current query on the "tags" edge.
+func (tq *TenantQuery) QueryTags() *TagQuery {
+	query := (&TagClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
+			sqlgraph.To(tag.Table, tag.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.TagsTable, tenant.TagsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMetadata chains the current query on the "metadata" edge.
+func (tq *TenantQuery) QueryMetadata() *OrgMetadataQuery {
+	query := (&OrgMetadataClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
+			sqlgraph.To(orgmetadata.Table, orgmetadata.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.MetadataTable, tenant.MetadataColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -271,12 +343,15 @@ func (tq *TenantQuery) Clone() *TenantQuery {
 		return nil
 	}
 	return &TenantQuery{
-		config:     tq.config,
-		ctx:        tq.ctx.Clone(),
-		order:      append([]tenant.OrderOption{}, tq.order...),
-		inters:     append([]Interceptor{}, tq.inters...),
-		predicates: append([]predicate.Tenant{}, tq.predicates...),
-		withSites:  tq.withSites.Clone(),
+		config:       tq.config,
+		ctx:          tq.ctx.Clone(),
+		order:        append([]tenant.OrderOption{}, tq.order...),
+		inters:       append([]Interceptor{}, tq.inters...),
+		predicates:   append([]predicate.Tenant{}, tq.predicates...),
+		withSites:    tq.withSites.Clone(),
+		withSettings: tq.withSettings.Clone(),
+		withTags:     tq.withTags.Clone(),
+		withMetadata: tq.withMetadata.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -292,6 +367,39 @@ func (tq *TenantQuery) WithSites(opts ...func(*SiteQuery)) *TenantQuery {
 		opt(query)
 	}
 	tq.withSites = query
+	return tq
+}
+
+// WithSettings tells the query-builder to eager-load the nodes that are connected to
+// the "settings" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TenantQuery) WithSettings(opts ...func(*SettingsQuery)) *TenantQuery {
+	query := (&SettingsClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withSettings = query
+	return tq
+}
+
+// WithTags tells the query-builder to eager-load the nodes that are connected to
+// the "tags" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TenantQuery) WithTags(opts ...func(*TagQuery)) *TenantQuery {
+	query := (&TagClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withTags = query
+	return tq
+}
+
+// WithMetadata tells the query-builder to eager-load the nodes that are connected to
+// the "metadata" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TenantQuery) WithMetadata(opts ...func(*OrgMetadataQuery)) *TenantQuery {
+	query := (&OrgMetadataClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withMetadata = query
 	return tq
 }
 
@@ -373,8 +481,11 @@ func (tq *TenantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tenan
 	var (
 		nodes       = []*Tenant{}
 		_spec       = tq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [4]bool{
 			tq.withSites != nil,
+			tq.withSettings != nil,
+			tq.withTags != nil,
+			tq.withMetadata != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -402,6 +513,26 @@ func (tq *TenantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tenan
 		if err := tq.loadSites(ctx, query, nodes,
 			func(n *Tenant) { n.Edges.Sites = []*Site{} },
 			func(n *Tenant, e *Site) { n.Edges.Sites = append(n.Edges.Sites, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withSettings; query != nil {
+		if err := tq.loadSettings(ctx, query, nodes, nil,
+			func(n *Tenant, e *Settings) { n.Edges.Settings = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withTags; query != nil {
+		if err := tq.loadTags(ctx, query, nodes,
+			func(n *Tenant) { n.Edges.Tags = []*Tag{} },
+			func(n *Tenant, e *Tag) { n.Edges.Tags = append(n.Edges.Tags, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withMetadata; query != nil {
+		if err := tq.loadMetadata(ctx, query, nodes,
+			func(n *Tenant) { n.Edges.Metadata = []*OrgMetadata{} },
+			func(n *Tenant, e *OrgMetadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -434,6 +565,96 @@ func (tq *TenantQuery) loadSites(ctx context.Context, query *SiteQuery, nodes []
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "tenant_sites" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (tq *TenantQuery) loadSettings(ctx context.Context, query *SettingsQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *Settings)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Tenant)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.Settings(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(tenant.SettingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.tenant_settings
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "tenant_settings" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "tenant_settings" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (tq *TenantQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *Tag)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Tenant)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Tag(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(tenant.TagsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.tenant_tags
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "tenant_tags" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "tenant_tags" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (tq *TenantQuery) loadMetadata(ctx context.Context, query *OrgMetadataQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *OrgMetadata)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Tenant)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.OrgMetadata(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(tenant.MetadataColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.tenant_metadata
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "tenant_metadata" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "tenant_metadata" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

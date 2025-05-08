@@ -10,7 +10,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
+	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/tenant"
 )
 
@@ -63,6 +66,55 @@ func (tc *TenantCreate) AddSites(s ...*Site) *TenantCreate {
 		ids[i] = s[i].ID
 	}
 	return tc.AddSiteIDs(ids...)
+}
+
+// SetSettingsID sets the "settings" edge to the Settings entity by ID.
+func (tc *TenantCreate) SetSettingsID(id int) *TenantCreate {
+	tc.mutation.SetSettingsID(id)
+	return tc
+}
+
+// SetNillableSettingsID sets the "settings" edge to the Settings entity by ID if the given value is not nil.
+func (tc *TenantCreate) SetNillableSettingsID(id *int) *TenantCreate {
+	if id != nil {
+		tc = tc.SetSettingsID(*id)
+	}
+	return tc
+}
+
+// SetSettings sets the "settings" edge to the Settings entity.
+func (tc *TenantCreate) SetSettings(s *Settings) *TenantCreate {
+	return tc.SetSettingsID(s.ID)
+}
+
+// AddTagIDs adds the "tags" edge to the Tag entity by IDs.
+func (tc *TenantCreate) AddTagIDs(ids ...int) *TenantCreate {
+	tc.mutation.AddTagIDs(ids...)
+	return tc
+}
+
+// AddTags adds the "tags" edges to the Tag entity.
+func (tc *TenantCreate) AddTags(t ...*Tag) *TenantCreate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tc.AddTagIDs(ids...)
+}
+
+// AddMetadatumIDs adds the "metadata" edge to the OrgMetadata entity by IDs.
+func (tc *TenantCreate) AddMetadatumIDs(ids ...int) *TenantCreate {
+	tc.mutation.AddMetadatumIDs(ids...)
+	return tc
+}
+
+// AddMetadata adds the "metadata" edges to the OrgMetadata entity.
+func (tc *TenantCreate) AddMetadata(o ...*OrgMetadata) *TenantCreate {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return tc.AddMetadatumIDs(ids...)
 }
 
 // Mutation returns the TenantMutation object of the builder.
@@ -143,6 +195,54 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.SettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   tenant.SettingsTable,
+			Columns: []string{tenant.SettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settings.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.TagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.TagsTable,
+			Columns: []string{tenant.TagsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.MetadataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.MetadataTable,
+			Columns: []string{tenant.MetadataColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

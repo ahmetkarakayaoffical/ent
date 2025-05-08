@@ -86,6 +86,8 @@ const (
 	FieldAutoAdmitAgents = "auto_admit_agents"
 	// EdgeTag holds the string denoting the tag edge name in mutations.
 	EdgeTag = "tag"
+	// EdgeTenant holds the string denoting the tenant edge name in mutations.
+	EdgeTenant = "tenant"
 	// Table holds the table name of the settings in the database.
 	Table = "settings"
 	// TagTable is the table that holds the tag relation/edge.
@@ -95,6 +97,13 @@ const (
 	TagInverseTable = "tags"
 	// TagColumn is the table column denoting the tag relation/edge.
 	TagColumn = "settings_tag"
+	// TenantTable is the table that holds the tenant relation/edge.
+	TenantTable = "settings"
+	// TenantInverseTable is the table name for the Tenant entity.
+	// It exists in this package in order to avoid circular dependency with the "tenant" package.
+	TenantInverseTable = "tenants"
+	// TenantColumn is the table column denoting the tenant relation/edge.
+	TenantColumn = "tenant_settings"
 )
 
 // Columns holds all SQL columns for settings fields.
@@ -141,6 +150,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"settings_tag",
+	"tenant_settings",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -396,10 +406,24 @@ func ByTagField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTagStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByTenantField orders the results by tenant field.
+func ByTenantField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTenantStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TagInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, TagTable, TagColumn),
+	)
+}
+func newTenantStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TenantInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, true, TenantTable, TenantColumn),
 	)
 }

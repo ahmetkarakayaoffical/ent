@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // Settings is the model entity for the Settings schema.
@@ -90,18 +91,21 @@ type Settings struct {
 	AutoAdmitAgents bool `json:"auto_admit_agents,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettingsQuery when eager-loading is set.
-	Edges        SettingsEdges `json:"edges"`
-	settings_tag *int
-	selectValues sql.SelectValues
+	Edges           SettingsEdges `json:"edges"`
+	settings_tag    *int
+	tenant_settings *int
+	selectValues    sql.SelectValues
 }
 
 // SettingsEdges holds the relations/edges for other nodes in the graph.
 type SettingsEdges struct {
 	// Tag holds the value of the tag edge.
 	Tag *Tag `json:"tag,omitempty"`
+	// Tenant holds the value of the tenant edge.
+	Tenant *Tenant `json:"tenant,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // TagOrErr returns the Tag value or an error if the edge
@@ -113,6 +117,17 @@ func (e SettingsEdges) TagOrErr() (*Tag, error) {
 		return nil, &NotFoundError{label: tag.Label}
 	}
 	return nil, &NotLoadedError{edge: "tag"}
+}
+
+// TenantOrErr returns the Tenant value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SettingsEdges) TenantOrErr() (*Tenant, error) {
+	if e.Tenant != nil {
+		return e.Tenant, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: tenant.Label}
+	}
+	return nil, &NotLoadedError{edge: "tenant"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -129,6 +144,8 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 		case settings.FieldCreated, settings.FieldModified:
 			values[i] = new(sql.NullTime)
 		case settings.ForeignKeys[0]: // settings_tag
+			values[i] = new(sql.NullInt64)
+		case settings.ForeignKeys[1]: // tenant_settings
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -368,6 +385,13 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 				s.settings_tag = new(int)
 				*s.settings_tag = int(value.Int64)
 			}
+		case settings.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field tenant_settings", value)
+			} else if value.Valid {
+				s.tenant_settings = new(int)
+				*s.tenant_settings = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -384,6 +408,11 @@ func (s *Settings) Value(name string) (ent.Value, error) {
 // QueryTag queries the "tag" edge of the Settings entity.
 func (s *Settings) QueryTag() *TagQuery {
 	return NewSettingsClient(s.config).QueryTag(s)
+}
+
+// QueryTenant queries the "tenant" edge of the Settings entity.
+func (s *Settings) QueryTenant() *TenantQuery {
+	return NewSettingsClient(s.config).QueryTenant(s)
 }
 
 // Update returns a builder for updating this Settings.

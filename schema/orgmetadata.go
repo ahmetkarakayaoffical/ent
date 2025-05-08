@@ -24,5 +24,6 @@ func (OrgMetadata) Fields() []ent.Field {
 func (OrgMetadata) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("metadata", Metadata.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.From("tenant", Tenant.Type).Unique().Ref("metadata"),
 	}
 }

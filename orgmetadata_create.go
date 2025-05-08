@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/tenant"
 )
 
 // OrgMetadataCreate is the builder for creating a OrgMetadata entity.
@@ -55,6 +56,25 @@ func (omc *OrgMetadataCreate) AddMetadata(m ...*Metadata) *OrgMetadataCreate {
 		ids[i] = m[i].ID
 	}
 	return omc.AddMetadatumIDs(ids...)
+}
+
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (omc *OrgMetadataCreate) SetTenantID(id int) *OrgMetadataCreate {
+	omc.mutation.SetTenantID(id)
+	return omc
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (omc *OrgMetadataCreate) SetNillableTenantID(id *int) *OrgMetadataCreate {
+	if id != nil {
+		omc = omc.SetTenantID(*id)
+	}
+	return omc
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (omc *OrgMetadataCreate) SetTenant(t *Tenant) *OrgMetadataCreate {
+	return omc.SetTenantID(t.ID)
 }
 
 // Mutation returns the OrgMetadataMutation object of the builder.
@@ -148,6 +168,23 @@ func (omc *OrgMetadataCreate) createSpec() (*OrgMetadata, *sqlgraph.CreateSpec) 
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := omc.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   orgmetadata.TenantTable,
+			Columns: []string{orgmetadata.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.tenant_metadata = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

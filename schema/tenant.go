@@ -24,5 +24,8 @@ func (Tenant) Fields() []ent.Field {
 func (Tenant) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("sites", Site.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("settings", Settings.Type).Unique().Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("tags", Tag.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
+		edge.To("metadata", OrgMetadata.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 	}
 }

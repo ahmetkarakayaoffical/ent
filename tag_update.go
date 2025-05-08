@@ -14,6 +14,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // TagUpdate is the builder for updating Tag entities.
@@ -142,6 +143,25 @@ func (tu *TagUpdate) AddProfile(p ...*Profile) *TagUpdate {
 	return tu.AddProfileIDs(ids...)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (tu *TagUpdate) SetTenantID(id int) *TagUpdate {
+	tu.mutation.SetTenantID(id)
+	return tu
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (tu *TagUpdate) SetNillableTenantID(id *int) *TagUpdate {
+	if id != nil {
+		tu = tu.SetTenantID(*id)
+	}
+	return tu
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (tu *TagUpdate) SetTenant(t *Tenant) *TagUpdate {
+	return tu.SetTenantID(t.ID)
+}
+
 // Mutation returns the TagMutation object of the builder.
 func (tu *TagUpdate) Mutation() *TagMutation {
 	return tu.mutation
@@ -214,6 +234,12 @@ func (tu *TagUpdate) RemoveProfile(p ...*Profile) *TagUpdate {
 		ids[i] = p[i].ID
 	}
 	return tu.RemoveProfileIDs(ids...)
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (tu *TagUpdate) ClearTenant() *TagUpdate {
+	tu.mutation.ClearTenant()
+	return tu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -447,6 +473,35 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tag.TenantTable,
+			Columns: []string{tag.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tag.TenantTable,
+			Columns: []string{tag.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -581,6 +636,25 @@ func (tuo *TagUpdateOne) AddProfile(p ...*Profile) *TagUpdateOne {
 	return tuo.AddProfileIDs(ids...)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (tuo *TagUpdateOne) SetTenantID(id int) *TagUpdateOne {
+	tuo.mutation.SetTenantID(id)
+	return tuo
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (tuo *TagUpdateOne) SetNillableTenantID(id *int) *TagUpdateOne {
+	if id != nil {
+		tuo = tuo.SetTenantID(*id)
+	}
+	return tuo
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (tuo *TagUpdateOne) SetTenant(t *Tenant) *TagUpdateOne {
+	return tuo.SetTenantID(t.ID)
+}
+
 // Mutation returns the TagMutation object of the builder.
 func (tuo *TagUpdateOne) Mutation() *TagMutation {
 	return tuo.mutation
@@ -653,6 +727,12 @@ func (tuo *TagUpdateOne) RemoveProfile(p ...*Profile) *TagUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return tuo.RemoveProfileIDs(ids...)
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (tuo *TagUpdateOne) ClearTenant() *TagUpdateOne {
+	tuo.mutation.ClearTenant()
+	return tuo
 }
 
 // Where appends a list predicates to the TagUpdate builder.
@@ -909,6 +989,35 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tag.TenantTable,
+			Columns: []string{tag.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tag.TenantTable,
+			Columns: []string{tag.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

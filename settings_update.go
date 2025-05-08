@@ -14,6 +14,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // SettingsUpdate is the builder for updating Settings entities.
@@ -790,6 +791,25 @@ func (su *SettingsUpdate) SetTag(t *Tag) *SettingsUpdate {
 	return su.SetTagID(t.ID)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (su *SettingsUpdate) SetTenantID(id int) *SettingsUpdate {
+	su.mutation.SetTenantID(id)
+	return su
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (su *SettingsUpdate) SetNillableTenantID(id *int) *SettingsUpdate {
+	if id != nil {
+		su = su.SetTenantID(*id)
+	}
+	return su
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (su *SettingsUpdate) SetTenant(t *Tenant) *SettingsUpdate {
+	return su.SetTenantID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (su *SettingsUpdate) Mutation() *SettingsMutation {
 	return su.mutation
@@ -798,6 +818,12 @@ func (su *SettingsUpdate) Mutation() *SettingsMutation {
 // ClearTag clears the "tag" edge to the Tag entity.
 func (su *SettingsUpdate) ClearTag() *SettingsUpdate {
 	su.mutation.ClearTag()
+	return su
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (su *SettingsUpdate) ClearTenant() *SettingsUpdate {
+	su.mutation.ClearTenant()
 	return su
 }
 
@@ -1105,6 +1131,35 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settings.TenantTable,
+			Columns: []string{settings.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settings.TenantTable,
+			Columns: []string{settings.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1894,6 +1949,25 @@ func (suo *SettingsUpdateOne) SetTag(t *Tag) *SettingsUpdateOne {
 	return suo.SetTagID(t.ID)
 }
 
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (suo *SettingsUpdateOne) SetTenantID(id int) *SettingsUpdateOne {
+	suo.mutation.SetTenantID(id)
+	return suo
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableTenantID(id *int) *SettingsUpdateOne {
+	if id != nil {
+		suo = suo.SetTenantID(*id)
+	}
+	return suo
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (suo *SettingsUpdateOne) SetTenant(t *Tenant) *SettingsUpdateOne {
+	return suo.SetTenantID(t.ID)
+}
+
 // Mutation returns the SettingsMutation object of the builder.
 func (suo *SettingsUpdateOne) Mutation() *SettingsMutation {
 	return suo.mutation
@@ -1902,6 +1976,12 @@ func (suo *SettingsUpdateOne) Mutation() *SettingsMutation {
 // ClearTag clears the "tag" edge to the Tag entity.
 func (suo *SettingsUpdateOne) ClearTag() *SettingsUpdateOne {
 	suo.mutation.ClearTag()
+	return suo
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (suo *SettingsUpdateOne) ClearTenant() *SettingsUpdateOne {
+	suo.mutation.ClearTenant()
 	return suo
 }
 
@@ -2239,6 +2319,35 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.TenantCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settings.TenantTable,
+			Columns: []string{settings.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   settings.TenantTable,
+			Columns: []string{settings.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

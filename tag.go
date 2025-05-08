@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // Tag is the model entity for the Tag schema.
@@ -27,6 +28,7 @@ type Tag struct {
 	Edges        TagEdges `json:"edges"`
 	tag_children *int
 	task_tags    *int
+	tenant_tags  *int
 	selectValues sql.SelectValues
 }
 
@@ -40,9 +42,11 @@ type TagEdges struct {
 	Children []*Tag `json:"children,omitempty"`
 	// Profile holds the value of the profile edge.
 	Profile []*Profile `json:"profile,omitempty"`
+	// Tenant holds the value of the tenant edge.
+	Tenant *Tenant `json:"tenant,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -83,6 +87,17 @@ func (e TagEdges) ProfileOrErr() ([]*Profile, error) {
 	return nil, &NotLoadedError{edge: "profile"}
 }
 
+// TenantOrErr returns the Tenant value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TagEdges) TenantOrErr() (*Tenant, error) {
+	if e.Tenant != nil {
+		return e.Tenant, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: tenant.Label}
+	}
+	return nil, &NotLoadedError{edge: "tenant"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -95,6 +110,8 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 		case tag.ForeignKeys[0]: // tag_children
 			values[i] = new(sql.NullInt64)
 		case tag.ForeignKeys[1]: // task_tags
+			values[i] = new(sql.NullInt64)
+		case tag.ForeignKeys[2]: // tenant_tags
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -149,6 +166,13 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 				t.task_tags = new(int)
 				*t.task_tags = int(value.Int64)
 			}
+		case tag.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field tenant_tags", value)
+			} else if value.Valid {
+				t.tenant_tags = new(int)
+				*t.tenant_tags = int(value.Int64)
+			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
 		}
@@ -180,6 +204,11 @@ func (t *Tag) QueryChildren() *TagQuery {
 // QueryProfile queries the "profile" edge of the Tag entity.
 func (t *Tag) QueryProfile() *ProfileQuery {
 	return NewTagClient(t.config).QueryProfile(t)
+}
+
+// QueryTenant queries the "tenant" edge of the Tag entity.
+func (t *Tag) QueryTenant() *TenantQuery {
+	return NewTagClient(t.config).QueryTenant(t)
 }
 
 // Update returns a builder for updating this Tag.

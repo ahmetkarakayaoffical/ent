@@ -13,6 +13,7 @@ import (
 	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/tag"
+	"github.com/open-uem/ent/tenant"
 )
 
 // TagCreate is the builder for creating a Tag entity.
@@ -111,6 +112,25 @@ func (tc *TagCreate) AddProfile(p ...*Profile) *TagCreate {
 		ids[i] = p[i].ID
 	}
 	return tc.AddProfileIDs(ids...)
+}
+
+// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
+func (tc *TagCreate) SetTenantID(id int) *TagCreate {
+	tc.mutation.SetTenantID(id)
+	return tc
+}
+
+// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
+func (tc *TagCreate) SetNillableTenantID(id *int) *TagCreate {
+	if id != nil {
+		tc = tc.SetTenantID(*id)
+	}
+	return tc
+}
+
+// SetTenant sets the "tenant" edge to the Tenant entity.
+func (tc *TagCreate) SetTenant(t *Tenant) *TagCreate {
+	return tc.SetTenantID(t.ID)
 }
 
 // Mutation returns the TagMutation object of the builder.
@@ -260,6 +280,23 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tag.TenantTable,
+			Columns: []string{tag.TenantColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.tenant_tags = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

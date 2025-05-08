@@ -15,6 +15,7 @@ import (
 	"github.com/open-uem/ent/metadata"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/tenant"
 )
 
 // OrgMetadataQuery is the builder for querying OrgMetadata entities.
@@ -25,6 +26,8 @@ type OrgMetadataQuery struct {
 	inters       []Interceptor
 	predicates   []predicate.OrgMetadata
 	withMetadata *MetadataQuery
+	withTenant   *TenantQuery
+	withFKs      bool
 	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -77,6 +80,28 @@ func (omq *OrgMetadataQuery) QueryMetadata() *MetadataQuery {
 			sqlgraph.From(orgmetadata.Table, orgmetadata.FieldID, selector),
 			sqlgraph.To(metadata.Table, metadata.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgmetadata.MetadataTable, orgmetadata.MetadataColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTenant chains the current query on the "tenant" edge.
+func (omq *OrgMetadataQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: omq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := omq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := omq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmetadata.Table, orgmetadata.FieldID, selector),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgmetadata.TenantTable, orgmetadata.TenantColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
 		return fromU, nil
@@ -277,6 +302,7 @@ func (omq *OrgMetadataQuery) Clone() *OrgMetadataQuery {
 		inters:       append([]Interceptor{}, omq.inters...),
 		predicates:   append([]predicate.OrgMetadata{}, omq.predicates...),
 		withMetadata: omq.withMetadata.Clone(),
+		withTenant:   omq.withTenant.Clone(),
 		// clone intermediate query.
 		sql:       omq.sql.Clone(),
 		path:      omq.path,
@@ -292,6 +318,17 @@ func (omq *OrgMetadataQuery) WithMetadata(opts ...func(*MetadataQuery)) *OrgMeta
 		opt(query)
 	}
 	omq.withMetadata = query
+	return omq
+}
+
+// WithTenant tells the query-builder to eager-load the nodes that are connected to
+// the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMetadataQuery) WithTenant(opts ...func(*TenantQuery)) *OrgMetadataQuery {
+	query := (&TenantClient{config: omq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	omq.withTenant = query
 	return omq
 }
 
@@ -372,11 +409,19 @@ func (omq *OrgMetadataQuery) prepareQuery(ctx context.Context) error {
 func (omq *OrgMetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgMetadata, error) {
 	var (
 		nodes       = []*OrgMetadata{}
+		withFKs     = omq.withFKs
 		_spec       = omq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			omq.withMetadata != nil,
+			omq.withTenant != nil,
 		}
 	)
+	if omq.withTenant != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, orgmetadata.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrgMetadata).scanValues(nil, columns)
 	}
@@ -402,6 +447,12 @@ func (omq *OrgMetadataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := omq.loadMetadata(ctx, query, nodes,
 			func(n *OrgMetadata) { n.Edges.Metadata = []*Metadata{} },
 			func(n *OrgMetadata, e *Metadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := omq.withTenant; query != nil {
+		if err := omq.loadTenant(ctx, query, nodes, nil,
+			func(n *OrgMetadata, e *Tenant) { n.Edges.Tenant = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -436,6 +487,38 @@ func (omq *OrgMetadataQuery) loadMetadata(ctx context.Context, query *MetadataQu
 			return fmt.Errorf(`unexpected referenced foreign-key "org_metadata_metadata" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (omq *OrgMetadataQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*OrgMetadata, init func(*OrgMetadata), assign func(*OrgMetadata, *Tenant)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*OrgMetadata)
+	for i := range nodes {
+		if nodes[i].tenant_metadata == nil {
+			continue
+		}
+		fk := *nodes[i].tenant_metadata
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(tenant.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "tenant_metadata" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }

@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/tenant"
 )
 
 // OrgMetadata is the model entity for the OrgMetadata schema.
@@ -22,17 +23,20 @@ type OrgMetadata struct {
 	Description string `json:"description,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrgMetadataQuery when eager-loading is set.
-	Edges        OrgMetadataEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges           OrgMetadataEdges `json:"edges"`
+	tenant_metadata *int
+	selectValues    sql.SelectValues
 }
 
 // OrgMetadataEdges holds the relations/edges for other nodes in the graph.
 type OrgMetadataEdges struct {
 	// Metadata holds the value of the metadata edge.
 	Metadata []*Metadata `json:"metadata,omitempty"`
+	// Tenant holds the value of the tenant edge.
+	Tenant *Tenant `json:"tenant,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // MetadataOrErr returns the Metadata value or an error if the edge
@@ -44,6 +48,17 @@ func (e OrgMetadataEdges) MetadataOrErr() ([]*Metadata, error) {
 	return nil, &NotLoadedError{edge: "metadata"}
 }
 
+// TenantOrErr returns the Tenant value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrgMetadataEdges) TenantOrErr() (*Tenant, error) {
+	if e.Tenant != nil {
+		return e.Tenant, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: tenant.Label}
+	}
+	return nil, &NotLoadedError{edge: "tenant"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*OrgMetadata) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -53,6 +68,8 @@ func (*OrgMetadata) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case orgmetadata.FieldName, orgmetadata.FieldDescription:
 			values[i] = new(sql.NullString)
+		case orgmetadata.ForeignKeys[0]: // tenant_metadata
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -86,6 +103,13 @@ func (om *OrgMetadata) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				om.Description = value.String
 			}
+		case orgmetadata.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field tenant_metadata", value)
+			} else if value.Valid {
+				om.tenant_metadata = new(int)
+				*om.tenant_metadata = int(value.Int64)
+			}
 		default:
 			om.selectValues.Set(columns[i], values[i])
 		}
@@ -102,6 +126,11 @@ func (om *OrgMetadata) Value(name string) (ent.Value, error) {
 // QueryMetadata queries the "metadata" edge of the OrgMetadata entity.
 func (om *OrgMetadata) QueryMetadata() *MetadataQuery {
 	return NewOrgMetadataClient(om.config).QueryMetadata(om)
+}
+
+// QueryTenant queries the "tenant" edge of the OrgMetadata entity.
+func (om *OrgMetadata) QueryTenant() *TenantQuery {
+	return NewOrgMetadataClient(om.config).QueryTenant(om)
 }
 
 // Update returns a builder for updating this OrgMetadata.
