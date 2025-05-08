@@ -3,6 +3,8 @@
 package tenant
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/open-uem/ent/predicate"
@@ -61,6 +63,16 @@ func Description(v string) predicate.Tenant {
 // IsDefault applies equality check predicate on the "is_default" field. It's identical to IsDefaultEQ.
 func IsDefault(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldIsDefault, v))
+}
+
+// Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
+func Created(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldCreated, v))
+}
+
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldModified, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -156,6 +168,106 @@ func IsDefaultIsNil() predicate.Tenant {
 // IsDefaultNotNil applies the NotNil predicate on the "is_default" field.
 func IsDefaultNotNil() predicate.Tenant {
 	return predicate.Tenant(sql.FieldNotNull(FieldIsDefault))
+}
+
+// CreatedEQ applies the EQ predicate on the "created" field.
+func CreatedEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldCreated, v))
+}
+
+// CreatedNEQ applies the NEQ predicate on the "created" field.
+func CreatedNEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldCreated, v))
+}
+
+// CreatedIn applies the In predicate on the "created" field.
+func CreatedIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldIn(FieldCreated, vs...))
+}
+
+// CreatedNotIn applies the NotIn predicate on the "created" field.
+func CreatedNotIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotIn(FieldCreated, vs...))
+}
+
+// CreatedGT applies the GT predicate on the "created" field.
+func CreatedGT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGT(FieldCreated, v))
+}
+
+// CreatedGTE applies the GTE predicate on the "created" field.
+func CreatedGTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGTE(FieldCreated, v))
+}
+
+// CreatedLT applies the LT predicate on the "created" field.
+func CreatedLT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLT(FieldCreated, v))
+}
+
+// CreatedLTE applies the LTE predicate on the "created" field.
+func CreatedLTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLTE(FieldCreated, v))
+}
+
+// CreatedIsNil applies the IsNil predicate on the "created" field.
+func CreatedIsNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldIsNull(FieldCreated))
+}
+
+// CreatedNotNil applies the NotNil predicate on the "created" field.
+func CreatedNotNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotNull(FieldCreated))
+}
+
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldModified, v))
+}
+
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldModified, v))
+}
+
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldIn(FieldModified, vs...))
+}
+
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotIn(FieldModified, vs...))
+}
+
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGT(FieldModified, v))
+}
+
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGTE(FieldModified, v))
+}
+
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLT(FieldModified, v))
+}
+
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLTE(FieldModified, v))
+}
+
+// ModifiedIsNil applies the IsNil predicate on the "modified" field.
+func ModifiedIsNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldIsNull(FieldModified))
+}
+
+// ModifiedNotNil applies the NotNil predicate on the "modified" field.
+func ModifiedNotNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotNull(FieldModified))
 }
 
 // HasSites applies the HasEdge predicate on the "sites" edge.

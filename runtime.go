@@ -17,6 +17,7 @@ import (
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
+	"github.com/open-uem/ent/tenant"
 	"github.com/open-uem/ent/user"
 	"github.com/open-uem/ent/wingetconfigexclusion"
 )
@@ -361,6 +362,18 @@ func init() {
 	taskDescLocalGroupMembersToExclude := taskFields[22].Descriptor()
 	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
 	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
+	tenantFields := schema.Tenant{}.Fields()
+	_ = tenantFields
+	// tenantDescCreated is the schema descriptor for created field.
+	tenantDescCreated := tenantFields[2].Descriptor()
+	// tenant.DefaultCreated holds the default value on creation for the created field.
+	tenant.DefaultCreated = tenantDescCreated.Default.(func() time.Time)
+	// tenantDescModified is the schema descriptor for modified field.
+	tenantDescModified := tenantFields[3].Descriptor()
+	// tenant.DefaultModified holds the default value on creation for the modified field.
+	tenant.DefaultModified = tenantDescModified.Default.(func() time.Time)
+	// tenant.UpdateDefaultModified holds the default value on update for the modified field.
+	tenant.UpdateDefaultModified = tenantDescModified.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmailVerified is the schema descriptor for email_verified field.

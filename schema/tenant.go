@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
@@ -17,6 +19,8 @@ func (Tenant) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("description").Optional(),
 		field.Bool("is_default").Optional(),
+		field.Time("created").Optional().Default(time.Now),
+		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}
 }
 

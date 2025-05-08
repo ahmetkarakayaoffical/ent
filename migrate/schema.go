@@ -737,6 +737,8 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "is_default", Type: field.TypeBool, Nullable: true},
+		{Name: "created", Type: field.TypeTime, Nullable: true},
+		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}
 	// TenantsTable holds the schema information for the "tenants" table.
 	TenantsTable = &schema.Table{

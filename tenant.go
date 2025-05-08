@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -21,6 +22,10 @@ type Tenant struct {
 	Description string `json:"description,omitempty"`
 	// IsDefault holds the value of the "is_default" field.
 	IsDefault bool `json:"is_default,omitempty"`
+	// Created holds the value of the "created" field.
+	Created time.Time `json:"created,omitempty"`
+	// Modified holds the value of the "modified" field.
+	Modified time.Time `json:"modified,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TenantQuery when eager-loading is set.
 	Edges        TenantEdges `json:"edges"`
@@ -91,6 +96,8 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case tenant.FieldDescription:
 			values[i] = new(sql.NullString)
+		case tenant.FieldCreated, tenant.FieldModified:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -123,6 +130,18 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_default", values[i])
 			} else if value.Valid {
 				t.IsDefault = value.Bool
+			}
+		case tenant.FieldCreated:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created", values[i])
+			} else if value.Valid {
+				t.Created = value.Time
+			}
+		case tenant.FieldModified:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field modified", values[i])
+			} else if value.Valid {
+				t.Modified = value.Time
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
@@ -185,6 +204,12 @@ func (t *Tenant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
 	builder.WriteString(fmt.Sprintf("%v", t.IsDefault))
+	builder.WriteString(", ")
+	builder.WriteString("created=")
+	builder.WriteString(t.Created.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("modified=")
+	builder.WriteString(t.Modified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

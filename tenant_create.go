@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -49,6 +50,34 @@ func (tc *TenantCreate) SetIsDefault(b bool) *TenantCreate {
 func (tc *TenantCreate) SetNillableIsDefault(b *bool) *TenantCreate {
 	if b != nil {
 		tc.SetIsDefault(*b)
+	}
+	return tc
+}
+
+// SetCreated sets the "created" field.
+func (tc *TenantCreate) SetCreated(t time.Time) *TenantCreate {
+	tc.mutation.SetCreated(t)
+	return tc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (tc *TenantCreate) SetNillableCreated(t *time.Time) *TenantCreate {
+	if t != nil {
+		tc.SetCreated(*t)
+	}
+	return tc
+}
+
+// SetModified sets the "modified" field.
+func (tc *TenantCreate) SetModified(t time.Time) *TenantCreate {
+	tc.mutation.SetModified(t)
+	return tc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (tc *TenantCreate) SetNillableModified(t *time.Time) *TenantCreate {
+	if t != nil {
+		tc.SetModified(*t)
 	}
 	return tc
 }
@@ -124,6 +153,7 @@ func (tc *TenantCreate) Mutation() *TenantMutation {
 
 // Save creates the Tenant in the database.
 func (tc *TenantCreate) Save(ctx context.Context) (*Tenant, error) {
+	tc.defaults()
 	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
 }
 
@@ -146,6 +176,18 @@ func (tc *TenantCreate) Exec(ctx context.Context) error {
 func (tc *TenantCreate) ExecX(ctx context.Context) {
 	if err := tc.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tc *TenantCreate) defaults() {
+	if _, ok := tc.mutation.Created(); !ok {
+		v := tenant.DefaultCreated()
+		tc.mutation.SetCreated(v)
+	}
+	if _, ok := tc.mutation.Modified(); !ok {
+		v := tenant.DefaultModified()
+		tc.mutation.SetModified(v)
 	}
 }
 
@@ -185,6 +227,14 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.IsDefault(); ok {
 		_spec.SetField(tenant.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
+	}
+	if value, ok := tc.mutation.Created(); ok {
+		_spec.SetField(tenant.FieldCreated, field.TypeTime, value)
+		_node.Created = value
+	}
+	if value, ok := tc.mutation.Modified(); ok {
+		_spec.SetField(tenant.FieldModified, field.TypeTime, value)
+		_node.Modified = value
 	}
 	if nodes := tc.mutation.SitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -338,6 +388,42 @@ func (u *TenantUpsert) ClearIsDefault() *TenantUpsert {
 	return u
 }
 
+// SetCreated sets the "created" field.
+func (u *TenantUpsert) SetCreated(v time.Time) *TenantUpsert {
+	u.Set(tenant.FieldCreated, v)
+	return u
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *TenantUpsert) UpdateCreated() *TenantUpsert {
+	u.SetExcluded(tenant.FieldCreated)
+	return u
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *TenantUpsert) ClearCreated() *TenantUpsert {
+	u.SetNull(tenant.FieldCreated)
+	return u
+}
+
+// SetModified sets the "modified" field.
+func (u *TenantUpsert) SetModified(v time.Time) *TenantUpsert {
+	u.Set(tenant.FieldModified, v)
+	return u
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *TenantUpsert) UpdateModified() *TenantUpsert {
+	u.SetExcluded(tenant.FieldModified)
+	return u
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *TenantUpsert) ClearModified() *TenantUpsert {
+	u.SetNull(tenant.FieldModified)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -420,6 +506,48 @@ func (u *TenantUpsertOne) ClearIsDefault() *TenantUpsertOne {
 	})
 }
 
+// SetCreated sets the "created" field.
+func (u *TenantUpsertOne) SetCreated(v time.Time) *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetCreated(v)
+	})
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *TenantUpsertOne) UpdateCreated() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *TenantUpsertOne) ClearCreated() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearCreated()
+	})
+}
+
+// SetModified sets the "modified" field.
+func (u *TenantUpsertOne) SetModified(v time.Time) *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetModified(v)
+	})
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *TenantUpsertOne) UpdateModified() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *TenantUpsertOne) ClearModified() *TenantUpsertOne {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearModified()
+	})
+}
+
 // Exec executes the query.
 func (u *TenantUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -472,6 +600,7 @@ func (tcb *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TenantMutation)
 				if !ok {
@@ -662,6 +791,48 @@ func (u *TenantUpsertBulk) UpdateIsDefault() *TenantUpsertBulk {
 func (u *TenantUpsertBulk) ClearIsDefault() *TenantUpsertBulk {
 	return u.Update(func(s *TenantUpsert) {
 		s.ClearIsDefault()
+	})
+}
+
+// SetCreated sets the "created" field.
+func (u *TenantUpsertBulk) SetCreated(v time.Time) *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetCreated(v)
+	})
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *TenantUpsertBulk) UpdateCreated() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *TenantUpsertBulk) ClearCreated() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearCreated()
+	})
+}
+
+// SetModified sets the "modified" field.
+func (u *TenantUpsertBulk) SetModified(v time.Time) *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.SetModified(v)
+	})
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *TenantUpsertBulk) UpdateModified() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *TenantUpsertBulk) ClearModified() *TenantUpsertBulk {
+	return u.Update(func(s *TenantUpsert) {
+		s.ClearModified()
 	})
 }
 

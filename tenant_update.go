@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -69,6 +70,38 @@ func (tu *TenantUpdate) SetNillableIsDefault(b *bool) *TenantUpdate {
 // ClearIsDefault clears the value of the "is_default" field.
 func (tu *TenantUpdate) ClearIsDefault() *TenantUpdate {
 	tu.mutation.ClearIsDefault()
+	return tu
+}
+
+// SetCreated sets the "created" field.
+func (tu *TenantUpdate) SetCreated(t time.Time) *TenantUpdate {
+	tu.mutation.SetCreated(t)
+	return tu
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (tu *TenantUpdate) SetNillableCreated(t *time.Time) *TenantUpdate {
+	if t != nil {
+		tu.SetCreated(*t)
+	}
+	return tu
+}
+
+// ClearCreated clears the value of the "created" field.
+func (tu *TenantUpdate) ClearCreated() *TenantUpdate {
+	tu.mutation.ClearCreated()
+	return tu
+}
+
+// SetModified sets the "modified" field.
+func (tu *TenantUpdate) SetModified(t time.Time) *TenantUpdate {
+	tu.mutation.SetModified(t)
+	return tu
+}
+
+// ClearModified clears the value of the "modified" field.
+func (tu *TenantUpdate) ClearModified() *TenantUpdate {
+	tu.mutation.ClearModified()
 	return tu
 }
 
@@ -212,6 +245,7 @@ func (tu *TenantUpdate) RemoveMetadata(o ...*OrgMetadata) *TenantUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tu *TenantUpdate) Save(ctx context.Context) (int, error) {
+	tu.defaults()
 	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
 }
 
@@ -234,6 +268,14 @@ func (tu *TenantUpdate) Exec(ctx context.Context) error {
 func (tu *TenantUpdate) ExecX(ctx context.Context) {
 	if err := tu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tu *TenantUpdate) defaults() {
+	if _, ok := tu.mutation.Modified(); !ok && !tu.mutation.ModifiedCleared() {
+		v := tenant.UpdateDefaultModified()
+		tu.mutation.SetModified(v)
 	}
 }
 
@@ -263,6 +305,18 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.IsDefaultCleared() {
 		_spec.ClearField(tenant.FieldIsDefault, field.TypeBool)
+	}
+	if value, ok := tu.mutation.Created(); ok {
+		_spec.SetField(tenant.FieldCreated, field.TypeTime, value)
+	}
+	if tu.mutation.CreatedCleared() {
+		_spec.ClearField(tenant.FieldCreated, field.TypeTime)
+	}
+	if value, ok := tu.mutation.Modified(); ok {
+		_spec.SetField(tenant.FieldModified, field.TypeTime, value)
+	}
+	if tu.mutation.ModifiedCleared() {
+		_spec.ClearField(tenant.FieldModified, field.TypeTime)
 	}
 	if tu.mutation.SitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -490,6 +544,38 @@ func (tuo *TenantUpdateOne) ClearIsDefault() *TenantUpdateOne {
 	return tuo
 }
 
+// SetCreated sets the "created" field.
+func (tuo *TenantUpdateOne) SetCreated(t time.Time) *TenantUpdateOne {
+	tuo.mutation.SetCreated(t)
+	return tuo
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (tuo *TenantUpdateOne) SetNillableCreated(t *time.Time) *TenantUpdateOne {
+	if t != nil {
+		tuo.SetCreated(*t)
+	}
+	return tuo
+}
+
+// ClearCreated clears the value of the "created" field.
+func (tuo *TenantUpdateOne) ClearCreated() *TenantUpdateOne {
+	tuo.mutation.ClearCreated()
+	return tuo
+}
+
+// SetModified sets the "modified" field.
+func (tuo *TenantUpdateOne) SetModified(t time.Time) *TenantUpdateOne {
+	tuo.mutation.SetModified(t)
+	return tuo
+}
+
+// ClearModified clears the value of the "modified" field.
+func (tuo *TenantUpdateOne) ClearModified() *TenantUpdateOne {
+	tuo.mutation.ClearModified()
+	return tuo
+}
+
 // AddSiteIDs adds the "sites" edge to the Site entity by IDs.
 func (tuo *TenantUpdateOne) AddSiteIDs(ids ...int) *TenantUpdateOne {
 	tuo.mutation.AddSiteIDs(ids...)
@@ -643,6 +729,7 @@ func (tuo *TenantUpdateOne) Select(field string, fields ...string) *TenantUpdate
 
 // Save executes the query and returns the updated Tenant entity.
 func (tuo *TenantUpdateOne) Save(ctx context.Context) (*Tenant, error) {
+	tuo.defaults()
 	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
 }
 
@@ -665,6 +752,14 @@ func (tuo *TenantUpdateOne) Exec(ctx context.Context) error {
 func (tuo *TenantUpdateOne) ExecX(ctx context.Context) {
 	if err := tuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tuo *TenantUpdateOne) defaults() {
+	if _, ok := tuo.mutation.Modified(); !ok && !tuo.mutation.ModifiedCleared() {
+		v := tenant.UpdateDefaultModified()
+		tuo.mutation.SetModified(v)
 	}
 }
 
@@ -711,6 +806,18 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 	}
 	if tuo.mutation.IsDefaultCleared() {
 		_spec.ClearField(tenant.FieldIsDefault, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.Created(); ok {
+		_spec.SetField(tenant.FieldCreated, field.TypeTime, value)
+	}
+	if tuo.mutation.CreatedCleared() {
+		_spec.ClearField(tenant.FieldCreated, field.TypeTime)
+	}
+	if value, ok := tuo.mutation.Modified(); ok {
+		_spec.SetField(tenant.FieldModified, field.TypeTime, value)
+	}
+	if tuo.mutation.ModifiedCleared() {
+		_spec.ClearField(tenant.FieldModified, field.TypeTime)
 	}
 	if tuo.mutation.SitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
