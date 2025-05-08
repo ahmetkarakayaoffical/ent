@@ -34,9 +34,11 @@ type SiteEdges struct {
 	Tenant *Tenant `json:"tenant,omitempty"`
 	// Agents holds the value of the agents edge.
 	Agents []*Agent `json:"agents,omitempty"`
+	// Profiles holds the value of the profiles edge.
+	Profiles []*Profile `json:"profiles,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // TenantOrErr returns the Tenant value or an error if the edge
@@ -57,6 +59,15 @@ func (e SiteEdges) AgentsOrErr() ([]*Agent, error) {
 		return e.Agents, nil
 	}
 	return nil, &NotLoadedError{edge: "agents"}
+}
+
+// ProfilesOrErr returns the Profiles value or an error if the edge
+// was not loaded in eager-loading.
+func (e SiteEdges) ProfilesOrErr() ([]*Profile, error) {
+	if e.loadedTypes[2] {
+		return e.Profiles, nil
+	}
+	return nil, &NotLoadedError{edge: "profiles"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -133,6 +144,11 @@ func (s *Site) QueryTenant() *TenantQuery {
 // QueryAgents queries the "agents" edge of the Site entity.
 func (s *Site) QueryAgents() *AgentQuery {
 	return NewSiteClient(s.config).QueryAgents(s)
+}
+
+// QueryProfiles queries the "profiles" edge of the Site entity.
+func (s *Site) QueryProfiles() *ProfileQuery {
+	return NewSiteClient(s.config).QueryProfiles(s)
 }
 
 // Update returns a builder for updating this Site.

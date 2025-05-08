@@ -13,6 +13,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -124,6 +125,25 @@ func (pu *ProfileUpdate) AddIssues(p ...*ProfileIssue) *ProfileUpdate {
 	return pu.AddIssueIDs(ids...)
 }
 
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (pu *ProfileUpdate) SetSiteID(id int) *ProfileUpdate {
+	pu.mutation.SetSiteID(id)
+	return pu
+}
+
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (pu *ProfileUpdate) SetNillableSiteID(id *int) *ProfileUpdate {
+	if id != nil {
+		pu = pu.SetSiteID(*id)
+	}
+	return pu
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (pu *ProfileUpdate) SetSite(s *Site) *ProfileUpdate {
+	return pu.SetSiteID(s.ID)
+}
+
 // Mutation returns the ProfileMutation object of the builder.
 func (pu *ProfileUpdate) Mutation() *ProfileMutation {
 	return pu.mutation
@@ -190,6 +210,12 @@ func (pu *ProfileUpdate) RemoveIssues(p ...*ProfileIssue) *ProfileUpdate {
 		ids[i] = p[i].ID
 	}
 	return pu.RemoveIssueIDs(ids...)
+}
+
+// ClearSite clears the "site" edge to the Site entity.
+func (pu *ProfileUpdate) ClearSite() *ProfileUpdate {
+	pu.mutation.ClearSite()
+	return pu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -399,6 +425,35 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.SiteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   profile.SiteTable,
+			Columns: []string{profile.SiteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.SiteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   profile.SiteTable,
+			Columns: []string{profile.SiteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(pu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -514,6 +569,25 @@ func (puo *ProfileUpdateOne) AddIssues(p ...*ProfileIssue) *ProfileUpdateOne {
 	return puo.AddIssueIDs(ids...)
 }
 
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (puo *ProfileUpdateOne) SetSiteID(id int) *ProfileUpdateOne {
+	puo.mutation.SetSiteID(id)
+	return puo
+}
+
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (puo *ProfileUpdateOne) SetNillableSiteID(id *int) *ProfileUpdateOne {
+	if id != nil {
+		puo = puo.SetSiteID(*id)
+	}
+	return puo
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (puo *ProfileUpdateOne) SetSite(s *Site) *ProfileUpdateOne {
+	return puo.SetSiteID(s.ID)
+}
+
 // Mutation returns the ProfileMutation object of the builder.
 func (puo *ProfileUpdateOne) Mutation() *ProfileMutation {
 	return puo.mutation
@@ -580,6 +654,12 @@ func (puo *ProfileUpdateOne) RemoveIssues(p ...*ProfileIssue) *ProfileUpdateOne 
 		ids[i] = p[i].ID
 	}
 	return puo.RemoveIssueIDs(ids...)
+}
+
+// ClearSite clears the "site" edge to the Site entity.
+func (puo *ProfileUpdateOne) ClearSite() *ProfileUpdateOne {
+	puo.mutation.ClearSite()
+	return puo
 }
 
 // Where appends a list predicates to the ProfileUpdate builder.
@@ -812,6 +892,35 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(profileissue.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.SiteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   profile.SiteTable,
+			Columns: []string{profile.SiteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.SiteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   profile.SiteTable,
+			Columns: []string{profile.SiteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -26,6 +26,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeIssues holds the string denoting the issues edge name in mutations.
 	EdgeIssues = "issues"
+	// EdgeSite holds the string denoting the site edge name in mutations.
+	EdgeSite = "site"
 	// Table holds the table name of the profile in the database.
 	Table = "profiles"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
@@ -47,6 +49,13 @@ const (
 	IssuesInverseTable = "profile_issues"
 	// IssuesColumn is the table column denoting the issues relation/edge.
 	IssuesColumn = "profile_issues"
+	// SiteTable is the table that holds the site relation/edge.
+	SiteTable = "profiles"
+	// SiteInverseTable is the table name for the Site entity.
+	// It exists in this package in order to avoid circular dependency with the "site" package.
+	SiteInverseTable = "sites"
+	// SiteColumn is the table column denoting the site relation/edge.
+	SiteColumn = "site_profiles"
 )
 
 // Columns holds all SQL columns for profile fields.
@@ -55,6 +64,12 @@ var Columns = []string{
 	FieldName,
 	FieldApplyToAll,
 	FieldType,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "profiles"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"site_profiles",
 }
 
 var (
@@ -67,6 +82,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -169,6 +189,13 @@ func ByIssues(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newIssuesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySiteField orders the results by site field.
+func BySiteField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSiteStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -188,5 +215,12 @@ func newIssuesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IssuesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, IssuesTable, IssuesColumn),
+	)
+}
+func newSiteStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SiteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SiteTable, SiteColumn),
 	)
 }

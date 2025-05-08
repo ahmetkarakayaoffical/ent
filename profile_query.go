@@ -15,6 +15,7 @@ import (
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -29,6 +30,8 @@ type ProfileQuery struct {
 	withTags   *TagQuery
 	withTasks  *TaskQuery
 	withIssues *ProfileIssueQuery
+	withSite   *SiteQuery
+	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -125,6 +128,28 @@ func (pq *ProfileQuery) QueryIssues() *ProfileIssueQuery {
 			sqlgraph.From(profile.Table, profile.FieldID, selector),
 			sqlgraph.To(profileissue.Table, profileissue.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, profile.IssuesTable, profile.IssuesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySite chains the current query on the "site" edge.
+func (pq *ProfileQuery) QuerySite() *SiteQuery {
+	query := (&SiteClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profile.Table, profile.FieldID, selector),
+			sqlgraph.To(site.Table, site.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, profile.SiteTable, profile.SiteColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -327,6 +352,7 @@ func (pq *ProfileQuery) Clone() *ProfileQuery {
 		withTags:   pq.withTags.Clone(),
 		withTasks:  pq.withTasks.Clone(),
 		withIssues: pq.withIssues.Clone(),
+		withSite:   pq.withSite.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -364,6 +390,17 @@ func (pq *ProfileQuery) WithIssues(opts ...func(*ProfileIssueQuery)) *ProfileQue
 		opt(query)
 	}
 	pq.withIssues = query
+	return pq
+}
+
+// WithSite tells the query-builder to eager-load the nodes that are connected to
+// the "site" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProfileQuery) WithSite(opts ...func(*SiteQuery)) *ProfileQuery {
+	query := (&SiteClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withSite = query
 	return pq
 }
 
@@ -444,13 +481,21 @@ func (pq *ProfileQuery) prepareQuery(ctx context.Context) error {
 func (pq *ProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Profile, error) {
 	var (
 		nodes       = []*Profile{}
+		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			pq.withTags != nil,
 			pq.withTasks != nil,
 			pq.withIssues != nil,
+			pq.withSite != nil,
 		}
 	)
+	if pq.withSite != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, profile.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Profile).scanValues(nil, columns)
 	}
@@ -490,6 +535,12 @@ func (pq *ProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prof
 		if err := pq.loadIssues(ctx, query, nodes,
 			func(n *Profile) { n.Edges.Issues = []*ProfileIssue{} },
 			func(n *Profile, e *ProfileIssue) { n.Edges.Issues = append(n.Edges.Issues, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withSite; query != nil {
+		if err := pq.loadSite(ctx, query, nodes, nil,
+			func(n *Profile, e *Site) { n.Edges.Site = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -616,6 +667,38 @@ func (pq *ProfileQuery) loadIssues(ctx context.Context, query *ProfileIssueQuery
 			return fmt.Errorf(`unexpected referenced foreign-key "profile_issues" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (pq *ProfileQuery) loadSite(ctx context.Context, query *SiteQuery, nodes []*Profile, init func(*Profile), assign func(*Profile, *Site)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Profile)
+	for i := range nodes {
+		if nodes[i].site_profiles == nil {
+			continue
+		}
+		fk := *nodes[i].site_profiles
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(site.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "site_profiles" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }

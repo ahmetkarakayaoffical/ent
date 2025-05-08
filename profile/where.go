@@ -237,6 +237,29 @@ func HasIssuesWith(preds ...predicate.ProfileIssue) predicate.Profile {
 	})
 }
 
+// HasSite applies the HasEdge predicate on the "site" edge.
+func HasSite() predicate.Profile {
+	return predicate.Profile(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SiteTable, SiteColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSiteWith applies the HasEdge predicate on the "site" edge with a given conditions (other predicates).
+func HasSiteWith(preds ...predicate.Site) predicate.Profile {
+	return predicate.Profile(func(s *sql.Selector) {
+		step := newSiteStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Profile) predicate.Profile {
 	return predicate.Profile(sql.AndPredicates(predicates...))

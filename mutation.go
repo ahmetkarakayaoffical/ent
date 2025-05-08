@@ -13034,6 +13034,8 @@ type ProfileMutation struct {
 	issues        map[int]struct{}
 	removedissues map[int]struct{}
 	clearedissues bool
+	site          *int
+	clearedsite   bool
 	done          bool
 	oldValue      func(context.Context) (*Profile, error)
 	predicates    []predicate.Profile
@@ -13420,6 +13422,45 @@ func (m *ProfileMutation) ResetIssues() {
 	m.removedissues = nil
 }
 
+// SetSiteID sets the "site" edge to the Site entity by id.
+func (m *ProfileMutation) SetSiteID(id int) {
+	m.site = &id
+}
+
+// ClearSite clears the "site" edge to the Site entity.
+func (m *ProfileMutation) ClearSite() {
+	m.clearedsite = true
+}
+
+// SiteCleared reports if the "site" edge to the Site entity was cleared.
+func (m *ProfileMutation) SiteCleared() bool {
+	return m.clearedsite
+}
+
+// SiteID returns the "site" edge ID in the mutation.
+func (m *ProfileMutation) SiteID() (id int, exists bool) {
+	if m.site != nil {
+		return *m.site, true
+	}
+	return
+}
+
+// SiteIDs returns the "site" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SiteID instead. It exists only for internal usage by the builders.
+func (m *ProfileMutation) SiteIDs() (ids []int) {
+	if id := m.site; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSite resets all changes to the "site" edge.
+func (m *ProfileMutation) ResetSite() {
+	m.site = nil
+	m.clearedsite = false
+}
+
 // Where appends a list predicates to the ProfileMutation builder.
 func (m *ProfileMutation) Where(ps ...predicate.Profile) {
 	m.predicates = append(m.predicates, ps...)
@@ -13596,7 +13637,7 @@ func (m *ProfileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProfileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.tags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -13605,6 +13646,9 @@ func (m *ProfileMutation) AddedEdges() []string {
 	}
 	if m.issues != nil {
 		edges = append(edges, profile.EdgeIssues)
+	}
+	if m.site != nil {
+		edges = append(edges, profile.EdgeSite)
 	}
 	return edges
 }
@@ -13631,13 +13675,17 @@ func (m *ProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case profile.EdgeSite:
+		if id := m.site; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProfileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedtags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -13678,7 +13726,7 @@ func (m *ProfileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProfileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedtags {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -13687,6 +13735,9 @@ func (m *ProfileMutation) ClearedEdges() []string {
 	}
 	if m.clearedissues {
 		edges = append(edges, profile.EdgeIssues)
+	}
+	if m.clearedsite {
+		edges = append(edges, profile.EdgeSite)
 	}
 	return edges
 }
@@ -13701,6 +13752,8 @@ func (m *ProfileMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case profile.EdgeIssues:
 		return m.clearedissues
+	case profile.EdgeSite:
+		return m.clearedsite
 	}
 	return false
 }
@@ -13709,6 +13762,9 @@ func (m *ProfileMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ProfileMutation) ClearEdge(name string) error {
 	switch name {
+	case profile.EdgeSite:
+		m.ClearSite()
+		return nil
 	}
 	return fmt.Errorf("unknown Profile unique edge %s", name)
 }
@@ -13725,6 +13781,9 @@ func (m *ProfileMutation) ResetEdge(name string) error {
 		return nil
 	case profile.EdgeIssues:
 		m.ResetIssues()
+		return nil
+	case profile.EdgeSite:
+		m.ResetSite()
 		return nil
 	}
 	return fmt.Errorf("unknown Profile edge %s", name)
@@ -21417,20 +21476,23 @@ func (m *ShareMutation) ResetEdge(name string) error {
 // SiteMutation represents an operation that mutates the Site nodes in the graph.
 type SiteMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	description   *string
-	is_default    *bool
-	clearedFields map[string]struct{}
-	tenant        *int
-	clearedtenant bool
-	agents        map[string]struct{}
-	removedagents map[string]struct{}
-	clearedagents bool
-	done          bool
-	oldValue      func(context.Context) (*Site, error)
-	predicates    []predicate.Site
+	op              Op
+	typ             string
+	id              *int
+	description     *string
+	is_default      *bool
+	clearedFields   map[string]struct{}
+	tenant          *int
+	clearedtenant   bool
+	agents          map[string]struct{}
+	removedagents   map[string]struct{}
+	clearedagents   bool
+	profiles        map[int]struct{}
+	removedprofiles map[int]struct{}
+	clearedprofiles bool
+	done            bool
+	oldValue        func(context.Context) (*Site, error)
+	predicates      []predicate.Site
 }
 
 var _ ent.Mutation = (*SiteMutation)(nil)
@@ -21722,6 +21784,60 @@ func (m *SiteMutation) ResetAgents() {
 	m.removedagents = nil
 }
 
+// AddProfileIDs adds the "profiles" edge to the Profile entity by ids.
+func (m *SiteMutation) AddProfileIDs(ids ...int) {
+	if m.profiles == nil {
+		m.profiles = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.profiles[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfiles clears the "profiles" edge to the Profile entity.
+func (m *SiteMutation) ClearProfiles() {
+	m.clearedprofiles = true
+}
+
+// ProfilesCleared reports if the "profiles" edge to the Profile entity was cleared.
+func (m *SiteMutation) ProfilesCleared() bool {
+	return m.clearedprofiles
+}
+
+// RemoveProfileIDs removes the "profiles" edge to the Profile entity by IDs.
+func (m *SiteMutation) RemoveProfileIDs(ids ...int) {
+	if m.removedprofiles == nil {
+		m.removedprofiles = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.profiles, ids[i])
+		m.removedprofiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfiles returns the removed IDs of the "profiles" edge to the Profile entity.
+func (m *SiteMutation) RemovedProfilesIDs() (ids []int) {
+	for id := range m.removedprofiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfilesIDs returns the "profiles" edge IDs in the mutation.
+func (m *SiteMutation) ProfilesIDs() (ids []int) {
+	for id := range m.profiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfiles resets all changes to the "profiles" edge.
+func (m *SiteMutation) ResetProfiles() {
+	m.profiles = nil
+	m.clearedprofiles = false
+	m.removedprofiles = nil
+}
+
 // Where appends a list predicates to the SiteMutation builder.
 func (m *SiteMutation) Where(ps ...predicate.Site) {
 	m.predicates = append(m.predicates, ps...)
@@ -21887,12 +22003,15 @@ func (m *SiteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SiteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.tenant != nil {
 		edges = append(edges, site.EdgeTenant)
 	}
 	if m.agents != nil {
 		edges = append(edges, site.EdgeAgents)
+	}
+	if m.profiles != nil {
+		edges = append(edges, site.EdgeProfiles)
 	}
 	return edges
 }
@@ -21911,15 +22030,24 @@ func (m *SiteMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case site.EdgeProfiles:
+		ids := make([]ent.Value, 0, len(m.profiles))
+		for id := range m.profiles {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SiteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedagents != nil {
 		edges = append(edges, site.EdgeAgents)
+	}
+	if m.removedprofiles != nil {
+		edges = append(edges, site.EdgeProfiles)
 	}
 	return edges
 }
@@ -21934,18 +22062,27 @@ func (m *SiteMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case site.EdgeProfiles:
+		ids := make([]ent.Value, 0, len(m.removedprofiles))
+		for id := range m.removedprofiles {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SiteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedtenant {
 		edges = append(edges, site.EdgeTenant)
 	}
 	if m.clearedagents {
 		edges = append(edges, site.EdgeAgents)
+	}
+	if m.clearedprofiles {
+		edges = append(edges, site.EdgeProfiles)
 	}
 	return edges
 }
@@ -21958,6 +22095,8 @@ func (m *SiteMutation) EdgeCleared(name string) bool {
 		return m.clearedtenant
 	case site.EdgeAgents:
 		return m.clearedagents
+	case site.EdgeProfiles:
+		return m.clearedprofiles
 	}
 	return false
 }
@@ -21982,6 +22121,9 @@ func (m *SiteMutation) ResetEdge(name string) error {
 		return nil
 	case site.EdgeAgents:
 		m.ResetAgents()
+		return nil
+	case site.EdgeProfiles:
+		m.ResetProfiles()
 		return nil
 	}
 	return fmt.Errorf("unknown Site edge %s", name)

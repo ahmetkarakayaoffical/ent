@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/agent"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tenant"
 )
@@ -83,6 +84,21 @@ func (sc *SiteCreate) AddAgents(a ...*Agent) *SiteCreate {
 		ids[i] = a[i].ID
 	}
 	return sc.AddAgentIDs(ids...)
+}
+
+// AddProfileIDs adds the "profiles" edge to the Profile entity by IDs.
+func (sc *SiteCreate) AddProfileIDs(ids ...int) *SiteCreate {
+	sc.mutation.AddProfileIDs(ids...)
+	return sc
+}
+
+// AddProfiles adds the "profiles" edges to the Profile entity.
+func (sc *SiteCreate) AddProfiles(p ...*Profile) *SiteCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return sc.AddProfileIDs(ids...)
 }
 
 // Mutation returns the SiteMutation object of the builder.
@@ -180,6 +196,22 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

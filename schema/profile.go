@@ -26,5 +26,6 @@ func (Profile) Edges() []ent.Edge {
 		edge.To("tags", Tag.Type),
 		edge.To("tasks", Task.Type),
 		edge.To("issues", ProfileIssue.Type),
+		edge.From("site", Site.Type).Unique().Ref("profiles"),
 	}
 }

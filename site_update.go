@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tenant"
 )
@@ -104,6 +105,21 @@ func (su *SiteUpdate) AddAgents(a ...*Agent) *SiteUpdate {
 	return su.AddAgentIDs(ids...)
 }
 
+// AddProfileIDs adds the "profiles" edge to the Profile entity by IDs.
+func (su *SiteUpdate) AddProfileIDs(ids ...int) *SiteUpdate {
+	su.mutation.AddProfileIDs(ids...)
+	return su
+}
+
+// AddProfiles adds the "profiles" edges to the Profile entity.
+func (su *SiteUpdate) AddProfiles(p ...*Profile) *SiteUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.AddProfileIDs(ids...)
+}
+
 // Mutation returns the SiteMutation object of the builder.
 func (su *SiteUpdate) Mutation() *SiteMutation {
 	return su.mutation
@@ -134,6 +150,27 @@ func (su *SiteUpdate) RemoveAgents(a ...*Agent) *SiteUpdate {
 		ids[i] = a[i].ID
 	}
 	return su.RemoveAgentIDs(ids...)
+}
+
+// ClearProfiles clears all "profiles" edges to the Profile entity.
+func (su *SiteUpdate) ClearProfiles() *SiteUpdate {
+	su.mutation.ClearProfiles()
+	return su
+}
+
+// RemoveProfileIDs removes the "profiles" edge to Profile entities by IDs.
+func (su *SiteUpdate) RemoveProfileIDs(ids ...int) *SiteUpdate {
+	su.mutation.RemoveProfileIDs(ids...)
+	return su
+}
+
+// RemoveProfiles removes "profiles" edges to Profile entities.
+func (su *SiteUpdate) RemoveProfiles(p ...*Profile) *SiteUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.RemoveProfileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -264,6 +301,51 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if su.mutation.ProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedProfilesIDs(); len(nodes) > 0 && !su.mutation.ProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.ProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -360,6 +442,21 @@ func (suo *SiteUpdateOne) AddAgents(a ...*Agent) *SiteUpdateOne {
 	return suo.AddAgentIDs(ids...)
 }
 
+// AddProfileIDs adds the "profiles" edge to the Profile entity by IDs.
+func (suo *SiteUpdateOne) AddProfileIDs(ids ...int) *SiteUpdateOne {
+	suo.mutation.AddProfileIDs(ids...)
+	return suo
+}
+
+// AddProfiles adds the "profiles" edges to the Profile entity.
+func (suo *SiteUpdateOne) AddProfiles(p ...*Profile) *SiteUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.AddProfileIDs(ids...)
+}
+
 // Mutation returns the SiteMutation object of the builder.
 func (suo *SiteUpdateOne) Mutation() *SiteMutation {
 	return suo.mutation
@@ -390,6 +487,27 @@ func (suo *SiteUpdateOne) RemoveAgents(a ...*Agent) *SiteUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return suo.RemoveAgentIDs(ids...)
+}
+
+// ClearProfiles clears all "profiles" edges to the Profile entity.
+func (suo *SiteUpdateOne) ClearProfiles() *SiteUpdateOne {
+	suo.mutation.ClearProfiles()
+	return suo
+}
+
+// RemoveProfileIDs removes the "profiles" edge to Profile entities by IDs.
+func (suo *SiteUpdateOne) RemoveProfileIDs(ids ...int) *SiteUpdateOne {
+	suo.mutation.RemoveProfileIDs(ids...)
+	return suo
+}
+
+// RemoveProfiles removes "profiles" edges to Profile entities.
+func (suo *SiteUpdateOne) RemoveProfiles(p ...*Profile) *SiteUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.RemoveProfileIDs(ids...)
 }
 
 // Where appends a list predicates to the SiteUpdate builder.
@@ -543,6 +661,51 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.ProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedProfilesIDs(); len(nodes) > 0 && !suo.mutation.ProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.ProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   site.ProfilesTable,
+			Columns: []string{site.ProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

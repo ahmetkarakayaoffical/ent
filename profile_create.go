@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 )
@@ -101,6 +102,25 @@ func (pc *ProfileCreate) AddIssues(p ...*ProfileIssue) *ProfileCreate {
 		ids[i] = p[i].ID
 	}
 	return pc.AddIssueIDs(ids...)
+}
+
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (pc *ProfileCreate) SetSiteID(id int) *ProfileCreate {
+	pc.mutation.SetSiteID(id)
+	return pc
+}
+
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (pc *ProfileCreate) SetNillableSiteID(id *int) *ProfileCreate {
+	if id != nil {
+		pc = pc.SetSiteID(*id)
+	}
+	return pc
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (pc *ProfileCreate) SetSite(s *Site) *ProfileCreate {
+	return pc.SetSiteID(s.ID)
 }
 
 // Mutation returns the ProfileMutation object of the builder.
@@ -251,6 +271,23 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.SiteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   profile.SiteTable,
+			Columns: []string{profile.SiteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.site_profiles = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

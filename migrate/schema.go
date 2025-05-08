@@ -381,12 +381,21 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "apply_to_all", Type: field.TypeBool, Default: false},
 		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"winget"}, Default: "winget"},
+		{Name: "site_profiles", Type: field.TypeInt, Nullable: true},
 	}
 	// ProfilesTable holds the schema information for the "profiles" table.
 	ProfilesTable = &schema.Table{
 		Name:       "profiles",
 		Columns:    ProfilesColumns,
 		PrimaryKey: []*schema.Column{ProfilesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "profiles_sites_profiles",
+				Columns:    []*schema.Column{ProfilesColumns[4]},
+				RefColumns: []*schema.Column{SitesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 	}
 	// ProfileIssuesColumns holds the columns for the "profile_issues" table.
 	ProfileIssuesColumns = []*schema.Column{
@@ -933,6 +942,7 @@ func init() {
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	OrgMetadataTable.ForeignKeys[0].RefTable = TenantsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
+	ProfilesTable.ForeignKeys[0].RefTable = SitesTable
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
