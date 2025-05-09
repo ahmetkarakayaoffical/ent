@@ -851,7 +851,7 @@ func (c *AgentClient) QuerySite(a *Agent) *SiteQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(site.Table, site.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, agent.SiteTable, agent.SiteColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, agent.SiteTable, agent.SitePrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -4209,7 +4209,7 @@ func (c *SiteClient) QueryAgents(s *Site) *AgentQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(site.Table, site.FieldID, id),
 			sqlgraph.To(agent.Table, agent.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, site.AgentsTable, site.AgentsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, site.AgentsTable, site.AgentsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

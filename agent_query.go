@@ -509,7 +509,7 @@ func (aq *AgentQuery) QuerySite() *SiteQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(agent.Table, agent.FieldID, selector),
 			sqlgraph.To(site.Table, site.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, agent.SiteTable, agent.SiteColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, agent.SiteTable, agent.SitePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -1045,7 +1045,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withSite != nil,
 		}
 	)
-	if aq.withRelease != nil || aq.withSite != nil {
+	if aq.withRelease != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -1196,8 +1196,9 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		}
 	}
 	if query := aq.withSite; query != nil {
-		if err := aq.loadSite(ctx, query, nodes, nil,
-			func(n *Agent, e *Site) { n.Edges.Site = e }); err != nil {
+		if err := aq.loadSite(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Site = []*Site{} },
+			func(n *Agent, e *Site) { n.Edges.Site = append(n.Edges.Site, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1782,33 +1783,62 @@ func (aq *AgentQuery) loadProfileissue(ctx context.Context, query *ProfileIssueQ
 	return nil
 }
 func (aq *AgentQuery) loadSite(ctx context.Context, query *SiteQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *Site)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Agent)
-	for i := range nodes {
-		if nodes[i].site_agents == nil {
-			continue
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Agent)
+	nids := make(map[int]map[*Agent]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].site_agents
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(agent.SiteTable)
+		s.Join(joinT).On(s.C(site.FieldID), joinT.C(agent.SitePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(agent.SitePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(agent.SitePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(site.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Agent]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Site](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "site_agents" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "site" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil

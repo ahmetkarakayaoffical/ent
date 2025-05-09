@@ -37,7 +37,6 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other"}, Default: "Other"},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
-		{Name: "site_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{
@@ -50,12 +49,6 @@ var (
 				Columns:    []*schema.Column{AgentsColumns[26]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "agents_sites_agents",
-				Columns:    []*schema.Column{AgentsColumns[27]},
-				RefColumns: []*schema.Column{SitesColumns[0]},
-				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -873,6 +866,31 @@ var (
 			},
 		},
 	}
+	// SiteAgentsColumns holds the columns for the "site_agents" table.
+	SiteAgentsColumns = []*schema.Column{
+		{Name: "site_id", Type: field.TypeInt},
+		{Name: "agent_id", Type: field.TypeString},
+	}
+	// SiteAgentsTable holds the schema information for the "site_agents" table.
+	SiteAgentsTable = &schema.Table{
+		Name:       "site_agents",
+		Columns:    SiteAgentsColumns,
+		PrimaryKey: []*schema.Column{SiteAgentsColumns[0], SiteAgentsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "site_agents_site_id",
+				Columns:    []*schema.Column{SiteAgentsColumns[0]},
+				RefColumns: []*schema.Column{SitesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "site_agents_agent_id",
+				Columns:    []*schema.Column{SiteAgentsColumns[1]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -907,12 +925,12 @@ var (
 		WingetConfigExclusionsTable,
 		AgentTagsTable,
 		ProfileTagsTable,
+		SiteAgentsTable,
 	}
 )
 
 func init() {
 	AgentsTable.ForeignKeys[0].RefTable = ReleasesTable
-	AgentsTable.ForeignKeys[1].RefTable = SitesTable
 	AntiviriTable.ForeignKeys[0].RefTable = AgentsTable
 	AppsTable.ForeignKeys[0].RefTable = AgentsTable
 	ComputersTable.ForeignKeys[0].RefTable = AgentsTable
@@ -945,4 +963,6 @@ func init() {
 	AgentTagsTable.ForeignKeys[1].RefTable = TagsTable
 	ProfileTagsTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
+	SiteAgentsTable.ForeignKeys[0].RefTable = SitesTable
+	SiteAgentsTable.ForeignKeys[1].RefTable = AgentsTable
 }

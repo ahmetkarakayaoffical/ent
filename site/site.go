@@ -33,13 +33,11 @@ const (
 	TenantInverseTable = "tenants"
 	// TenantColumn is the table column denoting the tenant relation/edge.
 	TenantColumn = "tenant_sites"
-	// AgentsTable is the table that holds the agents relation/edge.
-	AgentsTable = "agents"
+	// AgentsTable is the table that holds the agents relation/edge. The primary key declared below.
+	AgentsTable = "site_agents"
 	// AgentsInverseTable is the table name for the Agent entity.
 	// It exists in this package in order to avoid circular dependency with the "agent" package.
 	AgentsInverseTable = "agents"
-	// AgentsColumn is the table column denoting the agents relation/edge.
-	AgentsColumn = "site_agents"
 	// ProfilesTable is the table that holds the profiles relation/edge.
 	ProfilesTable = "profiles"
 	// ProfilesInverseTable is the table name for the Profile entity.
@@ -61,6 +59,12 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"tenant_sites",
 }
+
+var (
+	// AgentsPrimaryKey and AgentsColumn2 are the table columns denoting the
+	// primary key for the agents relation (M2M).
+	AgentsPrimaryKey = []string{"site_id", "agent_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -140,7 +144,7 @@ func newAgentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AgentsInverseTable, AgentFieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, AgentsTable, AgentsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, AgentsTable, AgentsPrimaryKey...),
 	)
 }
 func newProfilesStep() *sqlgraph.Step {

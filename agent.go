@@ -14,7 +14,6 @@ import (
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/release"
-	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/systemupdate"
 )
 
@@ -77,7 +76,6 @@ type Agent struct {
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
 	release_agents *int
-	site_agents    *int
 	selectValues   sql.SelectValues
 }
 
@@ -120,7 +118,7 @@ type AgentEdges struct {
 	// Profileissue holds the value of the profileissue edge.
 	Profileissue []*ProfileIssue `json:"profileissue,omitempty"`
 	// Site holds the value of the site edge.
-	Site *Site `json:"site,omitempty"`
+	Site []*Site `json:"site,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [19]bool
@@ -299,12 +297,10 @@ func (e AgentEdges) ProfileissueOrErr() ([]*ProfileIssue, error) {
 }
 
 // SiteOrErr returns the Site value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e AgentEdges) SiteOrErr() (*Site, error) {
-	if e.Site != nil {
+// was not loaded in eager-loading.
+func (e AgentEdges) SiteOrErr() ([]*Site, error) {
+	if e.loadedTypes[18] {
 		return e.Site, nil
-	} else if e.loadedTypes[18] {
-		return nil, &NotFoundError{label: site.Label}
 	}
 	return nil, &NotLoadedError{edge: "site"}
 }
@@ -321,8 +317,6 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution, agent.FieldSettingsModified:
 			values[i] = new(sql.NullTime)
 		case agent.ForeignKeys[0]: // release_agents
-			values[i] = new(sql.NullInt64)
-		case agent.ForeignKeys[1]: // site_agents
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -501,13 +495,6 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.release_agents = new(int)
 				*a.release_agents = int(value.Int64)
-			}
-		case agent.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field site_agents", value)
-			} else if value.Valid {
-				a.site_agents = new(int)
-				*a.site_agents = int(value.Int64)
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
