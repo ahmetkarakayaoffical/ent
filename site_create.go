@@ -189,10 +189,10 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 	}
 	if nodes := sc.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),

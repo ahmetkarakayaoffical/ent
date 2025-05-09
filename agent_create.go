@@ -672,19 +672,23 @@ func (ac *AgentCreate) AddProfileissue(p ...*ProfileIssue) *AgentCreate {
 	return ac.AddProfileissueIDs(ids...)
 }
 
-// AddSiteIDs adds the "site" edge to the Site entity by IDs.
-func (ac *AgentCreate) AddSiteIDs(ids ...int) *AgentCreate {
-	ac.mutation.AddSiteIDs(ids...)
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (ac *AgentCreate) SetSiteID(id int) *AgentCreate {
+	ac.mutation.SetSiteID(id)
 	return ac
 }
 
-// AddSite adds the "site" edges to the Site entity.
-func (ac *AgentCreate) AddSite(s ...*Site) *AgentCreate {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (ac *AgentCreate) SetNillableSiteID(id *int) *AgentCreate {
+	if id != nil {
+		ac = ac.SetSiteID(*id)
 	}
-	return ac.AddSiteIDs(ids...)
+	return ac
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (ac *AgentCreate) SetSite(s *Site) *AgentCreate {
+	return ac.SetSiteID(s.ID)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -1266,10 +1270,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ac.mutation.SiteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
+			Columns: []string{agent.SiteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
@@ -1278,6 +1282,7 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.site_agents = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

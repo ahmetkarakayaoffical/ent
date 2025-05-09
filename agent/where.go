@@ -1914,7 +1914,7 @@ func HasSite() predicate.Agent {
 	return predicate.Agent(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, SiteTable, SitePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, SiteTable, SiteColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

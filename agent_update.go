@@ -814,19 +814,23 @@ func (au *AgentUpdate) AddProfileissue(p ...*ProfileIssue) *AgentUpdate {
 	return au.AddProfileissueIDs(ids...)
 }
 
-// AddSiteIDs adds the "site" edge to the Site entity by IDs.
-func (au *AgentUpdate) AddSiteIDs(ids ...int) *AgentUpdate {
-	au.mutation.AddSiteIDs(ids...)
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (au *AgentUpdate) SetSiteID(id int) *AgentUpdate {
+	au.mutation.SetSiteID(id)
 	return au
 }
 
-// AddSite adds the "site" edges to the Site entity.
-func (au *AgentUpdate) AddSite(s ...*Site) *AgentUpdate {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (au *AgentUpdate) SetNillableSiteID(id *int) *AgentUpdate {
+	if id != nil {
+		au = au.SetSiteID(*id)
 	}
-	return au.AddSiteIDs(ids...)
+	return au
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (au *AgentUpdate) SetSite(s *Site) *AgentUpdate {
+	return au.SetSiteID(s.ID)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -1137,25 +1141,10 @@ func (au *AgentUpdate) RemoveProfileissue(p ...*ProfileIssue) *AgentUpdate {
 	return au.RemoveProfileissueIDs(ids...)
 }
 
-// ClearSite clears all "site" edges to the Site entity.
+// ClearSite clears the "site" edge to the Site entity.
 func (au *AgentUpdate) ClearSite() *AgentUpdate {
 	au.mutation.ClearSite()
 	return au
-}
-
-// RemoveSiteIDs removes the "site" edge to Site entities by IDs.
-func (au *AgentUpdate) RemoveSiteIDs(ids ...int) *AgentUpdate {
-	au.mutation.RemoveSiteIDs(ids...)
-	return au
-}
-
-// RemoveSite removes "site" edges to Site entities.
-func (au *AgentUpdate) RemoveSite(s ...*Site) *AgentUpdate {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return au.RemoveSiteIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2098,39 +2087,23 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.SiteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
+			Columns: []string{agent.SiteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.RemovedSiteIDs(); len(nodes) > 0 && !au.mutation.SiteCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := au.mutation.SiteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
+			Columns: []string{agent.SiteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
@@ -2929,19 +2902,23 @@ func (auo *AgentUpdateOne) AddProfileissue(p ...*ProfileIssue) *AgentUpdateOne {
 	return auo.AddProfileissueIDs(ids...)
 }
 
-// AddSiteIDs adds the "site" edge to the Site entity by IDs.
-func (auo *AgentUpdateOne) AddSiteIDs(ids ...int) *AgentUpdateOne {
-	auo.mutation.AddSiteIDs(ids...)
+// SetSiteID sets the "site" edge to the Site entity by ID.
+func (auo *AgentUpdateOne) SetSiteID(id int) *AgentUpdateOne {
+	auo.mutation.SetSiteID(id)
 	return auo
 }
 
-// AddSite adds the "site" edges to the Site entity.
-func (auo *AgentUpdateOne) AddSite(s ...*Site) *AgentUpdateOne {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+// SetNillableSiteID sets the "site" edge to the Site entity by ID if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableSiteID(id *int) *AgentUpdateOne {
+	if id != nil {
+		auo = auo.SetSiteID(*id)
 	}
-	return auo.AddSiteIDs(ids...)
+	return auo
+}
+
+// SetSite sets the "site" edge to the Site entity.
+func (auo *AgentUpdateOne) SetSite(s *Site) *AgentUpdateOne {
+	return auo.SetSiteID(s.ID)
 }
 
 // Mutation returns the AgentMutation object of the builder.
@@ -3252,25 +3229,10 @@ func (auo *AgentUpdateOne) RemoveProfileissue(p ...*ProfileIssue) *AgentUpdateOn
 	return auo.RemoveProfileissueIDs(ids...)
 }
 
-// ClearSite clears all "site" edges to the Site entity.
+// ClearSite clears the "site" edge to the Site entity.
 func (auo *AgentUpdateOne) ClearSite() *AgentUpdateOne {
 	auo.mutation.ClearSite()
 	return auo
-}
-
-// RemoveSiteIDs removes the "site" edge to Site entities by IDs.
-func (auo *AgentUpdateOne) RemoveSiteIDs(ids ...int) *AgentUpdateOne {
-	auo.mutation.RemoveSiteIDs(ids...)
-	return auo
-}
-
-// RemoveSite removes "site" edges to Site entities.
-func (auo *AgentUpdateOne) RemoveSite(s ...*Site) *AgentUpdateOne {
-	ids := make([]int, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return auo.RemoveSiteIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -4243,39 +4205,23 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.SiteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
+			Columns: []string{agent.SiteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.RemovedSiteIDs(); len(nodes) > 0 && !auo.mutation.SiteCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := auo.mutation.SiteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   agent.SiteTable,
-			Columns: agent.SitePrimaryKey,
+			Columns: []string{agent.SiteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),

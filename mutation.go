@@ -166,8 +166,7 @@ type AgentMutation struct {
 	profileissue               map[int]struct{}
 	removedprofileissue        map[int]struct{}
 	clearedprofileissue        bool
-	site                       map[int]struct{}
-	removedsite                map[int]struct{}
+	site                       *int
 	clearedsite                bool
 	done                       bool
 	oldValue                   func(context.Context) (*Agent, error)
@@ -2348,14 +2347,9 @@ func (m *AgentMutation) ResetProfileissue() {
 	m.removedprofileissue = nil
 }
 
-// AddSiteIDs adds the "site" edge to the Site entity by ids.
-func (m *AgentMutation) AddSiteIDs(ids ...int) {
-	if m.site == nil {
-		m.site = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.site[ids[i]] = struct{}{}
-	}
+// SetSiteID sets the "site" edge to the Site entity by id.
+func (m *AgentMutation) SetSiteID(id int) {
+	m.site = &id
 }
 
 // ClearSite clears the "site" edge to the Site entity.
@@ -2368,29 +2362,20 @@ func (m *AgentMutation) SiteCleared() bool {
 	return m.clearedsite
 }
 
-// RemoveSiteIDs removes the "site" edge to the Site entity by IDs.
-func (m *AgentMutation) RemoveSiteIDs(ids ...int) {
-	if m.removedsite == nil {
-		m.removedsite = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.site, ids[i])
-		m.removedsite[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedSite returns the removed IDs of the "site" edge to the Site entity.
-func (m *AgentMutation) RemovedSiteIDs() (ids []int) {
-	for id := range m.removedsite {
-		ids = append(ids, id)
+// SiteID returns the "site" edge ID in the mutation.
+func (m *AgentMutation) SiteID() (id int, exists bool) {
+	if m.site != nil {
+		return *m.site, true
 	}
 	return
 }
 
 // SiteIDs returns the "site" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SiteID instead. It exists only for internal usage by the builders.
 func (m *AgentMutation) SiteIDs() (ids []int) {
-	for id := range m.site {
-		ids = append(ids, id)
+	if id := m.site; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -2399,7 +2384,6 @@ func (m *AgentMutation) SiteIDs() (ids []int) {
 func (m *AgentMutation) ResetSite() {
 	m.site = nil
 	m.clearedsite = false
-	m.removedsite = nil
 }
 
 // Where appends a list predicates to the AgentMutation builder.
@@ -3236,11 +3220,9 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 		}
 		return ids
 	case agent.EdgeSite:
-		ids := make([]ent.Value, 0, len(m.site))
-		for id := range m.site {
-			ids = append(ids, id)
+		if id := m.site; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
 	}
 	return nil
 }
@@ -3286,9 +3268,6 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedprofileissue != nil {
 		edges = append(edges, agent.EdgeProfileissue)
-	}
-	if m.removedsite != nil {
-		edges = append(edges, agent.EdgeSite)
 	}
 	return edges
 }
@@ -3372,12 +3351,6 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 	case agent.EdgeProfileissue:
 		ids := make([]ent.Value, 0, len(m.removedprofileissue))
 		for id := range m.removedprofileissue {
-			ids = append(ids, id)
-		}
-		return ids
-	case agent.EdgeSite:
-		ids := make([]ent.Value, 0, len(m.removedsite))
-		for id := range m.removedsite {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3512,6 +3485,9 @@ func (m *AgentMutation) ClearEdge(name string) error {
 		return nil
 	case agent.EdgeRelease:
 		m.ClearRelease()
+		return nil
+	case agent.EdgeSite:
+		m.ClearSite()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent unique edge %s", name)

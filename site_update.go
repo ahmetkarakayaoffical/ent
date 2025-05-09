@@ -258,10 +258,10 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -271,10 +271,10 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := su.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !su.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -287,10 +287,10 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := su.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -625,10 +625,10 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if suo.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -638,10 +638,10 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if nodes := suo.mutation.RemovedAgentsIDs(); len(nodes) > 0 && !suo.mutation.AgentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
@@ -654,10 +654,10 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if nodes := suo.mutation.AgentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   site.AgentsTable,
-			Columns: site.AgentsPrimaryKey,
+			Columns: []string{site.AgentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(agent.FieldID, field.TypeString),
