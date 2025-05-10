@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -68,6 +69,38 @@ func (su *SiteUpdate) SetNillableIsDefault(b *bool) *SiteUpdate {
 // ClearIsDefault clears the value of the "is_default" field.
 func (su *SiteUpdate) ClearIsDefault() *SiteUpdate {
 	su.mutation.ClearIsDefault()
+	return su
+}
+
+// SetCreated sets the "created" field.
+func (su *SiteUpdate) SetCreated(t time.Time) *SiteUpdate {
+	su.mutation.SetCreated(t)
+	return su
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (su *SiteUpdate) SetNillableCreated(t *time.Time) *SiteUpdate {
+	if t != nil {
+		su.SetCreated(*t)
+	}
+	return su
+}
+
+// ClearCreated clears the value of the "created" field.
+func (su *SiteUpdate) ClearCreated() *SiteUpdate {
+	su.mutation.ClearCreated()
+	return su
+}
+
+// SetModified sets the "modified" field.
+func (su *SiteUpdate) SetModified(t time.Time) *SiteUpdate {
+	su.mutation.SetModified(t)
+	return su
+}
+
+// ClearModified clears the value of the "modified" field.
+func (su *SiteUpdate) ClearModified() *SiteUpdate {
+	su.mutation.ClearModified()
 	return su
 }
 
@@ -175,6 +208,7 @@ func (su *SiteUpdate) RemoveProfiles(p ...*Profile) *SiteUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *SiteUpdate) Save(ctx context.Context) (int, error) {
+	su.defaults()
 	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
@@ -197,6 +231,14 @@ func (su *SiteUpdate) Exec(ctx context.Context) error {
 func (su *SiteUpdate) ExecX(ctx context.Context) {
 	if err := su.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (su *SiteUpdate) defaults() {
+	if _, ok := su.mutation.Modified(); !ok && !su.mutation.ModifiedCleared() {
+		v := site.UpdateDefaultModified()
+		su.mutation.SetModified(v)
 	}
 }
 
@@ -226,6 +268,18 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.IsDefaultCleared() {
 		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
+	}
+	if value, ok := su.mutation.Created(); ok {
+		_spec.SetField(site.FieldCreated, field.TypeTime, value)
+	}
+	if su.mutation.CreatedCleared() {
+		_spec.ClearField(site.FieldCreated, field.TypeTime)
+	}
+	if value, ok := su.mutation.Modified(); ok {
+		_spec.SetField(site.FieldModified, field.TypeTime, value)
+	}
+	if su.mutation.ModifiedCleared() {
+		_spec.ClearField(site.FieldModified, field.TypeTime)
 	}
 	if su.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -408,6 +462,38 @@ func (suo *SiteUpdateOne) ClearIsDefault() *SiteUpdateOne {
 	return suo
 }
 
+// SetCreated sets the "created" field.
+func (suo *SiteUpdateOne) SetCreated(t time.Time) *SiteUpdateOne {
+	suo.mutation.SetCreated(t)
+	return suo
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (suo *SiteUpdateOne) SetNillableCreated(t *time.Time) *SiteUpdateOne {
+	if t != nil {
+		suo.SetCreated(*t)
+	}
+	return suo
+}
+
+// ClearCreated clears the value of the "created" field.
+func (suo *SiteUpdateOne) ClearCreated() *SiteUpdateOne {
+	suo.mutation.ClearCreated()
+	return suo
+}
+
+// SetModified sets the "modified" field.
+func (suo *SiteUpdateOne) SetModified(t time.Time) *SiteUpdateOne {
+	suo.mutation.SetModified(t)
+	return suo
+}
+
+// ClearModified clears the value of the "modified" field.
+func (suo *SiteUpdateOne) ClearModified() *SiteUpdateOne {
+	suo.mutation.ClearModified()
+	return suo
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (suo *SiteUpdateOne) SetTenantID(id int) *SiteUpdateOne {
 	suo.mutation.SetTenantID(id)
@@ -525,6 +611,7 @@ func (suo *SiteUpdateOne) Select(field string, fields ...string) *SiteUpdateOne 
 
 // Save executes the query and returns the updated Site entity.
 func (suo *SiteUpdateOne) Save(ctx context.Context) (*Site, error) {
+	suo.defaults()
 	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
@@ -547,6 +634,14 @@ func (suo *SiteUpdateOne) Exec(ctx context.Context) error {
 func (suo *SiteUpdateOne) ExecX(ctx context.Context) {
 	if err := suo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (suo *SiteUpdateOne) defaults() {
+	if _, ok := suo.mutation.Modified(); !ok && !suo.mutation.ModifiedCleared() {
+		v := site.UpdateDefaultModified()
+		suo.mutation.SetModified(v)
 	}
 }
 
@@ -593,6 +688,18 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if suo.mutation.IsDefaultCleared() {
 		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
+	}
+	if value, ok := suo.mutation.Created(); ok {
+		_spec.SetField(site.FieldCreated, field.TypeTime, value)
+	}
+	if suo.mutation.CreatedCleared() {
+		_spec.ClearField(site.FieldCreated, field.TypeTime)
+	}
+	if value, ok := suo.mutation.Modified(); ok {
+		_spec.SetField(site.FieldModified, field.TypeTime, value)
+	}
+	if suo.mutation.ModifiedCleared() {
+		_spec.ClearField(site.FieldModified, field.TypeTime)
 	}
 	if suo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{

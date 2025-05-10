@@ -3,6 +3,8 @@
 package site
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -16,6 +18,10 @@ const (
 	FieldDescription = "description"
 	// FieldIsDefault holds the string denoting the is_default field in the database.
 	FieldIsDefault = "is_default"
+	// FieldCreated holds the string denoting the created field in the database.
+	FieldCreated = "created"
+	// FieldModified holds the string denoting the modified field in the database.
+	FieldModified = "modified"
 	// EdgeTenant holds the string denoting the tenant edge name in mutations.
 	EdgeTenant = "tenant"
 	// EdgeAgents holds the string denoting the agents edge name in mutations.
@@ -52,6 +58,8 @@ var Columns = []string{
 	FieldID,
 	FieldDescription,
 	FieldIsDefault,
+	FieldCreated,
+	FieldModified,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "sites"
@@ -81,6 +89,15 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// DefaultCreated holds the default value on creation for the "created" field.
+	DefaultCreated func() time.Time
+	// DefaultModified holds the default value on creation for the "modified" field.
+	DefaultModified func() time.Time
+	// UpdateDefaultModified holds the default value on update for the "modified" field.
+	UpdateDefaultModified func() time.Time
+)
+
 // OrderOption defines the ordering options for the Site queries.
 type OrderOption func(*sql.Selector)
 
@@ -97,6 +114,16 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByIsDefault orders the results by the is_default field.
 func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsDefault, opts...).ToFunc()
+}
+
+// ByCreated orders the results by the created field.
+func ByCreated(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreated, opts...).ToFunc()
+}
+
+// ByModified orders the results by the modified field.
+func ByModified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldModified, opts...).ToFunc()
 }
 
 // ByTenantField orders the results by tenant field.

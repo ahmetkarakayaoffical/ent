@@ -15,6 +15,7 @@ import (
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
+	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
 	"github.com/open-uem/ent/task"
 	"github.com/open-uem/ent/tenant"
@@ -270,6 +271,18 @@ func init() {
 	settingsDescAutoAdmitAgents := settingsFields[34].Descriptor()
 	// settings.DefaultAutoAdmitAgents holds the default value on creation for the auto_admit_agents field.
 	settings.DefaultAutoAdmitAgents = settingsDescAutoAdmitAgents.Default.(bool)
+	siteFields := schema.Site{}.Fields()
+	_ = siteFields
+	// siteDescCreated is the schema descriptor for created field.
+	siteDescCreated := siteFields[2].Descriptor()
+	// site.DefaultCreated holds the default value on creation for the created field.
+	site.DefaultCreated = siteDescCreated.Default.(func() time.Time)
+	// siteDescModified is the schema descriptor for modified field.
+	siteDescModified := siteFields[3].Descriptor()
+	// site.DefaultModified holds the default value on creation for the modified field.
+	site.DefaultModified = siteDescModified.Default.(func() time.Time)
+	// site.UpdateDefaultModified holds the default value on update for the modified field.
+	site.UpdateDefaultModified = siteDescModified.UpdateDefault.(func() time.Time)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescTag is the schema descriptor for tag field.

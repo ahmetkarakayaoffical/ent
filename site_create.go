@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -48,6 +49,34 @@ func (sc *SiteCreate) SetIsDefault(b bool) *SiteCreate {
 func (sc *SiteCreate) SetNillableIsDefault(b *bool) *SiteCreate {
 	if b != nil {
 		sc.SetIsDefault(*b)
+	}
+	return sc
+}
+
+// SetCreated sets the "created" field.
+func (sc *SiteCreate) SetCreated(t time.Time) *SiteCreate {
+	sc.mutation.SetCreated(t)
+	return sc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (sc *SiteCreate) SetNillableCreated(t *time.Time) *SiteCreate {
+	if t != nil {
+		sc.SetCreated(*t)
+	}
+	return sc
+}
+
+// SetModified sets the "modified" field.
+func (sc *SiteCreate) SetModified(t time.Time) *SiteCreate {
+	sc.mutation.SetModified(t)
+	return sc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (sc *SiteCreate) SetNillableModified(t *time.Time) *SiteCreate {
+	if t != nil {
+		sc.SetModified(*t)
 	}
 	return sc
 }
@@ -108,6 +137,7 @@ func (sc *SiteCreate) Mutation() *SiteMutation {
 
 // Save creates the Site in the database.
 func (sc *SiteCreate) Save(ctx context.Context) (*Site, error) {
+	sc.defaults()
 	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
 }
 
@@ -130,6 +160,18 @@ func (sc *SiteCreate) Exec(ctx context.Context) error {
 func (sc *SiteCreate) ExecX(ctx context.Context) {
 	if err := sc.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (sc *SiteCreate) defaults() {
+	if _, ok := sc.mutation.Created(); !ok {
+		v := site.DefaultCreated()
+		sc.mutation.SetCreated(v)
+	}
+	if _, ok := sc.mutation.Modified(); !ok {
+		v := site.DefaultModified()
+		sc.mutation.SetModified(v)
 	}
 }
 
@@ -169,6 +211,14 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.IsDefault(); ok {
 		_spec.SetField(site.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
+	}
+	if value, ok := sc.mutation.Created(); ok {
+		_spec.SetField(site.FieldCreated, field.TypeTime, value)
+		_node.Created = value
+	}
+	if value, ok := sc.mutation.Modified(); ok {
+		_spec.SetField(site.FieldModified, field.TypeTime, value)
+		_node.Modified = value
 	}
 	if nodes := sc.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -307,6 +357,42 @@ func (u *SiteUpsert) ClearIsDefault() *SiteUpsert {
 	return u
 }
 
+// SetCreated sets the "created" field.
+func (u *SiteUpsert) SetCreated(v time.Time) *SiteUpsert {
+	u.Set(site.FieldCreated, v)
+	return u
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *SiteUpsert) UpdateCreated() *SiteUpsert {
+	u.SetExcluded(site.FieldCreated)
+	return u
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *SiteUpsert) ClearCreated() *SiteUpsert {
+	u.SetNull(site.FieldCreated)
+	return u
+}
+
+// SetModified sets the "modified" field.
+func (u *SiteUpsert) SetModified(v time.Time) *SiteUpsert {
+	u.Set(site.FieldModified, v)
+	return u
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *SiteUpsert) UpdateModified() *SiteUpsert {
+	u.SetExcluded(site.FieldModified)
+	return u
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *SiteUpsert) ClearModified() *SiteUpsert {
+	u.SetNull(site.FieldModified)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -389,6 +475,48 @@ func (u *SiteUpsertOne) ClearIsDefault() *SiteUpsertOne {
 	})
 }
 
+// SetCreated sets the "created" field.
+func (u *SiteUpsertOne) SetCreated(v time.Time) *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetCreated(v)
+	})
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *SiteUpsertOne) UpdateCreated() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *SiteUpsertOne) ClearCreated() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearCreated()
+	})
+}
+
+// SetModified sets the "modified" field.
+func (u *SiteUpsertOne) SetModified(v time.Time) *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetModified(v)
+	})
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *SiteUpsertOne) UpdateModified() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *SiteUpsertOne) ClearModified() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearModified()
+	})
+}
+
 // Exec executes the query.
 func (u *SiteUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -441,6 +569,7 @@ func (scb *SiteCreateBulk) Save(ctx context.Context) ([]*Site, error) {
 	for i := range scb.builders {
 		func(i int, root context.Context) {
 			builder := scb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SiteMutation)
 				if !ok {
@@ -631,6 +760,48 @@ func (u *SiteUpsertBulk) UpdateIsDefault() *SiteUpsertBulk {
 func (u *SiteUpsertBulk) ClearIsDefault() *SiteUpsertBulk {
 	return u.Update(func(s *SiteUpsert) {
 		s.ClearIsDefault()
+	})
+}
+
+// SetCreated sets the "created" field.
+func (u *SiteUpsertBulk) SetCreated(v time.Time) *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetCreated(v)
+	})
+}
+
+// UpdateCreated sets the "created" field to the value that was provided on create.
+func (u *SiteUpsertBulk) UpdateCreated() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateCreated()
+	})
+}
+
+// ClearCreated clears the value of the "created" field.
+func (u *SiteUpsertBulk) ClearCreated() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearCreated()
+	})
+}
+
+// SetModified sets the "modified" field.
+func (u *SiteUpsertBulk) SetModified(v time.Time) *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetModified(v)
+	})
+}
+
+// UpdateModified sets the "modified" field to the value that was provided on create.
+func (u *SiteUpsertBulk) UpdateModified() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateModified()
+	})
+}
+
+// ClearModified clears the value of the "modified" field.
+func (u *SiteUpsertBulk) ClearModified() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearModified()
 	})
 }
 

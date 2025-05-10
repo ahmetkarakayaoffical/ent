@@ -3,6 +3,8 @@
 package site
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/open-uem/ent/predicate"
@@ -61,6 +63,16 @@ func Description(v string) predicate.Site {
 // IsDefault applies equality check predicate on the "is_default" field. It's identical to IsDefaultEQ.
 func IsDefault(v bool) predicate.Site {
 	return predicate.Site(sql.FieldEQ(FieldIsDefault, v))
+}
+
+// Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
+func Created(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldCreated, v))
+}
+
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldModified, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -156,6 +168,106 @@ func IsDefaultIsNil() predicate.Site {
 // IsDefaultNotNil applies the NotNil predicate on the "is_default" field.
 func IsDefaultNotNil() predicate.Site {
 	return predicate.Site(sql.FieldNotNull(FieldIsDefault))
+}
+
+// CreatedEQ applies the EQ predicate on the "created" field.
+func CreatedEQ(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldCreated, v))
+}
+
+// CreatedNEQ applies the NEQ predicate on the "created" field.
+func CreatedNEQ(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldNEQ(FieldCreated, v))
+}
+
+// CreatedIn applies the In predicate on the "created" field.
+func CreatedIn(vs ...time.Time) predicate.Site {
+	return predicate.Site(sql.FieldIn(FieldCreated, vs...))
+}
+
+// CreatedNotIn applies the NotIn predicate on the "created" field.
+func CreatedNotIn(vs ...time.Time) predicate.Site {
+	return predicate.Site(sql.FieldNotIn(FieldCreated, vs...))
+}
+
+// CreatedGT applies the GT predicate on the "created" field.
+func CreatedGT(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldGT(FieldCreated, v))
+}
+
+// CreatedGTE applies the GTE predicate on the "created" field.
+func CreatedGTE(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldGTE(FieldCreated, v))
+}
+
+// CreatedLT applies the LT predicate on the "created" field.
+func CreatedLT(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldLT(FieldCreated, v))
+}
+
+// CreatedLTE applies the LTE predicate on the "created" field.
+func CreatedLTE(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldLTE(FieldCreated, v))
+}
+
+// CreatedIsNil applies the IsNil predicate on the "created" field.
+func CreatedIsNil() predicate.Site {
+	return predicate.Site(sql.FieldIsNull(FieldCreated))
+}
+
+// CreatedNotNil applies the NotNil predicate on the "created" field.
+func CreatedNotNil() predicate.Site {
+	return predicate.Site(sql.FieldNotNull(FieldCreated))
+}
+
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldEQ(FieldModified, v))
+}
+
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldNEQ(FieldModified, v))
+}
+
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.Site {
+	return predicate.Site(sql.FieldIn(FieldModified, vs...))
+}
+
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.Site {
+	return predicate.Site(sql.FieldNotIn(FieldModified, vs...))
+}
+
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldGT(FieldModified, v))
+}
+
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldGTE(FieldModified, v))
+}
+
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldLT(FieldModified, v))
+}
+
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.Site {
+	return predicate.Site(sql.FieldLTE(FieldModified, v))
+}
+
+// ModifiedIsNil applies the IsNil predicate on the "modified" field.
+func ModifiedIsNil() predicate.Site {
+	return predicate.Site(sql.FieldIsNull(FieldModified))
+}
+
+// ModifiedNotNil applies the NotNil predicate on the "modified" field.
+func ModifiedNotNil() predicate.Site {
+	return predicate.Site(sql.FieldNotNull(FieldModified))
 }
 
 // HasTenant applies the HasEdge predicate on the "tenant" edge.
