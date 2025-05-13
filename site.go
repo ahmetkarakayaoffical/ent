@@ -22,6 +22,8 @@ type Site struct {
 	Description string `json:"description,omitempty"`
 	// IsDefault holds the value of the "is_default" field.
 	IsDefault bool `json:"is_default,omitempty"`
+	// Domain holds the value of the "domain" field.
+	Domain string `json:"domain,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -84,7 +86,7 @@ func (*Site) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case site.FieldID:
 			values[i] = new(sql.NullInt64)
-		case site.FieldDescription:
+		case site.FieldDescription, site.FieldDomain:
 			values[i] = new(sql.NullString)
 		case site.FieldCreated, site.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -122,6 +124,12 @@ func (s *Site) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_default", values[i])
 			} else if value.Valid {
 				s.IsDefault = value.Bool
+			}
+		case site.FieldDomain:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field domain", values[i])
+			} else if value.Valid {
+				s.Domain = value.String
 			}
 		case site.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -198,6 +206,9 @@ func (s *Site) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
 	builder.WriteString(fmt.Sprintf("%v", s.IsDefault))
+	builder.WriteString(", ")
+	builder.WriteString("domain=")
+	builder.WriteString(s.Domain)
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(s.Created.Format(time.ANSIC))

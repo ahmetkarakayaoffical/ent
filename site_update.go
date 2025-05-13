@@ -72,6 +72,26 @@ func (su *SiteUpdate) ClearIsDefault() *SiteUpdate {
 	return su
 }
 
+// SetDomain sets the "domain" field.
+func (su *SiteUpdate) SetDomain(s string) *SiteUpdate {
+	su.mutation.SetDomain(s)
+	return su
+}
+
+// SetNillableDomain sets the "domain" field if the given value is not nil.
+func (su *SiteUpdate) SetNillableDomain(s *string) *SiteUpdate {
+	if s != nil {
+		su.SetDomain(*s)
+	}
+	return su
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (su *SiteUpdate) ClearDomain() *SiteUpdate {
+	su.mutation.ClearDomain()
+	return su
+}
+
 // SetCreated sets the "created" field.
 func (su *SiteUpdate) SetCreated(t time.Time) *SiteUpdate {
 	su.mutation.SetCreated(t)
@@ -269,6 +289,12 @@ func (su *SiteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.IsDefaultCleared() {
 		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
 	}
+	if value, ok := su.mutation.Domain(); ok {
+		_spec.SetField(site.FieldDomain, field.TypeString, value)
+	}
+	if su.mutation.DomainCleared() {
+		_spec.ClearField(site.FieldDomain, field.TypeString)
+	}
 	if value, ok := su.mutation.Created(); ok {
 		_spec.SetField(site.FieldCreated, field.TypeTime, value)
 	}
@@ -459,6 +485,26 @@ func (suo *SiteUpdateOne) SetNillableIsDefault(b *bool) *SiteUpdateOne {
 // ClearIsDefault clears the value of the "is_default" field.
 func (suo *SiteUpdateOne) ClearIsDefault() *SiteUpdateOne {
 	suo.mutation.ClearIsDefault()
+	return suo
+}
+
+// SetDomain sets the "domain" field.
+func (suo *SiteUpdateOne) SetDomain(s string) *SiteUpdateOne {
+	suo.mutation.SetDomain(s)
+	return suo
+}
+
+// SetNillableDomain sets the "domain" field if the given value is not nil.
+func (suo *SiteUpdateOne) SetNillableDomain(s *string) *SiteUpdateOne {
+	if s != nil {
+		suo.SetDomain(*s)
+	}
+	return suo
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (suo *SiteUpdateOne) ClearDomain() *SiteUpdateOne {
+	suo.mutation.ClearDomain()
 	return suo
 }
 
@@ -688,6 +734,12 @@ func (suo *SiteUpdateOne) sqlSave(ctx context.Context) (_node *Site, err error) 
 	}
 	if suo.mutation.IsDefaultCleared() {
 		_spec.ClearField(site.FieldIsDefault, field.TypeBool)
+	}
+	if value, ok := suo.mutation.Domain(); ok {
+		_spec.SetField(site.FieldDomain, field.TypeString, value)
+	}
+	if suo.mutation.DomainCleared() {
+		_spec.ClearField(site.FieldDomain, field.TypeString)
 	}
 	if value, ok := suo.mutation.Created(); ok {
 		_spec.SetField(site.FieldCreated, field.TypeTime, value)

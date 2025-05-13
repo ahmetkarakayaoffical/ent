@@ -53,6 +53,20 @@ func (sc *SiteCreate) SetNillableIsDefault(b *bool) *SiteCreate {
 	return sc
 }
 
+// SetDomain sets the "domain" field.
+func (sc *SiteCreate) SetDomain(s string) *SiteCreate {
+	sc.mutation.SetDomain(s)
+	return sc
+}
+
+// SetNillableDomain sets the "domain" field if the given value is not nil.
+func (sc *SiteCreate) SetNillableDomain(s *string) *SiteCreate {
+	if s != nil {
+		sc.SetDomain(*s)
+	}
+	return sc
+}
+
 // SetCreated sets the "created" field.
 func (sc *SiteCreate) SetCreated(t time.Time) *SiteCreate {
 	sc.mutation.SetCreated(t)
@@ -212,6 +226,10 @@ func (sc *SiteCreate) createSpec() (*Site, *sqlgraph.CreateSpec) {
 		_spec.SetField(site.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
 	}
+	if value, ok := sc.mutation.Domain(); ok {
+		_spec.SetField(site.FieldDomain, field.TypeString, value)
+		_node.Domain = value
+	}
 	if value, ok := sc.mutation.Created(); ok {
 		_spec.SetField(site.FieldCreated, field.TypeTime, value)
 		_node.Created = value
@@ -357,6 +375,24 @@ func (u *SiteUpsert) ClearIsDefault() *SiteUpsert {
 	return u
 }
 
+// SetDomain sets the "domain" field.
+func (u *SiteUpsert) SetDomain(v string) *SiteUpsert {
+	u.Set(site.FieldDomain, v)
+	return u
+}
+
+// UpdateDomain sets the "domain" field to the value that was provided on create.
+func (u *SiteUpsert) UpdateDomain() *SiteUpsert {
+	u.SetExcluded(site.FieldDomain)
+	return u
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (u *SiteUpsert) ClearDomain() *SiteUpsert {
+	u.SetNull(site.FieldDomain)
+	return u
+}
+
 // SetCreated sets the "created" field.
 func (u *SiteUpsert) SetCreated(v time.Time) *SiteUpsert {
 	u.Set(site.FieldCreated, v)
@@ -472,6 +508,27 @@ func (u *SiteUpsertOne) UpdateIsDefault() *SiteUpsertOne {
 func (u *SiteUpsertOne) ClearIsDefault() *SiteUpsertOne {
 	return u.Update(func(s *SiteUpsert) {
 		s.ClearIsDefault()
+	})
+}
+
+// SetDomain sets the "domain" field.
+func (u *SiteUpsertOne) SetDomain(v string) *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetDomain(v)
+	})
+}
+
+// UpdateDomain sets the "domain" field to the value that was provided on create.
+func (u *SiteUpsertOne) UpdateDomain() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateDomain()
+	})
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (u *SiteUpsertOne) ClearDomain() *SiteUpsertOne {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearDomain()
 	})
 }
 
@@ -760,6 +817,27 @@ func (u *SiteUpsertBulk) UpdateIsDefault() *SiteUpsertBulk {
 func (u *SiteUpsertBulk) ClearIsDefault() *SiteUpsertBulk {
 	return u.Update(func(s *SiteUpsert) {
 		s.ClearIsDefault()
+	})
+}
+
+// SetDomain sets the "domain" field.
+func (u *SiteUpsertBulk) SetDomain(v string) *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.SetDomain(v)
+	})
+}
+
+// UpdateDomain sets the "domain" field to the value that was provided on create.
+func (u *SiteUpsertBulk) UpdateDomain() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.UpdateDomain()
+	})
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (u *SiteUpsertBulk) ClearDomain() *SiteUpsertBulk {
+	return u.Update(func(s *SiteUpsert) {
+		s.ClearDomain()
 	})
 }
 

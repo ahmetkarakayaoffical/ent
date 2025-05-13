@@ -614,6 +614,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "is_default", Type: field.TypeBool, Nullable: true},
+		{Name: "domain", Type: field.TypeString, Nullable: true},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 		{Name: "tenant_sites", Type: field.TypeInt, Nullable: true},
@@ -626,7 +627,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sites_tenants_sites",
-				Columns:    []*schema.Column{SitesColumns[5]},
+				Columns:    []*schema.Column{SitesColumns[6]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

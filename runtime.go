@@ -274,11 +274,11 @@ func init() {
 	siteFields := schema.Site{}.Fields()
 	_ = siteFields
 	// siteDescCreated is the schema descriptor for created field.
-	siteDescCreated := siteFields[2].Descriptor()
+	siteDescCreated := siteFields[3].Descriptor()
 	// site.DefaultCreated holds the default value on creation for the created field.
 	site.DefaultCreated = siteDescCreated.Default.(func() time.Time)
 	// siteDescModified is the schema descriptor for modified field.
-	siteDescModified := siteFields[3].Descriptor()
+	siteDescModified := siteFields[4].Descriptor()
 	// site.DefaultModified holds the default value on creation for the modified field.
 	site.DefaultModified = siteDescModified.Default.(func() time.Time)
 	// site.UpdateDefaultModified holds the default value on update for the modified field.

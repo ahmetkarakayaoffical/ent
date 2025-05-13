@@ -18,6 +18,8 @@ const (
 	FieldDescription = "description"
 	// FieldIsDefault holds the string denoting the is_default field in the database.
 	FieldIsDefault = "is_default"
+	// FieldDomain holds the string denoting the domain field in the database.
+	FieldDomain = "domain"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -58,6 +60,7 @@ var Columns = []string{
 	FieldID,
 	FieldDescription,
 	FieldIsDefault,
+	FieldDomain,
 	FieldCreated,
 	FieldModified,
 }
@@ -114,6 +117,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByIsDefault orders the results by the is_default field.
 func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsDefault, opts...).ToFunc()
+}
+
+// ByDomain orders the results by the domain field.
+func ByDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDomain, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

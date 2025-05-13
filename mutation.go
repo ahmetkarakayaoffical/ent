@@ -21481,6 +21481,7 @@ type SiteMutation struct {
 	id              *int
 	description     *string
 	is_default      *bool
+	domain          *string
 	created         *time.Time
 	modified        *time.Time
 	clearedFields   map[string]struct{}
@@ -21691,6 +21692,55 @@ func (m *SiteMutation) IsDefaultCleared() bool {
 func (m *SiteMutation) ResetIsDefault() {
 	m.is_default = nil
 	delete(m.clearedFields, site.FieldIsDefault)
+}
+
+// SetDomain sets the "domain" field.
+func (m *SiteMutation) SetDomain(s string) {
+	m.domain = &s
+}
+
+// Domain returns the value of the "domain" field in the mutation.
+func (m *SiteMutation) Domain() (r string, exists bool) {
+	v := m.domain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDomain returns the old "domain" field's value of the Site entity.
+// If the Site object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SiteMutation) OldDomain(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDomain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDomain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDomain: %w", err)
+	}
+	return oldValue.Domain, nil
+}
+
+// ClearDomain clears the value of the "domain" field.
+func (m *SiteMutation) ClearDomain() {
+	m.domain = nil
+	m.clearedFields[site.FieldDomain] = struct{}{}
+}
+
+// DomainCleared returns if the "domain" field was cleared in this mutation.
+func (m *SiteMutation) DomainCleared() bool {
+	_, ok := m.clearedFields[site.FieldDomain]
+	return ok
+}
+
+// ResetDomain resets all changes to the "domain" field.
+func (m *SiteMutation) ResetDomain() {
+	m.domain = nil
+	delete(m.clearedFields, site.FieldDomain)
 }
 
 // SetCreated sets the "created" field.
@@ -21972,12 +22022,15 @@ func (m *SiteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SiteMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.description != nil {
 		fields = append(fields, site.FieldDescription)
 	}
 	if m.is_default != nil {
 		fields = append(fields, site.FieldIsDefault)
+	}
+	if m.domain != nil {
+		fields = append(fields, site.FieldDomain)
 	}
 	if m.created != nil {
 		fields = append(fields, site.FieldCreated)
@@ -21997,6 +22050,8 @@ func (m *SiteMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case site.FieldIsDefault:
 		return m.IsDefault()
+	case site.FieldDomain:
+		return m.Domain()
 	case site.FieldCreated:
 		return m.Created()
 	case site.FieldModified:
@@ -22014,6 +22069,8 @@ func (m *SiteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDescription(ctx)
 	case site.FieldIsDefault:
 		return m.OldIsDefault(ctx)
+	case site.FieldDomain:
+		return m.OldDomain(ctx)
 	case site.FieldCreated:
 		return m.OldCreated(ctx)
 	case site.FieldModified:
@@ -22040,6 +22097,13 @@ func (m *SiteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDefault(v)
+		return nil
+	case site.FieldDomain:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDomain(v)
 		return nil
 	case site.FieldCreated:
 		v, ok := value.(time.Time)
@@ -22091,6 +22155,9 @@ func (m *SiteMutation) ClearedFields() []string {
 	if m.FieldCleared(site.FieldIsDefault) {
 		fields = append(fields, site.FieldIsDefault)
 	}
+	if m.FieldCleared(site.FieldDomain) {
+		fields = append(fields, site.FieldDomain)
+	}
 	if m.FieldCleared(site.FieldCreated) {
 		fields = append(fields, site.FieldCreated)
 	}
@@ -22117,6 +22184,9 @@ func (m *SiteMutation) ClearField(name string) error {
 	case site.FieldIsDefault:
 		m.ClearIsDefault()
 		return nil
+	case site.FieldDomain:
+		m.ClearDomain()
+		return nil
 	case site.FieldCreated:
 		m.ClearCreated()
 		return nil
@@ -22136,6 +22206,9 @@ func (m *SiteMutation) ResetField(name string) error {
 		return nil
 	case site.FieldIsDefault:
 		m.ResetIsDefault()
+		return nil
+	case site.FieldDomain:
+		m.ResetDomain()
 		return nil
 	case site.FieldCreated:
 		m.ResetCreated()
