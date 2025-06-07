@@ -17797,6 +17797,7 @@ type SettingsMutation struct {
 	addprofiles_application_frequence_in_minutes *int
 	use_winget                                   *bool
 	use_flatpak                                  *bool
+	use_brew                                     *bool
 	disable_sftp                                 *bool
 	disable_remote_assistance                    *bool
 	detect_remote_agents                         *bool
@@ -19575,6 +19576,55 @@ func (m *SettingsMutation) ResetUseFlatpak() {
 	delete(m.clearedFields, settings.FieldUseFlatpak)
 }
 
+// SetUseBrew sets the "use_brew" field.
+func (m *SettingsMutation) SetUseBrew(b bool) {
+	m.use_brew = &b
+}
+
+// UseBrew returns the value of the "use_brew" field in the mutation.
+func (m *SettingsMutation) UseBrew() (r bool, exists bool) {
+	v := m.use_brew
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUseBrew returns the old "use_brew" field's value of the Settings entity.
+// If the Settings object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SettingsMutation) OldUseBrew(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUseBrew is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUseBrew requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUseBrew: %w", err)
+	}
+	return oldValue.UseBrew, nil
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (m *SettingsMutation) ClearUseBrew() {
+	m.use_brew = nil
+	m.clearedFields[settings.FieldUseBrew] = struct{}{}
+}
+
+// UseBrewCleared returns if the "use_brew" field was cleared in this mutation.
+func (m *SettingsMutation) UseBrewCleared() bool {
+	_, ok := m.clearedFields[settings.FieldUseBrew]
+	return ok
+}
+
+// ResetUseBrew resets all changes to the "use_brew" field.
+func (m *SettingsMutation) ResetUseBrew() {
+	m.use_brew = nil
+	delete(m.clearedFields, settings.FieldUseBrew)
+}
+
 // SetDisableSftp sets the "disable_sftp" field.
 func (m *SettingsMutation) SetDisableSftp(b bool) {
 	m.disable_sftp = &b
@@ -19883,7 +19933,7 @@ func (m *SettingsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SettingsMutation) Fields() []string {
-	fields := make([]string, 0, 35)
+	fields := make([]string, 0, 36)
 	if m.language != nil {
 		fields = append(fields, settings.FieldLanguage)
 	}
@@ -19977,6 +20027,9 @@ func (m *SettingsMutation) Fields() []string {
 	if m.use_flatpak != nil {
 		fields = append(fields, settings.FieldUseFlatpak)
 	}
+	if m.use_brew != nil {
+		fields = append(fields, settings.FieldUseBrew)
+	}
 	if m.disable_sftp != nil {
 		fields = append(fields, settings.FieldDisableSftp)
 	}
@@ -20059,6 +20112,8 @@ func (m *SettingsMutation) Field(name string) (ent.Value, bool) {
 		return m.UseWinget()
 	case settings.FieldUseFlatpak:
 		return m.UseFlatpak()
+	case settings.FieldUseBrew:
+		return m.UseBrew()
 	case settings.FieldDisableSftp:
 		return m.DisableSftp()
 	case settings.FieldDisableRemoteAssistance:
@@ -20138,6 +20193,8 @@ func (m *SettingsMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUseWinget(ctx)
 	case settings.FieldUseFlatpak:
 		return m.OldUseFlatpak(ctx)
+	case settings.FieldUseBrew:
+		return m.OldUseBrew(ctx)
 	case settings.FieldDisableSftp:
 		return m.OldDisableSftp(ctx)
 	case settings.FieldDisableRemoteAssistance:
@@ -20371,6 +20428,13 @@ func (m *SettingsMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUseFlatpak(v)
+		return nil
+	case settings.FieldUseBrew:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUseBrew(v)
 		return nil
 	case settings.FieldDisableSftp:
 		v, ok := value.(bool)
@@ -20610,6 +20674,9 @@ func (m *SettingsMutation) ClearedFields() []string {
 	if m.FieldCleared(settings.FieldUseFlatpak) {
 		fields = append(fields, settings.FieldUseFlatpak)
 	}
+	if m.FieldCleared(settings.FieldUseBrew) {
+		fields = append(fields, settings.FieldUseBrew)
+	}
 	if m.FieldCleared(settings.FieldDisableSftp) {
 		fields = append(fields, settings.FieldDisableSftp)
 	}
@@ -20729,6 +20796,9 @@ func (m *SettingsMutation) ClearField(name string) error {
 	case settings.FieldUseFlatpak:
 		m.ClearUseFlatpak()
 		return nil
+	case settings.FieldUseBrew:
+		m.ClearUseBrew()
+		return nil
 	case settings.FieldDisableSftp:
 		m.ClearDisableSftp()
 		return nil
@@ -20841,6 +20911,9 @@ func (m *SettingsMutation) ResetField(name string) error {
 		return nil
 	case settings.FieldUseFlatpak:
 		m.ResetUseFlatpak()
+		return nil
+	case settings.FieldUseBrew:
+		m.ResetUseBrew()
 		return nil
 	case settings.FieldDisableSftp:
 		m.ResetDisableSftp()

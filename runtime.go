@@ -255,20 +255,24 @@ func init() {
 	settingsDescUseFlatpak := settingsFields[30].Descriptor()
 	// settings.DefaultUseFlatpak holds the default value on creation for the use_flatpak field.
 	settings.DefaultUseFlatpak = settingsDescUseFlatpak.Default.(bool)
+	// settingsDescUseBrew is the schema descriptor for use_brew field.
+	settingsDescUseBrew := settingsFields[31].Descriptor()
+	// settings.DefaultUseBrew holds the default value on creation for the use_brew field.
+	settings.DefaultUseBrew = settingsDescUseBrew.Default.(bool)
 	// settingsDescDisableSftp is the schema descriptor for disable_sftp field.
-	settingsDescDisableSftp := settingsFields[31].Descriptor()
+	settingsDescDisableSftp := settingsFields[32].Descriptor()
 	// settings.DefaultDisableSftp holds the default value on creation for the disable_sftp field.
 	settings.DefaultDisableSftp = settingsDescDisableSftp.Default.(bool)
 	// settingsDescDisableRemoteAssistance is the schema descriptor for disable_remote_assistance field.
-	settingsDescDisableRemoteAssistance := settingsFields[32].Descriptor()
+	settingsDescDisableRemoteAssistance := settingsFields[33].Descriptor()
 	// settings.DefaultDisableRemoteAssistance holds the default value on creation for the disable_remote_assistance field.
 	settings.DefaultDisableRemoteAssistance = settingsDescDisableRemoteAssistance.Default.(bool)
 	// settingsDescDetectRemoteAgents is the schema descriptor for detect_remote_agents field.
-	settingsDescDetectRemoteAgents := settingsFields[33].Descriptor()
+	settingsDescDetectRemoteAgents := settingsFields[34].Descriptor()
 	// settings.DefaultDetectRemoteAgents holds the default value on creation for the detect_remote_agents field.
 	settings.DefaultDetectRemoteAgents = settingsDescDetectRemoteAgents.Default.(bool)
 	// settingsDescAutoAdmitAgents is the schema descriptor for auto_admit_agents field.
-	settingsDescAutoAdmitAgents := settingsFields[34].Descriptor()
+	settingsDescAutoAdmitAgents := settingsFields[35].Descriptor()
 	// settings.DefaultAutoAdmitAgents holds the default value on creation for the auto_admit_agents field.
 	settings.DefaultAutoAdmitAgents = settingsDescAutoAdmitAgents.Default.(bool)
 	siteFields := schema.Site{}.Fields()

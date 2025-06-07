@@ -76,6 +76,8 @@ const (
 	FieldUseWinget = "use_winget"
 	// FieldUseFlatpak holds the string denoting the use_flatpak field in the database.
 	FieldUseFlatpak = "use_flatpak"
+	// FieldUseBrew holds the string denoting the use_brew field in the database.
+	FieldUseBrew = "use_brew"
 	// FieldDisableSftp holds the string denoting the disable_sftp field in the database.
 	FieldDisableSftp = "disable_sftp"
 	// FieldDisableRemoteAssistance holds the string denoting the disable_remote_assistance field in the database.
@@ -140,6 +142,7 @@ var Columns = []string{
 	FieldProfilesApplicationFrequenceInMinutes,
 	FieldUseWinget,
 	FieldUseFlatpak,
+	FieldUseBrew,
 	FieldDisableSftp,
 	FieldDisableRemoteAssistance,
 	FieldDetectRemoteAgents,
@@ -207,6 +210,8 @@ var (
 	DefaultUseWinget bool
 	// DefaultUseFlatpak holds the default value on creation for the "use_flatpak" field.
 	DefaultUseFlatpak bool
+	// DefaultUseBrew holds the default value on creation for the "use_brew" field.
+	DefaultUseBrew bool
 	// DefaultDisableSftp holds the default value on creation for the "disable_sftp" field.
 	DefaultDisableSftp bool
 	// DefaultDisableRemoteAssistance holds the default value on creation for the "disable_remote_assistance" field.
@@ -378,6 +383,11 @@ func ByUseWinget(opts ...sql.OrderTermOption) OrderOption {
 // ByUseFlatpak orders the results by the use_flatpak field.
 func ByUseFlatpak(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUseFlatpak, opts...).ToFunc()
+}
+
+// ByUseBrew orders the results by the use_brew field.
+func ByUseBrew(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUseBrew, opts...).ToFunc()
 }
 
 // ByDisableSftp orders the results by the disable_sftp field.

@@ -560,6 +560,7 @@ var (
 		{Name: "profiles_application_frequence_in_minutes", Type: field.TypeInt, Nullable: true, Default: 30},
 		{Name: "use_winget", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "use_flatpak", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "use_brew", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "disable_sftp", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "disable_remote_assistance", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "detect_remote_agents", Type: field.TypeBool, Nullable: true, Default: false},
@@ -575,13 +576,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "settings_tags_tag",
-				Columns:    []*schema.Column{SettingsColumns[36]},
+				Columns:    []*schema.Column{SettingsColumns[37]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "settings_tenants_settings",
-				Columns:    []*schema.Column{SettingsColumns[37]},
+				Columns:    []*schema.Column{SettingsColumns[38]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

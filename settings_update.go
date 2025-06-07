@@ -692,6 +692,26 @@ func (su *SettingsUpdate) ClearUseFlatpak() *SettingsUpdate {
 	return su
 }
 
+// SetUseBrew sets the "use_brew" field.
+func (su *SettingsUpdate) SetUseBrew(b bool) *SettingsUpdate {
+	su.mutation.SetUseBrew(b)
+	return su
+}
+
+// SetNillableUseBrew sets the "use_brew" field if the given value is not nil.
+func (su *SettingsUpdate) SetNillableUseBrew(b *bool) *SettingsUpdate {
+	if b != nil {
+		su.SetUseBrew(*b)
+	}
+	return su
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (su *SettingsUpdate) ClearUseBrew() *SettingsUpdate {
+	su.mutation.ClearUseBrew()
+	return su
+}
+
 // SetDisableSftp sets the "disable_sftp" field.
 func (su *SettingsUpdate) SetDisableSftp(b bool) *SettingsUpdate {
 	su.mutation.SetDisableSftp(b)
@@ -1084,6 +1104,12 @@ func (su *SettingsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.UseFlatpakCleared() {
 		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
+	}
+	if value, ok := su.mutation.UseBrew(); ok {
+		_spec.SetField(settings.FieldUseBrew, field.TypeBool, value)
+	}
+	if su.mutation.UseBrewCleared() {
+		_spec.ClearField(settings.FieldUseBrew, field.TypeBool)
 	}
 	if value, ok := su.mutation.DisableSftp(); ok {
 		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
@@ -1850,6 +1876,26 @@ func (suo *SettingsUpdateOne) ClearUseFlatpak() *SettingsUpdateOne {
 	return suo
 }
 
+// SetUseBrew sets the "use_brew" field.
+func (suo *SettingsUpdateOne) SetUseBrew(b bool) *SettingsUpdateOne {
+	suo.mutation.SetUseBrew(b)
+	return suo
+}
+
+// SetNillableUseBrew sets the "use_brew" field if the given value is not nil.
+func (suo *SettingsUpdateOne) SetNillableUseBrew(b *bool) *SettingsUpdateOne {
+	if b != nil {
+		suo.SetUseBrew(*b)
+	}
+	return suo
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (suo *SettingsUpdateOne) ClearUseBrew() *SettingsUpdateOne {
+	suo.mutation.ClearUseBrew()
+	return suo
+}
+
 // SetDisableSftp sets the "disable_sftp" field.
 func (suo *SettingsUpdateOne) SetDisableSftp(b bool) *SettingsUpdateOne {
 	suo.mutation.SetDisableSftp(b)
@@ -2272,6 +2318,12 @@ func (suo *SettingsUpdateOne) sqlSave(ctx context.Context) (_node *Settings, err
 	}
 	if suo.mutation.UseFlatpakCleared() {
 		_spec.ClearField(settings.FieldUseFlatpak, field.TypeBool)
+	}
+	if value, ok := suo.mutation.UseBrew(); ok {
+		_spec.SetField(settings.FieldUseBrew, field.TypeBool, value)
+	}
+	if suo.mutation.UseBrewCleared() {
+		_spec.ClearField(settings.FieldUseBrew, field.TypeBool)
 	}
 	if value, ok := suo.mutation.DisableSftp(); ok {
 		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)

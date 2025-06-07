@@ -81,6 +81,8 @@ type Settings struct {
 	UseWinget bool `json:"use_winget,omitempty"`
 	// UseFlatpak holds the value of the "use_flatpak" field.
 	UseFlatpak bool `json:"use_flatpak,omitempty"`
+	// UseBrew holds the value of the "use_brew" field.
+	UseBrew bool `json:"use_brew,omitempty"`
 	// DisableSftp holds the value of the "disable_sftp" field.
 	DisableSftp bool `json:"disable_sftp,omitempty"`
 	// DisableRemoteAssistance holds the value of the "disable_remote_assistance" field.
@@ -135,7 +137,7 @@ func (*Settings) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin, settings.FieldUseWinget, settings.FieldUseFlatpak, settings.FieldDisableSftp, settings.FieldDisableRemoteAssistance, settings.FieldDetectRemoteAgents, settings.FieldAutoAdmitAgents:
+		case settings.FieldSMTPTLS, settings.FieldSMTPStarttls, settings.FieldRequestVncPin, settings.FieldUseWinget, settings.FieldUseFlatpak, settings.FieldUseBrew, settings.FieldDisableSftp, settings.FieldDisableRemoteAssistance, settings.FieldDetectRemoteAgents, settings.FieldAutoAdmitAgents:
 			values[i] = new(sql.NullBool)
 		case settings.FieldID, settings.FieldSMTPPort, settings.FieldUserCertYearsValid, settings.FieldNatsRequestTimeoutSeconds, settings.FieldRefreshTimeInMinutes, settings.FieldSessionLifetimeInMinutes, settings.FieldAgentReportFrequenceInMinutes, settings.FieldProfilesApplicationFrequenceInMinutes:
 			values[i] = new(sql.NullInt64)
@@ -354,6 +356,12 @@ func (s *Settings) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UseFlatpak = value.Bool
 			}
+		case settings.FieldUseBrew:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field use_brew", values[i])
+			} else if value.Valid {
+				s.UseBrew = value.Bool
+			}
 		case settings.FieldDisableSftp:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field disable_sftp", values[i])
@@ -530,6 +538,9 @@ func (s *Settings) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("use_flatpak=")
 	builder.WriteString(fmt.Sprintf("%v", s.UseFlatpak))
+	builder.WriteString(", ")
+	builder.WriteString("use_brew=")
+	builder.WriteString(fmt.Sprintf("%v", s.UseBrew))
 	builder.WriteString(", ")
 	builder.WriteString("disable_sftp=")
 	builder.WriteString(fmt.Sprintf("%v", s.DisableSftp))

@@ -210,6 +210,11 @@ func UseFlatpak(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldUseFlatpak, v))
 }
 
+// UseBrew applies equality check predicate on the "use_brew" field. It's identical to UseBrewEQ.
+func UseBrew(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseBrew, v))
+}
+
 // DisableSftp applies equality check predicate on the "disable_sftp" field. It's identical to DisableSftpEQ.
 func DisableSftp(v bool) predicate.Settings {
 	return predicate.Settings(sql.FieldEQ(FieldDisableSftp, v))
@@ -2053,6 +2058,26 @@ func UseFlatpakIsNil() predicate.Settings {
 // UseFlatpakNotNil applies the NotNil predicate on the "use_flatpak" field.
 func UseFlatpakNotNil() predicate.Settings {
 	return predicate.Settings(sql.FieldNotNull(FieldUseFlatpak))
+}
+
+// UseBrewEQ applies the EQ predicate on the "use_brew" field.
+func UseBrewEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldEQ(FieldUseBrew, v))
+}
+
+// UseBrewNEQ applies the NEQ predicate on the "use_brew" field.
+func UseBrewNEQ(v bool) predicate.Settings {
+	return predicate.Settings(sql.FieldNEQ(FieldUseBrew, v))
+}
+
+// UseBrewIsNil applies the IsNil predicate on the "use_brew" field.
+func UseBrewIsNil() predicate.Settings {
+	return predicate.Settings(sql.FieldIsNull(FieldUseBrew))
+}
+
+// UseBrewNotNil applies the NotNil predicate on the "use_brew" field.
+func UseBrewNotNil() predicate.Settings {
+	return predicate.Settings(sql.FieldNotNull(FieldUseBrew))
 }
 
 // DisableSftpEQ applies the EQ predicate on the "disable_sftp" field.

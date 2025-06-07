@@ -458,6 +458,20 @@ func (sc *SettingsCreate) SetNillableUseFlatpak(b *bool) *SettingsCreate {
 	return sc
 }
 
+// SetUseBrew sets the "use_brew" field.
+func (sc *SettingsCreate) SetUseBrew(b bool) *SettingsCreate {
+	sc.mutation.SetUseBrew(b)
+	return sc
+}
+
+// SetNillableUseBrew sets the "use_brew" field if the given value is not nil.
+func (sc *SettingsCreate) SetNillableUseBrew(b *bool) *SettingsCreate {
+	if b != nil {
+		sc.SetUseBrew(*b)
+	}
+	return sc
+}
+
 // SetDisableSftp sets the "disable_sftp" field.
 func (sc *SettingsCreate) SetDisableSftp(b bool) *SettingsCreate {
 	sc.mutation.SetDisableSftp(b)
@@ -659,6 +673,10 @@ func (sc *SettingsCreate) defaults() {
 		v := settings.DefaultUseFlatpak
 		sc.mutation.SetUseFlatpak(v)
 	}
+	if _, ok := sc.mutation.UseBrew(); !ok {
+		v := settings.DefaultUseBrew
+		sc.mutation.SetUseBrew(v)
+	}
 	if _, ok := sc.mutation.DisableSftp(); !ok {
 		v := settings.DefaultDisableSftp
 		sc.mutation.SetDisableSftp(v)
@@ -829,6 +847,10 @@ func (sc *SettingsCreate) createSpec() (*Settings, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.UseFlatpak(); ok {
 		_spec.SetField(settings.FieldUseFlatpak, field.TypeBool, value)
 		_node.UseFlatpak = value
+	}
+	if value, ok := sc.mutation.UseBrew(); ok {
+		_spec.SetField(settings.FieldUseBrew, field.TypeBool, value)
+		_node.UseBrew = value
 	}
 	if value, ok := sc.mutation.DisableSftp(); ok {
 		_spec.SetField(settings.FieldDisableSftp, field.TypeBool, value)
@@ -1529,6 +1551,24 @@ func (u *SettingsUpsert) UpdateUseFlatpak() *SettingsUpsert {
 // ClearUseFlatpak clears the value of the "use_flatpak" field.
 func (u *SettingsUpsert) ClearUseFlatpak() *SettingsUpsert {
 	u.SetNull(settings.FieldUseFlatpak)
+	return u
+}
+
+// SetUseBrew sets the "use_brew" field.
+func (u *SettingsUpsert) SetUseBrew(v bool) *SettingsUpsert {
+	u.Set(settings.FieldUseBrew, v)
+	return u
+}
+
+// UpdateUseBrew sets the "use_brew" field to the value that was provided on create.
+func (u *SettingsUpsert) UpdateUseBrew() *SettingsUpsert {
+	u.SetExcluded(settings.FieldUseBrew)
+	return u
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (u *SettingsUpsert) ClearUseBrew() *SettingsUpsert {
+	u.SetNull(settings.FieldUseBrew)
 	return u
 }
 
@@ -2341,6 +2381,27 @@ func (u *SettingsUpsertOne) UpdateUseFlatpak() *SettingsUpsertOne {
 func (u *SettingsUpsertOne) ClearUseFlatpak() *SettingsUpsertOne {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearUseFlatpak()
+	})
+}
+
+// SetUseBrew sets the "use_brew" field.
+func (u *SettingsUpsertOne) SetUseBrew(v bool) *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseBrew(v)
+	})
+}
+
+// UpdateUseBrew sets the "use_brew" field to the value that was provided on create.
+func (u *SettingsUpsertOne) UpdateUseBrew() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseBrew()
+	})
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (u *SettingsUpsertOne) ClearUseBrew() *SettingsUpsertOne {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseBrew()
 	})
 }
 
@@ -3329,6 +3390,27 @@ func (u *SettingsUpsertBulk) UpdateUseFlatpak() *SettingsUpsertBulk {
 func (u *SettingsUpsertBulk) ClearUseFlatpak() *SettingsUpsertBulk {
 	return u.Update(func(s *SettingsUpsert) {
 		s.ClearUseFlatpak()
+	})
+}
+
+// SetUseBrew sets the "use_brew" field.
+func (u *SettingsUpsertBulk) SetUseBrew(v bool) *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.SetUseBrew(v)
+	})
+}
+
+// UpdateUseBrew sets the "use_brew" field to the value that was provided on create.
+func (u *SettingsUpsertBulk) UpdateUseBrew() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.UpdateUseBrew()
+	})
+}
+
+// ClearUseBrew clears the value of the "use_brew" field.
+func (u *SettingsUpsertBulk) ClearUseBrew() *SettingsUpsertBulk {
+	return u.Update(func(s *SettingsUpsert) {
+		s.ClearUseBrew()
 	})
 }
 

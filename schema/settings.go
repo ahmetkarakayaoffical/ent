@@ -47,6 +47,7 @@ func (Settings) Fields() []ent.Field {
 		field.Int("profiles_application_frequence_in_minutes").Optional().Default(30),
 		field.Bool("use_winget").Optional().Default(true),
 		field.Bool("use_flatpak").Optional().Default(true),
+		field.Bool("use_brew").Optional().Default(true),
 		field.Bool("disable_sftp").Optional().Default(false),
 		field.Bool("disable_remote_assistance").Optional().Default(false),
 		field.Bool("detect_remote_agents").Optional().Default(false),
