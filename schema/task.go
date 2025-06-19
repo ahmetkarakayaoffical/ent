@@ -15,7 +15,7 @@ type Task struct {
 func (Task) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").NotEmpty(),
-		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user", "add_local_group", "remove_local_group", "add_users_to_local_group", "remove_users_from_local_group"),
+		field.Enum("type").Values("winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user", "add_local_group", "remove_local_group", "add_users_to_local_group", "remove_users_from_local_group", "msi_install", "msi_uninstall"),
 		field.String("package_id").Optional().Default(""),
 		field.String("package_name").Optional().Default(""),
 		field.String("registry_key").Optional().Default(""),
@@ -37,6 +37,11 @@ func (Task) Fields() []ent.Field {
 		field.String("local_group_members").Optional().Default(""),
 		field.String("local_group_members_to_include").Optional().Default(""),
 		field.String("local_group_members_to_exclude").Optional().Default(""),
+		field.String("msi_path").Optional().Default(""),
+		field.String("msi_arguments").Optional().Default(""),
+		field.String("msi_file_hash").Optional().Default(""),
+		field.Enum("msi_file_hash_alg").Values("MD5", "RIPEMD160", "SHA1", "SHA256", "SHA384", "SHA512").Optional(),
+		field.String("msi_log_path").Optional().Default(""),
 		field.Time("when").Optional(),
 	}
 }

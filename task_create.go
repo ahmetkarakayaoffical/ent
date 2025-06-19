@@ -330,6 +330,76 @@ func (tc *TaskCreate) SetNillableLocalGroupMembersToExclude(s *string) *TaskCrea
 	return tc
 }
 
+// SetMsiPath sets the "msi_path" field.
+func (tc *TaskCreate) SetMsiPath(s string) *TaskCreate {
+	tc.mutation.SetMsiPath(s)
+	return tc
+}
+
+// SetNillableMsiPath sets the "msi_path" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiPath(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMsiPath(*s)
+	}
+	return tc
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (tc *TaskCreate) SetMsiArguments(s string) *TaskCreate {
+	tc.mutation.SetMsiArguments(s)
+	return tc
+}
+
+// SetNillableMsiArguments sets the "msi_arguments" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiArguments(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMsiArguments(*s)
+	}
+	return tc
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (tc *TaskCreate) SetMsiFileHash(s string) *TaskCreate {
+	tc.mutation.SetMsiFileHash(s)
+	return tc
+}
+
+// SetNillableMsiFileHash sets the "msi_file_hash" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiFileHash(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMsiFileHash(*s)
+	}
+	return tc
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (tc *TaskCreate) SetMsiFileHashAlg(tfha task.MsiFileHashAlg) *TaskCreate {
+	tc.mutation.SetMsiFileHashAlg(tfha)
+	return tc
+}
+
+// SetNillableMsiFileHashAlg sets the "msi_file_hash_alg" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiFileHashAlg(tfha *task.MsiFileHashAlg) *TaskCreate {
+	if tfha != nil {
+		tc.SetMsiFileHashAlg(*tfha)
+	}
+	return tc
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (tc *TaskCreate) SetMsiLogPath(s string) *TaskCreate {
+	tc.mutation.SetMsiLogPath(s)
+	return tc
+}
+
+// SetNillableMsiLogPath sets the "msi_log_path" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiLogPath(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMsiLogPath(*s)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -493,6 +563,22 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultLocalGroupMembersToExclude
 		tc.mutation.SetLocalGroupMembersToExclude(v)
 	}
+	if _, ok := tc.mutation.MsiPath(); !ok {
+		v := task.DefaultMsiPath
+		tc.mutation.SetMsiPath(v)
+	}
+	if _, ok := tc.mutation.MsiArguments(); !ok {
+		v := task.DefaultMsiArguments
+		tc.mutation.SetMsiArguments(v)
+	}
+	if _, ok := tc.mutation.MsiFileHash(); !ok {
+		v := task.DefaultMsiFileHash
+		tc.mutation.SetMsiFileHash(v)
+	}
+	if _, ok := tc.mutation.MsiLogPath(); !ok {
+		v := task.DefaultMsiLogPath
+		tc.mutation.SetMsiLogPath(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -516,6 +602,11 @@ func (tc *TaskCreate) check() error {
 	if v, ok := tc.mutation.RegistryKeyValueType(); ok {
 		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
 			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.MsiFileHashAlg(); ok {
+		if err := task.MsiFileHashAlgValidator(v); err != nil {
+			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
 		}
 	}
 	return nil
@@ -636,6 +727,26 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.LocalGroupMembersToExclude(); ok {
 		_spec.SetField(task.FieldLocalGroupMembersToExclude, field.TypeString, value)
 		_node.LocalGroupMembersToExclude = value
+	}
+	if value, ok := tc.mutation.MsiPath(); ok {
+		_spec.SetField(task.FieldMsiPath, field.TypeString, value)
+		_node.MsiPath = value
+	}
+	if value, ok := tc.mutation.MsiArguments(); ok {
+		_spec.SetField(task.FieldMsiArguments, field.TypeString, value)
+		_node.MsiArguments = value
+	}
+	if value, ok := tc.mutation.MsiFileHash(); ok {
+		_spec.SetField(task.FieldMsiFileHash, field.TypeString, value)
+		_node.MsiFileHash = value
+	}
+	if value, ok := tc.mutation.MsiFileHashAlg(); ok {
+		_spec.SetField(task.FieldMsiFileHashAlg, field.TypeEnum, value)
+		_node.MsiFileHashAlg = value
+	}
+	if value, ok := tc.mutation.MsiLogPath(); ok {
+		_spec.SetField(task.FieldMsiLogPath, field.TypeString, value)
+		_node.MsiLogPath = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1125,6 +1236,96 @@ func (u *TaskUpsert) UpdateLocalGroupMembersToExclude() *TaskUpsert {
 // ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
 func (u *TaskUpsert) ClearLocalGroupMembersToExclude() *TaskUpsert {
 	u.SetNull(task.FieldLocalGroupMembersToExclude)
+	return u
+}
+
+// SetMsiPath sets the "msi_path" field.
+func (u *TaskUpsert) SetMsiPath(v string) *TaskUpsert {
+	u.Set(task.FieldMsiPath, v)
+	return u
+}
+
+// UpdateMsiPath sets the "msi_path" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiPath() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiPath)
+	return u
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (u *TaskUpsert) ClearMsiPath() *TaskUpsert {
+	u.SetNull(task.FieldMsiPath)
+	return u
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (u *TaskUpsert) SetMsiArguments(v string) *TaskUpsert {
+	u.Set(task.FieldMsiArguments, v)
+	return u
+}
+
+// UpdateMsiArguments sets the "msi_arguments" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiArguments() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiArguments)
+	return u
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (u *TaskUpsert) ClearMsiArguments() *TaskUpsert {
+	u.SetNull(task.FieldMsiArguments)
+	return u
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (u *TaskUpsert) SetMsiFileHash(v string) *TaskUpsert {
+	u.Set(task.FieldMsiFileHash, v)
+	return u
+}
+
+// UpdateMsiFileHash sets the "msi_file_hash" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiFileHash() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiFileHash)
+	return u
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (u *TaskUpsert) ClearMsiFileHash() *TaskUpsert {
+	u.SetNull(task.FieldMsiFileHash)
+	return u
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (u *TaskUpsert) SetMsiFileHashAlg(v task.MsiFileHashAlg) *TaskUpsert {
+	u.Set(task.FieldMsiFileHashAlg, v)
+	return u
+}
+
+// UpdateMsiFileHashAlg sets the "msi_file_hash_alg" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiFileHashAlg() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiFileHashAlg)
+	return u
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (u *TaskUpsert) ClearMsiFileHashAlg() *TaskUpsert {
+	u.SetNull(task.FieldMsiFileHashAlg)
+	return u
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (u *TaskUpsert) SetMsiLogPath(v string) *TaskUpsert {
+	u.Set(task.FieldMsiLogPath, v)
+	return u
+}
+
+// UpdateMsiLogPath sets the "msi_log_path" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiLogPath() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiLogPath)
+	return u
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (u *TaskUpsert) ClearMsiLogPath() *TaskUpsert {
+	u.SetNull(task.FieldMsiLogPath)
 	return u
 }
 
@@ -1652,6 +1853,111 @@ func (u *TaskUpsertOne) UpdateLocalGroupMembersToExclude() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearLocalGroupMembersToExclude() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupMembersToExclude()
+	})
+}
+
+// SetMsiPath sets the "msi_path" field.
+func (u *TaskUpsertOne) SetMsiPath(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiPath(v)
+	})
+}
+
+// UpdateMsiPath sets the "msi_path" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiPath() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiPath()
+	})
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (u *TaskUpsertOne) ClearMsiPath() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiPath()
+	})
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (u *TaskUpsertOne) SetMsiArguments(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiArguments(v)
+	})
+}
+
+// UpdateMsiArguments sets the "msi_arguments" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiArguments() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiArguments()
+	})
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (u *TaskUpsertOne) ClearMsiArguments() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiArguments()
+	})
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (u *TaskUpsertOne) SetMsiFileHash(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiFileHash(v)
+	})
+}
+
+// UpdateMsiFileHash sets the "msi_file_hash" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiFileHash() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiFileHash()
+	})
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (u *TaskUpsertOne) ClearMsiFileHash() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiFileHash()
+	})
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (u *TaskUpsertOne) SetMsiFileHashAlg(v task.MsiFileHashAlg) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiFileHashAlg(v)
+	})
+}
+
+// UpdateMsiFileHashAlg sets the "msi_file_hash_alg" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiFileHashAlg() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiFileHashAlg()
+	})
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (u *TaskUpsertOne) ClearMsiFileHashAlg() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiFileHashAlg()
+	})
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (u *TaskUpsertOne) SetMsiLogPath(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiLogPath(v)
+	})
+}
+
+// UpdateMsiLogPath sets the "msi_log_path" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiLogPath() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiLogPath()
+	})
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (u *TaskUpsertOne) ClearMsiLogPath() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiLogPath()
 	})
 }
 
@@ -2346,6 +2652,111 @@ func (u *TaskUpsertBulk) UpdateLocalGroupMembersToExclude() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearLocalGroupMembersToExclude() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupMembersToExclude()
+	})
+}
+
+// SetMsiPath sets the "msi_path" field.
+func (u *TaskUpsertBulk) SetMsiPath(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiPath(v)
+	})
+}
+
+// UpdateMsiPath sets the "msi_path" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiPath() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiPath()
+	})
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (u *TaskUpsertBulk) ClearMsiPath() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiPath()
+	})
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (u *TaskUpsertBulk) SetMsiArguments(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiArguments(v)
+	})
+}
+
+// UpdateMsiArguments sets the "msi_arguments" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiArguments() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiArguments()
+	})
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (u *TaskUpsertBulk) ClearMsiArguments() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiArguments()
+	})
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (u *TaskUpsertBulk) SetMsiFileHash(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiFileHash(v)
+	})
+}
+
+// UpdateMsiFileHash sets the "msi_file_hash" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiFileHash() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiFileHash()
+	})
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (u *TaskUpsertBulk) ClearMsiFileHash() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiFileHash()
+	})
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (u *TaskUpsertBulk) SetMsiFileHashAlg(v task.MsiFileHashAlg) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiFileHashAlg(v)
+	})
+}
+
+// UpdateMsiFileHashAlg sets the "msi_file_hash_alg" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiFileHashAlg() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiFileHashAlg()
+	})
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (u *TaskUpsertBulk) ClearMsiFileHashAlg() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiFileHashAlg()
+	})
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (u *TaskUpsertBulk) SetMsiLogPath(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiLogPath(v)
+	})
+}
+
+// UpdateMsiLogPath sets the "msi_log_path" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiLogPath() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiLogPath()
+	})
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (u *TaskUpsertBulk) ClearMsiLogPath() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiLogPath()
 	})
 }
 

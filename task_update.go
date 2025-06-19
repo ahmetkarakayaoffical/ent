@@ -479,6 +479,106 @@ func (tu *TaskUpdate) ClearLocalGroupMembersToExclude() *TaskUpdate {
 	return tu
 }
 
+// SetMsiPath sets the "msi_path" field.
+func (tu *TaskUpdate) SetMsiPath(s string) *TaskUpdate {
+	tu.mutation.SetMsiPath(s)
+	return tu
+}
+
+// SetNillableMsiPath sets the "msi_path" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiPath(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMsiPath(*s)
+	}
+	return tu
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (tu *TaskUpdate) ClearMsiPath() *TaskUpdate {
+	tu.mutation.ClearMsiPath()
+	return tu
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (tu *TaskUpdate) SetMsiArguments(s string) *TaskUpdate {
+	tu.mutation.SetMsiArguments(s)
+	return tu
+}
+
+// SetNillableMsiArguments sets the "msi_arguments" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiArguments(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMsiArguments(*s)
+	}
+	return tu
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (tu *TaskUpdate) ClearMsiArguments() *TaskUpdate {
+	tu.mutation.ClearMsiArguments()
+	return tu
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (tu *TaskUpdate) SetMsiFileHash(s string) *TaskUpdate {
+	tu.mutation.SetMsiFileHash(s)
+	return tu
+}
+
+// SetNillableMsiFileHash sets the "msi_file_hash" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiFileHash(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMsiFileHash(*s)
+	}
+	return tu
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (tu *TaskUpdate) ClearMsiFileHash() *TaskUpdate {
+	tu.mutation.ClearMsiFileHash()
+	return tu
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (tu *TaskUpdate) SetMsiFileHashAlg(tfha task.MsiFileHashAlg) *TaskUpdate {
+	tu.mutation.SetMsiFileHashAlg(tfha)
+	return tu
+}
+
+// SetNillableMsiFileHashAlg sets the "msi_file_hash_alg" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiFileHashAlg(tfha *task.MsiFileHashAlg) *TaskUpdate {
+	if tfha != nil {
+		tu.SetMsiFileHashAlg(*tfha)
+	}
+	return tu
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (tu *TaskUpdate) ClearMsiFileHashAlg() *TaskUpdate {
+	tu.mutation.ClearMsiFileHashAlg()
+	return tu
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (tu *TaskUpdate) SetMsiLogPath(s string) *TaskUpdate {
+	tu.mutation.SetMsiLogPath(s)
+	return tu
+}
+
+// SetNillableMsiLogPath sets the "msi_log_path" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiLogPath(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMsiLogPath(*s)
+	}
+	return tu
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (tu *TaskUpdate) ClearMsiLogPath() *TaskUpdate {
+	tu.mutation.ClearMsiLogPath()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -607,6 +707,11 @@ func (tu *TaskUpdate) check() error {
 	if v, ok := tu.mutation.RegistryKeyValueType(); ok {
 		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
 			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.MsiFileHashAlg(); ok {
+		if err := task.MsiFileHashAlgValidator(v); err != nil {
+			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
 		}
 	}
 	return nil
@@ -761,6 +866,36 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.LocalGroupMembersToExcludeCleared() {
 		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
+	}
+	if value, ok := tu.mutation.MsiPath(); ok {
+		_spec.SetField(task.FieldMsiPath, field.TypeString, value)
+	}
+	if tu.mutation.MsiPathCleared() {
+		_spec.ClearField(task.FieldMsiPath, field.TypeString)
+	}
+	if value, ok := tu.mutation.MsiArguments(); ok {
+		_spec.SetField(task.FieldMsiArguments, field.TypeString, value)
+	}
+	if tu.mutation.MsiArgumentsCleared() {
+		_spec.ClearField(task.FieldMsiArguments, field.TypeString)
+	}
+	if value, ok := tu.mutation.MsiFileHash(); ok {
+		_spec.SetField(task.FieldMsiFileHash, field.TypeString, value)
+	}
+	if tu.mutation.MsiFileHashCleared() {
+		_spec.ClearField(task.FieldMsiFileHash, field.TypeString)
+	}
+	if value, ok := tu.mutation.MsiFileHashAlg(); ok {
+		_spec.SetField(task.FieldMsiFileHashAlg, field.TypeEnum, value)
+	}
+	if tu.mutation.MsiFileHashAlgCleared() {
+		_spec.ClearField(task.FieldMsiFileHashAlg, field.TypeEnum)
+	}
+	if value, ok := tu.mutation.MsiLogPath(); ok {
+		_spec.SetField(task.FieldMsiLogPath, field.TypeString, value)
+	}
+	if tu.mutation.MsiLogPathCleared() {
+		_spec.ClearField(task.FieldMsiLogPath, field.TypeString)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1312,6 +1447,106 @@ func (tuo *TaskUpdateOne) ClearLocalGroupMembersToExclude() *TaskUpdateOne {
 	return tuo
 }
 
+// SetMsiPath sets the "msi_path" field.
+func (tuo *TaskUpdateOne) SetMsiPath(s string) *TaskUpdateOne {
+	tuo.mutation.SetMsiPath(s)
+	return tuo
+}
+
+// SetNillableMsiPath sets the "msi_path" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiPath(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMsiPath(*s)
+	}
+	return tuo
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (tuo *TaskUpdateOne) ClearMsiPath() *TaskUpdateOne {
+	tuo.mutation.ClearMsiPath()
+	return tuo
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (tuo *TaskUpdateOne) SetMsiArguments(s string) *TaskUpdateOne {
+	tuo.mutation.SetMsiArguments(s)
+	return tuo
+}
+
+// SetNillableMsiArguments sets the "msi_arguments" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiArguments(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMsiArguments(*s)
+	}
+	return tuo
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (tuo *TaskUpdateOne) ClearMsiArguments() *TaskUpdateOne {
+	tuo.mutation.ClearMsiArguments()
+	return tuo
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (tuo *TaskUpdateOne) SetMsiFileHash(s string) *TaskUpdateOne {
+	tuo.mutation.SetMsiFileHash(s)
+	return tuo
+}
+
+// SetNillableMsiFileHash sets the "msi_file_hash" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiFileHash(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMsiFileHash(*s)
+	}
+	return tuo
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (tuo *TaskUpdateOne) ClearMsiFileHash() *TaskUpdateOne {
+	tuo.mutation.ClearMsiFileHash()
+	return tuo
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (tuo *TaskUpdateOne) SetMsiFileHashAlg(tfha task.MsiFileHashAlg) *TaskUpdateOne {
+	tuo.mutation.SetMsiFileHashAlg(tfha)
+	return tuo
+}
+
+// SetNillableMsiFileHashAlg sets the "msi_file_hash_alg" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiFileHashAlg(tfha *task.MsiFileHashAlg) *TaskUpdateOne {
+	if tfha != nil {
+		tuo.SetMsiFileHashAlg(*tfha)
+	}
+	return tuo
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (tuo *TaskUpdateOne) ClearMsiFileHashAlg() *TaskUpdateOne {
+	tuo.mutation.ClearMsiFileHashAlg()
+	return tuo
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (tuo *TaskUpdateOne) SetMsiLogPath(s string) *TaskUpdateOne {
+	tuo.mutation.SetMsiLogPath(s)
+	return tuo
+}
+
+// SetNillableMsiLogPath sets the "msi_log_path" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiLogPath(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMsiLogPath(*s)
+	}
+	return tuo
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (tuo *TaskUpdateOne) ClearMsiLogPath() *TaskUpdateOne {
+	tuo.mutation.ClearMsiLogPath()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -1453,6 +1688,11 @@ func (tuo *TaskUpdateOne) check() error {
 	if v, ok := tuo.mutation.RegistryKeyValueType(); ok {
 		if err := task.RegistryKeyValueTypeValidator(v); err != nil {
 			return &ValidationError{Name: "registry_key_value_type", err: fmt.Errorf(`ent: validator failed for field "Task.registry_key_value_type": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.MsiFileHashAlg(); ok {
+		if err := task.MsiFileHashAlgValidator(v); err != nil {
+			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
 		}
 	}
 	return nil
@@ -1624,6 +1864,36 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalGroupMembersToExcludeCleared() {
 		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
+	}
+	if value, ok := tuo.mutation.MsiPath(); ok {
+		_spec.SetField(task.FieldMsiPath, field.TypeString, value)
+	}
+	if tuo.mutation.MsiPathCleared() {
+		_spec.ClearField(task.FieldMsiPath, field.TypeString)
+	}
+	if value, ok := tuo.mutation.MsiArguments(); ok {
+		_spec.SetField(task.FieldMsiArguments, field.TypeString, value)
+	}
+	if tuo.mutation.MsiArgumentsCleared() {
+		_spec.ClearField(task.FieldMsiArguments, field.TypeString)
+	}
+	if value, ok := tuo.mutation.MsiFileHash(); ok {
+		_spec.SetField(task.FieldMsiFileHash, field.TypeString, value)
+	}
+	if tuo.mutation.MsiFileHashCleared() {
+		_spec.ClearField(task.FieldMsiFileHash, field.TypeString)
+	}
+	if value, ok := tuo.mutation.MsiFileHashAlg(); ok {
+		_spec.SetField(task.FieldMsiFileHashAlg, field.TypeEnum, value)
+	}
+	if tuo.mutation.MsiFileHashAlgCleared() {
+		_spec.ClearField(task.FieldMsiFileHashAlg, field.TypeEnum)
+	}
+	if value, ok := tuo.mutation.MsiLogPath(); ok {
+		_spec.SetField(task.FieldMsiLogPath, field.TypeString, value)
+	}
+	if tuo.mutation.MsiLogPathCleared() {
+		_spec.ClearField(task.FieldMsiLogPath, field.TypeString)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

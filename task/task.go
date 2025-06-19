@@ -60,6 +60,16 @@ const (
 	FieldLocalGroupMembersToInclude = "local_group_members_to_include"
 	// FieldLocalGroupMembersToExclude holds the string denoting the local_group_members_to_exclude field in the database.
 	FieldLocalGroupMembersToExclude = "local_group_members_to_exclude"
+	// FieldMsiPath holds the string denoting the msi_path field in the database.
+	FieldMsiPath = "msi_path"
+	// FieldMsiArguments holds the string denoting the msi_arguments field in the database.
+	FieldMsiArguments = "msi_arguments"
+	// FieldMsiFileHash holds the string denoting the msi_file_hash field in the database.
+	FieldMsiFileHash = "msi_file_hash"
+	// FieldMsiFileHashAlg holds the string denoting the msi_file_hash_alg field in the database.
+	FieldMsiFileHashAlg = "msi_file_hash_alg"
+	// FieldMsiLogPath holds the string denoting the msi_log_path field in the database.
+	FieldMsiLogPath = "msi_log_path"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -110,6 +120,11 @@ var Columns = []string{
 	FieldLocalGroupMembers,
 	FieldLocalGroupMembersToInclude,
 	FieldLocalGroupMembersToExclude,
+	FieldMsiPath,
+	FieldMsiArguments,
+	FieldMsiFileHash,
+	FieldMsiFileHashAlg,
+	FieldMsiLogPath,
 	FieldWhen,
 }
 
@@ -177,6 +192,14 @@ var (
 	DefaultLocalGroupMembersToInclude string
 	// DefaultLocalGroupMembersToExclude holds the default value on creation for the "local_group_members_to_exclude" field.
 	DefaultLocalGroupMembersToExclude string
+	// DefaultMsiPath holds the default value on creation for the "msi_path" field.
+	DefaultMsiPath string
+	// DefaultMsiArguments holds the default value on creation for the "msi_arguments" field.
+	DefaultMsiArguments string
+	// DefaultMsiFileHash holds the default value on creation for the "msi_file_hash" field.
+	DefaultMsiFileHash string
+	// DefaultMsiLogPath holds the default value on creation for the "msi_log_path" field.
+	DefaultMsiLogPath string
 )
 
 // Type defines the type for the "type" enum field.
@@ -198,6 +221,8 @@ const (
 	TypeRemoveLocalGroup              Type = "remove_local_group"
 	TypeAddUsersToLocalGroup          Type = "add_users_to_local_group"
 	TypeRemoveUsersFromLocalGroup     Type = "remove_users_from_local_group"
+	TypeMsiInstall                    Type = "msi_install"
+	TypeMsiUninstall                  Type = "msi_uninstall"
 )
 
 func (_type Type) String() string {
@@ -207,7 +232,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
@@ -238,6 +263,33 @@ func RegistryKeyValueTypeValidator(rkvt RegistryKeyValueType) error {
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for registry_key_value_type field: %q", rkvt)
+	}
+}
+
+// MsiFileHashAlg defines the type for the "msi_file_hash_alg" enum field.
+type MsiFileHashAlg string
+
+// MsiFileHashAlg values.
+const (
+	MsiFileHashAlgMD5       MsiFileHashAlg = "MD5"
+	MsiFileHashAlgRIPEMD160 MsiFileHashAlg = "RIPEMD160"
+	MsiFileHashAlgSHA1      MsiFileHashAlg = "SHA1"
+	MsiFileHashAlgSHA256    MsiFileHashAlg = "SHA256"
+	MsiFileHashAlgSHA384    MsiFileHashAlg = "SHA384"
+	MsiFileHashAlgSHA512    MsiFileHashAlg = "SHA512"
+)
+
+func (mfha MsiFileHashAlg) String() string {
+	return string(mfha)
+}
+
+// MsiFileHashAlgValidator is a validator for the "msi_file_hash_alg" field enum values. It is called by the builders before save.
+func MsiFileHashAlgValidator(mfha MsiFileHashAlg) error {
+	switch mfha {
+	case MsiFileHashAlgMD5, MsiFileHashAlgRIPEMD160, MsiFileHashAlgSHA1, MsiFileHashAlgSHA256, MsiFileHashAlgSHA384, MsiFileHashAlgSHA512:
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for msi_file_hash_alg field: %q", mfha)
 	}
 }
 
@@ -362,6 +414,31 @@ func ByLocalGroupMembersToInclude(opts ...sql.OrderTermOption) OrderOption {
 // ByLocalGroupMembersToExclude orders the results by the local_group_members_to_exclude field.
 func ByLocalGroupMembersToExclude(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalGroupMembersToExclude, opts...).ToFunc()
+}
+
+// ByMsiPath orders the results by the msi_path field.
+func ByMsiPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiPath, opts...).ToFunc()
+}
+
+// ByMsiArguments orders the results by the msi_arguments field.
+func ByMsiArguments(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiArguments, opts...).ToFunc()
+}
+
+// ByMsiFileHash orders the results by the msi_file_hash field.
+func ByMsiFileHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiFileHash, opts...).ToFunc()
+}
+
+// ByMsiFileHashAlg orders the results by the msi_file_hash_alg field.
+func ByMsiFileHashAlg(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiFileHashAlg, opts...).ToFunc()
+}
+
+// ByMsiLogPath orders the results by the msi_log_path field.
+func ByMsiLogPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiLogPath, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

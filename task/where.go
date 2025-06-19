@@ -160,6 +160,26 @@ func LocalGroupMembersToExclude(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalGroupMembersToExclude, v))
 }
 
+// MsiPath applies equality check predicate on the "msi_path" field. It's identical to MsiPathEQ.
+func MsiPath(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiPath, v))
+}
+
+// MsiArguments applies equality check predicate on the "msi_arguments" field. It's identical to MsiArgumentsEQ.
+func MsiArguments(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiArguments, v))
+}
+
+// MsiFileHash applies equality check predicate on the "msi_file_hash" field. It's identical to MsiFileHashEQ.
+func MsiFileHash(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiFileHash, v))
+}
+
+// MsiLogPath applies equality check predicate on the "msi_log_path" field. It's identical to MsiLogPathEQ.
+func MsiLogPath(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiLogPath, v))
+}
+
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
 func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
@@ -1448,6 +1468,336 @@ func LocalGroupMembersToExcludeEqualFold(v string) predicate.Task {
 // LocalGroupMembersToExcludeContainsFold applies the ContainsFold predicate on the "local_group_members_to_exclude" field.
 func LocalGroupMembersToExcludeContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldLocalGroupMembersToExclude, v))
+}
+
+// MsiPathEQ applies the EQ predicate on the "msi_path" field.
+func MsiPathEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiPath, v))
+}
+
+// MsiPathNEQ applies the NEQ predicate on the "msi_path" field.
+func MsiPathNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiPath, v))
+}
+
+// MsiPathIn applies the In predicate on the "msi_path" field.
+func MsiPathIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiPath, vs...))
+}
+
+// MsiPathNotIn applies the NotIn predicate on the "msi_path" field.
+func MsiPathNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiPath, vs...))
+}
+
+// MsiPathGT applies the GT predicate on the "msi_path" field.
+func MsiPathGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldMsiPath, v))
+}
+
+// MsiPathGTE applies the GTE predicate on the "msi_path" field.
+func MsiPathGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldMsiPath, v))
+}
+
+// MsiPathLT applies the LT predicate on the "msi_path" field.
+func MsiPathLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldMsiPath, v))
+}
+
+// MsiPathLTE applies the LTE predicate on the "msi_path" field.
+func MsiPathLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldMsiPath, v))
+}
+
+// MsiPathContains applies the Contains predicate on the "msi_path" field.
+func MsiPathContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldMsiPath, v))
+}
+
+// MsiPathHasPrefix applies the HasPrefix predicate on the "msi_path" field.
+func MsiPathHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldMsiPath, v))
+}
+
+// MsiPathHasSuffix applies the HasSuffix predicate on the "msi_path" field.
+func MsiPathHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldMsiPath, v))
+}
+
+// MsiPathIsNil applies the IsNil predicate on the "msi_path" field.
+func MsiPathIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiPath))
+}
+
+// MsiPathNotNil applies the NotNil predicate on the "msi_path" field.
+func MsiPathNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiPath))
+}
+
+// MsiPathEqualFold applies the EqualFold predicate on the "msi_path" field.
+func MsiPathEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldMsiPath, v))
+}
+
+// MsiPathContainsFold applies the ContainsFold predicate on the "msi_path" field.
+func MsiPathContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldMsiPath, v))
+}
+
+// MsiArgumentsEQ applies the EQ predicate on the "msi_arguments" field.
+func MsiArgumentsEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiArguments, v))
+}
+
+// MsiArgumentsNEQ applies the NEQ predicate on the "msi_arguments" field.
+func MsiArgumentsNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiArguments, v))
+}
+
+// MsiArgumentsIn applies the In predicate on the "msi_arguments" field.
+func MsiArgumentsIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiArguments, vs...))
+}
+
+// MsiArgumentsNotIn applies the NotIn predicate on the "msi_arguments" field.
+func MsiArgumentsNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiArguments, vs...))
+}
+
+// MsiArgumentsGT applies the GT predicate on the "msi_arguments" field.
+func MsiArgumentsGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldMsiArguments, v))
+}
+
+// MsiArgumentsGTE applies the GTE predicate on the "msi_arguments" field.
+func MsiArgumentsGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldMsiArguments, v))
+}
+
+// MsiArgumentsLT applies the LT predicate on the "msi_arguments" field.
+func MsiArgumentsLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldMsiArguments, v))
+}
+
+// MsiArgumentsLTE applies the LTE predicate on the "msi_arguments" field.
+func MsiArgumentsLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldMsiArguments, v))
+}
+
+// MsiArgumentsContains applies the Contains predicate on the "msi_arguments" field.
+func MsiArgumentsContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldMsiArguments, v))
+}
+
+// MsiArgumentsHasPrefix applies the HasPrefix predicate on the "msi_arguments" field.
+func MsiArgumentsHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldMsiArguments, v))
+}
+
+// MsiArgumentsHasSuffix applies the HasSuffix predicate on the "msi_arguments" field.
+func MsiArgumentsHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldMsiArguments, v))
+}
+
+// MsiArgumentsIsNil applies the IsNil predicate on the "msi_arguments" field.
+func MsiArgumentsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiArguments))
+}
+
+// MsiArgumentsNotNil applies the NotNil predicate on the "msi_arguments" field.
+func MsiArgumentsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiArguments))
+}
+
+// MsiArgumentsEqualFold applies the EqualFold predicate on the "msi_arguments" field.
+func MsiArgumentsEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldMsiArguments, v))
+}
+
+// MsiArgumentsContainsFold applies the ContainsFold predicate on the "msi_arguments" field.
+func MsiArgumentsContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldMsiArguments, v))
+}
+
+// MsiFileHashEQ applies the EQ predicate on the "msi_file_hash" field.
+func MsiFileHashEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiFileHash, v))
+}
+
+// MsiFileHashNEQ applies the NEQ predicate on the "msi_file_hash" field.
+func MsiFileHashNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiFileHash, v))
+}
+
+// MsiFileHashIn applies the In predicate on the "msi_file_hash" field.
+func MsiFileHashIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiFileHash, vs...))
+}
+
+// MsiFileHashNotIn applies the NotIn predicate on the "msi_file_hash" field.
+func MsiFileHashNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiFileHash, vs...))
+}
+
+// MsiFileHashGT applies the GT predicate on the "msi_file_hash" field.
+func MsiFileHashGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldMsiFileHash, v))
+}
+
+// MsiFileHashGTE applies the GTE predicate on the "msi_file_hash" field.
+func MsiFileHashGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldMsiFileHash, v))
+}
+
+// MsiFileHashLT applies the LT predicate on the "msi_file_hash" field.
+func MsiFileHashLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldMsiFileHash, v))
+}
+
+// MsiFileHashLTE applies the LTE predicate on the "msi_file_hash" field.
+func MsiFileHashLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldMsiFileHash, v))
+}
+
+// MsiFileHashContains applies the Contains predicate on the "msi_file_hash" field.
+func MsiFileHashContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldMsiFileHash, v))
+}
+
+// MsiFileHashHasPrefix applies the HasPrefix predicate on the "msi_file_hash" field.
+func MsiFileHashHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldMsiFileHash, v))
+}
+
+// MsiFileHashHasSuffix applies the HasSuffix predicate on the "msi_file_hash" field.
+func MsiFileHashHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldMsiFileHash, v))
+}
+
+// MsiFileHashIsNil applies the IsNil predicate on the "msi_file_hash" field.
+func MsiFileHashIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiFileHash))
+}
+
+// MsiFileHashNotNil applies the NotNil predicate on the "msi_file_hash" field.
+func MsiFileHashNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiFileHash))
+}
+
+// MsiFileHashEqualFold applies the EqualFold predicate on the "msi_file_hash" field.
+func MsiFileHashEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldMsiFileHash, v))
+}
+
+// MsiFileHashContainsFold applies the ContainsFold predicate on the "msi_file_hash" field.
+func MsiFileHashContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldMsiFileHash, v))
+}
+
+// MsiFileHashAlgEQ applies the EQ predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgEQ(v MsiFileHashAlg) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiFileHashAlg, v))
+}
+
+// MsiFileHashAlgNEQ applies the NEQ predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgNEQ(v MsiFileHashAlg) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiFileHashAlg, v))
+}
+
+// MsiFileHashAlgIn applies the In predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgIn(vs ...MsiFileHashAlg) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiFileHashAlg, vs...))
+}
+
+// MsiFileHashAlgNotIn applies the NotIn predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgNotIn(vs ...MsiFileHashAlg) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiFileHashAlg, vs...))
+}
+
+// MsiFileHashAlgIsNil applies the IsNil predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiFileHashAlg))
+}
+
+// MsiFileHashAlgNotNil applies the NotNil predicate on the "msi_file_hash_alg" field.
+func MsiFileHashAlgNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiFileHashAlg))
+}
+
+// MsiLogPathEQ applies the EQ predicate on the "msi_log_path" field.
+func MsiLogPathEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiLogPath, v))
+}
+
+// MsiLogPathNEQ applies the NEQ predicate on the "msi_log_path" field.
+func MsiLogPathNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiLogPath, v))
+}
+
+// MsiLogPathIn applies the In predicate on the "msi_log_path" field.
+func MsiLogPathIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiLogPath, vs...))
+}
+
+// MsiLogPathNotIn applies the NotIn predicate on the "msi_log_path" field.
+func MsiLogPathNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiLogPath, vs...))
+}
+
+// MsiLogPathGT applies the GT predicate on the "msi_log_path" field.
+func MsiLogPathGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldMsiLogPath, v))
+}
+
+// MsiLogPathGTE applies the GTE predicate on the "msi_log_path" field.
+func MsiLogPathGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldMsiLogPath, v))
+}
+
+// MsiLogPathLT applies the LT predicate on the "msi_log_path" field.
+func MsiLogPathLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldMsiLogPath, v))
+}
+
+// MsiLogPathLTE applies the LTE predicate on the "msi_log_path" field.
+func MsiLogPathLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldMsiLogPath, v))
+}
+
+// MsiLogPathContains applies the Contains predicate on the "msi_log_path" field.
+func MsiLogPathContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldMsiLogPath, v))
+}
+
+// MsiLogPathHasPrefix applies the HasPrefix predicate on the "msi_log_path" field.
+func MsiLogPathHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldMsiLogPath, v))
+}
+
+// MsiLogPathHasSuffix applies the HasSuffix predicate on the "msi_log_path" field.
+func MsiLogPathHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldMsiLogPath, v))
+}
+
+// MsiLogPathIsNil applies the IsNil predicate on the "msi_log_path" field.
+func MsiLogPathIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiLogPath))
+}
+
+// MsiLogPathNotNil applies the NotNil predicate on the "msi_log_path" field.
+func MsiLogPathNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiLogPath))
+}
+
+// MsiLogPathEqualFold applies the EqualFold predicate on the "msi_log_path" field.
+func MsiLogPathEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldMsiLogPath, v))
+}
+
+// MsiLogPathContainsFold applies the ContainsFold predicate on the "msi_log_path" field.
+func MsiLogPathContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldMsiLogPath, v))
 }
 
 // WhenEQ applies the EQ predicate on the "when" field.

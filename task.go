@@ -64,6 +64,16 @@ type Task struct {
 	LocalGroupMembersToInclude string `json:"local_group_members_to_include,omitempty"`
 	// LocalGroupMembersToExclude holds the value of the "local_group_members_to_exclude" field.
 	LocalGroupMembersToExclude string `json:"local_group_members_to_exclude,omitempty"`
+	// MsiPath holds the value of the "msi_path" field.
+	MsiPath string `json:"msi_path,omitempty"`
+	// MsiArguments holds the value of the "msi_arguments" field.
+	MsiArguments string `json:"msi_arguments,omitempty"`
+	// MsiFileHash holds the value of the "msi_file_hash" field.
+	MsiFileHash string `json:"msi_file_hash,omitempty"`
+	// MsiFileHashAlg holds the value of the "msi_file_hash_alg" field.
+	MsiFileHashAlg task.MsiFileHashAlg `json:"msi_file_hash_alg,omitempty"`
+	// MsiLogPath holds the value of the "msi_log_path" field.
+	MsiLogPath string `json:"msi_log_path,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -113,7 +123,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -278,6 +288,36 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.LocalGroupMembersToExclude = value.String
 			}
+		case task.FieldMsiPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_path", values[i])
+			} else if value.Valid {
+				t.MsiPath = value.String
+			}
+		case task.FieldMsiArguments:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_arguments", values[i])
+			} else if value.Valid {
+				t.MsiArguments = value.String
+			}
+		case task.FieldMsiFileHash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_file_hash", values[i])
+			} else if value.Valid {
+				t.MsiFileHash = value.String
+			}
+		case task.FieldMsiFileHashAlg:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_file_hash_alg", values[i])
+			} else if value.Valid {
+				t.MsiFileHashAlg = task.MsiFileHashAlg(value.String)
+			}
+		case task.FieldMsiLogPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_log_path", values[i])
+			} else if value.Valid {
+				t.MsiLogPath = value.String
+			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field when", values[i])
@@ -405,6 +445,21 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("local_group_members_to_exclude=")
 	builder.WriteString(t.LocalGroupMembersToExclude)
+	builder.WriteString(", ")
+	builder.WriteString("msi_path=")
+	builder.WriteString(t.MsiPath)
+	builder.WriteString(", ")
+	builder.WriteString("msi_arguments=")
+	builder.WriteString(t.MsiArguments)
+	builder.WriteString(", ")
+	builder.WriteString("msi_file_hash=")
+	builder.WriteString(t.MsiFileHash)
+	builder.WriteString(", ")
+	builder.WriteString("msi_file_hash_alg=")
+	builder.WriteString(fmt.Sprintf("%v", t.MsiFileHashAlg))
+	builder.WriteString(", ")
+	builder.WriteString("msi_log_path=")
+	builder.WriteString(t.MsiLogPath)
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

@@ -23838,6 +23838,11 @@ type TaskMutation struct {
 	local_group_members                    *string
 	local_group_members_to_include         *string
 	local_group_members_to_exclude         *string
+	msi_path                               *string
+	msi_arguments                          *string
+	msi_file_hash                          *string
+	msi_file_hash_alg                      *task.MsiFileHashAlg
+	msi_log_path                           *string
 	when                                   *time.Time
 	clearedFields                          map[string]struct{}
 	tags                                   map[int]struct{}
@@ -25049,6 +25054,251 @@ func (m *TaskMutation) ResetLocalGroupMembersToExclude() {
 	delete(m.clearedFields, task.FieldLocalGroupMembersToExclude)
 }
 
+// SetMsiPath sets the "msi_path" field.
+func (m *TaskMutation) SetMsiPath(s string) {
+	m.msi_path = &s
+}
+
+// MsiPath returns the value of the "msi_path" field in the mutation.
+func (m *TaskMutation) MsiPath() (r string, exists bool) {
+	v := m.msi_path
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiPath returns the old "msi_path" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiPath(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiPath is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiPath requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiPath: %w", err)
+	}
+	return oldValue.MsiPath, nil
+}
+
+// ClearMsiPath clears the value of the "msi_path" field.
+func (m *TaskMutation) ClearMsiPath() {
+	m.msi_path = nil
+	m.clearedFields[task.FieldMsiPath] = struct{}{}
+}
+
+// MsiPathCleared returns if the "msi_path" field was cleared in this mutation.
+func (m *TaskMutation) MsiPathCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiPath]
+	return ok
+}
+
+// ResetMsiPath resets all changes to the "msi_path" field.
+func (m *TaskMutation) ResetMsiPath() {
+	m.msi_path = nil
+	delete(m.clearedFields, task.FieldMsiPath)
+}
+
+// SetMsiArguments sets the "msi_arguments" field.
+func (m *TaskMutation) SetMsiArguments(s string) {
+	m.msi_arguments = &s
+}
+
+// MsiArguments returns the value of the "msi_arguments" field in the mutation.
+func (m *TaskMutation) MsiArguments() (r string, exists bool) {
+	v := m.msi_arguments
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiArguments returns the old "msi_arguments" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiArguments(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiArguments is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiArguments requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiArguments: %w", err)
+	}
+	return oldValue.MsiArguments, nil
+}
+
+// ClearMsiArguments clears the value of the "msi_arguments" field.
+func (m *TaskMutation) ClearMsiArguments() {
+	m.msi_arguments = nil
+	m.clearedFields[task.FieldMsiArguments] = struct{}{}
+}
+
+// MsiArgumentsCleared returns if the "msi_arguments" field was cleared in this mutation.
+func (m *TaskMutation) MsiArgumentsCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiArguments]
+	return ok
+}
+
+// ResetMsiArguments resets all changes to the "msi_arguments" field.
+func (m *TaskMutation) ResetMsiArguments() {
+	m.msi_arguments = nil
+	delete(m.clearedFields, task.FieldMsiArguments)
+}
+
+// SetMsiFileHash sets the "msi_file_hash" field.
+func (m *TaskMutation) SetMsiFileHash(s string) {
+	m.msi_file_hash = &s
+}
+
+// MsiFileHash returns the value of the "msi_file_hash" field in the mutation.
+func (m *TaskMutation) MsiFileHash() (r string, exists bool) {
+	v := m.msi_file_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiFileHash returns the old "msi_file_hash" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiFileHash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiFileHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiFileHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiFileHash: %w", err)
+	}
+	return oldValue.MsiFileHash, nil
+}
+
+// ClearMsiFileHash clears the value of the "msi_file_hash" field.
+func (m *TaskMutation) ClearMsiFileHash() {
+	m.msi_file_hash = nil
+	m.clearedFields[task.FieldMsiFileHash] = struct{}{}
+}
+
+// MsiFileHashCleared returns if the "msi_file_hash" field was cleared in this mutation.
+func (m *TaskMutation) MsiFileHashCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiFileHash]
+	return ok
+}
+
+// ResetMsiFileHash resets all changes to the "msi_file_hash" field.
+func (m *TaskMutation) ResetMsiFileHash() {
+	m.msi_file_hash = nil
+	delete(m.clearedFields, task.FieldMsiFileHash)
+}
+
+// SetMsiFileHashAlg sets the "msi_file_hash_alg" field.
+func (m *TaskMutation) SetMsiFileHashAlg(tfha task.MsiFileHashAlg) {
+	m.msi_file_hash_alg = &tfha
+}
+
+// MsiFileHashAlg returns the value of the "msi_file_hash_alg" field in the mutation.
+func (m *TaskMutation) MsiFileHashAlg() (r task.MsiFileHashAlg, exists bool) {
+	v := m.msi_file_hash_alg
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiFileHashAlg returns the old "msi_file_hash_alg" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiFileHashAlg(ctx context.Context) (v task.MsiFileHashAlg, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiFileHashAlg is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiFileHashAlg requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiFileHashAlg: %w", err)
+	}
+	return oldValue.MsiFileHashAlg, nil
+}
+
+// ClearMsiFileHashAlg clears the value of the "msi_file_hash_alg" field.
+func (m *TaskMutation) ClearMsiFileHashAlg() {
+	m.msi_file_hash_alg = nil
+	m.clearedFields[task.FieldMsiFileHashAlg] = struct{}{}
+}
+
+// MsiFileHashAlgCleared returns if the "msi_file_hash_alg" field was cleared in this mutation.
+func (m *TaskMutation) MsiFileHashAlgCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiFileHashAlg]
+	return ok
+}
+
+// ResetMsiFileHashAlg resets all changes to the "msi_file_hash_alg" field.
+func (m *TaskMutation) ResetMsiFileHashAlg() {
+	m.msi_file_hash_alg = nil
+	delete(m.clearedFields, task.FieldMsiFileHashAlg)
+}
+
+// SetMsiLogPath sets the "msi_log_path" field.
+func (m *TaskMutation) SetMsiLogPath(s string) {
+	m.msi_log_path = &s
+}
+
+// MsiLogPath returns the value of the "msi_log_path" field in the mutation.
+func (m *TaskMutation) MsiLogPath() (r string, exists bool) {
+	v := m.msi_log_path
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiLogPath returns the old "msi_log_path" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiLogPath(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiLogPath is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiLogPath requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiLogPath: %w", err)
+	}
+	return oldValue.MsiLogPath, nil
+}
+
+// ClearMsiLogPath clears the value of the "msi_log_path" field.
+func (m *TaskMutation) ClearMsiLogPath() {
+	m.msi_log_path = nil
+	m.clearedFields[task.FieldMsiLogPath] = struct{}{}
+}
+
+// MsiLogPathCleared returns if the "msi_log_path" field was cleared in this mutation.
+func (m *TaskMutation) MsiLogPathCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiLogPath]
+	return ok
+}
+
+// ResetMsiLogPath resets all changes to the "msi_log_path" field.
+func (m *TaskMutation) ResetMsiLogPath() {
+	m.msi_log_path = nil
+	delete(m.clearedFields, task.FieldMsiLogPath)
+}
+
 // SetWhen sets the "when" field.
 func (m *TaskMutation) SetWhen(t time.Time) {
 	m.when = &t
@@ -25225,7 +25475,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 29)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -25295,6 +25545,21 @@ func (m *TaskMutation) Fields() []string {
 	if m.local_group_members_to_exclude != nil {
 		fields = append(fields, task.FieldLocalGroupMembersToExclude)
 	}
+	if m.msi_path != nil {
+		fields = append(fields, task.FieldMsiPath)
+	}
+	if m.msi_arguments != nil {
+		fields = append(fields, task.FieldMsiArguments)
+	}
+	if m.msi_file_hash != nil {
+		fields = append(fields, task.FieldMsiFileHash)
+	}
+	if m.msi_file_hash_alg != nil {
+		fields = append(fields, task.FieldMsiFileHashAlg)
+	}
+	if m.msi_log_path != nil {
+		fields = append(fields, task.FieldMsiLogPath)
+	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -25352,6 +25617,16 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.LocalGroupMembersToInclude()
 	case task.FieldLocalGroupMembersToExclude:
 		return m.LocalGroupMembersToExclude()
+	case task.FieldMsiPath:
+		return m.MsiPath()
+	case task.FieldMsiArguments:
+		return m.MsiArguments()
+	case task.FieldMsiFileHash:
+		return m.MsiFileHash()
+	case task.FieldMsiFileHashAlg:
+		return m.MsiFileHashAlg()
+	case task.FieldMsiLogPath:
+		return m.MsiLogPath()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -25409,6 +25684,16 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocalGroupMembersToInclude(ctx)
 	case task.FieldLocalGroupMembersToExclude:
 		return m.OldLocalGroupMembersToExclude(ctx)
+	case task.FieldMsiPath:
+		return m.OldMsiPath(ctx)
+	case task.FieldMsiArguments:
+		return m.OldMsiArguments(ctx)
+	case task.FieldMsiFileHash:
+		return m.OldMsiFileHash(ctx)
+	case task.FieldMsiFileHashAlg:
+		return m.OldMsiFileHashAlg(ctx)
+	case task.FieldMsiLogPath:
+		return m.OldMsiLogPath(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -25581,6 +25866,41 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLocalGroupMembersToExclude(v)
 		return nil
+	case task.FieldMsiPath:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiPath(v)
+		return nil
+	case task.FieldMsiArguments:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiArguments(v)
+		return nil
+	case task.FieldMsiFileHash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiFileHash(v)
+		return nil
+	case task.FieldMsiFileHashAlg:
+		v, ok := value.(task.MsiFileHashAlg)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiFileHashAlg(v)
+		return nil
+	case task.FieldMsiLogPath:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiLogPath(v)
+		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -25681,6 +26001,21 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldLocalGroupMembersToExclude) {
 		fields = append(fields, task.FieldLocalGroupMembersToExclude)
 	}
+	if m.FieldCleared(task.FieldMsiPath) {
+		fields = append(fields, task.FieldMsiPath)
+	}
+	if m.FieldCleared(task.FieldMsiArguments) {
+		fields = append(fields, task.FieldMsiArguments)
+	}
+	if m.FieldCleared(task.FieldMsiFileHash) {
+		fields = append(fields, task.FieldMsiFileHash)
+	}
+	if m.FieldCleared(task.FieldMsiFileHashAlg) {
+		fields = append(fields, task.FieldMsiFileHashAlg)
+	}
+	if m.FieldCleared(task.FieldMsiLogPath) {
+		fields = append(fields, task.FieldMsiLogPath)
+	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -25761,6 +26096,21 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldLocalGroupMembersToExclude:
 		m.ClearLocalGroupMembersToExclude()
 		return nil
+	case task.FieldMsiPath:
+		m.ClearMsiPath()
+		return nil
+	case task.FieldMsiArguments:
+		m.ClearMsiArguments()
+		return nil
+	case task.FieldMsiFileHash:
+		m.ClearMsiFileHash()
+		return nil
+	case task.FieldMsiFileHashAlg:
+		m.ClearMsiFileHashAlg()
+		return nil
+	case task.FieldMsiLogPath:
+		m.ClearMsiLogPath()
+		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
@@ -25840,6 +26190,21 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldLocalGroupMembersToExclude:
 		m.ResetLocalGroupMembersToExclude()
+		return nil
+	case task.FieldMsiPath:
+		m.ResetMsiPath()
+		return nil
+	case task.FieldMsiArguments:
+		m.ResetMsiArguments()
+		return nil
+	case task.FieldMsiFileHash:
+		m.ResetMsiFileHash()
+		return nil
+	case task.FieldMsiFileHashAlg:
+		m.ResetMsiFileHashAlg()
+		return nil
+	case task.FieldMsiLogPath:
+		m.ResetMsiLogPath()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()

@@ -697,7 +697,7 @@ var (
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user", "add_local_group", "remove_local_group", "add_users_to_local_group", "remove_users_from_local_group"}},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"winget_install", "winget_update", "winget_delete", "add_registry_key", "update_registry_key_default_value", "add_registry_key_value", "remove_registry_key", "remove_registry_key_value", "add_local_user", "remove_local_user", "add_local_group", "remove_local_group", "add_users_to_local_group", "remove_users_from_local_group", "msi_install", "msi_uninstall"}},
 		{Name: "package_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "package_name", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "registry_key", Type: field.TypeString, Nullable: true, Default: ""},
@@ -719,6 +719,11 @@ var (
 		{Name: "local_group_members", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_members_to_include", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_members_to_exclude", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "msi_path", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "msi_arguments", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "msi_file_hash", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "msi_file_hash_alg", Type: field.TypeEnum, Nullable: true, Enums: []string{"MD5", "RIPEMD160", "SHA1", "SHA256", "SHA384", "SHA512"}},
+		{Name: "msi_log_path", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -730,7 +735,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[25]},
+				Columns:    []*schema.Column{TasksColumns[30]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
