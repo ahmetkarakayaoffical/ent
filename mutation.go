@@ -23838,6 +23838,7 @@ type TaskMutation struct {
 	local_group_members                    *string
 	local_group_members_to_include         *string
 	local_group_members_to_exclude         *string
+	msi_productid                          *string
 	msi_path                               *string
 	msi_arguments                          *string
 	msi_file_hash                          *string
@@ -25054,6 +25055,55 @@ func (m *TaskMutation) ResetLocalGroupMembersToExclude() {
 	delete(m.clearedFields, task.FieldLocalGroupMembersToExclude)
 }
 
+// SetMsiProductid sets the "msi_productid" field.
+func (m *TaskMutation) SetMsiProductid(s string) {
+	m.msi_productid = &s
+}
+
+// MsiProductid returns the value of the "msi_productid" field in the mutation.
+func (m *TaskMutation) MsiProductid() (r string, exists bool) {
+	v := m.msi_productid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMsiProductid returns the old "msi_productid" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMsiProductid(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMsiProductid is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMsiProductid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMsiProductid: %w", err)
+	}
+	return oldValue.MsiProductid, nil
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (m *TaskMutation) ClearMsiProductid() {
+	m.msi_productid = nil
+	m.clearedFields[task.FieldMsiProductid] = struct{}{}
+}
+
+// MsiProductidCleared returns if the "msi_productid" field was cleared in this mutation.
+func (m *TaskMutation) MsiProductidCleared() bool {
+	_, ok := m.clearedFields[task.FieldMsiProductid]
+	return ok
+}
+
+// ResetMsiProductid resets all changes to the "msi_productid" field.
+func (m *TaskMutation) ResetMsiProductid() {
+	m.msi_productid = nil
+	delete(m.clearedFields, task.FieldMsiProductid)
+}
+
 // SetMsiPath sets the "msi_path" field.
 func (m *TaskMutation) SetMsiPath(s string) {
 	m.msi_path = &s
@@ -25475,7 +25525,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 29)
+	fields := make([]string, 0, 30)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -25544,6 +25594,9 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.local_group_members_to_exclude != nil {
 		fields = append(fields, task.FieldLocalGroupMembersToExclude)
+	}
+	if m.msi_productid != nil {
+		fields = append(fields, task.FieldMsiProductid)
 	}
 	if m.msi_path != nil {
 		fields = append(fields, task.FieldMsiPath)
@@ -25617,6 +25670,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.LocalGroupMembersToInclude()
 	case task.FieldLocalGroupMembersToExclude:
 		return m.LocalGroupMembersToExclude()
+	case task.FieldMsiProductid:
+		return m.MsiProductid()
 	case task.FieldMsiPath:
 		return m.MsiPath()
 	case task.FieldMsiArguments:
@@ -25684,6 +25739,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocalGroupMembersToInclude(ctx)
 	case task.FieldLocalGroupMembersToExclude:
 		return m.OldLocalGroupMembersToExclude(ctx)
+	case task.FieldMsiProductid:
+		return m.OldMsiProductid(ctx)
 	case task.FieldMsiPath:
 		return m.OldMsiPath(ctx)
 	case task.FieldMsiArguments:
@@ -25866,6 +25923,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLocalGroupMembersToExclude(v)
 		return nil
+	case task.FieldMsiProductid:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMsiProductid(v)
+		return nil
 	case task.FieldMsiPath:
 		v, ok := value.(string)
 		if !ok {
@@ -26001,6 +26065,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldLocalGroupMembersToExclude) {
 		fields = append(fields, task.FieldLocalGroupMembersToExclude)
 	}
+	if m.FieldCleared(task.FieldMsiProductid) {
+		fields = append(fields, task.FieldMsiProductid)
+	}
 	if m.FieldCleared(task.FieldMsiPath) {
 		fields = append(fields, task.FieldMsiPath)
 	}
@@ -26096,6 +26163,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldLocalGroupMembersToExclude:
 		m.ClearLocalGroupMembersToExclude()
 		return nil
+	case task.FieldMsiProductid:
+		m.ClearMsiProductid()
+		return nil
 	case task.FieldMsiPath:
 		m.ClearMsiPath()
 		return nil
@@ -26190,6 +26260,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldLocalGroupMembersToExclude:
 		m.ResetLocalGroupMembersToExclude()
+		return nil
+	case task.FieldMsiProductid:
+		m.ResetMsiProductid()
 		return nil
 	case task.FieldMsiPath:
 		m.ResetMsiPath()

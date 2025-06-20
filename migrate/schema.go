@@ -719,6 +719,7 @@ var (
 		{Name: "local_group_members", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_members_to_include", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_members_to_exclude", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "msi_productid", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "msi_path", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "msi_arguments", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "msi_file_hash", Type: field.TypeString, Nullable: true, Default: ""},
@@ -735,7 +736,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[30]},
+				Columns:    []*schema.Column{TasksColumns[31]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

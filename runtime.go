@@ -379,20 +379,24 @@ func init() {
 	taskDescLocalGroupMembersToExclude := taskFields[22].Descriptor()
 	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
 	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
+	// taskDescMsiProductid is the schema descriptor for msi_productid field.
+	taskDescMsiProductid := taskFields[23].Descriptor()
+	// task.DefaultMsiProductid holds the default value on creation for the msi_productid field.
+	task.DefaultMsiProductid = taskDescMsiProductid.Default.(string)
 	// taskDescMsiPath is the schema descriptor for msi_path field.
-	taskDescMsiPath := taskFields[23].Descriptor()
+	taskDescMsiPath := taskFields[24].Descriptor()
 	// task.DefaultMsiPath holds the default value on creation for the msi_path field.
 	task.DefaultMsiPath = taskDescMsiPath.Default.(string)
 	// taskDescMsiArguments is the schema descriptor for msi_arguments field.
-	taskDescMsiArguments := taskFields[24].Descriptor()
+	taskDescMsiArguments := taskFields[25].Descriptor()
 	// task.DefaultMsiArguments holds the default value on creation for the msi_arguments field.
 	task.DefaultMsiArguments = taskDescMsiArguments.Default.(string)
 	// taskDescMsiFileHash is the schema descriptor for msi_file_hash field.
-	taskDescMsiFileHash := taskFields[25].Descriptor()
+	taskDescMsiFileHash := taskFields[26].Descriptor()
 	// task.DefaultMsiFileHash holds the default value on creation for the msi_file_hash field.
 	task.DefaultMsiFileHash = taskDescMsiFileHash.Default.(string)
 	// taskDescMsiLogPath is the schema descriptor for msi_log_path field.
-	taskDescMsiLogPath := taskFields[27].Descriptor()
+	taskDescMsiLogPath := taskFields[28].Descriptor()
 	// task.DefaultMsiLogPath holds the default value on creation for the msi_log_path field.
 	task.DefaultMsiLogPath = taskDescMsiLogPath.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()

@@ -330,6 +330,20 @@ func (tc *TaskCreate) SetNillableLocalGroupMembersToExclude(s *string) *TaskCrea
 	return tc
 }
 
+// SetMsiProductid sets the "msi_productid" field.
+func (tc *TaskCreate) SetMsiProductid(s string) *TaskCreate {
+	tc.mutation.SetMsiProductid(s)
+	return tc
+}
+
+// SetNillableMsiProductid sets the "msi_productid" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableMsiProductid(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetMsiProductid(*s)
+	}
+	return tc
+}
+
 // SetMsiPath sets the "msi_path" field.
 func (tc *TaskCreate) SetMsiPath(s string) *TaskCreate {
 	tc.mutation.SetMsiPath(s)
@@ -563,6 +577,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultLocalGroupMembersToExclude
 		tc.mutation.SetLocalGroupMembersToExclude(v)
 	}
+	if _, ok := tc.mutation.MsiProductid(); !ok {
+		v := task.DefaultMsiProductid
+		tc.mutation.SetMsiProductid(v)
+	}
 	if _, ok := tc.mutation.MsiPath(); !ok {
 		v := task.DefaultMsiPath
 		tc.mutation.SetMsiPath(v)
@@ -727,6 +745,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.LocalGroupMembersToExclude(); ok {
 		_spec.SetField(task.FieldLocalGroupMembersToExclude, field.TypeString, value)
 		_node.LocalGroupMembersToExclude = value
+	}
+	if value, ok := tc.mutation.MsiProductid(); ok {
+		_spec.SetField(task.FieldMsiProductid, field.TypeString, value)
+		_node.MsiProductid = value
 	}
 	if value, ok := tc.mutation.MsiPath(); ok {
 		_spec.SetField(task.FieldMsiPath, field.TypeString, value)
@@ -1236,6 +1258,24 @@ func (u *TaskUpsert) UpdateLocalGroupMembersToExclude() *TaskUpsert {
 // ClearLocalGroupMembersToExclude clears the value of the "local_group_members_to_exclude" field.
 func (u *TaskUpsert) ClearLocalGroupMembersToExclude() *TaskUpsert {
 	u.SetNull(task.FieldLocalGroupMembersToExclude)
+	return u
+}
+
+// SetMsiProductid sets the "msi_productid" field.
+func (u *TaskUpsert) SetMsiProductid(v string) *TaskUpsert {
+	u.Set(task.FieldMsiProductid, v)
+	return u
+}
+
+// UpdateMsiProductid sets the "msi_productid" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateMsiProductid() *TaskUpsert {
+	u.SetExcluded(task.FieldMsiProductid)
+	return u
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (u *TaskUpsert) ClearMsiProductid() *TaskUpsert {
+	u.SetNull(task.FieldMsiProductid)
 	return u
 }
 
@@ -1853,6 +1893,27 @@ func (u *TaskUpsertOne) UpdateLocalGroupMembersToExclude() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearLocalGroupMembersToExclude() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupMembersToExclude()
+	})
+}
+
+// SetMsiProductid sets the "msi_productid" field.
+func (u *TaskUpsertOne) SetMsiProductid(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiProductid(v)
+	})
+}
+
+// UpdateMsiProductid sets the "msi_productid" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateMsiProductid() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiProductid()
+	})
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (u *TaskUpsertOne) ClearMsiProductid() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiProductid()
 	})
 }
 
@@ -2652,6 +2713,27 @@ func (u *TaskUpsertBulk) UpdateLocalGroupMembersToExclude() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearLocalGroupMembersToExclude() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupMembersToExclude()
+	})
+}
+
+// SetMsiProductid sets the "msi_productid" field.
+func (u *TaskUpsertBulk) SetMsiProductid(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetMsiProductid(v)
+	})
+}
+
+// UpdateMsiProductid sets the "msi_productid" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateMsiProductid() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateMsiProductid()
+	})
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (u *TaskUpsertBulk) ClearMsiProductid() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearMsiProductid()
 	})
 }
 

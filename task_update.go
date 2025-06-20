@@ -479,6 +479,26 @@ func (tu *TaskUpdate) ClearLocalGroupMembersToExclude() *TaskUpdate {
 	return tu
 }
 
+// SetMsiProductid sets the "msi_productid" field.
+func (tu *TaskUpdate) SetMsiProductid(s string) *TaskUpdate {
+	tu.mutation.SetMsiProductid(s)
+	return tu
+}
+
+// SetNillableMsiProductid sets the "msi_productid" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableMsiProductid(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetMsiProductid(*s)
+	}
+	return tu
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (tu *TaskUpdate) ClearMsiProductid() *TaskUpdate {
+	tu.mutation.ClearMsiProductid()
+	return tu
+}
+
 // SetMsiPath sets the "msi_path" field.
 func (tu *TaskUpdate) SetMsiPath(s string) *TaskUpdate {
 	tu.mutation.SetMsiPath(s)
@@ -866,6 +886,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.LocalGroupMembersToExcludeCleared() {
 		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
+	}
+	if value, ok := tu.mutation.MsiProductid(); ok {
+		_spec.SetField(task.FieldMsiProductid, field.TypeString, value)
+	}
+	if tu.mutation.MsiProductidCleared() {
+		_spec.ClearField(task.FieldMsiProductid, field.TypeString)
 	}
 	if value, ok := tu.mutation.MsiPath(); ok {
 		_spec.SetField(task.FieldMsiPath, field.TypeString, value)
@@ -1447,6 +1473,26 @@ func (tuo *TaskUpdateOne) ClearLocalGroupMembersToExclude() *TaskUpdateOne {
 	return tuo
 }
 
+// SetMsiProductid sets the "msi_productid" field.
+func (tuo *TaskUpdateOne) SetMsiProductid(s string) *TaskUpdateOne {
+	tuo.mutation.SetMsiProductid(s)
+	return tuo
+}
+
+// SetNillableMsiProductid sets the "msi_productid" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableMsiProductid(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetMsiProductid(*s)
+	}
+	return tuo
+}
+
+// ClearMsiProductid clears the value of the "msi_productid" field.
+func (tuo *TaskUpdateOne) ClearMsiProductid() *TaskUpdateOne {
+	tuo.mutation.ClearMsiProductid()
+	return tuo
+}
+
 // SetMsiPath sets the "msi_path" field.
 func (tuo *TaskUpdateOne) SetMsiPath(s string) *TaskUpdateOne {
 	tuo.mutation.SetMsiPath(s)
@@ -1864,6 +1910,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalGroupMembersToExcludeCleared() {
 		_spec.ClearField(task.FieldLocalGroupMembersToExclude, field.TypeString)
+	}
+	if value, ok := tuo.mutation.MsiProductid(); ok {
+		_spec.SetField(task.FieldMsiProductid, field.TypeString, value)
+	}
+	if tuo.mutation.MsiProductidCleared() {
+		_spec.ClearField(task.FieldMsiProductid, field.TypeString)
 	}
 	if value, ok := tuo.mutation.MsiPath(); ok {
 		_spec.SetField(task.FieldMsiPath, field.TypeString, value)

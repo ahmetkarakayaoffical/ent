@@ -60,6 +60,8 @@ const (
 	FieldLocalGroupMembersToInclude = "local_group_members_to_include"
 	// FieldLocalGroupMembersToExclude holds the string denoting the local_group_members_to_exclude field in the database.
 	FieldLocalGroupMembersToExclude = "local_group_members_to_exclude"
+	// FieldMsiProductid holds the string denoting the msi_productid field in the database.
+	FieldMsiProductid = "msi_productid"
 	// FieldMsiPath holds the string denoting the msi_path field in the database.
 	FieldMsiPath = "msi_path"
 	// FieldMsiArguments holds the string denoting the msi_arguments field in the database.
@@ -120,6 +122,7 @@ var Columns = []string{
 	FieldLocalGroupMembers,
 	FieldLocalGroupMembersToInclude,
 	FieldLocalGroupMembersToExclude,
+	FieldMsiProductid,
 	FieldMsiPath,
 	FieldMsiArguments,
 	FieldMsiFileHash,
@@ -192,6 +195,8 @@ var (
 	DefaultLocalGroupMembersToInclude string
 	// DefaultLocalGroupMembersToExclude holds the default value on creation for the "local_group_members_to_exclude" field.
 	DefaultLocalGroupMembersToExclude string
+	// DefaultMsiProductid holds the default value on creation for the "msi_productid" field.
+	DefaultMsiProductid string
 	// DefaultMsiPath holds the default value on creation for the "msi_path" field.
 	DefaultMsiPath string
 	// DefaultMsiArguments holds the default value on creation for the "msi_arguments" field.
@@ -414,6 +419,11 @@ func ByLocalGroupMembersToInclude(opts ...sql.OrderTermOption) OrderOption {
 // ByLocalGroupMembersToExclude orders the results by the local_group_members_to_exclude field.
 func ByLocalGroupMembersToExclude(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalGroupMembersToExclude, opts...).ToFunc()
+}
+
+// ByMsiProductid orders the results by the msi_productid field.
+func ByMsiProductid(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMsiProductid, opts...).ToFunc()
 }
 
 // ByMsiPath orders the results by the msi_path field.

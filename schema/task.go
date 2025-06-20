@@ -37,6 +37,7 @@ func (Task) Fields() []ent.Field {
 		field.String("local_group_members").Optional().Default(""),
 		field.String("local_group_members_to_include").Optional().Default(""),
 		field.String("local_group_members_to_exclude").Optional().Default(""),
+		field.String("msi_productid").Optional().Default(""),
 		field.String("msi_path").Optional().Default(""),
 		field.String("msi_arguments").Optional().Default(""),
 		field.String("msi_file_hash").Optional().Default(""),

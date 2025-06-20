@@ -64,6 +64,8 @@ type Task struct {
 	LocalGroupMembersToInclude string `json:"local_group_members_to_include,omitempty"`
 	// LocalGroupMembersToExclude holds the value of the "local_group_members_to_exclude" field.
 	LocalGroupMembersToExclude string `json:"local_group_members_to_exclude,omitempty"`
+	// MsiProductid holds the value of the "msi_productid" field.
+	MsiProductid string `json:"msi_productid,omitempty"`
 	// MsiPath holds the value of the "msi_path" field.
 	MsiPath string `json:"msi_path,omitempty"`
 	// MsiArguments holds the value of the "msi_arguments" field.
@@ -123,7 +125,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -288,6 +290,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.LocalGroupMembersToExclude = value.String
 			}
+		case task.FieldMsiProductid:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field msi_productid", values[i])
+			} else if value.Valid {
+				t.MsiProductid = value.String
+			}
 		case task.FieldMsiPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field msi_path", values[i])
@@ -445,6 +453,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("local_group_members_to_exclude=")
 	builder.WriteString(t.LocalGroupMembersToExclude)
+	builder.WriteString(", ")
+	builder.WriteString("msi_productid=")
+	builder.WriteString(t.MsiProductid)
 	builder.WriteString(", ")
 	builder.WriteString("msi_path=")
 	builder.WriteString(t.MsiPath)

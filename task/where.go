@@ -160,6 +160,11 @@ func LocalGroupMembersToExclude(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalGroupMembersToExclude, v))
 }
 
+// MsiProductid applies equality check predicate on the "msi_productid" field. It's identical to MsiProductidEQ.
+func MsiProductid(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiProductid, v))
+}
+
 // MsiPath applies equality check predicate on the "msi_path" field. It's identical to MsiPathEQ.
 func MsiPath(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldMsiPath, v))
@@ -1468,6 +1473,81 @@ func LocalGroupMembersToExcludeEqualFold(v string) predicate.Task {
 // LocalGroupMembersToExcludeContainsFold applies the ContainsFold predicate on the "local_group_members_to_exclude" field.
 func LocalGroupMembersToExcludeContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldLocalGroupMembersToExclude, v))
+}
+
+// MsiProductidEQ applies the EQ predicate on the "msi_productid" field.
+func MsiProductidEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldMsiProductid, v))
+}
+
+// MsiProductidNEQ applies the NEQ predicate on the "msi_productid" field.
+func MsiProductidNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldMsiProductid, v))
+}
+
+// MsiProductidIn applies the In predicate on the "msi_productid" field.
+func MsiProductidIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldMsiProductid, vs...))
+}
+
+// MsiProductidNotIn applies the NotIn predicate on the "msi_productid" field.
+func MsiProductidNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldMsiProductid, vs...))
+}
+
+// MsiProductidGT applies the GT predicate on the "msi_productid" field.
+func MsiProductidGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldMsiProductid, v))
+}
+
+// MsiProductidGTE applies the GTE predicate on the "msi_productid" field.
+func MsiProductidGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldMsiProductid, v))
+}
+
+// MsiProductidLT applies the LT predicate on the "msi_productid" field.
+func MsiProductidLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldMsiProductid, v))
+}
+
+// MsiProductidLTE applies the LTE predicate on the "msi_productid" field.
+func MsiProductidLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldMsiProductid, v))
+}
+
+// MsiProductidContains applies the Contains predicate on the "msi_productid" field.
+func MsiProductidContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldMsiProductid, v))
+}
+
+// MsiProductidHasPrefix applies the HasPrefix predicate on the "msi_productid" field.
+func MsiProductidHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldMsiProductid, v))
+}
+
+// MsiProductidHasSuffix applies the HasSuffix predicate on the "msi_productid" field.
+func MsiProductidHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldMsiProductid, v))
+}
+
+// MsiProductidIsNil applies the IsNil predicate on the "msi_productid" field.
+func MsiProductidIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMsiProductid))
+}
+
+// MsiProductidNotNil applies the NotNil predicate on the "msi_productid" field.
+func MsiProductidNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMsiProductid))
+}
+
+// MsiProductidEqualFold applies the EqualFold predicate on the "msi_productid" field.
+func MsiProductidEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldMsiProductid, v))
+}
+
+// MsiProductidContainsFold applies the ContainsFold predicate on the "msi_productid" field.
+func MsiProductidContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldMsiProductid, v))
 }
 
 // MsiPathEQ applies the EQ predicate on the "msi_path" field.
