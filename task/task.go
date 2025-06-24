@@ -72,6 +72,8 @@ const (
 	FieldMsiFileHashAlg = "msi_file_hash_alg"
 	// FieldMsiLogPath holds the string denoting the msi_log_path field in the database.
 	FieldMsiLogPath = "msi_log_path"
+	// FieldScript holds the string denoting the script field in the database.
+	FieldScript = "script"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -128,6 +130,7 @@ var Columns = []string{
 	FieldMsiFileHash,
 	FieldMsiFileHashAlg,
 	FieldMsiLogPath,
+	FieldScript,
 	FieldWhen,
 }
 
@@ -205,6 +208,8 @@ var (
 	DefaultMsiFileHash string
 	// DefaultMsiLogPath holds the default value on creation for the "msi_log_path" field.
 	DefaultMsiLogPath string
+	// DefaultScript holds the default value on creation for the "script" field.
+	DefaultScript string
 )
 
 // Type defines the type for the "type" enum field.
@@ -449,6 +454,11 @@ func ByMsiFileHashAlg(opts ...sql.OrderTermOption) OrderOption {
 // ByMsiLogPath orders the results by the msi_log_path field.
 func ByMsiLogPath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMsiLogPath, opts...).ToFunc()
+}
+
+// ByScript orders the results by the script field.
+func ByScript(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScript, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

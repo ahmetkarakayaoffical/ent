@@ -414,6 +414,20 @@ func (tc *TaskCreate) SetNillableMsiLogPath(s *string) *TaskCreate {
 	return tc
 }
 
+// SetScript sets the "script" field.
+func (tc *TaskCreate) SetScript(s string) *TaskCreate {
+	tc.mutation.SetScript(s)
+	return tc
+}
+
+// SetNillableScript sets the "script" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableScript(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetScript(*s)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -597,6 +611,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultMsiLogPath
 		tc.mutation.SetMsiLogPath(v)
 	}
+	if _, ok := tc.mutation.Script(); !ok {
+		v := task.DefaultScript
+		tc.mutation.SetScript(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -769,6 +787,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.MsiLogPath(); ok {
 		_spec.SetField(task.FieldMsiLogPath, field.TypeString, value)
 		_node.MsiLogPath = value
+	}
+	if value, ok := tc.mutation.Script(); ok {
+		_spec.SetField(task.FieldScript, field.TypeString, value)
+		_node.Script = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1366,6 +1388,24 @@ func (u *TaskUpsert) UpdateMsiLogPath() *TaskUpsert {
 // ClearMsiLogPath clears the value of the "msi_log_path" field.
 func (u *TaskUpsert) ClearMsiLogPath() *TaskUpsert {
 	u.SetNull(task.FieldMsiLogPath)
+	return u
+}
+
+// SetScript sets the "script" field.
+func (u *TaskUpsert) SetScript(v string) *TaskUpsert {
+	u.Set(task.FieldScript, v)
+	return u
+}
+
+// UpdateScript sets the "script" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateScript() *TaskUpsert {
+	u.SetExcluded(task.FieldScript)
+	return u
+}
+
+// ClearScript clears the value of the "script" field.
+func (u *TaskUpsert) ClearScript() *TaskUpsert {
+	u.SetNull(task.FieldScript)
 	return u
 }
 
@@ -2019,6 +2059,27 @@ func (u *TaskUpsertOne) UpdateMsiLogPath() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearMsiLogPath() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearMsiLogPath()
+	})
+}
+
+// SetScript sets the "script" field.
+func (u *TaskUpsertOne) SetScript(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScript(v)
+	})
+}
+
+// UpdateScript sets the "script" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateScript() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScript()
+	})
+}
+
+// ClearScript clears the value of the "script" field.
+func (u *TaskUpsertOne) ClearScript() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScript()
 	})
 }
 
@@ -2839,6 +2900,27 @@ func (u *TaskUpsertBulk) UpdateMsiLogPath() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearMsiLogPath() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearMsiLogPath()
+	})
+}
+
+// SetScript sets the "script" field.
+func (u *TaskUpsertBulk) SetScript(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScript(v)
+	})
+}
+
+// UpdateScript sets the "script" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateScript() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScript()
+	})
+}
+
+// ClearScript clears the value of the "script" field.
+func (u *TaskUpsertBulk) ClearScript() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScript()
 	})
 }
 

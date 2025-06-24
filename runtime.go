@@ -399,6 +399,10 @@ func init() {
 	taskDescMsiLogPath := taskFields[28].Descriptor()
 	// task.DefaultMsiLogPath holds the default value on creation for the msi_log_path field.
 	task.DefaultMsiLogPath = taskDescMsiLogPath.Default.(string)
+	// taskDescScript is the schema descriptor for script field.
+	taskDescScript := taskFields[29].Descriptor()
+	// task.DefaultScript holds the default value on creation for the script field.
+	task.DefaultScript = taskDescScript.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()
 	_ = tenantFields
 	// tenantDescCreated is the schema descriptor for created field.

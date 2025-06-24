@@ -599,6 +599,26 @@ func (tu *TaskUpdate) ClearMsiLogPath() *TaskUpdate {
 	return tu
 }
 
+// SetScript sets the "script" field.
+func (tu *TaskUpdate) SetScript(s string) *TaskUpdate {
+	tu.mutation.SetScript(s)
+	return tu
+}
+
+// SetNillableScript sets the "script" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableScript(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetScript(*s)
+	}
+	return tu
+}
+
+// ClearScript clears the value of the "script" field.
+func (tu *TaskUpdate) ClearScript() *TaskUpdate {
+	tu.mutation.ClearScript()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -922,6 +942,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.MsiLogPathCleared() {
 		_spec.ClearField(task.FieldMsiLogPath, field.TypeString)
+	}
+	if value, ok := tu.mutation.Script(); ok {
+		_spec.SetField(task.FieldScript, field.TypeString, value)
+	}
+	if tu.mutation.ScriptCleared() {
+		_spec.ClearField(task.FieldScript, field.TypeString)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1593,6 +1619,26 @@ func (tuo *TaskUpdateOne) ClearMsiLogPath() *TaskUpdateOne {
 	return tuo
 }
 
+// SetScript sets the "script" field.
+func (tuo *TaskUpdateOne) SetScript(s string) *TaskUpdateOne {
+	tuo.mutation.SetScript(s)
+	return tuo
+}
+
+// SetNillableScript sets the "script" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableScript(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetScript(*s)
+	}
+	return tuo
+}
+
+// ClearScript clears the value of the "script" field.
+func (tuo *TaskUpdateOne) ClearScript() *TaskUpdateOne {
+	tuo.mutation.ClearScript()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -1946,6 +1992,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.MsiLogPathCleared() {
 		_spec.ClearField(task.FieldMsiLogPath, field.TypeString)
+	}
+	if value, ok := tuo.mutation.Script(); ok {
+		_spec.SetField(task.FieldScript, field.TypeString, value)
+	}
+	if tuo.mutation.ScriptCleared() {
+		_spec.ClearField(task.FieldScript, field.TypeString)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

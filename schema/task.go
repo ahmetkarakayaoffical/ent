@@ -43,6 +43,7 @@ func (Task) Fields() []ent.Field {
 		field.String("msi_file_hash").Optional().Default(""),
 		field.Enum("msi_file_hash_alg").Values("MD5", "RIPEMD160", "SHA1", "SHA256", "SHA384", "SHA512").Optional(),
 		field.String("msi_log_path").Optional().Default(""),
+		field.String("script").Optional().Default(""),
 		field.Time("when").Optional(),
 	}
 }

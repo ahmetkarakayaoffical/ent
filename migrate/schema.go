@@ -725,6 +725,7 @@ var (
 		{Name: "msi_file_hash", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "msi_file_hash_alg", Type: field.TypeEnum, Nullable: true, Enums: []string{"MD5", "RIPEMD160", "SHA1", "SHA256", "SHA384", "SHA512"}},
 		{Name: "msi_log_path", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "script", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -736,7 +737,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[31]},
+				Columns:    []*schema.Column{TasksColumns[32]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

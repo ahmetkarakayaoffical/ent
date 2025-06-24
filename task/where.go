@@ -185,6 +185,11 @@ func MsiLogPath(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldMsiLogPath, v))
 }
 
+// Script applies equality check predicate on the "script" field. It's identical to ScriptEQ.
+func Script(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScript, v))
+}
+
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
 func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
@@ -1878,6 +1883,81 @@ func MsiLogPathEqualFold(v string) predicate.Task {
 // MsiLogPathContainsFold applies the ContainsFold predicate on the "msi_log_path" field.
 func MsiLogPathContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldMsiLogPath, v))
+}
+
+// ScriptEQ applies the EQ predicate on the "script" field.
+func ScriptEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScript, v))
+}
+
+// ScriptNEQ applies the NEQ predicate on the "script" field.
+func ScriptNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldScript, v))
+}
+
+// ScriptIn applies the In predicate on the "script" field.
+func ScriptIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldScript, vs...))
+}
+
+// ScriptNotIn applies the NotIn predicate on the "script" field.
+func ScriptNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldScript, vs...))
+}
+
+// ScriptGT applies the GT predicate on the "script" field.
+func ScriptGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldScript, v))
+}
+
+// ScriptGTE applies the GTE predicate on the "script" field.
+func ScriptGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldScript, v))
+}
+
+// ScriptLT applies the LT predicate on the "script" field.
+func ScriptLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldScript, v))
+}
+
+// ScriptLTE applies the LTE predicate on the "script" field.
+func ScriptLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldScript, v))
+}
+
+// ScriptContains applies the Contains predicate on the "script" field.
+func ScriptContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldScript, v))
+}
+
+// ScriptHasPrefix applies the HasPrefix predicate on the "script" field.
+func ScriptHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldScript, v))
+}
+
+// ScriptHasSuffix applies the HasSuffix predicate on the "script" field.
+func ScriptHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldScript, v))
+}
+
+// ScriptIsNil applies the IsNil predicate on the "script" field.
+func ScriptIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldScript))
+}
+
+// ScriptNotNil applies the NotNil predicate on the "script" field.
+func ScriptNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldScript))
+}
+
+// ScriptEqualFold applies the EqualFold predicate on the "script" field.
+func ScriptEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldScript, v))
+}
+
+// ScriptContainsFold applies the ContainsFold predicate on the "script" field.
+func ScriptContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldScript, v))
 }
 
 // WhenEQ applies the EQ predicate on the "when" field.
