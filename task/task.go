@@ -233,6 +233,7 @@ const (
 	TypeRemoveUsersFromLocalGroup     Type = "remove_users_from_local_group"
 	TypeMsiInstall                    Type = "msi_install"
 	TypeMsiUninstall                  Type = "msi_uninstall"
+	TypePowershellScript              Type = "powershell_script"
 )
 
 func (_type Type) String() string {
@@ -242,7 +243,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
