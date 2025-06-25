@@ -619,6 +619,26 @@ func (tu *TaskUpdate) ClearScript() *TaskUpdate {
 	return tu
 }
 
+// SetScriptRun sets the "script_run" field.
+func (tu *TaskUpdate) SetScriptRun(tr task.ScriptRun) *TaskUpdate {
+	tu.mutation.SetScriptRun(tr)
+	return tu
+}
+
+// SetNillableScriptRun sets the "script_run" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableScriptRun(tr *task.ScriptRun) *TaskUpdate {
+	if tr != nil {
+		tu.SetScriptRun(*tr)
+	}
+	return tu
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (tu *TaskUpdate) ClearScriptRun() *TaskUpdate {
+	tu.mutation.ClearScriptRun()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -752,6 +772,11 @@ func (tu *TaskUpdate) check() error {
 	if v, ok := tu.mutation.MsiFileHashAlg(); ok {
 		if err := task.MsiFileHashAlgValidator(v); err != nil {
 			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.ScriptRun(); ok {
+		if err := task.ScriptRunValidator(v); err != nil {
+			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
 		}
 	}
 	return nil
@@ -948,6 +973,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.ScriptCleared() {
 		_spec.ClearField(task.FieldScript, field.TypeString)
+	}
+	if value, ok := tu.mutation.ScriptRun(); ok {
+		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
+	}
+	if tu.mutation.ScriptRunCleared() {
+		_spec.ClearField(task.FieldScriptRun, field.TypeEnum)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1639,6 +1670,26 @@ func (tuo *TaskUpdateOne) ClearScript() *TaskUpdateOne {
 	return tuo
 }
 
+// SetScriptRun sets the "script_run" field.
+func (tuo *TaskUpdateOne) SetScriptRun(tr task.ScriptRun) *TaskUpdateOne {
+	tuo.mutation.SetScriptRun(tr)
+	return tuo
+}
+
+// SetNillableScriptRun sets the "script_run" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableScriptRun(tr *task.ScriptRun) *TaskUpdateOne {
+	if tr != nil {
+		tuo.SetScriptRun(*tr)
+	}
+	return tuo
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (tuo *TaskUpdateOne) ClearScriptRun() *TaskUpdateOne {
+	tuo.mutation.ClearScriptRun()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -1785,6 +1836,11 @@ func (tuo *TaskUpdateOne) check() error {
 	if v, ok := tuo.mutation.MsiFileHashAlg(); ok {
 		if err := task.MsiFileHashAlgValidator(v); err != nil {
 			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.ScriptRun(); ok {
+		if err := task.ScriptRunValidator(v); err != nil {
+			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
 		}
 	}
 	return nil
@@ -1998,6 +2054,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.ScriptCleared() {
 		_spec.ClearField(task.FieldScript, field.TypeString)
+	}
+	if value, ok := tuo.mutation.ScriptRun(); ok {
+		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
+	}
+	if tuo.mutation.ScriptRunCleared() {
+		_spec.ClearField(task.FieldScriptRun, field.TypeEnum)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

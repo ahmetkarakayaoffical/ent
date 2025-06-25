@@ -428,6 +428,20 @@ func (tc *TaskCreate) SetNillableScript(s *string) *TaskCreate {
 	return tc
 }
 
+// SetScriptRun sets the "script_run" field.
+func (tc *TaskCreate) SetScriptRun(tr task.ScriptRun) *TaskCreate {
+	tc.mutation.SetScriptRun(tr)
+	return tc
+}
+
+// SetNillableScriptRun sets the "script_run" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableScriptRun(tr *task.ScriptRun) *TaskCreate {
+	if tr != nil {
+		tc.SetScriptRun(*tr)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -645,6 +659,11 @@ func (tc *TaskCreate) check() error {
 			return &ValidationError{Name: "msi_file_hash_alg", err: fmt.Errorf(`ent: validator failed for field "Task.msi_file_hash_alg": %w`, err)}
 		}
 	}
+	if v, ok := tc.mutation.ScriptRun(); ok {
+		if err := task.ScriptRunValidator(v); err != nil {
+			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -791,6 +810,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Script(); ok {
 		_spec.SetField(task.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := tc.mutation.ScriptRun(); ok {
+		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
+		_node.ScriptRun = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1406,6 +1429,24 @@ func (u *TaskUpsert) UpdateScript() *TaskUpsert {
 // ClearScript clears the value of the "script" field.
 func (u *TaskUpsert) ClearScript() *TaskUpsert {
 	u.SetNull(task.FieldScript)
+	return u
+}
+
+// SetScriptRun sets the "script_run" field.
+func (u *TaskUpsert) SetScriptRun(v task.ScriptRun) *TaskUpsert {
+	u.Set(task.FieldScriptRun, v)
+	return u
+}
+
+// UpdateScriptRun sets the "script_run" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateScriptRun() *TaskUpsert {
+	u.SetExcluded(task.FieldScriptRun)
+	return u
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (u *TaskUpsert) ClearScriptRun() *TaskUpsert {
+	u.SetNull(task.FieldScriptRun)
 	return u
 }
 
@@ -2080,6 +2121,27 @@ func (u *TaskUpsertOne) UpdateScript() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearScript() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScript()
+	})
+}
+
+// SetScriptRun sets the "script_run" field.
+func (u *TaskUpsertOne) SetScriptRun(v task.ScriptRun) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptRun(v)
+	})
+}
+
+// UpdateScriptRun sets the "script_run" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateScriptRun() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptRun()
+	})
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (u *TaskUpsertOne) ClearScriptRun() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptRun()
 	})
 }
 
@@ -2921,6 +2983,27 @@ func (u *TaskUpsertBulk) UpdateScript() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearScript() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScript()
+	})
+}
+
+// SetScriptRun sets the "script_run" field.
+func (u *TaskUpsertBulk) SetScriptRun(v task.ScriptRun) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptRun(v)
+	})
+}
+
+// UpdateScriptRun sets the "script_run" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateScriptRun() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptRun()
+	})
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (u *TaskUpsertBulk) ClearScriptRun() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptRun()
 	})
 }
 

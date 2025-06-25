@@ -23845,6 +23845,7 @@ type TaskMutation struct {
 	msi_file_hash_alg                      *task.MsiFileHashAlg
 	msi_log_path                           *string
 	script                                 *string
+	script_run                             *task.ScriptRun
 	when                                   *time.Time
 	clearedFields                          map[string]struct{}
 	tags                                   map[int]struct{}
@@ -25399,6 +25400,55 @@ func (m *TaskMutation) ResetScript() {
 	delete(m.clearedFields, task.FieldScript)
 }
 
+// SetScriptRun sets the "script_run" field.
+func (m *TaskMutation) SetScriptRun(tr task.ScriptRun) {
+	m.script_run = &tr
+}
+
+// ScriptRun returns the value of the "script_run" field in the mutation.
+func (m *TaskMutation) ScriptRun() (r task.ScriptRun, exists bool) {
+	v := m.script_run
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScriptRun returns the old "script_run" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldScriptRun(ctx context.Context) (v task.ScriptRun, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScriptRun is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScriptRun requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScriptRun: %w", err)
+	}
+	return oldValue.ScriptRun, nil
+}
+
+// ClearScriptRun clears the value of the "script_run" field.
+func (m *TaskMutation) ClearScriptRun() {
+	m.script_run = nil
+	m.clearedFields[task.FieldScriptRun] = struct{}{}
+}
+
+// ScriptRunCleared returns if the "script_run" field was cleared in this mutation.
+func (m *TaskMutation) ScriptRunCleared() bool {
+	_, ok := m.clearedFields[task.FieldScriptRun]
+	return ok
+}
+
+// ResetScriptRun resets all changes to the "script_run" field.
+func (m *TaskMutation) ResetScriptRun() {
+	m.script_run = nil
+	delete(m.clearedFields, task.FieldScriptRun)
+}
+
 // SetWhen sets the "when" field.
 func (m *TaskMutation) SetWhen(t time.Time) {
 	m.when = &t
@@ -25575,7 +25625,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 32)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -25666,6 +25716,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.script != nil {
 		fields = append(fields, task.FieldScript)
 	}
+	if m.script_run != nil {
+		fields = append(fields, task.FieldScriptRun)
+	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -25737,6 +25790,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.MsiLogPath()
 	case task.FieldScript:
 		return m.Script()
+	case task.FieldScriptRun:
+		return m.ScriptRun()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -25808,6 +25863,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMsiLogPath(ctx)
 	case task.FieldScript:
 		return m.OldScript(ctx)
+	case task.FieldScriptRun:
+		return m.OldScriptRun(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -26029,6 +26086,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScript(v)
 		return nil
+	case task.FieldScriptRun:
+		v, ok := value.(task.ScriptRun)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScriptRun(v)
+		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -26150,6 +26214,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldScript) {
 		fields = append(fields, task.FieldScript)
 	}
+	if m.FieldCleared(task.FieldScriptRun) {
+		fields = append(fields, task.FieldScriptRun)
+	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -26251,6 +26318,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldScript:
 		m.ClearScript()
 		return nil
+	case task.FieldScriptRun:
+		m.ClearScriptRun()
+		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
@@ -26351,6 +26421,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldScript:
 		m.ResetScript()
+		return nil
+	case task.FieldScriptRun:
+		m.ResetScriptRun()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()

@@ -1960,6 +1960,36 @@ func ScriptContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldScript, v))
 }
 
+// ScriptRunEQ applies the EQ predicate on the "script_run" field.
+func ScriptRunEQ(v ScriptRun) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScriptRun, v))
+}
+
+// ScriptRunNEQ applies the NEQ predicate on the "script_run" field.
+func ScriptRunNEQ(v ScriptRun) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldScriptRun, v))
+}
+
+// ScriptRunIn applies the In predicate on the "script_run" field.
+func ScriptRunIn(vs ...ScriptRun) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldScriptRun, vs...))
+}
+
+// ScriptRunNotIn applies the NotIn predicate on the "script_run" field.
+func ScriptRunNotIn(vs ...ScriptRun) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldScriptRun, vs...))
+}
+
+// ScriptRunIsNil applies the IsNil predicate on the "script_run" field.
+func ScriptRunIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldScriptRun))
+}
+
+// ScriptRunNotNil applies the NotNil predicate on the "script_run" field.
+func ScriptRunNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldScriptRun))
+}
+
 // WhenEQ applies the EQ predicate on the "when" field.
 func WhenEQ(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))

@@ -74,6 +74,8 @@ const (
 	FieldMsiLogPath = "msi_log_path"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldScriptRun holds the string denoting the script_run field in the database.
+	FieldScriptRun = "script_run"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -131,6 +133,7 @@ var Columns = []string{
 	FieldMsiFileHashAlg,
 	FieldMsiLogPath,
 	FieldScript,
+	FieldScriptRun,
 	FieldWhen,
 }
 
@@ -304,6 +307,29 @@ func MsiFileHashAlgValidator(mfha MsiFileHashAlg) error {
 	}
 }
 
+// ScriptRun defines the type for the "script_run" enum field.
+type ScriptRun string
+
+// ScriptRun values.
+const (
+	ScriptRunOnce   ScriptRun = "once"
+	ScriptRunAlways ScriptRun = "always"
+)
+
+func (sr ScriptRun) String() string {
+	return string(sr)
+}
+
+// ScriptRunValidator is a validator for the "script_run" field enum values. It is called by the builders before save.
+func ScriptRunValidator(sr ScriptRun) error {
+	switch sr {
+	case ScriptRunOnce, ScriptRunAlways:
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for script_run field: %q", sr)
+	}
+}
+
 // OrderOption defines the ordering options for the Task queries.
 type OrderOption func(*sql.Selector)
 
@@ -460,6 +486,11 @@ func ByMsiLogPath(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByScriptRun orders the results by the script_run field.
+func ByScriptRun(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScriptRun, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.
