@@ -379,6 +379,26 @@ func (tu *TaskUpdate) ClearLocalUserPasswordNeverExpires() *TaskUpdate {
 	return tu
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (tu *TaskUpdate) SetLocalGroupID(s string) *TaskUpdate {
+	tu.mutation.SetLocalGroupID(s)
+	return tu
+}
+
+// SetNillableLocalGroupID sets the "local_group_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupID(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalGroupID(*s)
+	}
+	return tu
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (tu *TaskUpdate) ClearLocalGroupID() *TaskUpdate {
+	tu.mutation.ClearLocalGroupID()
+	return tu
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (tu *TaskUpdate) SetLocalGroupName(s string) *TaskUpdate {
 	tu.mutation.SetLocalGroupName(s)
@@ -416,6 +436,46 @@ func (tu *TaskUpdate) SetNillableLocalGroupDescription(s *string) *TaskUpdate {
 // ClearLocalGroupDescription clears the value of the "local_group_description" field.
 func (tu *TaskUpdate) ClearLocalGroupDescription() *TaskUpdate {
 	tu.mutation.ClearLocalGroupDescription()
+	return tu
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (tu *TaskUpdate) SetLocalGroupSystem(b bool) *TaskUpdate {
+	tu.mutation.SetLocalGroupSystem(b)
+	return tu
+}
+
+// SetNillableLocalGroupSystem sets the "local_group_system" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupSystem(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalGroupSystem(*b)
+	}
+	return tu
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (tu *TaskUpdate) ClearLocalGroupSystem() *TaskUpdate {
+	tu.mutation.ClearLocalGroupSystem()
+	return tu
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (tu *TaskUpdate) SetLocalGroupForce(b bool) *TaskUpdate {
+	tu.mutation.SetLocalGroupForce(b)
+	return tu
+}
+
+// SetNillableLocalGroupForce sets the "local_group_force" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalGroupForce(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalGroupForce(*b)
+	}
+	return tu
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (tu *TaskUpdate) ClearLocalGroupForce() *TaskUpdate {
+	tu.mutation.ClearLocalGroupForce()
 	return tu
 }
 
@@ -927,6 +987,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
 	}
+	if value, ok := tu.mutation.LocalGroupID(); ok {
+		_spec.SetField(task.FieldLocalGroupID, field.TypeString, value)
+	}
+	if tu.mutation.LocalGroupIDCleared() {
+		_spec.ClearField(task.FieldLocalGroupID, field.TypeString)
+	}
 	if value, ok := tu.mutation.LocalGroupName(); ok {
 		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
 	}
@@ -938,6 +1004,18 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.LocalGroupDescriptionCleared() {
 		_spec.ClearField(task.FieldLocalGroupDescription, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalGroupSystem(); ok {
+		_spec.SetField(task.FieldLocalGroupSystem, field.TypeBool, value)
+	}
+	if tu.mutation.LocalGroupSystemCleared() {
+		_spec.ClearField(task.FieldLocalGroupSystem, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalGroupForce(); ok {
+		_spec.SetField(task.FieldLocalGroupForce, field.TypeBool, value)
+	}
+	if tu.mutation.LocalGroupForceCleared() {
+		_spec.ClearField(task.FieldLocalGroupForce, field.TypeBool)
 	}
 	if value, ok := tu.mutation.LocalGroupMembers(); ok {
 		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)
@@ -1461,6 +1539,26 @@ func (tuo *TaskUpdateOne) ClearLocalUserPasswordNeverExpires() *TaskUpdateOne {
 	return tuo
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (tuo *TaskUpdateOne) SetLocalGroupID(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupID(s)
+	return tuo
+}
+
+// SetNillableLocalGroupID sets the "local_group_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupID(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalGroupID(*s)
+	}
+	return tuo
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupID() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupID()
+	return tuo
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (tuo *TaskUpdateOne) SetLocalGroupName(s string) *TaskUpdateOne {
 	tuo.mutation.SetLocalGroupName(s)
@@ -1498,6 +1596,46 @@ func (tuo *TaskUpdateOne) SetNillableLocalGroupDescription(s *string) *TaskUpdat
 // ClearLocalGroupDescription clears the value of the "local_group_description" field.
 func (tuo *TaskUpdateOne) ClearLocalGroupDescription() *TaskUpdateOne {
 	tuo.mutation.ClearLocalGroupDescription()
+	return tuo
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (tuo *TaskUpdateOne) SetLocalGroupSystem(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupSystem(b)
+	return tuo
+}
+
+// SetNillableLocalGroupSystem sets the "local_group_system" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupSystem(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalGroupSystem(*b)
+	}
+	return tuo
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupSystem() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupSystem()
+	return tuo
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (tuo *TaskUpdateOne) SetLocalGroupForce(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalGroupForce(b)
+	return tuo
+}
+
+// SetNillableLocalGroupForce sets the "local_group_force" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalGroupForce(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalGroupForce(*b)
+	}
+	return tuo
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (tuo *TaskUpdateOne) ClearLocalGroupForce() *TaskUpdateOne {
+	tuo.mutation.ClearLocalGroupForce()
 	return tuo
 }
 
@@ -2039,6 +2177,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
 	}
+	if value, ok := tuo.mutation.LocalGroupID(); ok {
+		_spec.SetField(task.FieldLocalGroupID, field.TypeString, value)
+	}
+	if tuo.mutation.LocalGroupIDCleared() {
+		_spec.ClearField(task.FieldLocalGroupID, field.TypeString)
+	}
 	if value, ok := tuo.mutation.LocalGroupName(); ok {
 		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
 	}
@@ -2050,6 +2194,18 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalGroupDescriptionCleared() {
 		_spec.ClearField(task.FieldLocalGroupDescription, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalGroupSystem(); ok {
+		_spec.SetField(task.FieldLocalGroupSystem, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalGroupSystemCleared() {
+		_spec.ClearField(task.FieldLocalGroupSystem, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalGroupForce(); ok {
+		_spec.SetField(task.FieldLocalGroupForce, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalGroupForceCleared() {
+		_spec.ClearField(task.FieldLocalGroupForce, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.LocalGroupMembers(); ok {
 		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)

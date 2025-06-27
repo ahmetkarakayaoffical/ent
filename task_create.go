@@ -260,6 +260,20 @@ func (tc *TaskCreate) SetNillableLocalUserPasswordNeverExpires(b *bool) *TaskCre
 	return tc
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (tc *TaskCreate) SetLocalGroupID(s string) *TaskCreate {
+	tc.mutation.SetLocalGroupID(s)
+	return tc
+}
+
+// SetNillableLocalGroupID sets the "local_group_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalGroupID(*s)
+	}
+	return tc
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (tc *TaskCreate) SetLocalGroupName(s string) *TaskCreate {
 	tc.mutation.SetLocalGroupName(s)
@@ -284,6 +298,34 @@ func (tc *TaskCreate) SetLocalGroupDescription(s string) *TaskCreate {
 func (tc *TaskCreate) SetNillableLocalGroupDescription(s *string) *TaskCreate {
 	if s != nil {
 		tc.SetLocalGroupDescription(*s)
+	}
+	return tc
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (tc *TaskCreate) SetLocalGroupSystem(b bool) *TaskCreate {
+	tc.mutation.SetLocalGroupSystem(b)
+	return tc
+}
+
+// SetNillableLocalGroupSystem sets the "local_group_system" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupSystem(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalGroupSystem(*b)
+	}
+	return tc
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (tc *TaskCreate) SetLocalGroupForce(b bool) *TaskCreate {
+	tc.mutation.SetLocalGroupForce(b)
+	return tc
+}
+
+// SetNillableLocalGroupForce sets the "local_group_force" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalGroupForce(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalGroupForce(*b)
 	}
 	return tc
 }
@@ -599,6 +641,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultLocalUserPasswordNeverExpires
 		tc.mutation.SetLocalUserPasswordNeverExpires(v)
 	}
+	if _, ok := tc.mutation.LocalGroupID(); !ok {
+		v := task.DefaultLocalGroupID
+		tc.mutation.SetLocalGroupID(v)
+	}
 	if _, ok := tc.mutation.LocalGroupName(); !ok {
 		v := task.DefaultLocalGroupName
 		tc.mutation.SetLocalGroupName(v)
@@ -606,6 +652,14 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.LocalGroupDescription(); !ok {
 		v := task.DefaultLocalGroupDescription
 		tc.mutation.SetLocalGroupDescription(v)
+	}
+	if _, ok := tc.mutation.LocalGroupSystem(); !ok {
+		v := task.DefaultLocalGroupSystem
+		tc.mutation.SetLocalGroupSystem(v)
+	}
+	if _, ok := tc.mutation.LocalGroupForce(); !ok {
+		v := task.DefaultLocalGroupForce
+		tc.mutation.SetLocalGroupForce(v)
 	}
 	if _, ok := tc.mutation.LocalGroupMembers(); !ok {
 		v := task.DefaultLocalGroupMembers
@@ -786,6 +840,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool, value)
 		_node.LocalUserPasswordNeverExpires = value
 	}
+	if value, ok := tc.mutation.LocalGroupID(); ok {
+		_spec.SetField(task.FieldLocalGroupID, field.TypeString, value)
+		_node.LocalGroupID = value
+	}
 	if value, ok := tc.mutation.LocalGroupName(); ok {
 		_spec.SetField(task.FieldLocalGroupName, field.TypeString, value)
 		_node.LocalGroupName = value
@@ -793,6 +851,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.LocalGroupDescription(); ok {
 		_spec.SetField(task.FieldLocalGroupDescription, field.TypeString, value)
 		_node.LocalGroupDescription = value
+	}
+	if value, ok := tc.mutation.LocalGroupSystem(); ok {
+		_spec.SetField(task.FieldLocalGroupSystem, field.TypeBool, value)
+		_node.LocalGroupSystem = value
+	}
+	if value, ok := tc.mutation.LocalGroupForce(); ok {
+		_spec.SetField(task.FieldLocalGroupForce, field.TypeBool, value)
+		_node.LocalGroupForce = value
 	}
 	if value, ok := tc.mutation.LocalGroupMembers(); ok {
 		_spec.SetField(task.FieldLocalGroupMembers, field.TypeString, value)
@@ -1243,6 +1309,24 @@ func (u *TaskUpsert) ClearLocalUserPasswordNeverExpires() *TaskUpsert {
 	return u
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (u *TaskUpsert) SetLocalGroupID(v string) *TaskUpsert {
+	u.Set(task.FieldLocalGroupID, v)
+	return u
+}
+
+// UpdateLocalGroupID sets the "local_group_id" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupID() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupID)
+	return u
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (u *TaskUpsert) ClearLocalGroupID() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupID)
+	return u
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (u *TaskUpsert) SetLocalGroupName(v string) *TaskUpsert {
 	u.Set(task.FieldLocalGroupName, v)
@@ -1276,6 +1360,42 @@ func (u *TaskUpsert) UpdateLocalGroupDescription() *TaskUpsert {
 // ClearLocalGroupDescription clears the value of the "local_group_description" field.
 func (u *TaskUpsert) ClearLocalGroupDescription() *TaskUpsert {
 	u.SetNull(task.FieldLocalGroupDescription)
+	return u
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (u *TaskUpsert) SetLocalGroupSystem(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalGroupSystem, v)
+	return u
+}
+
+// UpdateLocalGroupSystem sets the "local_group_system" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupSystem() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupSystem)
+	return u
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (u *TaskUpsert) ClearLocalGroupSystem() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupSystem)
+	return u
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (u *TaskUpsert) SetLocalGroupForce(v bool) *TaskUpsert {
+	u.Set(task.FieldLocalGroupForce, v)
+	return u
+}
+
+// UpdateLocalGroupForce sets the "local_group_force" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalGroupForce() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalGroupForce)
+	return u
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (u *TaskUpsert) ClearLocalGroupForce() *TaskUpsert {
+	u.SetNull(task.FieldLocalGroupForce)
 	return u
 }
 
@@ -1917,6 +2037,27 @@ func (u *TaskUpsertOne) ClearLocalUserPasswordNeverExpires() *TaskUpsertOne {
 	})
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (u *TaskUpsertOne) SetLocalGroupID(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupID(v)
+	})
+}
+
+// UpdateLocalGroupID sets the "local_group_id" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupID() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupID()
+	})
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (u *TaskUpsertOne) ClearLocalGroupID() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupID()
+	})
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (u *TaskUpsertOne) SetLocalGroupName(v string) *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
@@ -1956,6 +2097,48 @@ func (u *TaskUpsertOne) UpdateLocalGroupDescription() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearLocalGroupDescription() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupDescription()
+	})
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (u *TaskUpsertOne) SetLocalGroupSystem(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupSystem(v)
+	})
+}
+
+// UpdateLocalGroupSystem sets the "local_group_system" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupSystem() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupSystem()
+	})
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (u *TaskUpsertOne) ClearLocalGroupSystem() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupSystem()
+	})
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (u *TaskUpsertOne) SetLocalGroupForce(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupForce(v)
+	})
+}
+
+// UpdateLocalGroupForce sets the "local_group_force" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalGroupForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupForce()
+	})
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (u *TaskUpsertOne) ClearLocalGroupForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupForce()
 	})
 }
 
@@ -2800,6 +2983,27 @@ func (u *TaskUpsertBulk) ClearLocalUserPasswordNeverExpires() *TaskUpsertBulk {
 	})
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (u *TaskUpsertBulk) SetLocalGroupID(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupID(v)
+	})
+}
+
+// UpdateLocalGroupID sets the "local_group_id" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupID() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupID()
+	})
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (u *TaskUpsertBulk) ClearLocalGroupID() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupID()
+	})
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (u *TaskUpsertBulk) SetLocalGroupName(v string) *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
@@ -2839,6 +3043,48 @@ func (u *TaskUpsertBulk) UpdateLocalGroupDescription() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearLocalGroupDescription() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalGroupDescription()
+	})
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (u *TaskUpsertBulk) SetLocalGroupSystem(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupSystem(v)
+	})
+}
+
+// UpdateLocalGroupSystem sets the "local_group_system" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupSystem() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupSystem()
+	})
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (u *TaskUpsertBulk) ClearLocalGroupSystem() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupSystem()
+	})
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (u *TaskUpsertBulk) SetLocalGroupForce(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalGroupForce(v)
+	})
+}
+
+// UpdateLocalGroupForce sets the "local_group_force" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalGroupForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalGroupForce()
+	})
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (u *TaskUpsertBulk) ClearLocalGroupForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalGroupForce()
 	})
 }
 

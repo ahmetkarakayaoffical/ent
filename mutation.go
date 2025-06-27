@@ -23833,8 +23833,11 @@ type TaskMutation struct {
 	local_user_password_change_not_allowed *bool
 	local_user_password_change_required    *bool
 	local_user_password_never_expires      *bool
+	local_group_id                         *string
 	local_group_name                       *string
 	local_group_description                *string
+	local_group_system                     *bool
+	local_group_force                      *bool
 	local_group_members                    *string
 	local_group_members_to_include         *string
 	local_group_members_to_exclude         *string
@@ -24813,6 +24816,55 @@ func (m *TaskMutation) ResetLocalUserPasswordNeverExpires() {
 	delete(m.clearedFields, task.FieldLocalUserPasswordNeverExpires)
 }
 
+// SetLocalGroupID sets the "local_group_id" field.
+func (m *TaskMutation) SetLocalGroupID(s string) {
+	m.local_group_id = &s
+}
+
+// LocalGroupID returns the value of the "local_group_id" field in the mutation.
+func (m *TaskMutation) LocalGroupID() (r string, exists bool) {
+	v := m.local_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupID returns the old "local_group_id" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupID: %w", err)
+	}
+	return oldValue.LocalGroupID, nil
+}
+
+// ClearLocalGroupID clears the value of the "local_group_id" field.
+func (m *TaskMutation) ClearLocalGroupID() {
+	m.local_group_id = nil
+	m.clearedFields[task.FieldLocalGroupID] = struct{}{}
+}
+
+// LocalGroupIDCleared returns if the "local_group_id" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupIDCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupID]
+	return ok
+}
+
+// ResetLocalGroupID resets all changes to the "local_group_id" field.
+func (m *TaskMutation) ResetLocalGroupID() {
+	m.local_group_id = nil
+	delete(m.clearedFields, task.FieldLocalGroupID)
+}
+
 // SetLocalGroupName sets the "local_group_name" field.
 func (m *TaskMutation) SetLocalGroupName(s string) {
 	m.local_group_name = &s
@@ -24909,6 +24961,104 @@ func (m *TaskMutation) LocalGroupDescriptionCleared() bool {
 func (m *TaskMutation) ResetLocalGroupDescription() {
 	m.local_group_description = nil
 	delete(m.clearedFields, task.FieldLocalGroupDescription)
+}
+
+// SetLocalGroupSystem sets the "local_group_system" field.
+func (m *TaskMutation) SetLocalGroupSystem(b bool) {
+	m.local_group_system = &b
+}
+
+// LocalGroupSystem returns the value of the "local_group_system" field in the mutation.
+func (m *TaskMutation) LocalGroupSystem() (r bool, exists bool) {
+	v := m.local_group_system
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupSystem returns the old "local_group_system" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupSystem(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupSystem is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupSystem requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupSystem: %w", err)
+	}
+	return oldValue.LocalGroupSystem, nil
+}
+
+// ClearLocalGroupSystem clears the value of the "local_group_system" field.
+func (m *TaskMutation) ClearLocalGroupSystem() {
+	m.local_group_system = nil
+	m.clearedFields[task.FieldLocalGroupSystem] = struct{}{}
+}
+
+// LocalGroupSystemCleared returns if the "local_group_system" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupSystemCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupSystem]
+	return ok
+}
+
+// ResetLocalGroupSystem resets all changes to the "local_group_system" field.
+func (m *TaskMutation) ResetLocalGroupSystem() {
+	m.local_group_system = nil
+	delete(m.clearedFields, task.FieldLocalGroupSystem)
+}
+
+// SetLocalGroupForce sets the "local_group_force" field.
+func (m *TaskMutation) SetLocalGroupForce(b bool) {
+	m.local_group_force = &b
+}
+
+// LocalGroupForce returns the value of the "local_group_force" field in the mutation.
+func (m *TaskMutation) LocalGroupForce() (r bool, exists bool) {
+	v := m.local_group_force
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalGroupForce returns the old "local_group_force" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalGroupForce(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalGroupForce is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalGroupForce requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalGroupForce: %w", err)
+	}
+	return oldValue.LocalGroupForce, nil
+}
+
+// ClearLocalGroupForce clears the value of the "local_group_force" field.
+func (m *TaskMutation) ClearLocalGroupForce() {
+	m.local_group_force = nil
+	m.clearedFields[task.FieldLocalGroupForce] = struct{}{}
+}
+
+// LocalGroupForceCleared returns if the "local_group_force" field was cleared in this mutation.
+func (m *TaskMutation) LocalGroupForceCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalGroupForce]
+	return ok
+}
+
+// ResetLocalGroupForce resets all changes to the "local_group_force" field.
+func (m *TaskMutation) ResetLocalGroupForce() {
+	m.local_group_force = nil
+	delete(m.clearedFields, task.FieldLocalGroupForce)
 }
 
 // SetLocalGroupMembers sets the "local_group_members" field.
@@ -25675,7 +25825,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 33)
+	fields := make([]string, 0, 36)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -25730,11 +25880,20 @@ func (m *TaskMutation) Fields() []string {
 	if m.local_user_password_never_expires != nil {
 		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
 	}
+	if m.local_group_id != nil {
+		fields = append(fields, task.FieldLocalGroupID)
+	}
 	if m.local_group_name != nil {
 		fields = append(fields, task.FieldLocalGroupName)
 	}
 	if m.local_group_description != nil {
 		fields = append(fields, task.FieldLocalGroupDescription)
+	}
+	if m.local_group_system != nil {
+		fields = append(fields, task.FieldLocalGroupSystem)
+	}
+	if m.local_group_force != nil {
+		fields = append(fields, task.FieldLocalGroupForce)
 	}
 	if m.local_group_members != nil {
 		fields = append(fields, task.FieldLocalGroupMembers)
@@ -25819,10 +25978,16 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.LocalUserPasswordChangeRequired()
 	case task.FieldLocalUserPasswordNeverExpires:
 		return m.LocalUserPasswordNeverExpires()
+	case task.FieldLocalGroupID:
+		return m.LocalGroupID()
 	case task.FieldLocalGroupName:
 		return m.LocalGroupName()
 	case task.FieldLocalGroupDescription:
 		return m.LocalGroupDescription()
+	case task.FieldLocalGroupSystem:
+		return m.LocalGroupSystem()
+	case task.FieldLocalGroupForce:
+		return m.LocalGroupForce()
 	case task.FieldLocalGroupMembers:
 		return m.LocalGroupMembers()
 	case task.FieldLocalGroupMembersToInclude:
@@ -25894,10 +26059,16 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocalUserPasswordChangeRequired(ctx)
 	case task.FieldLocalUserPasswordNeverExpires:
 		return m.OldLocalUserPasswordNeverExpires(ctx)
+	case task.FieldLocalGroupID:
+		return m.OldLocalGroupID(ctx)
 	case task.FieldLocalGroupName:
 		return m.OldLocalGroupName(ctx)
 	case task.FieldLocalGroupDescription:
 		return m.OldLocalGroupDescription(ctx)
+	case task.FieldLocalGroupSystem:
+		return m.OldLocalGroupSystem(ctx)
+	case task.FieldLocalGroupForce:
+		return m.OldLocalGroupForce(ctx)
 	case task.FieldLocalGroupMembers:
 		return m.OldLocalGroupMembers(ctx)
 	case task.FieldLocalGroupMembersToInclude:
@@ -26059,6 +26230,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLocalUserPasswordNeverExpires(v)
 		return nil
+	case task.FieldLocalGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupID(v)
+		return nil
 	case task.FieldLocalGroupName:
 		v, ok := value.(string)
 		if !ok {
@@ -26072,6 +26250,20 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalGroupDescription(v)
+		return nil
+	case task.FieldLocalGroupSystem:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupSystem(v)
+		return nil
+	case task.FieldLocalGroupForce:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalGroupForce(v)
 		return nil
 	case task.FieldLocalGroupMembers:
 		v, ok := value.(string)
@@ -26242,11 +26434,20 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldLocalUserPasswordNeverExpires) {
 		fields = append(fields, task.FieldLocalUserPasswordNeverExpires)
 	}
+	if m.FieldCleared(task.FieldLocalGroupID) {
+		fields = append(fields, task.FieldLocalGroupID)
+	}
 	if m.FieldCleared(task.FieldLocalGroupName) {
 		fields = append(fields, task.FieldLocalGroupName)
 	}
 	if m.FieldCleared(task.FieldLocalGroupDescription) {
 		fields = append(fields, task.FieldLocalGroupDescription)
+	}
+	if m.FieldCleared(task.FieldLocalGroupSystem) {
+		fields = append(fields, task.FieldLocalGroupSystem)
+	}
+	if m.FieldCleared(task.FieldLocalGroupForce) {
+		fields = append(fields, task.FieldLocalGroupForce)
 	}
 	if m.FieldCleared(task.FieldLocalGroupMembers) {
 		fields = append(fields, task.FieldLocalGroupMembers)
@@ -26349,11 +26550,20 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldLocalUserPasswordNeverExpires:
 		m.ClearLocalUserPasswordNeverExpires()
 		return nil
+	case task.FieldLocalGroupID:
+		m.ClearLocalGroupID()
+		return nil
 	case task.FieldLocalGroupName:
 		m.ClearLocalGroupName()
 		return nil
 	case task.FieldLocalGroupDescription:
 		m.ClearLocalGroupDescription()
+		return nil
+	case task.FieldLocalGroupSystem:
+		m.ClearLocalGroupSystem()
+		return nil
+	case task.FieldLocalGroupForce:
+		m.ClearLocalGroupForce()
 		return nil
 	case task.FieldLocalGroupMembers:
 		m.ClearLocalGroupMembers()
@@ -26456,11 +26666,20 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldLocalUserPasswordNeverExpires:
 		m.ResetLocalUserPasswordNeverExpires()
 		return nil
+	case task.FieldLocalGroupID:
+		m.ResetLocalGroupID()
+		return nil
 	case task.FieldLocalGroupName:
 		m.ResetLocalGroupName()
 		return nil
 	case task.FieldLocalGroupDescription:
 		m.ResetLocalGroupDescription()
+		return nil
+	case task.FieldLocalGroupSystem:
+		m.ResetLocalGroupSystem()
+		return nil
+	case task.FieldLocalGroupForce:
+		m.ResetLocalGroupForce()
 		return nil
 	case task.FieldLocalGroupMembers:
 		m.ResetLocalGroupMembers()

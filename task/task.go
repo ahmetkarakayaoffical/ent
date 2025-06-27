@@ -50,10 +50,16 @@ const (
 	FieldLocalUserPasswordChangeRequired = "local_user_password_change_required"
 	// FieldLocalUserPasswordNeverExpires holds the string denoting the local_user_password_never_expires field in the database.
 	FieldLocalUserPasswordNeverExpires = "local_user_password_never_expires"
+	// FieldLocalGroupID holds the string denoting the local_group_id field in the database.
+	FieldLocalGroupID = "local_group_id"
 	// FieldLocalGroupName holds the string denoting the local_group_name field in the database.
 	FieldLocalGroupName = "local_group_name"
 	// FieldLocalGroupDescription holds the string denoting the local_group_description field in the database.
 	FieldLocalGroupDescription = "local_group_description"
+	// FieldLocalGroupSystem holds the string denoting the local_group_system field in the database.
+	FieldLocalGroupSystem = "local_group_system"
+	// FieldLocalGroupForce holds the string denoting the local_group_force field in the database.
+	FieldLocalGroupForce = "local_group_force"
 	// FieldLocalGroupMembers holds the string denoting the local_group_members field in the database.
 	FieldLocalGroupMembers = "local_group_members"
 	// FieldLocalGroupMembersToInclude holds the string denoting the local_group_members_to_include field in the database.
@@ -123,8 +129,11 @@ var Columns = []string{
 	FieldLocalUserPasswordChangeNotAllowed,
 	FieldLocalUserPasswordChangeRequired,
 	FieldLocalUserPasswordNeverExpires,
+	FieldLocalGroupID,
 	FieldLocalGroupName,
 	FieldLocalGroupDescription,
+	FieldLocalGroupSystem,
+	FieldLocalGroupForce,
 	FieldLocalGroupMembers,
 	FieldLocalGroupMembersToInclude,
 	FieldLocalGroupMembersToExclude,
@@ -194,10 +203,16 @@ var (
 	DefaultLocalUserPasswordChangeRequired bool
 	// DefaultLocalUserPasswordNeverExpires holds the default value on creation for the "local_user_password_never_expires" field.
 	DefaultLocalUserPasswordNeverExpires bool
+	// DefaultLocalGroupID holds the default value on creation for the "local_group_id" field.
+	DefaultLocalGroupID string
 	// DefaultLocalGroupName holds the default value on creation for the "local_group_name" field.
 	DefaultLocalGroupName string
 	// DefaultLocalGroupDescription holds the default value on creation for the "local_group_description" field.
 	DefaultLocalGroupDescription string
+	// DefaultLocalGroupSystem holds the default value on creation for the "local_group_system" field.
+	DefaultLocalGroupSystem bool
+	// DefaultLocalGroupForce holds the default value on creation for the "local_group_force" field.
+	DefaultLocalGroupForce bool
 	// DefaultLocalGroupMembers holds the default value on creation for the "local_group_members" field.
 	DefaultLocalGroupMembers string
 	// DefaultLocalGroupMembersToInclude holds the default value on creation for the "local_group_members_to_include" field.
@@ -458,6 +473,11 @@ func ByLocalUserPasswordNeverExpires(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalUserPasswordNeverExpires, opts...).ToFunc()
 }
 
+// ByLocalGroupID orders the results by the local_group_id field.
+func ByLocalGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupID, opts...).ToFunc()
+}
+
 // ByLocalGroupName orders the results by the local_group_name field.
 func ByLocalGroupName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalGroupName, opts...).ToFunc()
@@ -466,6 +486,16 @@ func ByLocalGroupName(opts ...sql.OrderTermOption) OrderOption {
 // ByLocalGroupDescription orders the results by the local_group_description field.
 func ByLocalGroupDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalGroupDescription, opts...).ToFunc()
+}
+
+// ByLocalGroupSystem orders the results by the local_group_system field.
+func ByLocalGroupSystem(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupSystem, opts...).ToFunc()
+}
+
+// ByLocalGroupForce orders the results by the local_group_force field.
+func ByLocalGroupForce(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalGroupForce, opts...).ToFunc()
 }
 
 // ByLocalGroupMembers orders the results by the local_group_members field.

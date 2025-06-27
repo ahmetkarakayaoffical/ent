@@ -135,6 +135,11 @@ func LocalUserPasswordNeverExpires(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordNeverExpires, v))
 }
 
+// LocalGroupID applies equality check predicate on the "local_group_id" field. It's identical to LocalGroupIDEQ.
+func LocalGroupID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupID, v))
+}
+
 // LocalGroupName applies equality check predicate on the "local_group_name" field. It's identical to LocalGroupNameEQ.
 func LocalGroupName(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalGroupName, v))
@@ -143,6 +148,16 @@ func LocalGroupName(v string) predicate.Task {
 // LocalGroupDescription applies equality check predicate on the "local_group_description" field. It's identical to LocalGroupDescriptionEQ.
 func LocalGroupDescription(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalGroupDescription, v))
+}
+
+// LocalGroupSystem applies equality check predicate on the "local_group_system" field. It's identical to LocalGroupSystemEQ.
+func LocalGroupSystem(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupSystem, v))
+}
+
+// LocalGroupForce applies equality check predicate on the "local_group_force" field. It's identical to LocalGroupForceEQ.
+func LocalGroupForce(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupForce, v))
 }
 
 // LocalGroupMembers applies equality check predicate on the "local_group_members" field. It's identical to LocalGroupMembersEQ.
@@ -1105,6 +1120,81 @@ func LocalUserPasswordNeverExpiresNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordNeverExpires))
 }
 
+// LocalGroupIDEQ applies the EQ predicate on the "local_group_id" field.
+func LocalGroupIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDNEQ applies the NEQ predicate on the "local_group_id" field.
+func LocalGroupIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDIn applies the In predicate on the "local_group_id" field.
+func LocalGroupIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalGroupID, vs...))
+}
+
+// LocalGroupIDNotIn applies the NotIn predicate on the "local_group_id" field.
+func LocalGroupIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalGroupID, vs...))
+}
+
+// LocalGroupIDGT applies the GT predicate on the "local_group_id" field.
+func LocalGroupIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDGTE applies the GTE predicate on the "local_group_id" field.
+func LocalGroupIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDLT applies the LT predicate on the "local_group_id" field.
+func LocalGroupIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDLTE applies the LTE predicate on the "local_group_id" field.
+func LocalGroupIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDContains applies the Contains predicate on the "local_group_id" field.
+func LocalGroupIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDHasPrefix applies the HasPrefix predicate on the "local_group_id" field.
+func LocalGroupIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDHasSuffix applies the HasSuffix predicate on the "local_group_id" field.
+func LocalGroupIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDIsNil applies the IsNil predicate on the "local_group_id" field.
+func LocalGroupIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalGroupID))
+}
+
+// LocalGroupIDNotNil applies the NotNil predicate on the "local_group_id" field.
+func LocalGroupIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalGroupID))
+}
+
+// LocalGroupIDEqualFold applies the EqualFold predicate on the "local_group_id" field.
+func LocalGroupIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalGroupID, v))
+}
+
+// LocalGroupIDContainsFold applies the ContainsFold predicate on the "local_group_id" field.
+func LocalGroupIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalGroupID, v))
+}
+
 // LocalGroupNameEQ applies the EQ predicate on the "local_group_name" field.
 func LocalGroupNameEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalGroupName, v))
@@ -1253,6 +1343,46 @@ func LocalGroupDescriptionEqualFold(v string) predicate.Task {
 // LocalGroupDescriptionContainsFold applies the ContainsFold predicate on the "local_group_description" field.
 func LocalGroupDescriptionContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldLocalGroupDescription, v))
+}
+
+// LocalGroupSystemEQ applies the EQ predicate on the "local_group_system" field.
+func LocalGroupSystemEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupSystem, v))
+}
+
+// LocalGroupSystemNEQ applies the NEQ predicate on the "local_group_system" field.
+func LocalGroupSystemNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalGroupSystem, v))
+}
+
+// LocalGroupSystemIsNil applies the IsNil predicate on the "local_group_system" field.
+func LocalGroupSystemIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalGroupSystem))
+}
+
+// LocalGroupSystemNotNil applies the NotNil predicate on the "local_group_system" field.
+func LocalGroupSystemNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalGroupSystem))
+}
+
+// LocalGroupForceEQ applies the EQ predicate on the "local_group_force" field.
+func LocalGroupForceEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalGroupForce, v))
+}
+
+// LocalGroupForceNEQ applies the NEQ predicate on the "local_group_force" field.
+func LocalGroupForceNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalGroupForce, v))
+}
+
+// LocalGroupForceIsNil applies the IsNil predicate on the "local_group_force" field.
+func LocalGroupForceIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalGroupForce))
+}
+
+// LocalGroupForceNotNil applies the NotNil predicate on the "local_group_force" field.
+func LocalGroupForceNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalGroupForce))
 }
 
 // LocalGroupMembersEQ applies the EQ predicate on the "local_group_members" field.
