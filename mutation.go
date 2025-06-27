@@ -23846,6 +23846,7 @@ type TaskMutation struct {
 	msi_log_path                           *string
 	script                                 *string
 	script_run                             *task.ScriptRun
+	agent_type                             *task.AgentType
 	when                                   *time.Time
 	clearedFields                          map[string]struct{}
 	tags                                   map[int]struct{}
@@ -25449,6 +25450,55 @@ func (m *TaskMutation) ResetScriptRun() {
 	delete(m.clearedFields, task.FieldScriptRun)
 }
 
+// SetAgentType sets the "agent_type" field.
+func (m *TaskMutation) SetAgentType(tt task.AgentType) {
+	m.agent_type = &tt
+}
+
+// AgentType returns the value of the "agent_type" field in the mutation.
+func (m *TaskMutation) AgentType() (r task.AgentType, exists bool) {
+	v := m.agent_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAgentType returns the old "agent_type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAgentType(ctx context.Context) (v task.AgentType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAgentType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAgentType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAgentType: %w", err)
+	}
+	return oldValue.AgentType, nil
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (m *TaskMutation) ClearAgentType() {
+	m.agent_type = nil
+	m.clearedFields[task.FieldAgentType] = struct{}{}
+}
+
+// AgentTypeCleared returns if the "agent_type" field was cleared in this mutation.
+func (m *TaskMutation) AgentTypeCleared() bool {
+	_, ok := m.clearedFields[task.FieldAgentType]
+	return ok
+}
+
+// ResetAgentType resets all changes to the "agent_type" field.
+func (m *TaskMutation) ResetAgentType() {
+	m.agent_type = nil
+	delete(m.clearedFields, task.FieldAgentType)
+}
+
 // SetWhen sets the "when" field.
 func (m *TaskMutation) SetWhen(t time.Time) {
 	m.when = &t
@@ -25625,7 +25675,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 32)
+	fields := make([]string, 0, 33)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -25719,6 +25769,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.script_run != nil {
 		fields = append(fields, task.FieldScriptRun)
 	}
+	if m.agent_type != nil {
+		fields = append(fields, task.FieldAgentType)
+	}
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -25792,6 +25845,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Script()
 	case task.FieldScriptRun:
 		return m.ScriptRun()
+	case task.FieldAgentType:
+		return m.AgentType()
 	case task.FieldWhen:
 		return m.When()
 	}
@@ -25865,6 +25920,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldScript(ctx)
 	case task.FieldScriptRun:
 		return m.OldScriptRun(ctx)
+	case task.FieldAgentType:
+		return m.OldAgentType(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
 	}
@@ -26093,6 +26150,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScriptRun(v)
 		return nil
+	case task.FieldAgentType:
+		v, ok := value.(task.AgentType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAgentType(v)
+		return nil
 	case task.FieldWhen:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -26217,6 +26281,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldScriptRun) {
 		fields = append(fields, task.FieldScriptRun)
 	}
+	if m.FieldCleared(task.FieldAgentType) {
+		fields = append(fields, task.FieldAgentType)
+	}
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
@@ -26321,6 +26388,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldScriptRun:
 		m.ClearScriptRun()
 		return nil
+	case task.FieldAgentType:
+		m.ClearAgentType()
+		return nil
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
@@ -26424,6 +26494,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldScriptRun:
 		m.ResetScriptRun()
+		return nil
+	case task.FieldAgentType:
+		m.ResetAgentType()
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()

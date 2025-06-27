@@ -727,6 +727,7 @@ var (
 		{Name: "msi_log_path", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "script", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "script_run", Type: field.TypeEnum, Nullable: true, Enums: []string{"once", "always"}},
+		{Name: "agent_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"windows", "linux", "macos"}, Default: "windows"},
 		{Name: "when", Type: field.TypeTime, Nullable: true},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
@@ -738,7 +739,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[33]},
+				Columns:    []*schema.Column{TasksColumns[34]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

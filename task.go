@@ -80,6 +80,8 @@ type Task struct {
 	Script string `json:"script,omitempty"`
 	// ScriptRun holds the value of the "script_run" field.
 	ScriptRun task.ScriptRun `json:"script_run,omitempty"`
+	// AgentType holds the value of the "agent_type" field.
+	AgentType task.AgentType `json:"agent_type,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -129,7 +131,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -342,6 +344,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.ScriptRun = task.ScriptRun(value.String)
 			}
+		case task.FieldAgentType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field agent_type", values[i])
+			} else if value.Valid {
+				t.AgentType = task.AgentType(value.String)
+			}
 		case task.FieldWhen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field when", values[i])
@@ -493,6 +501,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script_run=")
 	builder.WriteString(fmt.Sprintf("%v", t.ScriptRun))
+	builder.WriteString(", ")
+	builder.WriteString("agent_type=")
+	builder.WriteString(fmt.Sprintf("%v", t.AgentType))
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))

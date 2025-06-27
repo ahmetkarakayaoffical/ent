@@ -639,6 +639,26 @@ func (tu *TaskUpdate) ClearScriptRun() *TaskUpdate {
 	return tu
 }
 
+// SetAgentType sets the "agent_type" field.
+func (tu *TaskUpdate) SetAgentType(tt task.AgentType) *TaskUpdate {
+	tu.mutation.SetAgentType(tt)
+	return tu
+}
+
+// SetNillableAgentType sets the "agent_type" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAgentType(tt *task.AgentType) *TaskUpdate {
+	if tt != nil {
+		tu.SetAgentType(*tt)
+	}
+	return tu
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (tu *TaskUpdate) ClearAgentType() *TaskUpdate {
+	tu.mutation.ClearAgentType()
+	return tu
+}
+
 // SetWhen sets the "when" field.
 func (tu *TaskUpdate) SetWhen(t time.Time) *TaskUpdate {
 	tu.mutation.SetWhen(t)
@@ -777,6 +797,11 @@ func (tu *TaskUpdate) check() error {
 	if v, ok := tu.mutation.ScriptRun(); ok {
 		if err := task.ScriptRunValidator(v); err != nil {
 			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.AgentType(); ok {
+		if err := task.AgentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
 		}
 	}
 	return nil
@@ -979,6 +1004,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.ScriptRunCleared() {
 		_spec.ClearField(task.FieldScriptRun, field.TypeEnum)
+	}
+	if value, ok := tu.mutation.AgentType(); ok {
+		_spec.SetField(task.FieldAgentType, field.TypeEnum, value)
+	}
+	if tu.mutation.AgentTypeCleared() {
+		_spec.ClearField(task.FieldAgentType, field.TypeEnum)
 	}
 	if value, ok := tu.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1690,6 +1721,26 @@ func (tuo *TaskUpdateOne) ClearScriptRun() *TaskUpdateOne {
 	return tuo
 }
 
+// SetAgentType sets the "agent_type" field.
+func (tuo *TaskUpdateOne) SetAgentType(tt task.AgentType) *TaskUpdateOne {
+	tuo.mutation.SetAgentType(tt)
+	return tuo
+}
+
+// SetNillableAgentType sets the "agent_type" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAgentType(tt *task.AgentType) *TaskUpdateOne {
+	if tt != nil {
+		tuo.SetAgentType(*tt)
+	}
+	return tuo
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (tuo *TaskUpdateOne) ClearAgentType() *TaskUpdateOne {
+	tuo.mutation.ClearAgentType()
+	return tuo
+}
+
 // SetWhen sets the "when" field.
 func (tuo *TaskUpdateOne) SetWhen(t time.Time) *TaskUpdateOne {
 	tuo.mutation.SetWhen(t)
@@ -1841,6 +1892,11 @@ func (tuo *TaskUpdateOne) check() error {
 	if v, ok := tuo.mutation.ScriptRun(); ok {
 		if err := task.ScriptRunValidator(v); err != nil {
 			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.AgentType(); ok {
+		if err := task.AgentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
 		}
 	}
 	return nil
@@ -2060,6 +2116,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.ScriptRunCleared() {
 		_spec.ClearField(task.FieldScriptRun, field.TypeEnum)
+	}
+	if value, ok := tuo.mutation.AgentType(); ok {
+		_spec.SetField(task.FieldAgentType, field.TypeEnum, value)
+	}
+	if tuo.mutation.AgentTypeCleared() {
+		_spec.ClearField(task.FieldAgentType, field.TypeEnum)
 	}
 	if value, ok := tuo.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)

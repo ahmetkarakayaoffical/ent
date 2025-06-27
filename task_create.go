@@ -442,6 +442,20 @@ func (tc *TaskCreate) SetNillableScriptRun(tr *task.ScriptRun) *TaskCreate {
 	return tc
 }
 
+// SetAgentType sets the "agent_type" field.
+func (tc *TaskCreate) SetAgentType(tt task.AgentType) *TaskCreate {
+	tc.mutation.SetAgentType(tt)
+	return tc
+}
+
+// SetNillableAgentType sets the "agent_type" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAgentType(tt *task.AgentType) *TaskCreate {
+	if tt != nil {
+		tc.SetAgentType(*tt)
+	}
+	return tc
+}
+
 // SetWhen sets the "when" field.
 func (tc *TaskCreate) SetWhen(t time.Time) *TaskCreate {
 	tc.mutation.SetWhen(t)
@@ -629,6 +643,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultScript
 		tc.mutation.SetScript(v)
 	}
+	if _, ok := tc.mutation.AgentType(); !ok {
+		v := task.DefaultAgentType
+		tc.mutation.SetAgentType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -662,6 +680,11 @@ func (tc *TaskCreate) check() error {
 	if v, ok := tc.mutation.ScriptRun(); ok {
 		if err := task.ScriptRunValidator(v); err != nil {
 			return &ValidationError{Name: "script_run", err: fmt.Errorf(`ent: validator failed for field "Task.script_run": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.AgentType(); ok {
+		if err := task.AgentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
 		}
 	}
 	return nil
@@ -814,6 +837,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.ScriptRun(); ok {
 		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
 		_node.ScriptRun = value
+	}
+	if value, ok := tc.mutation.AgentType(); ok {
+		_spec.SetField(task.FieldAgentType, field.TypeEnum, value)
+		_node.AgentType = value
 	}
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
@@ -1447,6 +1474,24 @@ func (u *TaskUpsert) UpdateScriptRun() *TaskUpsert {
 // ClearScriptRun clears the value of the "script_run" field.
 func (u *TaskUpsert) ClearScriptRun() *TaskUpsert {
 	u.SetNull(task.FieldScriptRun)
+	return u
+}
+
+// SetAgentType sets the "agent_type" field.
+func (u *TaskUpsert) SetAgentType(v task.AgentType) *TaskUpsert {
+	u.Set(task.FieldAgentType, v)
+	return u
+}
+
+// UpdateAgentType sets the "agent_type" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAgentType() *TaskUpsert {
+	u.SetExcluded(task.FieldAgentType)
+	return u
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (u *TaskUpsert) ClearAgentType() *TaskUpsert {
+	u.SetNull(task.FieldAgentType)
 	return u
 }
 
@@ -2142,6 +2187,27 @@ func (u *TaskUpsertOne) UpdateScriptRun() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearScriptRun() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScriptRun()
+	})
+}
+
+// SetAgentType sets the "agent_type" field.
+func (u *TaskUpsertOne) SetAgentType(v task.AgentType) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAgentType(v)
+	})
+}
+
+// UpdateAgentType sets the "agent_type" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAgentType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAgentType()
+	})
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (u *TaskUpsertOne) ClearAgentType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAgentType()
 	})
 }
 
@@ -3004,6 +3070,27 @@ func (u *TaskUpsertBulk) UpdateScriptRun() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearScriptRun() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScriptRun()
+	})
+}
+
+// SetAgentType sets the "agent_type" field.
+func (u *TaskUpsertBulk) SetAgentType(v task.AgentType) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAgentType(v)
+	})
+}
+
+// UpdateAgentType sets the "agent_type" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAgentType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAgentType()
+	})
+}
+
+// ClearAgentType clears the value of the "agent_type" field.
+func (u *TaskUpsertBulk) ClearAgentType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAgentType()
 	})
 }
 

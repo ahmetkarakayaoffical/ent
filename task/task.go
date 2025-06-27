@@ -76,6 +76,8 @@ const (
 	FieldScript = "script"
 	// FieldScriptRun holds the string denoting the script_run field in the database.
 	FieldScriptRun = "script_run"
+	// FieldAgentType holds the string denoting the agent_type field in the database.
+	FieldAgentType = "agent_type"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
@@ -134,6 +136,7 @@ var Columns = []string{
 	FieldMsiLogPath,
 	FieldScript,
 	FieldScriptRun,
+	FieldAgentType,
 	FieldWhen,
 }
 
@@ -330,6 +333,33 @@ func ScriptRunValidator(sr ScriptRun) error {
 	}
 }
 
+// AgentType defines the type for the "agent_type" enum field.
+type AgentType string
+
+// AgentTypeWindows is the default value of the AgentType enum.
+const DefaultAgentType = AgentTypeWindows
+
+// AgentType values.
+const (
+	AgentTypeWindows AgentType = "windows"
+	AgentTypeLinux   AgentType = "linux"
+	AgentTypeMacos   AgentType = "macos"
+)
+
+func (at AgentType) String() string {
+	return string(at)
+}
+
+// AgentTypeValidator is a validator for the "agent_type" field enum values. It is called by the builders before save.
+func AgentTypeValidator(at AgentType) error {
+	switch at {
+	case AgentTypeWindows, AgentTypeLinux, AgentTypeMacos:
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for agent_type field: %q", at)
+	}
+}
+
 // OrderOption defines the ordering options for the Task queries.
 type OrderOption func(*sql.Selector)
 
@@ -491,6 +521,11 @@ func ByScript(opts ...sql.OrderTermOption) OrderOption {
 // ByScriptRun orders the results by the script_run field.
 func ByScriptRun(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScriptRun, opts...).ToFunc()
+}
+
+// ByAgentType orders the results by the agent_type field.
+func ByAgentType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAgentType, opts...).ToFunc()
 }
 
 // ByWhen orders the results by the when field.

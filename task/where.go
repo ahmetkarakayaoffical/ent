@@ -1990,6 +1990,36 @@ func ScriptRunNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldScriptRun))
 }
 
+// AgentTypeEQ applies the EQ predicate on the "agent_type" field.
+func AgentTypeEQ(v AgentType) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAgentType, v))
+}
+
+// AgentTypeNEQ applies the NEQ predicate on the "agent_type" field.
+func AgentTypeNEQ(v AgentType) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAgentType, v))
+}
+
+// AgentTypeIn applies the In predicate on the "agent_type" field.
+func AgentTypeIn(vs ...AgentType) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAgentType, vs...))
+}
+
+// AgentTypeNotIn applies the NotIn predicate on the "agent_type" field.
+func AgentTypeNotIn(vs ...AgentType) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAgentType, vs...))
+}
+
+// AgentTypeIsNil applies the IsNil predicate on the "agent_type" field.
+func AgentTypeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAgentType))
+}
+
+// AgentTypeNotNil applies the NotNil predicate on the "agent_type" field.
+func AgentTypeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAgentType))
+}
+
 // WhenEQ applies the EQ predicate on the "when" field.
 func WhenEQ(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
