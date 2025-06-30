@@ -50,6 +50,52 @@ const (
 	FieldLocalUserPasswordChangeRequired = "local_user_password_change_required"
 	// FieldLocalUserPasswordNeverExpires holds the string denoting the local_user_password_never_expires field in the database.
 	FieldLocalUserPasswordNeverExpires = "local_user_password_never_expires"
+	// FieldLocalUserAppend holds the string denoting the local_user_append field in the database.
+	FieldLocalUserAppend = "local_user_append"
+	// FieldLocalUserCreateHome holds the string denoting the local_user_create_home field in the database.
+	FieldLocalUserCreateHome = "local_user_create_home"
+	// FieldLocalUserExpires holds the string denoting the local_user_expires field in the database.
+	FieldLocalUserExpires = "local_user_expires"
+	// FieldLocalUserForce holds the string denoting the local_user_force field in the database.
+	FieldLocalUserForce = "local_user_force"
+	// FieldLocalUserGenerateSSHKey holds the string denoting the local_user_generate_ssh_key field in the database.
+	FieldLocalUserGenerateSSHKey = "local_user_generate_ssh_key"
+	// FieldLocalUserGroup holds the string denoting the local_user_group field in the database.
+	FieldLocalUserGroup = "local_user_group"
+	// FieldLocalUserGroups holds the string denoting the local_user_groups field in the database.
+	FieldLocalUserGroups = "local_user_groups"
+	// FieldLocalUserHome holds the string denoting the local_user_home field in the database.
+	FieldLocalUserHome = "local_user_home"
+	// FieldLocalUserMoveHome holds the string denoting the local_user_move_home field in the database.
+	FieldLocalUserMoveHome = "local_user_move_home"
+	// FieldLocalUserNonunique holds the string denoting the local_user_nonunique field in the database.
+	FieldLocalUserNonunique = "local_user_nonunique"
+	// FieldLocalUserPasswordExpireAccountDisable holds the string denoting the local_user_password_expire_account_disable field in the database.
+	FieldLocalUserPasswordExpireAccountDisable = "local_user_password_expire_account_disable"
+	// FieldLocalUserPasswordExpireMax holds the string denoting the local_user_password_expire_max field in the database.
+	FieldLocalUserPasswordExpireMax = "local_user_password_expire_max"
+	// FieldLocalUserPasswordExpireMin holds the string denoting the local_user_password_expire_min field in the database.
+	FieldLocalUserPasswordExpireMin = "local_user_password_expire_min"
+	// FieldLocalUserPasswordExpireWarn holds the string denoting the local_user_password_expire_warn field in the database.
+	FieldLocalUserPasswordExpireWarn = "local_user_password_expire_warn"
+	// FieldLocalUserPasswordLock holds the string denoting the local_user_password_lock field in the database.
+	FieldLocalUserPasswordLock = "local_user_password_lock"
+	// FieldLocalUserSeuser holds the string denoting the local_user_seuser field in the database.
+	FieldLocalUserSeuser = "local_user_seuser"
+	// FieldLocalUserShell holds the string denoting the local_user_shell field in the database.
+	FieldLocalUserShell = "local_user_shell"
+	// FieldLocalUserSkeleton holds the string denoting the local_user_skeleton field in the database.
+	FieldLocalUserSkeleton = "local_user_skeleton"
+	// FieldLocalUserSystem holds the string denoting the local_user_system field in the database.
+	FieldLocalUserSystem = "local_user_system"
+	// FieldLocalUserID holds the string denoting the local_user_id field in the database.
+	FieldLocalUserID = "local_user_id"
+	// FieldLocalUserIDMax holds the string denoting the local_user_id_max field in the database.
+	FieldLocalUserIDMax = "local_user_id_max"
+	// FieldLocalUserIDMin holds the string denoting the local_user_id_min field in the database.
+	FieldLocalUserIDMin = "local_user_id_min"
+	// FieldLocalUserUmask holds the string denoting the local_user_umask field in the database.
+	FieldLocalUserUmask = "local_user_umask"
 	// FieldLocalGroupID holds the string denoting the local_group_id field in the database.
 	FieldLocalGroupID = "local_group_id"
 	// FieldLocalGroupName holds the string denoting the local_group_name field in the database.
@@ -129,6 +175,29 @@ var Columns = []string{
 	FieldLocalUserPasswordChangeNotAllowed,
 	FieldLocalUserPasswordChangeRequired,
 	FieldLocalUserPasswordNeverExpires,
+	FieldLocalUserAppend,
+	FieldLocalUserCreateHome,
+	FieldLocalUserExpires,
+	FieldLocalUserForce,
+	FieldLocalUserGenerateSSHKey,
+	FieldLocalUserGroup,
+	FieldLocalUserGroups,
+	FieldLocalUserHome,
+	FieldLocalUserMoveHome,
+	FieldLocalUserNonunique,
+	FieldLocalUserPasswordExpireAccountDisable,
+	FieldLocalUserPasswordExpireMax,
+	FieldLocalUserPasswordExpireMin,
+	FieldLocalUserPasswordExpireWarn,
+	FieldLocalUserPasswordLock,
+	FieldLocalUserSeuser,
+	FieldLocalUserShell,
+	FieldLocalUserSkeleton,
+	FieldLocalUserSystem,
+	FieldLocalUserID,
+	FieldLocalUserIDMax,
+	FieldLocalUserIDMin,
+	FieldLocalUserUmask,
 	FieldLocalGroupID,
 	FieldLocalGroupName,
 	FieldLocalGroupDescription,
@@ -203,6 +272,22 @@ var (
 	DefaultLocalUserPasswordChangeRequired bool
 	// DefaultLocalUserPasswordNeverExpires holds the default value on creation for the "local_user_password_never_expires" field.
 	DefaultLocalUserPasswordNeverExpires bool
+	// DefaultLocalUserAppend holds the default value on creation for the "local_user_append" field.
+	DefaultLocalUserAppend bool
+	// DefaultLocalUserCreateHome holds the default value on creation for the "local_user_create_home" field.
+	DefaultLocalUserCreateHome bool
+	// DefaultLocalUserForce holds the default value on creation for the "local_user_force" field.
+	DefaultLocalUserForce bool
+	// DefaultLocalUserGenerateSSHKey holds the default value on creation for the "local_user_generate_ssh_key" field.
+	DefaultLocalUserGenerateSSHKey bool
+	// DefaultLocalUserMoveHome holds the default value on creation for the "local_user_move_home" field.
+	DefaultLocalUserMoveHome bool
+	// DefaultLocalUserNonunique holds the default value on creation for the "local_user_nonunique" field.
+	DefaultLocalUserNonunique bool
+	// DefaultLocalUserPasswordLock holds the default value on creation for the "local_user_password_lock" field.
+	DefaultLocalUserPasswordLock string
+	// DefaultLocalUserSystem holds the default value on creation for the "local_user_system" field.
+	DefaultLocalUserSystem bool
 	// DefaultLocalGroupID holds the default value on creation for the "local_group_id" field.
 	DefaultLocalGroupID string
 	// DefaultLocalGroupName holds the default value on creation for the "local_group_name" field.
@@ -248,6 +333,8 @@ const (
 	TypeRemoveRegistryKeyValue        Type = "remove_registry_key_value"
 	TypeAddLocalUser                  Type = "add_local_user"
 	TypeRemoveLocalUser               Type = "remove_local_user"
+	TypeAddUnixLocalUser              Type = "add_unix_local_user"
+	TypeRemoveUnixLocalUser           Type = "remove_unix_local_user"
 	TypeAddLocalGroup                 Type = "add_local_group"
 	TypeRemoveLocalGroup              Type = "remove_local_group"
 	TypeAddUnixLocalGroup             Type = "add_unix_local_group"
@@ -266,7 +353,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddUnixLocalUser, TypeRemoveUnixLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
@@ -473,6 +560,121 @@ func ByLocalUserPasswordChangeRequired(opts ...sql.OrderTermOption) OrderOption 
 // ByLocalUserPasswordNeverExpires orders the results by the local_user_password_never_expires field.
 func ByLocalUserPasswordNeverExpires(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalUserPasswordNeverExpires, opts...).ToFunc()
+}
+
+// ByLocalUserAppend orders the results by the local_user_append field.
+func ByLocalUserAppend(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserAppend, opts...).ToFunc()
+}
+
+// ByLocalUserCreateHome orders the results by the local_user_create_home field.
+func ByLocalUserCreateHome(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserCreateHome, opts...).ToFunc()
+}
+
+// ByLocalUserExpires orders the results by the local_user_expires field.
+func ByLocalUserExpires(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserExpires, opts...).ToFunc()
+}
+
+// ByLocalUserForce orders the results by the local_user_force field.
+func ByLocalUserForce(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserForce, opts...).ToFunc()
+}
+
+// ByLocalUserGenerateSSHKey orders the results by the local_user_generate_ssh_key field.
+func ByLocalUserGenerateSSHKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserGenerateSSHKey, opts...).ToFunc()
+}
+
+// ByLocalUserGroup orders the results by the local_user_group field.
+func ByLocalUserGroup(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserGroup, opts...).ToFunc()
+}
+
+// ByLocalUserGroups orders the results by the local_user_groups field.
+func ByLocalUserGroups(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserGroups, opts...).ToFunc()
+}
+
+// ByLocalUserHome orders the results by the local_user_home field.
+func ByLocalUserHome(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserHome, opts...).ToFunc()
+}
+
+// ByLocalUserMoveHome orders the results by the local_user_move_home field.
+func ByLocalUserMoveHome(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserMoveHome, opts...).ToFunc()
+}
+
+// ByLocalUserNonunique orders the results by the local_user_nonunique field.
+func ByLocalUserNonunique(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserNonunique, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordExpireAccountDisable orders the results by the local_user_password_expire_account_disable field.
+func ByLocalUserPasswordExpireAccountDisable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordExpireAccountDisable, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordExpireMax orders the results by the local_user_password_expire_max field.
+func ByLocalUserPasswordExpireMax(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordExpireMax, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordExpireMin orders the results by the local_user_password_expire_min field.
+func ByLocalUserPasswordExpireMin(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordExpireMin, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordExpireWarn orders the results by the local_user_password_expire_warn field.
+func ByLocalUserPasswordExpireWarn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordExpireWarn, opts...).ToFunc()
+}
+
+// ByLocalUserPasswordLock orders the results by the local_user_password_lock field.
+func ByLocalUserPasswordLock(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserPasswordLock, opts...).ToFunc()
+}
+
+// ByLocalUserSeuser orders the results by the local_user_seuser field.
+func ByLocalUserSeuser(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSeuser, opts...).ToFunc()
+}
+
+// ByLocalUserShell orders the results by the local_user_shell field.
+func ByLocalUserShell(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserShell, opts...).ToFunc()
+}
+
+// ByLocalUserSkeleton orders the results by the local_user_skeleton field.
+func ByLocalUserSkeleton(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSkeleton, opts...).ToFunc()
+}
+
+// ByLocalUserSystem orders the results by the local_user_system field.
+func ByLocalUserSystem(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSystem, opts...).ToFunc()
+}
+
+// ByLocalUserID orders the results by the local_user_id field.
+func ByLocalUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserID, opts...).ToFunc()
+}
+
+// ByLocalUserIDMax orders the results by the local_user_id_max field.
+func ByLocalUserIDMax(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserIDMax, opts...).ToFunc()
+}
+
+// ByLocalUserIDMin orders the results by the local_user_id_min field.
+func ByLocalUserIDMin(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserIDMin, opts...).ToFunc()
+}
+
+// ByLocalUserUmask orders the results by the local_user_umask field.
+func ByLocalUserUmask(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserUmask, opts...).ToFunc()
 }
 
 // ByLocalGroupID orders the results by the local_group_id field.

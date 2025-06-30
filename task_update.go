@@ -379,6 +379,522 @@ func (tu *TaskUpdate) ClearLocalUserPasswordNeverExpires() *TaskUpdate {
 	return tu
 }
 
+// SetLocalUserAppend sets the "local_user_append" field.
+func (tu *TaskUpdate) SetLocalUserAppend(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserAppend(b)
+	return tu
+}
+
+// SetNillableLocalUserAppend sets the "local_user_append" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserAppend(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserAppend(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserAppend clears the value of the "local_user_append" field.
+func (tu *TaskUpdate) ClearLocalUserAppend() *TaskUpdate {
+	tu.mutation.ClearLocalUserAppend()
+	return tu
+}
+
+// SetLocalUserCreateHome sets the "local_user_create_home" field.
+func (tu *TaskUpdate) SetLocalUserCreateHome(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserCreateHome(b)
+	return tu
+}
+
+// SetNillableLocalUserCreateHome sets the "local_user_create_home" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserCreateHome(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserCreateHome(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserCreateHome clears the value of the "local_user_create_home" field.
+func (tu *TaskUpdate) ClearLocalUserCreateHome() *TaskUpdate {
+	tu.mutation.ClearLocalUserCreateHome()
+	return tu
+}
+
+// SetLocalUserExpires sets the "local_user_expires" field.
+func (tu *TaskUpdate) SetLocalUserExpires(f float64) *TaskUpdate {
+	tu.mutation.ResetLocalUserExpires()
+	tu.mutation.SetLocalUserExpires(f)
+	return tu
+}
+
+// SetNillableLocalUserExpires sets the "local_user_expires" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserExpires(f *float64) *TaskUpdate {
+	if f != nil {
+		tu.SetLocalUserExpires(*f)
+	}
+	return tu
+}
+
+// AddLocalUserExpires adds f to the "local_user_expires" field.
+func (tu *TaskUpdate) AddLocalUserExpires(f float64) *TaskUpdate {
+	tu.mutation.AddLocalUserExpires(f)
+	return tu
+}
+
+// ClearLocalUserExpires clears the value of the "local_user_expires" field.
+func (tu *TaskUpdate) ClearLocalUserExpires() *TaskUpdate {
+	tu.mutation.ClearLocalUserExpires()
+	return tu
+}
+
+// SetLocalUserForce sets the "local_user_force" field.
+func (tu *TaskUpdate) SetLocalUserForce(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserForce(b)
+	return tu
+}
+
+// SetNillableLocalUserForce sets the "local_user_force" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserForce(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserForce(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserForce clears the value of the "local_user_force" field.
+func (tu *TaskUpdate) ClearLocalUserForce() *TaskUpdate {
+	tu.mutation.ClearLocalUserForce()
+	return tu
+}
+
+// SetLocalUserGenerateSSHKey sets the "local_user_generate_ssh_key" field.
+func (tu *TaskUpdate) SetLocalUserGenerateSSHKey(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserGenerateSSHKey(b)
+	return tu
+}
+
+// SetNillableLocalUserGenerateSSHKey sets the "local_user_generate_ssh_key" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserGenerateSSHKey(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserGenerateSSHKey(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserGenerateSSHKey clears the value of the "local_user_generate_ssh_key" field.
+func (tu *TaskUpdate) ClearLocalUserGenerateSSHKey() *TaskUpdate {
+	tu.mutation.ClearLocalUserGenerateSSHKey()
+	return tu
+}
+
+// SetLocalUserGroup sets the "local_user_group" field.
+func (tu *TaskUpdate) SetLocalUserGroup(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserGroup(s)
+	return tu
+}
+
+// SetNillableLocalUserGroup sets the "local_user_group" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserGroup(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserGroup(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserGroup clears the value of the "local_user_group" field.
+func (tu *TaskUpdate) ClearLocalUserGroup() *TaskUpdate {
+	tu.mutation.ClearLocalUserGroup()
+	return tu
+}
+
+// SetLocalUserGroups sets the "local_user_groups" field.
+func (tu *TaskUpdate) SetLocalUserGroups(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserGroups(s)
+	return tu
+}
+
+// SetNillableLocalUserGroups sets the "local_user_groups" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserGroups(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserGroups(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserGroups clears the value of the "local_user_groups" field.
+func (tu *TaskUpdate) ClearLocalUserGroups() *TaskUpdate {
+	tu.mutation.ClearLocalUserGroups()
+	return tu
+}
+
+// SetLocalUserHome sets the "local_user_home" field.
+func (tu *TaskUpdate) SetLocalUserHome(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserHome(s)
+	return tu
+}
+
+// SetNillableLocalUserHome sets the "local_user_home" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserHome(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserHome(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserHome clears the value of the "local_user_home" field.
+func (tu *TaskUpdate) ClearLocalUserHome() *TaskUpdate {
+	tu.mutation.ClearLocalUserHome()
+	return tu
+}
+
+// SetLocalUserMoveHome sets the "local_user_move_home" field.
+func (tu *TaskUpdate) SetLocalUserMoveHome(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserMoveHome(b)
+	return tu
+}
+
+// SetNillableLocalUserMoveHome sets the "local_user_move_home" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserMoveHome(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserMoveHome(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserMoveHome clears the value of the "local_user_move_home" field.
+func (tu *TaskUpdate) ClearLocalUserMoveHome() *TaskUpdate {
+	tu.mutation.ClearLocalUserMoveHome()
+	return tu
+}
+
+// SetLocalUserNonunique sets the "local_user_nonunique" field.
+func (tu *TaskUpdate) SetLocalUserNonunique(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserNonunique(b)
+	return tu
+}
+
+// SetNillableLocalUserNonunique sets the "local_user_nonunique" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserNonunique(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserNonunique(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserNonunique clears the value of the "local_user_nonunique" field.
+func (tu *TaskUpdate) ClearLocalUserNonunique() *TaskUpdate {
+	tu.mutation.ClearLocalUserNonunique()
+	return tu
+}
+
+// SetLocalUserPasswordExpireAccountDisable sets the "local_user_password_expire_account_disable" field.
+func (tu *TaskUpdate) SetLocalUserPasswordExpireAccountDisable(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserPasswordExpireAccountDisable()
+	tu.mutation.SetLocalUserPasswordExpireAccountDisable(i)
+	return tu
+}
+
+// SetNillableLocalUserPasswordExpireAccountDisable sets the "local_user_password_expire_account_disable" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordExpireAccountDisable(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserPasswordExpireAccountDisable(*i)
+	}
+	return tu
+}
+
+// AddLocalUserPasswordExpireAccountDisable adds i to the "local_user_password_expire_account_disable" field.
+func (tu *TaskUpdate) AddLocalUserPasswordExpireAccountDisable(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserPasswordExpireAccountDisable(i)
+	return tu
+}
+
+// ClearLocalUserPasswordExpireAccountDisable clears the value of the "local_user_password_expire_account_disable" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordExpireAccountDisable() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordExpireAccountDisable()
+	return tu
+}
+
+// SetLocalUserPasswordExpireMax sets the "local_user_password_expire_max" field.
+func (tu *TaskUpdate) SetLocalUserPasswordExpireMax(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserPasswordExpireMax()
+	tu.mutation.SetLocalUserPasswordExpireMax(i)
+	return tu
+}
+
+// SetNillableLocalUserPasswordExpireMax sets the "local_user_password_expire_max" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordExpireMax(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserPasswordExpireMax(*i)
+	}
+	return tu
+}
+
+// AddLocalUserPasswordExpireMax adds i to the "local_user_password_expire_max" field.
+func (tu *TaskUpdate) AddLocalUserPasswordExpireMax(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserPasswordExpireMax(i)
+	return tu
+}
+
+// ClearLocalUserPasswordExpireMax clears the value of the "local_user_password_expire_max" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordExpireMax() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordExpireMax()
+	return tu
+}
+
+// SetLocalUserPasswordExpireMin sets the "local_user_password_expire_min" field.
+func (tu *TaskUpdate) SetLocalUserPasswordExpireMin(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserPasswordExpireMin()
+	tu.mutation.SetLocalUserPasswordExpireMin(i)
+	return tu
+}
+
+// SetNillableLocalUserPasswordExpireMin sets the "local_user_password_expire_min" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordExpireMin(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserPasswordExpireMin(*i)
+	}
+	return tu
+}
+
+// AddLocalUserPasswordExpireMin adds i to the "local_user_password_expire_min" field.
+func (tu *TaskUpdate) AddLocalUserPasswordExpireMin(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserPasswordExpireMin(i)
+	return tu
+}
+
+// ClearLocalUserPasswordExpireMin clears the value of the "local_user_password_expire_min" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordExpireMin() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordExpireMin()
+	return tu
+}
+
+// SetLocalUserPasswordExpireWarn sets the "local_user_password_expire_warn" field.
+func (tu *TaskUpdate) SetLocalUserPasswordExpireWarn(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserPasswordExpireWarn()
+	tu.mutation.SetLocalUserPasswordExpireWarn(i)
+	return tu
+}
+
+// SetNillableLocalUserPasswordExpireWarn sets the "local_user_password_expire_warn" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordExpireWarn(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserPasswordExpireWarn(*i)
+	}
+	return tu
+}
+
+// AddLocalUserPasswordExpireWarn adds i to the "local_user_password_expire_warn" field.
+func (tu *TaskUpdate) AddLocalUserPasswordExpireWarn(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserPasswordExpireWarn(i)
+	return tu
+}
+
+// ClearLocalUserPasswordExpireWarn clears the value of the "local_user_password_expire_warn" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordExpireWarn() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordExpireWarn()
+	return tu
+}
+
+// SetLocalUserPasswordLock sets the "local_user_password_lock" field.
+func (tu *TaskUpdate) SetLocalUserPasswordLock(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserPasswordLock(s)
+	return tu
+}
+
+// SetNillableLocalUserPasswordLock sets the "local_user_password_lock" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserPasswordLock(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserPasswordLock(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserPasswordLock clears the value of the "local_user_password_lock" field.
+func (tu *TaskUpdate) ClearLocalUserPasswordLock() *TaskUpdate {
+	tu.mutation.ClearLocalUserPasswordLock()
+	return tu
+}
+
+// SetLocalUserSeuser sets the "local_user_seuser" field.
+func (tu *TaskUpdate) SetLocalUserSeuser(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSeuser(s)
+	return tu
+}
+
+// SetNillableLocalUserSeuser sets the "local_user_seuser" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSeuser(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSeuser(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSeuser clears the value of the "local_user_seuser" field.
+func (tu *TaskUpdate) ClearLocalUserSeuser() *TaskUpdate {
+	tu.mutation.ClearLocalUserSeuser()
+	return tu
+}
+
+// SetLocalUserShell sets the "local_user_shell" field.
+func (tu *TaskUpdate) SetLocalUserShell(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserShell(s)
+	return tu
+}
+
+// SetNillableLocalUserShell sets the "local_user_shell" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserShell(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserShell(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserShell clears the value of the "local_user_shell" field.
+func (tu *TaskUpdate) ClearLocalUserShell() *TaskUpdate {
+	tu.mutation.ClearLocalUserShell()
+	return tu
+}
+
+// SetLocalUserSkeleton sets the "local_user_skeleton" field.
+func (tu *TaskUpdate) SetLocalUserSkeleton(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSkeleton(s)
+	return tu
+}
+
+// SetNillableLocalUserSkeleton sets the "local_user_skeleton" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSkeleton(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSkeleton(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSkeleton clears the value of the "local_user_skeleton" field.
+func (tu *TaskUpdate) ClearLocalUserSkeleton() *TaskUpdate {
+	tu.mutation.ClearLocalUserSkeleton()
+	return tu
+}
+
+// SetLocalUserSystem sets the "local_user_system" field.
+func (tu *TaskUpdate) SetLocalUserSystem(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserSystem(b)
+	return tu
+}
+
+// SetNillableLocalUserSystem sets the "local_user_system" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSystem(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserSystem(*b)
+	}
+	return tu
+}
+
+// ClearLocalUserSystem clears the value of the "local_user_system" field.
+func (tu *TaskUpdate) ClearLocalUserSystem() *TaskUpdate {
+	tu.mutation.ClearLocalUserSystem()
+	return tu
+}
+
+// SetLocalUserID sets the "local_user_id" field.
+func (tu *TaskUpdate) SetLocalUserID(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserID()
+	tu.mutation.SetLocalUserID(i)
+	return tu
+}
+
+// SetNillableLocalUserID sets the "local_user_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserID(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserID(*i)
+	}
+	return tu
+}
+
+// AddLocalUserID adds i to the "local_user_id" field.
+func (tu *TaskUpdate) AddLocalUserID(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserID(i)
+	return tu
+}
+
+// ClearLocalUserID clears the value of the "local_user_id" field.
+func (tu *TaskUpdate) ClearLocalUserID() *TaskUpdate {
+	tu.mutation.ClearLocalUserID()
+	return tu
+}
+
+// SetLocalUserIDMax sets the "local_user_id_max" field.
+func (tu *TaskUpdate) SetLocalUserIDMax(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserIDMax()
+	tu.mutation.SetLocalUserIDMax(i)
+	return tu
+}
+
+// SetNillableLocalUserIDMax sets the "local_user_id_max" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserIDMax(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserIDMax(*i)
+	}
+	return tu
+}
+
+// AddLocalUserIDMax adds i to the "local_user_id_max" field.
+func (tu *TaskUpdate) AddLocalUserIDMax(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserIDMax(i)
+	return tu
+}
+
+// ClearLocalUserIDMax clears the value of the "local_user_id_max" field.
+func (tu *TaskUpdate) ClearLocalUserIDMax() *TaskUpdate {
+	tu.mutation.ClearLocalUserIDMax()
+	return tu
+}
+
+// SetLocalUserIDMin sets the "local_user_id_min" field.
+func (tu *TaskUpdate) SetLocalUserIDMin(i int) *TaskUpdate {
+	tu.mutation.ResetLocalUserIDMin()
+	tu.mutation.SetLocalUserIDMin(i)
+	return tu
+}
+
+// SetNillableLocalUserIDMin sets the "local_user_id_min" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserIDMin(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetLocalUserIDMin(*i)
+	}
+	return tu
+}
+
+// AddLocalUserIDMin adds i to the "local_user_id_min" field.
+func (tu *TaskUpdate) AddLocalUserIDMin(i int) *TaskUpdate {
+	tu.mutation.AddLocalUserIDMin(i)
+	return tu
+}
+
+// ClearLocalUserIDMin clears the value of the "local_user_id_min" field.
+func (tu *TaskUpdate) ClearLocalUserIDMin() *TaskUpdate {
+	tu.mutation.ClearLocalUserIDMin()
+	return tu
+}
+
+// SetLocalUserUmask sets the "local_user_umask" field.
+func (tu *TaskUpdate) SetLocalUserUmask(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserUmask(s)
+	return tu
+}
+
+// SetNillableLocalUserUmask sets the "local_user_umask" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserUmask(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserUmask(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserUmask clears the value of the "local_user_umask" field.
+func (tu *TaskUpdate) ClearLocalUserUmask() *TaskUpdate {
+	tu.mutation.ClearLocalUserUmask()
+	return tu
+}
+
 // SetLocalGroupID sets the "local_group_id" field.
 func (tu *TaskUpdate) SetLocalGroupID(s string) *TaskUpdate {
 	tu.mutation.SetLocalGroupID(s)
@@ -987,6 +1503,168 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
 	}
+	if value, ok := tu.mutation.LocalUserAppend(); ok {
+		_spec.SetField(task.FieldLocalUserAppend, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserAppendCleared() {
+		_spec.ClearField(task.FieldLocalUserAppend, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserCreateHome(); ok {
+		_spec.SetField(task.FieldLocalUserCreateHome, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserCreateHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserCreateHome, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserExpires(); ok {
+		_spec.SetField(task.FieldLocalUserExpires, field.TypeFloat64, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserExpires(); ok {
+		_spec.AddField(task.FieldLocalUserExpires, field.TypeFloat64, value)
+	}
+	if tu.mutation.LocalUserExpiresCleared() {
+		_spec.ClearField(task.FieldLocalUserExpires, field.TypeFloat64)
+	}
+	if value, ok := tu.mutation.LocalUserForce(); ok {
+		_spec.SetField(task.FieldLocalUserForce, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserForceCleared() {
+		_spec.ClearField(task.FieldLocalUserForce, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserGenerateSSHKey(); ok {
+		_spec.SetField(task.FieldLocalUserGenerateSSHKey, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserGenerateSSHKeyCleared() {
+		_spec.ClearField(task.FieldLocalUserGenerateSSHKey, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserGroup(); ok {
+		_spec.SetField(task.FieldLocalUserGroup, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserGroupCleared() {
+		_spec.ClearField(task.FieldLocalUserGroup, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserGroups(); ok {
+		_spec.SetField(task.FieldLocalUserGroups, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserGroupsCleared() {
+		_spec.ClearField(task.FieldLocalUserGroups, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserHome(); ok {
+		_spec.SetField(task.FieldLocalUserHome, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserHome, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserMoveHome(); ok {
+		_spec.SetField(task.FieldLocalUserMoveHome, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserMoveHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserMoveHome, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserNonunique(); ok {
+		_spec.SetField(task.FieldLocalUserNonunique, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserNonuniqueCleared() {
+		_spec.ClearField(task.FieldLocalUserNonunique, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordExpireAccountDisable(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserPasswordExpireAccountDisable(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserPasswordExpireAccountDisableCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordExpireMax(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireMax, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserPasswordExpireMax(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireMax, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserPasswordExpireMaxCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireMax, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordExpireMin(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireMin, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserPasswordExpireMin(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireMin, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserPasswordExpireMinCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireMin, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordExpireWarn(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserPasswordExpireWarn(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserPasswordExpireWarnCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserPasswordLock(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserPasswordLockCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSeuser(); ok {
+		_spec.SetField(task.FieldLocalUserSeuser, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSeuserCleared() {
+		_spec.ClearField(task.FieldLocalUserSeuser, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserShell(); ok {
+		_spec.SetField(task.FieldLocalUserShell, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserShellCleared() {
+		_spec.ClearField(task.FieldLocalUserShell, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSkeleton(); ok {
+		_spec.SetField(task.FieldLocalUserSkeleton, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSkeletonCleared() {
+		_spec.ClearField(task.FieldLocalUserSkeleton, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSystem(); ok {
+		_spec.SetField(task.FieldLocalUserSystem, field.TypeBool, value)
+	}
+	if tu.mutation.LocalUserSystemCleared() {
+		_spec.ClearField(task.FieldLocalUserSystem, field.TypeBool)
+	}
+	if value, ok := tu.mutation.LocalUserID(); ok {
+		_spec.SetField(task.FieldLocalUserID, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserID(); ok {
+		_spec.AddField(task.FieldLocalUserID, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserIDCleared() {
+		_spec.ClearField(task.FieldLocalUserID, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserIDMax(); ok {
+		_spec.SetField(task.FieldLocalUserIDMax, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserIDMax(); ok {
+		_spec.AddField(task.FieldLocalUserIDMax, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserIDMaxCleared() {
+		_spec.ClearField(task.FieldLocalUserIDMax, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserIDMin(); ok {
+		_spec.SetField(task.FieldLocalUserIDMin, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedLocalUserIDMin(); ok {
+		_spec.AddField(task.FieldLocalUserIDMin, field.TypeInt, value)
+	}
+	if tu.mutation.LocalUserIDMinCleared() {
+		_spec.ClearField(task.FieldLocalUserIDMin, field.TypeInt)
+	}
+	if value, ok := tu.mutation.LocalUserUmask(); ok {
+		_spec.SetField(task.FieldLocalUserUmask, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserUmaskCleared() {
+		_spec.ClearField(task.FieldLocalUserUmask, field.TypeString)
+	}
 	if value, ok := tu.mutation.LocalGroupID(); ok {
 		_spec.SetField(task.FieldLocalGroupID, field.TypeString, value)
 	}
@@ -1536,6 +2214,522 @@ func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordNeverExpires(b *bool) *Tas
 // ClearLocalUserPasswordNeverExpires clears the value of the "local_user_password_never_expires" field.
 func (tuo *TaskUpdateOne) ClearLocalUserPasswordNeverExpires() *TaskUpdateOne {
 	tuo.mutation.ClearLocalUserPasswordNeverExpires()
+	return tuo
+}
+
+// SetLocalUserAppend sets the "local_user_append" field.
+func (tuo *TaskUpdateOne) SetLocalUserAppend(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserAppend(b)
+	return tuo
+}
+
+// SetNillableLocalUserAppend sets the "local_user_append" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserAppend(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserAppend(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserAppend clears the value of the "local_user_append" field.
+func (tuo *TaskUpdateOne) ClearLocalUserAppend() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserAppend()
+	return tuo
+}
+
+// SetLocalUserCreateHome sets the "local_user_create_home" field.
+func (tuo *TaskUpdateOne) SetLocalUserCreateHome(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserCreateHome(b)
+	return tuo
+}
+
+// SetNillableLocalUserCreateHome sets the "local_user_create_home" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserCreateHome(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserCreateHome(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserCreateHome clears the value of the "local_user_create_home" field.
+func (tuo *TaskUpdateOne) ClearLocalUserCreateHome() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserCreateHome()
+	return tuo
+}
+
+// SetLocalUserExpires sets the "local_user_expires" field.
+func (tuo *TaskUpdateOne) SetLocalUserExpires(f float64) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserExpires()
+	tuo.mutation.SetLocalUserExpires(f)
+	return tuo
+}
+
+// SetNillableLocalUserExpires sets the "local_user_expires" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserExpires(f *float64) *TaskUpdateOne {
+	if f != nil {
+		tuo.SetLocalUserExpires(*f)
+	}
+	return tuo
+}
+
+// AddLocalUserExpires adds f to the "local_user_expires" field.
+func (tuo *TaskUpdateOne) AddLocalUserExpires(f float64) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserExpires(f)
+	return tuo
+}
+
+// ClearLocalUserExpires clears the value of the "local_user_expires" field.
+func (tuo *TaskUpdateOne) ClearLocalUserExpires() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserExpires()
+	return tuo
+}
+
+// SetLocalUserForce sets the "local_user_force" field.
+func (tuo *TaskUpdateOne) SetLocalUserForce(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserForce(b)
+	return tuo
+}
+
+// SetNillableLocalUserForce sets the "local_user_force" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserForce(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserForce(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserForce clears the value of the "local_user_force" field.
+func (tuo *TaskUpdateOne) ClearLocalUserForce() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserForce()
+	return tuo
+}
+
+// SetLocalUserGenerateSSHKey sets the "local_user_generate_ssh_key" field.
+func (tuo *TaskUpdateOne) SetLocalUserGenerateSSHKey(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserGenerateSSHKey(b)
+	return tuo
+}
+
+// SetNillableLocalUserGenerateSSHKey sets the "local_user_generate_ssh_key" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserGenerateSSHKey(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserGenerateSSHKey(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserGenerateSSHKey clears the value of the "local_user_generate_ssh_key" field.
+func (tuo *TaskUpdateOne) ClearLocalUserGenerateSSHKey() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserGenerateSSHKey()
+	return tuo
+}
+
+// SetLocalUserGroup sets the "local_user_group" field.
+func (tuo *TaskUpdateOne) SetLocalUserGroup(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserGroup(s)
+	return tuo
+}
+
+// SetNillableLocalUserGroup sets the "local_user_group" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserGroup(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserGroup(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserGroup clears the value of the "local_user_group" field.
+func (tuo *TaskUpdateOne) ClearLocalUserGroup() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserGroup()
+	return tuo
+}
+
+// SetLocalUserGroups sets the "local_user_groups" field.
+func (tuo *TaskUpdateOne) SetLocalUserGroups(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserGroups(s)
+	return tuo
+}
+
+// SetNillableLocalUserGroups sets the "local_user_groups" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserGroups(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserGroups(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserGroups clears the value of the "local_user_groups" field.
+func (tuo *TaskUpdateOne) ClearLocalUserGroups() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserGroups()
+	return tuo
+}
+
+// SetLocalUserHome sets the "local_user_home" field.
+func (tuo *TaskUpdateOne) SetLocalUserHome(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserHome(s)
+	return tuo
+}
+
+// SetNillableLocalUserHome sets the "local_user_home" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserHome(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserHome(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserHome clears the value of the "local_user_home" field.
+func (tuo *TaskUpdateOne) ClearLocalUserHome() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserHome()
+	return tuo
+}
+
+// SetLocalUserMoveHome sets the "local_user_move_home" field.
+func (tuo *TaskUpdateOne) SetLocalUserMoveHome(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserMoveHome(b)
+	return tuo
+}
+
+// SetNillableLocalUserMoveHome sets the "local_user_move_home" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserMoveHome(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserMoveHome(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserMoveHome clears the value of the "local_user_move_home" field.
+func (tuo *TaskUpdateOne) ClearLocalUserMoveHome() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserMoveHome()
+	return tuo
+}
+
+// SetLocalUserNonunique sets the "local_user_nonunique" field.
+func (tuo *TaskUpdateOne) SetLocalUserNonunique(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserNonunique(b)
+	return tuo
+}
+
+// SetNillableLocalUserNonunique sets the "local_user_nonunique" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserNonunique(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserNonunique(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserNonunique clears the value of the "local_user_nonunique" field.
+func (tuo *TaskUpdateOne) ClearLocalUserNonunique() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserNonunique()
+	return tuo
+}
+
+// SetLocalUserPasswordExpireAccountDisable sets the "local_user_password_expire_account_disable" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordExpireAccountDisable(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserPasswordExpireAccountDisable()
+	tuo.mutation.SetLocalUserPasswordExpireAccountDisable(i)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordExpireAccountDisable sets the "local_user_password_expire_account_disable" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordExpireAccountDisable(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserPasswordExpireAccountDisable(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserPasswordExpireAccountDisable adds i to the "local_user_password_expire_account_disable" field.
+func (tuo *TaskUpdateOne) AddLocalUserPasswordExpireAccountDisable(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserPasswordExpireAccountDisable(i)
+	return tuo
+}
+
+// ClearLocalUserPasswordExpireAccountDisable clears the value of the "local_user_password_expire_account_disable" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordExpireAccountDisable() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordExpireAccountDisable()
+	return tuo
+}
+
+// SetLocalUserPasswordExpireMax sets the "local_user_password_expire_max" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordExpireMax(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserPasswordExpireMax()
+	tuo.mutation.SetLocalUserPasswordExpireMax(i)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordExpireMax sets the "local_user_password_expire_max" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordExpireMax(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserPasswordExpireMax(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserPasswordExpireMax adds i to the "local_user_password_expire_max" field.
+func (tuo *TaskUpdateOne) AddLocalUserPasswordExpireMax(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserPasswordExpireMax(i)
+	return tuo
+}
+
+// ClearLocalUserPasswordExpireMax clears the value of the "local_user_password_expire_max" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordExpireMax() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordExpireMax()
+	return tuo
+}
+
+// SetLocalUserPasswordExpireMin sets the "local_user_password_expire_min" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordExpireMin(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserPasswordExpireMin()
+	tuo.mutation.SetLocalUserPasswordExpireMin(i)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordExpireMin sets the "local_user_password_expire_min" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordExpireMin(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserPasswordExpireMin(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserPasswordExpireMin adds i to the "local_user_password_expire_min" field.
+func (tuo *TaskUpdateOne) AddLocalUserPasswordExpireMin(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserPasswordExpireMin(i)
+	return tuo
+}
+
+// ClearLocalUserPasswordExpireMin clears the value of the "local_user_password_expire_min" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordExpireMin() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordExpireMin()
+	return tuo
+}
+
+// SetLocalUserPasswordExpireWarn sets the "local_user_password_expire_warn" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordExpireWarn(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserPasswordExpireWarn()
+	tuo.mutation.SetLocalUserPasswordExpireWarn(i)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordExpireWarn sets the "local_user_password_expire_warn" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordExpireWarn(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserPasswordExpireWarn(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserPasswordExpireWarn adds i to the "local_user_password_expire_warn" field.
+func (tuo *TaskUpdateOne) AddLocalUserPasswordExpireWarn(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserPasswordExpireWarn(i)
+	return tuo
+}
+
+// ClearLocalUserPasswordExpireWarn clears the value of the "local_user_password_expire_warn" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordExpireWarn() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordExpireWarn()
+	return tuo
+}
+
+// SetLocalUserPasswordLock sets the "local_user_password_lock" field.
+func (tuo *TaskUpdateOne) SetLocalUserPasswordLock(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPasswordLock(s)
+	return tuo
+}
+
+// SetNillableLocalUserPasswordLock sets the "local_user_password_lock" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordLock(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserPasswordLock(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserPasswordLock clears the value of the "local_user_password_lock" field.
+func (tuo *TaskUpdateOne) ClearLocalUserPasswordLock() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserPasswordLock()
+	return tuo
+}
+
+// SetLocalUserSeuser sets the "local_user_seuser" field.
+func (tuo *TaskUpdateOne) SetLocalUserSeuser(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSeuser(s)
+	return tuo
+}
+
+// SetNillableLocalUserSeuser sets the "local_user_seuser" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSeuser(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSeuser(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSeuser clears the value of the "local_user_seuser" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSeuser() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSeuser()
+	return tuo
+}
+
+// SetLocalUserShell sets the "local_user_shell" field.
+func (tuo *TaskUpdateOne) SetLocalUserShell(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserShell(s)
+	return tuo
+}
+
+// SetNillableLocalUserShell sets the "local_user_shell" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserShell(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserShell(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserShell clears the value of the "local_user_shell" field.
+func (tuo *TaskUpdateOne) ClearLocalUserShell() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserShell()
+	return tuo
+}
+
+// SetLocalUserSkeleton sets the "local_user_skeleton" field.
+func (tuo *TaskUpdateOne) SetLocalUserSkeleton(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSkeleton(s)
+	return tuo
+}
+
+// SetNillableLocalUserSkeleton sets the "local_user_skeleton" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSkeleton(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSkeleton(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSkeleton clears the value of the "local_user_skeleton" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSkeleton() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSkeleton()
+	return tuo
+}
+
+// SetLocalUserSystem sets the "local_user_system" field.
+func (tuo *TaskUpdateOne) SetLocalUserSystem(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSystem(b)
+	return tuo
+}
+
+// SetNillableLocalUserSystem sets the "local_user_system" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSystem(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserSystem(*b)
+	}
+	return tuo
+}
+
+// ClearLocalUserSystem clears the value of the "local_user_system" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSystem() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSystem()
+	return tuo
+}
+
+// SetLocalUserID sets the "local_user_id" field.
+func (tuo *TaskUpdateOne) SetLocalUserID(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserID()
+	tuo.mutation.SetLocalUserID(i)
+	return tuo
+}
+
+// SetNillableLocalUserID sets the "local_user_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserID(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserID(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserID adds i to the "local_user_id" field.
+func (tuo *TaskUpdateOne) AddLocalUserID(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserID(i)
+	return tuo
+}
+
+// ClearLocalUserID clears the value of the "local_user_id" field.
+func (tuo *TaskUpdateOne) ClearLocalUserID() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserID()
+	return tuo
+}
+
+// SetLocalUserIDMax sets the "local_user_id_max" field.
+func (tuo *TaskUpdateOne) SetLocalUserIDMax(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserIDMax()
+	tuo.mutation.SetLocalUserIDMax(i)
+	return tuo
+}
+
+// SetNillableLocalUserIDMax sets the "local_user_id_max" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserIDMax(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserIDMax(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserIDMax adds i to the "local_user_id_max" field.
+func (tuo *TaskUpdateOne) AddLocalUserIDMax(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserIDMax(i)
+	return tuo
+}
+
+// ClearLocalUserIDMax clears the value of the "local_user_id_max" field.
+func (tuo *TaskUpdateOne) ClearLocalUserIDMax() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserIDMax()
+	return tuo
+}
+
+// SetLocalUserIDMin sets the "local_user_id_min" field.
+func (tuo *TaskUpdateOne) SetLocalUserIDMin(i int) *TaskUpdateOne {
+	tuo.mutation.ResetLocalUserIDMin()
+	tuo.mutation.SetLocalUserIDMin(i)
+	return tuo
+}
+
+// SetNillableLocalUserIDMin sets the "local_user_id_min" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserIDMin(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetLocalUserIDMin(*i)
+	}
+	return tuo
+}
+
+// AddLocalUserIDMin adds i to the "local_user_id_min" field.
+func (tuo *TaskUpdateOne) AddLocalUserIDMin(i int) *TaskUpdateOne {
+	tuo.mutation.AddLocalUserIDMin(i)
+	return tuo
+}
+
+// ClearLocalUserIDMin clears the value of the "local_user_id_min" field.
+func (tuo *TaskUpdateOne) ClearLocalUserIDMin() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserIDMin()
+	return tuo
+}
+
+// SetLocalUserUmask sets the "local_user_umask" field.
+func (tuo *TaskUpdateOne) SetLocalUserUmask(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserUmask(s)
+	return tuo
+}
+
+// SetNillableLocalUserUmask sets the "local_user_umask" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserUmask(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserUmask(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserUmask clears the value of the "local_user_umask" field.
+func (tuo *TaskUpdateOne) ClearLocalUserUmask() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserUmask()
 	return tuo
 }
 
@@ -2176,6 +3370,168 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalUserPasswordNeverExpiresCleared() {
 		_spec.ClearField(task.FieldLocalUserPasswordNeverExpires, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserAppend(); ok {
+		_spec.SetField(task.FieldLocalUserAppend, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserAppendCleared() {
+		_spec.ClearField(task.FieldLocalUserAppend, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserCreateHome(); ok {
+		_spec.SetField(task.FieldLocalUserCreateHome, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserCreateHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserCreateHome, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserExpires(); ok {
+		_spec.SetField(task.FieldLocalUserExpires, field.TypeFloat64, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserExpires(); ok {
+		_spec.AddField(task.FieldLocalUserExpires, field.TypeFloat64, value)
+	}
+	if tuo.mutation.LocalUserExpiresCleared() {
+		_spec.ClearField(task.FieldLocalUserExpires, field.TypeFloat64)
+	}
+	if value, ok := tuo.mutation.LocalUserForce(); ok {
+		_spec.SetField(task.FieldLocalUserForce, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserForceCleared() {
+		_spec.ClearField(task.FieldLocalUserForce, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserGenerateSSHKey(); ok {
+		_spec.SetField(task.FieldLocalUserGenerateSSHKey, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserGenerateSSHKeyCleared() {
+		_spec.ClearField(task.FieldLocalUserGenerateSSHKey, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserGroup(); ok {
+		_spec.SetField(task.FieldLocalUserGroup, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserGroupCleared() {
+		_spec.ClearField(task.FieldLocalUserGroup, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserGroups(); ok {
+		_spec.SetField(task.FieldLocalUserGroups, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserGroupsCleared() {
+		_spec.ClearField(task.FieldLocalUserGroups, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserHome(); ok {
+		_spec.SetField(task.FieldLocalUserHome, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserHome, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserMoveHome(); ok {
+		_spec.SetField(task.FieldLocalUserMoveHome, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserMoveHomeCleared() {
+		_spec.ClearField(task.FieldLocalUserMoveHome, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserNonunique(); ok {
+		_spec.SetField(task.FieldLocalUserNonunique, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserNonuniqueCleared() {
+		_spec.ClearField(task.FieldLocalUserNonunique, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordExpireAccountDisable(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserPasswordExpireAccountDisable(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserPasswordExpireAccountDisableCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireAccountDisable, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordExpireMax(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireMax, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserPasswordExpireMax(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireMax, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserPasswordExpireMaxCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireMax, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordExpireMin(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireMin, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserPasswordExpireMin(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireMin, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserPasswordExpireMinCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireMin, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordExpireWarn(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserPasswordExpireWarn(); ok {
+		_spec.AddField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserPasswordExpireWarnCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordExpireWarn, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserPasswordLock(); ok {
+		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserPasswordLockCleared() {
+		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSeuser(); ok {
+		_spec.SetField(task.FieldLocalUserSeuser, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSeuserCleared() {
+		_spec.ClearField(task.FieldLocalUserSeuser, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserShell(); ok {
+		_spec.SetField(task.FieldLocalUserShell, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserShellCleared() {
+		_spec.ClearField(task.FieldLocalUserShell, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSkeleton(); ok {
+		_spec.SetField(task.FieldLocalUserSkeleton, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSkeletonCleared() {
+		_spec.ClearField(task.FieldLocalUserSkeleton, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSystem(); ok {
+		_spec.SetField(task.FieldLocalUserSystem, field.TypeBool, value)
+	}
+	if tuo.mutation.LocalUserSystemCleared() {
+		_spec.ClearField(task.FieldLocalUserSystem, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.LocalUserID(); ok {
+		_spec.SetField(task.FieldLocalUserID, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserID(); ok {
+		_spec.AddField(task.FieldLocalUserID, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserIDCleared() {
+		_spec.ClearField(task.FieldLocalUserID, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserIDMax(); ok {
+		_spec.SetField(task.FieldLocalUserIDMax, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserIDMax(); ok {
+		_spec.AddField(task.FieldLocalUserIDMax, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserIDMaxCleared() {
+		_spec.ClearField(task.FieldLocalUserIDMax, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserIDMin(); ok {
+		_spec.SetField(task.FieldLocalUserIDMin, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedLocalUserIDMin(); ok {
+		_spec.AddField(task.FieldLocalUserIDMin, field.TypeInt, value)
+	}
+	if tuo.mutation.LocalUserIDMinCleared() {
+		_spec.ClearField(task.FieldLocalUserIDMin, field.TypeInt)
+	}
+	if value, ok := tuo.mutation.LocalUserUmask(); ok {
+		_spec.SetField(task.FieldLocalUserUmask, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserUmaskCleared() {
+		_spec.ClearField(task.FieldLocalUserUmask, field.TypeString)
 	}
 	if value, ok := tuo.mutation.LocalGroupID(); ok {
 		_spec.SetField(task.FieldLocalGroupID, field.TypeString, value)
