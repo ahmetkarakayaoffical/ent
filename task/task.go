@@ -351,6 +351,7 @@ const (
 	TypeAddLocalUser                  Type = "add_local_user"
 	TypeRemoveLocalUser               Type = "remove_local_user"
 	TypeAddLinuxLocalUser             Type = "add_linux_local_user"
+	TypeModifyLinuxLocalUser          Type = "modify_linux_local_user"
 	TypeRemoveLinuxLocalUser          Type = "remove_linux_local_user"
 	TypeAddMacosLocalUser             Type = "add_macos_local_user"
 	TypeRemoveMacosLocalUser          Type = "remove_macos_local_user"
@@ -372,7 +373,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLinuxLocalUser, TypeRemoveLinuxLocalUser, TypeAddMacosLocalUser, TypeRemoveMacosLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLinuxLocalUser, TypeModifyLinuxLocalUser, TypeRemoveLinuxLocalUser, TypeAddMacosLocalUser, TypeRemoveMacosLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
