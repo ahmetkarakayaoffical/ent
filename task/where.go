@@ -245,6 +245,31 @@ func LocalUserIDMin(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserIDMin, v))
 }
 
+// LocalUserSSHKeyBits applies equality check predicate on the "local_user_ssh_key_bits" field. It's identical to LocalUserSSHKeyBitsEQ.
+func LocalUserSSHKeyBits(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyComment applies equality check predicate on the "local_user_ssh_key_comment" field. It's identical to LocalUserSSHKeyCommentEQ.
+func LocalUserSSHKeyComment(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyFile applies equality check predicate on the "local_user_ssh_key_file" field. It's identical to LocalUserSSHKeyFileEQ.
+func LocalUserSSHKeyFile(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyPassphrase applies equality check predicate on the "local_user_ssh_key_passphrase" field. It's identical to LocalUserSSHKeyPassphraseEQ.
+func LocalUserSSHKeyPassphrase(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyType applies equality check predicate on the "local_user_ssh_key_type" field. It's identical to LocalUserSSHKeyTypeEQ.
+func LocalUserSSHKeyType(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyType, v))
+}
+
 // LocalUserUmask applies equality check predicate on the "local_user_umask" field. It's identical to LocalUserUmaskEQ.
 func LocalUserUmask(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserUmask, v))
@@ -2498,6 +2523,381 @@ func LocalUserIDMinEqualFold(v string) predicate.Task {
 // LocalUserIDMinContainsFold applies the ContainsFold predicate on the "local_user_id_min" field.
 func LocalUserIDMinContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldLocalUserIDMin, v))
+}
+
+// LocalUserSSHKeyBitsEQ applies the EQ predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsNEQ applies the NEQ predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsIn applies the In predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalUserSSHKeyBits, vs...))
+}
+
+// LocalUserSSHKeyBitsNotIn applies the NotIn predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalUserSSHKeyBits, vs...))
+}
+
+// LocalUserSSHKeyBitsGT applies the GT predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsGTE applies the GTE predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsLT applies the LT predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsLTE applies the LTE predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsContains applies the Contains predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsHasPrefix applies the HasPrefix predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsHasSuffix applies the HasSuffix predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsIsNil applies the IsNil predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalUserSSHKeyBits))
+}
+
+// LocalUserSSHKeyBitsNotNil applies the NotNil predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalUserSSHKeyBits))
+}
+
+// LocalUserSSHKeyBitsEqualFold applies the EqualFold predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyBitsContainsFold applies the ContainsFold predicate on the "local_user_ssh_key_bits" field.
+func LocalUserSSHKeyBitsContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserSSHKeyBits, v))
+}
+
+// LocalUserSSHKeyCommentEQ applies the EQ predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentNEQ applies the NEQ predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentIn applies the In predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalUserSSHKeyComment, vs...))
+}
+
+// LocalUserSSHKeyCommentNotIn applies the NotIn predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalUserSSHKeyComment, vs...))
+}
+
+// LocalUserSSHKeyCommentGT applies the GT predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentGTE applies the GTE predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentLT applies the LT predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentLTE applies the LTE predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentContains applies the Contains predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentHasPrefix applies the HasPrefix predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentHasSuffix applies the HasSuffix predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentIsNil applies the IsNil predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalUserSSHKeyComment))
+}
+
+// LocalUserSSHKeyCommentNotNil applies the NotNil predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalUserSSHKeyComment))
+}
+
+// LocalUserSSHKeyCommentEqualFold applies the EqualFold predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyCommentContainsFold applies the ContainsFold predicate on the "local_user_ssh_key_comment" field.
+func LocalUserSSHKeyCommentContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserSSHKeyComment, v))
+}
+
+// LocalUserSSHKeyFileEQ applies the EQ predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileNEQ applies the NEQ predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileIn applies the In predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalUserSSHKeyFile, vs...))
+}
+
+// LocalUserSSHKeyFileNotIn applies the NotIn predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalUserSSHKeyFile, vs...))
+}
+
+// LocalUserSSHKeyFileGT applies the GT predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileGTE applies the GTE predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileLT applies the LT predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileLTE applies the LTE predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileContains applies the Contains predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileHasPrefix applies the HasPrefix predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileHasSuffix applies the HasSuffix predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileIsNil applies the IsNil predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalUserSSHKeyFile))
+}
+
+// LocalUserSSHKeyFileNotNil applies the NotNil predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalUserSSHKeyFile))
+}
+
+// LocalUserSSHKeyFileEqualFold applies the EqualFold predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyFileContainsFold applies the ContainsFold predicate on the "local_user_ssh_key_file" field.
+func LocalUserSSHKeyFileContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserSSHKeyFile, v))
+}
+
+// LocalUserSSHKeyPassphraseEQ applies the EQ predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseNEQ applies the NEQ predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseIn applies the In predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalUserSSHKeyPassphrase, vs...))
+}
+
+// LocalUserSSHKeyPassphraseNotIn applies the NotIn predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalUserSSHKeyPassphrase, vs...))
+}
+
+// LocalUserSSHKeyPassphraseGT applies the GT predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseGTE applies the GTE predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseLT applies the LT predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseLTE applies the LTE predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseContains applies the Contains predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseHasPrefix applies the HasPrefix predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseHasSuffix applies the HasSuffix predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseIsNil applies the IsNil predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalUserSSHKeyPassphrase))
+}
+
+// LocalUserSSHKeyPassphraseNotNil applies the NotNil predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalUserSSHKeyPassphrase))
+}
+
+// LocalUserSSHKeyPassphraseEqualFold applies the EqualFold predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyPassphraseContainsFold applies the ContainsFold predicate on the "local_user_ssh_key_passphrase" field.
+func LocalUserSSHKeyPassphraseContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserSSHKeyPassphrase, v))
+}
+
+// LocalUserSSHKeyTypeEQ applies the EQ predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeNEQ applies the NEQ predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeIn applies the In predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldLocalUserSSHKeyType, vs...))
+}
+
+// LocalUserSSHKeyTypeNotIn applies the NotIn predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldLocalUserSSHKeyType, vs...))
+}
+
+// LocalUserSSHKeyTypeGT applies the GT predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeGTE applies the GTE predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeLT applies the LT predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeLTE applies the LTE predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeContains applies the Contains predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeHasPrefix applies the HasPrefix predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeHasSuffix applies the HasSuffix predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeIsNil applies the IsNil predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldLocalUserSSHKeyType))
+}
+
+// LocalUserSSHKeyTypeNotNil applies the NotNil predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldLocalUserSSHKeyType))
+}
+
+// LocalUserSSHKeyTypeEqualFold applies the EqualFold predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserSSHKeyType, v))
+}
+
+// LocalUserSSHKeyTypeContainsFold applies the ContainsFold predicate on the "local_user_ssh_key_type" field.
+func LocalUserSSHKeyTypeContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserSSHKeyType, v))
 }
 
 // LocalUserUmaskEQ applies the EQ predicate on the "local_user_umask" field.

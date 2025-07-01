@@ -568,6 +568,76 @@ func (tc *TaskCreate) SetNillableLocalUserIDMin(s *string) *TaskCreate {
 	return tc
 }
 
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (tc *TaskCreate) SetLocalUserSSHKeyBits(s string) *TaskCreate {
+	tc.mutation.SetLocalUserSSHKeyBits(s)
+	return tc
+}
+
+// SetNillableLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserSSHKeyBits(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserSSHKeyBits(*s)
+	}
+	return tc
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (tc *TaskCreate) SetLocalUserSSHKeyComment(s string) *TaskCreate {
+	tc.mutation.SetLocalUserSSHKeyComment(s)
+	return tc
+}
+
+// SetNillableLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserSSHKeyComment(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserSSHKeyComment(*s)
+	}
+	return tc
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (tc *TaskCreate) SetLocalUserSSHKeyFile(s string) *TaskCreate {
+	tc.mutation.SetLocalUserSSHKeyFile(s)
+	return tc
+}
+
+// SetNillableLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserSSHKeyFile(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserSSHKeyFile(*s)
+	}
+	return tc
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (tc *TaskCreate) SetLocalUserSSHKeyPassphrase(s string) *TaskCreate {
+	tc.mutation.SetLocalUserSSHKeyPassphrase(s)
+	return tc
+}
+
+// SetNillableLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserSSHKeyPassphrase(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserSSHKeyPassphrase(*s)
+	}
+	return tc
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (tc *TaskCreate) SetLocalUserSSHKeyType(s string) *TaskCreate {
+	tc.mutation.SetLocalUserSSHKeyType(s)
+	return tc
+}
+
+// SetNillableLocalUserSSHKeyType sets the "local_user_ssh_key_type" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableLocalUserSSHKeyType(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetLocalUserSSHKeyType(*s)
+	}
+	return tc
+}
+
 // SetLocalUserUmask sets the "local_user_umask" field.
 func (tc *TaskCreate) SetLocalUserUmask(s string) *TaskCreate {
 	tc.mutation.SetLocalUserUmask(s)
@@ -995,6 +1065,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultLocalUserSystem
 		tc.mutation.SetLocalUserSystem(v)
 	}
+	if _, ok := tc.mutation.LocalUserSSHKeyType(); !ok {
+		v := task.DefaultLocalUserSSHKeyType
+		tc.mutation.SetLocalUserSSHKeyType(v)
+	}
 	if _, ok := tc.mutation.LocalGroupID(); !ok {
 		v := task.DefaultLocalGroupID
 		tc.mutation.SetLocalGroupID(v)
@@ -1281,6 +1355,26 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.LocalUserIDMin(); ok {
 		_spec.SetField(task.FieldLocalUserIDMin, field.TypeString, value)
 		_node.LocalUserIDMin = value
+	}
+	if value, ok := tc.mutation.LocalUserSSHKeyBits(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyBits, field.TypeString, value)
+		_node.LocalUserSSHKeyBits = value
+	}
+	if value, ok := tc.mutation.LocalUserSSHKeyComment(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyComment, field.TypeString, value)
+		_node.LocalUserSSHKeyComment = value
+	}
+	if value, ok := tc.mutation.LocalUserSSHKeyFile(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyFile, field.TypeString, value)
+		_node.LocalUserSSHKeyFile = value
+	}
+	if value, ok := tc.mutation.LocalUserSSHKeyPassphrase(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyPassphrase, field.TypeString, value)
+		_node.LocalUserSSHKeyPassphrase = value
+	}
+	if value, ok := tc.mutation.LocalUserSSHKeyType(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyType, field.TypeString, value)
+		_node.LocalUserSSHKeyType = value
 	}
 	if value, ok := tc.mutation.LocalUserUmask(); ok {
 		_spec.SetField(task.FieldLocalUserUmask, field.TypeString, value)
@@ -2148,6 +2242,96 @@ func (u *TaskUpsert) UpdateLocalUserIDMin() *TaskUpsert {
 // ClearLocalUserIDMin clears the value of the "local_user_id_min" field.
 func (u *TaskUpsert) ClearLocalUserIDMin() *TaskUpsert {
 	u.SetNull(task.FieldLocalUserIDMin)
+	return u
+}
+
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (u *TaskUpsert) SetLocalUserSSHKeyBits(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserSSHKeyBits, v)
+	return u
+}
+
+// UpdateLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserSSHKeyBits() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserSSHKeyBits)
+	return u
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (u *TaskUpsert) ClearLocalUserSSHKeyBits() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserSSHKeyBits)
+	return u
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (u *TaskUpsert) SetLocalUserSSHKeyComment(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserSSHKeyComment, v)
+	return u
+}
+
+// UpdateLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserSSHKeyComment() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserSSHKeyComment)
+	return u
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (u *TaskUpsert) ClearLocalUserSSHKeyComment() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserSSHKeyComment)
+	return u
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (u *TaskUpsert) SetLocalUserSSHKeyFile(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserSSHKeyFile, v)
+	return u
+}
+
+// UpdateLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserSSHKeyFile() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserSSHKeyFile)
+	return u
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (u *TaskUpsert) ClearLocalUserSSHKeyFile() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserSSHKeyFile)
+	return u
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsert) SetLocalUserSSHKeyPassphrase(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserSSHKeyPassphrase, v)
+	return u
+}
+
+// UpdateLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserSSHKeyPassphrase() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserSSHKeyPassphrase)
+	return u
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsert) ClearLocalUserSSHKeyPassphrase() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserSSHKeyPassphrase)
+	return u
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (u *TaskUpsert) SetLocalUserSSHKeyType(v string) *TaskUpsert {
+	u.Set(task.FieldLocalUserSSHKeyType, v)
+	return u
+}
+
+// UpdateLocalUserSSHKeyType sets the "local_user_ssh_key_type" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateLocalUserSSHKeyType() *TaskUpsert {
+	u.SetExcluded(task.FieldLocalUserSSHKeyType)
+	return u
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (u *TaskUpsert) ClearLocalUserSSHKeyType() *TaskUpsert {
+	u.SetNull(task.FieldLocalUserSSHKeyType)
 	return u
 }
 
@@ -3356,6 +3540,111 @@ func (u *TaskUpsertOne) UpdateLocalUserIDMin() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearLocalUserIDMin() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalUserIDMin()
+	})
+}
+
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (u *TaskUpsertOne) SetLocalUserSSHKeyBits(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyBits(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserSSHKeyBits() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyBits()
+	})
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (u *TaskUpsertOne) ClearLocalUserSSHKeyBits() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyBits()
+	})
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (u *TaskUpsertOne) SetLocalUserSSHKeyComment(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyComment(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserSSHKeyComment() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyComment()
+	})
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (u *TaskUpsertOne) ClearLocalUserSSHKeyComment() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyComment()
+	})
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (u *TaskUpsertOne) SetLocalUserSSHKeyFile(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyFile(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserSSHKeyFile() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyFile()
+	})
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (u *TaskUpsertOne) ClearLocalUserSSHKeyFile() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyFile()
+	})
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsertOne) SetLocalUserSSHKeyPassphrase(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyPassphrase(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserSSHKeyPassphrase() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyPassphrase()
+	})
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsertOne) ClearLocalUserSSHKeyPassphrase() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyPassphrase()
+	})
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (u *TaskUpsertOne) SetLocalUserSSHKeyType(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyType(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyType sets the "local_user_ssh_key_type" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateLocalUserSSHKeyType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyType()
+	})
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (u *TaskUpsertOne) ClearLocalUserSSHKeyType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyType()
 	})
 }
 
@@ -4785,6 +5074,111 @@ func (u *TaskUpsertBulk) UpdateLocalUserIDMin() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearLocalUserIDMin() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearLocalUserIDMin()
+	})
+}
+
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (u *TaskUpsertBulk) SetLocalUserSSHKeyBits(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyBits(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserSSHKeyBits() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyBits()
+	})
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (u *TaskUpsertBulk) ClearLocalUserSSHKeyBits() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyBits()
+	})
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (u *TaskUpsertBulk) SetLocalUserSSHKeyComment(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyComment(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserSSHKeyComment() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyComment()
+	})
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (u *TaskUpsertBulk) ClearLocalUserSSHKeyComment() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyComment()
+	})
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (u *TaskUpsertBulk) SetLocalUserSSHKeyFile(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyFile(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserSSHKeyFile() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyFile()
+	})
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (u *TaskUpsertBulk) ClearLocalUserSSHKeyFile() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyFile()
+	})
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsertBulk) SetLocalUserSSHKeyPassphrase(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyPassphrase(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserSSHKeyPassphrase() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyPassphrase()
+	})
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (u *TaskUpsertBulk) ClearLocalUserSSHKeyPassphrase() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyPassphrase()
+	})
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (u *TaskUpsertBulk) SetLocalUserSSHKeyType(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetLocalUserSSHKeyType(v)
+	})
+}
+
+// UpdateLocalUserSSHKeyType sets the "local_user_ssh_key_type" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateLocalUserSSHKeyType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateLocalUserSSHKeyType()
+	})
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (u *TaskUpsertBulk) ClearLocalUserSSHKeyType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearLocalUserSSHKeyType()
 	})
 }
 

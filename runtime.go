@@ -391,60 +391,64 @@ func init() {
 	taskDescLocalUserSystem := taskFields[36].Descriptor()
 	// task.DefaultLocalUserSystem holds the default value on creation for the local_user_system field.
 	task.DefaultLocalUserSystem = taskDescLocalUserSystem.Default.(bool)
+	// taskDescLocalUserSSHKeyType is the schema descriptor for local_user_ssh_key_type field.
+	taskDescLocalUserSSHKeyType := taskFields[44].Descriptor()
+	// task.DefaultLocalUserSSHKeyType holds the default value on creation for the local_user_ssh_key_type field.
+	task.DefaultLocalUserSSHKeyType = taskDescLocalUserSSHKeyType.Default.(string)
 	// taskDescLocalGroupID is the schema descriptor for local_group_id field.
-	taskDescLocalGroupID := taskFields[41].Descriptor()
+	taskDescLocalGroupID := taskFields[46].Descriptor()
 	// task.DefaultLocalGroupID holds the default value on creation for the local_group_id field.
 	task.DefaultLocalGroupID = taskDescLocalGroupID.Default.(string)
 	// taskDescLocalGroupName is the schema descriptor for local_group_name field.
-	taskDescLocalGroupName := taskFields[42].Descriptor()
+	taskDescLocalGroupName := taskFields[47].Descriptor()
 	// task.DefaultLocalGroupName holds the default value on creation for the local_group_name field.
 	task.DefaultLocalGroupName = taskDescLocalGroupName.Default.(string)
 	// taskDescLocalGroupDescription is the schema descriptor for local_group_description field.
-	taskDescLocalGroupDescription := taskFields[43].Descriptor()
+	taskDescLocalGroupDescription := taskFields[48].Descriptor()
 	// task.DefaultLocalGroupDescription holds the default value on creation for the local_group_description field.
 	task.DefaultLocalGroupDescription = taskDescLocalGroupDescription.Default.(string)
 	// taskDescLocalGroupSystem is the schema descriptor for local_group_system field.
-	taskDescLocalGroupSystem := taskFields[44].Descriptor()
+	taskDescLocalGroupSystem := taskFields[49].Descriptor()
 	// task.DefaultLocalGroupSystem holds the default value on creation for the local_group_system field.
 	task.DefaultLocalGroupSystem = taskDescLocalGroupSystem.Default.(bool)
 	// taskDescLocalGroupForce is the schema descriptor for local_group_force field.
-	taskDescLocalGroupForce := taskFields[45].Descriptor()
+	taskDescLocalGroupForce := taskFields[50].Descriptor()
 	// task.DefaultLocalGroupForce holds the default value on creation for the local_group_force field.
 	task.DefaultLocalGroupForce = taskDescLocalGroupForce.Default.(bool)
 	// taskDescLocalGroupMembers is the schema descriptor for local_group_members field.
-	taskDescLocalGroupMembers := taskFields[46].Descriptor()
+	taskDescLocalGroupMembers := taskFields[51].Descriptor()
 	// task.DefaultLocalGroupMembers holds the default value on creation for the local_group_members field.
 	task.DefaultLocalGroupMembers = taskDescLocalGroupMembers.Default.(string)
 	// taskDescLocalGroupMembersToInclude is the schema descriptor for local_group_members_to_include field.
-	taskDescLocalGroupMembersToInclude := taskFields[47].Descriptor()
+	taskDescLocalGroupMembersToInclude := taskFields[52].Descriptor()
 	// task.DefaultLocalGroupMembersToInclude holds the default value on creation for the local_group_members_to_include field.
 	task.DefaultLocalGroupMembersToInclude = taskDescLocalGroupMembersToInclude.Default.(string)
 	// taskDescLocalGroupMembersToExclude is the schema descriptor for local_group_members_to_exclude field.
-	taskDescLocalGroupMembersToExclude := taskFields[48].Descriptor()
+	taskDescLocalGroupMembersToExclude := taskFields[53].Descriptor()
 	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
 	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
 	// taskDescMsiProductid is the schema descriptor for msi_productid field.
-	taskDescMsiProductid := taskFields[49].Descriptor()
+	taskDescMsiProductid := taskFields[54].Descriptor()
 	// task.DefaultMsiProductid holds the default value on creation for the msi_productid field.
 	task.DefaultMsiProductid = taskDescMsiProductid.Default.(string)
 	// taskDescMsiPath is the schema descriptor for msi_path field.
-	taskDescMsiPath := taskFields[50].Descriptor()
+	taskDescMsiPath := taskFields[55].Descriptor()
 	// task.DefaultMsiPath holds the default value on creation for the msi_path field.
 	task.DefaultMsiPath = taskDescMsiPath.Default.(string)
 	// taskDescMsiArguments is the schema descriptor for msi_arguments field.
-	taskDescMsiArguments := taskFields[51].Descriptor()
+	taskDescMsiArguments := taskFields[56].Descriptor()
 	// task.DefaultMsiArguments holds the default value on creation for the msi_arguments field.
 	task.DefaultMsiArguments = taskDescMsiArguments.Default.(string)
 	// taskDescMsiFileHash is the schema descriptor for msi_file_hash field.
-	taskDescMsiFileHash := taskFields[52].Descriptor()
+	taskDescMsiFileHash := taskFields[57].Descriptor()
 	// task.DefaultMsiFileHash holds the default value on creation for the msi_file_hash field.
 	task.DefaultMsiFileHash = taskDescMsiFileHash.Default.(string)
 	// taskDescMsiLogPath is the schema descriptor for msi_log_path field.
-	taskDescMsiLogPath := taskFields[54].Descriptor()
+	taskDescMsiLogPath := taskFields[59].Descriptor()
 	// task.DefaultMsiLogPath holds the default value on creation for the msi_log_path field.
 	task.DefaultMsiLogPath = taskDescMsiLogPath.Default.(string)
 	// taskDescScript is the schema descriptor for script field.
-	taskDescScript := taskFields[55].Descriptor()
+	taskDescScript := taskFields[60].Descriptor()
 	// task.DefaultScript holds the default value on creation for the script field.
 	task.DefaultScript = taskDescScript.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()

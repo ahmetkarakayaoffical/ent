@@ -94,6 +94,16 @@ const (
 	FieldLocalUserIDMax = "local_user_id_max"
 	// FieldLocalUserIDMin holds the string denoting the local_user_id_min field in the database.
 	FieldLocalUserIDMin = "local_user_id_min"
+	// FieldLocalUserSSHKeyBits holds the string denoting the local_user_ssh_key_bits field in the database.
+	FieldLocalUserSSHKeyBits = "local_user_ssh_key_bits"
+	// FieldLocalUserSSHKeyComment holds the string denoting the local_user_ssh_key_comment field in the database.
+	FieldLocalUserSSHKeyComment = "local_user_ssh_key_comment"
+	// FieldLocalUserSSHKeyFile holds the string denoting the local_user_ssh_key_file field in the database.
+	FieldLocalUserSSHKeyFile = "local_user_ssh_key_file"
+	// FieldLocalUserSSHKeyPassphrase holds the string denoting the local_user_ssh_key_passphrase field in the database.
+	FieldLocalUserSSHKeyPassphrase = "local_user_ssh_key_passphrase"
+	// FieldLocalUserSSHKeyType holds the string denoting the local_user_ssh_key_type field in the database.
+	FieldLocalUserSSHKeyType = "local_user_ssh_key_type"
 	// FieldLocalUserUmask holds the string denoting the local_user_umask field in the database.
 	FieldLocalUserUmask = "local_user_umask"
 	// FieldLocalGroupID holds the string denoting the local_group_id field in the database.
@@ -197,6 +207,11 @@ var Columns = []string{
 	FieldLocalUserID,
 	FieldLocalUserIDMax,
 	FieldLocalUserIDMin,
+	FieldLocalUserSSHKeyBits,
+	FieldLocalUserSSHKeyComment,
+	FieldLocalUserSSHKeyFile,
+	FieldLocalUserSSHKeyPassphrase,
+	FieldLocalUserSSHKeyType,
 	FieldLocalUserUmask,
 	FieldLocalGroupID,
 	FieldLocalGroupName,
@@ -288,6 +303,8 @@ var (
 	DefaultLocalUserPasswordLock string
 	// DefaultLocalUserSystem holds the default value on creation for the "local_user_system" field.
 	DefaultLocalUserSystem bool
+	// DefaultLocalUserSSHKeyType holds the default value on creation for the "local_user_ssh_key_type" field.
+	DefaultLocalUserSSHKeyType string
 	// DefaultLocalGroupID holds the default value on creation for the "local_group_id" field.
 	DefaultLocalGroupID string
 	// DefaultLocalGroupName holds the default value on creation for the "local_group_name" field.
@@ -672,6 +689,31 @@ func ByLocalUserIDMax(opts ...sql.OrderTermOption) OrderOption {
 // ByLocalUserIDMin orders the results by the local_user_id_min field.
 func ByLocalUserIDMin(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLocalUserIDMin, opts...).ToFunc()
+}
+
+// ByLocalUserSSHKeyBits orders the results by the local_user_ssh_key_bits field.
+func ByLocalUserSSHKeyBits(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSSHKeyBits, opts...).ToFunc()
+}
+
+// ByLocalUserSSHKeyComment orders the results by the local_user_ssh_key_comment field.
+func ByLocalUserSSHKeyComment(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSSHKeyComment, opts...).ToFunc()
+}
+
+// ByLocalUserSSHKeyFile orders the results by the local_user_ssh_key_file field.
+func ByLocalUserSSHKeyFile(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSSHKeyFile, opts...).ToFunc()
+}
+
+// ByLocalUserSSHKeyPassphrase orders the results by the local_user_ssh_key_passphrase field.
+func ByLocalUserSSHKeyPassphrase(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSSHKeyPassphrase, opts...).ToFunc()
+}
+
+// ByLocalUserSSHKeyType orders the results by the local_user_ssh_key_type field.
+func ByLocalUserSSHKeyType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocalUserSSHKeyType, opts...).ToFunc()
 }
 
 // ByLocalUserUmask orders the results by the local_user_umask field.

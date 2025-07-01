@@ -736,6 +736,11 @@ var (
 		{Name: "local_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_id_max", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_id_min", Type: field.TypeString, Nullable: true},
+		{Name: "local_user_ssh_key_bits", Type: field.TypeString, Nullable: true},
+		{Name: "local_user_ssh_key_comment", Type: field.TypeString, Nullable: true},
+		{Name: "local_user_ssh_key_file", Type: field.TypeString, Nullable: true},
+		{Name: "local_user_ssh_key_passphrase", Type: field.TypeString, Nullable: true},
+		{Name: "local_user_ssh_key_type", Type: field.TypeString, Nullable: true, Default: "rsa"},
 		{Name: "local_user_umask", Type: field.TypeString, Nullable: true},
 		{Name: "local_group_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "local_group_name", Type: field.TypeString, Nullable: true, Default: ""},
@@ -765,7 +770,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[60]},
+				Columns:    []*schema.Column{TasksColumns[65]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

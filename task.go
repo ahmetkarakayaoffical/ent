@@ -98,6 +98,16 @@ type Task struct {
 	LocalUserIDMax string `json:"local_user_id_max,omitempty"`
 	// LocalUserIDMin holds the value of the "local_user_id_min" field.
 	LocalUserIDMin string `json:"local_user_id_min,omitempty"`
+	// LocalUserSSHKeyBits holds the value of the "local_user_ssh_key_bits" field.
+	LocalUserSSHKeyBits string `json:"local_user_ssh_key_bits,omitempty"`
+	// LocalUserSSHKeyComment holds the value of the "local_user_ssh_key_comment" field.
+	LocalUserSSHKeyComment string `json:"local_user_ssh_key_comment,omitempty"`
+	// LocalUserSSHKeyFile holds the value of the "local_user_ssh_key_file" field.
+	LocalUserSSHKeyFile string `json:"local_user_ssh_key_file,omitempty"`
+	// LocalUserSSHKeyPassphrase holds the value of the "local_user_ssh_key_passphrase" field.
+	LocalUserSSHKeyPassphrase string `json:"local_user_ssh_key_passphrase,omitempty"`
+	// LocalUserSSHKeyType holds the value of the "local_user_ssh_key_type" field.
+	LocalUserSSHKeyType string `json:"local_user_ssh_key_type,omitempty"`
 	// LocalUserUmask holds the value of the "local_user_umask" field.
 	LocalUserUmask string `json:"local_user_umask,omitempty"`
 	// LocalGroupID holds the value of the "local_group_id" field.
@@ -183,7 +193,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserPasswordLock, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserPasswordLock, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -449,6 +459,36 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field local_user_id_min", values[i])
 			} else if value.Valid {
 				t.LocalUserIDMin = value.String
+			}
+		case task.FieldLocalUserSSHKeyBits:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_ssh_key_bits", values[i])
+			} else if value.Valid {
+				t.LocalUserSSHKeyBits = value.String
+			}
+		case task.FieldLocalUserSSHKeyComment:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_ssh_key_comment", values[i])
+			} else if value.Valid {
+				t.LocalUserSSHKeyComment = value.String
+			}
+		case task.FieldLocalUserSSHKeyFile:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_ssh_key_file", values[i])
+			} else if value.Valid {
+				t.LocalUserSSHKeyFile = value.String
+			}
+		case task.FieldLocalUserSSHKeyPassphrase:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_ssh_key_passphrase", values[i])
+			} else if value.Valid {
+				t.LocalUserSSHKeyPassphrase = value.String
+			}
+		case task.FieldLocalUserSSHKeyType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field local_user_ssh_key_type", values[i])
+			} else if value.Valid {
+				t.LocalUserSSHKeyType = value.String
 			}
 		case task.FieldLocalUserUmask:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -736,6 +776,21 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("local_user_id_min=")
 	builder.WriteString(t.LocalUserIDMin)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_ssh_key_bits=")
+	builder.WriteString(t.LocalUserSSHKeyBits)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_ssh_key_comment=")
+	builder.WriteString(t.LocalUserSSHKeyComment)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_ssh_key_file=")
+	builder.WriteString(t.LocalUserSSHKeyFile)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_ssh_key_passphrase=")
+	builder.WriteString(t.LocalUserSSHKeyPassphrase)
+	builder.WriteString(", ")
+	builder.WriteString("local_user_ssh_key_type=")
+	builder.WriteString(t.LocalUserSSHKeyType)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_umask=")
 	builder.WriteString(t.LocalUserUmask)

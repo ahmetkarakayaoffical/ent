@@ -819,6 +819,106 @@ func (tu *TaskUpdate) ClearLocalUserIDMin() *TaskUpdate {
 	return tu
 }
 
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (tu *TaskUpdate) SetLocalUserSSHKeyBits(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSSHKeyBits(s)
+	return tu
+}
+
+// SetNillableLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSSHKeyBits(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSSHKeyBits(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (tu *TaskUpdate) ClearLocalUserSSHKeyBits() *TaskUpdate {
+	tu.mutation.ClearLocalUserSSHKeyBits()
+	return tu
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (tu *TaskUpdate) SetLocalUserSSHKeyComment(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSSHKeyComment(s)
+	return tu
+}
+
+// SetNillableLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSSHKeyComment(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSSHKeyComment(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (tu *TaskUpdate) ClearLocalUserSSHKeyComment() *TaskUpdate {
+	tu.mutation.ClearLocalUserSSHKeyComment()
+	return tu
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (tu *TaskUpdate) SetLocalUserSSHKeyFile(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSSHKeyFile(s)
+	return tu
+}
+
+// SetNillableLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSSHKeyFile(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSSHKeyFile(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (tu *TaskUpdate) ClearLocalUserSSHKeyFile() *TaskUpdate {
+	tu.mutation.ClearLocalUserSSHKeyFile()
+	return tu
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (tu *TaskUpdate) SetLocalUserSSHKeyPassphrase(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSSHKeyPassphrase(s)
+	return tu
+}
+
+// SetNillableLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSSHKeyPassphrase(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSSHKeyPassphrase(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (tu *TaskUpdate) ClearLocalUserSSHKeyPassphrase() *TaskUpdate {
+	tu.mutation.ClearLocalUserSSHKeyPassphrase()
+	return tu
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (tu *TaskUpdate) SetLocalUserSSHKeyType(s string) *TaskUpdate {
+	tu.mutation.SetLocalUserSSHKeyType(s)
+	return tu
+}
+
+// SetNillableLocalUserSSHKeyType sets the "local_user_ssh_key_type" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableLocalUserSSHKeyType(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetLocalUserSSHKeyType(*s)
+	}
+	return tu
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (tu *TaskUpdate) ClearLocalUserSSHKeyType() *TaskUpdate {
+	tu.mutation.ClearLocalUserSSHKeyType()
+	return tu
+}
+
 // SetLocalUserUmask sets the "local_user_umask" field.
 func (tu *TaskUpdate) SetLocalUserUmask(s string) *TaskUpdate {
 	tu.mutation.SetLocalUserUmask(s)
@@ -1578,6 +1678,36 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.LocalUserIDMinCleared() {
 		_spec.ClearField(task.FieldLocalUserIDMin, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSSHKeyBits(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyBits, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSSHKeyBitsCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyBits, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSSHKeyComment(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyComment, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSSHKeyCommentCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyComment, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSSHKeyFile(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyFile, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSSHKeyFileCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyFile, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSSHKeyPassphrase(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyPassphrase, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSSHKeyPassphraseCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyPassphrase, field.TypeString)
+	}
+	if value, ok := tu.mutation.LocalUserSSHKeyType(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyType, field.TypeString, value)
+	}
+	if tu.mutation.LocalUserSSHKeyTypeCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyType, field.TypeString)
 	}
 	if value, ok := tu.mutation.LocalUserUmask(); ok {
 		_spec.SetField(task.FieldLocalUserUmask, field.TypeString, value)
@@ -2577,6 +2707,106 @@ func (tuo *TaskUpdateOne) ClearLocalUserIDMin() *TaskUpdateOne {
 	return tuo
 }
 
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (tuo *TaskUpdateOne) SetLocalUserSSHKeyBits(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSSHKeyBits(s)
+	return tuo
+}
+
+// SetNillableLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSSHKeyBits(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSSHKeyBits(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSSHKeyBits() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSSHKeyBits()
+	return tuo
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (tuo *TaskUpdateOne) SetLocalUserSSHKeyComment(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSSHKeyComment(s)
+	return tuo
+}
+
+// SetNillableLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSSHKeyComment(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSSHKeyComment(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSSHKeyComment() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSSHKeyComment()
+	return tuo
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (tuo *TaskUpdateOne) SetLocalUserSSHKeyFile(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSSHKeyFile(s)
+	return tuo
+}
+
+// SetNillableLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSSHKeyFile(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSSHKeyFile(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSSHKeyFile() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSSHKeyFile()
+	return tuo
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (tuo *TaskUpdateOne) SetLocalUserSSHKeyPassphrase(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSSHKeyPassphrase(s)
+	return tuo
+}
+
+// SetNillableLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSSHKeyPassphrase(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSSHKeyPassphrase(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSSHKeyPassphrase() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSSHKeyPassphrase()
+	return tuo
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (tuo *TaskUpdateOne) SetLocalUserSSHKeyType(s string) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserSSHKeyType(s)
+	return tuo
+}
+
+// SetNillableLocalUserSSHKeyType sets the "local_user_ssh_key_type" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableLocalUserSSHKeyType(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetLocalUserSSHKeyType(*s)
+	}
+	return tuo
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (tuo *TaskUpdateOne) ClearLocalUserSSHKeyType() *TaskUpdateOne {
+	tuo.mutation.ClearLocalUserSSHKeyType()
+	return tuo
+}
+
 // SetLocalUserUmask sets the "local_user_umask" field.
 func (tuo *TaskUpdateOne) SetLocalUserUmask(s string) *TaskUpdateOne {
 	tuo.mutation.SetLocalUserUmask(s)
@@ -3366,6 +3596,36 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.LocalUserIDMinCleared() {
 		_spec.ClearField(task.FieldLocalUserIDMin, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSSHKeyBits(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyBits, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSSHKeyBitsCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyBits, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSSHKeyComment(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyComment, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSSHKeyCommentCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyComment, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSSHKeyFile(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyFile, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSSHKeyFileCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyFile, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSSHKeyPassphrase(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyPassphrase, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSSHKeyPassphraseCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyPassphrase, field.TypeString)
+	}
+	if value, ok := tuo.mutation.LocalUserSSHKeyType(); ok {
+		_spec.SetField(task.FieldLocalUserSSHKeyType, field.TypeString, value)
+	}
+	if tuo.mutation.LocalUserSSHKeyTypeCleared() {
+		_spec.ClearField(task.FieldLocalUserSSHKeyType, field.TypeString)
 	}
 	if value, ok := tuo.mutation.LocalUserUmask(); ok {
 		_spec.SetField(task.FieldLocalUserUmask, field.TypeString, value)

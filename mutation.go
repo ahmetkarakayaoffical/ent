@@ -23855,6 +23855,11 @@ type TaskMutation struct {
 	local_user_id                              *string
 	local_user_id_max                          *string
 	local_user_id_min                          *string
+	local_user_ssh_key_bits                    *string
+	local_user_ssh_key_comment                 *string
+	local_user_ssh_key_file                    *string
+	local_user_ssh_key_passphrase              *string
+	local_user_ssh_key_type                    *string
 	local_user_umask                           *string
 	local_group_id                             *string
 	local_group_name                           *string
@@ -25917,6 +25922,251 @@ func (m *TaskMutation) ResetLocalUserIDMin() {
 	delete(m.clearedFields, task.FieldLocalUserIDMin)
 }
 
+// SetLocalUserSSHKeyBits sets the "local_user_ssh_key_bits" field.
+func (m *TaskMutation) SetLocalUserSSHKeyBits(s string) {
+	m.local_user_ssh_key_bits = &s
+}
+
+// LocalUserSSHKeyBits returns the value of the "local_user_ssh_key_bits" field in the mutation.
+func (m *TaskMutation) LocalUserSSHKeyBits() (r string, exists bool) {
+	v := m.local_user_ssh_key_bits
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserSSHKeyBits returns the old "local_user_ssh_key_bits" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserSSHKeyBits(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserSSHKeyBits is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserSSHKeyBits requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserSSHKeyBits: %w", err)
+	}
+	return oldValue.LocalUserSSHKeyBits, nil
+}
+
+// ClearLocalUserSSHKeyBits clears the value of the "local_user_ssh_key_bits" field.
+func (m *TaskMutation) ClearLocalUserSSHKeyBits() {
+	m.local_user_ssh_key_bits = nil
+	m.clearedFields[task.FieldLocalUserSSHKeyBits] = struct{}{}
+}
+
+// LocalUserSSHKeyBitsCleared returns if the "local_user_ssh_key_bits" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserSSHKeyBitsCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserSSHKeyBits]
+	return ok
+}
+
+// ResetLocalUserSSHKeyBits resets all changes to the "local_user_ssh_key_bits" field.
+func (m *TaskMutation) ResetLocalUserSSHKeyBits() {
+	m.local_user_ssh_key_bits = nil
+	delete(m.clearedFields, task.FieldLocalUserSSHKeyBits)
+}
+
+// SetLocalUserSSHKeyComment sets the "local_user_ssh_key_comment" field.
+func (m *TaskMutation) SetLocalUserSSHKeyComment(s string) {
+	m.local_user_ssh_key_comment = &s
+}
+
+// LocalUserSSHKeyComment returns the value of the "local_user_ssh_key_comment" field in the mutation.
+func (m *TaskMutation) LocalUserSSHKeyComment() (r string, exists bool) {
+	v := m.local_user_ssh_key_comment
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserSSHKeyComment returns the old "local_user_ssh_key_comment" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserSSHKeyComment(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserSSHKeyComment is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserSSHKeyComment requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserSSHKeyComment: %w", err)
+	}
+	return oldValue.LocalUserSSHKeyComment, nil
+}
+
+// ClearLocalUserSSHKeyComment clears the value of the "local_user_ssh_key_comment" field.
+func (m *TaskMutation) ClearLocalUserSSHKeyComment() {
+	m.local_user_ssh_key_comment = nil
+	m.clearedFields[task.FieldLocalUserSSHKeyComment] = struct{}{}
+}
+
+// LocalUserSSHKeyCommentCleared returns if the "local_user_ssh_key_comment" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserSSHKeyCommentCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserSSHKeyComment]
+	return ok
+}
+
+// ResetLocalUserSSHKeyComment resets all changes to the "local_user_ssh_key_comment" field.
+func (m *TaskMutation) ResetLocalUserSSHKeyComment() {
+	m.local_user_ssh_key_comment = nil
+	delete(m.clearedFields, task.FieldLocalUserSSHKeyComment)
+}
+
+// SetLocalUserSSHKeyFile sets the "local_user_ssh_key_file" field.
+func (m *TaskMutation) SetLocalUserSSHKeyFile(s string) {
+	m.local_user_ssh_key_file = &s
+}
+
+// LocalUserSSHKeyFile returns the value of the "local_user_ssh_key_file" field in the mutation.
+func (m *TaskMutation) LocalUserSSHKeyFile() (r string, exists bool) {
+	v := m.local_user_ssh_key_file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserSSHKeyFile returns the old "local_user_ssh_key_file" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserSSHKeyFile(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserSSHKeyFile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserSSHKeyFile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserSSHKeyFile: %w", err)
+	}
+	return oldValue.LocalUserSSHKeyFile, nil
+}
+
+// ClearLocalUserSSHKeyFile clears the value of the "local_user_ssh_key_file" field.
+func (m *TaskMutation) ClearLocalUserSSHKeyFile() {
+	m.local_user_ssh_key_file = nil
+	m.clearedFields[task.FieldLocalUserSSHKeyFile] = struct{}{}
+}
+
+// LocalUserSSHKeyFileCleared returns if the "local_user_ssh_key_file" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserSSHKeyFileCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserSSHKeyFile]
+	return ok
+}
+
+// ResetLocalUserSSHKeyFile resets all changes to the "local_user_ssh_key_file" field.
+func (m *TaskMutation) ResetLocalUserSSHKeyFile() {
+	m.local_user_ssh_key_file = nil
+	delete(m.clearedFields, task.FieldLocalUserSSHKeyFile)
+}
+
+// SetLocalUserSSHKeyPassphrase sets the "local_user_ssh_key_passphrase" field.
+func (m *TaskMutation) SetLocalUserSSHKeyPassphrase(s string) {
+	m.local_user_ssh_key_passphrase = &s
+}
+
+// LocalUserSSHKeyPassphrase returns the value of the "local_user_ssh_key_passphrase" field in the mutation.
+func (m *TaskMutation) LocalUserSSHKeyPassphrase() (r string, exists bool) {
+	v := m.local_user_ssh_key_passphrase
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserSSHKeyPassphrase returns the old "local_user_ssh_key_passphrase" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserSSHKeyPassphrase(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserSSHKeyPassphrase is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserSSHKeyPassphrase requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserSSHKeyPassphrase: %w", err)
+	}
+	return oldValue.LocalUserSSHKeyPassphrase, nil
+}
+
+// ClearLocalUserSSHKeyPassphrase clears the value of the "local_user_ssh_key_passphrase" field.
+func (m *TaskMutation) ClearLocalUserSSHKeyPassphrase() {
+	m.local_user_ssh_key_passphrase = nil
+	m.clearedFields[task.FieldLocalUserSSHKeyPassphrase] = struct{}{}
+}
+
+// LocalUserSSHKeyPassphraseCleared returns if the "local_user_ssh_key_passphrase" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserSSHKeyPassphraseCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserSSHKeyPassphrase]
+	return ok
+}
+
+// ResetLocalUserSSHKeyPassphrase resets all changes to the "local_user_ssh_key_passphrase" field.
+func (m *TaskMutation) ResetLocalUserSSHKeyPassphrase() {
+	m.local_user_ssh_key_passphrase = nil
+	delete(m.clearedFields, task.FieldLocalUserSSHKeyPassphrase)
+}
+
+// SetLocalUserSSHKeyType sets the "local_user_ssh_key_type" field.
+func (m *TaskMutation) SetLocalUserSSHKeyType(s string) {
+	m.local_user_ssh_key_type = &s
+}
+
+// LocalUserSSHKeyType returns the value of the "local_user_ssh_key_type" field in the mutation.
+func (m *TaskMutation) LocalUserSSHKeyType() (r string, exists bool) {
+	v := m.local_user_ssh_key_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocalUserSSHKeyType returns the old "local_user_ssh_key_type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldLocalUserSSHKeyType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocalUserSSHKeyType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocalUserSSHKeyType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocalUserSSHKeyType: %w", err)
+	}
+	return oldValue.LocalUserSSHKeyType, nil
+}
+
+// ClearLocalUserSSHKeyType clears the value of the "local_user_ssh_key_type" field.
+func (m *TaskMutation) ClearLocalUserSSHKeyType() {
+	m.local_user_ssh_key_type = nil
+	m.clearedFields[task.FieldLocalUserSSHKeyType] = struct{}{}
+}
+
+// LocalUserSSHKeyTypeCleared returns if the "local_user_ssh_key_type" field was cleared in this mutation.
+func (m *TaskMutation) LocalUserSSHKeyTypeCleared() bool {
+	_, ok := m.clearedFields[task.FieldLocalUserSSHKeyType]
+	return ok
+}
+
+// ResetLocalUserSSHKeyType resets all changes to the "local_user_ssh_key_type" field.
+func (m *TaskMutation) ResetLocalUserSSHKeyType() {
+	m.local_user_ssh_key_type = nil
+	delete(m.clearedFields, task.FieldLocalUserSSHKeyType)
+}
+
 // SetLocalUserUmask sets the "local_user_umask" field.
 func (m *TaskMutation) SetLocalUserUmask(s string) {
 	m.local_user_umask = &s
@@ -26975,7 +27225,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 59)
+	fields := make([]string, 0, 64)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -27095,6 +27345,21 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.local_user_id_min != nil {
 		fields = append(fields, task.FieldLocalUserIDMin)
+	}
+	if m.local_user_ssh_key_bits != nil {
+		fields = append(fields, task.FieldLocalUserSSHKeyBits)
+	}
+	if m.local_user_ssh_key_comment != nil {
+		fields = append(fields, task.FieldLocalUserSSHKeyComment)
+	}
+	if m.local_user_ssh_key_file != nil {
+		fields = append(fields, task.FieldLocalUserSSHKeyFile)
+	}
+	if m.local_user_ssh_key_passphrase != nil {
+		fields = append(fields, task.FieldLocalUserSSHKeyPassphrase)
+	}
+	if m.local_user_ssh_key_type != nil {
+		fields = append(fields, task.FieldLocalUserSSHKeyType)
 	}
 	if m.local_user_umask != nil {
 		fields = append(fields, task.FieldLocalUserUmask)
@@ -27241,6 +27506,16 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.LocalUserIDMax()
 	case task.FieldLocalUserIDMin:
 		return m.LocalUserIDMin()
+	case task.FieldLocalUserSSHKeyBits:
+		return m.LocalUserSSHKeyBits()
+	case task.FieldLocalUserSSHKeyComment:
+		return m.LocalUserSSHKeyComment()
+	case task.FieldLocalUserSSHKeyFile:
+		return m.LocalUserSSHKeyFile()
+	case task.FieldLocalUserSSHKeyPassphrase:
+		return m.LocalUserSSHKeyPassphrase()
+	case task.FieldLocalUserSSHKeyType:
+		return m.LocalUserSSHKeyType()
 	case task.FieldLocalUserUmask:
 		return m.LocalUserUmask()
 	case task.FieldLocalGroupID:
@@ -27368,6 +27643,16 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocalUserIDMax(ctx)
 	case task.FieldLocalUserIDMin:
 		return m.OldLocalUserIDMin(ctx)
+	case task.FieldLocalUserSSHKeyBits:
+		return m.OldLocalUserSSHKeyBits(ctx)
+	case task.FieldLocalUserSSHKeyComment:
+		return m.OldLocalUserSSHKeyComment(ctx)
+	case task.FieldLocalUserSSHKeyFile:
+		return m.OldLocalUserSSHKeyFile(ctx)
+	case task.FieldLocalUserSSHKeyPassphrase:
+		return m.OldLocalUserSSHKeyPassphrase(ctx)
+	case task.FieldLocalUserSSHKeyType:
+		return m.OldLocalUserSSHKeyType(ctx)
 	case task.FieldLocalUserUmask:
 		return m.OldLocalUserUmask(ctx)
 	case task.FieldLocalGroupID:
@@ -27695,6 +27980,41 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLocalUserIDMin(v)
 		return nil
+	case task.FieldLocalUserSSHKeyBits:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserSSHKeyBits(v)
+		return nil
+	case task.FieldLocalUserSSHKeyComment:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserSSHKeyComment(v)
+		return nil
+	case task.FieldLocalUserSSHKeyFile:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserSSHKeyFile(v)
+		return nil
+	case task.FieldLocalUserSSHKeyPassphrase:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserSSHKeyPassphrase(v)
+		return nil
+	case task.FieldLocalUserSSHKeyType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocalUserSSHKeyType(v)
+		return nil
 	case task.FieldLocalUserUmask:
 		v, ok := value.(string)
 		if !ok {
@@ -27972,6 +28292,21 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldLocalUserIDMin) {
 		fields = append(fields, task.FieldLocalUserIDMin)
 	}
+	if m.FieldCleared(task.FieldLocalUserSSHKeyBits) {
+		fields = append(fields, task.FieldLocalUserSSHKeyBits)
+	}
+	if m.FieldCleared(task.FieldLocalUserSSHKeyComment) {
+		fields = append(fields, task.FieldLocalUserSSHKeyComment)
+	}
+	if m.FieldCleared(task.FieldLocalUserSSHKeyFile) {
+		fields = append(fields, task.FieldLocalUserSSHKeyFile)
+	}
+	if m.FieldCleared(task.FieldLocalUserSSHKeyPassphrase) {
+		fields = append(fields, task.FieldLocalUserSSHKeyPassphrase)
+	}
+	if m.FieldCleared(task.FieldLocalUserSSHKeyType) {
+		fields = append(fields, task.FieldLocalUserSSHKeyType)
+	}
 	if m.FieldCleared(task.FieldLocalUserUmask) {
 		fields = append(fields, task.FieldLocalUserUmask)
 	}
@@ -28157,6 +28492,21 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldLocalUserIDMin:
 		m.ClearLocalUserIDMin()
 		return nil
+	case task.FieldLocalUserSSHKeyBits:
+		m.ClearLocalUserSSHKeyBits()
+		return nil
+	case task.FieldLocalUserSSHKeyComment:
+		m.ClearLocalUserSSHKeyComment()
+		return nil
+	case task.FieldLocalUserSSHKeyFile:
+		m.ClearLocalUserSSHKeyFile()
+		return nil
+	case task.FieldLocalUserSSHKeyPassphrase:
+		m.ClearLocalUserSSHKeyPassphrase()
+		return nil
+	case task.FieldLocalUserSSHKeyType:
+		m.ClearLocalUserSSHKeyType()
+		return nil
 	case task.FieldLocalUserUmask:
 		m.ClearLocalUserUmask()
 		return nil
@@ -28341,6 +28691,21 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldLocalUserIDMin:
 		m.ResetLocalUserIDMin()
+		return nil
+	case task.FieldLocalUserSSHKeyBits:
+		m.ResetLocalUserSSHKeyBits()
+		return nil
+	case task.FieldLocalUserSSHKeyComment:
+		m.ResetLocalUserSSHKeyComment()
+		return nil
+	case task.FieldLocalUserSSHKeyFile:
+		m.ResetLocalUserSSHKeyFile()
+		return nil
+	case task.FieldLocalUserSSHKeyPassphrase:
+		m.ResetLocalUserSSHKeyPassphrase()
+		return nil
+	case task.FieldLocalUserSSHKeyType:
+		m.ResetLocalUserSSHKeyType()
 		return nil
 	case task.FieldLocalUserUmask:
 		m.ResetLocalUserUmask()
