@@ -59,7 +59,7 @@ type Task struct {
 	// LocalUserCreateHome holds the value of the "local_user_create_home" field.
 	LocalUserCreateHome bool `json:"local_user_create_home,omitempty"`
 	// LocalUserExpires holds the value of the "local_user_expires" field.
-	LocalUserExpires float64 `json:"local_user_expires,omitempty"`
+	LocalUserExpires string `json:"local_user_expires,omitempty"`
 	// LocalUserForce holds the value of the "local_user_force" field.
 	LocalUserForce bool `json:"local_user_force,omitempty"`
 	// LocalUserGenerateSSHKey holds the value of the "local_user_generate_ssh_key" field.
@@ -75,13 +75,13 @@ type Task struct {
 	// LocalUserNonunique holds the value of the "local_user_nonunique" field.
 	LocalUserNonunique bool `json:"local_user_nonunique,omitempty"`
 	// LocalUserPasswordExpireAccountDisable holds the value of the "local_user_password_expire_account_disable" field.
-	LocalUserPasswordExpireAccountDisable int `json:"local_user_password_expire_account_disable,omitempty"`
+	LocalUserPasswordExpireAccountDisable string `json:"local_user_password_expire_account_disable,omitempty"`
 	// LocalUserPasswordExpireMax holds the value of the "local_user_password_expire_max" field.
-	LocalUserPasswordExpireMax int `json:"local_user_password_expire_max,omitempty"`
+	LocalUserPasswordExpireMax string `json:"local_user_password_expire_max,omitempty"`
 	// LocalUserPasswordExpireMin holds the value of the "local_user_password_expire_min" field.
-	LocalUserPasswordExpireMin int `json:"local_user_password_expire_min,omitempty"`
+	LocalUserPasswordExpireMin string `json:"local_user_password_expire_min,omitempty"`
 	// LocalUserPasswordExpireWarn holds the value of the "local_user_password_expire_warn" field.
-	LocalUserPasswordExpireWarn int `json:"local_user_password_expire_warn,omitempty"`
+	LocalUserPasswordExpireWarn string `json:"local_user_password_expire_warn,omitempty"`
 	// LocalUserPasswordLock holds the value of the "local_user_password_lock" field.
 	LocalUserPasswordLock string `json:"local_user_password_lock,omitempty"`
 	// LocalUserSeuser holds the value of the "local_user_seuser" field.
@@ -93,11 +93,11 @@ type Task struct {
 	// LocalUserSystem holds the value of the "local_user_system" field.
 	LocalUserSystem bool `json:"local_user_system,omitempty"`
 	// LocalUserID holds the value of the "local_user_id" field.
-	LocalUserID int `json:"local_user_id,omitempty"`
+	LocalUserID string `json:"local_user_id,omitempty"`
 	// LocalUserIDMax holds the value of the "local_user_id_max" field.
-	LocalUserIDMax int `json:"local_user_id_max,omitempty"`
+	LocalUserIDMax string `json:"local_user_id_max,omitempty"`
 	// LocalUserIDMin holds the value of the "local_user_id_min" field.
-	LocalUserIDMin int `json:"local_user_id_min,omitempty"`
+	LocalUserIDMin string `json:"local_user_id_min,omitempty"`
 	// LocalUserUmask holds the value of the "local_user_umask" field.
 	LocalUserUmask string `json:"local_user_umask,omitempty"`
 	// LocalGroupID holds the value of the "local_group_id" field.
@@ -181,11 +181,9 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
 			values[i] = new(sql.NullBool)
-		case task.FieldLocalUserExpires:
-			values[i] = new(sql.NullFloat64)
-		case task.FieldID, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin:
+		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordLock, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserPasswordLock, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -333,10 +331,10 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.LocalUserCreateHome = value.Bool
 			}
 		case task.FieldLocalUserExpires:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_expires", values[i])
 			} else if value.Valid {
-				t.LocalUserExpires = value.Float64
+				t.LocalUserExpires = value.String
 			}
 		case task.FieldLocalUserForce:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -381,28 +379,28 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.LocalUserNonunique = value.Bool
 			}
 		case task.FieldLocalUserPasswordExpireAccountDisable:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_password_expire_account_disable", values[i])
 			} else if value.Valid {
-				t.LocalUserPasswordExpireAccountDisable = int(value.Int64)
+				t.LocalUserPasswordExpireAccountDisable = value.String
 			}
 		case task.FieldLocalUserPasswordExpireMax:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_password_expire_max", values[i])
 			} else if value.Valid {
-				t.LocalUserPasswordExpireMax = int(value.Int64)
+				t.LocalUserPasswordExpireMax = value.String
 			}
 		case task.FieldLocalUserPasswordExpireMin:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_password_expire_min", values[i])
 			} else if value.Valid {
-				t.LocalUserPasswordExpireMin = int(value.Int64)
+				t.LocalUserPasswordExpireMin = value.String
 			}
 		case task.FieldLocalUserPasswordExpireWarn:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_password_expire_warn", values[i])
 			} else if value.Valid {
-				t.LocalUserPasswordExpireWarn = int(value.Int64)
+				t.LocalUserPasswordExpireWarn = value.String
 			}
 		case task.FieldLocalUserPasswordLock:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -435,22 +433,22 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.LocalUserSystem = value.Bool
 			}
 		case task.FieldLocalUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_id", values[i])
 			} else if value.Valid {
-				t.LocalUserID = int(value.Int64)
+				t.LocalUserID = value.String
 			}
 		case task.FieldLocalUserIDMax:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_id_max", values[i])
 			} else if value.Valid {
-				t.LocalUserIDMax = int(value.Int64)
+				t.LocalUserIDMax = value.String
 			}
 		case task.FieldLocalUserIDMin:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_id_min", values[i])
 			} else if value.Valid {
-				t.LocalUserIDMin = int(value.Int64)
+				t.LocalUserIDMin = value.String
 			}
 		case task.FieldLocalUserUmask:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -680,7 +678,7 @@ func (t *Task) String() string {
 	builder.WriteString(fmt.Sprintf("%v", t.LocalUserCreateHome))
 	builder.WriteString(", ")
 	builder.WriteString("local_user_expires=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserExpires))
+	builder.WriteString(t.LocalUserExpires)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_force=")
 	builder.WriteString(fmt.Sprintf("%v", t.LocalUserForce))
@@ -704,16 +702,16 @@ func (t *Task) String() string {
 	builder.WriteString(fmt.Sprintf("%v", t.LocalUserNonunique))
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_expire_account_disable=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordExpireAccountDisable))
+	builder.WriteString(t.LocalUserPasswordExpireAccountDisable)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_expire_max=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordExpireMax))
+	builder.WriteString(t.LocalUserPasswordExpireMax)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_expire_min=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordExpireMin))
+	builder.WriteString(t.LocalUserPasswordExpireMin)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_expire_warn=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordExpireWarn))
+	builder.WriteString(t.LocalUserPasswordExpireWarn)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_lock=")
 	builder.WriteString(t.LocalUserPasswordLock)
@@ -731,13 +729,13 @@ func (t *Task) String() string {
 	builder.WriteString(fmt.Sprintf("%v", t.LocalUserSystem))
 	builder.WriteString(", ")
 	builder.WriteString("local_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserID))
+	builder.WriteString(t.LocalUserID)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_id_max=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserIDMax))
+	builder.WriteString(t.LocalUserIDMax)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_id_min=")
-	builder.WriteString(fmt.Sprintf("%v", t.LocalUserIDMin))
+	builder.WriteString(t.LocalUserIDMin)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_umask=")
 	builder.WriteString(t.LocalUserUmask)

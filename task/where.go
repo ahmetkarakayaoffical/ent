@@ -146,7 +146,7 @@ func LocalUserCreateHome(v bool) predicate.Task {
 }
 
 // LocalUserExpires applies equality check predicate on the "local_user_expires" field. It's identical to LocalUserExpiresEQ.
-func LocalUserExpires(v float64) predicate.Task {
+func LocalUserExpires(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserExpires, v))
 }
 
@@ -186,22 +186,22 @@ func LocalUserNonunique(v bool) predicate.Task {
 }
 
 // LocalUserPasswordExpireAccountDisable applies equality check predicate on the "local_user_password_expire_account_disable" field. It's identical to LocalUserPasswordExpireAccountDisableEQ.
-func LocalUserPasswordExpireAccountDisable(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisable(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireMax applies equality check predicate on the "local_user_password_expire_max" field. It's identical to LocalUserPasswordExpireMaxEQ.
-func LocalUserPasswordExpireMax(v int) predicate.Task {
+func LocalUserPasswordExpireMax(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMin applies equality check predicate on the "local_user_password_expire_min" field. It's identical to LocalUserPasswordExpireMinEQ.
-func LocalUserPasswordExpireMin(v int) predicate.Task {
+func LocalUserPasswordExpireMin(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireWarn applies equality check predicate on the "local_user_password_expire_warn" field. It's identical to LocalUserPasswordExpireWarnEQ.
-func LocalUserPasswordExpireWarn(v int) predicate.Task {
+func LocalUserPasswordExpireWarn(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireWarn, v))
 }
 
@@ -231,17 +231,17 @@ func LocalUserSystem(v bool) predicate.Task {
 }
 
 // LocalUserID applies equality check predicate on the "local_user_id" field. It's identical to LocalUserIDEQ.
-func LocalUserID(v int) predicate.Task {
+func LocalUserID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserID, v))
 }
 
 // LocalUserIDMax applies equality check predicate on the "local_user_id_max" field. It's identical to LocalUserIDMaxEQ.
-func LocalUserIDMax(v int) predicate.Task {
+func LocalUserIDMax(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMin applies equality check predicate on the "local_user_id_min" field. It's identical to LocalUserIDMinEQ.
-func LocalUserIDMin(v int) predicate.Task {
+func LocalUserIDMin(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserIDMin, v))
 }
 
@@ -1276,43 +1276,58 @@ func LocalUserCreateHomeNotNil() predicate.Task {
 }
 
 // LocalUserExpiresEQ applies the EQ predicate on the "local_user_expires" field.
-func LocalUserExpiresEQ(v float64) predicate.Task {
+func LocalUserExpiresEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresNEQ applies the NEQ predicate on the "local_user_expires" field.
-func LocalUserExpiresNEQ(v float64) predicate.Task {
+func LocalUserExpiresNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresIn applies the In predicate on the "local_user_expires" field.
-func LocalUserExpiresIn(vs ...float64) predicate.Task {
+func LocalUserExpiresIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserExpires, vs...))
 }
 
 // LocalUserExpiresNotIn applies the NotIn predicate on the "local_user_expires" field.
-func LocalUserExpiresNotIn(vs ...float64) predicate.Task {
+func LocalUserExpiresNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserExpires, vs...))
 }
 
 // LocalUserExpiresGT applies the GT predicate on the "local_user_expires" field.
-func LocalUserExpiresGT(v float64) predicate.Task {
+func LocalUserExpiresGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresGTE applies the GTE predicate on the "local_user_expires" field.
-func LocalUserExpiresGTE(v float64) predicate.Task {
+func LocalUserExpiresGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresLT applies the LT predicate on the "local_user_expires" field.
-func LocalUserExpiresLT(v float64) predicate.Task {
+func LocalUserExpiresLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresLTE applies the LTE predicate on the "local_user_expires" field.
-func LocalUserExpiresLTE(v float64) predicate.Task {
+func LocalUserExpiresLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserExpires, v))
+}
+
+// LocalUserExpiresContains applies the Contains predicate on the "local_user_expires" field.
+func LocalUserExpiresContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserExpires, v))
+}
+
+// LocalUserExpiresHasPrefix applies the HasPrefix predicate on the "local_user_expires" field.
+func LocalUserExpiresHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserExpires, v))
+}
+
+// LocalUserExpiresHasSuffix applies the HasSuffix predicate on the "local_user_expires" field.
+func LocalUserExpiresHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserExpires, v))
 }
 
 // LocalUserExpiresIsNil applies the IsNil predicate on the "local_user_expires" field.
@@ -1323,6 +1338,16 @@ func LocalUserExpiresIsNil() predicate.Task {
 // LocalUserExpiresNotNil applies the NotNil predicate on the "local_user_expires" field.
 func LocalUserExpiresNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserExpires))
+}
+
+// LocalUserExpiresEqualFold applies the EqualFold predicate on the "local_user_expires" field.
+func LocalUserExpiresEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserExpires, v))
+}
+
+// LocalUserExpiresContainsFold applies the ContainsFold predicate on the "local_user_expires" field.
+func LocalUserExpiresContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserExpires, v))
 }
 
 // LocalUserForceEQ applies the EQ predicate on the "local_user_force" field.
@@ -1631,43 +1656,58 @@ func LocalUserNonuniqueNotNil() predicate.Task {
 }
 
 // LocalUserPasswordExpireAccountDisableEQ applies the EQ predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableEQ(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableNEQ applies the NEQ predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableNEQ(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableIn applies the In predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserPasswordExpireAccountDisable, vs...))
 }
 
 // LocalUserPasswordExpireAccountDisableNotIn applies the NotIn predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableNotIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserPasswordExpireAccountDisable, vs...))
 }
 
 // LocalUserPasswordExpireAccountDisableGT applies the GT predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableGT(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableGTE applies the GTE predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableGTE(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableLT applies the LT predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableLT(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableLTE applies the LTE predicate on the "local_user_password_expire_account_disable" field.
-func LocalUserPasswordExpireAccountDisableLTE(v int) predicate.Task {
+func LocalUserPasswordExpireAccountDisableLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserPasswordExpireAccountDisable, v))
+}
+
+// LocalUserPasswordExpireAccountDisableContains applies the Contains predicate on the "local_user_password_expire_account_disable" field.
+func LocalUserPasswordExpireAccountDisableContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserPasswordExpireAccountDisable, v))
+}
+
+// LocalUserPasswordExpireAccountDisableHasPrefix applies the HasPrefix predicate on the "local_user_password_expire_account_disable" field.
+func LocalUserPasswordExpireAccountDisableHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserPasswordExpireAccountDisable, v))
+}
+
+// LocalUserPasswordExpireAccountDisableHasSuffix applies the HasSuffix predicate on the "local_user_password_expire_account_disable" field.
+func LocalUserPasswordExpireAccountDisableHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserPasswordExpireAccountDisable, v))
 }
 
 // LocalUserPasswordExpireAccountDisableIsNil applies the IsNil predicate on the "local_user_password_expire_account_disable" field.
@@ -1680,44 +1720,69 @@ func LocalUserPasswordExpireAccountDisableNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordExpireAccountDisable))
 }
 
+// LocalUserPasswordExpireAccountDisableEqualFold applies the EqualFold predicate on the "local_user_password_expire_account_disable" field.
+func LocalUserPasswordExpireAccountDisableEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserPasswordExpireAccountDisable, v))
+}
+
+// LocalUserPasswordExpireAccountDisableContainsFold applies the ContainsFold predicate on the "local_user_password_expire_account_disable" field.
+func LocalUserPasswordExpireAccountDisableContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserPasswordExpireAccountDisable, v))
+}
+
 // LocalUserPasswordExpireMaxEQ applies the EQ predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxEQ(v int) predicate.Task {
+func LocalUserPasswordExpireMaxEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxNEQ applies the NEQ predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxNEQ(v int) predicate.Task {
+func LocalUserPasswordExpireMaxNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxIn applies the In predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireMaxIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserPasswordExpireMax, vs...))
 }
 
 // LocalUserPasswordExpireMaxNotIn applies the NotIn predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxNotIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireMaxNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserPasswordExpireMax, vs...))
 }
 
 // LocalUserPasswordExpireMaxGT applies the GT predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxGT(v int) predicate.Task {
+func LocalUserPasswordExpireMaxGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxGTE applies the GTE predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxGTE(v int) predicate.Task {
+func LocalUserPasswordExpireMaxGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxLT applies the LT predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxLT(v int) predicate.Task {
+func LocalUserPasswordExpireMaxLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxLTE applies the LTE predicate on the "local_user_password_expire_max" field.
-func LocalUserPasswordExpireMaxLTE(v int) predicate.Task {
+func LocalUserPasswordExpireMaxLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserPasswordExpireMax, v))
+}
+
+// LocalUserPasswordExpireMaxContains applies the Contains predicate on the "local_user_password_expire_max" field.
+func LocalUserPasswordExpireMaxContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserPasswordExpireMax, v))
+}
+
+// LocalUserPasswordExpireMaxHasPrefix applies the HasPrefix predicate on the "local_user_password_expire_max" field.
+func LocalUserPasswordExpireMaxHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserPasswordExpireMax, v))
+}
+
+// LocalUserPasswordExpireMaxHasSuffix applies the HasSuffix predicate on the "local_user_password_expire_max" field.
+func LocalUserPasswordExpireMaxHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserPasswordExpireMax, v))
 }
 
 // LocalUserPasswordExpireMaxIsNil applies the IsNil predicate on the "local_user_password_expire_max" field.
@@ -1730,44 +1795,69 @@ func LocalUserPasswordExpireMaxNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordExpireMax))
 }
 
+// LocalUserPasswordExpireMaxEqualFold applies the EqualFold predicate on the "local_user_password_expire_max" field.
+func LocalUserPasswordExpireMaxEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserPasswordExpireMax, v))
+}
+
+// LocalUserPasswordExpireMaxContainsFold applies the ContainsFold predicate on the "local_user_password_expire_max" field.
+func LocalUserPasswordExpireMaxContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserPasswordExpireMax, v))
+}
+
 // LocalUserPasswordExpireMinEQ applies the EQ predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinEQ(v int) predicate.Task {
+func LocalUserPasswordExpireMinEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinNEQ applies the NEQ predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinNEQ(v int) predicate.Task {
+func LocalUserPasswordExpireMinNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinIn applies the In predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireMinIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserPasswordExpireMin, vs...))
 }
 
 // LocalUserPasswordExpireMinNotIn applies the NotIn predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinNotIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireMinNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserPasswordExpireMin, vs...))
 }
 
 // LocalUserPasswordExpireMinGT applies the GT predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinGT(v int) predicate.Task {
+func LocalUserPasswordExpireMinGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinGTE applies the GTE predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinGTE(v int) predicate.Task {
+func LocalUserPasswordExpireMinGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinLT applies the LT predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinLT(v int) predicate.Task {
+func LocalUserPasswordExpireMinLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinLTE applies the LTE predicate on the "local_user_password_expire_min" field.
-func LocalUserPasswordExpireMinLTE(v int) predicate.Task {
+func LocalUserPasswordExpireMinLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserPasswordExpireMin, v))
+}
+
+// LocalUserPasswordExpireMinContains applies the Contains predicate on the "local_user_password_expire_min" field.
+func LocalUserPasswordExpireMinContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserPasswordExpireMin, v))
+}
+
+// LocalUserPasswordExpireMinHasPrefix applies the HasPrefix predicate on the "local_user_password_expire_min" field.
+func LocalUserPasswordExpireMinHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserPasswordExpireMin, v))
+}
+
+// LocalUserPasswordExpireMinHasSuffix applies the HasSuffix predicate on the "local_user_password_expire_min" field.
+func LocalUserPasswordExpireMinHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserPasswordExpireMin, v))
 }
 
 // LocalUserPasswordExpireMinIsNil applies the IsNil predicate on the "local_user_password_expire_min" field.
@@ -1780,44 +1870,69 @@ func LocalUserPasswordExpireMinNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordExpireMin))
 }
 
+// LocalUserPasswordExpireMinEqualFold applies the EqualFold predicate on the "local_user_password_expire_min" field.
+func LocalUserPasswordExpireMinEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserPasswordExpireMin, v))
+}
+
+// LocalUserPasswordExpireMinContainsFold applies the ContainsFold predicate on the "local_user_password_expire_min" field.
+func LocalUserPasswordExpireMinContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserPasswordExpireMin, v))
+}
+
 // LocalUserPasswordExpireWarnEQ applies the EQ predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnEQ(v int) predicate.Task {
+func LocalUserPasswordExpireWarnEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnNEQ applies the NEQ predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnNEQ(v int) predicate.Task {
+func LocalUserPasswordExpireWarnNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnIn applies the In predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireWarnIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserPasswordExpireWarn, vs...))
 }
 
 // LocalUserPasswordExpireWarnNotIn applies the NotIn predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnNotIn(vs ...int) predicate.Task {
+func LocalUserPasswordExpireWarnNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserPasswordExpireWarn, vs...))
 }
 
 // LocalUserPasswordExpireWarnGT applies the GT predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnGT(v int) predicate.Task {
+func LocalUserPasswordExpireWarnGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnGTE applies the GTE predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnGTE(v int) predicate.Task {
+func LocalUserPasswordExpireWarnGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnLT applies the LT predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnLT(v int) predicate.Task {
+func LocalUserPasswordExpireWarnLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnLTE applies the LTE predicate on the "local_user_password_expire_warn" field.
-func LocalUserPasswordExpireWarnLTE(v int) predicate.Task {
+func LocalUserPasswordExpireWarnLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserPasswordExpireWarn, v))
+}
+
+// LocalUserPasswordExpireWarnContains applies the Contains predicate on the "local_user_password_expire_warn" field.
+func LocalUserPasswordExpireWarnContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserPasswordExpireWarn, v))
+}
+
+// LocalUserPasswordExpireWarnHasPrefix applies the HasPrefix predicate on the "local_user_password_expire_warn" field.
+func LocalUserPasswordExpireWarnHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserPasswordExpireWarn, v))
+}
+
+// LocalUserPasswordExpireWarnHasSuffix applies the HasSuffix predicate on the "local_user_password_expire_warn" field.
+func LocalUserPasswordExpireWarnHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordExpireWarnIsNil applies the IsNil predicate on the "local_user_password_expire_warn" field.
@@ -1828,6 +1943,16 @@ func LocalUserPasswordExpireWarnIsNil() predicate.Task {
 // LocalUserPasswordExpireWarnNotNil applies the NotNil predicate on the "local_user_password_expire_warn" field.
 func LocalUserPasswordExpireWarnNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordExpireWarn))
+}
+
+// LocalUserPasswordExpireWarnEqualFold applies the EqualFold predicate on the "local_user_password_expire_warn" field.
+func LocalUserPasswordExpireWarnEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserPasswordExpireWarn, v))
+}
+
+// LocalUserPasswordExpireWarnContainsFold applies the ContainsFold predicate on the "local_user_password_expire_warn" field.
+func LocalUserPasswordExpireWarnContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserPasswordExpireWarn, v))
 }
 
 // LocalUserPasswordLockEQ applies the EQ predicate on the "local_user_password_lock" field.
@@ -2151,43 +2276,58 @@ func LocalUserSystemNotNil() predicate.Task {
 }
 
 // LocalUserIDEQ applies the EQ predicate on the "local_user_id" field.
-func LocalUserIDEQ(v int) predicate.Task {
+func LocalUserIDEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserID, v))
 }
 
 // LocalUserIDNEQ applies the NEQ predicate on the "local_user_id" field.
-func LocalUserIDNEQ(v int) predicate.Task {
+func LocalUserIDNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserID, v))
 }
 
 // LocalUserIDIn applies the In predicate on the "local_user_id" field.
-func LocalUserIDIn(vs ...int) predicate.Task {
+func LocalUserIDIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserID, vs...))
 }
 
 // LocalUserIDNotIn applies the NotIn predicate on the "local_user_id" field.
-func LocalUserIDNotIn(vs ...int) predicate.Task {
+func LocalUserIDNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserID, vs...))
 }
 
 // LocalUserIDGT applies the GT predicate on the "local_user_id" field.
-func LocalUserIDGT(v int) predicate.Task {
+func LocalUserIDGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserID, v))
 }
 
 // LocalUserIDGTE applies the GTE predicate on the "local_user_id" field.
-func LocalUserIDGTE(v int) predicate.Task {
+func LocalUserIDGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserID, v))
 }
 
 // LocalUserIDLT applies the LT predicate on the "local_user_id" field.
-func LocalUserIDLT(v int) predicate.Task {
+func LocalUserIDLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserID, v))
 }
 
 // LocalUserIDLTE applies the LTE predicate on the "local_user_id" field.
-func LocalUserIDLTE(v int) predicate.Task {
+func LocalUserIDLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserID, v))
+}
+
+// LocalUserIDContains applies the Contains predicate on the "local_user_id" field.
+func LocalUserIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserID, v))
+}
+
+// LocalUserIDHasPrefix applies the HasPrefix predicate on the "local_user_id" field.
+func LocalUserIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserID, v))
+}
+
+// LocalUserIDHasSuffix applies the HasSuffix predicate on the "local_user_id" field.
+func LocalUserIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserID, v))
 }
 
 // LocalUserIDIsNil applies the IsNil predicate on the "local_user_id" field.
@@ -2200,44 +2340,69 @@ func LocalUserIDNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserID))
 }
 
+// LocalUserIDEqualFold applies the EqualFold predicate on the "local_user_id" field.
+func LocalUserIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserID, v))
+}
+
+// LocalUserIDContainsFold applies the ContainsFold predicate on the "local_user_id" field.
+func LocalUserIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserID, v))
+}
+
 // LocalUserIDMaxEQ applies the EQ predicate on the "local_user_id_max" field.
-func LocalUserIDMaxEQ(v int) predicate.Task {
+func LocalUserIDMaxEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxNEQ applies the NEQ predicate on the "local_user_id_max" field.
-func LocalUserIDMaxNEQ(v int) predicate.Task {
+func LocalUserIDMaxNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxIn applies the In predicate on the "local_user_id_max" field.
-func LocalUserIDMaxIn(vs ...int) predicate.Task {
+func LocalUserIDMaxIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserIDMax, vs...))
 }
 
 // LocalUserIDMaxNotIn applies the NotIn predicate on the "local_user_id_max" field.
-func LocalUserIDMaxNotIn(vs ...int) predicate.Task {
+func LocalUserIDMaxNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserIDMax, vs...))
 }
 
 // LocalUserIDMaxGT applies the GT predicate on the "local_user_id_max" field.
-func LocalUserIDMaxGT(v int) predicate.Task {
+func LocalUserIDMaxGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxGTE applies the GTE predicate on the "local_user_id_max" field.
-func LocalUserIDMaxGTE(v int) predicate.Task {
+func LocalUserIDMaxGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxLT applies the LT predicate on the "local_user_id_max" field.
-func LocalUserIDMaxLT(v int) predicate.Task {
+func LocalUserIDMaxLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxLTE applies the LTE predicate on the "local_user_id_max" field.
-func LocalUserIDMaxLTE(v int) predicate.Task {
+func LocalUserIDMaxLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserIDMax, v))
+}
+
+// LocalUserIDMaxContains applies the Contains predicate on the "local_user_id_max" field.
+func LocalUserIDMaxContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserIDMax, v))
+}
+
+// LocalUserIDMaxHasPrefix applies the HasPrefix predicate on the "local_user_id_max" field.
+func LocalUserIDMaxHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserIDMax, v))
+}
+
+// LocalUserIDMaxHasSuffix applies the HasSuffix predicate on the "local_user_id_max" field.
+func LocalUserIDMaxHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserIDMax, v))
 }
 
 // LocalUserIDMaxIsNil applies the IsNil predicate on the "local_user_id_max" field.
@@ -2250,44 +2415,69 @@ func LocalUserIDMaxNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserIDMax))
 }
 
+// LocalUserIDMaxEqualFold applies the EqualFold predicate on the "local_user_id_max" field.
+func LocalUserIDMaxEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserIDMax, v))
+}
+
+// LocalUserIDMaxContainsFold applies the ContainsFold predicate on the "local_user_id_max" field.
+func LocalUserIDMaxContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserIDMax, v))
+}
+
 // LocalUserIDMinEQ applies the EQ predicate on the "local_user_id_min" field.
-func LocalUserIDMinEQ(v int) predicate.Task {
+func LocalUserIDMinEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinNEQ applies the NEQ predicate on the "local_user_id_min" field.
-func LocalUserIDMinNEQ(v int) predicate.Task {
+func LocalUserIDMinNEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinIn applies the In predicate on the "local_user_id_min" field.
-func LocalUserIDMinIn(vs ...int) predicate.Task {
+func LocalUserIDMinIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldIn(FieldLocalUserIDMin, vs...))
 }
 
 // LocalUserIDMinNotIn applies the NotIn predicate on the "local_user_id_min" field.
-func LocalUserIDMinNotIn(vs ...int) predicate.Task {
+func LocalUserIDMinNotIn(vs ...string) predicate.Task {
 	return predicate.Task(sql.FieldNotIn(FieldLocalUserIDMin, vs...))
 }
 
 // LocalUserIDMinGT applies the GT predicate on the "local_user_id_min" field.
-func LocalUserIDMinGT(v int) predicate.Task {
+func LocalUserIDMinGT(v string) predicate.Task {
 	return predicate.Task(sql.FieldGT(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinGTE applies the GTE predicate on the "local_user_id_min" field.
-func LocalUserIDMinGTE(v int) predicate.Task {
+func LocalUserIDMinGTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldGTE(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinLT applies the LT predicate on the "local_user_id_min" field.
-func LocalUserIDMinLT(v int) predicate.Task {
+func LocalUserIDMinLT(v string) predicate.Task {
 	return predicate.Task(sql.FieldLT(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinLTE applies the LTE predicate on the "local_user_id_min" field.
-func LocalUserIDMinLTE(v int) predicate.Task {
+func LocalUserIDMinLTE(v string) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldLocalUserIDMin, v))
+}
+
+// LocalUserIDMinContains applies the Contains predicate on the "local_user_id_min" field.
+func LocalUserIDMinContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldLocalUserIDMin, v))
+}
+
+// LocalUserIDMinHasPrefix applies the HasPrefix predicate on the "local_user_id_min" field.
+func LocalUserIDMinHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserIDMin, v))
+}
+
+// LocalUserIDMinHasSuffix applies the HasSuffix predicate on the "local_user_id_min" field.
+func LocalUserIDMinHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserIDMin, v))
 }
 
 // LocalUserIDMinIsNil applies the IsNil predicate on the "local_user_id_min" field.
@@ -2298,6 +2488,16 @@ func LocalUserIDMinIsNil() predicate.Task {
 // LocalUserIDMinNotNil applies the NotNil predicate on the "local_user_id_min" field.
 func LocalUserIDMinNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserIDMin))
+}
+
+// LocalUserIDMinEqualFold applies the EqualFold predicate on the "local_user_id_min" field.
+func LocalUserIDMinEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldLocalUserIDMin, v))
+}
+
+// LocalUserIDMinContainsFold applies the ContainsFold predicate on the "local_user_id_min" field.
+func LocalUserIDMinContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldLocalUserIDMin, v))
 }
 
 // LocalUserUmaskEQ applies the EQ predicate on the "local_user_umask" field.

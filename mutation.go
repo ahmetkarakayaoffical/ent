@@ -23812,85 +23812,77 @@ func (m *TagMutation) ResetEdge(name string) error {
 // TaskMutation represents an operation that mutates the Task nodes in the graph.
 type TaskMutation struct {
 	config
-	op                                            Op
-	typ                                           string
-	id                                            *int
-	name                                          *string
-	_type                                         *task.Type
-	package_id                                    *string
-	package_name                                  *string
-	registry_key                                  *string
-	registry_key_value_name                       *string
-	registry_key_value_type                       *task.RegistryKeyValueType
-	registry_key_value_data                       *string
-	registry_hex                                  *bool
-	registry_force                                *bool
-	local_user_username                           *string
-	local_user_description                        *string
-	local_user_disable                            *bool
-	local_user_fullname                           *string
-	local_user_password                           *string
-	local_user_password_change_not_allowed        *bool
-	local_user_password_change_required           *bool
-	local_user_password_never_expires             *bool
-	local_user_append                             *bool
-	local_user_create_home                        *bool
-	local_user_expires                            *float64
-	addlocal_user_expires                         *float64
-	local_user_force                              *bool
-	local_user_generate_ssh_key                   *bool
-	local_user_group                              *string
-	local_user_groups                             *string
-	local_user_home                               *string
-	local_user_move_home                          *bool
-	local_user_nonunique                          *bool
-	local_user_password_expire_account_disable    *int
-	addlocal_user_password_expire_account_disable *int
-	local_user_password_expire_max                *int
-	addlocal_user_password_expire_max             *int
-	local_user_password_expire_min                *int
-	addlocal_user_password_expire_min             *int
-	local_user_password_expire_warn               *int
-	addlocal_user_password_expire_warn            *int
-	local_user_password_lock                      *string
-	local_user_seuser                             *string
-	local_user_shell                              *string
-	local_user_skeleton                           *string
-	local_user_system                             *bool
-	local_user_id                                 *int
-	addlocal_user_id                              *int
-	local_user_id_max                             *int
-	addlocal_user_id_max                          *int
-	local_user_id_min                             *int
-	addlocal_user_id_min                          *int
-	local_user_umask                              *string
-	local_group_id                                *string
-	local_group_name                              *string
-	local_group_description                       *string
-	local_group_system                            *bool
-	local_group_force                             *bool
-	local_group_members                           *string
-	local_group_members_to_include                *string
-	local_group_members_to_exclude                *string
-	msi_productid                                 *string
-	msi_path                                      *string
-	msi_arguments                                 *string
-	msi_file_hash                                 *string
-	msi_file_hash_alg                             *task.MsiFileHashAlg
-	msi_log_path                                  *string
-	script                                        *string
-	script_run                                    *task.ScriptRun
-	agent_type                                    *task.AgentType
-	when                                          *time.Time
-	clearedFields                                 map[string]struct{}
-	tags                                          map[int]struct{}
-	removedtags                                   map[int]struct{}
-	clearedtags                                   bool
-	profile                                       *int
-	clearedprofile                                bool
-	done                                          bool
-	oldValue                                      func(context.Context) (*Task, error)
-	predicates                                    []predicate.Task
+	op                                         Op
+	typ                                        string
+	id                                         *int
+	name                                       *string
+	_type                                      *task.Type
+	package_id                                 *string
+	package_name                               *string
+	registry_key                               *string
+	registry_key_value_name                    *string
+	registry_key_value_type                    *task.RegistryKeyValueType
+	registry_key_value_data                    *string
+	registry_hex                               *bool
+	registry_force                             *bool
+	local_user_username                        *string
+	local_user_description                     *string
+	local_user_disable                         *bool
+	local_user_fullname                        *string
+	local_user_password                        *string
+	local_user_password_change_not_allowed     *bool
+	local_user_password_change_required        *bool
+	local_user_password_never_expires          *bool
+	local_user_append                          *bool
+	local_user_create_home                     *bool
+	local_user_expires                         *string
+	local_user_force                           *bool
+	local_user_generate_ssh_key                *bool
+	local_user_group                           *string
+	local_user_groups                          *string
+	local_user_home                            *string
+	local_user_move_home                       *bool
+	local_user_nonunique                       *bool
+	local_user_password_expire_account_disable *string
+	local_user_password_expire_max             *string
+	local_user_password_expire_min             *string
+	local_user_password_expire_warn            *string
+	local_user_password_lock                   *string
+	local_user_seuser                          *string
+	local_user_shell                           *string
+	local_user_skeleton                        *string
+	local_user_system                          *bool
+	local_user_id                              *string
+	local_user_id_max                          *string
+	local_user_id_min                          *string
+	local_user_umask                           *string
+	local_group_id                             *string
+	local_group_name                           *string
+	local_group_description                    *string
+	local_group_system                         *bool
+	local_group_force                          *bool
+	local_group_members                        *string
+	local_group_members_to_include             *string
+	local_group_members_to_exclude             *string
+	msi_productid                              *string
+	msi_path                                   *string
+	msi_arguments                              *string
+	msi_file_hash                              *string
+	msi_file_hash_alg                          *task.MsiFileHashAlg
+	msi_log_path                               *string
+	script                                     *string
+	script_run                                 *task.ScriptRun
+	agent_type                                 *task.AgentType
+	when                                       *time.Time
+	clearedFields                              map[string]struct{}
+	tags                                       map[int]struct{}
+	removedtags                                map[int]struct{}
+	clearedtags                                bool
+	profile                                    *int
+	clearedprofile                             bool
+	done                                       bool
+	oldValue                                   func(context.Context) (*Task, error)
+	predicates                                 []predicate.Task
 }
 
 var _ ent.Mutation = (*TaskMutation)(nil)
@@ -24946,13 +24938,12 @@ func (m *TaskMutation) ResetLocalUserCreateHome() {
 }
 
 // SetLocalUserExpires sets the "local_user_expires" field.
-func (m *TaskMutation) SetLocalUserExpires(f float64) {
-	m.local_user_expires = &f
-	m.addlocal_user_expires = nil
+func (m *TaskMutation) SetLocalUserExpires(s string) {
+	m.local_user_expires = &s
 }
 
 // LocalUserExpires returns the value of the "local_user_expires" field in the mutation.
-func (m *TaskMutation) LocalUserExpires() (r float64, exists bool) {
+func (m *TaskMutation) LocalUserExpires() (r string, exists bool) {
 	v := m.local_user_expires
 	if v == nil {
 		return
@@ -24963,7 +24954,7 @@ func (m *TaskMutation) LocalUserExpires() (r float64, exists bool) {
 // OldLocalUserExpires returns the old "local_user_expires" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserExpires(ctx context.Context) (v float64, err error) {
+func (m *TaskMutation) OldLocalUserExpires(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserExpires is only allowed on UpdateOne operations")
 	}
@@ -24977,28 +24968,9 @@ func (m *TaskMutation) OldLocalUserExpires(ctx context.Context) (v float64, err 
 	return oldValue.LocalUserExpires, nil
 }
 
-// AddLocalUserExpires adds f to the "local_user_expires" field.
-func (m *TaskMutation) AddLocalUserExpires(f float64) {
-	if m.addlocal_user_expires != nil {
-		*m.addlocal_user_expires += f
-	} else {
-		m.addlocal_user_expires = &f
-	}
-}
-
-// AddedLocalUserExpires returns the value that was added to the "local_user_expires" field in this mutation.
-func (m *TaskMutation) AddedLocalUserExpires() (r float64, exists bool) {
-	v := m.addlocal_user_expires
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserExpires clears the value of the "local_user_expires" field.
 func (m *TaskMutation) ClearLocalUserExpires() {
 	m.local_user_expires = nil
-	m.addlocal_user_expires = nil
 	m.clearedFields[task.FieldLocalUserExpires] = struct{}{}
 }
 
@@ -25011,7 +24983,6 @@ func (m *TaskMutation) LocalUserExpiresCleared() bool {
 // ResetLocalUserExpires resets all changes to the "local_user_expires" field.
 func (m *TaskMutation) ResetLocalUserExpires() {
 	m.local_user_expires = nil
-	m.addlocal_user_expires = nil
 	delete(m.clearedFields, task.FieldLocalUserExpires)
 }
 
@@ -25359,13 +25330,12 @@ func (m *TaskMutation) ResetLocalUserNonunique() {
 }
 
 // SetLocalUserPasswordExpireAccountDisable sets the "local_user_password_expire_account_disable" field.
-func (m *TaskMutation) SetLocalUserPasswordExpireAccountDisable(i int) {
-	m.local_user_password_expire_account_disable = &i
-	m.addlocal_user_password_expire_account_disable = nil
+func (m *TaskMutation) SetLocalUserPasswordExpireAccountDisable(s string) {
+	m.local_user_password_expire_account_disable = &s
 }
 
 // LocalUserPasswordExpireAccountDisable returns the value of the "local_user_password_expire_account_disable" field in the mutation.
-func (m *TaskMutation) LocalUserPasswordExpireAccountDisable() (r int, exists bool) {
+func (m *TaskMutation) LocalUserPasswordExpireAccountDisable() (r string, exists bool) {
 	v := m.local_user_password_expire_account_disable
 	if v == nil {
 		return
@@ -25376,7 +25346,7 @@ func (m *TaskMutation) LocalUserPasswordExpireAccountDisable() (r int, exists bo
 // OldLocalUserPasswordExpireAccountDisable returns the old "local_user_password_expire_account_disable" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserPasswordExpireAccountDisable(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserPasswordExpireAccountDisable(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserPasswordExpireAccountDisable is only allowed on UpdateOne operations")
 	}
@@ -25390,28 +25360,9 @@ func (m *TaskMutation) OldLocalUserPasswordExpireAccountDisable(ctx context.Cont
 	return oldValue.LocalUserPasswordExpireAccountDisable, nil
 }
 
-// AddLocalUserPasswordExpireAccountDisable adds i to the "local_user_password_expire_account_disable" field.
-func (m *TaskMutation) AddLocalUserPasswordExpireAccountDisable(i int) {
-	if m.addlocal_user_password_expire_account_disable != nil {
-		*m.addlocal_user_password_expire_account_disable += i
-	} else {
-		m.addlocal_user_password_expire_account_disable = &i
-	}
-}
-
-// AddedLocalUserPasswordExpireAccountDisable returns the value that was added to the "local_user_password_expire_account_disable" field in this mutation.
-func (m *TaskMutation) AddedLocalUserPasswordExpireAccountDisable() (r int, exists bool) {
-	v := m.addlocal_user_password_expire_account_disable
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserPasswordExpireAccountDisable clears the value of the "local_user_password_expire_account_disable" field.
 func (m *TaskMutation) ClearLocalUserPasswordExpireAccountDisable() {
 	m.local_user_password_expire_account_disable = nil
-	m.addlocal_user_password_expire_account_disable = nil
 	m.clearedFields[task.FieldLocalUserPasswordExpireAccountDisable] = struct{}{}
 }
 
@@ -25424,18 +25375,16 @@ func (m *TaskMutation) LocalUserPasswordExpireAccountDisableCleared() bool {
 // ResetLocalUserPasswordExpireAccountDisable resets all changes to the "local_user_password_expire_account_disable" field.
 func (m *TaskMutation) ResetLocalUserPasswordExpireAccountDisable() {
 	m.local_user_password_expire_account_disable = nil
-	m.addlocal_user_password_expire_account_disable = nil
 	delete(m.clearedFields, task.FieldLocalUserPasswordExpireAccountDisable)
 }
 
 // SetLocalUserPasswordExpireMax sets the "local_user_password_expire_max" field.
-func (m *TaskMutation) SetLocalUserPasswordExpireMax(i int) {
-	m.local_user_password_expire_max = &i
-	m.addlocal_user_password_expire_max = nil
+func (m *TaskMutation) SetLocalUserPasswordExpireMax(s string) {
+	m.local_user_password_expire_max = &s
 }
 
 // LocalUserPasswordExpireMax returns the value of the "local_user_password_expire_max" field in the mutation.
-func (m *TaskMutation) LocalUserPasswordExpireMax() (r int, exists bool) {
+func (m *TaskMutation) LocalUserPasswordExpireMax() (r string, exists bool) {
 	v := m.local_user_password_expire_max
 	if v == nil {
 		return
@@ -25446,7 +25395,7 @@ func (m *TaskMutation) LocalUserPasswordExpireMax() (r int, exists bool) {
 // OldLocalUserPasswordExpireMax returns the old "local_user_password_expire_max" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserPasswordExpireMax(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserPasswordExpireMax(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserPasswordExpireMax is only allowed on UpdateOne operations")
 	}
@@ -25460,28 +25409,9 @@ func (m *TaskMutation) OldLocalUserPasswordExpireMax(ctx context.Context) (v int
 	return oldValue.LocalUserPasswordExpireMax, nil
 }
 
-// AddLocalUserPasswordExpireMax adds i to the "local_user_password_expire_max" field.
-func (m *TaskMutation) AddLocalUserPasswordExpireMax(i int) {
-	if m.addlocal_user_password_expire_max != nil {
-		*m.addlocal_user_password_expire_max += i
-	} else {
-		m.addlocal_user_password_expire_max = &i
-	}
-}
-
-// AddedLocalUserPasswordExpireMax returns the value that was added to the "local_user_password_expire_max" field in this mutation.
-func (m *TaskMutation) AddedLocalUserPasswordExpireMax() (r int, exists bool) {
-	v := m.addlocal_user_password_expire_max
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserPasswordExpireMax clears the value of the "local_user_password_expire_max" field.
 func (m *TaskMutation) ClearLocalUserPasswordExpireMax() {
 	m.local_user_password_expire_max = nil
-	m.addlocal_user_password_expire_max = nil
 	m.clearedFields[task.FieldLocalUserPasswordExpireMax] = struct{}{}
 }
 
@@ -25494,18 +25424,16 @@ func (m *TaskMutation) LocalUserPasswordExpireMaxCleared() bool {
 // ResetLocalUserPasswordExpireMax resets all changes to the "local_user_password_expire_max" field.
 func (m *TaskMutation) ResetLocalUserPasswordExpireMax() {
 	m.local_user_password_expire_max = nil
-	m.addlocal_user_password_expire_max = nil
 	delete(m.clearedFields, task.FieldLocalUserPasswordExpireMax)
 }
 
 // SetLocalUserPasswordExpireMin sets the "local_user_password_expire_min" field.
-func (m *TaskMutation) SetLocalUserPasswordExpireMin(i int) {
-	m.local_user_password_expire_min = &i
-	m.addlocal_user_password_expire_min = nil
+func (m *TaskMutation) SetLocalUserPasswordExpireMin(s string) {
+	m.local_user_password_expire_min = &s
 }
 
 // LocalUserPasswordExpireMin returns the value of the "local_user_password_expire_min" field in the mutation.
-func (m *TaskMutation) LocalUserPasswordExpireMin() (r int, exists bool) {
+func (m *TaskMutation) LocalUserPasswordExpireMin() (r string, exists bool) {
 	v := m.local_user_password_expire_min
 	if v == nil {
 		return
@@ -25516,7 +25444,7 @@ func (m *TaskMutation) LocalUserPasswordExpireMin() (r int, exists bool) {
 // OldLocalUserPasswordExpireMin returns the old "local_user_password_expire_min" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserPasswordExpireMin(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserPasswordExpireMin(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserPasswordExpireMin is only allowed on UpdateOne operations")
 	}
@@ -25530,28 +25458,9 @@ func (m *TaskMutation) OldLocalUserPasswordExpireMin(ctx context.Context) (v int
 	return oldValue.LocalUserPasswordExpireMin, nil
 }
 
-// AddLocalUserPasswordExpireMin adds i to the "local_user_password_expire_min" field.
-func (m *TaskMutation) AddLocalUserPasswordExpireMin(i int) {
-	if m.addlocal_user_password_expire_min != nil {
-		*m.addlocal_user_password_expire_min += i
-	} else {
-		m.addlocal_user_password_expire_min = &i
-	}
-}
-
-// AddedLocalUserPasswordExpireMin returns the value that was added to the "local_user_password_expire_min" field in this mutation.
-func (m *TaskMutation) AddedLocalUserPasswordExpireMin() (r int, exists bool) {
-	v := m.addlocal_user_password_expire_min
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserPasswordExpireMin clears the value of the "local_user_password_expire_min" field.
 func (m *TaskMutation) ClearLocalUserPasswordExpireMin() {
 	m.local_user_password_expire_min = nil
-	m.addlocal_user_password_expire_min = nil
 	m.clearedFields[task.FieldLocalUserPasswordExpireMin] = struct{}{}
 }
 
@@ -25564,18 +25473,16 @@ func (m *TaskMutation) LocalUserPasswordExpireMinCleared() bool {
 // ResetLocalUserPasswordExpireMin resets all changes to the "local_user_password_expire_min" field.
 func (m *TaskMutation) ResetLocalUserPasswordExpireMin() {
 	m.local_user_password_expire_min = nil
-	m.addlocal_user_password_expire_min = nil
 	delete(m.clearedFields, task.FieldLocalUserPasswordExpireMin)
 }
 
 // SetLocalUserPasswordExpireWarn sets the "local_user_password_expire_warn" field.
-func (m *TaskMutation) SetLocalUserPasswordExpireWarn(i int) {
-	m.local_user_password_expire_warn = &i
-	m.addlocal_user_password_expire_warn = nil
+func (m *TaskMutation) SetLocalUserPasswordExpireWarn(s string) {
+	m.local_user_password_expire_warn = &s
 }
 
 // LocalUserPasswordExpireWarn returns the value of the "local_user_password_expire_warn" field in the mutation.
-func (m *TaskMutation) LocalUserPasswordExpireWarn() (r int, exists bool) {
+func (m *TaskMutation) LocalUserPasswordExpireWarn() (r string, exists bool) {
 	v := m.local_user_password_expire_warn
 	if v == nil {
 		return
@@ -25586,7 +25493,7 @@ func (m *TaskMutation) LocalUserPasswordExpireWarn() (r int, exists bool) {
 // OldLocalUserPasswordExpireWarn returns the old "local_user_password_expire_warn" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserPasswordExpireWarn(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserPasswordExpireWarn(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserPasswordExpireWarn is only allowed on UpdateOne operations")
 	}
@@ -25600,28 +25507,9 @@ func (m *TaskMutation) OldLocalUserPasswordExpireWarn(ctx context.Context) (v in
 	return oldValue.LocalUserPasswordExpireWarn, nil
 }
 
-// AddLocalUserPasswordExpireWarn adds i to the "local_user_password_expire_warn" field.
-func (m *TaskMutation) AddLocalUserPasswordExpireWarn(i int) {
-	if m.addlocal_user_password_expire_warn != nil {
-		*m.addlocal_user_password_expire_warn += i
-	} else {
-		m.addlocal_user_password_expire_warn = &i
-	}
-}
-
-// AddedLocalUserPasswordExpireWarn returns the value that was added to the "local_user_password_expire_warn" field in this mutation.
-func (m *TaskMutation) AddedLocalUserPasswordExpireWarn() (r int, exists bool) {
-	v := m.addlocal_user_password_expire_warn
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserPasswordExpireWarn clears the value of the "local_user_password_expire_warn" field.
 func (m *TaskMutation) ClearLocalUserPasswordExpireWarn() {
 	m.local_user_password_expire_warn = nil
-	m.addlocal_user_password_expire_warn = nil
 	m.clearedFields[task.FieldLocalUserPasswordExpireWarn] = struct{}{}
 }
 
@@ -25634,7 +25522,6 @@ func (m *TaskMutation) LocalUserPasswordExpireWarnCleared() bool {
 // ResetLocalUserPasswordExpireWarn resets all changes to the "local_user_password_expire_warn" field.
 func (m *TaskMutation) ResetLocalUserPasswordExpireWarn() {
 	m.local_user_password_expire_warn = nil
-	m.addlocal_user_password_expire_warn = nil
 	delete(m.clearedFields, task.FieldLocalUserPasswordExpireWarn)
 }
 
@@ -25884,13 +25771,12 @@ func (m *TaskMutation) ResetLocalUserSystem() {
 }
 
 // SetLocalUserID sets the "local_user_id" field.
-func (m *TaskMutation) SetLocalUserID(i int) {
-	m.local_user_id = &i
-	m.addlocal_user_id = nil
+func (m *TaskMutation) SetLocalUserID(s string) {
+	m.local_user_id = &s
 }
 
 // LocalUserID returns the value of the "local_user_id" field in the mutation.
-func (m *TaskMutation) LocalUserID() (r int, exists bool) {
+func (m *TaskMutation) LocalUserID() (r string, exists bool) {
 	v := m.local_user_id
 	if v == nil {
 		return
@@ -25901,7 +25787,7 @@ func (m *TaskMutation) LocalUserID() (r int, exists bool) {
 // OldLocalUserID returns the old "local_user_id" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserID(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserID is only allowed on UpdateOne operations")
 	}
@@ -25915,28 +25801,9 @@ func (m *TaskMutation) OldLocalUserID(ctx context.Context) (v int, err error) {
 	return oldValue.LocalUserID, nil
 }
 
-// AddLocalUserID adds i to the "local_user_id" field.
-func (m *TaskMutation) AddLocalUserID(i int) {
-	if m.addlocal_user_id != nil {
-		*m.addlocal_user_id += i
-	} else {
-		m.addlocal_user_id = &i
-	}
-}
-
-// AddedLocalUserID returns the value that was added to the "local_user_id" field in this mutation.
-func (m *TaskMutation) AddedLocalUserID() (r int, exists bool) {
-	v := m.addlocal_user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserID clears the value of the "local_user_id" field.
 func (m *TaskMutation) ClearLocalUserID() {
 	m.local_user_id = nil
-	m.addlocal_user_id = nil
 	m.clearedFields[task.FieldLocalUserID] = struct{}{}
 }
 
@@ -25949,18 +25816,16 @@ func (m *TaskMutation) LocalUserIDCleared() bool {
 // ResetLocalUserID resets all changes to the "local_user_id" field.
 func (m *TaskMutation) ResetLocalUserID() {
 	m.local_user_id = nil
-	m.addlocal_user_id = nil
 	delete(m.clearedFields, task.FieldLocalUserID)
 }
 
 // SetLocalUserIDMax sets the "local_user_id_max" field.
-func (m *TaskMutation) SetLocalUserIDMax(i int) {
-	m.local_user_id_max = &i
-	m.addlocal_user_id_max = nil
+func (m *TaskMutation) SetLocalUserIDMax(s string) {
+	m.local_user_id_max = &s
 }
 
 // LocalUserIDMax returns the value of the "local_user_id_max" field in the mutation.
-func (m *TaskMutation) LocalUserIDMax() (r int, exists bool) {
+func (m *TaskMutation) LocalUserIDMax() (r string, exists bool) {
 	v := m.local_user_id_max
 	if v == nil {
 		return
@@ -25971,7 +25836,7 @@ func (m *TaskMutation) LocalUserIDMax() (r int, exists bool) {
 // OldLocalUserIDMax returns the old "local_user_id_max" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserIDMax(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserIDMax(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserIDMax is only allowed on UpdateOne operations")
 	}
@@ -25985,28 +25850,9 @@ func (m *TaskMutation) OldLocalUserIDMax(ctx context.Context) (v int, err error)
 	return oldValue.LocalUserIDMax, nil
 }
 
-// AddLocalUserIDMax adds i to the "local_user_id_max" field.
-func (m *TaskMutation) AddLocalUserIDMax(i int) {
-	if m.addlocal_user_id_max != nil {
-		*m.addlocal_user_id_max += i
-	} else {
-		m.addlocal_user_id_max = &i
-	}
-}
-
-// AddedLocalUserIDMax returns the value that was added to the "local_user_id_max" field in this mutation.
-func (m *TaskMutation) AddedLocalUserIDMax() (r int, exists bool) {
-	v := m.addlocal_user_id_max
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserIDMax clears the value of the "local_user_id_max" field.
 func (m *TaskMutation) ClearLocalUserIDMax() {
 	m.local_user_id_max = nil
-	m.addlocal_user_id_max = nil
 	m.clearedFields[task.FieldLocalUserIDMax] = struct{}{}
 }
 
@@ -26019,18 +25865,16 @@ func (m *TaskMutation) LocalUserIDMaxCleared() bool {
 // ResetLocalUserIDMax resets all changes to the "local_user_id_max" field.
 func (m *TaskMutation) ResetLocalUserIDMax() {
 	m.local_user_id_max = nil
-	m.addlocal_user_id_max = nil
 	delete(m.clearedFields, task.FieldLocalUserIDMax)
 }
 
 // SetLocalUserIDMin sets the "local_user_id_min" field.
-func (m *TaskMutation) SetLocalUserIDMin(i int) {
-	m.local_user_id_min = &i
-	m.addlocal_user_id_min = nil
+func (m *TaskMutation) SetLocalUserIDMin(s string) {
+	m.local_user_id_min = &s
 }
 
 // LocalUserIDMin returns the value of the "local_user_id_min" field in the mutation.
-func (m *TaskMutation) LocalUserIDMin() (r int, exists bool) {
+func (m *TaskMutation) LocalUserIDMin() (r string, exists bool) {
 	v := m.local_user_id_min
 	if v == nil {
 		return
@@ -26041,7 +25885,7 @@ func (m *TaskMutation) LocalUserIDMin() (r int, exists bool) {
 // OldLocalUserIDMin returns the old "local_user_id_min" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserIDMin(ctx context.Context) (v int, err error) {
+func (m *TaskMutation) OldLocalUserIDMin(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserIDMin is only allowed on UpdateOne operations")
 	}
@@ -26055,28 +25899,9 @@ func (m *TaskMutation) OldLocalUserIDMin(ctx context.Context) (v int, err error)
 	return oldValue.LocalUserIDMin, nil
 }
 
-// AddLocalUserIDMin adds i to the "local_user_id_min" field.
-func (m *TaskMutation) AddLocalUserIDMin(i int) {
-	if m.addlocal_user_id_min != nil {
-		*m.addlocal_user_id_min += i
-	} else {
-		m.addlocal_user_id_min = &i
-	}
-}
-
-// AddedLocalUserIDMin returns the value that was added to the "local_user_id_min" field in this mutation.
-func (m *TaskMutation) AddedLocalUserIDMin() (r int, exists bool) {
-	v := m.addlocal_user_id_min
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearLocalUserIDMin clears the value of the "local_user_id_min" field.
 func (m *TaskMutation) ClearLocalUserIDMin() {
 	m.local_user_id_min = nil
-	m.addlocal_user_id_min = nil
 	m.clearedFields[task.FieldLocalUserIDMin] = struct{}{}
 }
 
@@ -26089,7 +25914,6 @@ func (m *TaskMutation) LocalUserIDMinCleared() bool {
 // ResetLocalUserIDMin resets all changes to the "local_user_id_min" field.
 func (m *TaskMutation) ResetLocalUserIDMin() {
 	m.local_user_id_min = nil
-	m.addlocal_user_id_min = nil
 	delete(m.clearedFields, task.FieldLocalUserIDMin)
 }
 
@@ -27732,7 +27556,7 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetLocalUserCreateHome(v)
 		return nil
 	case task.FieldLocalUserExpires:
-		v, ok := value.(float64)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -27788,28 +27612,28 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetLocalUserNonunique(v)
 		return nil
 	case task.FieldLocalUserPasswordExpireAccountDisable:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalUserPasswordExpireAccountDisable(v)
 		return nil
 	case task.FieldLocalUserPasswordExpireMax:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalUserPasswordExpireMax(v)
 		return nil
 	case task.FieldLocalUserPasswordExpireMin:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalUserPasswordExpireMin(v)
 		return nil
 	case task.FieldLocalUserPasswordExpireWarn:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -27851,21 +27675,21 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetLocalUserSystem(v)
 		return nil
 	case task.FieldLocalUserID:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalUserID(v)
 		return nil
 	case task.FieldLocalUserIDMax:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocalUserIDMax(v)
 		return nil
 	case task.FieldLocalUserIDMin:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -28011,56 +27835,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *TaskMutation) AddedFields() []string {
-	var fields []string
-	if m.addlocal_user_expires != nil {
-		fields = append(fields, task.FieldLocalUserExpires)
-	}
-	if m.addlocal_user_password_expire_account_disable != nil {
-		fields = append(fields, task.FieldLocalUserPasswordExpireAccountDisable)
-	}
-	if m.addlocal_user_password_expire_max != nil {
-		fields = append(fields, task.FieldLocalUserPasswordExpireMax)
-	}
-	if m.addlocal_user_password_expire_min != nil {
-		fields = append(fields, task.FieldLocalUserPasswordExpireMin)
-	}
-	if m.addlocal_user_password_expire_warn != nil {
-		fields = append(fields, task.FieldLocalUserPasswordExpireWarn)
-	}
-	if m.addlocal_user_id != nil {
-		fields = append(fields, task.FieldLocalUserID)
-	}
-	if m.addlocal_user_id_max != nil {
-		fields = append(fields, task.FieldLocalUserIDMax)
-	}
-	if m.addlocal_user_id_min != nil {
-		fields = append(fields, task.FieldLocalUserIDMin)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case task.FieldLocalUserExpires:
-		return m.AddedLocalUserExpires()
-	case task.FieldLocalUserPasswordExpireAccountDisable:
-		return m.AddedLocalUserPasswordExpireAccountDisable()
-	case task.FieldLocalUserPasswordExpireMax:
-		return m.AddedLocalUserPasswordExpireMax()
-	case task.FieldLocalUserPasswordExpireMin:
-		return m.AddedLocalUserPasswordExpireMin()
-	case task.FieldLocalUserPasswordExpireWarn:
-		return m.AddedLocalUserPasswordExpireWarn()
-	case task.FieldLocalUserID:
-		return m.AddedLocalUserID()
-	case task.FieldLocalUserIDMax:
-		return m.AddedLocalUserIDMax()
-	case task.FieldLocalUserIDMin:
-		return m.AddedLocalUserIDMin()
-	}
 	return nil, false
 }
 
@@ -28069,62 +27850,6 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TaskMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case task.FieldLocalUserExpires:
-		v, ok := value.(float64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserExpires(v)
-		return nil
-	case task.FieldLocalUserPasswordExpireAccountDisable:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserPasswordExpireAccountDisable(v)
-		return nil
-	case task.FieldLocalUserPasswordExpireMax:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserPasswordExpireMax(v)
-		return nil
-	case task.FieldLocalUserPasswordExpireMin:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserPasswordExpireMin(v)
-		return nil
-	case task.FieldLocalUserPasswordExpireWarn:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserPasswordExpireWarn(v)
-		return nil
-	case task.FieldLocalUserID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserID(v)
-		return nil
-	case task.FieldLocalUserIDMax:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserIDMax(v)
-		return nil
-	case task.FieldLocalUserIDMin:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddLocalUserIDMin(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Task numeric field %s", name)
 }
