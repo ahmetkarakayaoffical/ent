@@ -27,6 +27,7 @@ func (Task) Fields() []ent.Field {
 			"add_local_user",
 			"remove_local_user",
 			"add_linux_local_user",
+			"modify_linux_local_user",
 			"remove_linux_local_user",
 			"add_macos_local_user",
 			"remove_macos_local_user",
