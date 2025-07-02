@@ -457,15 +457,15 @@ func (tc *TaskCreate) SetNillableLocalUserPasswordExpireWarn(s *string) *TaskCre
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (tc *TaskCreate) SetLocalUserPasswordLock(s string) *TaskCreate {
-	tc.mutation.SetLocalUserPasswordLock(s)
+func (tc *TaskCreate) SetLocalUserPasswordLock(b bool) *TaskCreate {
+	tc.mutation.SetLocalUserPasswordLock(b)
 	return tc
 }
 
 // SetNillableLocalUserPasswordLock sets the "local_user_password_lock" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableLocalUserPasswordLock(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetLocalUserPasswordLock(*s)
+func (tc *TaskCreate) SetNillableLocalUserPasswordLock(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetLocalUserPasswordLock(*b)
 	}
 	return tc
 }
@@ -1325,7 +1325,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_node.LocalUserPasswordExpireWarn = value
 	}
 	if value, ok := tc.mutation.LocalUserPasswordLock(); ok {
-		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeString, value)
+		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeBool, value)
 		_node.LocalUserPasswordLock = value
 	}
 	if value, ok := tc.mutation.LocalUserSeuser(); ok {
@@ -2102,7 +2102,7 @@ func (u *TaskUpsert) ClearLocalUserPasswordExpireWarn() *TaskUpsert {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (u *TaskUpsert) SetLocalUserPasswordLock(v string) *TaskUpsert {
+func (u *TaskUpsert) SetLocalUserPasswordLock(v bool) *TaskUpsert {
 	u.Set(task.FieldLocalUserPasswordLock, v)
 	return u
 }
@@ -3376,7 +3376,7 @@ func (u *TaskUpsertOne) ClearLocalUserPasswordExpireWarn() *TaskUpsertOne {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (u *TaskUpsertOne) SetLocalUserPasswordLock(v string) *TaskUpsertOne {
+func (u *TaskUpsertOne) SetLocalUserPasswordLock(v bool) *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.SetLocalUserPasswordLock(v)
 	})
@@ -4910,7 +4910,7 @@ func (u *TaskUpsertBulk) ClearLocalUserPasswordExpireWarn() *TaskUpsertBulk {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (u *TaskUpsertBulk) SetLocalUserPasswordLock(v string) *TaskUpsertBulk {
+func (u *TaskUpsertBulk) SetLocalUserPasswordLock(v bool) *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.SetLocalUserPasswordLock(v)
 	})

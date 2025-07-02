@@ -23847,7 +23847,7 @@ type TaskMutation struct {
 	local_user_password_expire_max             *string
 	local_user_password_expire_min             *string
 	local_user_password_expire_warn            *string
-	local_user_password_lock                   *string
+	local_user_password_lock                   *bool
 	local_user_seuser                          *string
 	local_user_shell                           *string
 	local_user_skeleton                        *string
@@ -25531,12 +25531,12 @@ func (m *TaskMutation) ResetLocalUserPasswordExpireWarn() {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (m *TaskMutation) SetLocalUserPasswordLock(s string) {
-	m.local_user_password_lock = &s
+func (m *TaskMutation) SetLocalUserPasswordLock(b bool) {
+	m.local_user_password_lock = &b
 }
 
 // LocalUserPasswordLock returns the value of the "local_user_password_lock" field in the mutation.
-func (m *TaskMutation) LocalUserPasswordLock() (r string, exists bool) {
+func (m *TaskMutation) LocalUserPasswordLock() (r bool, exists bool) {
 	v := m.local_user_password_lock
 	if v == nil {
 		return
@@ -25547,7 +25547,7 @@ func (m *TaskMutation) LocalUserPasswordLock() (r string, exists bool) {
 // OldLocalUserPasswordLock returns the old "local_user_password_lock" field's value of the Task entity.
 // If the Task object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldLocalUserPasswordLock(ctx context.Context) (v string, err error) {
+func (m *TaskMutation) OldLocalUserPasswordLock(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLocalUserPasswordLock is only allowed on UpdateOne operations")
 	}
@@ -27925,7 +27925,7 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		m.SetLocalUserPasswordExpireWarn(v)
 		return nil
 	case task.FieldLocalUserPasswordLock:
-		v, ok := value.(string)
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

@@ -386,7 +386,7 @@ func init() {
 	// taskDescLocalUserPasswordLock is the schema descriptor for local_user_password_lock field.
 	taskDescLocalUserPasswordLock := taskFields[32].Descriptor()
 	// task.DefaultLocalUserPasswordLock holds the default value on creation for the local_user_password_lock field.
-	task.DefaultLocalUserPasswordLock = taskDescLocalUserPasswordLock.Default.(string)
+	task.DefaultLocalUserPasswordLock = taskDescLocalUserPasswordLock.Default.(bool)
 	// taskDescLocalUserSystem is the schema descriptor for local_user_system field.
 	taskDescLocalUserSystem := taskFields[36].Descriptor()
 	// task.DefaultLocalUserSystem holds the default value on creation for the local_user_system field.

@@ -728,7 +728,7 @@ var (
 		{Name: "local_user_password_expire_max", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_password_expire_min", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_password_expire_warn", Type: field.TypeString, Nullable: true},
-		{Name: "local_user_password_lock", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "local_user_password_lock", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "local_user_seuser", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_shell", Type: field.TypeString, Nullable: true},
 		{Name: "local_user_skeleton", Type: field.TypeString, Nullable: true},

@@ -70,7 +70,7 @@ func (Task) Fields() []ent.Field {
 		field.String("local_user_password_expire_max").Optional(),
 		field.String("local_user_password_expire_min").Optional(),
 		field.String("local_user_password_expire_warn").Optional(),
-		field.String("local_user_password_lock").Optional().Default(""),
+		field.Bool("local_user_password_lock").Optional().Default(false),
 		field.String("local_user_seuser").Optional(),
 		field.String("local_user_shell").Optional(),
 		field.String("local_user_skeleton").Optional(),

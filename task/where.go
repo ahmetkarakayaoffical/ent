@@ -206,7 +206,7 @@ func LocalUserPasswordExpireWarn(v string) predicate.Task {
 }
 
 // LocalUserPasswordLock applies equality check predicate on the "local_user_password_lock" field. It's identical to LocalUserPasswordLockEQ.
-func LocalUserPasswordLock(v string) predicate.Task {
+func LocalUserPasswordLock(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordLock, v))
 }
 
@@ -1981,58 +1981,13 @@ func LocalUserPasswordExpireWarnContainsFold(v string) predicate.Task {
 }
 
 // LocalUserPasswordLockEQ applies the EQ predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockEQ(v string) predicate.Task {
+func LocalUserPasswordLockEQ(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldLocalUserPasswordLock, v))
 }
 
 // LocalUserPasswordLockNEQ applies the NEQ predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockNEQ(v string) predicate.Task {
+func LocalUserPasswordLockNEQ(v bool) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockIn applies the In predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldIn(FieldLocalUserPasswordLock, vs...))
-}
-
-// LocalUserPasswordLockNotIn applies the NotIn predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockNotIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldNotIn(FieldLocalUserPasswordLock, vs...))
-}
-
-// LocalUserPasswordLockGT applies the GT predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockGT(v string) predicate.Task {
-	return predicate.Task(sql.FieldGT(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockGTE applies the GTE predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockGTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldGTE(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockLT applies the LT predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockLT(v string) predicate.Task {
-	return predicate.Task(sql.FieldLT(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockLTE applies the LTE predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockLTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldLTE(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockContains applies the Contains predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockContains(v string) predicate.Task {
-	return predicate.Task(sql.FieldContains(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockHasPrefix applies the HasPrefix predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockHasPrefix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasPrefix(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockHasSuffix applies the HasSuffix predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockHasSuffix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasSuffix(FieldLocalUserPasswordLock, v))
 }
 
 // LocalUserPasswordLockIsNil applies the IsNil predicate on the "local_user_password_lock" field.
@@ -2043,16 +1998,6 @@ func LocalUserPasswordLockIsNil() predicate.Task {
 // LocalUserPasswordLockNotNil applies the NotNil predicate on the "local_user_password_lock" field.
 func LocalUserPasswordLockNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldLocalUserPasswordLock))
-}
-
-// LocalUserPasswordLockEqualFold applies the EqualFold predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockEqualFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldEqualFold(FieldLocalUserPasswordLock, v))
-}
-
-// LocalUserPasswordLockContainsFold applies the ContainsFold predicate on the "local_user_password_lock" field.
-func LocalUserPasswordLockContainsFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldContainsFold(FieldLocalUserPasswordLock, v))
 }
 
 // LocalUserSeuserEQ applies the EQ predicate on the "local_user_seuser" field.

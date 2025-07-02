@@ -300,7 +300,7 @@ var (
 	// DefaultLocalUserNonunique holds the default value on creation for the "local_user_nonunique" field.
 	DefaultLocalUserNonunique bool
 	// DefaultLocalUserPasswordLock holds the default value on creation for the "local_user_password_lock" field.
-	DefaultLocalUserPasswordLock string
+	DefaultLocalUserPasswordLock bool
 	// DefaultLocalUserSystem holds the default value on creation for the "local_user_system" field.
 	DefaultLocalUserSystem bool
 	// DefaultLocalUserSSHKeyType holds the default value on creation for the "local_user_ssh_key_type" field.

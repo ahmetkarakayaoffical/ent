@@ -660,15 +660,15 @@ func (tu *TaskUpdate) ClearLocalUserPasswordExpireWarn() *TaskUpdate {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (tu *TaskUpdate) SetLocalUserPasswordLock(s string) *TaskUpdate {
-	tu.mutation.SetLocalUserPasswordLock(s)
+func (tu *TaskUpdate) SetLocalUserPasswordLock(b bool) *TaskUpdate {
+	tu.mutation.SetLocalUserPasswordLock(b)
 	return tu
 }
 
 // SetNillableLocalUserPasswordLock sets the "local_user_password_lock" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableLocalUserPasswordLock(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetLocalUserPasswordLock(*s)
+func (tu *TaskUpdate) SetNillableLocalUserPasswordLock(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetLocalUserPasswordLock(*b)
 	}
 	return tu
 }
@@ -1632,10 +1632,10 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(task.FieldLocalUserPasswordExpireWarn, field.TypeString)
 	}
 	if value, ok := tu.mutation.LocalUserPasswordLock(); ok {
-		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeString, value)
+		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeBool, value)
 	}
 	if tu.mutation.LocalUserPasswordLockCleared() {
-		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeString)
+		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeBool)
 	}
 	if value, ok := tu.mutation.LocalUserSeuser(); ok {
 		_spec.SetField(task.FieldLocalUserSeuser, field.TypeString, value)
@@ -2548,15 +2548,15 @@ func (tuo *TaskUpdateOne) ClearLocalUserPasswordExpireWarn() *TaskUpdateOne {
 }
 
 // SetLocalUserPasswordLock sets the "local_user_password_lock" field.
-func (tuo *TaskUpdateOne) SetLocalUserPasswordLock(s string) *TaskUpdateOne {
-	tuo.mutation.SetLocalUserPasswordLock(s)
+func (tuo *TaskUpdateOne) SetLocalUserPasswordLock(b bool) *TaskUpdateOne {
+	tuo.mutation.SetLocalUserPasswordLock(b)
 	return tuo
 }
 
 // SetNillableLocalUserPasswordLock sets the "local_user_password_lock" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordLock(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetLocalUserPasswordLock(*s)
+func (tuo *TaskUpdateOne) SetNillableLocalUserPasswordLock(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetLocalUserPasswordLock(*b)
 	}
 	return tuo
 }
@@ -3550,10 +3550,10 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		_spec.ClearField(task.FieldLocalUserPasswordExpireWarn, field.TypeString)
 	}
 	if value, ok := tuo.mutation.LocalUserPasswordLock(); ok {
-		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeString, value)
+		_spec.SetField(task.FieldLocalUserPasswordLock, field.TypeBool, value)
 	}
 	if tuo.mutation.LocalUserPasswordLockCleared() {
-		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeString)
+		_spec.ClearField(task.FieldLocalUserPasswordLock, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.LocalUserSeuser(); ok {
 		_spec.SetField(task.FieldLocalUserSeuser, field.TypeString, value)

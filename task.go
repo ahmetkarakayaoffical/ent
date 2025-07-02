@@ -83,7 +83,7 @@ type Task struct {
 	// LocalUserPasswordExpireWarn holds the value of the "local_user_password_expire_warn" field.
 	LocalUserPasswordExpireWarn string `json:"local_user_password_expire_warn,omitempty"`
 	// LocalUserPasswordLock holds the value of the "local_user_password_lock" field.
-	LocalUserPasswordLock string `json:"local_user_password_lock,omitempty"`
+	LocalUserPasswordLock bool `json:"local_user_password_lock,omitempty"`
 	// LocalUserSeuser holds the value of the "local_user_seuser" field.
 	LocalUserSeuser string `json:"local_user_seuser,omitempty"`
 	// LocalUserShell holds the value of the "local_user_shell" field.
@@ -189,11 +189,11 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
+		case task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserPasswordLock, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptRun, task.FieldAgentType:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -413,10 +413,10 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.LocalUserPasswordExpireWarn = value.String
 			}
 		case task.FieldLocalUserPasswordLock:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field local_user_password_lock", values[i])
 			} else if value.Valid {
-				t.LocalUserPasswordLock = value.String
+				t.LocalUserPasswordLock = value.Bool
 			}
 		case task.FieldLocalUserSeuser:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -754,7 +754,7 @@ func (t *Task) String() string {
 	builder.WriteString(t.LocalUserPasswordExpireWarn)
 	builder.WriteString(", ")
 	builder.WriteString("local_user_password_lock=")
-	builder.WriteString(t.LocalUserPasswordLock)
+	builder.WriteString(fmt.Sprintf("%v", t.LocalUserPasswordLock))
 	builder.WriteString(", ")
 	builder.WriteString("local_user_seuser=")
 	builder.WriteString(t.LocalUserSeuser)
