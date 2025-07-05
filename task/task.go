@@ -136,6 +136,8 @@ const (
 	FieldMsiLogPath = "msi_log_path"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldScriptExecutable holds the string denoting the script_executable field in the database.
+	FieldScriptExecutable = "script_executable"
 	// FieldScriptRun holds the string denoting the script_run field in the database.
 	FieldScriptRun = "script_run"
 	// FieldAgentType holds the string denoting the agent_type field in the database.
@@ -228,6 +230,7 @@ var Columns = []string{
 	FieldMsiFileHashAlg,
 	FieldMsiLogPath,
 	FieldScript,
+	FieldScriptExecutable,
 	FieldScriptRun,
 	FieldAgentType,
 	FieldWhen,
@@ -333,6 +336,8 @@ var (
 	DefaultMsiLogPath string
 	// DefaultScript holds the default value on creation for the "script" field.
 	DefaultScript string
+	// DefaultScriptExecutable holds the default value on creation for the "script_executable" field.
+	DefaultScriptExecutable string
 )
 
 // Type defines the type for the "type" enum field.
@@ -795,6 +800,11 @@ func ByMsiLogPath(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByScriptExecutable orders the results by the script_executable field.
+func ByScriptExecutable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScriptExecutable, opts...).ToFunc()
 }
 
 // ByScriptRun orders the results by the script_run field.

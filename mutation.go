@@ -23876,6 +23876,7 @@ type TaskMutation struct {
 	msi_file_hash_alg                          *task.MsiFileHashAlg
 	msi_log_path                               *string
 	script                                     *string
+	script_executable                          *string
 	script_run                                 *task.ScriptRun
 	agent_type                                 *task.AgentType
 	when                                       *time.Time
@@ -26951,6 +26952,55 @@ func (m *TaskMutation) ResetScript() {
 	delete(m.clearedFields, task.FieldScript)
 }
 
+// SetScriptExecutable sets the "script_executable" field.
+func (m *TaskMutation) SetScriptExecutable(s string) {
+	m.script_executable = &s
+}
+
+// ScriptExecutable returns the value of the "script_executable" field in the mutation.
+func (m *TaskMutation) ScriptExecutable() (r string, exists bool) {
+	v := m.script_executable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScriptExecutable returns the old "script_executable" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldScriptExecutable(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScriptExecutable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScriptExecutable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScriptExecutable: %w", err)
+	}
+	return oldValue.ScriptExecutable, nil
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (m *TaskMutation) ClearScriptExecutable() {
+	m.script_executable = nil
+	m.clearedFields[task.FieldScriptExecutable] = struct{}{}
+}
+
+// ScriptExecutableCleared returns if the "script_executable" field was cleared in this mutation.
+func (m *TaskMutation) ScriptExecutableCleared() bool {
+	_, ok := m.clearedFields[task.FieldScriptExecutable]
+	return ok
+}
+
+// ResetScriptExecutable resets all changes to the "script_executable" field.
+func (m *TaskMutation) ResetScriptExecutable() {
+	m.script_executable = nil
+	delete(m.clearedFields, task.FieldScriptExecutable)
+}
+
 // SetScriptRun sets the "script_run" field.
 func (m *TaskMutation) SetScriptRun(tr task.ScriptRun) {
 	m.script_run = &tr
@@ -27225,7 +27275,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 64)
+	fields := make([]string, 0, 65)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -27409,6 +27459,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.script != nil {
 		fields = append(fields, task.FieldScript)
 	}
+	if m.script_executable != nil {
+		fields = append(fields, task.FieldScriptExecutable)
+	}
 	if m.script_run != nil {
 		fields = append(fields, task.FieldScriptRun)
 	}
@@ -27548,6 +27601,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.MsiLogPath()
 	case task.FieldScript:
 		return m.Script()
+	case task.FieldScriptExecutable:
+		return m.ScriptExecutable()
 	case task.FieldScriptRun:
 		return m.ScriptRun()
 	case task.FieldAgentType:
@@ -27685,6 +27740,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMsiLogPath(ctx)
 	case task.FieldScript:
 		return m.OldScript(ctx)
+	case task.FieldScriptExecutable:
+		return m.OldScriptExecutable(ctx)
 	case task.FieldScriptRun:
 		return m.OldScriptRun(ctx)
 	case task.FieldAgentType:
@@ -28127,6 +28184,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScript(v)
 		return nil
+	case task.FieldScriptExecutable:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScriptExecutable(v)
+		return nil
 	case task.FieldScriptRun:
 		v, ok := value.(task.ScriptRun)
 		if !ok {
@@ -28355,6 +28419,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldScript) {
 		fields = append(fields, task.FieldScript)
 	}
+	if m.FieldCleared(task.FieldScriptExecutable) {
+		fields = append(fields, task.FieldScriptExecutable)
+	}
 	if m.FieldCleared(task.FieldScriptRun) {
 		fields = append(fields, task.FieldScriptRun)
 	}
@@ -28555,6 +28622,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldScript:
 		m.ClearScript()
 		return nil
+	case task.FieldScriptExecutable:
+		m.ClearScriptExecutable()
+		return nil
 	case task.FieldScriptRun:
 		m.ClearScriptRun()
 		return nil
@@ -28754,6 +28824,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldScript:
 		m.ResetScript()
+		return nil
+	case task.FieldScriptExecutable:
+		m.ResetScriptExecutable()
 		return nil
 	case task.FieldScriptRun:
 		m.ResetScriptRun()

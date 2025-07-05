@@ -345,6 +345,11 @@ func Script(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldScript, v))
 }
 
+// ScriptExecutable applies equality check predicate on the "script_executable" field. It's identical to ScriptExecutableEQ.
+func ScriptExecutable(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScriptExecutable, v))
+}
+
 // When applies equality check predicate on the "when" field. It's identical to WhenEQ.
 func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
@@ -3888,6 +3893,81 @@ func ScriptEqualFold(v string) predicate.Task {
 // ScriptContainsFold applies the ContainsFold predicate on the "script" field.
 func ScriptContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldScript, v))
+}
+
+// ScriptExecutableEQ applies the EQ predicate on the "script_executable" field.
+func ScriptExecutableEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableNEQ applies the NEQ predicate on the "script_executable" field.
+func ScriptExecutableNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableIn applies the In predicate on the "script_executable" field.
+func ScriptExecutableIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldScriptExecutable, vs...))
+}
+
+// ScriptExecutableNotIn applies the NotIn predicate on the "script_executable" field.
+func ScriptExecutableNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldScriptExecutable, vs...))
+}
+
+// ScriptExecutableGT applies the GT predicate on the "script_executable" field.
+func ScriptExecutableGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableGTE applies the GTE predicate on the "script_executable" field.
+func ScriptExecutableGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableLT applies the LT predicate on the "script_executable" field.
+func ScriptExecutableLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableLTE applies the LTE predicate on the "script_executable" field.
+func ScriptExecutableLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableContains applies the Contains predicate on the "script_executable" field.
+func ScriptExecutableContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableHasPrefix applies the HasPrefix predicate on the "script_executable" field.
+func ScriptExecutableHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableHasSuffix applies the HasSuffix predicate on the "script_executable" field.
+func ScriptExecutableHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableIsNil applies the IsNil predicate on the "script_executable" field.
+func ScriptExecutableIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldScriptExecutable))
+}
+
+// ScriptExecutableNotNil applies the NotNil predicate on the "script_executable" field.
+func ScriptExecutableNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldScriptExecutable))
+}
+
+// ScriptExecutableEqualFold applies the EqualFold predicate on the "script_executable" field.
+func ScriptExecutableEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldScriptExecutable, v))
+}
+
+// ScriptExecutableContainsFold applies the ContainsFold predicate on the "script_executable" field.
+func ScriptExecutableContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldScriptExecutable, v))
 }
 
 // ScriptRunEQ applies the EQ predicate on the "script_run" field.

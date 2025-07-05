@@ -1239,6 +1239,26 @@ func (tu *TaskUpdate) ClearScript() *TaskUpdate {
 	return tu
 }
 
+// SetScriptExecutable sets the "script_executable" field.
+func (tu *TaskUpdate) SetScriptExecutable(s string) *TaskUpdate {
+	tu.mutation.SetScriptExecutable(s)
+	return tu
+}
+
+// SetNillableScriptExecutable sets the "script_executable" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableScriptExecutable(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetScriptExecutable(*s)
+	}
+	return tu
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (tu *TaskUpdate) ClearScriptExecutable() *TaskUpdate {
+	tu.mutation.ClearScriptExecutable()
+	return tu
+}
+
 // SetScriptRun sets the "script_run" field.
 func (tu *TaskUpdate) SetScriptRun(tr task.ScriptRun) *TaskUpdate {
 	tu.mutation.SetScriptRun(tr)
@@ -1804,6 +1824,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.ScriptCleared() {
 		_spec.ClearField(task.FieldScript, field.TypeString)
+	}
+	if value, ok := tu.mutation.ScriptExecutable(); ok {
+		_spec.SetField(task.FieldScriptExecutable, field.TypeString, value)
+	}
+	if tu.mutation.ScriptExecutableCleared() {
+		_spec.ClearField(task.FieldScriptExecutable, field.TypeString)
 	}
 	if value, ok := tu.mutation.ScriptRun(); ok {
 		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
@@ -3127,6 +3153,26 @@ func (tuo *TaskUpdateOne) ClearScript() *TaskUpdateOne {
 	return tuo
 }
 
+// SetScriptExecutable sets the "script_executable" field.
+func (tuo *TaskUpdateOne) SetScriptExecutable(s string) *TaskUpdateOne {
+	tuo.mutation.SetScriptExecutable(s)
+	return tuo
+}
+
+// SetNillableScriptExecutable sets the "script_executable" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableScriptExecutable(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetScriptExecutable(*s)
+	}
+	return tuo
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (tuo *TaskUpdateOne) ClearScriptExecutable() *TaskUpdateOne {
+	tuo.mutation.ClearScriptExecutable()
+	return tuo
+}
+
 // SetScriptRun sets the "script_run" field.
 func (tuo *TaskUpdateOne) SetScriptRun(tr task.ScriptRun) *TaskUpdateOne {
 	tuo.mutation.SetScriptRun(tr)
@@ -3722,6 +3768,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.ScriptCleared() {
 		_spec.ClearField(task.FieldScript, field.TypeString)
+	}
+	if value, ok := tuo.mutation.ScriptExecutable(); ok {
+		_spec.SetField(task.FieldScriptExecutable, field.TypeString, value)
+	}
+	if tuo.mutation.ScriptExecutableCleared() {
+		_spec.ClearField(task.FieldScriptExecutable, field.TypeString)
 	}
 	if value, ok := tuo.mutation.ScriptRun(); ok {
 		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)

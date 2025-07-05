@@ -99,6 +99,7 @@ func (Task) Fields() []ent.Field {
 		field.Enum("msi_file_hash_alg").Values("MD5", "RIPEMD160", "SHA1", "SHA256", "SHA384", "SHA512").Optional(),
 		field.String("msi_log_path").Optional().Default(""),
 		field.String("script").Optional().Default(""),
+		field.String("script_executable").Optional().Default(""),
 		field.Enum("script_run").Values("once", "always").Optional(),
 		field.Enum("agent_type").Values("windows", "linux", "macos").Optional().Default("windows"),
 		field.Time("when").Optional(),

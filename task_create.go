@@ -862,6 +862,20 @@ func (tc *TaskCreate) SetNillableScript(s *string) *TaskCreate {
 	return tc
 }
 
+// SetScriptExecutable sets the "script_executable" field.
+func (tc *TaskCreate) SetScriptExecutable(s string) *TaskCreate {
+	tc.mutation.SetScriptExecutable(s)
+	return tc
+}
+
+// SetNillableScriptExecutable sets the "script_executable" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableScriptExecutable(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetScriptExecutable(*s)
+	}
+	return tc
+}
+
 // SetScriptRun sets the "script_run" field.
 func (tc *TaskCreate) SetScriptRun(tr task.ScriptRun) *TaskCreate {
 	tc.mutation.SetScriptRun(tr)
@@ -1124,6 +1138,10 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.Script(); !ok {
 		v := task.DefaultScript
 		tc.mutation.SetScript(v)
+	}
+	if _, ok := tc.mutation.ScriptExecutable(); !ok {
+		v := task.DefaultScriptExecutable
+		tc.mutation.SetScriptExecutable(v)
 	}
 	if _, ok := tc.mutation.AgentType(); !ok {
 		v := task.DefaultAgentType
@@ -1439,6 +1457,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Script(); ok {
 		_spec.SetField(task.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := tc.mutation.ScriptExecutable(); ok {
+		_spec.SetField(task.FieldScriptExecutable, field.TypeString, value)
+		_node.ScriptExecutable = value
 	}
 	if value, ok := tc.mutation.ScriptRun(); ok {
 		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
@@ -2620,6 +2642,24 @@ func (u *TaskUpsert) UpdateScript() *TaskUpsert {
 // ClearScript clears the value of the "script" field.
 func (u *TaskUpsert) ClearScript() *TaskUpsert {
 	u.SetNull(task.FieldScript)
+	return u
+}
+
+// SetScriptExecutable sets the "script_executable" field.
+func (u *TaskUpsert) SetScriptExecutable(v string) *TaskUpsert {
+	u.Set(task.FieldScriptExecutable, v)
+	return u
+}
+
+// UpdateScriptExecutable sets the "script_executable" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateScriptExecutable() *TaskUpsert {
+	u.SetExcluded(task.FieldScriptExecutable)
+	return u
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (u *TaskUpsert) ClearScriptExecutable() *TaskUpsert {
+	u.SetNull(task.FieldScriptExecutable)
 	return u
 }
 
@@ -3981,6 +4021,27 @@ func (u *TaskUpsertOne) UpdateScript() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearScript() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScript()
+	})
+}
+
+// SetScriptExecutable sets the "script_executable" field.
+func (u *TaskUpsertOne) SetScriptExecutable(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptExecutable(v)
+	})
+}
+
+// UpdateScriptExecutable sets the "script_executable" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateScriptExecutable() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptExecutable()
+	})
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (u *TaskUpsertOne) ClearScriptExecutable() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptExecutable()
 	})
 }
 
@@ -5515,6 +5576,27 @@ func (u *TaskUpsertBulk) UpdateScript() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearScript() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScript()
+	})
+}
+
+// SetScriptExecutable sets the "script_executable" field.
+func (u *TaskUpsertBulk) SetScriptExecutable(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptExecutable(v)
+	})
+}
+
+// UpdateScriptExecutable sets the "script_executable" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateScriptExecutable() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptExecutable()
+	})
+}
+
+// ClearScriptExecutable clears the value of the "script_executable" field.
+func (u *TaskUpsertBulk) ClearScriptExecutable() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptExecutable()
 	})
 }
 
