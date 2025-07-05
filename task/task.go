@@ -138,6 +138,8 @@ const (
 	FieldScript = "script"
 	// FieldScriptExecutable holds the string denoting the script_executable field in the database.
 	FieldScriptExecutable = "script_executable"
+	// FieldScriptCreates holds the string denoting the script_creates field in the database.
+	FieldScriptCreates = "script_creates"
 	// FieldScriptRun holds the string denoting the script_run field in the database.
 	FieldScriptRun = "script_run"
 	// FieldAgentType holds the string denoting the agent_type field in the database.
@@ -231,6 +233,7 @@ var Columns = []string{
 	FieldMsiLogPath,
 	FieldScript,
 	FieldScriptExecutable,
+	FieldScriptCreates,
 	FieldScriptRun,
 	FieldAgentType,
 	FieldWhen,
@@ -338,6 +341,8 @@ var (
 	DefaultScript string
 	// DefaultScriptExecutable holds the default value on creation for the "script_executable" field.
 	DefaultScriptExecutable string
+	// DefaultScriptCreates holds the default value on creation for the "script_creates" field.
+	DefaultScriptCreates string
 )
 
 // Type defines the type for the "type" enum field.
@@ -806,6 +811,11 @@ func ByScript(opts ...sql.OrderTermOption) OrderOption {
 // ByScriptExecutable orders the results by the script_executable field.
 func ByScriptExecutable(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScriptExecutable, opts...).ToFunc()
+}
+
+// ByScriptCreates orders the results by the script_creates field.
+func ByScriptCreates(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScriptCreates, opts...).ToFunc()
 }
 
 // ByScriptRun orders the results by the script_run field.

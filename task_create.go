@@ -876,6 +876,20 @@ func (tc *TaskCreate) SetNillableScriptExecutable(s *string) *TaskCreate {
 	return tc
 }
 
+// SetScriptCreates sets the "script_creates" field.
+func (tc *TaskCreate) SetScriptCreates(s string) *TaskCreate {
+	tc.mutation.SetScriptCreates(s)
+	return tc
+}
+
+// SetNillableScriptCreates sets the "script_creates" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableScriptCreates(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetScriptCreates(*s)
+	}
+	return tc
+}
+
 // SetScriptRun sets the "script_run" field.
 func (tc *TaskCreate) SetScriptRun(tr task.ScriptRun) *TaskCreate {
 	tc.mutation.SetScriptRun(tr)
@@ -1142,6 +1156,10 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.ScriptExecutable(); !ok {
 		v := task.DefaultScriptExecutable
 		tc.mutation.SetScriptExecutable(v)
+	}
+	if _, ok := tc.mutation.ScriptCreates(); !ok {
+		v := task.DefaultScriptCreates
+		tc.mutation.SetScriptCreates(v)
 	}
 	if _, ok := tc.mutation.AgentType(); !ok {
 		v := task.DefaultAgentType
@@ -1461,6 +1479,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.ScriptExecutable(); ok {
 		_spec.SetField(task.FieldScriptExecutable, field.TypeString, value)
 		_node.ScriptExecutable = value
+	}
+	if value, ok := tc.mutation.ScriptCreates(); ok {
+		_spec.SetField(task.FieldScriptCreates, field.TypeString, value)
+		_node.ScriptCreates = value
 	}
 	if value, ok := tc.mutation.ScriptRun(); ok {
 		_spec.SetField(task.FieldScriptRun, field.TypeEnum, value)
@@ -2660,6 +2682,24 @@ func (u *TaskUpsert) UpdateScriptExecutable() *TaskUpsert {
 // ClearScriptExecutable clears the value of the "script_executable" field.
 func (u *TaskUpsert) ClearScriptExecutable() *TaskUpsert {
 	u.SetNull(task.FieldScriptExecutable)
+	return u
+}
+
+// SetScriptCreates sets the "script_creates" field.
+func (u *TaskUpsert) SetScriptCreates(v string) *TaskUpsert {
+	u.Set(task.FieldScriptCreates, v)
+	return u
+}
+
+// UpdateScriptCreates sets the "script_creates" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateScriptCreates() *TaskUpsert {
+	u.SetExcluded(task.FieldScriptCreates)
+	return u
+}
+
+// ClearScriptCreates clears the value of the "script_creates" field.
+func (u *TaskUpsert) ClearScriptCreates() *TaskUpsert {
+	u.SetNull(task.FieldScriptCreates)
 	return u
 }
 
@@ -4042,6 +4082,27 @@ func (u *TaskUpsertOne) UpdateScriptExecutable() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearScriptExecutable() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScriptExecutable()
+	})
+}
+
+// SetScriptCreates sets the "script_creates" field.
+func (u *TaskUpsertOne) SetScriptCreates(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptCreates(v)
+	})
+}
+
+// UpdateScriptCreates sets the "script_creates" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateScriptCreates() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptCreates()
+	})
+}
+
+// ClearScriptCreates clears the value of the "script_creates" field.
+func (u *TaskUpsertOne) ClearScriptCreates() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptCreates()
 	})
 }
 
@@ -5597,6 +5658,27 @@ func (u *TaskUpsertBulk) UpdateScriptExecutable() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearScriptExecutable() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearScriptExecutable()
+	})
+}
+
+// SetScriptCreates sets the "script_creates" field.
+func (u *TaskUpsertBulk) SetScriptCreates(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetScriptCreates(v)
+	})
+}
+
+// UpdateScriptCreates sets the "script_creates" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateScriptCreates() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateScriptCreates()
+	})
+}
+
+// ClearScriptCreates clears the value of the "script_creates" field.
+func (u *TaskUpsertBulk) ClearScriptCreates() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearScriptCreates()
 	})
 }
 

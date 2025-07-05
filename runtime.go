@@ -455,6 +455,10 @@ func init() {
 	taskDescScriptExecutable := taskFields[61].Descriptor()
 	// task.DefaultScriptExecutable holds the default value on creation for the script_executable field.
 	task.DefaultScriptExecutable = taskDescScriptExecutable.Default.(string)
+	// taskDescScriptCreates is the schema descriptor for script_creates field.
+	taskDescScriptCreates := taskFields[62].Descriptor()
+	// task.DefaultScriptCreates holds the default value on creation for the script_creates field.
+	task.DefaultScriptCreates = taskDescScriptCreates.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()
 	_ = tenantFields
 	// tenantDescCreated is the schema descriptor for created field.

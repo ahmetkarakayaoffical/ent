@@ -101,6 +101,7 @@ func (Task) Fields() []ent.Field {
 		field.String("msi_log_path").Optional().Default(""),
 		field.String("script").Optional().Default(""),
 		field.String("script_executable").Optional().Default(""),
+		field.String("script_creates").Optional().Default(""),
 		field.Enum("script_run").Values("once", "always").Optional(),
 		field.Enum("agent_type").Values("windows", "linux", "macos").Optional().Default("windows"),
 		field.Time("when").Optional(),
