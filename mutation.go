@@ -23819,6 +23819,7 @@ type TaskMutation struct {
 	_type                                      *task.Type
 	package_id                                 *string
 	package_name                               *string
+	package_latest                             *bool
 	registry_key                               *string
 	registry_key_value_name                    *string
 	registry_key_value_type                    *task.RegistryKeyValueType
@@ -24158,6 +24159,55 @@ func (m *TaskMutation) PackageNameCleared() bool {
 func (m *TaskMutation) ResetPackageName() {
 	m.package_name = nil
 	delete(m.clearedFields, task.FieldPackageName)
+}
+
+// SetPackageLatest sets the "package_latest" field.
+func (m *TaskMutation) SetPackageLatest(b bool) {
+	m.package_latest = &b
+}
+
+// PackageLatest returns the value of the "package_latest" field in the mutation.
+func (m *TaskMutation) PackageLatest() (r bool, exists bool) {
+	v := m.package_latest
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageLatest returns the old "package_latest" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldPackageLatest(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageLatest is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageLatest requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageLatest: %w", err)
+	}
+	return oldValue.PackageLatest, nil
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (m *TaskMutation) ClearPackageLatest() {
+	m.package_latest = nil
+	m.clearedFields[task.FieldPackageLatest] = struct{}{}
+}
+
+// PackageLatestCleared returns if the "package_latest" field was cleared in this mutation.
+func (m *TaskMutation) PackageLatestCleared() bool {
+	_, ok := m.clearedFields[task.FieldPackageLatest]
+	return ok
+}
+
+// ResetPackageLatest resets all changes to the "package_latest" field.
+func (m *TaskMutation) ResetPackageLatest() {
+	m.package_latest = nil
+	delete(m.clearedFields, task.FieldPackageLatest)
 }
 
 // SetRegistryKey sets the "registry_key" field.
@@ -27325,7 +27375,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 66)
+	fields := make([]string, 0, 67)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -27337,6 +27387,9 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.package_name != nil {
 		fields = append(fields, task.FieldPackageName)
+	}
+	if m.package_latest != nil {
+		fields = append(fields, task.FieldPackageLatest)
 	}
 	if m.registry_key != nil {
 		fields = append(fields, task.FieldRegistryKey)
@@ -27540,6 +27593,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.PackageID()
 	case task.FieldPackageName:
 		return m.PackageName()
+	case task.FieldPackageLatest:
+		return m.PackageLatest()
 	case task.FieldRegistryKey:
 		return m.RegistryKey()
 	case task.FieldRegistryKeyValueName:
@@ -27681,6 +27736,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldPackageID(ctx)
 	case task.FieldPackageName:
 		return m.OldPackageName(ctx)
+	case task.FieldPackageLatest:
+		return m.OldPackageLatest(ctx)
 	case task.FieldRegistryKey:
 		return m.OldRegistryKey(ctx)
 	case task.FieldRegistryKeyValueName:
@@ -27841,6 +27898,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPackageName(v)
+		return nil
+	case task.FieldPackageLatest:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageLatest(v)
 		return nil
 	case task.FieldRegistryKey:
 		v, ok := value.(string)
@@ -28312,6 +28376,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldPackageName) {
 		fields = append(fields, task.FieldPackageName)
 	}
+	if m.FieldCleared(task.FieldPackageLatest) {
+		fields = append(fields, task.FieldPackageLatest)
+	}
 	if m.FieldCleared(task.FieldRegistryKey) {
 		fields = append(fields, task.FieldRegistryKey)
 	}
@@ -28518,6 +28585,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldPackageName:
 		m.ClearPackageName()
 		return nil
+	case task.FieldPackageLatest:
+		m.ClearPackageLatest()
+		return nil
 	case task.FieldRegistryKey:
 		m.ClearRegistryKey()
 		return nil
@@ -28723,6 +28793,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldPackageName:
 		m.ResetPackageName()
+		return nil
+	case task.FieldPackageLatest:
+		m.ResetPackageLatest()
 		return nil
 	case task.FieldRegistryKey:
 		m.ResetRegistryKey()

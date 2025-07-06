@@ -64,6 +64,20 @@ func (tc *TaskCreate) SetNillablePackageName(s *string) *TaskCreate {
 	return tc
 }
 
+// SetPackageLatest sets the "package_latest" field.
+func (tc *TaskCreate) SetPackageLatest(b bool) *TaskCreate {
+	tc.mutation.SetPackageLatest(b)
+	return tc
+}
+
+// SetNillablePackageLatest sets the "package_latest" field if the given value is not nil.
+func (tc *TaskCreate) SetNillablePackageLatest(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetPackageLatest(*b)
+	}
+	return tc
+}
+
 // SetRegistryKey sets the "registry_key" field.
 func (tc *TaskCreate) SetRegistryKey(s string) *TaskCreate {
 	tc.mutation.SetRegistryKey(s)
@@ -1009,6 +1023,10 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultPackageName
 		tc.mutation.SetPackageName(v)
 	}
+	if _, ok := tc.mutation.PackageLatest(); !ok {
+		v := task.DefaultPackageLatest
+		tc.mutation.SetPackageLatest(v)
+	}
 	if _, ok := tc.mutation.RegistryKey(); !ok {
 		v := task.DefaultRegistryKey
 		tc.mutation.SetRegistryKey(v)
@@ -1247,6 +1265,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.PackageName(); ok {
 		_spec.SetField(task.FieldPackageName, field.TypeString, value)
 		_node.PackageName = value
+	}
+	if value, ok := tc.mutation.PackageLatest(); ok {
+		_spec.SetField(task.FieldPackageLatest, field.TypeBool, value)
+		_node.PackageLatest = value
 	}
 	if value, ok := tc.mutation.RegistryKey(); ok {
 		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)
@@ -1638,6 +1660,24 @@ func (u *TaskUpsert) UpdatePackageName() *TaskUpsert {
 // ClearPackageName clears the value of the "package_name" field.
 func (u *TaskUpsert) ClearPackageName() *TaskUpsert {
 	u.SetNull(task.FieldPackageName)
+	return u
+}
+
+// SetPackageLatest sets the "package_latest" field.
+func (u *TaskUpsert) SetPackageLatest(v bool) *TaskUpsert {
+	u.Set(task.FieldPackageLatest, v)
+	return u
+}
+
+// UpdatePackageLatest sets the "package_latest" field to the value that was provided on create.
+func (u *TaskUpsert) UpdatePackageLatest() *TaskUpsert {
+	u.SetExcluded(task.FieldPackageLatest)
+	return u
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (u *TaskUpsert) ClearPackageLatest() *TaskUpsert {
+	u.SetNull(task.FieldPackageLatest)
 	return u
 }
 
@@ -2864,6 +2904,27 @@ func (u *TaskUpsertOne) UpdatePackageName() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearPackageName() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageName()
+	})
+}
+
+// SetPackageLatest sets the "package_latest" field.
+func (u *TaskUpsertOne) SetPackageLatest(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageLatest(v)
+	})
+}
+
+// UpdatePackageLatest sets the "package_latest" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdatePackageLatest() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageLatest()
+	})
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (u *TaskUpsertOne) ClearPackageLatest() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageLatest()
 	})
 }
 
@@ -4440,6 +4501,27 @@ func (u *TaskUpsertBulk) UpdatePackageName() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearPackageName() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageName()
+	})
+}
+
+// SetPackageLatest sets the "package_latest" field.
+func (u *TaskUpsertBulk) SetPackageLatest(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageLatest(v)
+	})
+}
+
+// UpdatePackageLatest sets the "package_latest" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdatePackageLatest() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageLatest()
+	})
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (u *TaskUpsertBulk) ClearPackageLatest() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageLatest()
 	})
 }
 

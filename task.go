@@ -26,6 +26,8 @@ type Task struct {
 	PackageID string `json:"package_id,omitempty"`
 	// PackageName holds the value of the "package_name" field.
 	PackageName string `json:"package_name,omitempty"`
+	// PackageLatest holds the value of the "package_latest" field.
+	PackageLatest bool `json:"package_latest,omitempty"`
 	// RegistryKey holds the value of the "registry_key" field.
 	RegistryKey string `json:"registry_key,omitempty"`
 	// RegistryKeyValueName holds the value of the "registry_key_value_name" field.
@@ -193,7 +195,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
+		case task.FieldPackageLatest, task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
@@ -247,6 +249,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field package_name", values[i])
 			} else if value.Valid {
 				t.PackageName = value.String
+			}
+		case task.FieldPackageLatest:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field package_latest", values[i])
+			} else if value.Valid {
+				t.PackageLatest = value.Bool
 			}
 		case task.FieldRegistryKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -684,6 +692,9 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("package_name=")
 	builder.WriteString(t.PackageName)
+	builder.WriteString(", ")
+	builder.WriteString("package_latest=")
+	builder.WriteString(fmt.Sprintf("%v", t.PackageLatest))
 	builder.WriteString(", ")
 	builder.WriteString("registry_key=")
 	builder.WriteString(t.RegistryKey)

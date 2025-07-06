@@ -45,6 +45,7 @@ func (Task) Fields() []ent.Field {
 			"flatpak_uninstall"),
 		field.String("package_id").Optional().Default(""),
 		field.String("package_name").Optional().Default(""),
+		field.Bool("package_latest").Optional().Default(false),
 		field.String("registry_key").Optional().Default(""),
 		field.String("registry_key_value_name").Optional().Default(""),
 		field.Enum("registry_key_value_type").Values("String", "Binary", "DWord", "QWord", "MultiString", "ExpandString").Optional(),

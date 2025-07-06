@@ -22,6 +22,8 @@ const (
 	FieldPackageID = "package_id"
 	// FieldPackageName holds the string denoting the package_name field in the database.
 	FieldPackageName = "package_name"
+	// FieldPackageLatest holds the string denoting the package_latest field in the database.
+	FieldPackageLatest = "package_latest"
 	// FieldRegistryKey holds the string denoting the registry_key field in the database.
 	FieldRegistryKey = "registry_key"
 	// FieldRegistryKeyValueName holds the string denoting the registry_key_value_name field in the database.
@@ -175,6 +177,7 @@ var Columns = []string{
 	FieldType,
 	FieldPackageID,
 	FieldPackageName,
+	FieldPackageLatest,
 	FieldRegistryKey,
 	FieldRegistryKeyValueName,
 	FieldRegistryKeyValueType,
@@ -267,6 +270,8 @@ var (
 	DefaultPackageID string
 	// DefaultPackageName holds the default value on creation for the "package_name" field.
 	DefaultPackageName string
+	// DefaultPackageLatest holds the default value on creation for the "package_latest" field.
+	DefaultPackageLatest bool
 	// DefaultRegistryKey holds the default value on creation for the "registry_key" field.
 	DefaultRegistryKey string
 	// DefaultRegistryKeyValueName holds the default value on creation for the "registry_key_value_name" field.
@@ -523,6 +528,11 @@ func ByPackageID(opts ...sql.OrderTermOption) OrderOption {
 // ByPackageName orders the results by the package_name field.
 func ByPackageName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPackageName, opts...).ToFunc()
+}
+
+// ByPackageLatest orders the results by the package_latest field.
+func ByPackageLatest(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageLatest, opts...).ToFunc()
 }
 
 // ByRegistryKey orders the results by the registry_key field.

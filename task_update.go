@@ -99,6 +99,26 @@ func (tu *TaskUpdate) ClearPackageName() *TaskUpdate {
 	return tu
 }
 
+// SetPackageLatest sets the "package_latest" field.
+func (tu *TaskUpdate) SetPackageLatest(b bool) *TaskUpdate {
+	tu.mutation.SetPackageLatest(b)
+	return tu
+}
+
+// SetNillablePackageLatest sets the "package_latest" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillablePackageLatest(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetPackageLatest(*b)
+	}
+	return tu
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (tu *TaskUpdate) ClearPackageLatest() *TaskUpdate {
+	tu.mutation.ClearPackageLatest()
+	return tu
+}
+
 // SetRegistryKey sets the "registry_key" field.
 func (tu *TaskUpdate) SetRegistryKey(s string) *TaskUpdate {
 	tu.mutation.SetRegistryKey(s)
@@ -1503,6 +1523,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.PackageNameCleared() {
 		_spec.ClearField(task.FieldPackageName, field.TypeString)
 	}
+	if value, ok := tu.mutation.PackageLatest(); ok {
+		_spec.SetField(task.FieldPackageLatest, field.TypeBool, value)
+	}
+	if tu.mutation.PackageLatestCleared() {
+		_spec.ClearField(task.FieldPackageLatest, field.TypeBool)
+	}
 	if value, ok := tu.mutation.RegistryKey(); ok {
 		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)
 	}
@@ -2036,6 +2062,26 @@ func (tuo *TaskUpdateOne) SetNillablePackageName(s *string) *TaskUpdateOne {
 // ClearPackageName clears the value of the "package_name" field.
 func (tuo *TaskUpdateOne) ClearPackageName() *TaskUpdateOne {
 	tuo.mutation.ClearPackageName()
+	return tuo
+}
+
+// SetPackageLatest sets the "package_latest" field.
+func (tuo *TaskUpdateOne) SetPackageLatest(b bool) *TaskUpdateOne {
+	tuo.mutation.SetPackageLatest(b)
+	return tuo
+}
+
+// SetNillablePackageLatest sets the "package_latest" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillablePackageLatest(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetPackageLatest(*b)
+	}
+	return tuo
+}
+
+// ClearPackageLatest clears the value of the "package_latest" field.
+func (tuo *TaskUpdateOne) ClearPackageLatest() *TaskUpdateOne {
+	tuo.mutation.ClearPackageLatest()
 	return tuo
 }
 
@@ -3472,6 +3518,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.PackageNameCleared() {
 		_spec.ClearField(task.FieldPackageName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.PackageLatest(); ok {
+		_spec.SetField(task.FieldPackageLatest, field.TypeBool, value)
+	}
+	if tuo.mutation.PackageLatestCleared() {
+		_spec.ClearField(task.FieldPackageLatest, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.RegistryKey(); ok {
 		_spec.SetField(task.FieldRegistryKey, field.TypeString, value)

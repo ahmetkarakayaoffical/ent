@@ -70,6 +70,11 @@ func PackageName(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldPackageName, v))
 }
 
+// PackageLatest applies equality check predicate on the "package_latest" field. It's identical to PackageLatestEQ.
+func PackageLatest(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageLatest, v))
+}
+
 // RegistryKey applies equality check predicate on the "registry_key" field. It's identical to RegistryKeyEQ.
 func RegistryKey(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldRegistryKey, v))
@@ -593,6 +598,26 @@ func PackageNameEqualFold(v string) predicate.Task {
 // PackageNameContainsFold applies the ContainsFold predicate on the "package_name" field.
 func PackageNameContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldPackageName, v))
+}
+
+// PackageLatestEQ applies the EQ predicate on the "package_latest" field.
+func PackageLatestEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageLatest, v))
+}
+
+// PackageLatestNEQ applies the NEQ predicate on the "package_latest" field.
+func PackageLatestNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldPackageLatest, v))
+}
+
+// PackageLatestIsNil applies the IsNil predicate on the "package_latest" field.
+func PackageLatestIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldPackageLatest))
+}
+
+// PackageLatestNotNil applies the NotNil predicate on the "package_latest" field.
+func PackageLatestNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldPackageLatest))
 }
 
 // RegistryKeyEQ applies the EQ predicate on the "registry_key" field.

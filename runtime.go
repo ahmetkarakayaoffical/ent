@@ -307,156 +307,160 @@ func init() {
 	taskDescPackageName := taskFields[3].Descriptor()
 	// task.DefaultPackageName holds the default value on creation for the package_name field.
 	task.DefaultPackageName = taskDescPackageName.Default.(string)
+	// taskDescPackageLatest is the schema descriptor for package_latest field.
+	taskDescPackageLatest := taskFields[4].Descriptor()
+	// task.DefaultPackageLatest holds the default value on creation for the package_latest field.
+	task.DefaultPackageLatest = taskDescPackageLatest.Default.(bool)
 	// taskDescRegistryKey is the schema descriptor for registry_key field.
-	taskDescRegistryKey := taskFields[4].Descriptor()
+	taskDescRegistryKey := taskFields[5].Descriptor()
 	// task.DefaultRegistryKey holds the default value on creation for the registry_key field.
 	task.DefaultRegistryKey = taskDescRegistryKey.Default.(string)
 	// taskDescRegistryKeyValueName is the schema descriptor for registry_key_value_name field.
-	taskDescRegistryKeyValueName := taskFields[5].Descriptor()
+	taskDescRegistryKeyValueName := taskFields[6].Descriptor()
 	// task.DefaultRegistryKeyValueName holds the default value on creation for the registry_key_value_name field.
 	task.DefaultRegistryKeyValueName = taskDescRegistryKeyValueName.Default.(string)
 	// taskDescRegistryKeyValueData is the schema descriptor for registry_key_value_data field.
-	taskDescRegistryKeyValueData := taskFields[7].Descriptor()
+	taskDescRegistryKeyValueData := taskFields[8].Descriptor()
 	// task.DefaultRegistryKeyValueData holds the default value on creation for the registry_key_value_data field.
 	task.DefaultRegistryKeyValueData = taskDescRegistryKeyValueData.Default.(string)
 	// taskDescRegistryHex is the schema descriptor for registry_hex field.
-	taskDescRegistryHex := taskFields[8].Descriptor()
+	taskDescRegistryHex := taskFields[9].Descriptor()
 	// task.DefaultRegistryHex holds the default value on creation for the registry_hex field.
 	task.DefaultRegistryHex = taskDescRegistryHex.Default.(bool)
 	// taskDescRegistryForce is the schema descriptor for registry_force field.
-	taskDescRegistryForce := taskFields[9].Descriptor()
+	taskDescRegistryForce := taskFields[10].Descriptor()
 	// task.DefaultRegistryForce holds the default value on creation for the registry_force field.
 	task.DefaultRegistryForce = taskDescRegistryForce.Default.(bool)
 	// taskDescLocalUserUsername is the schema descriptor for local_user_username field.
-	taskDescLocalUserUsername := taskFields[10].Descriptor()
+	taskDescLocalUserUsername := taskFields[11].Descriptor()
 	// task.DefaultLocalUserUsername holds the default value on creation for the local_user_username field.
 	task.DefaultLocalUserUsername = taskDescLocalUserUsername.Default.(string)
 	// taskDescLocalUserDescription is the schema descriptor for local_user_description field.
-	taskDescLocalUserDescription := taskFields[11].Descriptor()
+	taskDescLocalUserDescription := taskFields[12].Descriptor()
 	// task.DefaultLocalUserDescription holds the default value on creation for the local_user_description field.
 	task.DefaultLocalUserDescription = taskDescLocalUserDescription.Default.(string)
 	// taskDescLocalUserDisable is the schema descriptor for local_user_disable field.
-	taskDescLocalUserDisable := taskFields[12].Descriptor()
+	taskDescLocalUserDisable := taskFields[13].Descriptor()
 	// task.DefaultLocalUserDisable holds the default value on creation for the local_user_disable field.
 	task.DefaultLocalUserDisable = taskDescLocalUserDisable.Default.(bool)
 	// taskDescLocalUserFullname is the schema descriptor for local_user_fullname field.
-	taskDescLocalUserFullname := taskFields[13].Descriptor()
+	taskDescLocalUserFullname := taskFields[14].Descriptor()
 	// task.DefaultLocalUserFullname holds the default value on creation for the local_user_fullname field.
 	task.DefaultLocalUserFullname = taskDescLocalUserFullname.Default.(string)
 	// taskDescLocalUserPassword is the schema descriptor for local_user_password field.
-	taskDescLocalUserPassword := taskFields[14].Descriptor()
+	taskDescLocalUserPassword := taskFields[15].Descriptor()
 	// task.DefaultLocalUserPassword holds the default value on creation for the local_user_password field.
 	task.DefaultLocalUserPassword = taskDescLocalUserPassword.Default.(string)
 	// taskDescLocalUserPasswordChangeNotAllowed is the schema descriptor for local_user_password_change_not_allowed field.
-	taskDescLocalUserPasswordChangeNotAllowed := taskFields[15].Descriptor()
+	taskDescLocalUserPasswordChangeNotAllowed := taskFields[16].Descriptor()
 	// task.DefaultLocalUserPasswordChangeNotAllowed holds the default value on creation for the local_user_password_change_not_allowed field.
 	task.DefaultLocalUserPasswordChangeNotAllowed = taskDescLocalUserPasswordChangeNotAllowed.Default.(bool)
 	// taskDescLocalUserPasswordChangeRequired is the schema descriptor for local_user_password_change_required field.
-	taskDescLocalUserPasswordChangeRequired := taskFields[16].Descriptor()
+	taskDescLocalUserPasswordChangeRequired := taskFields[17].Descriptor()
 	// task.DefaultLocalUserPasswordChangeRequired holds the default value on creation for the local_user_password_change_required field.
 	task.DefaultLocalUserPasswordChangeRequired = taskDescLocalUserPasswordChangeRequired.Default.(bool)
 	// taskDescLocalUserPasswordNeverExpires is the schema descriptor for local_user_password_never_expires field.
-	taskDescLocalUserPasswordNeverExpires := taskFields[17].Descriptor()
+	taskDescLocalUserPasswordNeverExpires := taskFields[18].Descriptor()
 	// task.DefaultLocalUserPasswordNeverExpires holds the default value on creation for the local_user_password_never_expires field.
 	task.DefaultLocalUserPasswordNeverExpires = taskDescLocalUserPasswordNeverExpires.Default.(bool)
 	// taskDescLocalUserAppend is the schema descriptor for local_user_append field.
-	taskDescLocalUserAppend := taskFields[18].Descriptor()
+	taskDescLocalUserAppend := taskFields[19].Descriptor()
 	// task.DefaultLocalUserAppend holds the default value on creation for the local_user_append field.
 	task.DefaultLocalUserAppend = taskDescLocalUserAppend.Default.(bool)
 	// taskDescLocalUserCreateHome is the schema descriptor for local_user_create_home field.
-	taskDescLocalUserCreateHome := taskFields[19].Descriptor()
+	taskDescLocalUserCreateHome := taskFields[20].Descriptor()
 	// task.DefaultLocalUserCreateHome holds the default value on creation for the local_user_create_home field.
 	task.DefaultLocalUserCreateHome = taskDescLocalUserCreateHome.Default.(bool)
 	// taskDescLocalUserForce is the schema descriptor for local_user_force field.
-	taskDescLocalUserForce := taskFields[21].Descriptor()
+	taskDescLocalUserForce := taskFields[22].Descriptor()
 	// task.DefaultLocalUserForce holds the default value on creation for the local_user_force field.
 	task.DefaultLocalUserForce = taskDescLocalUserForce.Default.(bool)
 	// taskDescLocalUserGenerateSSHKey is the schema descriptor for local_user_generate_ssh_key field.
-	taskDescLocalUserGenerateSSHKey := taskFields[22].Descriptor()
+	taskDescLocalUserGenerateSSHKey := taskFields[23].Descriptor()
 	// task.DefaultLocalUserGenerateSSHKey holds the default value on creation for the local_user_generate_ssh_key field.
 	task.DefaultLocalUserGenerateSSHKey = taskDescLocalUserGenerateSSHKey.Default.(bool)
 	// taskDescLocalUserMoveHome is the schema descriptor for local_user_move_home field.
-	taskDescLocalUserMoveHome := taskFields[26].Descriptor()
+	taskDescLocalUserMoveHome := taskFields[27].Descriptor()
 	// task.DefaultLocalUserMoveHome holds the default value on creation for the local_user_move_home field.
 	task.DefaultLocalUserMoveHome = taskDescLocalUserMoveHome.Default.(bool)
 	// taskDescLocalUserNonunique is the schema descriptor for local_user_nonunique field.
-	taskDescLocalUserNonunique := taskFields[27].Descriptor()
+	taskDescLocalUserNonunique := taskFields[28].Descriptor()
 	// task.DefaultLocalUserNonunique holds the default value on creation for the local_user_nonunique field.
 	task.DefaultLocalUserNonunique = taskDescLocalUserNonunique.Default.(bool)
 	// taskDescLocalUserPasswordLock is the schema descriptor for local_user_password_lock field.
-	taskDescLocalUserPasswordLock := taskFields[32].Descriptor()
+	taskDescLocalUserPasswordLock := taskFields[33].Descriptor()
 	// task.DefaultLocalUserPasswordLock holds the default value on creation for the local_user_password_lock field.
 	task.DefaultLocalUserPasswordLock = taskDescLocalUserPasswordLock.Default.(bool)
 	// taskDescLocalUserSystem is the schema descriptor for local_user_system field.
-	taskDescLocalUserSystem := taskFields[36].Descriptor()
+	taskDescLocalUserSystem := taskFields[37].Descriptor()
 	// task.DefaultLocalUserSystem holds the default value on creation for the local_user_system field.
 	task.DefaultLocalUserSystem = taskDescLocalUserSystem.Default.(bool)
 	// taskDescLocalUserSSHKeyType is the schema descriptor for local_user_ssh_key_type field.
-	taskDescLocalUserSSHKeyType := taskFields[44].Descriptor()
+	taskDescLocalUserSSHKeyType := taskFields[45].Descriptor()
 	// task.DefaultLocalUserSSHKeyType holds the default value on creation for the local_user_ssh_key_type field.
 	task.DefaultLocalUserSSHKeyType = taskDescLocalUserSSHKeyType.Default.(string)
 	// taskDescLocalGroupID is the schema descriptor for local_group_id field.
-	taskDescLocalGroupID := taskFields[46].Descriptor()
+	taskDescLocalGroupID := taskFields[47].Descriptor()
 	// task.DefaultLocalGroupID holds the default value on creation for the local_group_id field.
 	task.DefaultLocalGroupID = taskDescLocalGroupID.Default.(string)
 	// taskDescLocalGroupName is the schema descriptor for local_group_name field.
-	taskDescLocalGroupName := taskFields[47].Descriptor()
+	taskDescLocalGroupName := taskFields[48].Descriptor()
 	// task.DefaultLocalGroupName holds the default value on creation for the local_group_name field.
 	task.DefaultLocalGroupName = taskDescLocalGroupName.Default.(string)
 	// taskDescLocalGroupDescription is the schema descriptor for local_group_description field.
-	taskDescLocalGroupDescription := taskFields[48].Descriptor()
+	taskDescLocalGroupDescription := taskFields[49].Descriptor()
 	// task.DefaultLocalGroupDescription holds the default value on creation for the local_group_description field.
 	task.DefaultLocalGroupDescription = taskDescLocalGroupDescription.Default.(string)
 	// taskDescLocalGroupSystem is the schema descriptor for local_group_system field.
-	taskDescLocalGroupSystem := taskFields[49].Descriptor()
+	taskDescLocalGroupSystem := taskFields[50].Descriptor()
 	// task.DefaultLocalGroupSystem holds the default value on creation for the local_group_system field.
 	task.DefaultLocalGroupSystem = taskDescLocalGroupSystem.Default.(bool)
 	// taskDescLocalGroupForce is the schema descriptor for local_group_force field.
-	taskDescLocalGroupForce := taskFields[50].Descriptor()
+	taskDescLocalGroupForce := taskFields[51].Descriptor()
 	// task.DefaultLocalGroupForce holds the default value on creation for the local_group_force field.
 	task.DefaultLocalGroupForce = taskDescLocalGroupForce.Default.(bool)
 	// taskDescLocalGroupMembers is the schema descriptor for local_group_members field.
-	taskDescLocalGroupMembers := taskFields[51].Descriptor()
+	taskDescLocalGroupMembers := taskFields[52].Descriptor()
 	// task.DefaultLocalGroupMembers holds the default value on creation for the local_group_members field.
 	task.DefaultLocalGroupMembers = taskDescLocalGroupMembers.Default.(string)
 	// taskDescLocalGroupMembersToInclude is the schema descriptor for local_group_members_to_include field.
-	taskDescLocalGroupMembersToInclude := taskFields[52].Descriptor()
+	taskDescLocalGroupMembersToInclude := taskFields[53].Descriptor()
 	// task.DefaultLocalGroupMembersToInclude holds the default value on creation for the local_group_members_to_include field.
 	task.DefaultLocalGroupMembersToInclude = taskDescLocalGroupMembersToInclude.Default.(string)
 	// taskDescLocalGroupMembersToExclude is the schema descriptor for local_group_members_to_exclude field.
-	taskDescLocalGroupMembersToExclude := taskFields[53].Descriptor()
+	taskDescLocalGroupMembersToExclude := taskFields[54].Descriptor()
 	// task.DefaultLocalGroupMembersToExclude holds the default value on creation for the local_group_members_to_exclude field.
 	task.DefaultLocalGroupMembersToExclude = taskDescLocalGroupMembersToExclude.Default.(string)
 	// taskDescMsiProductid is the schema descriptor for msi_productid field.
-	taskDescMsiProductid := taskFields[54].Descriptor()
+	taskDescMsiProductid := taskFields[55].Descriptor()
 	// task.DefaultMsiProductid holds the default value on creation for the msi_productid field.
 	task.DefaultMsiProductid = taskDescMsiProductid.Default.(string)
 	// taskDescMsiPath is the schema descriptor for msi_path field.
-	taskDescMsiPath := taskFields[55].Descriptor()
+	taskDescMsiPath := taskFields[56].Descriptor()
 	// task.DefaultMsiPath holds the default value on creation for the msi_path field.
 	task.DefaultMsiPath = taskDescMsiPath.Default.(string)
 	// taskDescMsiArguments is the schema descriptor for msi_arguments field.
-	taskDescMsiArguments := taskFields[56].Descriptor()
+	taskDescMsiArguments := taskFields[57].Descriptor()
 	// task.DefaultMsiArguments holds the default value on creation for the msi_arguments field.
 	task.DefaultMsiArguments = taskDescMsiArguments.Default.(string)
 	// taskDescMsiFileHash is the schema descriptor for msi_file_hash field.
-	taskDescMsiFileHash := taskFields[57].Descriptor()
+	taskDescMsiFileHash := taskFields[58].Descriptor()
 	// task.DefaultMsiFileHash holds the default value on creation for the msi_file_hash field.
 	task.DefaultMsiFileHash = taskDescMsiFileHash.Default.(string)
 	// taskDescMsiLogPath is the schema descriptor for msi_log_path field.
-	taskDescMsiLogPath := taskFields[59].Descriptor()
+	taskDescMsiLogPath := taskFields[60].Descriptor()
 	// task.DefaultMsiLogPath holds the default value on creation for the msi_log_path field.
 	task.DefaultMsiLogPath = taskDescMsiLogPath.Default.(string)
 	// taskDescScript is the schema descriptor for script field.
-	taskDescScript := taskFields[60].Descriptor()
+	taskDescScript := taskFields[61].Descriptor()
 	// task.DefaultScript holds the default value on creation for the script field.
 	task.DefaultScript = taskDescScript.Default.(string)
 	// taskDescScriptExecutable is the schema descriptor for script_executable field.
-	taskDescScriptExecutable := taskFields[61].Descriptor()
+	taskDescScriptExecutable := taskFields[62].Descriptor()
 	// task.DefaultScriptExecutable holds the default value on creation for the script_executable field.
 	task.DefaultScriptExecutable = taskDescScriptExecutable.Default.(string)
 	// taskDescScriptCreates is the schema descriptor for script_creates field.
-	taskDescScriptCreates := taskFields[62].Descriptor()
+	taskDescScriptCreates := taskFields[63].Descriptor()
 	// task.DefaultScriptCreates holds the default value on creation for the script_creates field.
 	task.DefaultScriptCreates = taskDescScriptCreates.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()
