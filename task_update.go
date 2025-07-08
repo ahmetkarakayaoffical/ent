@@ -1359,6 +1359,106 @@ func (tu *TaskUpdate) ClearWhen() *TaskUpdate {
 	return tu
 }
 
+// SetBrewUpdate sets the "brew_update" field.
+func (tu *TaskUpdate) SetBrewUpdate(b bool) *TaskUpdate {
+	tu.mutation.SetBrewUpdate(b)
+	return tu
+}
+
+// SetNillableBrewUpdate sets the "brew_update" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableBrewUpdate(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetBrewUpdate(*b)
+	}
+	return tu
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (tu *TaskUpdate) ClearBrewUpdate() *TaskUpdate {
+	tu.mutation.ClearBrewUpdate()
+	return tu
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (tu *TaskUpdate) SetBrewUpgradeAll(b bool) *TaskUpdate {
+	tu.mutation.SetBrewUpgradeAll(b)
+	return tu
+}
+
+// SetNillableBrewUpgradeAll sets the "brew_upgrade_all" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableBrewUpgradeAll(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetBrewUpgradeAll(*b)
+	}
+	return tu
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (tu *TaskUpdate) ClearBrewUpgradeAll() *TaskUpdate {
+	tu.mutation.ClearBrewUpgradeAll()
+	return tu
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (tu *TaskUpdate) SetBrewUpgradeOptions(s string) *TaskUpdate {
+	tu.mutation.SetBrewUpgradeOptions(s)
+	return tu
+}
+
+// SetNillableBrewUpgradeOptions sets the "brew_upgrade_options" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableBrewUpgradeOptions(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetBrewUpgradeOptions(*s)
+	}
+	return tu
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (tu *TaskUpdate) ClearBrewUpgradeOptions() *TaskUpdate {
+	tu.mutation.ClearBrewUpgradeOptions()
+	return tu
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (tu *TaskUpdate) SetBrewInstallOptions(s string) *TaskUpdate {
+	tu.mutation.SetBrewInstallOptions(s)
+	return tu
+}
+
+// SetNillableBrewInstallOptions sets the "brew_install_options" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableBrewInstallOptions(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetBrewInstallOptions(*s)
+	}
+	return tu
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (tu *TaskUpdate) ClearBrewInstallOptions() *TaskUpdate {
+	tu.mutation.ClearBrewInstallOptions()
+	return tu
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (tu *TaskUpdate) SetBrewGreedy(b bool) *TaskUpdate {
+	tu.mutation.SetBrewGreedy(b)
+	return tu
+}
+
+// SetNillableBrewGreedy sets the "brew_greedy" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableBrewGreedy(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetBrewGreedy(*b)
+	}
+	return tu
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (tu *TaskUpdate) ClearBrewGreedy() *TaskUpdate {
+	tu.mutation.ClearBrewGreedy()
+	return tu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tu *TaskUpdate) AddTagIDs(ids ...int) *TaskUpdate {
 	tu.mutation.AddTagIDs(ids...)
@@ -1900,6 +2000,36 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.WhenCleared() {
 		_spec.ClearField(task.FieldWhen, field.TypeTime)
+	}
+	if value, ok := tu.mutation.BrewUpdate(); ok {
+		_spec.SetField(task.FieldBrewUpdate, field.TypeBool, value)
+	}
+	if tu.mutation.BrewUpdateCleared() {
+		_spec.ClearField(task.FieldBrewUpdate, field.TypeBool)
+	}
+	if value, ok := tu.mutation.BrewUpgradeAll(); ok {
+		_spec.SetField(task.FieldBrewUpgradeAll, field.TypeBool, value)
+	}
+	if tu.mutation.BrewUpgradeAllCleared() {
+		_spec.ClearField(task.FieldBrewUpgradeAll, field.TypeBool)
+	}
+	if value, ok := tu.mutation.BrewUpgradeOptions(); ok {
+		_spec.SetField(task.FieldBrewUpgradeOptions, field.TypeString, value)
+	}
+	if tu.mutation.BrewUpgradeOptionsCleared() {
+		_spec.ClearField(task.FieldBrewUpgradeOptions, field.TypeString)
+	}
+	if value, ok := tu.mutation.BrewInstallOptions(); ok {
+		_spec.SetField(task.FieldBrewInstallOptions, field.TypeString, value)
+	}
+	if tu.mutation.BrewInstallOptionsCleared() {
+		_spec.ClearField(task.FieldBrewInstallOptions, field.TypeString)
+	}
+	if value, ok := tu.mutation.BrewGreedy(); ok {
+		_spec.SetField(task.FieldBrewGreedy, field.TypeBool, value)
+	}
+	if tu.mutation.BrewGreedyCleared() {
+		_spec.ClearField(task.FieldBrewGreedy, field.TypeBool)
 	}
 	if tu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3325,6 +3455,106 @@ func (tuo *TaskUpdateOne) ClearWhen() *TaskUpdateOne {
 	return tuo
 }
 
+// SetBrewUpdate sets the "brew_update" field.
+func (tuo *TaskUpdateOne) SetBrewUpdate(b bool) *TaskUpdateOne {
+	tuo.mutation.SetBrewUpdate(b)
+	return tuo
+}
+
+// SetNillableBrewUpdate sets the "brew_update" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableBrewUpdate(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetBrewUpdate(*b)
+	}
+	return tuo
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (tuo *TaskUpdateOne) ClearBrewUpdate() *TaskUpdateOne {
+	tuo.mutation.ClearBrewUpdate()
+	return tuo
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (tuo *TaskUpdateOne) SetBrewUpgradeAll(b bool) *TaskUpdateOne {
+	tuo.mutation.SetBrewUpgradeAll(b)
+	return tuo
+}
+
+// SetNillableBrewUpgradeAll sets the "brew_upgrade_all" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableBrewUpgradeAll(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetBrewUpgradeAll(*b)
+	}
+	return tuo
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (tuo *TaskUpdateOne) ClearBrewUpgradeAll() *TaskUpdateOne {
+	tuo.mutation.ClearBrewUpgradeAll()
+	return tuo
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (tuo *TaskUpdateOne) SetBrewUpgradeOptions(s string) *TaskUpdateOne {
+	tuo.mutation.SetBrewUpgradeOptions(s)
+	return tuo
+}
+
+// SetNillableBrewUpgradeOptions sets the "brew_upgrade_options" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableBrewUpgradeOptions(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetBrewUpgradeOptions(*s)
+	}
+	return tuo
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (tuo *TaskUpdateOne) ClearBrewUpgradeOptions() *TaskUpdateOne {
+	tuo.mutation.ClearBrewUpgradeOptions()
+	return tuo
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (tuo *TaskUpdateOne) SetBrewInstallOptions(s string) *TaskUpdateOne {
+	tuo.mutation.SetBrewInstallOptions(s)
+	return tuo
+}
+
+// SetNillableBrewInstallOptions sets the "brew_install_options" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableBrewInstallOptions(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetBrewInstallOptions(*s)
+	}
+	return tuo
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (tuo *TaskUpdateOne) ClearBrewInstallOptions() *TaskUpdateOne {
+	tuo.mutation.ClearBrewInstallOptions()
+	return tuo
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (tuo *TaskUpdateOne) SetBrewGreedy(b bool) *TaskUpdateOne {
+	tuo.mutation.SetBrewGreedy(b)
+	return tuo
+}
+
+// SetNillableBrewGreedy sets the "brew_greedy" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableBrewGreedy(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetBrewGreedy(*b)
+	}
+	return tuo
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (tuo *TaskUpdateOne) ClearBrewGreedy() *TaskUpdateOne {
+	tuo.mutation.ClearBrewGreedy()
+	return tuo
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tuo *TaskUpdateOne) AddTagIDs(ids ...int) *TaskUpdateOne {
 	tuo.mutation.AddTagIDs(ids...)
@@ -3896,6 +4126,36 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.WhenCleared() {
 		_spec.ClearField(task.FieldWhen, field.TypeTime)
+	}
+	if value, ok := tuo.mutation.BrewUpdate(); ok {
+		_spec.SetField(task.FieldBrewUpdate, field.TypeBool, value)
+	}
+	if tuo.mutation.BrewUpdateCleared() {
+		_spec.ClearField(task.FieldBrewUpdate, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.BrewUpgradeAll(); ok {
+		_spec.SetField(task.FieldBrewUpgradeAll, field.TypeBool, value)
+	}
+	if tuo.mutation.BrewUpgradeAllCleared() {
+		_spec.ClearField(task.FieldBrewUpgradeAll, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.BrewUpgradeOptions(); ok {
+		_spec.SetField(task.FieldBrewUpgradeOptions, field.TypeString, value)
+	}
+	if tuo.mutation.BrewUpgradeOptionsCleared() {
+		_spec.ClearField(task.FieldBrewUpgradeOptions, field.TypeString)
+	}
+	if value, ok := tuo.mutation.BrewInstallOptions(); ok {
+		_spec.SetField(task.FieldBrewInstallOptions, field.TypeString, value)
+	}
+	if tuo.mutation.BrewInstallOptionsCleared() {
+		_spec.ClearField(task.FieldBrewInstallOptions, field.TypeString)
+	}
+	if value, ok := tuo.mutation.BrewGreedy(); ok {
+		_spec.SetField(task.FieldBrewGreedy, field.TypeBool, value)
+	}
+	if tuo.mutation.BrewGreedyCleared() {
+		_spec.ClearField(task.FieldBrewGreedy, field.TypeBool)
 	}
 	if tuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -148,6 +148,16 @@ const (
 	FieldAgentType = "agent_type"
 	// FieldWhen holds the string denoting the when field in the database.
 	FieldWhen = "when"
+	// FieldBrewUpdate holds the string denoting the brew_update field in the database.
+	FieldBrewUpdate = "brew_update"
+	// FieldBrewUpgradeAll holds the string denoting the brew_upgrade_all field in the database.
+	FieldBrewUpgradeAll = "brew_upgrade_all"
+	// FieldBrewUpgradeOptions holds the string denoting the brew_upgrade_options field in the database.
+	FieldBrewUpgradeOptions = "brew_upgrade_options"
+	// FieldBrewInstallOptions holds the string denoting the brew_install_options field in the database.
+	FieldBrewInstallOptions = "brew_install_options"
+	// FieldBrewGreedy holds the string denoting the brew_greedy field in the database.
+	FieldBrewGreedy = "brew_greedy"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeProfile holds the string denoting the profile edge name in mutations.
@@ -240,6 +250,11 @@ var Columns = []string{
 	FieldScriptRun,
 	FieldAgentType,
 	FieldWhen,
+	FieldBrewUpdate,
+	FieldBrewUpgradeAll,
+	FieldBrewUpgradeOptions,
+	FieldBrewInstallOptions,
+	FieldBrewGreedy,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -382,8 +397,12 @@ const (
 	TypeUnixScript                    Type = "unix_script"
 	TypeFlatpakInstall                Type = "flatpak_install"
 	TypeFlatpakUninstall              Type = "flatpak_uninstall"
-	TypeBrewInstall                   Type = "brew_install"
-	TypeBrewUninstall                 Type = "brew_uninstall"
+	TypeBrewFormulaInstall            Type = "brew_formula_install"
+	TypeBrewFormulaUpgrade            Type = "brew_formula_upgrade"
+	TypeBrewFormulaUninstall          Type = "brew_formula_uninstall"
+	TypeBrewCaskInstall               Type = "brew_cask_install"
+	TypeBrewCaskUpgrade               Type = "brew_cask_upgrade"
+	TypeBrewCaskUninstall             Type = "brew_cask_uninstall"
 )
 
 func (_type Type) String() string {
@@ -393,7 +412,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLinuxLocalUser, TypeModifyLinuxLocalUser, TypeRemoveLinuxLocalUser, TypeAddMacosLocalUser, TypeRemoveMacosLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript, TypeUnixScript, TypeFlatpakInstall, TypeFlatpakUninstall, TypeBrewInstall, TypeBrewUninstall:
+	case TypeWingetInstall, TypeWingetUpdate, TypeWingetDelete, TypeAddRegistryKey, TypeUpdateRegistryKeyDefaultValue, TypeAddRegistryKeyValue, TypeRemoveRegistryKey, TypeRemoveRegistryKeyValue, TypeAddLocalUser, TypeRemoveLocalUser, TypeAddLinuxLocalUser, TypeModifyLinuxLocalUser, TypeRemoveLinuxLocalUser, TypeAddMacosLocalUser, TypeRemoveMacosLocalUser, TypeAddLocalGroup, TypeRemoveLocalGroup, TypeAddUnixLocalGroup, TypeRemoveUnixLocalGroup, TypeAddUsersToLocalGroup, TypeRemoveUsersFromLocalGroup, TypeMsiInstall, TypeMsiUninstall, TypePowershellScript, TypeUnixScript, TypeFlatpakInstall, TypeFlatpakUninstall, TypeBrewFormulaInstall, TypeBrewFormulaUpgrade, TypeBrewFormulaUninstall, TypeBrewCaskInstall, TypeBrewCaskUpgrade, TypeBrewCaskUninstall:
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for type field: %q", _type)
@@ -845,6 +864,31 @@ func ByAgentType(opts ...sql.OrderTermOption) OrderOption {
 // ByWhen orders the results by the when field.
 func ByWhen(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWhen, opts...).ToFunc()
+}
+
+// ByBrewUpdate orders the results by the brew_update field.
+func ByBrewUpdate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBrewUpdate, opts...).ToFunc()
+}
+
+// ByBrewUpgradeAll orders the results by the brew_upgrade_all field.
+func ByBrewUpgradeAll(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBrewUpgradeAll, opts...).ToFunc()
+}
+
+// ByBrewUpgradeOptions orders the results by the brew_upgrade_options field.
+func ByBrewUpgradeOptions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBrewUpgradeOptions, opts...).ToFunc()
+}
+
+// ByBrewInstallOptions orders the results by the brew_install_options field.
+func ByBrewInstallOptions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBrewInstallOptions, opts...).ToFunc()
+}
+
+// ByBrewGreedy orders the results by the brew_greedy field.
+func ByBrewGreedy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBrewGreedy, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.

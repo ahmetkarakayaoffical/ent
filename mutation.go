@@ -23882,6 +23882,11 @@ type TaskMutation struct {
 	script_run                                 *task.ScriptRun
 	agent_type                                 *task.AgentType
 	when                                       *time.Time
+	brew_update                                *bool
+	brew_upgrade_all                           *bool
+	brew_upgrade_options                       *string
+	brew_install_options                       *string
+	brew_greedy                                *bool
 	clearedFields                              map[string]struct{}
 	tags                                       map[int]struct{}
 	removedtags                                map[int]struct{}
@@ -27248,6 +27253,251 @@ func (m *TaskMutation) ResetWhen() {
 	delete(m.clearedFields, task.FieldWhen)
 }
 
+// SetBrewUpdate sets the "brew_update" field.
+func (m *TaskMutation) SetBrewUpdate(b bool) {
+	m.brew_update = &b
+}
+
+// BrewUpdate returns the value of the "brew_update" field in the mutation.
+func (m *TaskMutation) BrewUpdate() (r bool, exists bool) {
+	v := m.brew_update
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBrewUpdate returns the old "brew_update" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldBrewUpdate(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBrewUpdate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBrewUpdate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBrewUpdate: %w", err)
+	}
+	return oldValue.BrewUpdate, nil
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (m *TaskMutation) ClearBrewUpdate() {
+	m.brew_update = nil
+	m.clearedFields[task.FieldBrewUpdate] = struct{}{}
+}
+
+// BrewUpdateCleared returns if the "brew_update" field was cleared in this mutation.
+func (m *TaskMutation) BrewUpdateCleared() bool {
+	_, ok := m.clearedFields[task.FieldBrewUpdate]
+	return ok
+}
+
+// ResetBrewUpdate resets all changes to the "brew_update" field.
+func (m *TaskMutation) ResetBrewUpdate() {
+	m.brew_update = nil
+	delete(m.clearedFields, task.FieldBrewUpdate)
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (m *TaskMutation) SetBrewUpgradeAll(b bool) {
+	m.brew_upgrade_all = &b
+}
+
+// BrewUpgradeAll returns the value of the "brew_upgrade_all" field in the mutation.
+func (m *TaskMutation) BrewUpgradeAll() (r bool, exists bool) {
+	v := m.brew_upgrade_all
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBrewUpgradeAll returns the old "brew_upgrade_all" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldBrewUpgradeAll(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBrewUpgradeAll is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBrewUpgradeAll requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBrewUpgradeAll: %w", err)
+	}
+	return oldValue.BrewUpgradeAll, nil
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (m *TaskMutation) ClearBrewUpgradeAll() {
+	m.brew_upgrade_all = nil
+	m.clearedFields[task.FieldBrewUpgradeAll] = struct{}{}
+}
+
+// BrewUpgradeAllCleared returns if the "brew_upgrade_all" field was cleared in this mutation.
+func (m *TaskMutation) BrewUpgradeAllCleared() bool {
+	_, ok := m.clearedFields[task.FieldBrewUpgradeAll]
+	return ok
+}
+
+// ResetBrewUpgradeAll resets all changes to the "brew_upgrade_all" field.
+func (m *TaskMutation) ResetBrewUpgradeAll() {
+	m.brew_upgrade_all = nil
+	delete(m.clearedFields, task.FieldBrewUpgradeAll)
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (m *TaskMutation) SetBrewUpgradeOptions(s string) {
+	m.brew_upgrade_options = &s
+}
+
+// BrewUpgradeOptions returns the value of the "brew_upgrade_options" field in the mutation.
+func (m *TaskMutation) BrewUpgradeOptions() (r string, exists bool) {
+	v := m.brew_upgrade_options
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBrewUpgradeOptions returns the old "brew_upgrade_options" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldBrewUpgradeOptions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBrewUpgradeOptions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBrewUpgradeOptions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBrewUpgradeOptions: %w", err)
+	}
+	return oldValue.BrewUpgradeOptions, nil
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (m *TaskMutation) ClearBrewUpgradeOptions() {
+	m.brew_upgrade_options = nil
+	m.clearedFields[task.FieldBrewUpgradeOptions] = struct{}{}
+}
+
+// BrewUpgradeOptionsCleared returns if the "brew_upgrade_options" field was cleared in this mutation.
+func (m *TaskMutation) BrewUpgradeOptionsCleared() bool {
+	_, ok := m.clearedFields[task.FieldBrewUpgradeOptions]
+	return ok
+}
+
+// ResetBrewUpgradeOptions resets all changes to the "brew_upgrade_options" field.
+func (m *TaskMutation) ResetBrewUpgradeOptions() {
+	m.brew_upgrade_options = nil
+	delete(m.clearedFields, task.FieldBrewUpgradeOptions)
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (m *TaskMutation) SetBrewInstallOptions(s string) {
+	m.brew_install_options = &s
+}
+
+// BrewInstallOptions returns the value of the "brew_install_options" field in the mutation.
+func (m *TaskMutation) BrewInstallOptions() (r string, exists bool) {
+	v := m.brew_install_options
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBrewInstallOptions returns the old "brew_install_options" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldBrewInstallOptions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBrewInstallOptions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBrewInstallOptions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBrewInstallOptions: %w", err)
+	}
+	return oldValue.BrewInstallOptions, nil
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (m *TaskMutation) ClearBrewInstallOptions() {
+	m.brew_install_options = nil
+	m.clearedFields[task.FieldBrewInstallOptions] = struct{}{}
+}
+
+// BrewInstallOptionsCleared returns if the "brew_install_options" field was cleared in this mutation.
+func (m *TaskMutation) BrewInstallOptionsCleared() bool {
+	_, ok := m.clearedFields[task.FieldBrewInstallOptions]
+	return ok
+}
+
+// ResetBrewInstallOptions resets all changes to the "brew_install_options" field.
+func (m *TaskMutation) ResetBrewInstallOptions() {
+	m.brew_install_options = nil
+	delete(m.clearedFields, task.FieldBrewInstallOptions)
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (m *TaskMutation) SetBrewGreedy(b bool) {
+	m.brew_greedy = &b
+}
+
+// BrewGreedy returns the value of the "brew_greedy" field in the mutation.
+func (m *TaskMutation) BrewGreedy() (r bool, exists bool) {
+	v := m.brew_greedy
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBrewGreedy returns the old "brew_greedy" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldBrewGreedy(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBrewGreedy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBrewGreedy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBrewGreedy: %w", err)
+	}
+	return oldValue.BrewGreedy, nil
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (m *TaskMutation) ClearBrewGreedy() {
+	m.brew_greedy = nil
+	m.clearedFields[task.FieldBrewGreedy] = struct{}{}
+}
+
+// BrewGreedyCleared returns if the "brew_greedy" field was cleared in this mutation.
+func (m *TaskMutation) BrewGreedyCleared() bool {
+	_, ok := m.clearedFields[task.FieldBrewGreedy]
+	return ok
+}
+
+// ResetBrewGreedy resets all changes to the "brew_greedy" field.
+func (m *TaskMutation) ResetBrewGreedy() {
+	m.brew_greedy = nil
+	delete(m.clearedFields, task.FieldBrewGreedy)
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
 func (m *TaskMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
@@ -27375,7 +27625,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 67)
+	fields := make([]string, 0, 72)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -27577,6 +27827,21 @@ func (m *TaskMutation) Fields() []string {
 	if m.when != nil {
 		fields = append(fields, task.FieldWhen)
 	}
+	if m.brew_update != nil {
+		fields = append(fields, task.FieldBrewUpdate)
+	}
+	if m.brew_upgrade_all != nil {
+		fields = append(fields, task.FieldBrewUpgradeAll)
+	}
+	if m.brew_upgrade_options != nil {
+		fields = append(fields, task.FieldBrewUpgradeOptions)
+	}
+	if m.brew_install_options != nil {
+		fields = append(fields, task.FieldBrewInstallOptions)
+	}
+	if m.brew_greedy != nil {
+		fields = append(fields, task.FieldBrewGreedy)
+	}
 	return fields
 }
 
@@ -27719,6 +27984,16 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.AgentType()
 	case task.FieldWhen:
 		return m.When()
+	case task.FieldBrewUpdate:
+		return m.BrewUpdate()
+	case task.FieldBrewUpgradeAll:
+		return m.BrewUpgradeAll()
+	case task.FieldBrewUpgradeOptions:
+		return m.BrewUpgradeOptions()
+	case task.FieldBrewInstallOptions:
+		return m.BrewInstallOptions()
+	case task.FieldBrewGreedy:
+		return m.BrewGreedy()
 	}
 	return nil, false
 }
@@ -27862,6 +28137,16 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAgentType(ctx)
 	case task.FieldWhen:
 		return m.OldWhen(ctx)
+	case task.FieldBrewUpdate:
+		return m.OldBrewUpdate(ctx)
+	case task.FieldBrewUpgradeAll:
+		return m.OldBrewUpgradeAll(ctx)
+	case task.FieldBrewUpgradeOptions:
+		return m.OldBrewUpgradeOptions(ctx)
+	case task.FieldBrewInstallOptions:
+		return m.OldBrewInstallOptions(ctx)
+	case task.FieldBrewGreedy:
+		return m.OldBrewGreedy(ctx)
 	}
 	return nil, fmt.Errorf("unknown Task field %s", name)
 }
@@ -28340,6 +28625,41 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetWhen(v)
 		return nil
+	case task.FieldBrewUpdate:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBrewUpdate(v)
+		return nil
+	case task.FieldBrewUpgradeAll:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBrewUpgradeAll(v)
+		return nil
+	case task.FieldBrewUpgradeOptions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBrewUpgradeOptions(v)
+		return nil
+	case task.FieldBrewInstallOptions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBrewInstallOptions(v)
+		return nil
+	case task.FieldBrewGreedy:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBrewGreedy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)
 }
@@ -28565,6 +28885,21 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldWhen) {
 		fields = append(fields, task.FieldWhen)
 	}
+	if m.FieldCleared(task.FieldBrewUpdate) {
+		fields = append(fields, task.FieldBrewUpdate)
+	}
+	if m.FieldCleared(task.FieldBrewUpgradeAll) {
+		fields = append(fields, task.FieldBrewUpgradeAll)
+	}
+	if m.FieldCleared(task.FieldBrewUpgradeOptions) {
+		fields = append(fields, task.FieldBrewUpgradeOptions)
+	}
+	if m.FieldCleared(task.FieldBrewInstallOptions) {
+		fields = append(fields, task.FieldBrewInstallOptions)
+	}
+	if m.FieldCleared(task.FieldBrewGreedy) {
+		fields = append(fields, task.FieldBrewGreedy)
+	}
 	return fields
 }
 
@@ -28774,6 +29109,21 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldWhen:
 		m.ClearWhen()
 		return nil
+	case task.FieldBrewUpdate:
+		m.ClearBrewUpdate()
+		return nil
+	case task.FieldBrewUpgradeAll:
+		m.ClearBrewUpgradeAll()
+		return nil
+	case task.FieldBrewUpgradeOptions:
+		m.ClearBrewUpgradeOptions()
+		return nil
+	case task.FieldBrewInstallOptions:
+		m.ClearBrewInstallOptions()
+		return nil
+	case task.FieldBrewGreedy:
+		m.ClearBrewGreedy()
+		return nil
 	}
 	return fmt.Errorf("unknown Task nullable field %s", name)
 }
@@ -28982,6 +29332,21 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldWhen:
 		m.ResetWhen()
+		return nil
+	case task.FieldBrewUpdate:
+		m.ResetBrewUpdate()
+		return nil
+	case task.FieldBrewUpgradeAll:
+		m.ResetBrewUpgradeAll()
+		return nil
+	case task.FieldBrewUpgradeOptions:
+		m.ResetBrewUpgradeOptions()
+		return nil
+	case task.FieldBrewInstallOptions:
+		m.ResetBrewInstallOptions()
+		return nil
+	case task.FieldBrewGreedy:
+		m.ResetBrewGreedy()
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)

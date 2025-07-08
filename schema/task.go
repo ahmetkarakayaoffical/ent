@@ -43,8 +43,12 @@ func (Task) Fields() []ent.Field {
 			"unix_script",
 			"flatpak_install",
 			"flatpak_uninstall",
-			"brew_install",
-			"brew_uninstall"),
+			"brew_formula_install",
+			"brew_formula_upgrade",
+			"brew_formula_uninstall",
+			"brew_cask_install",
+			"brew_cask_upgrade",
+			"brew_cask_uninstall"),
 		field.String("package_id").Optional().Default(""),
 		field.String("package_name").Optional().Default(""),
 		field.Bool("package_latest").Optional().Default(false),
@@ -110,6 +114,11 @@ func (Task) Fields() []ent.Field {
 		field.Enum("script_run").Values("once", "always").Optional(),
 		field.Enum("agent_type").Values("windows", "linux", "macos").Optional().Default("windows"),
 		field.Time("when").Optional(),
+		field.Bool("brew_update").Optional(),
+		field.Bool("brew_upgrade_all").Optional(),
+		field.String("brew_upgrade_options").Optional(),
+		field.String("brew_install_options").Optional(),
+		field.Bool("brew_greedy").Optional(),
 	}
 }
 

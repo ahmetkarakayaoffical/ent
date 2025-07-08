@@ -946,6 +946,76 @@ func (tc *TaskCreate) SetNillableWhen(t *time.Time) *TaskCreate {
 	return tc
 }
 
+// SetBrewUpdate sets the "brew_update" field.
+func (tc *TaskCreate) SetBrewUpdate(b bool) *TaskCreate {
+	tc.mutation.SetBrewUpdate(b)
+	return tc
+}
+
+// SetNillableBrewUpdate sets the "brew_update" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableBrewUpdate(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetBrewUpdate(*b)
+	}
+	return tc
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (tc *TaskCreate) SetBrewUpgradeAll(b bool) *TaskCreate {
+	tc.mutation.SetBrewUpgradeAll(b)
+	return tc
+}
+
+// SetNillableBrewUpgradeAll sets the "brew_upgrade_all" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableBrewUpgradeAll(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetBrewUpgradeAll(*b)
+	}
+	return tc
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (tc *TaskCreate) SetBrewUpgradeOptions(s string) *TaskCreate {
+	tc.mutation.SetBrewUpgradeOptions(s)
+	return tc
+}
+
+// SetNillableBrewUpgradeOptions sets the "brew_upgrade_options" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableBrewUpgradeOptions(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetBrewUpgradeOptions(*s)
+	}
+	return tc
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (tc *TaskCreate) SetBrewInstallOptions(s string) *TaskCreate {
+	tc.mutation.SetBrewInstallOptions(s)
+	return tc
+}
+
+// SetNillableBrewInstallOptions sets the "brew_install_options" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableBrewInstallOptions(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetBrewInstallOptions(*s)
+	}
+	return tc
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (tc *TaskCreate) SetBrewGreedy(b bool) *TaskCreate {
+	tc.mutation.SetBrewGreedy(b)
+	return tc
+}
+
+// SetNillableBrewGreedy sets the "brew_greedy" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableBrewGreedy(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetBrewGreedy(*b)
+	}
+	return tc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tc *TaskCreate) AddTagIDs(ids ...int) *TaskCreate {
 	tc.mutation.AddTagIDs(ids...)
@@ -1517,6 +1587,26 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.When(); ok {
 		_spec.SetField(task.FieldWhen, field.TypeTime, value)
 		_node.When = value
+	}
+	if value, ok := tc.mutation.BrewUpdate(); ok {
+		_spec.SetField(task.FieldBrewUpdate, field.TypeBool, value)
+		_node.BrewUpdate = value
+	}
+	if value, ok := tc.mutation.BrewUpgradeAll(); ok {
+		_spec.SetField(task.FieldBrewUpgradeAll, field.TypeBool, value)
+		_node.BrewUpgradeAll = value
+	}
+	if value, ok := tc.mutation.BrewUpgradeOptions(); ok {
+		_spec.SetField(task.FieldBrewUpgradeOptions, field.TypeString, value)
+		_node.BrewUpgradeOptions = value
+	}
+	if value, ok := tc.mutation.BrewInstallOptions(); ok {
+		_spec.SetField(task.FieldBrewInstallOptions, field.TypeString, value)
+		_node.BrewInstallOptions = value
+	}
+	if value, ok := tc.mutation.BrewGreedy(); ok {
+		_spec.SetField(task.FieldBrewGreedy, field.TypeBool, value)
+		_node.BrewGreedy = value
 	}
 	if nodes := tc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -2794,6 +2884,96 @@ func (u *TaskUpsert) UpdateWhen() *TaskUpsert {
 // ClearWhen clears the value of the "when" field.
 func (u *TaskUpsert) ClearWhen() *TaskUpsert {
 	u.SetNull(task.FieldWhen)
+	return u
+}
+
+// SetBrewUpdate sets the "brew_update" field.
+func (u *TaskUpsert) SetBrewUpdate(v bool) *TaskUpsert {
+	u.Set(task.FieldBrewUpdate, v)
+	return u
+}
+
+// UpdateBrewUpdate sets the "brew_update" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateBrewUpdate() *TaskUpsert {
+	u.SetExcluded(task.FieldBrewUpdate)
+	return u
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (u *TaskUpsert) ClearBrewUpdate() *TaskUpsert {
+	u.SetNull(task.FieldBrewUpdate)
+	return u
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (u *TaskUpsert) SetBrewUpgradeAll(v bool) *TaskUpsert {
+	u.Set(task.FieldBrewUpgradeAll, v)
+	return u
+}
+
+// UpdateBrewUpgradeAll sets the "brew_upgrade_all" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateBrewUpgradeAll() *TaskUpsert {
+	u.SetExcluded(task.FieldBrewUpgradeAll)
+	return u
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (u *TaskUpsert) ClearBrewUpgradeAll() *TaskUpsert {
+	u.SetNull(task.FieldBrewUpgradeAll)
+	return u
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (u *TaskUpsert) SetBrewUpgradeOptions(v string) *TaskUpsert {
+	u.Set(task.FieldBrewUpgradeOptions, v)
+	return u
+}
+
+// UpdateBrewUpgradeOptions sets the "brew_upgrade_options" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateBrewUpgradeOptions() *TaskUpsert {
+	u.SetExcluded(task.FieldBrewUpgradeOptions)
+	return u
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (u *TaskUpsert) ClearBrewUpgradeOptions() *TaskUpsert {
+	u.SetNull(task.FieldBrewUpgradeOptions)
+	return u
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (u *TaskUpsert) SetBrewInstallOptions(v string) *TaskUpsert {
+	u.Set(task.FieldBrewInstallOptions, v)
+	return u
+}
+
+// UpdateBrewInstallOptions sets the "brew_install_options" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateBrewInstallOptions() *TaskUpsert {
+	u.SetExcluded(task.FieldBrewInstallOptions)
+	return u
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (u *TaskUpsert) ClearBrewInstallOptions() *TaskUpsert {
+	u.SetNull(task.FieldBrewInstallOptions)
+	return u
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (u *TaskUpsert) SetBrewGreedy(v bool) *TaskUpsert {
+	u.Set(task.FieldBrewGreedy, v)
+	return u
+}
+
+// UpdateBrewGreedy sets the "brew_greedy" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateBrewGreedy() *TaskUpsert {
+	u.SetExcluded(task.FieldBrewGreedy)
+	return u
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (u *TaskUpsert) ClearBrewGreedy() *TaskUpsert {
+	u.SetNull(task.FieldBrewGreedy)
 	return u
 }
 
@@ -4227,6 +4407,111 @@ func (u *TaskUpsertOne) UpdateWhen() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearWhen() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearWhen()
+	})
+}
+
+// SetBrewUpdate sets the "brew_update" field.
+func (u *TaskUpsertOne) SetBrewUpdate(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpdate(v)
+	})
+}
+
+// UpdateBrewUpdate sets the "brew_update" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateBrewUpdate() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpdate()
+	})
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (u *TaskUpsertOne) ClearBrewUpdate() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpdate()
+	})
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (u *TaskUpsertOne) SetBrewUpgradeAll(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpgradeAll(v)
+	})
+}
+
+// UpdateBrewUpgradeAll sets the "brew_upgrade_all" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateBrewUpgradeAll() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpgradeAll()
+	})
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (u *TaskUpsertOne) ClearBrewUpgradeAll() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpgradeAll()
+	})
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (u *TaskUpsertOne) SetBrewUpgradeOptions(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpgradeOptions(v)
+	})
+}
+
+// UpdateBrewUpgradeOptions sets the "brew_upgrade_options" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateBrewUpgradeOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpgradeOptions()
+	})
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (u *TaskUpsertOne) ClearBrewUpgradeOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpgradeOptions()
+	})
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (u *TaskUpsertOne) SetBrewInstallOptions(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewInstallOptions(v)
+	})
+}
+
+// UpdateBrewInstallOptions sets the "brew_install_options" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateBrewInstallOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewInstallOptions()
+	})
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (u *TaskUpsertOne) ClearBrewInstallOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewInstallOptions()
+	})
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (u *TaskUpsertOne) SetBrewGreedy(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewGreedy(v)
+	})
+}
+
+// UpdateBrewGreedy sets the "brew_greedy" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateBrewGreedy() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewGreedy()
+	})
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (u *TaskUpsertOne) ClearBrewGreedy() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewGreedy()
 	})
 }
 
@@ -5824,6 +6109,111 @@ func (u *TaskUpsertBulk) UpdateWhen() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearWhen() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearWhen()
+	})
+}
+
+// SetBrewUpdate sets the "brew_update" field.
+func (u *TaskUpsertBulk) SetBrewUpdate(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpdate(v)
+	})
+}
+
+// UpdateBrewUpdate sets the "brew_update" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateBrewUpdate() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpdate()
+	})
+}
+
+// ClearBrewUpdate clears the value of the "brew_update" field.
+func (u *TaskUpsertBulk) ClearBrewUpdate() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpdate()
+	})
+}
+
+// SetBrewUpgradeAll sets the "brew_upgrade_all" field.
+func (u *TaskUpsertBulk) SetBrewUpgradeAll(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpgradeAll(v)
+	})
+}
+
+// UpdateBrewUpgradeAll sets the "brew_upgrade_all" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateBrewUpgradeAll() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpgradeAll()
+	})
+}
+
+// ClearBrewUpgradeAll clears the value of the "brew_upgrade_all" field.
+func (u *TaskUpsertBulk) ClearBrewUpgradeAll() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpgradeAll()
+	})
+}
+
+// SetBrewUpgradeOptions sets the "brew_upgrade_options" field.
+func (u *TaskUpsertBulk) SetBrewUpgradeOptions(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewUpgradeOptions(v)
+	})
+}
+
+// UpdateBrewUpgradeOptions sets the "brew_upgrade_options" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateBrewUpgradeOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewUpgradeOptions()
+	})
+}
+
+// ClearBrewUpgradeOptions clears the value of the "brew_upgrade_options" field.
+func (u *TaskUpsertBulk) ClearBrewUpgradeOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewUpgradeOptions()
+	})
+}
+
+// SetBrewInstallOptions sets the "brew_install_options" field.
+func (u *TaskUpsertBulk) SetBrewInstallOptions(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewInstallOptions(v)
+	})
+}
+
+// UpdateBrewInstallOptions sets the "brew_install_options" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateBrewInstallOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewInstallOptions()
+	})
+}
+
+// ClearBrewInstallOptions clears the value of the "brew_install_options" field.
+func (u *TaskUpsertBulk) ClearBrewInstallOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewInstallOptions()
+	})
+}
+
+// SetBrewGreedy sets the "brew_greedy" field.
+func (u *TaskUpsertBulk) SetBrewGreedy(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetBrewGreedy(v)
+	})
+}
+
+// UpdateBrewGreedy sets the "brew_greedy" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateBrewGreedy() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateBrewGreedy()
+	})
+}
+
+// ClearBrewGreedy clears the value of the "brew_greedy" field.
+func (u *TaskUpsertBulk) ClearBrewGreedy() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearBrewGreedy()
 	})
 }
 

@@ -152,6 +152,16 @@ type Task struct {
 	AgentType task.AgentType `json:"agent_type,omitempty"`
 	// When holds the value of the "when" field.
 	When time.Time `json:"when,omitempty"`
+	// BrewUpdate holds the value of the "brew_update" field.
+	BrewUpdate bool `json:"brew_update,omitempty"`
+	// BrewUpgradeAll holds the value of the "brew_upgrade_all" field.
+	BrewUpgradeAll bool `json:"brew_upgrade_all,omitempty"`
+	// BrewUpgradeOptions holds the value of the "brew_upgrade_options" field.
+	BrewUpgradeOptions string `json:"brew_upgrade_options,omitempty"`
+	// BrewInstallOptions holds the value of the "brew_install_options" field.
+	BrewInstallOptions string `json:"brew_install_options,omitempty"`
+	// BrewGreedy holds the value of the "brew_greedy" field.
+	BrewGreedy bool `json:"brew_greedy,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges         TaskEdges `json:"edges"`
@@ -195,11 +205,11 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldPackageLatest, task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce:
+		case task.FieldPackageLatest, task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce, task.FieldBrewUpdate, task.FieldBrewUpgradeAll, task.FieldBrewGreedy:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptExecutable, task.FieldScriptCreates, task.FieldScriptRun, task.FieldAgentType:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptExecutable, task.FieldScriptCreates, task.FieldScriptRun, task.FieldAgentType, task.FieldBrewUpgradeOptions, task.FieldBrewInstallOptions:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -628,6 +638,36 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.When = value.Time
 			}
+		case task.FieldBrewUpdate:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field brew_update", values[i])
+			} else if value.Valid {
+				t.BrewUpdate = value.Bool
+			}
+		case task.FieldBrewUpgradeAll:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field brew_upgrade_all", values[i])
+			} else if value.Valid {
+				t.BrewUpgradeAll = value.Bool
+			}
+		case task.FieldBrewUpgradeOptions:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field brew_upgrade_options", values[i])
+			} else if value.Valid {
+				t.BrewUpgradeOptions = value.String
+			}
+		case task.FieldBrewInstallOptions:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field brew_install_options", values[i])
+			} else if value.Valid {
+				t.BrewInstallOptions = value.String
+			}
+		case task.FieldBrewGreedy:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field brew_greedy", values[i])
+			} else if value.Valid {
+				t.BrewGreedy = value.Bool
+			}
 		case task.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field profile_tasks", value)
@@ -881,6 +921,21 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("when=")
 	builder.WriteString(t.When.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("brew_update=")
+	builder.WriteString(fmt.Sprintf("%v", t.BrewUpdate))
+	builder.WriteString(", ")
+	builder.WriteString("brew_upgrade_all=")
+	builder.WriteString(fmt.Sprintf("%v", t.BrewUpgradeAll))
+	builder.WriteString(", ")
+	builder.WriteString("brew_upgrade_options=")
+	builder.WriteString(t.BrewUpgradeOptions)
+	builder.WriteString(", ")
+	builder.WriteString("brew_install_options=")
+	builder.WriteString(t.BrewInstallOptions)
+	builder.WriteString(", ")
+	builder.WriteString("brew_greedy=")
+	builder.WriteString(fmt.Sprintf("%v", t.BrewGreedy))
 	builder.WriteByte(')')
 	return builder.String()
 }

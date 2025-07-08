@@ -365,6 +365,31 @@ func When(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldWhen, v))
 }
 
+// BrewUpdate applies equality check predicate on the "brew_update" field. It's identical to BrewUpdateEQ.
+func BrewUpdate(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpdate, v))
+}
+
+// BrewUpgradeAll applies equality check predicate on the "brew_upgrade_all" field. It's identical to BrewUpgradeAllEQ.
+func BrewUpgradeAll(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpgradeAll, v))
+}
+
+// BrewUpgradeOptions applies equality check predicate on the "brew_upgrade_options" field. It's identical to BrewUpgradeOptionsEQ.
+func BrewUpgradeOptions(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpgradeOptions, v))
+}
+
+// BrewInstallOptions applies equality check predicate on the "brew_install_options" field. It's identical to BrewInstallOptionsEQ.
+func BrewInstallOptions(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewInstallOptions, v))
+}
+
+// BrewGreedy applies equality check predicate on the "brew_greedy" field. It's identical to BrewGreedyEQ.
+func BrewGreedy(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewGreedy, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldName, v))
@@ -4183,6 +4208,216 @@ func WhenIsNil() predicate.Task {
 // WhenNotNil applies the NotNil predicate on the "when" field.
 func WhenNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldWhen))
+}
+
+// BrewUpdateEQ applies the EQ predicate on the "brew_update" field.
+func BrewUpdateEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpdate, v))
+}
+
+// BrewUpdateNEQ applies the NEQ predicate on the "brew_update" field.
+func BrewUpdateNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldBrewUpdate, v))
+}
+
+// BrewUpdateIsNil applies the IsNil predicate on the "brew_update" field.
+func BrewUpdateIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldBrewUpdate))
+}
+
+// BrewUpdateNotNil applies the NotNil predicate on the "brew_update" field.
+func BrewUpdateNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldBrewUpdate))
+}
+
+// BrewUpgradeAllEQ applies the EQ predicate on the "brew_upgrade_all" field.
+func BrewUpgradeAllEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpgradeAll, v))
+}
+
+// BrewUpgradeAllNEQ applies the NEQ predicate on the "brew_upgrade_all" field.
+func BrewUpgradeAllNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldBrewUpgradeAll, v))
+}
+
+// BrewUpgradeAllIsNil applies the IsNil predicate on the "brew_upgrade_all" field.
+func BrewUpgradeAllIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldBrewUpgradeAll))
+}
+
+// BrewUpgradeAllNotNil applies the NotNil predicate on the "brew_upgrade_all" field.
+func BrewUpgradeAllNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldBrewUpgradeAll))
+}
+
+// BrewUpgradeOptionsEQ applies the EQ predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsNEQ applies the NEQ predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsIn applies the In predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldBrewUpgradeOptions, vs...))
+}
+
+// BrewUpgradeOptionsNotIn applies the NotIn predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldBrewUpgradeOptions, vs...))
+}
+
+// BrewUpgradeOptionsGT applies the GT predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsGTE applies the GTE predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsLT applies the LT predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsLTE applies the LTE predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsContains applies the Contains predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsHasPrefix applies the HasPrefix predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsHasSuffix applies the HasSuffix predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsIsNil applies the IsNil predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldBrewUpgradeOptions))
+}
+
+// BrewUpgradeOptionsNotNil applies the NotNil predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldBrewUpgradeOptions))
+}
+
+// BrewUpgradeOptionsEqualFold applies the EqualFold predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldBrewUpgradeOptions, v))
+}
+
+// BrewUpgradeOptionsContainsFold applies the ContainsFold predicate on the "brew_upgrade_options" field.
+func BrewUpgradeOptionsContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldBrewUpgradeOptions, v))
+}
+
+// BrewInstallOptionsEQ applies the EQ predicate on the "brew_install_options" field.
+func BrewInstallOptionsEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsNEQ applies the NEQ predicate on the "brew_install_options" field.
+func BrewInstallOptionsNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsIn applies the In predicate on the "brew_install_options" field.
+func BrewInstallOptionsIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldBrewInstallOptions, vs...))
+}
+
+// BrewInstallOptionsNotIn applies the NotIn predicate on the "brew_install_options" field.
+func BrewInstallOptionsNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldBrewInstallOptions, vs...))
+}
+
+// BrewInstallOptionsGT applies the GT predicate on the "brew_install_options" field.
+func BrewInstallOptionsGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsGTE applies the GTE predicate on the "brew_install_options" field.
+func BrewInstallOptionsGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsLT applies the LT predicate on the "brew_install_options" field.
+func BrewInstallOptionsLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsLTE applies the LTE predicate on the "brew_install_options" field.
+func BrewInstallOptionsLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsContains applies the Contains predicate on the "brew_install_options" field.
+func BrewInstallOptionsContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsHasPrefix applies the HasPrefix predicate on the "brew_install_options" field.
+func BrewInstallOptionsHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsHasSuffix applies the HasSuffix predicate on the "brew_install_options" field.
+func BrewInstallOptionsHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsIsNil applies the IsNil predicate on the "brew_install_options" field.
+func BrewInstallOptionsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldBrewInstallOptions))
+}
+
+// BrewInstallOptionsNotNil applies the NotNil predicate on the "brew_install_options" field.
+func BrewInstallOptionsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldBrewInstallOptions))
+}
+
+// BrewInstallOptionsEqualFold applies the EqualFold predicate on the "brew_install_options" field.
+func BrewInstallOptionsEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldBrewInstallOptions, v))
+}
+
+// BrewInstallOptionsContainsFold applies the ContainsFold predicate on the "brew_install_options" field.
+func BrewInstallOptionsContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldBrewInstallOptions, v))
+}
+
+// BrewGreedyEQ applies the EQ predicate on the "brew_greedy" field.
+func BrewGreedyEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldBrewGreedy, v))
+}
+
+// BrewGreedyNEQ applies the NEQ predicate on the "brew_greedy" field.
+func BrewGreedyNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldBrewGreedy, v))
+}
+
+// BrewGreedyIsNil applies the IsNil predicate on the "brew_greedy" field.
+func BrewGreedyIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldBrewGreedy))
+}
+
+// BrewGreedyNotNil applies the NotNil predicate on the "brew_greedy" field.
+func BrewGreedyNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldBrewGreedy))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.
