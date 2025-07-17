@@ -105,6 +105,11 @@ func Expiry(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldExpiry, v))
 }
 
+// Openid applies equality check predicate on the "openid" field. It's identical to OpenidEQ.
+func Openid(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOpenid, v))
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCreated, v))
@@ -603,6 +608,26 @@ func ExpiryIsNil() predicate.User {
 // ExpiryNotNil applies the NotNil predicate on the "expiry" field.
 func ExpiryNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldExpiry))
+}
+
+// OpenidEQ applies the EQ predicate on the "openid" field.
+func OpenidEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOpenid, v))
+}
+
+// OpenidNEQ applies the NEQ predicate on the "openid" field.
+func OpenidNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldOpenid, v))
+}
+
+// OpenidIsNil applies the IsNil predicate on the "openid" field.
+func OpenidIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldOpenid))
+}
+
+// OpenidNotNil applies the NotNil predicate on the "openid" field.
+func OpenidNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldOpenid))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.

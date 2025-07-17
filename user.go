@@ -33,6 +33,8 @@ type User struct {
 	CertClearPassword string `json:"cert_clear_password,omitempty"`
 	// Expiry holds the value of the "expiry" field.
 	Expiry time.Time `json:"expiry,omitempty"`
+	// Openid holds the value of the "openid" field.
+	Openid bool `json:"openid,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -66,7 +68,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldEmailVerified:
+		case user.FieldEmailVerified, user.FieldOpenid:
 			values[i] = new(sql.NullBool)
 		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword:
 			values[i] = new(sql.NullString)
@@ -140,6 +142,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field expiry", values[i])
 			} else if value.Valid {
 				u.Expiry = value.Time
+			}
+		case user.FieldOpenid:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field openid", values[i])
+			} else if value.Valid {
+				u.Openid = value.Bool
 			}
 		case user.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -217,6 +225,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("expiry=")
 	builder.WriteString(u.Expiry.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("openid=")
+	builder.WriteString(fmt.Sprintf("%v", u.Openid))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(u.Created.Format(time.ANSIC))

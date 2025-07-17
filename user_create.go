@@ -128,6 +128,20 @@ func (uc *UserCreate) SetNillableExpiry(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetOpenid sets the "openid" field.
+func (uc *UserCreate) SetOpenid(b bool) *UserCreate {
+	uc.mutation.SetOpenid(b)
+	return uc
+}
+
+// SetNillableOpenid sets the "openid" field if the given value is not nil.
+func (uc *UserCreate) SetNillableOpenid(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetOpenid(*b)
+	}
+	return uc
+}
+
 // SetCreated sets the "created" field.
 func (uc *UserCreate) SetCreated(t time.Time) *UserCreate {
 	uc.mutation.SetCreated(t)
@@ -219,6 +233,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.Register(); !ok {
 		v := user.DefaultRegister
 		uc.mutation.SetRegister(v)
+	}
+	if _, ok := uc.mutation.Openid(); !ok {
+		v := user.DefaultOpenid
+		uc.mutation.SetOpenid(v)
 	}
 	if _, ok := uc.mutation.Created(); !ok {
 		v := user.DefaultCreated()
@@ -313,6 +331,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Expiry(); ok {
 		_spec.SetField(user.FieldExpiry, field.TypeTime, value)
 		_node.Expiry = value
+	}
+	if value, ok := uc.mutation.Openid(); ok {
+		_spec.SetField(user.FieldOpenid, field.TypeBool, value)
+		_node.Openid = value
 	}
 	if value, ok := uc.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
@@ -513,6 +535,24 @@ func (u *UserUpsert) UpdateExpiry() *UserUpsert {
 // ClearExpiry clears the value of the "expiry" field.
 func (u *UserUpsert) ClearExpiry() *UserUpsert {
 	u.SetNull(user.FieldExpiry)
+	return u
+}
+
+// SetOpenid sets the "openid" field.
+func (u *UserUpsert) SetOpenid(v bool) *UserUpsert {
+	u.Set(user.FieldOpenid, v)
+	return u
+}
+
+// UpdateOpenid sets the "openid" field to the value that was provided on create.
+func (u *UserUpsert) UpdateOpenid() *UserUpsert {
+	u.SetExcluded(user.FieldOpenid)
+	return u
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (u *UserUpsert) ClearOpenid() *UserUpsert {
+	u.SetNull(user.FieldOpenid)
 	return u
 }
 
@@ -744,6 +784,27 @@ func (u *UserUpsertOne) UpdateExpiry() *UserUpsertOne {
 func (u *UserUpsertOne) ClearExpiry() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearExpiry()
+	})
+}
+
+// SetOpenid sets the "openid" field.
+func (u *UserUpsertOne) SetOpenid(v bool) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetOpenid(v)
+	})
+}
+
+// UpdateOpenid sets the "openid" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateOpenid() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateOpenid()
+	})
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (u *UserUpsertOne) ClearOpenid() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearOpenid()
 	})
 }
 
@@ -1148,6 +1209,27 @@ func (u *UserUpsertBulk) UpdateExpiry() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearExpiry() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearExpiry()
+	})
+}
+
+// SetOpenid sets the "openid" field.
+func (u *UserUpsertBulk) SetOpenid(v bool) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetOpenid(v)
+	})
+}
+
+// UpdateOpenid sets the "openid" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateOpenid() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateOpenid()
+	})
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (u *UserUpsertBulk) ClearOpenid() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearOpenid()
 	})
 }
 

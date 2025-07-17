@@ -172,6 +172,26 @@ func (uu *UserUpdate) ClearExpiry() *UserUpdate {
 	return uu
 }
 
+// SetOpenid sets the "openid" field.
+func (uu *UserUpdate) SetOpenid(b bool) *UserUpdate {
+	uu.mutation.SetOpenid(b)
+	return uu
+}
+
+// SetNillableOpenid sets the "openid" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOpenid(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetOpenid(*b)
+	}
+	return uu
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (uu *UserUpdate) ClearOpenid() *UserUpdate {
+	uu.mutation.ClearOpenid()
+	return uu
+}
+
 // SetCreated sets the "created" field.
 func (uu *UserUpdate) SetCreated(t time.Time) *UserUpdate {
 	uu.mutation.SetCreated(t)
@@ -334,6 +354,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.ExpiryCleared() {
 		_spec.ClearField(user.FieldExpiry, field.TypeTime)
+	}
+	if value, ok := uu.mutation.Openid(); ok {
+		_spec.SetField(user.FieldOpenid, field.TypeBool, value)
+	}
+	if uu.mutation.OpenidCleared() {
+		_spec.ClearField(user.FieldOpenid, field.TypeBool)
 	}
 	if value, ok := uu.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)
@@ -556,6 +582,26 @@ func (uuo *UserUpdateOne) ClearExpiry() *UserUpdateOne {
 	return uuo
 }
 
+// SetOpenid sets the "openid" field.
+func (uuo *UserUpdateOne) SetOpenid(b bool) *UserUpdateOne {
+	uuo.mutation.SetOpenid(b)
+	return uuo
+}
+
+// SetNillableOpenid sets the "openid" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOpenid(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetOpenid(*b)
+	}
+	return uuo
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (uuo *UserUpdateOne) ClearOpenid() *UserUpdateOne {
+	uuo.mutation.ClearOpenid()
+	return uuo
+}
+
 // SetCreated sets the "created" field.
 func (uuo *UserUpdateOne) SetCreated(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetCreated(t)
@@ -748,6 +794,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.ExpiryCleared() {
 		_spec.ClearField(user.FieldExpiry, field.TypeTime)
+	}
+	if value, ok := uuo.mutation.Openid(); ok {
+		_spec.SetField(user.FieldOpenid, field.TypeBool, value)
+	}
+	if uuo.mutation.OpenidCleared() {
+		_spec.ClearField(user.FieldOpenid, field.TypeBool)
 	}
 	if value, ok := uuo.mutation.Created(); ok {
 		_spec.SetField(user.FieldCreated, field.TypeTime, value)

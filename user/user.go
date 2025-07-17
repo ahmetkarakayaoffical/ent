@@ -30,6 +30,8 @@ const (
 	FieldCertClearPassword = "cert_clear_password"
 	// FieldExpiry holds the string denoting the expiry field in the database.
 	FieldExpiry = "expiry"
+	// FieldOpenid holds the string denoting the openid field in the database.
+	FieldOpenid = "openid"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -60,6 +62,7 @@ var Columns = []string{
 	FieldRegister,
 	FieldCertClearPassword,
 	FieldExpiry,
+	FieldOpenid,
 	FieldCreated,
 	FieldModified,
 }
@@ -79,6 +82,8 @@ var (
 	DefaultEmailVerified bool
 	// DefaultRegister holds the default value on creation for the "register" field.
 	DefaultRegister string
+	// DefaultOpenid holds the default value on creation for the "openid" field.
+	DefaultOpenid bool
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
@@ -135,6 +140,11 @@ func ByCertClearPassword(opts ...sql.OrderTermOption) OrderOption {
 // ByExpiry orders the results by the expiry field.
 func ByExpiry(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiry, opts...).ToFunc()
+}
+
+// ByOpenid orders the results by the openid field.
+func ByOpenid(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOpenid, opts...).ToFunc()
 }
 
 // ByCreated orders the results by the created field.

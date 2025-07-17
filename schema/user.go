@@ -27,6 +27,7 @@ func (User) Fields() []ent.Field {
 		field.String("register").Default("users.pending_email_confirmation"),
 		field.String("cert_clear_password").Optional(),
 		field.Time("expiry").Optional(),
+		field.Bool("openid").Optional().Default(false),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 	}

@@ -831,6 +831,7 @@ var (
 		{Name: "register", Type: field.TypeString, Default: "users.pending_email_confirmation"},
 		{Name: "cert_clear_password", Type: field.TypeString, Nullable: true},
 		{Name: "expiry", Type: field.TypeTime, Nullable: true},
+		{Name: "openid", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 	}

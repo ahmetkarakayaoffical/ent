@@ -485,12 +485,16 @@ func init() {
 	userDescRegister := userFields[6].Descriptor()
 	// user.DefaultRegister holds the default value on creation for the register field.
 	user.DefaultRegister = userDescRegister.Default.(string)
+	// userDescOpenid is the schema descriptor for openid field.
+	userDescOpenid := userFields[9].Descriptor()
+	// user.DefaultOpenid holds the default value on creation for the openid field.
+	user.DefaultOpenid = userDescOpenid.Default.(bool)
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[9].Descriptor()
+	userDescCreated := userFields[10].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[10].Descriptor()
+	userDescModified := userFields[11].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

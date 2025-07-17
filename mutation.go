@@ -30876,6 +30876,7 @@ type UserMutation struct {
 	register            *string
 	cert_clear_password *string
 	expiry              *time.Time
+	openid              *bool
 	created             *time.Time
 	modified            *time.Time
 	clearedFields       map[string]struct{}
@@ -31344,6 +31345,55 @@ func (m *UserMutation) ResetExpiry() {
 	delete(m.clearedFields, user.FieldExpiry)
 }
 
+// SetOpenid sets the "openid" field.
+func (m *UserMutation) SetOpenid(b bool) {
+	m.openid = &b
+}
+
+// Openid returns the value of the "openid" field in the mutation.
+func (m *UserMutation) Openid() (r bool, exists bool) {
+	v := m.openid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOpenid returns the old "openid" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldOpenid(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOpenid is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOpenid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOpenid: %w", err)
+	}
+	return oldValue.Openid, nil
+}
+
+// ClearOpenid clears the value of the "openid" field.
+func (m *UserMutation) ClearOpenid() {
+	m.openid = nil
+	m.clearedFields[user.FieldOpenid] = struct{}{}
+}
+
+// OpenidCleared returns if the "openid" field was cleared in this mutation.
+func (m *UserMutation) OpenidCleared() bool {
+	_, ok := m.clearedFields[user.FieldOpenid]
+	return ok
+}
+
+// ResetOpenid resets all changes to the "openid" field.
+func (m *UserMutation) ResetOpenid() {
+	m.openid = nil
+	delete(m.clearedFields, user.FieldOpenid)
+}
+
 // SetCreated sets the "created" field.
 func (m *UserMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -31530,7 +31580,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -31554,6 +31604,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.expiry != nil {
 		fields = append(fields, user.FieldExpiry)
+	}
+	if m.openid != nil {
+		fields = append(fields, user.FieldOpenid)
 	}
 	if m.created != nil {
 		fields = append(fields, user.FieldCreated)
@@ -31585,6 +31638,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.CertClearPassword()
 	case user.FieldExpiry:
 		return m.Expiry()
+	case user.FieldOpenid:
+		return m.Openid()
 	case user.FieldCreated:
 		return m.Created()
 	case user.FieldModified:
@@ -31614,6 +31669,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCertClearPassword(ctx)
 	case user.FieldExpiry:
 		return m.OldExpiry(ctx)
+	case user.FieldOpenid:
+		return m.OldOpenid(ctx)
 	case user.FieldCreated:
 		return m.OldCreated(ctx)
 	case user.FieldModified:
@@ -31683,6 +31740,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExpiry(v)
 		return nil
+	case user.FieldOpenid:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOpenid(v)
+		return nil
 	case user.FieldCreated:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -31742,6 +31806,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldExpiry) {
 		fields = append(fields, user.FieldExpiry)
 	}
+	if m.FieldCleared(user.FieldOpenid) {
+		fields = append(fields, user.FieldOpenid)
+	}
 	if m.FieldCleared(user.FieldCreated) {
 		fields = append(fields, user.FieldCreated)
 	}
@@ -31776,6 +31843,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldExpiry:
 		m.ClearExpiry()
+		return nil
+	case user.FieldOpenid:
+		m.ClearOpenid()
 		return nil
 	case user.FieldCreated:
 		m.ClearCreated()
@@ -31814,6 +31884,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldExpiry:
 		m.ResetExpiry()
+		return nil
+	case user.FieldOpenid:
+		m.ResetOpenid()
 		return nil
 	case user.FieldCreated:
 		m.ResetCreated()
