@@ -119,6 +119,7 @@ func (Task) Fields() []ent.Field {
 		field.String("brew_upgrade_options").Optional(),
 		field.String("brew_install_options").Optional(),
 		field.Bool("brew_greedy").Optional(),
+		field.String("package_version").Optional().Default(""),
 	}
 }
 

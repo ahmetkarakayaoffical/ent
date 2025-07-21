@@ -768,6 +768,7 @@ var (
 		{Name: "brew_upgrade_options", Type: field.TypeString, Nullable: true},
 		{Name: "brew_install_options", Type: field.TypeString, Nullable: true},
 		{Name: "brew_greedy", Type: field.TypeBool, Nullable: true},
+		{Name: "package_version", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
@@ -778,7 +779,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[73]},
+				Columns:    []*schema.Column{TasksColumns[74]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

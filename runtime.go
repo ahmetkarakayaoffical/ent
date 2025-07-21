@@ -463,6 +463,10 @@ func init() {
 	taskDescScriptCreates := taskFields[63].Descriptor()
 	// task.DefaultScriptCreates holds the default value on creation for the script_creates field.
 	task.DefaultScriptCreates = taskDescScriptCreates.Default.(string)
+	// taskDescPackageVersion is the schema descriptor for package_version field.
+	taskDescPackageVersion := taskFields[72].Descriptor()
+	// task.DefaultPackageVersion holds the default value on creation for the package_version field.
+	task.DefaultPackageVersion = taskDescPackageVersion.Default.(string)
 	tenantFields := schema.Tenant{}.Fields()
 	_ = tenantFields
 	// tenantDescCreated is the schema descriptor for created field.

@@ -1016,6 +1016,20 @@ func (tc *TaskCreate) SetNillableBrewGreedy(b *bool) *TaskCreate {
 	return tc
 }
 
+// SetPackageVersion sets the "package_version" field.
+func (tc *TaskCreate) SetPackageVersion(s string) *TaskCreate {
+	tc.mutation.SetPackageVersion(s)
+	return tc
+}
+
+// SetNillablePackageVersion sets the "package_version" field if the given value is not nil.
+func (tc *TaskCreate) SetNillablePackageVersion(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetPackageVersion(*s)
+	}
+	return tc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tc *TaskCreate) AddTagIDs(ids ...int) *TaskCreate {
 	tc.mutation.AddTagIDs(ids...)
@@ -1252,6 +1266,10 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.AgentType(); !ok {
 		v := task.DefaultAgentType
 		tc.mutation.SetAgentType(v)
+	}
+	if _, ok := tc.mutation.PackageVersion(); !ok {
+		v := task.DefaultPackageVersion
+		tc.mutation.SetPackageVersion(v)
 	}
 }
 
@@ -1607,6 +1625,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.BrewGreedy(); ok {
 		_spec.SetField(task.FieldBrewGreedy, field.TypeBool, value)
 		_node.BrewGreedy = value
+	}
+	if value, ok := tc.mutation.PackageVersion(); ok {
+		_spec.SetField(task.FieldPackageVersion, field.TypeString, value)
+		_node.PackageVersion = value
 	}
 	if nodes := tc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -2974,6 +2996,24 @@ func (u *TaskUpsert) UpdateBrewGreedy() *TaskUpsert {
 // ClearBrewGreedy clears the value of the "brew_greedy" field.
 func (u *TaskUpsert) ClearBrewGreedy() *TaskUpsert {
 	u.SetNull(task.FieldBrewGreedy)
+	return u
+}
+
+// SetPackageVersion sets the "package_version" field.
+func (u *TaskUpsert) SetPackageVersion(v string) *TaskUpsert {
+	u.Set(task.FieldPackageVersion, v)
+	return u
+}
+
+// UpdatePackageVersion sets the "package_version" field to the value that was provided on create.
+func (u *TaskUpsert) UpdatePackageVersion() *TaskUpsert {
+	u.SetExcluded(task.FieldPackageVersion)
+	return u
+}
+
+// ClearPackageVersion clears the value of the "package_version" field.
+func (u *TaskUpsert) ClearPackageVersion() *TaskUpsert {
+	u.SetNull(task.FieldPackageVersion)
 	return u
 }
 
@@ -4512,6 +4552,27 @@ func (u *TaskUpsertOne) UpdateBrewGreedy() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearBrewGreedy() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearBrewGreedy()
+	})
+}
+
+// SetPackageVersion sets the "package_version" field.
+func (u *TaskUpsertOne) SetPackageVersion(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageVersion(v)
+	})
+}
+
+// UpdatePackageVersion sets the "package_version" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdatePackageVersion() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageVersion()
+	})
+}
+
+// ClearPackageVersion clears the value of the "package_version" field.
+func (u *TaskUpsertOne) ClearPackageVersion() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageVersion()
 	})
 }
 
@@ -6214,6 +6275,27 @@ func (u *TaskUpsertBulk) UpdateBrewGreedy() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearBrewGreedy() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearBrewGreedy()
+	})
+}
+
+// SetPackageVersion sets the "package_version" field.
+func (u *TaskUpsertBulk) SetPackageVersion(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetPackageVersion(v)
+	})
+}
+
+// UpdatePackageVersion sets the "package_version" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdatePackageVersion() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdatePackageVersion()
+	})
+}
+
+// ClearPackageVersion clears the value of the "package_version" field.
+func (u *TaskUpsertBulk) ClearPackageVersion() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearPackageVersion()
 	})
 }
 

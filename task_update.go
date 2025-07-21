@@ -1459,6 +1459,26 @@ func (tu *TaskUpdate) ClearBrewGreedy() *TaskUpdate {
 	return tu
 }
 
+// SetPackageVersion sets the "package_version" field.
+func (tu *TaskUpdate) SetPackageVersion(s string) *TaskUpdate {
+	tu.mutation.SetPackageVersion(s)
+	return tu
+}
+
+// SetNillablePackageVersion sets the "package_version" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillablePackageVersion(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetPackageVersion(*s)
+	}
+	return tu
+}
+
+// ClearPackageVersion clears the value of the "package_version" field.
+func (tu *TaskUpdate) ClearPackageVersion() *TaskUpdate {
+	tu.mutation.ClearPackageVersion()
+	return tu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tu *TaskUpdate) AddTagIDs(ids ...int) *TaskUpdate {
 	tu.mutation.AddTagIDs(ids...)
@@ -2030,6 +2050,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.BrewGreedyCleared() {
 		_spec.ClearField(task.FieldBrewGreedy, field.TypeBool)
+	}
+	if value, ok := tu.mutation.PackageVersion(); ok {
+		_spec.SetField(task.FieldPackageVersion, field.TypeString, value)
+	}
+	if tu.mutation.PackageVersionCleared() {
+		_spec.ClearField(task.FieldPackageVersion, field.TypeString)
 	}
 	if tu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3555,6 +3581,26 @@ func (tuo *TaskUpdateOne) ClearBrewGreedy() *TaskUpdateOne {
 	return tuo
 }
 
+// SetPackageVersion sets the "package_version" field.
+func (tuo *TaskUpdateOne) SetPackageVersion(s string) *TaskUpdateOne {
+	tuo.mutation.SetPackageVersion(s)
+	return tuo
+}
+
+// SetNillablePackageVersion sets the "package_version" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillablePackageVersion(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetPackageVersion(*s)
+	}
+	return tuo
+}
+
+// ClearPackageVersion clears the value of the "package_version" field.
+func (tuo *TaskUpdateOne) ClearPackageVersion() *TaskUpdateOne {
+	tuo.mutation.ClearPackageVersion()
+	return tuo
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tuo *TaskUpdateOne) AddTagIDs(ids ...int) *TaskUpdateOne {
 	tuo.mutation.AddTagIDs(ids...)
@@ -4156,6 +4202,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.BrewGreedyCleared() {
 		_spec.ClearField(task.FieldBrewGreedy, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.PackageVersion(); ok {
+		_spec.SetField(task.FieldPackageVersion, field.TypeString, value)
+	}
+	if tuo.mutation.PackageVersionCleared() {
+		_spec.ClearField(task.FieldPackageVersion, field.TypeString)
 	}
 	if tuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

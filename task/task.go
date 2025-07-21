@@ -158,6 +158,8 @@ const (
 	FieldBrewInstallOptions = "brew_install_options"
 	// FieldBrewGreedy holds the string denoting the brew_greedy field in the database.
 	FieldBrewGreedy = "brew_greedy"
+	// FieldPackageVersion holds the string denoting the package_version field in the database.
+	FieldPackageVersion = "package_version"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeProfile holds the string denoting the profile edge name in mutations.
@@ -255,6 +257,7 @@ var Columns = []string{
 	FieldBrewUpgradeOptions,
 	FieldBrewInstallOptions,
 	FieldBrewGreedy,
+	FieldPackageVersion,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -363,6 +366,8 @@ var (
 	DefaultScriptExecutable string
 	// DefaultScriptCreates holds the default value on creation for the "script_creates" field.
 	DefaultScriptCreates string
+	// DefaultPackageVersion holds the default value on creation for the "package_version" field.
+	DefaultPackageVersion string
 )
 
 // Type defines the type for the "type" enum field.
@@ -889,6 +894,11 @@ func ByBrewInstallOptions(opts ...sql.OrderTermOption) OrderOption {
 // ByBrewGreedy orders the results by the brew_greedy field.
 func ByBrewGreedy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBrewGreedy, opts...).ToFunc()
+}
+
+// ByPackageVersion orders the results by the package_version field.
+func ByPackageVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageVersion, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.

@@ -390,6 +390,11 @@ func BrewGreedy(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldBrewGreedy, v))
 }
 
+// PackageVersion applies equality check predicate on the "package_version" field. It's identical to PackageVersionEQ.
+func PackageVersion(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageVersion, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldName, v))
@@ -4418,6 +4423,81 @@ func BrewGreedyIsNil() predicate.Task {
 // BrewGreedyNotNil applies the NotNil predicate on the "brew_greedy" field.
 func BrewGreedyNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldBrewGreedy))
+}
+
+// PackageVersionEQ applies the EQ predicate on the "package_version" field.
+func PackageVersionEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPackageVersion, v))
+}
+
+// PackageVersionNEQ applies the NEQ predicate on the "package_version" field.
+func PackageVersionNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldPackageVersion, v))
+}
+
+// PackageVersionIn applies the In predicate on the "package_version" field.
+func PackageVersionIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldPackageVersion, vs...))
+}
+
+// PackageVersionNotIn applies the NotIn predicate on the "package_version" field.
+func PackageVersionNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldPackageVersion, vs...))
+}
+
+// PackageVersionGT applies the GT predicate on the "package_version" field.
+func PackageVersionGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldPackageVersion, v))
+}
+
+// PackageVersionGTE applies the GTE predicate on the "package_version" field.
+func PackageVersionGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldPackageVersion, v))
+}
+
+// PackageVersionLT applies the LT predicate on the "package_version" field.
+func PackageVersionLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldPackageVersion, v))
+}
+
+// PackageVersionLTE applies the LTE predicate on the "package_version" field.
+func PackageVersionLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldPackageVersion, v))
+}
+
+// PackageVersionContains applies the Contains predicate on the "package_version" field.
+func PackageVersionContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldPackageVersion, v))
+}
+
+// PackageVersionHasPrefix applies the HasPrefix predicate on the "package_version" field.
+func PackageVersionHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldPackageVersion, v))
+}
+
+// PackageVersionHasSuffix applies the HasSuffix predicate on the "package_version" field.
+func PackageVersionHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldPackageVersion, v))
+}
+
+// PackageVersionIsNil applies the IsNil predicate on the "package_version" field.
+func PackageVersionIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldPackageVersion))
+}
+
+// PackageVersionNotNil applies the NotNil predicate on the "package_version" field.
+func PackageVersionNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldPackageVersion))
+}
+
+// PackageVersionEqualFold applies the EqualFold predicate on the "package_version" field.
+func PackageVersionEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldPackageVersion, v))
+}
+
+// PackageVersionContainsFold applies the ContainsFold predicate on the "package_version" field.
+func PackageVersionContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldPackageVersion, v))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.
