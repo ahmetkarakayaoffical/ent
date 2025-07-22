@@ -504,6 +504,26 @@ func (au *AgentUpdate) ClearDescription() *AgentUpdate {
 	return au
 }
 
+// SetNickname sets the "nickname" field.
+func (au *AgentUpdate) SetNickname(s string) *AgentUpdate {
+	au.mutation.SetNickname(s)
+	return au
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableNickname(s *string) *AgentUpdate {
+	if s != nil {
+		au.SetNickname(*s)
+	}
+	return au
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (au *AgentUpdate) ClearNickname() *AgentUpdate {
+	au.mutation.ClearNickname()
+	return au
+}
+
 // SetEndpointType sets the "endpoint_type" field.
 func (au *AgentUpdate) SetEndpointType(at agent.EndpointType) *AgentUpdate {
 	au.mutation.SetEndpointType(at)
@@ -1359,6 +1379,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.DescriptionCleared() {
 		_spec.ClearField(agent.FieldDescription, field.TypeString)
+	}
+	if value, ok := au.mutation.Nickname(); ok {
+		_spec.SetField(agent.FieldNickname, field.TypeString, value)
+	}
+	if au.mutation.NicknameCleared() {
+		_spec.ClearField(agent.FieldNickname, field.TypeString)
 	}
 	if value, ok := au.mutation.EndpointType(); ok {
 		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
@@ -2619,6 +2645,26 @@ func (auo *AgentUpdateOne) ClearDescription() *AgentUpdateOne {
 	return auo
 }
 
+// SetNickname sets the "nickname" field.
+func (auo *AgentUpdateOne) SetNickname(s string) *AgentUpdateOne {
+	auo.mutation.SetNickname(s)
+	return auo
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableNickname(s *string) *AgentUpdateOne {
+	if s != nil {
+		auo.SetNickname(*s)
+	}
+	return auo
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (auo *AgentUpdateOne) ClearNickname() *AgentUpdateOne {
+	auo.mutation.ClearNickname()
+	return auo
+}
+
 // SetEndpointType sets the "endpoint_type" field.
 func (auo *AgentUpdateOne) SetEndpointType(at agent.EndpointType) *AgentUpdateOne {
 	auo.mutation.SetEndpointType(at)
@@ -3504,6 +3550,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.DescriptionCleared() {
 		_spec.ClearField(agent.FieldDescription, field.TypeString)
+	}
+	if value, ok := auo.mutation.Nickname(); ok {
+		_spec.SetField(agent.FieldNickname, field.TypeString, value)
+	}
+	if auo.mutation.NicknameCleared() {
+		_spec.ClearField(agent.FieldNickname, field.TypeString)
 	}
 	if value, ok := auo.mutation.EndpointType(); ok {
 		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)

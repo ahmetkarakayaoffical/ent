@@ -63,6 +63,8 @@ const (
 	FieldSettingsModified = "settings_modified"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldNickname holds the string denoting the nickname field in the database.
+	FieldNickname = "nickname"
 	// FieldEndpointType holds the string denoting the endpoint_type field in the database.
 	FieldEndpointType = "endpoint_type"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
@@ -301,6 +303,7 @@ var Columns = []string{
 	FieldRemoteAssistance,
 	FieldSettingsModified,
 	FieldDescription,
+	FieldNickname,
 	FieldEndpointType,
 }
 
@@ -373,6 +376,8 @@ var (
 	DefaultSettingsModified func() time.Time
 	// DefaultDescription holds the default value on creation for the "description" field.
 	DefaultDescription string
+	// DefaultNickname holds the default value on creation for the "nickname" field.
+	DefaultNickname string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -561,6 +566,11 @@ func BySettingsModified(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByNickname orders the results by the nickname field.
+func ByNickname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNickname, opts...).ToFunc()
 }
 
 // ByEndpointType orders the results by the endpoint_type field.

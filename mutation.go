@@ -115,6 +115,7 @@ type AgentMutation struct {
 	remote_assistance          *bool
 	settings_modified          *time.Time
 	description                *string
+	nickname                   *string
 	endpoint_type              *agent.EndpointType
 	clearedFields              map[string]struct{}
 	computer                   *int
@@ -1402,6 +1403,55 @@ func (m *AgentMutation) ResetDescription() {
 	delete(m.clearedFields, agent.FieldDescription)
 }
 
+// SetNickname sets the "nickname" field.
+func (m *AgentMutation) SetNickname(s string) {
+	m.nickname = &s
+}
+
+// Nickname returns the value of the "nickname" field in the mutation.
+func (m *AgentMutation) Nickname() (r string, exists bool) {
+	v := m.nickname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNickname returns the old "nickname" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldNickname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNickname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNickname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNickname: %w", err)
+	}
+	return oldValue.Nickname, nil
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (m *AgentMutation) ClearNickname() {
+	m.nickname = nil
+	m.clearedFields[agent.FieldNickname] = struct{}{}
+}
+
+// NicknameCleared returns if the "nickname" field was cleared in this mutation.
+func (m *AgentMutation) NicknameCleared() bool {
+	_, ok := m.clearedFields[agent.FieldNickname]
+	return ok
+}
+
+// ResetNickname resets all changes to the "nickname" field.
+func (m *AgentMutation) ResetNickname() {
+	m.nickname = nil
+	delete(m.clearedFields, agent.FieldNickname)
+}
+
 // SetEndpointType sets the "endpoint_type" field.
 func (m *AgentMutation) SetEndpointType(at agent.EndpointType) {
 	m.endpoint_type = &at
@@ -2436,7 +2486,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2509,6 +2559,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.description != nil {
 		fields = append(fields, agent.FieldDescription)
 	}
+	if m.nickname != nil {
+		fields = append(fields, agent.FieldNickname)
+	}
 	if m.endpoint_type != nil {
 		fields = append(fields, agent.FieldEndpointType)
 	}
@@ -2568,6 +2621,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.SettingsModified()
 	case agent.FieldDescription:
 		return m.Description()
+	case agent.FieldNickname:
+		return m.Nickname()
 	case agent.FieldEndpointType:
 		return m.EndpointType()
 	}
@@ -2627,6 +2682,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldSettingsModified(ctx)
 	case agent.FieldDescription:
 		return m.OldDescription(ctx)
+	case agent.FieldNickname:
+		return m.OldNickname(ctx)
 	case agent.FieldEndpointType:
 		return m.OldEndpointType(ctx)
 	}
@@ -2806,6 +2863,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescription(v)
 		return nil
+	case agent.FieldNickname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNickname(v)
+		return nil
 	case agent.FieldEndpointType:
 		v, ok := value.(agent.EndpointType)
 		if !ok {
@@ -2903,6 +2967,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldDescription) {
 		fields = append(fields, agent.FieldDescription)
 	}
+	if m.FieldCleared(agent.FieldNickname) {
+		fields = append(fields, agent.FieldNickname)
+	}
 	if m.FieldCleared(agent.FieldEndpointType) {
 		fields = append(fields, agent.FieldEndpointType)
 	}
@@ -2979,6 +3046,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldDescription:
 		m.ClearDescription()
+		return nil
+	case agent.FieldNickname:
+		m.ClearNickname()
 		return nil
 	case agent.FieldEndpointType:
 		m.ClearEndpointType()
@@ -3062,6 +3132,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case agent.FieldNickname:
+		m.ResetNickname()
 		return nil
 	case agent.FieldEndpointType:
 		m.ResetEndpointType()

@@ -362,6 +362,20 @@ func (ac *AgentCreate) SetNillableDescription(s *string) *AgentCreate {
 	return ac
 }
 
+// SetNickname sets the "nickname" field.
+func (ac *AgentCreate) SetNickname(s string) *AgentCreate {
+	ac.mutation.SetNickname(s)
+	return ac
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableNickname(s *string) *AgentCreate {
+	if s != nil {
+		ac.SetNickname(*s)
+	}
+	return ac
+}
+
 // SetEndpointType sets the "endpoint_type" field.
 func (ac *AgentCreate) SetEndpointType(at agent.EndpointType) *AgentCreate {
 	ac.mutation.SetEndpointType(at)
@@ -794,6 +808,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultDescription
 		ac.mutation.SetDescription(v)
 	}
+	if _, ok := ac.mutation.Nickname(); !ok {
+		v := agent.DefaultNickname
+		ac.mutation.SetNickname(v)
+	}
 	if _, ok := ac.mutation.EndpointType(); !ok {
 		v := agent.DefaultEndpointType
 		ac.mutation.SetEndpointType(v)
@@ -970,6 +988,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Description(); ok {
 		_spec.SetField(agent.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := ac.mutation.Nickname(); ok {
+		_spec.SetField(agent.FieldNickname, field.TypeString, value)
+		_node.Nickname = value
 	}
 	if value, ok := ac.mutation.EndpointType(); ok {
 		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
@@ -1740,6 +1762,24 @@ func (u *AgentUpsert) ClearDescription() *AgentUpsert {
 	return u
 }
 
+// SetNickname sets the "nickname" field.
+func (u *AgentUpsert) SetNickname(v string) *AgentUpsert {
+	u.Set(agent.FieldNickname, v)
+	return u
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateNickname() *AgentUpsert {
+	u.SetExcluded(agent.FieldNickname)
+	return u
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (u *AgentUpsert) ClearNickname() *AgentUpsert {
+	u.SetNull(agent.FieldNickname)
+	return u
+}
+
 // SetEndpointType sets the "endpoint_type" field.
 func (u *AgentUpsert) SetEndpointType(v agent.EndpointType) *AgentUpsert {
 	u.Set(agent.FieldEndpointType, v)
@@ -2279,6 +2319,27 @@ func (u *AgentUpsertOne) UpdateDescription() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearDescription() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetNickname sets the "nickname" field.
+func (u *AgentUpsertOne) SetNickname(v string) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetNickname(v)
+	})
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateNickname() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateNickname()
+	})
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (u *AgentUpsertOne) ClearNickname() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearNickname()
 	})
 }
 
@@ -2991,6 +3052,27 @@ func (u *AgentUpsertBulk) UpdateDescription() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearDescription() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetNickname sets the "nickname" field.
+func (u *AgentUpsertBulk) SetNickname(v string) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetNickname(v)
+	})
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateNickname() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateNickname()
+	})
+}
+
+// ClearNickname clears the value of the "nickname" field.
+func (u *AgentUpsertBulk) ClearNickname() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearNickname()
 	})
 }
 

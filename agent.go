@@ -70,6 +70,8 @@ type Agent struct {
 	SettingsModified time.Time `json:"settings_modified,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// Nickname holds the value of the "nickname" field.
+	Nickname string `json:"nickname,omitempty"`
 	// EndpointType holds the value of the "endpoint_type" field.
 	EndpointType agent.EndpointType `json:"endpoint_type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -312,7 +314,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldCertificateReady, agent.FieldRestartRequired, agent.FieldIsRemote, agent.FieldDebugMode, agent.FieldSftpService, agent.FieldRemoteAssistance:
 			values[i] = new(sql.NullBool)
-		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus, agent.FieldDescription, agent.FieldEndpointType:
+		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus, agent.FieldDescription, agent.FieldNickname, agent.FieldEndpointType:
 			values[i] = new(sql.NullString)
 		case agent.FieldFirstContact, agent.FieldLastContact, agent.FieldUpdateTaskExecution, agent.FieldSettingsModified:
 			values[i] = new(sql.NullTime)
@@ -482,6 +484,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				a.Description = value.String
+			}
+		case agent.FieldNickname:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nickname", values[i])
+			} else if value.Valid {
+				a.Nickname = value.String
 			}
 		case agent.FieldEndpointType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -698,6 +706,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(a.Description)
+	builder.WriteString(", ")
+	builder.WriteString("nickname=")
+	builder.WriteString(a.Nickname)
 	builder.WriteString(", ")
 	builder.WriteString("endpoint_type=")
 	builder.WriteString(fmt.Sprintf("%v", a.EndpointType))
