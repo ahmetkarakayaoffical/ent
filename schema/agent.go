@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // Agent holds the schema definition for the Agent entity.
@@ -69,5 +70,12 @@ func (Agent) Edges() []ent.Edge {
 		edge.From("release", Release.Type).Ref("agents").Unique(),
 		edge.From("profileissue", ProfileIssue.Type).Ref("agents"),
 		edge.From("site", Site.Type).Ref("agents"),
+	}
+}
+
+// Indexes of the Agent.
+func (Agent) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("nickname").StorageKey("agent_nickname_idx"),
 	}
 }

@@ -52,6 +52,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "agent_nickname_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AgentsColumns[25]},
+			},
+		},
 	}
 	// AntiviriColumns holds the columns for the "antiviri" table.
 	AntiviriColumns = []*schema.Column{
