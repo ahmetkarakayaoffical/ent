@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
@@ -144,6 +145,21 @@ func (tc *TenantCreate) AddMetadata(o ...*OrgMetadata) *TenantCreate {
 		ids[i] = o[i].ID
 	}
 	return tc.AddMetadatumIDs(ids...)
+}
+
+// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+func (tc *TenantCreate) AddRustdeskIDs(ids ...int) *TenantCreate {
+	tc.mutation.AddRustdeskIDs(ids...)
+	return tc
+}
+
+// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
+func (tc *TenantCreate) AddRustdesk(r ...*RustDesk) *TenantCreate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tc.AddRustdeskIDs(ids...)
 }
 
 // Mutation returns the TenantMutation object of the builder.
@@ -293,6 +309,22 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.RustdeskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

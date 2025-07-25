@@ -12,6 +12,7 @@ import (
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/revocation"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
@@ -173,6 +174,24 @@ func init() {
 	revocationDescRevoked := revocationFields[4].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
+	rustdeskFields := schema.RustDesk{}.Fields()
+	_ = rustdeskFields
+	// rustdeskDescCustomRendezvousServer is the schema descriptor for custom_rendezvous_server field.
+	rustdeskDescCustomRendezvousServer := rustdeskFields[0].Descriptor()
+	// rustdesk.DefaultCustomRendezvousServer holds the default value on creation for the custom_rendezvous_server field.
+	rustdesk.DefaultCustomRendezvousServer = rustdeskDescCustomRendezvousServer.Default.(string)
+	// rustdeskDescRelayServer is the schema descriptor for relay_server field.
+	rustdeskDescRelayServer := rustdeskFields[1].Descriptor()
+	// rustdesk.DefaultRelayServer holds the default value on creation for the relay_server field.
+	rustdesk.DefaultRelayServer = rustdeskDescRelayServer.Default.(string)
+	// rustdeskDescAPIServer is the schema descriptor for api_server field.
+	rustdeskDescAPIServer := rustdeskFields[2].Descriptor()
+	// rustdesk.DefaultAPIServer holds the default value on creation for the api_server field.
+	rustdesk.DefaultAPIServer = rustdeskDescAPIServer.Default.(string)
+	// rustdeskDescKey is the schema descriptor for key field.
+	rustdeskDescKey := rustdeskFields[3].Descriptor()
+	// rustdesk.DefaultKey holds the default value on creation for the key field.
+	rustdesk.DefaultKey = rustdeskDescKey.Default.(string)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
 	// sessionsDescData is the schema descriptor for data field.

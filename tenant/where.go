@@ -362,6 +362,29 @@ func HasMetadataWith(preds ...predicate.OrgMetadata) predicate.Tenant {
 	})
 }
 
+// HasRustdesk applies the HasEdge predicate on the "rustdesk" edge.
+func HasRustdesk() predicate.Tenant {
+	return predicate.Tenant(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RustdeskTable, RustdeskColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRustdeskWith applies the HasEdge predicate on the "rustdesk" edge with a given conditions (other predicates).
+func HasRustdeskWith(preds ...predicate.RustDesk) predicate.Tenant {
+	return predicate.Tenant(func(s *sql.Selector) {
+		step := newRustdeskStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Tenant) predicate.Tenant {
 	return predicate.Tenant(sql.AndPredicates(predicates...))

@@ -42,9 +42,11 @@ type TenantEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Metadata holds the value of the metadata edge.
 	Metadata []*OrgMetadata `json:"metadata,omitempty"`
+	// Rustdesk holds the value of the rustdesk edge.
+	Rustdesk []*RustDesk `json:"rustdesk,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // SitesOrErr returns the Sites value or an error if the edge
@@ -83,6 +85,15 @@ func (e TenantEdges) MetadataOrErr() ([]*OrgMetadata, error) {
 		return e.Metadata, nil
 	}
 	return nil, &NotLoadedError{edge: "metadata"}
+}
+
+// RustdeskOrErr returns the Rustdesk value or an error if the edge
+// was not loaded in eager-loading.
+func (e TenantEdges) RustdeskOrErr() ([]*RustDesk, error) {
+	if e.loadedTypes[4] {
+		return e.Rustdesk, nil
+	}
+	return nil, &NotLoadedError{edge: "rustdesk"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -174,6 +185,11 @@ func (t *Tenant) QueryTags() *TagQuery {
 // QueryMetadata queries the "metadata" edge of the Tenant entity.
 func (t *Tenant) QueryMetadata() *OrgMetadataQuery {
 	return NewTenantClient(t.config).QueryMetadata(t)
+}
+
+// QueryRustdesk queries the "rustdesk" edge of the Tenant entity.
+func (t *Tenant) QueryRustdesk() *RustDeskQuery {
+	return NewTenantClient(t.config).QueryRustdesk(t)
 }
 
 // Update returns a builder for updating this Tenant.

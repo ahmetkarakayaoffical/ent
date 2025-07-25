@@ -475,6 +475,29 @@ var (
 		Columns:    RevocationsColumns,
 		PrimaryKey: []*schema.Column{RevocationsColumns[0]},
 	}
+	// RustDesksColumns holds the columns for the "rust_desks" table.
+	RustDesksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "custom_rendezvous_server", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "relay_server", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "api_server", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "tenant_rustdesk", Type: field.TypeInt, Nullable: true},
+	}
+	// RustDesksTable holds the schema information for the "rust_desks" table.
+	RustDesksTable = &schema.Table{
+		Name:       "rust_desks",
+		Columns:    RustDesksColumns,
+		PrimaryKey: []*schema.Column{RustDesksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "rust_desks_tenants_rustdesk",
+				Columns:    []*schema.Column{RustDesksColumns[5]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ServersColumns holds the columns for the "servers" table.
 	ServersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -973,6 +996,7 @@ var (
 		ProfileIssuesTable,
 		ReleasesTable,
 		RevocationsTable,
+		RustDesksTable,
 		ServersTable,
 		SessionsTable,
 		SettingsTable,
@@ -1009,6 +1033,7 @@ func init() {
 	ProfilesTable.ForeignKeys[0].RefTable = SitesTable
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
+	RustDesksTable.ForeignKeys[0].RefTable = TenantsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SettingsTable.ForeignKeys[1].RefTable = TenantsTable
