@@ -119,6 +119,7 @@ type AgentMutation struct {
 	description                *string
 	nickname                   *string
 	endpoint_type              *agent.EndpointType
+	has_rustdesk               *bool
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1503,6 +1504,55 @@ func (m *AgentMutation) ResetEndpointType() {
 	delete(m.clearedFields, agent.FieldEndpointType)
 }
 
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (m *AgentMutation) SetHasRustdesk(b bool) {
+	m.has_rustdesk = &b
+}
+
+// HasRustdesk returns the value of the "has_rustdesk" field in the mutation.
+func (m *AgentMutation) HasRustdesk() (r bool, exists bool) {
+	v := m.has_rustdesk
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHasRustdesk returns the old "has_rustdesk" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldHasRustdesk(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHasRustdesk is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHasRustdesk requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHasRustdesk: %w", err)
+	}
+	return oldValue.HasRustdesk, nil
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (m *AgentMutation) ClearHasRustdesk() {
+	m.has_rustdesk = nil
+	m.clearedFields[agent.FieldHasRustdesk] = struct{}{}
+}
+
+// HasRustdeskCleared returns if the "has_rustdesk" field was cleared in this mutation.
+func (m *AgentMutation) HasRustdeskCleared() bool {
+	_, ok := m.clearedFields[agent.FieldHasRustdesk]
+	return ok
+}
+
+// ResetHasRustdesk resets all changes to the "has_rustdesk" field.
+func (m *AgentMutation) ResetHasRustdesk() {
+	m.has_rustdesk = nil
+	delete(m.clearedFields, agent.FieldHasRustdesk)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2488,7 +2538,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 27)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2567,6 +2617,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.endpoint_type != nil {
 		fields = append(fields, agent.FieldEndpointType)
 	}
+	if m.has_rustdesk != nil {
+		fields = append(fields, agent.FieldHasRustdesk)
+	}
 	return fields
 }
 
@@ -2627,6 +2680,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.Nickname()
 	case agent.FieldEndpointType:
 		return m.EndpointType()
+	case agent.FieldHasRustdesk:
+		return m.HasRustdesk()
 	}
 	return nil, false
 }
@@ -2688,6 +2743,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldNickname(ctx)
 	case agent.FieldEndpointType:
 		return m.OldEndpointType(ctx)
+	case agent.FieldHasRustdesk:
+		return m.OldHasRustdesk(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2879,6 +2936,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEndpointType(v)
 		return nil
+	case agent.FieldHasRustdesk:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHasRustdesk(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -2975,6 +3039,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldEndpointType) {
 		fields = append(fields, agent.FieldEndpointType)
 	}
+	if m.FieldCleared(agent.FieldHasRustdesk) {
+		fields = append(fields, agent.FieldHasRustdesk)
+	}
 	return fields
 }
 
@@ -3054,6 +3121,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldEndpointType:
 		m.ClearEndpointType()
+		return nil
+	case agent.FieldHasRustdesk:
+		m.ClearHasRustdesk()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -3140,6 +3210,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldEndpointType:
 		m.ResetEndpointType()
+		return nil
+	case agent.FieldHasRustdesk:
+		m.ResetHasRustdesk()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

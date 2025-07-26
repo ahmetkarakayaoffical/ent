@@ -110,6 +110,10 @@ func init() {
 	agentDescNickname := agentFields[25].Descriptor()
 	// agent.DefaultNickname holds the default value on creation for the nickname field.
 	agent.DefaultNickname = agentDescNickname.Default.(string)
+	// agentDescHasRustdesk is the schema descriptor for has_rustdesk field.
+	agentDescHasRustdesk := agentFields[27].Descriptor()
+	// agent.DefaultHasRustdesk holds the default value on creation for the has_rustdesk field.
+	agent.DefaultHasRustdesk = agentDescHasRustdesk.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
