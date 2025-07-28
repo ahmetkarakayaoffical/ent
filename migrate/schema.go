@@ -483,6 +483,9 @@ var (
 		{Name: "relay_server", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "api_server", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "use_permanent_password", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "whitelist", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "direct_ip_access", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "tenant_rustdesk", Type: field.TypeInt, Nullable: true},
 	}
 	// RustDesksTable holds the schema information for the "rust_desks" table.
@@ -493,7 +496,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "rust_desks_tenants_rustdesk",
-				Columns:    []*schema.Column{RustDesksColumns[5]},
+				Columns:    []*schema.Column{RustDesksColumns[8]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},

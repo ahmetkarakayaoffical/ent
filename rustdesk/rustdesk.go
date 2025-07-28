@@ -20,6 +20,12 @@ const (
 	FieldAPIServer = "api_server"
 	// FieldKey holds the string denoting the key field in the database.
 	FieldKey = "key"
+	// FieldUsePermanentPassword holds the string denoting the use_permanent_password field in the database.
+	FieldUsePermanentPassword = "use_permanent_password"
+	// FieldWhitelist holds the string denoting the whitelist field in the database.
+	FieldWhitelist = "whitelist"
+	// FieldDirectIPAccess holds the string denoting the direct_ip_access field in the database.
+	FieldDirectIPAccess = "direct_ip_access"
 	// EdgeTenant holds the string denoting the tenant edge name in mutations.
 	EdgeTenant = "tenant"
 	// Table holds the table name of the rustdesk in the database.
@@ -40,6 +46,9 @@ var Columns = []string{
 	FieldRelayServer,
 	FieldAPIServer,
 	FieldKey,
+	FieldUsePermanentPassword,
+	FieldWhitelist,
+	FieldDirectIPAccess,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "rust_desks"
@@ -72,6 +81,12 @@ var (
 	DefaultAPIServer string
 	// DefaultKey holds the default value on creation for the "key" field.
 	DefaultKey string
+	// DefaultUsePermanentPassword holds the default value on creation for the "use_permanent_password" field.
+	DefaultUsePermanentPassword bool
+	// DefaultWhitelist holds the default value on creation for the "whitelist" field.
+	DefaultWhitelist string
+	// DefaultDirectIPAccess holds the default value on creation for the "direct_ip_access" field.
+	DefaultDirectIPAccess bool
 )
 
 // OrderOption defines the ordering options for the RustDesk queries.
@@ -100,6 +115,21 @@ func ByAPIServer(opts ...sql.OrderTermOption) OrderOption {
 // ByKey orders the results by the key field.
 func ByKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKey, opts...).ToFunc()
+}
+
+// ByUsePermanentPassword orders the results by the use_permanent_password field.
+func ByUsePermanentPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUsePermanentPassword, opts...).ToFunc()
+}
+
+// ByWhitelist orders the results by the whitelist field.
+func ByWhitelist(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWhitelist, opts...).ToFunc()
+}
+
+// ByDirectIPAccess orders the results by the direct_ip_access field.
+func ByDirectIPAccess(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectIPAccess, opts...).ToFunc()
 }
 
 // ByTenantField orders the results by tenant field.

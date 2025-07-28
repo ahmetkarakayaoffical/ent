@@ -25,6 +25,12 @@ type RustDesk struct {
 	APIServer string `json:"api_server,omitempty"`
 	// Key holds the value of the "key" field.
 	Key string `json:"key,omitempty"`
+	// UsePermanentPassword holds the value of the "use_permanent_password" field.
+	UsePermanentPassword bool `json:"use_permanent_password,omitempty"`
+	// Whitelist holds the value of the "whitelist" field.
+	Whitelist string `json:"whitelist,omitempty"`
+	// DirectIPAccess holds the value of the "direct_ip_access" field.
+	DirectIPAccess bool `json:"direct_ip_access,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RustDeskQuery when eager-loading is set.
 	Edges           RustDeskEdges `json:"edges"`
@@ -57,9 +63,11 @@ func (*RustDesk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case rustdesk.FieldUsePermanentPassword, rustdesk.FieldDirectIPAccess:
+			values[i] = new(sql.NullBool)
 		case rustdesk.FieldID:
 			values[i] = new(sql.NullInt64)
-		case rustdesk.FieldCustomRendezvousServer, rustdesk.FieldRelayServer, rustdesk.FieldAPIServer, rustdesk.FieldKey:
+		case rustdesk.FieldCustomRendezvousServer, rustdesk.FieldRelayServer, rustdesk.FieldAPIServer, rustdesk.FieldKey, rustdesk.FieldWhitelist:
 			values[i] = new(sql.NullString)
 		case rustdesk.ForeignKeys[0]: // tenant_rustdesk
 			values[i] = new(sql.NullInt64)
@@ -107,6 +115,24 @@ func (rd *RustDesk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field key", values[i])
 			} else if value.Valid {
 				rd.Key = value.String
+			}
+		case rustdesk.FieldUsePermanentPassword:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field use_permanent_password", values[i])
+			} else if value.Valid {
+				rd.UsePermanentPassword = value.Bool
+			}
+		case rustdesk.FieldWhitelist:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field whitelist", values[i])
+			} else if value.Valid {
+				rd.Whitelist = value.String
+			}
+		case rustdesk.FieldDirectIPAccess:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field direct_ip_access", values[i])
+			} else if value.Valid {
+				rd.DirectIPAccess = value.Bool
 			}
 		case rustdesk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -167,6 +193,15 @@ func (rd *RustDesk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("key=")
 	builder.WriteString(rd.Key)
+	builder.WriteString(", ")
+	builder.WriteString("use_permanent_password=")
+	builder.WriteString(fmt.Sprintf("%v", rd.UsePermanentPassword))
+	builder.WriteString(", ")
+	builder.WriteString("whitelist=")
+	builder.WriteString(rd.Whitelist)
+	builder.WriteString(", ")
+	builder.WriteString("direct_ip_access=")
+	builder.WriteString(fmt.Sprintf("%v", rd.DirectIPAccess))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -196,6 +196,18 @@ func init() {
 	rustdeskDescKey := rustdeskFields[3].Descriptor()
 	// rustdesk.DefaultKey holds the default value on creation for the key field.
 	rustdesk.DefaultKey = rustdeskDescKey.Default.(string)
+	// rustdeskDescUsePermanentPassword is the schema descriptor for use_permanent_password field.
+	rustdeskDescUsePermanentPassword := rustdeskFields[4].Descriptor()
+	// rustdesk.DefaultUsePermanentPassword holds the default value on creation for the use_permanent_password field.
+	rustdesk.DefaultUsePermanentPassword = rustdeskDescUsePermanentPassword.Default.(bool)
+	// rustdeskDescWhitelist is the schema descriptor for whitelist field.
+	rustdeskDescWhitelist := rustdeskFields[5].Descriptor()
+	// rustdesk.DefaultWhitelist holds the default value on creation for the whitelist field.
+	rustdesk.DefaultWhitelist = rustdeskDescWhitelist.Default.(string)
+	// rustdeskDescDirectIPAccess is the schema descriptor for direct_ip_access field.
+	rustdeskDescDirectIPAccess := rustdeskFields[6].Descriptor()
+	// rustdesk.DefaultDirectIPAccess holds the default value on creation for the direct_ip_access field.
+	rustdesk.DefaultDirectIPAccess = rustdeskDescDirectIPAccess.Default.(bool)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
 	// sessionsDescData is the schema descriptor for data field.

@@ -109,6 +109,66 @@ func (rdu *RustDeskUpdate) ClearKey() *RustDeskUpdate {
 	return rdu
 }
 
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (rdu *RustDeskUpdate) SetUsePermanentPassword(b bool) *RustDeskUpdate {
+	rdu.mutation.SetUsePermanentPassword(b)
+	return rdu
+}
+
+// SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
+func (rdu *RustDeskUpdate) SetNillableUsePermanentPassword(b *bool) *RustDeskUpdate {
+	if b != nil {
+		rdu.SetUsePermanentPassword(*b)
+	}
+	return rdu
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (rdu *RustDeskUpdate) ClearUsePermanentPassword() *RustDeskUpdate {
+	rdu.mutation.ClearUsePermanentPassword()
+	return rdu
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (rdu *RustDeskUpdate) SetWhitelist(s string) *RustDeskUpdate {
+	rdu.mutation.SetWhitelist(s)
+	return rdu
+}
+
+// SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
+func (rdu *RustDeskUpdate) SetNillableWhitelist(s *string) *RustDeskUpdate {
+	if s != nil {
+		rdu.SetWhitelist(*s)
+	}
+	return rdu
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (rdu *RustDeskUpdate) ClearWhitelist() *RustDeskUpdate {
+	rdu.mutation.ClearWhitelist()
+	return rdu
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (rdu *RustDeskUpdate) SetDirectIPAccess(b bool) *RustDeskUpdate {
+	rdu.mutation.SetDirectIPAccess(b)
+	return rdu
+}
+
+// SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
+func (rdu *RustDeskUpdate) SetNillableDirectIPAccess(b *bool) *RustDeskUpdate {
+	if b != nil {
+		rdu.SetDirectIPAccess(*b)
+	}
+	return rdu
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (rdu *RustDeskUpdate) ClearDirectIPAccess() *RustDeskUpdate {
+	rdu.mutation.ClearDirectIPAccess()
+	return rdu
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (rdu *RustDeskUpdate) SetTenantID(id int) *RustDeskUpdate {
 	rdu.mutation.SetTenantID(id)
@@ -204,6 +264,24 @@ func (rdu *RustDeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if rdu.mutation.KeyCleared() {
 		_spec.ClearField(rustdesk.FieldKey, field.TypeString)
+	}
+	if value, ok := rdu.mutation.UsePermanentPassword(); ok {
+		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
+	}
+	if rdu.mutation.UsePermanentPasswordCleared() {
+		_spec.ClearField(rustdesk.FieldUsePermanentPassword, field.TypeBool)
+	}
+	if value, ok := rdu.mutation.Whitelist(); ok {
+		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
+	}
+	if rdu.mutation.WhitelistCleared() {
+		_spec.ClearField(rustdesk.FieldWhitelist, field.TypeString)
+	}
+	if value, ok := rdu.mutation.DirectIPAccess(); ok {
+		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
+	}
+	if rdu.mutation.DirectIPAccessCleared() {
+		_spec.ClearField(rustdesk.FieldDirectIPAccess, field.TypeBool)
 	}
 	if rdu.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -336,6 +414,66 @@ func (rduo *RustDeskUpdateOne) ClearKey() *RustDeskUpdateOne {
 	return rduo
 }
 
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (rduo *RustDeskUpdateOne) SetUsePermanentPassword(b bool) *RustDeskUpdateOne {
+	rduo.mutation.SetUsePermanentPassword(b)
+	return rduo
+}
+
+// SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
+func (rduo *RustDeskUpdateOne) SetNillableUsePermanentPassword(b *bool) *RustDeskUpdateOne {
+	if b != nil {
+		rduo.SetUsePermanentPassword(*b)
+	}
+	return rduo
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (rduo *RustDeskUpdateOne) ClearUsePermanentPassword() *RustDeskUpdateOne {
+	rduo.mutation.ClearUsePermanentPassword()
+	return rduo
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (rduo *RustDeskUpdateOne) SetWhitelist(s string) *RustDeskUpdateOne {
+	rduo.mutation.SetWhitelist(s)
+	return rduo
+}
+
+// SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
+func (rduo *RustDeskUpdateOne) SetNillableWhitelist(s *string) *RustDeskUpdateOne {
+	if s != nil {
+		rduo.SetWhitelist(*s)
+	}
+	return rduo
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (rduo *RustDeskUpdateOne) ClearWhitelist() *RustDeskUpdateOne {
+	rduo.mutation.ClearWhitelist()
+	return rduo
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (rduo *RustDeskUpdateOne) SetDirectIPAccess(b bool) *RustDeskUpdateOne {
+	rduo.mutation.SetDirectIPAccess(b)
+	return rduo
+}
+
+// SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
+func (rduo *RustDeskUpdateOne) SetNillableDirectIPAccess(b *bool) *RustDeskUpdateOne {
+	if b != nil {
+		rduo.SetDirectIPAccess(*b)
+	}
+	return rduo
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (rduo *RustDeskUpdateOne) ClearDirectIPAccess() *RustDeskUpdateOne {
+	rduo.mutation.ClearDirectIPAccess()
+	return rduo
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (rduo *RustDeskUpdateOne) SetTenantID(id int) *RustDeskUpdateOne {
 	rduo.mutation.SetTenantID(id)
@@ -461,6 +599,24 @@ func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, er
 	}
 	if rduo.mutation.KeyCleared() {
 		_spec.ClearField(rustdesk.FieldKey, field.TypeString)
+	}
+	if value, ok := rduo.mutation.UsePermanentPassword(); ok {
+		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
+	}
+	if rduo.mutation.UsePermanentPasswordCleared() {
+		_spec.ClearField(rustdesk.FieldUsePermanentPassword, field.TypeBool)
+	}
+	if value, ok := rduo.mutation.Whitelist(); ok {
+		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
+	}
+	if rduo.mutation.WhitelistCleared() {
+		_spec.ClearField(rustdesk.FieldWhitelist, field.TypeString)
+	}
+	if value, ok := rduo.mutation.DirectIPAccess(); ok {
+		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
+	}
+	if rduo.mutation.DirectIPAccessCleared() {
+		_spec.ClearField(rustdesk.FieldDirectIPAccess, field.TypeBool)
 	}
 	if rduo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{

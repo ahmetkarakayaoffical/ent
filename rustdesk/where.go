@@ -73,6 +73,21 @@ func Key(v string) predicate.RustDesk {
 	return predicate.RustDesk(sql.FieldEQ(FieldKey, v))
 }
 
+// UsePermanentPassword applies equality check predicate on the "use_permanent_password" field. It's identical to UsePermanentPasswordEQ.
+func UsePermanentPassword(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldUsePermanentPassword, v))
+}
+
+// Whitelist applies equality check predicate on the "whitelist" field. It's identical to WhitelistEQ.
+func Whitelist(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldWhitelist, v))
+}
+
+// DirectIPAccess applies equality check predicate on the "direct_ip_access" field. It's identical to DirectIPAccessEQ.
+func DirectIPAccess(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldDirectIPAccess, v))
+}
+
 // CustomRendezvousServerEQ applies the EQ predicate on the "custom_rendezvous_server" field.
 func CustomRendezvousServerEQ(v string) predicate.RustDesk {
 	return predicate.RustDesk(sql.FieldEQ(FieldCustomRendezvousServer, v))
@@ -371,6 +386,121 @@ func KeyEqualFold(v string) predicate.RustDesk {
 // KeyContainsFold applies the ContainsFold predicate on the "key" field.
 func KeyContainsFold(v string) predicate.RustDesk {
 	return predicate.RustDesk(sql.FieldContainsFold(FieldKey, v))
+}
+
+// UsePermanentPasswordEQ applies the EQ predicate on the "use_permanent_password" field.
+func UsePermanentPasswordEQ(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldUsePermanentPassword, v))
+}
+
+// UsePermanentPasswordNEQ applies the NEQ predicate on the "use_permanent_password" field.
+func UsePermanentPasswordNEQ(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNEQ(FieldUsePermanentPassword, v))
+}
+
+// UsePermanentPasswordIsNil applies the IsNil predicate on the "use_permanent_password" field.
+func UsePermanentPasswordIsNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldIsNull(FieldUsePermanentPassword))
+}
+
+// UsePermanentPasswordNotNil applies the NotNil predicate on the "use_permanent_password" field.
+func UsePermanentPasswordNotNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNotNull(FieldUsePermanentPassword))
+}
+
+// WhitelistEQ applies the EQ predicate on the "whitelist" field.
+func WhitelistEQ(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldWhitelist, v))
+}
+
+// WhitelistNEQ applies the NEQ predicate on the "whitelist" field.
+func WhitelistNEQ(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNEQ(FieldWhitelist, v))
+}
+
+// WhitelistIn applies the In predicate on the "whitelist" field.
+func WhitelistIn(vs ...string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldIn(FieldWhitelist, vs...))
+}
+
+// WhitelistNotIn applies the NotIn predicate on the "whitelist" field.
+func WhitelistNotIn(vs ...string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNotIn(FieldWhitelist, vs...))
+}
+
+// WhitelistGT applies the GT predicate on the "whitelist" field.
+func WhitelistGT(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldGT(FieldWhitelist, v))
+}
+
+// WhitelistGTE applies the GTE predicate on the "whitelist" field.
+func WhitelistGTE(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldGTE(FieldWhitelist, v))
+}
+
+// WhitelistLT applies the LT predicate on the "whitelist" field.
+func WhitelistLT(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldLT(FieldWhitelist, v))
+}
+
+// WhitelistLTE applies the LTE predicate on the "whitelist" field.
+func WhitelistLTE(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldLTE(FieldWhitelist, v))
+}
+
+// WhitelistContains applies the Contains predicate on the "whitelist" field.
+func WhitelistContains(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldContains(FieldWhitelist, v))
+}
+
+// WhitelistHasPrefix applies the HasPrefix predicate on the "whitelist" field.
+func WhitelistHasPrefix(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldHasPrefix(FieldWhitelist, v))
+}
+
+// WhitelistHasSuffix applies the HasSuffix predicate on the "whitelist" field.
+func WhitelistHasSuffix(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldHasSuffix(FieldWhitelist, v))
+}
+
+// WhitelistIsNil applies the IsNil predicate on the "whitelist" field.
+func WhitelistIsNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldIsNull(FieldWhitelist))
+}
+
+// WhitelistNotNil applies the NotNil predicate on the "whitelist" field.
+func WhitelistNotNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNotNull(FieldWhitelist))
+}
+
+// WhitelistEqualFold applies the EqualFold predicate on the "whitelist" field.
+func WhitelistEqualFold(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEqualFold(FieldWhitelist, v))
+}
+
+// WhitelistContainsFold applies the ContainsFold predicate on the "whitelist" field.
+func WhitelistContainsFold(v string) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldContainsFold(FieldWhitelist, v))
+}
+
+// DirectIPAccessEQ applies the EQ predicate on the "direct_ip_access" field.
+func DirectIPAccessEQ(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldEQ(FieldDirectIPAccess, v))
+}
+
+// DirectIPAccessNEQ applies the NEQ predicate on the "direct_ip_access" field.
+func DirectIPAccessNEQ(v bool) predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNEQ(FieldDirectIPAccess, v))
+}
+
+// DirectIPAccessIsNil applies the IsNil predicate on the "direct_ip_access" field.
+func DirectIPAccessIsNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldIsNull(FieldDirectIPAccess))
+}
+
+// DirectIPAccessNotNil applies the NotNil predicate on the "direct_ip_access" field.
+func DirectIPAccessNotNil() predicate.RustDesk {
+	return predicate.RustDesk(sql.FieldNotNull(FieldDirectIPAccess))
 }
 
 // HasTenant applies the HasEdge predicate on the "tenant" edge.

@@ -16256,6 +16256,9 @@ type RustDeskMutation struct {
 	relay_server             *string
 	api_server               *string
 	key                      *string
+	use_permanent_password   *bool
+	whitelist                *string
+	direct_ip_access         *bool
 	clearedFields            map[string]struct{}
 	tenant                   *int
 	clearedtenant            bool
@@ -16558,6 +16561,153 @@ func (m *RustDeskMutation) ResetKey() {
 	delete(m.clearedFields, rustdesk.FieldKey)
 }
 
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (m *RustDeskMutation) SetUsePermanentPassword(b bool) {
+	m.use_permanent_password = &b
+}
+
+// UsePermanentPassword returns the value of the "use_permanent_password" field in the mutation.
+func (m *RustDeskMutation) UsePermanentPassword() (r bool, exists bool) {
+	v := m.use_permanent_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsePermanentPassword returns the old "use_permanent_password" field's value of the RustDesk entity.
+// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RustDeskMutation) OldUsePermanentPassword(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUsePermanentPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUsePermanentPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsePermanentPassword: %w", err)
+	}
+	return oldValue.UsePermanentPassword, nil
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (m *RustDeskMutation) ClearUsePermanentPassword() {
+	m.use_permanent_password = nil
+	m.clearedFields[rustdesk.FieldUsePermanentPassword] = struct{}{}
+}
+
+// UsePermanentPasswordCleared returns if the "use_permanent_password" field was cleared in this mutation.
+func (m *RustDeskMutation) UsePermanentPasswordCleared() bool {
+	_, ok := m.clearedFields[rustdesk.FieldUsePermanentPassword]
+	return ok
+}
+
+// ResetUsePermanentPassword resets all changes to the "use_permanent_password" field.
+func (m *RustDeskMutation) ResetUsePermanentPassword() {
+	m.use_permanent_password = nil
+	delete(m.clearedFields, rustdesk.FieldUsePermanentPassword)
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (m *RustDeskMutation) SetWhitelist(s string) {
+	m.whitelist = &s
+}
+
+// Whitelist returns the value of the "whitelist" field in the mutation.
+func (m *RustDeskMutation) Whitelist() (r string, exists bool) {
+	v := m.whitelist
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWhitelist returns the old "whitelist" field's value of the RustDesk entity.
+// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RustDeskMutation) OldWhitelist(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWhitelist is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWhitelist requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWhitelist: %w", err)
+	}
+	return oldValue.Whitelist, nil
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (m *RustDeskMutation) ClearWhitelist() {
+	m.whitelist = nil
+	m.clearedFields[rustdesk.FieldWhitelist] = struct{}{}
+}
+
+// WhitelistCleared returns if the "whitelist" field was cleared in this mutation.
+func (m *RustDeskMutation) WhitelistCleared() bool {
+	_, ok := m.clearedFields[rustdesk.FieldWhitelist]
+	return ok
+}
+
+// ResetWhitelist resets all changes to the "whitelist" field.
+func (m *RustDeskMutation) ResetWhitelist() {
+	m.whitelist = nil
+	delete(m.clearedFields, rustdesk.FieldWhitelist)
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (m *RustDeskMutation) SetDirectIPAccess(b bool) {
+	m.direct_ip_access = &b
+}
+
+// DirectIPAccess returns the value of the "direct_ip_access" field in the mutation.
+func (m *RustDeskMutation) DirectIPAccess() (r bool, exists bool) {
+	v := m.direct_ip_access
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDirectIPAccess returns the old "direct_ip_access" field's value of the RustDesk entity.
+// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RustDeskMutation) OldDirectIPAccess(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDirectIPAccess is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDirectIPAccess requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDirectIPAccess: %w", err)
+	}
+	return oldValue.DirectIPAccess, nil
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (m *RustDeskMutation) ClearDirectIPAccess() {
+	m.direct_ip_access = nil
+	m.clearedFields[rustdesk.FieldDirectIPAccess] = struct{}{}
+}
+
+// DirectIPAccessCleared returns if the "direct_ip_access" field was cleared in this mutation.
+func (m *RustDeskMutation) DirectIPAccessCleared() bool {
+	_, ok := m.clearedFields[rustdesk.FieldDirectIPAccess]
+	return ok
+}
+
+// ResetDirectIPAccess resets all changes to the "direct_ip_access" field.
+func (m *RustDeskMutation) ResetDirectIPAccess() {
+	m.direct_ip_access = nil
+	delete(m.clearedFields, rustdesk.FieldDirectIPAccess)
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by id.
 func (m *RustDeskMutation) SetTenantID(id int) {
 	m.tenant = &id
@@ -16631,7 +16781,7 @@ func (m *RustDeskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RustDeskMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 7)
 	if m.custom_rendezvous_server != nil {
 		fields = append(fields, rustdesk.FieldCustomRendezvousServer)
 	}
@@ -16643,6 +16793,15 @@ func (m *RustDeskMutation) Fields() []string {
 	}
 	if m.key != nil {
 		fields = append(fields, rustdesk.FieldKey)
+	}
+	if m.use_permanent_password != nil {
+		fields = append(fields, rustdesk.FieldUsePermanentPassword)
+	}
+	if m.whitelist != nil {
+		fields = append(fields, rustdesk.FieldWhitelist)
+	}
+	if m.direct_ip_access != nil {
+		fields = append(fields, rustdesk.FieldDirectIPAccess)
 	}
 	return fields
 }
@@ -16660,6 +16819,12 @@ func (m *RustDeskMutation) Field(name string) (ent.Value, bool) {
 		return m.APIServer()
 	case rustdesk.FieldKey:
 		return m.Key()
+	case rustdesk.FieldUsePermanentPassword:
+		return m.UsePermanentPassword()
+	case rustdesk.FieldWhitelist:
+		return m.Whitelist()
+	case rustdesk.FieldDirectIPAccess:
+		return m.DirectIPAccess()
 	}
 	return nil, false
 }
@@ -16677,6 +16842,12 @@ func (m *RustDeskMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldAPIServer(ctx)
 	case rustdesk.FieldKey:
 		return m.OldKey(ctx)
+	case rustdesk.FieldUsePermanentPassword:
+		return m.OldUsePermanentPassword(ctx)
+	case rustdesk.FieldWhitelist:
+		return m.OldWhitelist(ctx)
+	case rustdesk.FieldDirectIPAccess:
+		return m.OldDirectIPAccess(ctx)
 	}
 	return nil, fmt.Errorf("unknown RustDesk field %s", name)
 }
@@ -16713,6 +16884,27 @@ func (m *RustDeskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetKey(v)
+		return nil
+	case rustdesk.FieldUsePermanentPassword:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsePermanentPassword(v)
+		return nil
+	case rustdesk.FieldWhitelist:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWhitelist(v)
+		return nil
+	case rustdesk.FieldDirectIPAccess:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDirectIPAccess(v)
 		return nil
 	}
 	return fmt.Errorf("unknown RustDesk field %s", name)
@@ -16756,6 +16948,15 @@ func (m *RustDeskMutation) ClearedFields() []string {
 	if m.FieldCleared(rustdesk.FieldKey) {
 		fields = append(fields, rustdesk.FieldKey)
 	}
+	if m.FieldCleared(rustdesk.FieldUsePermanentPassword) {
+		fields = append(fields, rustdesk.FieldUsePermanentPassword)
+	}
+	if m.FieldCleared(rustdesk.FieldWhitelist) {
+		fields = append(fields, rustdesk.FieldWhitelist)
+	}
+	if m.FieldCleared(rustdesk.FieldDirectIPAccess) {
+		fields = append(fields, rustdesk.FieldDirectIPAccess)
+	}
 	return fields
 }
 
@@ -16782,6 +16983,15 @@ func (m *RustDeskMutation) ClearField(name string) error {
 	case rustdesk.FieldKey:
 		m.ClearKey()
 		return nil
+	case rustdesk.FieldUsePermanentPassword:
+		m.ClearUsePermanentPassword()
+		return nil
+	case rustdesk.FieldWhitelist:
+		m.ClearWhitelist()
+		return nil
+	case rustdesk.FieldDirectIPAccess:
+		m.ClearDirectIPAccess()
+		return nil
 	}
 	return fmt.Errorf("unknown RustDesk nullable field %s", name)
 }
@@ -16801,6 +17011,15 @@ func (m *RustDeskMutation) ResetField(name string) error {
 		return nil
 	case rustdesk.FieldKey:
 		m.ResetKey()
+		return nil
+	case rustdesk.FieldUsePermanentPassword:
+		m.ResetUsePermanentPassword()
+		return nil
+	case rustdesk.FieldWhitelist:
+		m.ResetWhitelist()
+		return nil
+	case rustdesk.FieldDirectIPAccess:
+		m.ResetDirectIPAccess()
 		return nil
 	}
 	return fmt.Errorf("unknown RustDesk field %s", name)

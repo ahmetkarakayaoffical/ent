@@ -78,6 +78,48 @@ func (rdc *RustDeskCreate) SetNillableKey(s *string) *RustDeskCreate {
 	return rdc
 }
 
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (rdc *RustDeskCreate) SetUsePermanentPassword(b bool) *RustDeskCreate {
+	rdc.mutation.SetUsePermanentPassword(b)
+	return rdc
+}
+
+// SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
+func (rdc *RustDeskCreate) SetNillableUsePermanentPassword(b *bool) *RustDeskCreate {
+	if b != nil {
+		rdc.SetUsePermanentPassword(*b)
+	}
+	return rdc
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (rdc *RustDeskCreate) SetWhitelist(s string) *RustDeskCreate {
+	rdc.mutation.SetWhitelist(s)
+	return rdc
+}
+
+// SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
+func (rdc *RustDeskCreate) SetNillableWhitelist(s *string) *RustDeskCreate {
+	if s != nil {
+		rdc.SetWhitelist(*s)
+	}
+	return rdc
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (rdc *RustDeskCreate) SetDirectIPAccess(b bool) *RustDeskCreate {
+	rdc.mutation.SetDirectIPAccess(b)
+	return rdc
+}
+
+// SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
+func (rdc *RustDeskCreate) SetNillableDirectIPAccess(b *bool) *RustDeskCreate {
+	if b != nil {
+		rdc.SetDirectIPAccess(*b)
+	}
+	return rdc
+}
+
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
 func (rdc *RustDeskCreate) SetTenantID(id int) *RustDeskCreate {
 	rdc.mutation.SetTenantID(id)
@@ -148,6 +190,18 @@ func (rdc *RustDeskCreate) defaults() {
 		v := rustdesk.DefaultKey
 		rdc.mutation.SetKey(v)
 	}
+	if _, ok := rdc.mutation.UsePermanentPassword(); !ok {
+		v := rustdesk.DefaultUsePermanentPassword
+		rdc.mutation.SetUsePermanentPassword(v)
+	}
+	if _, ok := rdc.mutation.Whitelist(); !ok {
+		v := rustdesk.DefaultWhitelist
+		rdc.mutation.SetWhitelist(v)
+	}
+	if _, ok := rdc.mutation.DirectIPAccess(); !ok {
+		v := rustdesk.DefaultDirectIPAccess
+		rdc.mutation.SetDirectIPAccess(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -194,6 +248,18 @@ func (rdc *RustDeskCreate) createSpec() (*RustDesk, *sqlgraph.CreateSpec) {
 	if value, ok := rdc.mutation.Key(); ok {
 		_spec.SetField(rustdesk.FieldKey, field.TypeString, value)
 		_node.Key = value
+	}
+	if value, ok := rdc.mutation.UsePermanentPassword(); ok {
+		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
+		_node.UsePermanentPassword = value
+	}
+	if value, ok := rdc.mutation.Whitelist(); ok {
+		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
+		_node.Whitelist = value
+	}
+	if value, ok := rdc.mutation.DirectIPAccess(); ok {
+		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
+		_node.DirectIPAccess = value
 	}
 	if nodes := rdc.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -336,6 +402,60 @@ func (u *RustDeskUpsert) ClearKey() *RustDeskUpsert {
 	return u
 }
 
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (u *RustDeskUpsert) SetUsePermanentPassword(v bool) *RustDeskUpsert {
+	u.Set(rustdesk.FieldUsePermanentPassword, v)
+	return u
+}
+
+// UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
+func (u *RustDeskUpsert) UpdateUsePermanentPassword() *RustDeskUpsert {
+	u.SetExcluded(rustdesk.FieldUsePermanentPassword)
+	return u
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (u *RustDeskUpsert) ClearUsePermanentPassword() *RustDeskUpsert {
+	u.SetNull(rustdesk.FieldUsePermanentPassword)
+	return u
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (u *RustDeskUpsert) SetWhitelist(v string) *RustDeskUpsert {
+	u.Set(rustdesk.FieldWhitelist, v)
+	return u
+}
+
+// UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
+func (u *RustDeskUpsert) UpdateWhitelist() *RustDeskUpsert {
+	u.SetExcluded(rustdesk.FieldWhitelist)
+	return u
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (u *RustDeskUpsert) ClearWhitelist() *RustDeskUpsert {
+	u.SetNull(rustdesk.FieldWhitelist)
+	return u
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (u *RustDeskUpsert) SetDirectIPAccess(v bool) *RustDeskUpsert {
+	u.Set(rustdesk.FieldDirectIPAccess, v)
+	return u
+}
+
+// UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
+func (u *RustDeskUpsert) UpdateDirectIPAccess() *RustDeskUpsert {
+	u.SetExcluded(rustdesk.FieldDirectIPAccess)
+	return u
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (u *RustDeskUpsert) ClearDirectIPAccess() *RustDeskUpsert {
+	u.SetNull(rustdesk.FieldDirectIPAccess)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -457,6 +577,69 @@ func (u *RustDeskUpsertOne) UpdateKey() *RustDeskUpsertOne {
 func (u *RustDeskUpsertOne) ClearKey() *RustDeskUpsertOne {
 	return u.Update(func(s *RustDeskUpsert) {
 		s.ClearKey()
+	})
+}
+
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (u *RustDeskUpsertOne) SetUsePermanentPassword(v bool) *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetUsePermanentPassword(v)
+	})
+}
+
+// UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
+func (u *RustDeskUpsertOne) UpdateUsePermanentPassword() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateUsePermanentPassword()
+	})
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (u *RustDeskUpsertOne) ClearUsePermanentPassword() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearUsePermanentPassword()
+	})
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (u *RustDeskUpsertOne) SetWhitelist(v string) *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetWhitelist(v)
+	})
+}
+
+// UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
+func (u *RustDeskUpsertOne) UpdateWhitelist() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateWhitelist()
+	})
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (u *RustDeskUpsertOne) ClearWhitelist() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearWhitelist()
+	})
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (u *RustDeskUpsertOne) SetDirectIPAccess(v bool) *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetDirectIPAccess(v)
+	})
+}
+
+// UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
+func (u *RustDeskUpsertOne) UpdateDirectIPAccess() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateDirectIPAccess()
+	})
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (u *RustDeskUpsertOne) ClearDirectIPAccess() *RustDeskUpsertOne {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearDirectIPAccess()
 	})
 }
 
@@ -745,6 +928,69 @@ func (u *RustDeskUpsertBulk) UpdateKey() *RustDeskUpsertBulk {
 func (u *RustDeskUpsertBulk) ClearKey() *RustDeskUpsertBulk {
 	return u.Update(func(s *RustDeskUpsert) {
 		s.ClearKey()
+	})
+}
+
+// SetUsePermanentPassword sets the "use_permanent_password" field.
+func (u *RustDeskUpsertBulk) SetUsePermanentPassword(v bool) *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetUsePermanentPassword(v)
+	})
+}
+
+// UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
+func (u *RustDeskUpsertBulk) UpdateUsePermanentPassword() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateUsePermanentPassword()
+	})
+}
+
+// ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
+func (u *RustDeskUpsertBulk) ClearUsePermanentPassword() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearUsePermanentPassword()
+	})
+}
+
+// SetWhitelist sets the "whitelist" field.
+func (u *RustDeskUpsertBulk) SetWhitelist(v string) *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetWhitelist(v)
+	})
+}
+
+// UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
+func (u *RustDeskUpsertBulk) UpdateWhitelist() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateWhitelist()
+	})
+}
+
+// ClearWhitelist clears the value of the "whitelist" field.
+func (u *RustDeskUpsertBulk) ClearWhitelist() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearWhitelist()
+	})
+}
+
+// SetDirectIPAccess sets the "direct_ip_access" field.
+func (u *RustDeskUpsertBulk) SetDirectIPAccess(v bool) *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.SetDirectIPAccess(v)
+	})
+}
+
+// UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
+func (u *RustDeskUpsertBulk) UpdateDirectIPAccess() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.UpdateDirectIPAccess()
+	})
+}
+
+// ClearDirectIPAccess clears the value of the "direct_ip_access" field.
+func (u *RustDeskUpsertBulk) ClearDirectIPAccess() *RustDeskUpsertBulk {
+	return u.Update(func(s *RustDeskUpsert) {
+		s.ClearDirectIPAccess()
 	})
 }
 

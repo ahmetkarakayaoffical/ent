@@ -18,6 +18,9 @@ func (RustDesk) Fields() []ent.Field {
 		field.String("relay_server").Optional().Default(""),
 		field.String("api_server").Optional().Default(""),
 		field.String("key").Optional().Default(""),
+		field.Bool("use_permanent_password").Optional().Default(false),
+		field.String("whitelist").Optional().Default(""),
+		field.Bool("direct_ip_access").Optional().Default(false),
 	}
 }
 
