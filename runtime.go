@@ -12,6 +12,7 @@ import (
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/revocation"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/schema"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
@@ -109,6 +110,10 @@ func init() {
 	agentDescNickname := agentFields[25].Descriptor()
 	// agent.DefaultNickname holds the default value on creation for the nickname field.
 	agent.DefaultNickname = agentDescNickname.Default.(string)
+	// agentDescHasRustdesk is the schema descriptor for has_rustdesk field.
+	agentDescHasRustdesk := agentFields[27].Descriptor()
+	// agent.DefaultHasRustdesk holds the default value on creation for the has_rustdesk field.
+	agent.DefaultHasRustdesk = agentDescHasRustdesk.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -173,6 +178,36 @@ func init() {
 	revocationDescRevoked := revocationFields[4].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
+	rustdeskFields := schema.RustDesk{}.Fields()
+	_ = rustdeskFields
+	// rustdeskDescCustomRendezvousServer is the schema descriptor for custom_rendezvous_server field.
+	rustdeskDescCustomRendezvousServer := rustdeskFields[0].Descriptor()
+	// rustdesk.DefaultCustomRendezvousServer holds the default value on creation for the custom_rendezvous_server field.
+	rustdesk.DefaultCustomRendezvousServer = rustdeskDescCustomRendezvousServer.Default.(string)
+	// rustdeskDescRelayServer is the schema descriptor for relay_server field.
+	rustdeskDescRelayServer := rustdeskFields[1].Descriptor()
+	// rustdesk.DefaultRelayServer holds the default value on creation for the relay_server field.
+	rustdesk.DefaultRelayServer = rustdeskDescRelayServer.Default.(string)
+	// rustdeskDescAPIServer is the schema descriptor for api_server field.
+	rustdeskDescAPIServer := rustdeskFields[2].Descriptor()
+	// rustdesk.DefaultAPIServer holds the default value on creation for the api_server field.
+	rustdesk.DefaultAPIServer = rustdeskDescAPIServer.Default.(string)
+	// rustdeskDescKey is the schema descriptor for key field.
+	rustdeskDescKey := rustdeskFields[3].Descriptor()
+	// rustdesk.DefaultKey holds the default value on creation for the key field.
+	rustdesk.DefaultKey = rustdeskDescKey.Default.(string)
+	// rustdeskDescUsePermanentPassword is the schema descriptor for use_permanent_password field.
+	rustdeskDescUsePermanentPassword := rustdeskFields[4].Descriptor()
+	// rustdesk.DefaultUsePermanentPassword holds the default value on creation for the use_permanent_password field.
+	rustdesk.DefaultUsePermanentPassword = rustdeskDescUsePermanentPassword.Default.(bool)
+	// rustdeskDescWhitelist is the schema descriptor for whitelist field.
+	rustdeskDescWhitelist := rustdeskFields[5].Descriptor()
+	// rustdesk.DefaultWhitelist holds the default value on creation for the whitelist field.
+	rustdesk.DefaultWhitelist = rustdeskDescWhitelist.Default.(string)
+	// rustdeskDescDirectIPAccess is the schema descriptor for direct_ip_access field.
+	rustdeskDescDirectIPAccess := rustdeskFields[6].Descriptor()
+	// rustdesk.DefaultDirectIPAccess holds the default value on creation for the direct_ip_access field.
+	rustdesk.DefaultDirectIPAccess = rustdeskDescDirectIPAccess.Default.(bool)
 	sessionsFields := schema.Sessions{}.Fields()
 	_ = sessionsFields
 	// sessionsDescData is the schema descriptor for data field.

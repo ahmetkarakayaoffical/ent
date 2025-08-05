@@ -185,6 +185,11 @@ func Nickname(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldNickname, v))
 }
 
+// HasRustdesk applies equality check predicate on the "has_rustdesk" field. It's identical to HasRustdeskEQ.
+func HasRustdesk(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldHasRustdesk, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1573,6 +1578,26 @@ func EndpointTypeIsNil() predicate.Agent {
 // EndpointTypeNotNil applies the NotNil predicate on the "endpoint_type" field.
 func EndpointTypeNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldEndpointType))
+}
+
+// HasRustdeskEQ applies the EQ predicate on the "has_rustdesk" field.
+func HasRustdeskEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldHasRustdesk, v))
+}
+
+// HasRustdeskNEQ applies the NEQ predicate on the "has_rustdesk" field.
+func HasRustdeskNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldHasRustdesk, v))
+}
+
+// HasRustdeskIsNil applies the IsNil predicate on the "has_rustdesk" field.
+func HasRustdeskIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldHasRustdesk))
+}
+
+// HasRustdeskNotNil applies the NotNil predicate on the "has_rustdesk" field.
+func HasRustdeskNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldHasRustdesk))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

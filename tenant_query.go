@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
@@ -31,6 +32,7 @@ type TenantQuery struct {
 	withSettings *SettingsQuery
 	withTags     *TagQuery
 	withMetadata *OrgMetadataQuery
+	withRustdesk *RustDeskQuery
 	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -149,6 +151,28 @@ func (tq *TenantQuery) QueryMetadata() *OrgMetadataQuery {
 			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
 			sqlgraph.To(orgmetadata.Table, orgmetadata.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, tenant.MetadataTable, tenant.MetadataColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRustdesk chains the current query on the "rustdesk" edge.
+func (tq *TenantQuery) QueryRustdesk() *RustDeskQuery {
+	query := (&RustDeskClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tenant.Table, tenant.FieldID, selector),
+			sqlgraph.To(rustdesk.Table, rustdesk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tenant.RustdeskTable, tenant.RustdeskColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -352,6 +376,7 @@ func (tq *TenantQuery) Clone() *TenantQuery {
 		withSettings: tq.withSettings.Clone(),
 		withTags:     tq.withTags.Clone(),
 		withMetadata: tq.withMetadata.Clone(),
+		withRustdesk: tq.withRustdesk.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -400,6 +425,17 @@ func (tq *TenantQuery) WithMetadata(opts ...func(*OrgMetadataQuery)) *TenantQuer
 		opt(query)
 	}
 	tq.withMetadata = query
+	return tq
+}
+
+// WithRustdesk tells the query-builder to eager-load the nodes that are connected to
+// the "rustdesk" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TenantQuery) WithRustdesk(opts ...func(*RustDeskQuery)) *TenantQuery {
+	query := (&RustDeskClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withRustdesk = query
 	return tq
 }
 
@@ -481,11 +517,12 @@ func (tq *TenantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tenan
 	var (
 		nodes       = []*Tenant{}
 		_spec       = tq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			tq.withSites != nil,
 			tq.withSettings != nil,
 			tq.withTags != nil,
 			tq.withMetadata != nil,
+			tq.withRustdesk != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -533,6 +570,13 @@ func (tq *TenantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tenan
 		if err := tq.loadMetadata(ctx, query, nodes,
 			func(n *Tenant) { n.Edges.Metadata = []*OrgMetadata{} },
 			func(n *Tenant, e *OrgMetadata) { n.Edges.Metadata = append(n.Edges.Metadata, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withRustdesk; query != nil {
+		if err := tq.loadRustdesk(ctx, query, nodes,
+			func(n *Tenant) { n.Edges.Rustdesk = []*RustDesk{} },
+			func(n *Tenant, e *RustDesk) { n.Edges.Rustdesk = append(n.Edges.Rustdesk, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -655,6 +699,37 @@ func (tq *TenantQuery) loadMetadata(ctx context.Context, query *OrgMetadataQuery
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "tenant_metadata" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (tq *TenantQuery) loadRustdesk(ctx context.Context, query *RustDeskQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *RustDesk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Tenant)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.RustDesk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(tenant.RustdeskColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.tenant_rustdesk
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "tenant_rustdesk" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "tenant_rustdesk" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

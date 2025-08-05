@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/orgmetadata"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/settings"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tag"
@@ -169,6 +170,21 @@ func (tu *TenantUpdate) AddMetadata(o ...*OrgMetadata) *TenantUpdate {
 	return tu.AddMetadatumIDs(ids...)
 }
 
+// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+func (tu *TenantUpdate) AddRustdeskIDs(ids ...int) *TenantUpdate {
+	tu.mutation.AddRustdeskIDs(ids...)
+	return tu
+}
+
+// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
+func (tu *TenantUpdate) AddRustdesk(r ...*RustDesk) *TenantUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tu.AddRustdeskIDs(ids...)
+}
+
 // Mutation returns the TenantMutation object of the builder.
 func (tu *TenantUpdate) Mutation() *TenantMutation {
 	return tu.mutation
@@ -241,6 +257,27 @@ func (tu *TenantUpdate) RemoveMetadata(o ...*OrgMetadata) *TenantUpdate {
 		ids[i] = o[i].ID
 	}
 	return tu.RemoveMetadatumIDs(ids...)
+}
+
+// ClearRustdesk clears all "rustdesk" edges to the RustDesk entity.
+func (tu *TenantUpdate) ClearRustdesk() *TenantUpdate {
+	tu.mutation.ClearRustdesk()
+	return tu
+}
+
+// RemoveRustdeskIDs removes the "rustdesk" edge to RustDesk entities by IDs.
+func (tu *TenantUpdate) RemoveRustdeskIDs(ids ...int) *TenantUpdate {
+	tu.mutation.RemoveRustdeskIDs(ids...)
+	return tu
+}
+
+// RemoveRustdesk removes "rustdesk" edges to RustDesk entities.
+func (tu *TenantUpdate) RemoveRustdesk(r ...*RustDesk) *TenantUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tu.RemoveRustdeskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -482,6 +519,51 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.RustdeskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedRustdeskIDs(); len(nodes) > 0 && !tu.mutation.RustdeskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RustdeskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -640,6 +722,21 @@ func (tuo *TenantUpdateOne) AddMetadata(o ...*OrgMetadata) *TenantUpdateOne {
 	return tuo.AddMetadatumIDs(ids...)
 }
 
+// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+func (tuo *TenantUpdateOne) AddRustdeskIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.AddRustdeskIDs(ids...)
+	return tuo
+}
+
+// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
+func (tuo *TenantUpdateOne) AddRustdesk(r ...*RustDesk) *TenantUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tuo.AddRustdeskIDs(ids...)
+}
+
 // Mutation returns the TenantMutation object of the builder.
 func (tuo *TenantUpdateOne) Mutation() *TenantMutation {
 	return tuo.mutation
@@ -712,6 +809,27 @@ func (tuo *TenantUpdateOne) RemoveMetadata(o ...*OrgMetadata) *TenantUpdateOne {
 		ids[i] = o[i].ID
 	}
 	return tuo.RemoveMetadatumIDs(ids...)
+}
+
+// ClearRustdesk clears all "rustdesk" edges to the RustDesk entity.
+func (tuo *TenantUpdateOne) ClearRustdesk() *TenantUpdateOne {
+	tuo.mutation.ClearRustdesk()
+	return tuo
+}
+
+// RemoveRustdeskIDs removes the "rustdesk" edge to RustDesk entities by IDs.
+func (tuo *TenantUpdateOne) RemoveRustdeskIDs(ids ...int) *TenantUpdateOne {
+	tuo.mutation.RemoveRustdeskIDs(ids...)
+	return tuo
+}
+
+// RemoveRustdesk removes "rustdesk" edges to RustDesk entities.
+func (tuo *TenantUpdateOne) RemoveRustdesk(r ...*RustDesk) *TenantUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tuo.RemoveRustdeskIDs(ids...)
 }
 
 // Where appends a list predicates to the TenantUpdate builder.
@@ -976,6 +1094,51 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmetadata.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.RustdeskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedRustdeskIDs(); len(nodes) > 0 && !tuo.mutation.RustdeskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RustdeskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   tenant.RustdeskTable,
+			Columns: []string{tenant.RustdeskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -390,6 +390,20 @@ func (ac *AgentCreate) SetNillableEndpointType(at *agent.EndpointType) *AgentCre
 	return ac
 }
 
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (ac *AgentCreate) SetHasRustdesk(b bool) *AgentCreate {
+	ac.mutation.SetHasRustdesk(b)
+	return ac
+}
+
+// SetNillableHasRustdesk sets the "has_rustdesk" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableHasRustdesk(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetHasRustdesk(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -816,6 +830,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultEndpointType
 		ac.mutation.SetEndpointType(v)
 	}
+	if _, ok := ac.mutation.HasRustdesk(); !ok {
+		v := agent.DefaultHasRustdesk
+		ac.mutation.SetHasRustdesk(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -996,6 +1014,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.EndpointType(); ok {
 		_spec.SetField(agent.FieldEndpointType, field.TypeEnum, value)
 		_node.EndpointType = value
+	}
+	if value, ok := ac.mutation.HasRustdesk(); ok {
+		_spec.SetField(agent.FieldHasRustdesk, field.TypeBool, value)
+		_node.HasRustdesk = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1798,6 +1820,24 @@ func (u *AgentUpsert) ClearEndpointType() *AgentUpsert {
 	return u
 }
 
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (u *AgentUpsert) SetHasRustdesk(v bool) *AgentUpsert {
+	u.Set(agent.FieldHasRustdesk, v)
+	return u
+}
+
+// UpdateHasRustdesk sets the "has_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateHasRustdesk() *AgentUpsert {
+	u.SetExcluded(agent.FieldHasRustdesk)
+	return u
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (u *AgentUpsert) ClearHasRustdesk() *AgentUpsert {
+	u.SetNull(agent.FieldHasRustdesk)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -2361,6 +2401,27 @@ func (u *AgentUpsertOne) UpdateEndpointType() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearEndpointType() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearEndpointType()
+	})
+}
+
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (u *AgentUpsertOne) SetHasRustdesk(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetHasRustdesk(v)
+	})
+}
+
+// UpdateHasRustdesk sets the "has_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateHasRustdesk() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateHasRustdesk()
+	})
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (u *AgentUpsertOne) ClearHasRustdesk() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearHasRustdesk()
 	})
 }
 
@@ -3094,6 +3155,27 @@ func (u *AgentUpsertBulk) UpdateEndpointType() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearEndpointType() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearEndpointType()
+	})
+}
+
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (u *AgentUpsertBulk) SetHasRustdesk(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetHasRustdesk(v)
+	})
+}
+
+// UpdateHasRustdesk sets the "has_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateHasRustdesk() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateHasRustdesk()
+	})
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (u *AgentUpsertBulk) ClearHasRustdesk() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearHasRustdesk()
 	})
 }
 

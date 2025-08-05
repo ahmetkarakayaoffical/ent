@@ -30,6 +30,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeMetadata holds the string denoting the metadata edge name in mutations.
 	EdgeMetadata = "metadata"
+	// EdgeRustdesk holds the string denoting the rustdesk edge name in mutations.
+	EdgeRustdesk = "rustdesk"
 	// Table holds the table name of the tenant in the database.
 	Table = "tenants"
 	// SitesTable is the table that holds the sites relation/edge.
@@ -60,6 +62,13 @@ const (
 	MetadataInverseTable = "org_metadata"
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "tenant_metadata"
+	// RustdeskTable is the table that holds the rustdesk relation/edge.
+	RustdeskTable = "rust_desks"
+	// RustdeskInverseTable is the table name for the RustDesk entity.
+	// It exists in this package in order to avoid circular dependency with the "rustdesk" package.
+	RustdeskInverseTable = "rust_desks"
+	// RustdeskColumn is the table column denoting the rustdesk relation/edge.
+	RustdeskColumn = "tenant_rustdesk"
 )
 
 // Columns holds all SQL columns for tenant fields.
@@ -166,6 +175,20 @@ func ByMetadata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newMetadataStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByRustdeskCount orders the results by rustdesk count.
+func ByRustdeskCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRustdeskStep(), opts...)
+	}
+}
+
+// ByRustdesk orders the results by rustdesk terms.
+func ByRustdesk(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRustdeskStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newSitesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -192,5 +215,12 @@ func newMetadataStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MetadataInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, MetadataTable, MetadataColumn),
+	)
+}
+func newRustdeskStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RustdeskInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RustdeskTable, RustdeskColumn),
 	)
 }

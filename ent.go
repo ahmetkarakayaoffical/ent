@@ -30,6 +30,7 @@ import (
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
 	"github.com/open-uem/ent/revocation"
+	"github.com/open-uem/ent/rustdesk"
 	"github.com/open-uem/ent/server"
 	"github.com/open-uem/ent/sessions"
 	"github.com/open-uem/ent/settings"
@@ -120,6 +121,7 @@ func checkColumn(table, column string) error {
 			profileissue.Table:          profileissue.ValidColumn,
 			release.Table:               release.ValidColumn,
 			revocation.Table:            revocation.ValidColumn,
+			rustdesk.Table:              rustdesk.ValidColumn,
 			server.Table:                server.ValidColumn,
 			sessions.Table:              sessions.ValidColumn,
 			settings.Table:              settings.ValidColumn,

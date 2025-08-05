@@ -67,6 +67,8 @@ const (
 	FieldNickname = "nickname"
 	// FieldEndpointType holds the string denoting the endpoint_type field in the database.
 	FieldEndpointType = "endpoint_type"
+	// FieldHasRustdesk holds the string denoting the has_rustdesk field in the database.
+	FieldHasRustdesk = "has_rustdesk"
 	// EdgeComputer holds the string denoting the computer edge name in mutations.
 	EdgeComputer = "computer"
 	// EdgeOperatingsystem holds the string denoting the operatingsystem edge name in mutations.
@@ -305,6 +307,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldNickname,
 	FieldEndpointType,
+	FieldHasRustdesk,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "agents"
@@ -378,6 +381,8 @@ var (
 	DefaultDescription string
 	// DefaultNickname holds the default value on creation for the "nickname" field.
 	DefaultNickname string
+	// DefaultHasRustdesk holds the default value on creation for the "has_rustdesk" field.
+	DefaultHasRustdesk bool
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -576,6 +581,11 @@ func ByNickname(opts ...sql.OrderTermOption) OrderOption {
 // ByEndpointType orders the results by the endpoint_type field.
 func ByEndpointType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndpointType, opts...).ToFunc()
+}
+
+// ByHasRustdesk orders the results by the has_rustdesk field.
+func ByHasRustdesk(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasRustdesk, opts...).ToFunc()
 }
 
 // ByComputerField orders the results by computer field.

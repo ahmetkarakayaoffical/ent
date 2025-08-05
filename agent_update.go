@@ -544,6 +544,26 @@ func (au *AgentUpdate) ClearEndpointType() *AgentUpdate {
 	return au
 }
 
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (au *AgentUpdate) SetHasRustdesk(b bool) *AgentUpdate {
+	au.mutation.SetHasRustdesk(b)
+	return au
+}
+
+// SetNillableHasRustdesk sets the "has_rustdesk" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableHasRustdesk(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetHasRustdesk(*b)
+	}
+	return au
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (au *AgentUpdate) ClearHasRustdesk() *AgentUpdate {
+	au.mutation.ClearHasRustdesk()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1391,6 +1411,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.EndpointTypeCleared() {
 		_spec.ClearField(agent.FieldEndpointType, field.TypeEnum)
+	}
+	if value, ok := au.mutation.HasRustdesk(); ok {
+		_spec.SetField(agent.FieldHasRustdesk, field.TypeBool, value)
+	}
+	if au.mutation.HasRustdeskCleared() {
+		_spec.ClearField(agent.FieldHasRustdesk, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2685,6 +2711,26 @@ func (auo *AgentUpdateOne) ClearEndpointType() *AgentUpdateOne {
 	return auo
 }
 
+// SetHasRustdesk sets the "has_rustdesk" field.
+func (auo *AgentUpdateOne) SetHasRustdesk(b bool) *AgentUpdateOne {
+	auo.mutation.SetHasRustdesk(b)
+	return auo
+}
+
+// SetNillableHasRustdesk sets the "has_rustdesk" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableHasRustdesk(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetHasRustdesk(*b)
+	}
+	return auo
+}
+
+// ClearHasRustdesk clears the value of the "has_rustdesk" field.
+func (auo *AgentUpdateOne) ClearHasRustdesk() *AgentUpdateOne {
+	auo.mutation.ClearHasRustdesk()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3562,6 +3608,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.EndpointTypeCleared() {
 		_spec.ClearField(agent.FieldEndpointType, field.TypeEnum)
+	}
+	if value, ok := auo.mutation.HasRustdesk(); ok {
+		_spec.SetField(agent.FieldHasRustdesk, field.TypeBool, value)
+	}
+	if auo.mutation.HasRustdeskCleared() {
+		_spec.ClearField(agent.FieldHasRustdesk, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
