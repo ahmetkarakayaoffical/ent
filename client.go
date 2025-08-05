@@ -18,6 +18,7 @@ import (
 	"github.com/open-uem/ent/agent"
 	"github.com/open-uem/ent/antivirus"
 	"github.com/open-uem/ent/app"
+	"github.com/open-uem/ent/authentication"
 	"github.com/open-uem/ent/certificate"
 	"github.com/open-uem/ent/computer"
 	"github.com/open-uem/ent/deployment"
@@ -59,6 +60,8 @@ type Client struct {
 	Antivirus *AntivirusClient
 	// App is the client for interacting with the App builders.
 	App *AppClient
+	// Authentication is the client for interacting with the Authentication builders.
+	Authentication *AuthenticationClient
 	// Certificate is the client for interacting with the Certificate builders.
 	Certificate *CertificateClient
 	// Computer is the client for interacting with the Computer builders.
@@ -129,6 +132,7 @@ func (c *Client) init() {
 	c.Agent = NewAgentClient(c.config)
 	c.Antivirus = NewAntivirusClient(c.config)
 	c.App = NewAppClient(c.config)
+	c.Authentication = NewAuthenticationClient(c.config)
 	c.Certificate = NewCertificateClient(c.config)
 	c.Computer = NewComputerClient(c.config)
 	c.Deployment = NewDeploymentClient(c.config)
@@ -252,6 +256,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Agent:                 NewAgentClient(cfg),
 		Antivirus:             NewAntivirusClient(cfg),
 		App:                   NewAppClient(cfg),
+		Authentication:        NewAuthenticationClient(cfg),
 		Certificate:           NewCertificateClient(cfg),
 		Computer:              NewComputerClient(cfg),
 		Deployment:            NewDeploymentClient(cfg),
@@ -302,6 +307,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Agent:                 NewAgentClient(cfg),
 		Antivirus:             NewAntivirusClient(cfg),
 		App:                   NewAppClient(cfg),
+		Authentication:        NewAuthenticationClient(cfg),
 		Certificate:           NewCertificateClient(cfg),
 		Computer:              NewComputerClient(cfg),
 		Deployment:            NewDeploymentClient(cfg),
@@ -359,12 +365,12 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
-		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
-		c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions, c.Settings, c.Share,
-		c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update, c.User,
-		c.WingetConfigExclusion,
+		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
+		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
+		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile,
+		c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions,
+		c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update,
+		c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -374,12 +380,12 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.Antivirus, c.App, c.Certificate, c.Computer, c.Deployment,
-		c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor, c.NetworkAdapter,
-		c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile, c.ProfileIssue,
-		c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions, c.Settings, c.Share,
-		c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update, c.User,
-		c.WingetConfigExclusion,
+		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
+		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
+		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile,
+		c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions,
+		c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update,
+		c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -394,6 +400,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Antivirus.mutate(ctx, m)
 	case *AppMutation:
 		return c.App.mutate(ctx, m)
+	case *AuthenticationMutation:
+		return c.Authentication.mutate(ctx, m)
 	case *CertificateMutation:
 		return c.Certificate.mutate(ctx, m)
 	case *ComputerMutation:
@@ -1187,6 +1195,139 @@ func (c *AppClient) mutate(ctx context.Context, m *AppMutation) (Value, error) {
 		return (&AppDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown App mutation op: %q", m.Op())
+	}
+}
+
+// AuthenticationClient is a client for the Authentication schema.
+type AuthenticationClient struct {
+	config
+}
+
+// NewAuthenticationClient returns a client for the Authentication from the given config.
+func NewAuthenticationClient(c config) *AuthenticationClient {
+	return &AuthenticationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `authentication.Hooks(f(g(h())))`.
+func (c *AuthenticationClient) Use(hooks ...Hook) {
+	c.hooks.Authentication = append(c.hooks.Authentication, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `authentication.Intercept(f(g(h())))`.
+func (c *AuthenticationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Authentication = append(c.inters.Authentication, interceptors...)
+}
+
+// Create returns a builder for creating a Authentication entity.
+func (c *AuthenticationClient) Create() *AuthenticationCreate {
+	mutation := newAuthenticationMutation(c.config, OpCreate)
+	return &AuthenticationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Authentication entities.
+func (c *AuthenticationClient) CreateBulk(builders ...*AuthenticationCreate) *AuthenticationCreateBulk {
+	return &AuthenticationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AuthenticationClient) MapCreateBulk(slice any, setFunc func(*AuthenticationCreate, int)) *AuthenticationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AuthenticationCreateBulk{err: fmt.Errorf("calling to AuthenticationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AuthenticationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AuthenticationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Authentication.
+func (c *AuthenticationClient) Update() *AuthenticationUpdate {
+	mutation := newAuthenticationMutation(c.config, OpUpdate)
+	return &AuthenticationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AuthenticationClient) UpdateOne(a *Authentication) *AuthenticationUpdateOne {
+	mutation := newAuthenticationMutation(c.config, OpUpdateOne, withAuthentication(a))
+	return &AuthenticationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AuthenticationClient) UpdateOneID(id int) *AuthenticationUpdateOne {
+	mutation := newAuthenticationMutation(c.config, OpUpdateOne, withAuthenticationID(id))
+	return &AuthenticationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Authentication.
+func (c *AuthenticationClient) Delete() *AuthenticationDelete {
+	mutation := newAuthenticationMutation(c.config, OpDelete)
+	return &AuthenticationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AuthenticationClient) DeleteOne(a *Authentication) *AuthenticationDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AuthenticationClient) DeleteOneID(id int) *AuthenticationDeleteOne {
+	builder := c.Delete().Where(authentication.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AuthenticationDeleteOne{builder}
+}
+
+// Query returns a query builder for Authentication.
+func (c *AuthenticationClient) Query() *AuthenticationQuery {
+	return &AuthenticationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAuthentication},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Authentication entity by its id.
+func (c *AuthenticationClient) Get(ctx context.Context, id int) (*Authentication, error) {
+	return c.Query().Where(authentication.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AuthenticationClient) GetX(ctx context.Context, id int) *Authentication {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AuthenticationClient) Hooks() []Hook {
+	return c.hooks.Authentication
+}
+
+// Interceptors returns the client interceptors.
+func (c *AuthenticationClient) Interceptors() []Interceptor {
+	return c.inters.Authentication
+}
+
+func (c *AuthenticationClient) mutate(ctx context.Context, m *AuthenticationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AuthenticationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AuthenticationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AuthenticationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AuthenticationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Authentication mutation op: %q", m.Op())
 	}
 }
 
@@ -5605,17 +5746,17 @@ func (c *WingetConfigExclusionClient) mutate(ctx context.Context, m *WingetConfi
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
-		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
-		Printer, Profile, ProfileIssue, Release, Revocation, RustDesk, Server,
-		Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant, Update, User,
-		WingetConfigExclusion []ent.Hook
+		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
+		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
+		OrgMetadata, Printer, Profile, ProfileIssue, Release, Revocation, RustDesk,
+		Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant,
+		Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
-		Agent, Antivirus, App, Certificate, Computer, Deployment, LogicalDisk,
-		MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem, OrgMetadata,
-		Printer, Profile, ProfileIssue, Release, Revocation, RustDesk, Server,
-		Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant, Update, User,
-		WingetConfigExclusion []ent.Interceptor
+		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
+		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
+		OrgMetadata, Printer, Profile, ProfileIssue, Release, Revocation, RustDesk,
+		Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant,
+		Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )
