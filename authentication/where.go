@@ -67,6 +67,11 @@ func UseOIDC(v bool) predicate.Authentication {
 	return predicate.Authentication(sql.FieldEQ(FieldUseOIDC, v))
 }
 
+// OIDCProvider applies equality check predicate on the "OIDC_provider" field. It's identical to OIDCProviderEQ.
+func OIDCProvider(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldEQ(FieldOIDCProvider, v))
+}
+
 // OIDCServer applies equality check predicate on the "OIDC_server" field. It's identical to OIDCServerEQ.
 func OIDCServer(v string) predicate.Authentication {
 	return predicate.Authentication(sql.FieldEQ(FieldOIDCServer, v))
@@ -163,23 +168,58 @@ func UseOIDCNotNil() predicate.Authentication {
 }
 
 // OIDCProviderEQ applies the EQ predicate on the "OIDC_provider" field.
-func OIDCProviderEQ(v OIDCProvider) predicate.Authentication {
+func OIDCProviderEQ(v string) predicate.Authentication {
 	return predicate.Authentication(sql.FieldEQ(FieldOIDCProvider, v))
 }
 
 // OIDCProviderNEQ applies the NEQ predicate on the "OIDC_provider" field.
-func OIDCProviderNEQ(v OIDCProvider) predicate.Authentication {
+func OIDCProviderNEQ(v string) predicate.Authentication {
 	return predicate.Authentication(sql.FieldNEQ(FieldOIDCProvider, v))
 }
 
 // OIDCProviderIn applies the In predicate on the "OIDC_provider" field.
-func OIDCProviderIn(vs ...OIDCProvider) predicate.Authentication {
+func OIDCProviderIn(vs ...string) predicate.Authentication {
 	return predicate.Authentication(sql.FieldIn(FieldOIDCProvider, vs...))
 }
 
 // OIDCProviderNotIn applies the NotIn predicate on the "OIDC_provider" field.
-func OIDCProviderNotIn(vs ...OIDCProvider) predicate.Authentication {
+func OIDCProviderNotIn(vs ...string) predicate.Authentication {
 	return predicate.Authentication(sql.FieldNotIn(FieldOIDCProvider, vs...))
+}
+
+// OIDCProviderGT applies the GT predicate on the "OIDC_provider" field.
+func OIDCProviderGT(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldGT(FieldOIDCProvider, v))
+}
+
+// OIDCProviderGTE applies the GTE predicate on the "OIDC_provider" field.
+func OIDCProviderGTE(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldGTE(FieldOIDCProvider, v))
+}
+
+// OIDCProviderLT applies the LT predicate on the "OIDC_provider" field.
+func OIDCProviderLT(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldLT(FieldOIDCProvider, v))
+}
+
+// OIDCProviderLTE applies the LTE predicate on the "OIDC_provider" field.
+func OIDCProviderLTE(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldLTE(FieldOIDCProvider, v))
+}
+
+// OIDCProviderContains applies the Contains predicate on the "OIDC_provider" field.
+func OIDCProviderContains(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldContains(FieldOIDCProvider, v))
+}
+
+// OIDCProviderHasPrefix applies the HasPrefix predicate on the "OIDC_provider" field.
+func OIDCProviderHasPrefix(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldHasPrefix(FieldOIDCProvider, v))
+}
+
+// OIDCProviderHasSuffix applies the HasSuffix predicate on the "OIDC_provider" field.
+func OIDCProviderHasSuffix(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldHasSuffix(FieldOIDCProvider, v))
 }
 
 // OIDCProviderIsNil applies the IsNil predicate on the "OIDC_provider" field.
@@ -190,6 +230,16 @@ func OIDCProviderIsNil() predicate.Authentication {
 // OIDCProviderNotNil applies the NotNil predicate on the "OIDC_provider" field.
 func OIDCProviderNotNil() predicate.Authentication {
 	return predicate.Authentication(sql.FieldNotNull(FieldOIDCProvider))
+}
+
+// OIDCProviderEqualFold applies the EqualFold predicate on the "OIDC_provider" field.
+func OIDCProviderEqualFold(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldEqualFold(FieldOIDCProvider, v))
+}
+
+// OIDCProviderContainsFold applies the ContainsFold predicate on the "OIDC_provider" field.
+func OIDCProviderContainsFold(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldContainsFold(FieldOIDCProvider, v))
 }
 
 // OIDCServerEQ applies the EQ predicate on the "OIDC_server" field.

@@ -3,8 +3,6 @@
 package authentication
 
 import (
-	"fmt"
-
 	"entgo.io/ent/dialect/sql"
 )
 
@@ -72,6 +70,8 @@ var (
 	DefaultAllowRegister bool
 	// DefaultUseOIDC holds the default value on creation for the "use_OIDC" field.
 	DefaultUseOIDC bool
+	// DefaultOIDCProvider holds the default value on creation for the "OIDC_provider" field.
+	DefaultOIDCProvider string
 	// DefaultOIDCServer holds the default value on creation for the "OIDC_server" field.
 	DefaultOIDCServer string
 	// DefaultOIDCClientID holds the default value on creation for the "OIDC_client_id" field.
@@ -87,30 +87,6 @@ var (
 	// DefaultOIDCAutoApprove holds the default value on creation for the "OIDC_auto_approve" field.
 	DefaultOIDCAutoApprove bool
 )
-
-// OIDCProvider defines the type for the "OIDC_provider" enum field.
-type OIDCProvider string
-
-// OIDCProvider values.
-const (
-	OIDCProviderAuthentik OIDCProvider = "authentik"
-	OIDCProviderKeycloak  OIDCProvider = "keycloak"
-	OIDCProviderZitadel   OIDCProvider = "zitadel"
-)
-
-func (_oidc_provider OIDCProvider) String() string {
-	return string(_oidc_provider)
-}
-
-// OIDCProviderValidator is a validator for the "OIDC_provider" field enum values. It is called by the builders before save.
-func OIDCProviderValidator(_oidc_provider OIDCProvider) error {
-	switch _oidc_provider {
-	case OIDCProviderAuthentik, OIDCProviderKeycloak, OIDCProviderZitadel:
-		return nil
-	default:
-		return fmt.Errorf("authentication: invalid enum value for OIDC_provider field: %q", _oidc_provider)
-	}
-}
 
 // OrderOption defines the ordering options for the Authentication queries.
 type OrderOption func(*sql.Selector)

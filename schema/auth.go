@@ -16,7 +16,7 @@ func (Authentication) Fields() []ent.Field {
 		field.Bool("use_certificates").Optional().Default(true),
 		field.Bool("allow_register").Optional().Default(true),
 		field.Bool("use_OIDC").Optional().Default(false),
-		field.Enum("OIDC_provider").Values("authentik", "keycloak", "zitadel").Optional(),
+		field.String("OIDC_provider").Optional().Default(""),
 		field.String("OIDC_server").Optional().Default(""),
 		field.String("OIDC_client_id").Optional().Default(""),
 		field.String("OIDC_role").Optional().Default(""),

@@ -23,7 +23,7 @@ type Authentication struct {
 	// UseOIDC holds the value of the "use_OIDC" field.
 	UseOIDC bool `json:"use_OIDC,omitempty"`
 	// OIDCProvider holds the value of the "OIDC_provider" field.
-	OIDCProvider authentication.OIDCProvider `json:"OIDC_provider,omitempty"`
+	OIDCProvider string `json:"OIDC_provider,omitempty"`
 	// OIDCServer holds the value of the "OIDC_server" field.
 	OIDCServer string `json:"OIDC_server,omitempty"`
 	// OIDCClientID holds the value of the "OIDC_client_id" field.
@@ -95,7 +95,7 @@ func (a *Authentication) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field OIDC_provider", values[i])
 			} else if value.Valid {
-				a.OIDCProvider = authentication.OIDCProvider(value.String)
+				a.OIDCProvider = value.String
 			}
 		case authentication.FieldOIDCServer:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -185,7 +185,7 @@ func (a *Authentication) String() string {
 	builder.WriteString(fmt.Sprintf("%v", a.UseOIDC))
 	builder.WriteString(", ")
 	builder.WriteString("OIDC_provider=")
-	builder.WriteString(fmt.Sprintf("%v", a.OIDCProvider))
+	builder.WriteString(a.OIDCProvider)
 	builder.WriteString(", ")
 	builder.WriteString("OIDC_server=")
 	builder.WriteString(a.OIDCServer)

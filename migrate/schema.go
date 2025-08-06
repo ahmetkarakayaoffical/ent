@@ -112,7 +112,7 @@ var (
 		{Name: "use_certificates", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "allow_register", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "use_oidc", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "oidc_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"authentik", "keycloak", "zitadel"}},
+		{Name: "oidc_provider", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_server", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_client_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_role", Type: field.TypeString, Nullable: true, Default: ""},

@@ -4838,7 +4838,7 @@ type AuthenticationMutation struct {
 	use_certificates            *bool
 	allow_register              *bool
 	use_OIDC                    *bool
-	_OIDC_provider              *authentication.OIDCProvider
+	_OIDC_provider              *string
 	_OIDC_server                *string
 	_OIDC_client_id             *string
 	_OIDC_role                  *string
@@ -5098,12 +5098,12 @@ func (m *AuthenticationMutation) ResetUseOIDC() {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (m *AuthenticationMutation) SetOIDCProvider(ap authentication.OIDCProvider) {
-	m._OIDC_provider = &ap
+func (m *AuthenticationMutation) SetOIDCProvider(s string) {
+	m._OIDC_provider = &s
 }
 
 // OIDCProvider returns the value of the "OIDC_provider" field in the mutation.
-func (m *AuthenticationMutation) OIDCProvider() (r authentication.OIDCProvider, exists bool) {
+func (m *AuthenticationMutation) OIDCProvider() (r string, exists bool) {
 	v := m._OIDC_provider
 	if v == nil {
 		return
@@ -5114,7 +5114,7 @@ func (m *AuthenticationMutation) OIDCProvider() (r authentication.OIDCProvider, 
 // OldOIDCProvider returns the old "OIDC_provider" field's value of the Authentication entity.
 // If the Authentication object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AuthenticationMutation) OldOIDCProvider(ctx context.Context) (v authentication.OIDCProvider, err error) {
+func (m *AuthenticationMutation) OldOIDCProvider(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOIDCProvider is only allowed on UpdateOne operations")
 	}
@@ -5649,7 +5649,7 @@ func (m *AuthenticationMutation) SetField(name string, value ent.Value) error {
 		m.SetUseOIDC(v)
 		return nil
 	case authentication.FieldOIDCProvider:
-		v, ok := value.(authentication.OIDCProvider)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

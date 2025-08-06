@@ -89,15 +89,15 @@ func (au *AuthenticationUpdate) ClearUseOIDC() *AuthenticationUpdate {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (au *AuthenticationUpdate) SetOIDCProvider(ap authentication.OIDCProvider) *AuthenticationUpdate {
-	au.mutation.SetOIDCProvider(ap)
+func (au *AuthenticationUpdate) SetOIDCProvider(s string) *AuthenticationUpdate {
+	au.mutation.SetOIDCProvider(s)
 	return au
 }
 
 // SetNillableOIDCProvider sets the "OIDC_provider" field if the given value is not nil.
-func (au *AuthenticationUpdate) SetNillableOIDCProvider(ap *authentication.OIDCProvider) *AuthenticationUpdate {
-	if ap != nil {
-		au.SetOIDCProvider(*ap)
+func (au *AuthenticationUpdate) SetNillableOIDCProvider(s *string) *AuthenticationUpdate {
+	if s != nil {
+		au.SetOIDCProvider(*s)
 	}
 	return au
 }
@@ -280,16 +280,6 @@ func (au *AuthenticationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (au *AuthenticationUpdate) check() error {
-	if v, ok := au.mutation.OIDCProvider(); ok {
-		if err := authentication.OIDCProviderValidator(v); err != nil {
-			return &ValidationError{Name: "OIDC_provider", err: fmt.Errorf(`ent: validator failed for field "Authentication.OIDC_provider": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (au *AuthenticationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AuthenticationUpdate {
 	au.modifiers = append(au.modifiers, modifiers...)
@@ -297,9 +287,6 @@ func (au *AuthenticationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (au *AuthenticationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := au.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(authentication.Table, authentication.Columns, sqlgraph.NewFieldSpec(authentication.FieldID, field.TypeInt))
 	if ps := au.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -327,10 +314,10 @@ func (au *AuthenticationUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		_spec.ClearField(authentication.FieldUseOIDC, field.TypeBool)
 	}
 	if value, ok := au.mutation.OIDCProvider(); ok {
-		_spec.SetField(authentication.FieldOIDCProvider, field.TypeEnum, value)
+		_spec.SetField(authentication.FieldOIDCProvider, field.TypeString, value)
 	}
 	if au.mutation.OIDCProviderCleared() {
-		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeEnum)
+		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeString)
 	}
 	if value, ok := au.mutation.OIDCServer(); ok {
 		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)
@@ -457,15 +444,15 @@ func (auo *AuthenticationUpdateOne) ClearUseOIDC() *AuthenticationUpdateOne {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (auo *AuthenticationUpdateOne) SetOIDCProvider(ap authentication.OIDCProvider) *AuthenticationUpdateOne {
-	auo.mutation.SetOIDCProvider(ap)
+func (auo *AuthenticationUpdateOne) SetOIDCProvider(s string) *AuthenticationUpdateOne {
+	auo.mutation.SetOIDCProvider(s)
 	return auo
 }
 
 // SetNillableOIDCProvider sets the "OIDC_provider" field if the given value is not nil.
-func (auo *AuthenticationUpdateOne) SetNillableOIDCProvider(ap *authentication.OIDCProvider) *AuthenticationUpdateOne {
-	if ap != nil {
-		auo.SetOIDCProvider(*ap)
+func (auo *AuthenticationUpdateOne) SetNillableOIDCProvider(s *string) *AuthenticationUpdateOne {
+	if s != nil {
+		auo.SetOIDCProvider(*s)
 	}
 	return auo
 }
@@ -661,16 +648,6 @@ func (auo *AuthenticationUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (auo *AuthenticationUpdateOne) check() error {
-	if v, ok := auo.mutation.OIDCProvider(); ok {
-		if err := authentication.OIDCProviderValidator(v); err != nil {
-			return &ValidationError{Name: "OIDC_provider", err: fmt.Errorf(`ent: validator failed for field "Authentication.OIDC_provider": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (auo *AuthenticationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AuthenticationUpdateOne {
 	auo.modifiers = append(auo.modifiers, modifiers...)
@@ -678,9 +655,6 @@ func (auo *AuthenticationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilde
 }
 
 func (auo *AuthenticationUpdateOne) sqlSave(ctx context.Context) (_node *Authentication, err error) {
-	if err := auo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(authentication.Table, authentication.Columns, sqlgraph.NewFieldSpec(authentication.FieldID, field.TypeInt))
 	id, ok := auo.mutation.ID()
 	if !ok {
@@ -725,10 +699,10 @@ func (auo *AuthenticationUpdateOne) sqlSave(ctx context.Context) (_node *Authent
 		_spec.ClearField(authentication.FieldUseOIDC, field.TypeBool)
 	}
 	if value, ok := auo.mutation.OIDCProvider(); ok {
-		_spec.SetField(authentication.FieldOIDCProvider, field.TypeEnum, value)
+		_spec.SetField(authentication.FieldOIDCProvider, field.TypeString, value)
 	}
 	if auo.mutation.OIDCProviderCleared() {
-		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeEnum)
+		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeString)
 	}
 	if value, ok := auo.mutation.OIDCServer(); ok {
 		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)

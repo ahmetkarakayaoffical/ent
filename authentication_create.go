@@ -64,15 +64,15 @@ func (ac *AuthenticationCreate) SetNillableUseOIDC(b *bool) *AuthenticationCreat
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (ac *AuthenticationCreate) SetOIDCProvider(ap authentication.OIDCProvider) *AuthenticationCreate {
-	ac.mutation.SetOIDCProvider(ap)
+func (ac *AuthenticationCreate) SetOIDCProvider(s string) *AuthenticationCreate {
+	ac.mutation.SetOIDCProvider(s)
 	return ac
 }
 
 // SetNillableOIDCProvider sets the "OIDC_provider" field if the given value is not nil.
-func (ac *AuthenticationCreate) SetNillableOIDCProvider(ap *authentication.OIDCProvider) *AuthenticationCreate {
-	if ap != nil {
-		ac.SetOIDCProvider(*ap)
+func (ac *AuthenticationCreate) SetNillableOIDCProvider(s *string) *AuthenticationCreate {
+	if s != nil {
+		ac.SetOIDCProvider(*s)
 	}
 	return ac
 }
@@ -222,6 +222,10 @@ func (ac *AuthenticationCreate) defaults() {
 		v := authentication.DefaultUseOIDC
 		ac.mutation.SetUseOIDC(v)
 	}
+	if _, ok := ac.mutation.OIDCProvider(); !ok {
+		v := authentication.DefaultOIDCProvider
+		ac.mutation.SetOIDCProvider(v)
+	}
 	if _, ok := ac.mutation.OIDCServer(); !ok {
 		v := authentication.DefaultOIDCServer
 		ac.mutation.SetOIDCServer(v)
@@ -254,11 +258,6 @@ func (ac *AuthenticationCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *AuthenticationCreate) check() error {
-	if v, ok := ac.mutation.OIDCProvider(); ok {
-		if err := authentication.OIDCProviderValidator(v); err != nil {
-			return &ValidationError{Name: "OIDC_provider", err: fmt.Errorf(`ent: validator failed for field "Authentication.OIDC_provider": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -299,7 +298,7 @@ func (ac *AuthenticationCreate) createSpec() (*Authentication, *sqlgraph.CreateS
 		_node.UseOIDC = value
 	}
 	if value, ok := ac.mutation.OIDCProvider(); ok {
-		_spec.SetField(authentication.FieldOIDCProvider, field.TypeEnum, value)
+		_spec.SetField(authentication.FieldOIDCProvider, field.TypeString, value)
 		_node.OIDCProvider = value
 	}
 	if value, ok := ac.mutation.OIDCServer(); ok {
@@ -437,7 +436,7 @@ func (u *AuthenticationUpsert) ClearUseOIDC() *AuthenticationUpsert {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (u *AuthenticationUpsert) SetOIDCProvider(v authentication.OIDCProvider) *AuthenticationUpsert {
+func (u *AuthenticationUpsert) SetOIDCProvider(v string) *AuthenticationUpsert {
 	u.Set(authentication.FieldOIDCProvider, v)
 	return u
 }
@@ -684,7 +683,7 @@ func (u *AuthenticationUpsertOne) ClearUseOIDC() *AuthenticationUpsertOne {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (u *AuthenticationUpsertOne) SetOIDCProvider(v authentication.OIDCProvider) *AuthenticationUpsertOne {
+func (u *AuthenticationUpsertOne) SetOIDCProvider(v string) *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
 		s.SetOIDCProvider(v)
 	})
@@ -1119,7 +1118,7 @@ func (u *AuthenticationUpsertBulk) ClearUseOIDC() *AuthenticationUpsertBulk {
 }
 
 // SetOIDCProvider sets the "OIDC_provider" field.
-func (u *AuthenticationUpsertBulk) SetOIDCProvider(v authentication.OIDCProvider) *AuthenticationUpsertBulk {
+func (u *AuthenticationUpsertBulk) SetOIDCProvider(v string) *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
 		s.SetOIDCProvider(v)
 	})
