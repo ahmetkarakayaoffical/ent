@@ -115,7 +115,7 @@ var (
 		{Name: "oidc_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"authentik", "keycloak", "zitadel"}},
 		{Name: "oidc_endpoint", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_client_id", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "oidc_role", Type: field.TypeString, Nullable: true, Default: "openuem"},
+		{Name: "oidc_role", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_cookie_encription_key", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_keycloak_public_key", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_auto_create_account", Type: field.TypeBool, Nullable: true, Default: true},

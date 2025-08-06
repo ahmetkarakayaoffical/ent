@@ -19,7 +19,7 @@ func (Authentication) Fields() []ent.Field {
 		field.Enum("OIDC_provider").Values("authentik", "keycloak", "zitadel").Optional(),
 		field.String("OIDC_endpoint").Optional().Default(""),
 		field.String("OIDC_client_id").Optional().Default(""),
-		field.String("OIDC_role").Optional().Default("openuem"),
+		field.String("OIDC_role").Optional().Default(""),
 		field.String("OIDC_cookie_encription_key").Optional().Default(""),
 		field.String("OIDC_keycloak_public_key").Optional().Default(""),
 		field.Bool("OIDC_auto_create_account").Optional().Default(true),
