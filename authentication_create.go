@@ -77,16 +77,16 @@ func (ac *AuthenticationCreate) SetNillableOIDCProvider(ap *authentication.OIDCP
 	return ac
 }
 
-// SetOIDCEndpoint sets the "OIDC_endpoint" field.
-func (ac *AuthenticationCreate) SetOIDCEndpoint(s string) *AuthenticationCreate {
-	ac.mutation.SetOIDCEndpoint(s)
+// SetOIDCServer sets the "OIDC_server" field.
+func (ac *AuthenticationCreate) SetOIDCServer(s string) *AuthenticationCreate {
+	ac.mutation.SetOIDCServer(s)
 	return ac
 }
 
-// SetNillableOIDCEndpoint sets the "OIDC_endpoint" field if the given value is not nil.
-func (ac *AuthenticationCreate) SetNillableOIDCEndpoint(s *string) *AuthenticationCreate {
+// SetNillableOIDCServer sets the "OIDC_server" field if the given value is not nil.
+func (ac *AuthenticationCreate) SetNillableOIDCServer(s *string) *AuthenticationCreate {
 	if s != nil {
-		ac.SetOIDCEndpoint(*s)
+		ac.SetOIDCServer(*s)
 	}
 	return ac
 }
@@ -222,9 +222,9 @@ func (ac *AuthenticationCreate) defaults() {
 		v := authentication.DefaultUseOIDC
 		ac.mutation.SetUseOIDC(v)
 	}
-	if _, ok := ac.mutation.OIDCEndpoint(); !ok {
-		v := authentication.DefaultOIDCEndpoint
-		ac.mutation.SetOIDCEndpoint(v)
+	if _, ok := ac.mutation.OIDCServer(); !ok {
+		v := authentication.DefaultOIDCServer
+		ac.mutation.SetOIDCServer(v)
 	}
 	if _, ok := ac.mutation.OIDCClientID(); !ok {
 		v := authentication.DefaultOIDCClientID
@@ -302,9 +302,9 @@ func (ac *AuthenticationCreate) createSpec() (*Authentication, *sqlgraph.CreateS
 		_spec.SetField(authentication.FieldOIDCProvider, field.TypeEnum, value)
 		_node.OIDCProvider = value
 	}
-	if value, ok := ac.mutation.OIDCEndpoint(); ok {
-		_spec.SetField(authentication.FieldOIDCEndpoint, field.TypeString, value)
-		_node.OIDCEndpoint = value
+	if value, ok := ac.mutation.OIDCServer(); ok {
+		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)
+		_node.OIDCServer = value
 	}
 	if value, ok := ac.mutation.OIDCClientID(); ok {
 		_spec.SetField(authentication.FieldOIDCClientID, field.TypeString, value)
@@ -454,21 +454,21 @@ func (u *AuthenticationUpsert) ClearOIDCProvider() *AuthenticationUpsert {
 	return u
 }
 
-// SetOIDCEndpoint sets the "OIDC_endpoint" field.
-func (u *AuthenticationUpsert) SetOIDCEndpoint(v string) *AuthenticationUpsert {
-	u.Set(authentication.FieldOIDCEndpoint, v)
+// SetOIDCServer sets the "OIDC_server" field.
+func (u *AuthenticationUpsert) SetOIDCServer(v string) *AuthenticationUpsert {
+	u.Set(authentication.FieldOIDCServer, v)
 	return u
 }
 
-// UpdateOIDCEndpoint sets the "OIDC_endpoint" field to the value that was provided on create.
-func (u *AuthenticationUpsert) UpdateOIDCEndpoint() *AuthenticationUpsert {
-	u.SetExcluded(authentication.FieldOIDCEndpoint)
+// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
+func (u *AuthenticationUpsert) UpdateOIDCServer() *AuthenticationUpsert {
+	u.SetExcluded(authentication.FieldOIDCServer)
 	return u
 }
 
-// ClearOIDCEndpoint clears the value of the "OIDC_endpoint" field.
-func (u *AuthenticationUpsert) ClearOIDCEndpoint() *AuthenticationUpsert {
-	u.SetNull(authentication.FieldOIDCEndpoint)
+// ClearOIDCServer clears the value of the "OIDC_server" field.
+func (u *AuthenticationUpsert) ClearOIDCServer() *AuthenticationUpsert {
+	u.SetNull(authentication.FieldOIDCServer)
 	return u
 }
 
@@ -704,24 +704,24 @@ func (u *AuthenticationUpsertOne) ClearOIDCProvider() *AuthenticationUpsertOne {
 	})
 }
 
-// SetOIDCEndpoint sets the "OIDC_endpoint" field.
-func (u *AuthenticationUpsertOne) SetOIDCEndpoint(v string) *AuthenticationUpsertOne {
+// SetOIDCServer sets the "OIDC_server" field.
+func (u *AuthenticationUpsertOne) SetOIDCServer(v string) *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.SetOIDCEndpoint(v)
+		s.SetOIDCServer(v)
 	})
 }
 
-// UpdateOIDCEndpoint sets the "OIDC_endpoint" field to the value that was provided on create.
-func (u *AuthenticationUpsertOne) UpdateOIDCEndpoint() *AuthenticationUpsertOne {
+// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
+func (u *AuthenticationUpsertOne) UpdateOIDCServer() *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.UpdateOIDCEndpoint()
+		s.UpdateOIDCServer()
 	})
 }
 
-// ClearOIDCEndpoint clears the value of the "OIDC_endpoint" field.
-func (u *AuthenticationUpsertOne) ClearOIDCEndpoint() *AuthenticationUpsertOne {
+// ClearOIDCServer clears the value of the "OIDC_server" field.
+func (u *AuthenticationUpsertOne) ClearOIDCServer() *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.ClearOIDCEndpoint()
+		s.ClearOIDCServer()
 	})
 }
 
@@ -1139,24 +1139,24 @@ func (u *AuthenticationUpsertBulk) ClearOIDCProvider() *AuthenticationUpsertBulk
 	})
 }
 
-// SetOIDCEndpoint sets the "OIDC_endpoint" field.
-func (u *AuthenticationUpsertBulk) SetOIDCEndpoint(v string) *AuthenticationUpsertBulk {
+// SetOIDCServer sets the "OIDC_server" field.
+func (u *AuthenticationUpsertBulk) SetOIDCServer(v string) *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.SetOIDCEndpoint(v)
+		s.SetOIDCServer(v)
 	})
 }
 
-// UpdateOIDCEndpoint sets the "OIDC_endpoint" field to the value that was provided on create.
-func (u *AuthenticationUpsertBulk) UpdateOIDCEndpoint() *AuthenticationUpsertBulk {
+// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
+func (u *AuthenticationUpsertBulk) UpdateOIDCServer() *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.UpdateOIDCEndpoint()
+		s.UpdateOIDCServer()
 	})
 }
 
-// ClearOIDCEndpoint clears the value of the "OIDC_endpoint" field.
-func (u *AuthenticationUpsertBulk) ClearOIDCEndpoint() *AuthenticationUpsertBulk {
+// ClearOIDCServer clears the value of the "OIDC_server" field.
+func (u *AuthenticationUpsertBulk) ClearOIDCServer() *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.ClearOIDCEndpoint()
+		s.ClearOIDCServer()
 	})
 }
 

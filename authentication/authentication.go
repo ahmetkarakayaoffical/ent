@@ -21,8 +21,8 @@ const (
 	FieldUseOIDC = "use_oidc"
 	// FieldOIDCProvider holds the string denoting the oidc_provider field in the database.
 	FieldOIDCProvider = "oidc_provider"
-	// FieldOIDCEndpoint holds the string denoting the oidc_endpoint field in the database.
-	FieldOIDCEndpoint = "oidc_endpoint"
+	// FieldOIDCServer holds the string denoting the oidc_server field in the database.
+	FieldOIDCServer = "oidc_server"
 	// FieldOIDCClientID holds the string denoting the oidc_client_id field in the database.
 	FieldOIDCClientID = "oidc_client_id"
 	// FieldOIDCRole holds the string denoting the oidc_role field in the database.
@@ -46,7 +46,7 @@ var Columns = []string{
 	FieldAllowRegister,
 	FieldUseOIDC,
 	FieldOIDCProvider,
-	FieldOIDCEndpoint,
+	FieldOIDCServer,
 	FieldOIDCClientID,
 	FieldOIDCRole,
 	FieldOIDCCookieEncriptionKey,
@@ -72,8 +72,8 @@ var (
 	DefaultAllowRegister bool
 	// DefaultUseOIDC holds the default value on creation for the "use_OIDC" field.
 	DefaultUseOIDC bool
-	// DefaultOIDCEndpoint holds the default value on creation for the "OIDC_endpoint" field.
-	DefaultOIDCEndpoint string
+	// DefaultOIDCServer holds the default value on creation for the "OIDC_server" field.
+	DefaultOIDCServer string
 	// DefaultOIDCClientID holds the default value on creation for the "OIDC_client_id" field.
 	DefaultOIDCClientID string
 	// DefaultOIDCRole holds the default value on creation for the "OIDC_role" field.
@@ -140,9 +140,9 @@ func ByOIDCProvider(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOIDCProvider, opts...).ToFunc()
 }
 
-// ByOIDCEndpoint orders the results by the OIDC_endpoint field.
-func ByOIDCEndpoint(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOIDCEndpoint, opts...).ToFunc()
+// ByOIDCServer orders the results by the OIDC_server field.
+func ByOIDCServer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOIDCServer, opts...).ToFunc()
 }
 
 // ByOIDCClientID orders the results by the OIDC_client_id field.

@@ -133,10 +133,10 @@ func init() {
 	authenticationDescUseOIDC := authenticationFields[2].Descriptor()
 	// authentication.DefaultUseOIDC holds the default value on creation for the use_OIDC field.
 	authentication.DefaultUseOIDC = authenticationDescUseOIDC.Default.(bool)
-	// authenticationDescOIDCEndpoint is the schema descriptor for OIDC_endpoint field.
-	authenticationDescOIDCEndpoint := authenticationFields[4].Descriptor()
-	// authentication.DefaultOIDCEndpoint holds the default value on creation for the OIDC_endpoint field.
-	authentication.DefaultOIDCEndpoint = authenticationDescOIDCEndpoint.Default.(string)
+	// authenticationDescOIDCServer is the schema descriptor for OIDC_server field.
+	authenticationDescOIDCServer := authenticationFields[4].Descriptor()
+	// authentication.DefaultOIDCServer holds the default value on creation for the OIDC_server field.
+	authentication.DefaultOIDCServer = authenticationDescOIDCServer.Default.(string)
 	// authenticationDescOIDCClientID is the schema descriptor for OIDC_client_id field.
 	authenticationDescOIDCClientID := authenticationFields[5].Descriptor()
 	// authentication.DefaultOIDCClientID holds the default value on creation for the OIDC_client_id field.

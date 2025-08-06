@@ -67,9 +67,9 @@ func UseOIDC(v bool) predicate.Authentication {
 	return predicate.Authentication(sql.FieldEQ(FieldUseOIDC, v))
 }
 
-// OIDCEndpoint applies equality check predicate on the "OIDC_endpoint" field. It's identical to OIDCEndpointEQ.
-func OIDCEndpoint(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldEQ(FieldOIDCEndpoint, v))
+// OIDCServer applies equality check predicate on the "OIDC_server" field. It's identical to OIDCServerEQ.
+func OIDCServer(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldEQ(FieldOIDCServer, v))
 }
 
 // OIDCClientID applies equality check predicate on the "OIDC_client_id" field. It's identical to OIDCClientIDEQ.
@@ -192,79 +192,79 @@ func OIDCProviderNotNil() predicate.Authentication {
 	return predicate.Authentication(sql.FieldNotNull(FieldOIDCProvider))
 }
 
-// OIDCEndpointEQ applies the EQ predicate on the "OIDC_endpoint" field.
-func OIDCEndpointEQ(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldEQ(FieldOIDCEndpoint, v))
+// OIDCServerEQ applies the EQ predicate on the "OIDC_server" field.
+func OIDCServerEQ(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldEQ(FieldOIDCServer, v))
 }
 
-// OIDCEndpointNEQ applies the NEQ predicate on the "OIDC_endpoint" field.
-func OIDCEndpointNEQ(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldNEQ(FieldOIDCEndpoint, v))
+// OIDCServerNEQ applies the NEQ predicate on the "OIDC_server" field.
+func OIDCServerNEQ(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldNEQ(FieldOIDCServer, v))
 }
 
-// OIDCEndpointIn applies the In predicate on the "OIDC_endpoint" field.
-func OIDCEndpointIn(vs ...string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldIn(FieldOIDCEndpoint, vs...))
+// OIDCServerIn applies the In predicate on the "OIDC_server" field.
+func OIDCServerIn(vs ...string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldIn(FieldOIDCServer, vs...))
 }
 
-// OIDCEndpointNotIn applies the NotIn predicate on the "OIDC_endpoint" field.
-func OIDCEndpointNotIn(vs ...string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldNotIn(FieldOIDCEndpoint, vs...))
+// OIDCServerNotIn applies the NotIn predicate on the "OIDC_server" field.
+func OIDCServerNotIn(vs ...string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldNotIn(FieldOIDCServer, vs...))
 }
 
-// OIDCEndpointGT applies the GT predicate on the "OIDC_endpoint" field.
-func OIDCEndpointGT(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldGT(FieldOIDCEndpoint, v))
+// OIDCServerGT applies the GT predicate on the "OIDC_server" field.
+func OIDCServerGT(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldGT(FieldOIDCServer, v))
 }
 
-// OIDCEndpointGTE applies the GTE predicate on the "OIDC_endpoint" field.
-func OIDCEndpointGTE(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldGTE(FieldOIDCEndpoint, v))
+// OIDCServerGTE applies the GTE predicate on the "OIDC_server" field.
+func OIDCServerGTE(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldGTE(FieldOIDCServer, v))
 }
 
-// OIDCEndpointLT applies the LT predicate on the "OIDC_endpoint" field.
-func OIDCEndpointLT(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldLT(FieldOIDCEndpoint, v))
+// OIDCServerLT applies the LT predicate on the "OIDC_server" field.
+func OIDCServerLT(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldLT(FieldOIDCServer, v))
 }
 
-// OIDCEndpointLTE applies the LTE predicate on the "OIDC_endpoint" field.
-func OIDCEndpointLTE(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldLTE(FieldOIDCEndpoint, v))
+// OIDCServerLTE applies the LTE predicate on the "OIDC_server" field.
+func OIDCServerLTE(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldLTE(FieldOIDCServer, v))
 }
 
-// OIDCEndpointContains applies the Contains predicate on the "OIDC_endpoint" field.
-func OIDCEndpointContains(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldContains(FieldOIDCEndpoint, v))
+// OIDCServerContains applies the Contains predicate on the "OIDC_server" field.
+func OIDCServerContains(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldContains(FieldOIDCServer, v))
 }
 
-// OIDCEndpointHasPrefix applies the HasPrefix predicate on the "OIDC_endpoint" field.
-func OIDCEndpointHasPrefix(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldHasPrefix(FieldOIDCEndpoint, v))
+// OIDCServerHasPrefix applies the HasPrefix predicate on the "OIDC_server" field.
+func OIDCServerHasPrefix(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldHasPrefix(FieldOIDCServer, v))
 }
 
-// OIDCEndpointHasSuffix applies the HasSuffix predicate on the "OIDC_endpoint" field.
-func OIDCEndpointHasSuffix(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldHasSuffix(FieldOIDCEndpoint, v))
+// OIDCServerHasSuffix applies the HasSuffix predicate on the "OIDC_server" field.
+func OIDCServerHasSuffix(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldHasSuffix(FieldOIDCServer, v))
 }
 
-// OIDCEndpointIsNil applies the IsNil predicate on the "OIDC_endpoint" field.
-func OIDCEndpointIsNil() predicate.Authentication {
-	return predicate.Authentication(sql.FieldIsNull(FieldOIDCEndpoint))
+// OIDCServerIsNil applies the IsNil predicate on the "OIDC_server" field.
+func OIDCServerIsNil() predicate.Authentication {
+	return predicate.Authentication(sql.FieldIsNull(FieldOIDCServer))
 }
 
-// OIDCEndpointNotNil applies the NotNil predicate on the "OIDC_endpoint" field.
-func OIDCEndpointNotNil() predicate.Authentication {
-	return predicate.Authentication(sql.FieldNotNull(FieldOIDCEndpoint))
+// OIDCServerNotNil applies the NotNil predicate on the "OIDC_server" field.
+func OIDCServerNotNil() predicate.Authentication {
+	return predicate.Authentication(sql.FieldNotNull(FieldOIDCServer))
 }
 
-// OIDCEndpointEqualFold applies the EqualFold predicate on the "OIDC_endpoint" field.
-func OIDCEndpointEqualFold(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldEqualFold(FieldOIDCEndpoint, v))
+// OIDCServerEqualFold applies the EqualFold predicate on the "OIDC_server" field.
+func OIDCServerEqualFold(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldEqualFold(FieldOIDCServer, v))
 }
 
-// OIDCEndpointContainsFold applies the ContainsFold predicate on the "OIDC_endpoint" field.
-func OIDCEndpointContainsFold(v string) predicate.Authentication {
-	return predicate.Authentication(sql.FieldContainsFold(FieldOIDCEndpoint, v))
+// OIDCServerContainsFold applies the ContainsFold predicate on the "OIDC_server" field.
+func OIDCServerContainsFold(v string) predicate.Authentication {
+	return predicate.Authentication(sql.FieldContainsFold(FieldOIDCServer, v))
 }
 
 // OIDCClientIDEQ applies the EQ predicate on the "OIDC_client_id" field.
