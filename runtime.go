@@ -137,10 +137,10 @@ func init() {
 	authenticationDescOIDCProvider := authenticationFields[3].Descriptor()
 	// authentication.DefaultOIDCProvider holds the default value on creation for the OIDC_provider field.
 	authentication.DefaultOIDCProvider = authenticationDescOIDCProvider.Default.(string)
-	// authenticationDescOIDCConfigurationURL is the schema descriptor for OIDC_configuration_url field.
-	authenticationDescOIDCConfigurationURL := authenticationFields[4].Descriptor()
-	// authentication.DefaultOIDCConfigurationURL holds the default value on creation for the OIDC_configuration_url field.
-	authentication.DefaultOIDCConfigurationURL = authenticationDescOIDCConfigurationURL.Default.(string)
+	// authenticationDescOIDCIssuerURL is the schema descriptor for OIDC_issuer_url field.
+	authenticationDescOIDCIssuerURL := authenticationFields[4].Descriptor()
+	// authentication.DefaultOIDCIssuerURL holds the default value on creation for the OIDC_issuer_url field.
+	authentication.DefaultOIDCIssuerURL = authenticationDescOIDCIssuerURL.Default.(string)
 	// authenticationDescOIDCClientID is the schema descriptor for OIDC_client_id field.
 	authenticationDescOIDCClientID := authenticationFields[5].Descriptor()
 	// authentication.DefaultOIDCClientID holds the default value on creation for the OIDC_client_id field.

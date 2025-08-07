@@ -19,8 +19,8 @@ const (
 	FieldUseOIDC = "use_oidc"
 	// FieldOIDCProvider holds the string denoting the oidc_provider field in the database.
 	FieldOIDCProvider = "oidc_provider"
-	// FieldOIDCConfigurationURL holds the string denoting the oidc_configuration_url field in the database.
-	FieldOIDCConfigurationURL = "oidc_configuration_url"
+	// FieldOIDCIssuerURL holds the string denoting the oidc_issuer_url field in the database.
+	FieldOIDCIssuerURL = "oidc_issuer_url"
 	// FieldOIDCClientID holds the string denoting the oidc_client_id field in the database.
 	FieldOIDCClientID = "oidc_client_id"
 	// FieldOIDCRole holds the string denoting the oidc_role field in the database.
@@ -44,7 +44,7 @@ var Columns = []string{
 	FieldAllowRegister,
 	FieldUseOIDC,
 	FieldOIDCProvider,
-	FieldOIDCConfigurationURL,
+	FieldOIDCIssuerURL,
 	FieldOIDCClientID,
 	FieldOIDCRole,
 	FieldOIDCCookieEncriptionKey,
@@ -72,8 +72,8 @@ var (
 	DefaultUseOIDC bool
 	// DefaultOIDCProvider holds the default value on creation for the "OIDC_provider" field.
 	DefaultOIDCProvider string
-	// DefaultOIDCConfigurationURL holds the default value on creation for the "OIDC_configuration_url" field.
-	DefaultOIDCConfigurationURL string
+	// DefaultOIDCIssuerURL holds the default value on creation for the "OIDC_issuer_url" field.
+	DefaultOIDCIssuerURL string
 	// DefaultOIDCClientID holds the default value on creation for the "OIDC_client_id" field.
 	DefaultOIDCClientID string
 	// DefaultOIDCRole holds the default value on creation for the "OIDC_role" field.
@@ -116,9 +116,9 @@ func ByOIDCProvider(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOIDCProvider, opts...).ToFunc()
 }
 
-// ByOIDCConfigurationURL orders the results by the OIDC_configuration_url field.
-func ByOIDCConfigurationURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOIDCConfigurationURL, opts...).ToFunc()
+// ByOIDCIssuerURL orders the results by the OIDC_issuer_url field.
+func ByOIDCIssuerURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOIDCIssuerURL, opts...).ToFunc()
 }
 
 // ByOIDCClientID orders the results by the OIDC_client_id field.

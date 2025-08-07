@@ -113,7 +113,7 @@ var (
 		{Name: "allow_register", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "use_oidc", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "oidc_provider", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "oidc_configuration_url", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_issuer_url", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_client_id", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_role", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "oidc_cookie_encription_key", Type: field.TypeString, Nullable: true, Default: ""},
