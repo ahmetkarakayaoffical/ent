@@ -19,8 +19,8 @@ const (
 	FieldUseOIDC = "use_oidc"
 	// FieldOIDCProvider holds the string denoting the oidc_provider field in the database.
 	FieldOIDCProvider = "oidc_provider"
-	// FieldOIDCServer holds the string denoting the oidc_server field in the database.
-	FieldOIDCServer = "oidc_server"
+	// FieldOIDCConfigurationURL holds the string denoting the oidc_configuration_url field in the database.
+	FieldOIDCConfigurationURL = "oidc_configuration_url"
 	// FieldOIDCClientID holds the string denoting the oidc_client_id field in the database.
 	FieldOIDCClientID = "oidc_client_id"
 	// FieldOIDCRole holds the string denoting the oidc_role field in the database.
@@ -44,7 +44,7 @@ var Columns = []string{
 	FieldAllowRegister,
 	FieldUseOIDC,
 	FieldOIDCProvider,
-	FieldOIDCServer,
+	FieldOIDCConfigurationURL,
 	FieldOIDCClientID,
 	FieldOIDCRole,
 	FieldOIDCCookieEncriptionKey,
@@ -72,8 +72,8 @@ var (
 	DefaultUseOIDC bool
 	// DefaultOIDCProvider holds the default value on creation for the "OIDC_provider" field.
 	DefaultOIDCProvider string
-	// DefaultOIDCServer holds the default value on creation for the "OIDC_server" field.
-	DefaultOIDCServer string
+	// DefaultOIDCConfigurationURL holds the default value on creation for the "OIDC_configuration_url" field.
+	DefaultOIDCConfigurationURL string
 	// DefaultOIDCClientID holds the default value on creation for the "OIDC_client_id" field.
 	DefaultOIDCClientID string
 	// DefaultOIDCRole holds the default value on creation for the "OIDC_role" field.
@@ -116,9 +116,9 @@ func ByOIDCProvider(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOIDCProvider, opts...).ToFunc()
 }
 
-// ByOIDCServer orders the results by the OIDC_server field.
-func ByOIDCServer(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOIDCServer, opts...).ToFunc()
+// ByOIDCConfigurationURL orders the results by the OIDC_configuration_url field.
+func ByOIDCConfigurationURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOIDCConfigurationURL, opts...).ToFunc()
 }
 
 // ByOIDCClientID orders the results by the OIDC_client_id field.

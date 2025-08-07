@@ -24,8 +24,8 @@ type Authentication struct {
 	UseOIDC bool `json:"use_OIDC,omitempty"`
 	// OIDCProvider holds the value of the "OIDC_provider" field.
 	OIDCProvider string `json:"OIDC_provider,omitempty"`
-	// OIDCServer holds the value of the "OIDC_server" field.
-	OIDCServer string `json:"OIDC_server,omitempty"`
+	// OIDCConfigurationURL holds the value of the "OIDC_configuration_url" field.
+	OIDCConfigurationURL string `json:"OIDC_configuration_url,omitempty"`
 	// OIDCClientID holds the value of the "OIDC_client_id" field.
 	OIDCClientID string `json:"OIDC_client_id,omitempty"`
 	// OIDCRole holds the value of the "OIDC_role" field.
@@ -50,7 +50,7 @@ func (*Authentication) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case authentication.FieldID:
 			values[i] = new(sql.NullInt64)
-		case authentication.FieldOIDCProvider, authentication.FieldOIDCServer, authentication.FieldOIDCClientID, authentication.FieldOIDCRole, authentication.FieldOIDCCookieEncriptionKey, authentication.FieldOIDCKeycloakPublicKey:
+		case authentication.FieldOIDCProvider, authentication.FieldOIDCConfigurationURL, authentication.FieldOIDCClientID, authentication.FieldOIDCRole, authentication.FieldOIDCCookieEncriptionKey, authentication.FieldOIDCKeycloakPublicKey:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -97,11 +97,11 @@ func (a *Authentication) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.OIDCProvider = value.String
 			}
-		case authentication.FieldOIDCServer:
+		case authentication.FieldOIDCConfigurationURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field OIDC_server", values[i])
+				return fmt.Errorf("unexpected type %T for field OIDC_configuration_url", values[i])
 			} else if value.Valid {
-				a.OIDCServer = value.String
+				a.OIDCConfigurationURL = value.String
 			}
 		case authentication.FieldOIDCClientID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -187,8 +187,8 @@ func (a *Authentication) String() string {
 	builder.WriteString("OIDC_provider=")
 	builder.WriteString(a.OIDCProvider)
 	builder.WriteString(", ")
-	builder.WriteString("OIDC_server=")
-	builder.WriteString(a.OIDCServer)
+	builder.WriteString("OIDC_configuration_url=")
+	builder.WriteString(a.OIDCConfigurationURL)
 	builder.WriteString(", ")
 	builder.WriteString("OIDC_client_id=")
 	builder.WriteString(a.OIDCClientID)

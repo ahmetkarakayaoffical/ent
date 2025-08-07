@@ -108,23 +108,23 @@ func (au *AuthenticationUpdate) ClearOIDCProvider() *AuthenticationUpdate {
 	return au
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (au *AuthenticationUpdate) SetOIDCServer(s string) *AuthenticationUpdate {
-	au.mutation.SetOIDCServer(s)
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (au *AuthenticationUpdate) SetOIDCConfigurationURL(s string) *AuthenticationUpdate {
+	au.mutation.SetOIDCConfigurationURL(s)
 	return au
 }
 
-// SetNillableOIDCServer sets the "OIDC_server" field if the given value is not nil.
-func (au *AuthenticationUpdate) SetNillableOIDCServer(s *string) *AuthenticationUpdate {
+// SetNillableOIDCConfigurationURL sets the "OIDC_configuration_url" field if the given value is not nil.
+func (au *AuthenticationUpdate) SetNillableOIDCConfigurationURL(s *string) *AuthenticationUpdate {
 	if s != nil {
-		au.SetOIDCServer(*s)
+		au.SetOIDCConfigurationURL(*s)
 	}
 	return au
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (au *AuthenticationUpdate) ClearOIDCServer() *AuthenticationUpdate {
-	au.mutation.ClearOIDCServer()
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (au *AuthenticationUpdate) ClearOIDCConfigurationURL() *AuthenticationUpdate {
+	au.mutation.ClearOIDCConfigurationURL()
 	return au
 }
 
@@ -319,11 +319,11 @@ func (au *AuthenticationUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if au.mutation.OIDCProviderCleared() {
 		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeString)
 	}
-	if value, ok := au.mutation.OIDCServer(); ok {
-		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)
+	if value, ok := au.mutation.OIDCConfigurationURL(); ok {
+		_spec.SetField(authentication.FieldOIDCConfigurationURL, field.TypeString, value)
 	}
-	if au.mutation.OIDCServerCleared() {
-		_spec.ClearField(authentication.FieldOIDCServer, field.TypeString)
+	if au.mutation.OIDCConfigurationURLCleared() {
+		_spec.ClearField(authentication.FieldOIDCConfigurationURL, field.TypeString)
 	}
 	if value, ok := au.mutation.OIDCClientID(); ok {
 		_spec.SetField(authentication.FieldOIDCClientID, field.TypeString, value)
@@ -463,23 +463,23 @@ func (auo *AuthenticationUpdateOne) ClearOIDCProvider() *AuthenticationUpdateOne
 	return auo
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (auo *AuthenticationUpdateOne) SetOIDCServer(s string) *AuthenticationUpdateOne {
-	auo.mutation.SetOIDCServer(s)
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (auo *AuthenticationUpdateOne) SetOIDCConfigurationURL(s string) *AuthenticationUpdateOne {
+	auo.mutation.SetOIDCConfigurationURL(s)
 	return auo
 }
 
-// SetNillableOIDCServer sets the "OIDC_server" field if the given value is not nil.
-func (auo *AuthenticationUpdateOne) SetNillableOIDCServer(s *string) *AuthenticationUpdateOne {
+// SetNillableOIDCConfigurationURL sets the "OIDC_configuration_url" field if the given value is not nil.
+func (auo *AuthenticationUpdateOne) SetNillableOIDCConfigurationURL(s *string) *AuthenticationUpdateOne {
 	if s != nil {
-		auo.SetOIDCServer(*s)
+		auo.SetOIDCConfigurationURL(*s)
 	}
 	return auo
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (auo *AuthenticationUpdateOne) ClearOIDCServer() *AuthenticationUpdateOne {
-	auo.mutation.ClearOIDCServer()
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (auo *AuthenticationUpdateOne) ClearOIDCConfigurationURL() *AuthenticationUpdateOne {
+	auo.mutation.ClearOIDCConfigurationURL()
 	return auo
 }
 
@@ -704,11 +704,11 @@ func (auo *AuthenticationUpdateOne) sqlSave(ctx context.Context) (_node *Authent
 	if auo.mutation.OIDCProviderCleared() {
 		_spec.ClearField(authentication.FieldOIDCProvider, field.TypeString)
 	}
-	if value, ok := auo.mutation.OIDCServer(); ok {
-		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)
+	if value, ok := auo.mutation.OIDCConfigurationURL(); ok {
+		_spec.SetField(authentication.FieldOIDCConfigurationURL, field.TypeString, value)
 	}
-	if auo.mutation.OIDCServerCleared() {
-		_spec.ClearField(authentication.FieldOIDCServer, field.TypeString)
+	if auo.mutation.OIDCConfigurationURLCleared() {
+		_spec.ClearField(authentication.FieldOIDCConfigurationURL, field.TypeString)
 	}
 	if value, ok := auo.mutation.OIDCClientID(); ok {
 		_spec.SetField(authentication.FieldOIDCClientID, field.TypeString, value)

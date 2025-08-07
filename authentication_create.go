@@ -77,16 +77,16 @@ func (ac *AuthenticationCreate) SetNillableOIDCProvider(s *string) *Authenticati
 	return ac
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (ac *AuthenticationCreate) SetOIDCServer(s string) *AuthenticationCreate {
-	ac.mutation.SetOIDCServer(s)
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (ac *AuthenticationCreate) SetOIDCConfigurationURL(s string) *AuthenticationCreate {
+	ac.mutation.SetOIDCConfigurationURL(s)
 	return ac
 }
 
-// SetNillableOIDCServer sets the "OIDC_server" field if the given value is not nil.
-func (ac *AuthenticationCreate) SetNillableOIDCServer(s *string) *AuthenticationCreate {
+// SetNillableOIDCConfigurationURL sets the "OIDC_configuration_url" field if the given value is not nil.
+func (ac *AuthenticationCreate) SetNillableOIDCConfigurationURL(s *string) *AuthenticationCreate {
 	if s != nil {
-		ac.SetOIDCServer(*s)
+		ac.SetOIDCConfigurationURL(*s)
 	}
 	return ac
 }
@@ -226,9 +226,9 @@ func (ac *AuthenticationCreate) defaults() {
 		v := authentication.DefaultOIDCProvider
 		ac.mutation.SetOIDCProvider(v)
 	}
-	if _, ok := ac.mutation.OIDCServer(); !ok {
-		v := authentication.DefaultOIDCServer
-		ac.mutation.SetOIDCServer(v)
+	if _, ok := ac.mutation.OIDCConfigurationURL(); !ok {
+		v := authentication.DefaultOIDCConfigurationURL
+		ac.mutation.SetOIDCConfigurationURL(v)
 	}
 	if _, ok := ac.mutation.OIDCClientID(); !ok {
 		v := authentication.DefaultOIDCClientID
@@ -301,9 +301,9 @@ func (ac *AuthenticationCreate) createSpec() (*Authentication, *sqlgraph.CreateS
 		_spec.SetField(authentication.FieldOIDCProvider, field.TypeString, value)
 		_node.OIDCProvider = value
 	}
-	if value, ok := ac.mutation.OIDCServer(); ok {
-		_spec.SetField(authentication.FieldOIDCServer, field.TypeString, value)
-		_node.OIDCServer = value
+	if value, ok := ac.mutation.OIDCConfigurationURL(); ok {
+		_spec.SetField(authentication.FieldOIDCConfigurationURL, field.TypeString, value)
+		_node.OIDCConfigurationURL = value
 	}
 	if value, ok := ac.mutation.OIDCClientID(); ok {
 		_spec.SetField(authentication.FieldOIDCClientID, field.TypeString, value)
@@ -453,21 +453,21 @@ func (u *AuthenticationUpsert) ClearOIDCProvider() *AuthenticationUpsert {
 	return u
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (u *AuthenticationUpsert) SetOIDCServer(v string) *AuthenticationUpsert {
-	u.Set(authentication.FieldOIDCServer, v)
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsert) SetOIDCConfigurationURL(v string) *AuthenticationUpsert {
+	u.Set(authentication.FieldOIDCConfigurationURL, v)
 	return u
 }
 
-// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
-func (u *AuthenticationUpsert) UpdateOIDCServer() *AuthenticationUpsert {
-	u.SetExcluded(authentication.FieldOIDCServer)
+// UpdateOIDCConfigurationURL sets the "OIDC_configuration_url" field to the value that was provided on create.
+func (u *AuthenticationUpsert) UpdateOIDCConfigurationURL() *AuthenticationUpsert {
+	u.SetExcluded(authentication.FieldOIDCConfigurationURL)
 	return u
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (u *AuthenticationUpsert) ClearOIDCServer() *AuthenticationUpsert {
-	u.SetNull(authentication.FieldOIDCServer)
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsert) ClearOIDCConfigurationURL() *AuthenticationUpsert {
+	u.SetNull(authentication.FieldOIDCConfigurationURL)
 	return u
 }
 
@@ -703,24 +703,24 @@ func (u *AuthenticationUpsertOne) ClearOIDCProvider() *AuthenticationUpsertOne {
 	})
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (u *AuthenticationUpsertOne) SetOIDCServer(v string) *AuthenticationUpsertOne {
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsertOne) SetOIDCConfigurationURL(v string) *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.SetOIDCServer(v)
+		s.SetOIDCConfigurationURL(v)
 	})
 }
 
-// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
-func (u *AuthenticationUpsertOne) UpdateOIDCServer() *AuthenticationUpsertOne {
+// UpdateOIDCConfigurationURL sets the "OIDC_configuration_url" field to the value that was provided on create.
+func (u *AuthenticationUpsertOne) UpdateOIDCConfigurationURL() *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.UpdateOIDCServer()
+		s.UpdateOIDCConfigurationURL()
 	})
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (u *AuthenticationUpsertOne) ClearOIDCServer() *AuthenticationUpsertOne {
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsertOne) ClearOIDCConfigurationURL() *AuthenticationUpsertOne {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.ClearOIDCServer()
+		s.ClearOIDCConfigurationURL()
 	})
 }
 
@@ -1138,24 +1138,24 @@ func (u *AuthenticationUpsertBulk) ClearOIDCProvider() *AuthenticationUpsertBulk
 	})
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (u *AuthenticationUpsertBulk) SetOIDCServer(v string) *AuthenticationUpsertBulk {
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsertBulk) SetOIDCConfigurationURL(v string) *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.SetOIDCServer(v)
+		s.SetOIDCConfigurationURL(v)
 	})
 }
 
-// UpdateOIDCServer sets the "OIDC_server" field to the value that was provided on create.
-func (u *AuthenticationUpsertBulk) UpdateOIDCServer() *AuthenticationUpsertBulk {
+// UpdateOIDCConfigurationURL sets the "OIDC_configuration_url" field to the value that was provided on create.
+func (u *AuthenticationUpsertBulk) UpdateOIDCConfigurationURL() *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.UpdateOIDCServer()
+		s.UpdateOIDCConfigurationURL()
 	})
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (u *AuthenticationUpsertBulk) ClearOIDCServer() *AuthenticationUpsertBulk {
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (u *AuthenticationUpsertBulk) ClearOIDCConfigurationURL() *AuthenticationUpsertBulk {
 	return u.Update(func(s *AuthenticationUpsert) {
-		s.ClearOIDCServer()
+		s.ClearOIDCConfigurationURL()
 	})
 }
 

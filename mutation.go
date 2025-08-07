@@ -4839,7 +4839,7 @@ type AuthenticationMutation struct {
 	allow_register              *bool
 	use_OIDC                    *bool
 	_OIDC_provider              *string
-	_OIDC_server                *string
+	_OIDC_configuration_url     *string
 	_OIDC_client_id             *string
 	_OIDC_role                  *string
 	_OIDC_cookie_encription_key *string
@@ -5146,53 +5146,53 @@ func (m *AuthenticationMutation) ResetOIDCProvider() {
 	delete(m.clearedFields, authentication.FieldOIDCProvider)
 }
 
-// SetOIDCServer sets the "OIDC_server" field.
-func (m *AuthenticationMutation) SetOIDCServer(s string) {
-	m._OIDC_server = &s
+// SetOIDCConfigurationURL sets the "OIDC_configuration_url" field.
+func (m *AuthenticationMutation) SetOIDCConfigurationURL(s string) {
+	m._OIDC_configuration_url = &s
 }
 
-// OIDCServer returns the value of the "OIDC_server" field in the mutation.
-func (m *AuthenticationMutation) OIDCServer() (r string, exists bool) {
-	v := m._OIDC_server
+// OIDCConfigurationURL returns the value of the "OIDC_configuration_url" field in the mutation.
+func (m *AuthenticationMutation) OIDCConfigurationURL() (r string, exists bool) {
+	v := m._OIDC_configuration_url
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldOIDCServer returns the old "OIDC_server" field's value of the Authentication entity.
+// OldOIDCConfigurationURL returns the old "OIDC_configuration_url" field's value of the Authentication entity.
 // If the Authentication object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AuthenticationMutation) OldOIDCServer(ctx context.Context) (v string, err error) {
+func (m *AuthenticationMutation) OldOIDCConfigurationURL(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOIDCServer is only allowed on UpdateOne operations")
+		return v, errors.New("OldOIDCConfigurationURL is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOIDCServer requires an ID field in the mutation")
+		return v, errors.New("OldOIDCConfigurationURL requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOIDCServer: %w", err)
+		return v, fmt.Errorf("querying old value for OldOIDCConfigurationURL: %w", err)
 	}
-	return oldValue.OIDCServer, nil
+	return oldValue.OIDCConfigurationURL, nil
 }
 
-// ClearOIDCServer clears the value of the "OIDC_server" field.
-func (m *AuthenticationMutation) ClearOIDCServer() {
-	m._OIDC_server = nil
-	m.clearedFields[authentication.FieldOIDCServer] = struct{}{}
+// ClearOIDCConfigurationURL clears the value of the "OIDC_configuration_url" field.
+func (m *AuthenticationMutation) ClearOIDCConfigurationURL() {
+	m._OIDC_configuration_url = nil
+	m.clearedFields[authentication.FieldOIDCConfigurationURL] = struct{}{}
 }
 
-// OIDCServerCleared returns if the "OIDC_server" field was cleared in this mutation.
-func (m *AuthenticationMutation) OIDCServerCleared() bool {
-	_, ok := m.clearedFields[authentication.FieldOIDCServer]
+// OIDCConfigurationURLCleared returns if the "OIDC_configuration_url" field was cleared in this mutation.
+func (m *AuthenticationMutation) OIDCConfigurationURLCleared() bool {
+	_, ok := m.clearedFields[authentication.FieldOIDCConfigurationURL]
 	return ok
 }
 
-// ResetOIDCServer resets all changes to the "OIDC_server" field.
-func (m *AuthenticationMutation) ResetOIDCServer() {
-	m._OIDC_server = nil
-	delete(m.clearedFields, authentication.FieldOIDCServer)
+// ResetOIDCConfigurationURL resets all changes to the "OIDC_configuration_url" field.
+func (m *AuthenticationMutation) ResetOIDCConfigurationURL() {
+	m._OIDC_configuration_url = nil
+	delete(m.clearedFields, authentication.FieldOIDCConfigurationURL)
 }
 
 // SetOIDCClientID sets the "OIDC_client_id" field.
@@ -5536,8 +5536,8 @@ func (m *AuthenticationMutation) Fields() []string {
 	if m._OIDC_provider != nil {
 		fields = append(fields, authentication.FieldOIDCProvider)
 	}
-	if m._OIDC_server != nil {
-		fields = append(fields, authentication.FieldOIDCServer)
+	if m._OIDC_configuration_url != nil {
+		fields = append(fields, authentication.FieldOIDCConfigurationURL)
 	}
 	if m._OIDC_client_id != nil {
 		fields = append(fields, authentication.FieldOIDCClientID)
@@ -5573,8 +5573,8 @@ func (m *AuthenticationMutation) Field(name string) (ent.Value, bool) {
 		return m.UseOIDC()
 	case authentication.FieldOIDCProvider:
 		return m.OIDCProvider()
-	case authentication.FieldOIDCServer:
-		return m.OIDCServer()
+	case authentication.FieldOIDCConfigurationURL:
+		return m.OIDCConfigurationURL()
 	case authentication.FieldOIDCClientID:
 		return m.OIDCClientID()
 	case authentication.FieldOIDCRole:
@@ -5604,8 +5604,8 @@ func (m *AuthenticationMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldUseOIDC(ctx)
 	case authentication.FieldOIDCProvider:
 		return m.OldOIDCProvider(ctx)
-	case authentication.FieldOIDCServer:
-		return m.OldOIDCServer(ctx)
+	case authentication.FieldOIDCConfigurationURL:
+		return m.OldOIDCConfigurationURL(ctx)
 	case authentication.FieldOIDCClientID:
 		return m.OldOIDCClientID(ctx)
 	case authentication.FieldOIDCRole:
@@ -5655,12 +5655,12 @@ func (m *AuthenticationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOIDCProvider(v)
 		return nil
-	case authentication.FieldOIDCServer:
+	case authentication.FieldOIDCConfigurationURL:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetOIDCServer(v)
+		m.SetOIDCConfigurationURL(v)
 		return nil
 	case authentication.FieldOIDCClientID:
 		v, ok := value.(string)
@@ -5746,8 +5746,8 @@ func (m *AuthenticationMutation) ClearedFields() []string {
 	if m.FieldCleared(authentication.FieldOIDCProvider) {
 		fields = append(fields, authentication.FieldOIDCProvider)
 	}
-	if m.FieldCleared(authentication.FieldOIDCServer) {
-		fields = append(fields, authentication.FieldOIDCServer)
+	if m.FieldCleared(authentication.FieldOIDCConfigurationURL) {
+		fields = append(fields, authentication.FieldOIDCConfigurationURL)
 	}
 	if m.FieldCleared(authentication.FieldOIDCClientID) {
 		fields = append(fields, authentication.FieldOIDCClientID)
@@ -5793,8 +5793,8 @@ func (m *AuthenticationMutation) ClearField(name string) error {
 	case authentication.FieldOIDCProvider:
 		m.ClearOIDCProvider()
 		return nil
-	case authentication.FieldOIDCServer:
-		m.ClearOIDCServer()
+	case authentication.FieldOIDCConfigurationURL:
+		m.ClearOIDCConfigurationURL()
 		return nil
 	case authentication.FieldOIDCClientID:
 		m.ClearOIDCClientID()
@@ -5834,8 +5834,8 @@ func (m *AuthenticationMutation) ResetField(name string) error {
 	case authentication.FieldOIDCProvider:
 		m.ResetOIDCProvider()
 		return nil
-	case authentication.FieldOIDCServer:
-		m.ResetOIDCServer()
+	case authentication.FieldOIDCConfigurationURL:
+		m.ResetOIDCConfigurationURL()
 		return nil
 	case authentication.FieldOIDCClientID:
 		m.ResetOIDCClientID()
