@@ -30,7 +30,7 @@ func (User) Fields() []ent.Field {
 		field.Bool("openid").Optional().Default(false),
 		field.Time("created").Optional().Default(time.Now),
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
-		field.Time("refresh_token").Optional().Default(""),
+		field.String("refresh_token").Optional().Default(""),
 	}
 }
 

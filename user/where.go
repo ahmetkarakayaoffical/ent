@@ -121,7 +121,7 @@ func Modified(v time.Time) predicate.User {
 }
 
 // RefreshToken applies equality check predicate on the "refresh_token" field. It's identical to RefreshTokenEQ.
-func RefreshToken(v time.Time) predicate.User {
+func RefreshToken(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldRefreshToken, v))
 }
 
@@ -736,43 +736,58 @@ func ModifiedNotNil() predicate.User {
 }
 
 // RefreshTokenEQ applies the EQ predicate on the "refresh_token" field.
-func RefreshTokenEQ(v time.Time) predicate.User {
+func RefreshTokenEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldRefreshToken, v))
 }
 
 // RefreshTokenNEQ applies the NEQ predicate on the "refresh_token" field.
-func RefreshTokenNEQ(v time.Time) predicate.User {
+func RefreshTokenNEQ(v string) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldRefreshToken, v))
 }
 
 // RefreshTokenIn applies the In predicate on the "refresh_token" field.
-func RefreshTokenIn(vs ...time.Time) predicate.User {
+func RefreshTokenIn(vs ...string) predicate.User {
 	return predicate.User(sql.FieldIn(FieldRefreshToken, vs...))
 }
 
 // RefreshTokenNotIn applies the NotIn predicate on the "refresh_token" field.
-func RefreshTokenNotIn(vs ...time.Time) predicate.User {
+func RefreshTokenNotIn(vs ...string) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldRefreshToken, vs...))
 }
 
 // RefreshTokenGT applies the GT predicate on the "refresh_token" field.
-func RefreshTokenGT(v time.Time) predicate.User {
+func RefreshTokenGT(v string) predicate.User {
 	return predicate.User(sql.FieldGT(FieldRefreshToken, v))
 }
 
 // RefreshTokenGTE applies the GTE predicate on the "refresh_token" field.
-func RefreshTokenGTE(v time.Time) predicate.User {
+func RefreshTokenGTE(v string) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldRefreshToken, v))
 }
 
 // RefreshTokenLT applies the LT predicate on the "refresh_token" field.
-func RefreshTokenLT(v time.Time) predicate.User {
+func RefreshTokenLT(v string) predicate.User {
 	return predicate.User(sql.FieldLT(FieldRefreshToken, v))
 }
 
 // RefreshTokenLTE applies the LTE predicate on the "refresh_token" field.
-func RefreshTokenLTE(v time.Time) predicate.User {
+func RefreshTokenLTE(v string) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldRefreshToken, v))
+}
+
+// RefreshTokenContains applies the Contains predicate on the "refresh_token" field.
+func RefreshTokenContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldRefreshToken, v))
+}
+
+// RefreshTokenHasPrefix applies the HasPrefix predicate on the "refresh_token" field.
+func RefreshTokenHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldRefreshToken, v))
+}
+
+// RefreshTokenHasSuffix applies the HasSuffix predicate on the "refresh_token" field.
+func RefreshTokenHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldRefreshToken, v))
 }
 
 // RefreshTokenIsNil applies the IsNil predicate on the "refresh_token" field.
@@ -783,6 +798,16 @@ func RefreshTokenIsNil() predicate.User {
 // RefreshTokenNotNil applies the NotNil predicate on the "refresh_token" field.
 func RefreshTokenNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldRefreshToken))
+}
+
+// RefreshTokenEqualFold applies the EqualFold predicate on the "refresh_token" field.
+func RefreshTokenEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldRefreshToken, v))
+}
+
+// RefreshTokenContainsFold applies the ContainsFold predicate on the "refresh_token" field.
+func RefreshTokenContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldRefreshToken, v))
 }
 
 // HasSessions applies the HasEdge predicate on the "sessions" edge.

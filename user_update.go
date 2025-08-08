@@ -225,15 +225,15 @@ func (uu *UserUpdate) ClearModified() *UserUpdate {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (uu *UserUpdate) SetRefreshToken(t time.Time) *UserUpdate {
-	uu.mutation.SetRefreshToken(t)
+func (uu *UserUpdate) SetRefreshToken(s string) *UserUpdate {
+	uu.mutation.SetRefreshToken(s)
 	return uu
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableRefreshToken(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetRefreshToken(*t)
+func (uu *UserUpdate) SetNillableRefreshToken(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetRefreshToken(*s)
 	}
 	return uu
 }
@@ -394,10 +394,10 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
 	}
 	if value, ok := uu.mutation.RefreshToken(); ok {
-		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 	}
 	if uu.mutation.RefreshTokenCleared() {
-		_spec.ClearField(user.FieldRefreshToken, field.TypeTime)
+		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
 	}
 	if uu.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -661,15 +661,15 @@ func (uuo *UserUpdateOne) ClearModified() *UserUpdateOne {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (uuo *UserUpdateOne) SetRefreshToken(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetRefreshToken(t)
+func (uuo *UserUpdateOne) SetRefreshToken(s string) *UserUpdateOne {
+	uuo.mutation.SetRefreshToken(s)
 	return uuo
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableRefreshToken(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetRefreshToken(*t)
+func (uuo *UserUpdateOne) SetNillableRefreshToken(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetRefreshToken(*s)
 	}
 	return uuo
 }
@@ -860,10 +860,10 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.ClearField(user.FieldModified, field.TypeTime)
 	}
 	if value, ok := uuo.mutation.RefreshToken(); ok {
-		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 	}
 	if uuo.mutation.RefreshTokenCleared() {
-		_spec.ClearField(user.FieldRefreshToken, field.TypeTime)
+		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
 	}
 	if uuo.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

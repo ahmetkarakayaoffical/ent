@@ -33116,7 +33116,7 @@ type UserMutation struct {
 	openid              *bool
 	created             *time.Time
 	modified            *time.Time
-	refresh_token       *time.Time
+	refresh_token       *string
 	clearedFields       map[string]struct{}
 	sessions            map[string]struct{}
 	removedsessions     map[string]struct{}
@@ -33731,12 +33731,12 @@ func (m *UserMutation) ResetModified() {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (m *UserMutation) SetRefreshToken(t time.Time) {
-	m.refresh_token = &t
+func (m *UserMutation) SetRefreshToken(s string) {
+	m.refresh_token = &s
 }
 
 // RefreshToken returns the value of the "refresh_token" field in the mutation.
-func (m *UserMutation) RefreshToken() (r time.Time, exists bool) {
+func (m *UserMutation) RefreshToken() (r string, exists bool) {
 	v := m.refresh_token
 	if v == nil {
 		return
@@ -33747,7 +33747,7 @@ func (m *UserMutation) RefreshToken() (r time.Time, exists bool) {
 // OldRefreshToken returns the old "refresh_token" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldRefreshToken(ctx context.Context) (v time.Time, err error) {
+func (m *UserMutation) OldRefreshToken(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRefreshToken is only allowed on UpdateOne operations")
 	}
@@ -34056,7 +34056,7 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetModified(v)
 		return nil
 	case user.FieldRefreshToken:
-		v, ok := value.(time.Time)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

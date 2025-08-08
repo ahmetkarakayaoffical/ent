@@ -171,15 +171,15 @@ func (uc *UserCreate) SetNillableModified(t *time.Time) *UserCreate {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (uc *UserCreate) SetRefreshToken(t time.Time) *UserCreate {
-	uc.mutation.SetRefreshToken(t)
+func (uc *UserCreate) SetRefreshToken(s string) *UserCreate {
+	uc.mutation.SetRefreshToken(s)
 	return uc
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (uc *UserCreate) SetNillableRefreshToken(t *time.Time) *UserCreate {
-	if t != nil {
-		uc.SetRefreshToken(*t)
+func (uc *UserCreate) SetNillableRefreshToken(s *string) *UserCreate {
+	if s != nil {
+		uc.SetRefreshToken(*s)
 	}
 	return uc
 }
@@ -363,7 +363,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.Modified = value
 	}
 	if value, ok := uc.mutation.RefreshToken(); ok {
-		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 		_node.RefreshToken = value
 	}
 	if nodes := uc.mutation.SessionsIDs(); len(nodes) > 0 {
@@ -615,7 +615,7 @@ func (u *UserUpsert) ClearModified() *UserUpsert {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (u *UserUpsert) SetRefreshToken(v time.Time) *UserUpsert {
+func (u *UserUpsert) SetRefreshToken(v string) *UserUpsert {
 	u.Set(user.FieldRefreshToken, v)
 	return u
 }
@@ -891,7 +891,7 @@ func (u *UserUpsertOne) ClearModified() *UserUpsertOne {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (u *UserUpsertOne) SetRefreshToken(v time.Time) *UserUpsertOne {
+func (u *UserUpsertOne) SetRefreshToken(v string) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.SetRefreshToken(v)
 	})
@@ -1337,7 +1337,7 @@ func (u *UserUpsertBulk) ClearModified() *UserUpsertBulk {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (u *UserUpsertBulk) SetRefreshToken(v time.Time) *UserUpsertBulk {
+func (u *UserUpsertBulk) SetRefreshToken(v string) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.SetRefreshToken(v)
 	})

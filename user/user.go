@@ -94,7 +94,7 @@ var (
 	// UpdateDefaultModified holds the default value on update for the "modified" field.
 	UpdateDefaultModified func() time.Time
 	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
-	DefaultRefreshToken time.Time
+	DefaultRefreshToken string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )

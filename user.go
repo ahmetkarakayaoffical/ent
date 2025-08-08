@@ -40,7 +40,7 @@ type User struct {
 	// Modified holds the value of the "modified" field.
 	Modified time.Time `json:"modified,omitempty"`
 	// RefreshToken holds the value of the "refresh_token" field.
-	RefreshToken time.Time `json:"refresh_token,omitempty"`
+	RefreshToken string `json:"refresh_token,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges        UserEdges `json:"edges"`
@@ -72,9 +72,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldEmailVerified, user.FieldOpenid:
 			values[i] = new(sql.NullBool)
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword:
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword, user.FieldRefreshToken:
 			values[i] = new(sql.NullString)
-		case user.FieldExpiry, user.FieldCreated, user.FieldModified, user.FieldRefreshToken:
+		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -164,10 +164,10 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.Modified = value.Time
 			}
 		case user.FieldRefreshToken:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
 			} else if value.Valid {
-				u.RefreshToken = value.Time
+				u.RefreshToken = value.String
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -244,7 +244,7 @@ func (u *User) String() string {
 	builder.WriteString(u.Modified.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("refresh_token=")
-	builder.WriteString(u.RefreshToken.Format(time.ANSIC))
+	builder.WriteString(u.RefreshToken)
 	builder.WriteByte(')')
 	return builder.String()
 }
