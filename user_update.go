@@ -224,6 +224,26 @@ func (uu *UserUpdate) ClearModified() *UserUpdate {
 	return uu
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (uu *UserUpdate) SetRefreshToken(t time.Time) *UserUpdate {
+	uu.mutation.SetRefreshToken(t)
+	return uu
+}
+
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableRefreshToken(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetRefreshToken(*t)
+	}
+	return uu
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (uu *UserUpdate) ClearRefreshToken() *UserUpdate {
+	uu.mutation.ClearRefreshToken()
+	return uu
+}
+
 // AddSessionIDs adds the "sessions" edge to the Sessions entity by IDs.
 func (uu *UserUpdate) AddSessionIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddSessionIDs(ids...)
@@ -372,6 +392,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
+	}
+	if value, ok := uu.mutation.RefreshToken(); ok {
+		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+	}
+	if uu.mutation.RefreshTokenCleared() {
+		_spec.ClearField(user.FieldRefreshToken, field.TypeTime)
 	}
 	if uu.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -634,6 +660,26 @@ func (uuo *UserUpdateOne) ClearModified() *UserUpdateOne {
 	return uuo
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (uuo *UserUpdateOne) SetRefreshToken(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetRefreshToken(t)
+	return uuo
+}
+
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableRefreshToken(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetRefreshToken(*t)
+	}
+	return uuo
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (uuo *UserUpdateOne) ClearRefreshToken() *UserUpdateOne {
+	uuo.mutation.ClearRefreshToken()
+	return uuo
+}
+
 // AddSessionIDs adds the "sessions" edge to the Sessions entity by IDs.
 func (uuo *UserUpdateOne) AddSessionIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddSessionIDs(ids...)
@@ -812,6 +858,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
+	}
+	if value, ok := uuo.mutation.RefreshToken(); ok {
+		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+	}
+	if uuo.mutation.RefreshTokenCleared() {
+		_spec.ClearField(user.FieldRefreshToken, field.TypeTime)
 	}
 	if uuo.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

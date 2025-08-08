@@ -33116,6 +33116,7 @@ type UserMutation struct {
 	openid              *bool
 	created             *time.Time
 	modified            *time.Time
+	refresh_token       *time.Time
 	clearedFields       map[string]struct{}
 	sessions            map[string]struct{}
 	removedsessions     map[string]struct{}
@@ -33729,6 +33730,55 @@ func (m *UserMutation) ResetModified() {
 	delete(m.clearedFields, user.FieldModified)
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (m *UserMutation) SetRefreshToken(t time.Time) {
+	m.refresh_token = &t
+}
+
+// RefreshToken returns the value of the "refresh_token" field in the mutation.
+func (m *UserMutation) RefreshToken() (r time.Time, exists bool) {
+	v := m.refresh_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefreshToken returns the old "refresh_token" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldRefreshToken(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefreshToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefreshToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefreshToken: %w", err)
+	}
+	return oldValue.RefreshToken, nil
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (m *UserMutation) ClearRefreshToken() {
+	m.refresh_token = nil
+	m.clearedFields[user.FieldRefreshToken] = struct{}{}
+}
+
+// RefreshTokenCleared returns if the "refresh_token" field was cleared in this mutation.
+func (m *UserMutation) RefreshTokenCleared() bool {
+	_, ok := m.clearedFields[user.FieldRefreshToken]
+	return ok
+}
+
+// ResetRefreshToken resets all changes to the "refresh_token" field.
+func (m *UserMutation) ResetRefreshToken() {
+	m.refresh_token = nil
+	delete(m.clearedFields, user.FieldRefreshToken)
+}
+
 // AddSessionIDs adds the "sessions" edge to the Sessions entity by ids.
 func (m *UserMutation) AddSessionIDs(ids ...string) {
 	if m.sessions == nil {
@@ -33817,7 +33867,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -33851,6 +33901,9 @@ func (m *UserMutation) Fields() []string {
 	if m.modified != nil {
 		fields = append(fields, user.FieldModified)
 	}
+	if m.refresh_token != nil {
+		fields = append(fields, user.FieldRefreshToken)
+	}
 	return fields
 }
 
@@ -33881,6 +33934,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Created()
 	case user.FieldModified:
 		return m.Modified()
+	case user.FieldRefreshToken:
+		return m.RefreshToken()
 	}
 	return nil, false
 }
@@ -33912,6 +33967,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreated(ctx)
 	case user.FieldModified:
 		return m.OldModified(ctx)
+	case user.FieldRefreshToken:
+		return m.OldRefreshToken(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -33998,6 +34055,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetModified(v)
 		return nil
+	case user.FieldRefreshToken:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefreshToken(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
 }
@@ -34052,6 +34116,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldModified) {
 		fields = append(fields, user.FieldModified)
 	}
+	if m.FieldCleared(user.FieldRefreshToken) {
+		fields = append(fields, user.FieldRefreshToken)
+	}
 	return fields
 }
 
@@ -34089,6 +34156,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldModified:
 		m.ClearModified()
+		return nil
+	case user.FieldRefreshToken:
+		m.ClearRefreshToken()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -34130,6 +34200,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldModified:
 		m.ResetModified()
+		return nil
+	case user.FieldRefreshToken:
+		m.ResetRefreshToken()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

@@ -120,6 +120,11 @@ func Modified(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldModified, v))
 }
 
+// RefreshToken applies equality check predicate on the "refresh_token" field. It's identical to RefreshTokenEQ.
+func RefreshToken(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldRefreshToken, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldName, v))
@@ -728,6 +733,56 @@ func ModifiedIsNil() predicate.User {
 // ModifiedNotNil applies the NotNil predicate on the "modified" field.
 func ModifiedNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldModified))
+}
+
+// RefreshTokenEQ applies the EQ predicate on the "refresh_token" field.
+func RefreshTokenEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldRefreshToken, v))
+}
+
+// RefreshTokenNEQ applies the NEQ predicate on the "refresh_token" field.
+func RefreshTokenNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldRefreshToken, v))
+}
+
+// RefreshTokenIn applies the In predicate on the "refresh_token" field.
+func RefreshTokenIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldRefreshToken, vs...))
+}
+
+// RefreshTokenNotIn applies the NotIn predicate on the "refresh_token" field.
+func RefreshTokenNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldRefreshToken, vs...))
+}
+
+// RefreshTokenGT applies the GT predicate on the "refresh_token" field.
+func RefreshTokenGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldRefreshToken, v))
+}
+
+// RefreshTokenGTE applies the GTE predicate on the "refresh_token" field.
+func RefreshTokenGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldRefreshToken, v))
+}
+
+// RefreshTokenLT applies the LT predicate on the "refresh_token" field.
+func RefreshTokenLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldRefreshToken, v))
+}
+
+// RefreshTokenLTE applies the LTE predicate on the "refresh_token" field.
+func RefreshTokenLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldRefreshToken, v))
+}
+
+// RefreshTokenIsNil applies the IsNil predicate on the "refresh_token" field.
+func RefreshTokenIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldRefreshToken))
+}
+
+// RefreshTokenNotNil applies the NotNil predicate on the "refresh_token" field.
+func RefreshTokenNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldRefreshToken))
 }
 
 // HasSessions applies the HasEdge predicate on the "sessions" edge.

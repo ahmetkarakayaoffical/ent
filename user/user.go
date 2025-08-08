@@ -36,6 +36,8 @@ const (
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
 	FieldModified = "modified"
+	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
+	FieldRefreshToken = "refresh_token"
 	// EdgeSessions holds the string denoting the sessions edge name in mutations.
 	EdgeSessions = "sessions"
 	// SessionsFieldID holds the string denoting the ID field of the Sessions.
@@ -65,6 +67,7 @@ var Columns = []string{
 	FieldOpenid,
 	FieldCreated,
 	FieldModified,
+	FieldRefreshToken,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -90,6 +93,8 @@ var (
 	DefaultModified func() time.Time
 	// UpdateDefaultModified holds the default value on update for the "modified" field.
 	UpdateDefaultModified func() time.Time
+	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
+	DefaultRefreshToken time.Time
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -155,6 +160,11 @@ func ByCreated(opts ...sql.OrderTermOption) OrderOption {
 // ByModified orders the results by the modified field.
 func ByModified(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldModified, opts...).ToFunc()
+}
+
+// ByRefreshToken orders the results by the refresh_token field.
+func ByRefreshToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefreshToken, opts...).ToFunc()
 }
 
 // BySessionsCount orders the results by sessions count.

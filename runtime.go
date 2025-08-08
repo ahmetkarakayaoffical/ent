@@ -589,6 +589,10 @@ func init() {
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.
 	user.UpdateDefaultModified = userDescModified.UpdateDefault.(func() time.Time)
+	// userDescRefreshToken is the schema descriptor for refresh_token field.
+	userDescRefreshToken := userFields[12].Descriptor()
+	// user.DefaultRefreshToken holds the default value on creation for the refresh_token field.
+	user.DefaultRefreshToken = userDescRefreshToken.Default.(time.Time)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.

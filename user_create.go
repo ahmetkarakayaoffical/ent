@@ -170,6 +170,20 @@ func (uc *UserCreate) SetNillableModified(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (uc *UserCreate) SetRefreshToken(t time.Time) *UserCreate {
+	uc.mutation.SetRefreshToken(t)
+	return uc
+}
+
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (uc *UserCreate) SetNillableRefreshToken(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetRefreshToken(*t)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(s string) *UserCreate {
 	uc.mutation.SetID(s)
@@ -245,6 +259,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.Modified(); !ok {
 		v := user.DefaultModified()
 		uc.mutation.SetModified(v)
+	}
+	if _, ok := uc.mutation.RefreshToken(); !ok {
+		v := user.DefaultRefreshToken
+		uc.mutation.SetRefreshToken(v)
 	}
 }
 
@@ -343,6 +361,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Modified(); ok {
 		_spec.SetField(user.FieldModified, field.TypeTime, value)
 		_node.Modified = value
+	}
+	if value, ok := uc.mutation.RefreshToken(); ok {
+		_spec.SetField(user.FieldRefreshToken, field.TypeTime, value)
+		_node.RefreshToken = value
 	}
 	if nodes := uc.mutation.SessionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -589,6 +611,24 @@ func (u *UserUpsert) UpdateModified() *UserUpsert {
 // ClearModified clears the value of the "modified" field.
 func (u *UserUpsert) ClearModified() *UserUpsert {
 	u.SetNull(user.FieldModified)
+	return u
+}
+
+// SetRefreshToken sets the "refresh_token" field.
+func (u *UserUpsert) SetRefreshToken(v time.Time) *UserUpsert {
+	u.Set(user.FieldRefreshToken, v)
+	return u
+}
+
+// UpdateRefreshToken sets the "refresh_token" field to the value that was provided on create.
+func (u *UserUpsert) UpdateRefreshToken() *UserUpsert {
+	u.SetExcluded(user.FieldRefreshToken)
+	return u
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (u *UserUpsert) ClearRefreshToken() *UserUpsert {
+	u.SetNull(user.FieldRefreshToken)
 	return u
 }
 
@@ -847,6 +887,27 @@ func (u *UserUpsertOne) UpdateModified() *UserUpsertOne {
 func (u *UserUpsertOne) ClearModified() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearModified()
+	})
+}
+
+// SetRefreshToken sets the "refresh_token" field.
+func (u *UserUpsertOne) SetRefreshToken(v time.Time) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetRefreshToken(v)
+	})
+}
+
+// UpdateRefreshToken sets the "refresh_token" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateRefreshToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateRefreshToken()
+	})
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (u *UserUpsertOne) ClearRefreshToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearRefreshToken()
 	})
 }
 
@@ -1272,6 +1333,27 @@ func (u *UserUpsertBulk) UpdateModified() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearModified() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearModified()
+	})
+}
+
+// SetRefreshToken sets the "refresh_token" field.
+func (u *UserUpsertBulk) SetRefreshToken(v time.Time) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetRefreshToken(v)
+	})
+}
+
+// UpdateRefreshToken sets the "refresh_token" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateRefreshToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateRefreshToken()
+	})
+}
+
+// ClearRefreshToken clears the value of the "refresh_token" field.
+func (u *UserUpsertBulk) ClearRefreshToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearRefreshToken()
 	})
 }
 
