@@ -33116,7 +33116,11 @@ type UserMutation struct {
 	openid              *bool
 	created             *time.Time
 	modified            *time.Time
+	access_token        *string
 	refresh_token       *string
+	token_type          *string
+	token_expiry        *int
+	addtoken_expiry     *int
 	clearedFields       map[string]struct{}
 	sessions            map[string]struct{}
 	removedsessions     map[string]struct{}
@@ -33730,6 +33734,55 @@ func (m *UserMutation) ResetModified() {
 	delete(m.clearedFields, user.FieldModified)
 }
 
+// SetAccessToken sets the "access_token" field.
+func (m *UserMutation) SetAccessToken(s string) {
+	m.access_token = &s
+}
+
+// AccessToken returns the value of the "access_token" field in the mutation.
+func (m *UserMutation) AccessToken() (r string, exists bool) {
+	v := m.access_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccessToken returns the old "access_token" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldAccessToken(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccessToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccessToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccessToken: %w", err)
+	}
+	return oldValue.AccessToken, nil
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (m *UserMutation) ClearAccessToken() {
+	m.access_token = nil
+	m.clearedFields[user.FieldAccessToken] = struct{}{}
+}
+
+// AccessTokenCleared returns if the "access_token" field was cleared in this mutation.
+func (m *UserMutation) AccessTokenCleared() bool {
+	_, ok := m.clearedFields[user.FieldAccessToken]
+	return ok
+}
+
+// ResetAccessToken resets all changes to the "access_token" field.
+func (m *UserMutation) ResetAccessToken() {
+	m.access_token = nil
+	delete(m.clearedFields, user.FieldAccessToken)
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (m *UserMutation) SetRefreshToken(s string) {
 	m.refresh_token = &s
@@ -33777,6 +33830,125 @@ func (m *UserMutation) RefreshTokenCleared() bool {
 func (m *UserMutation) ResetRefreshToken() {
 	m.refresh_token = nil
 	delete(m.clearedFields, user.FieldRefreshToken)
+}
+
+// SetTokenType sets the "token_type" field.
+func (m *UserMutation) SetTokenType(s string) {
+	m.token_type = &s
+}
+
+// TokenType returns the value of the "token_type" field in the mutation.
+func (m *UserMutation) TokenType() (r string, exists bool) {
+	v := m.token_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTokenType returns the old "token_type" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTokenType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTokenType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTokenType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTokenType: %w", err)
+	}
+	return oldValue.TokenType, nil
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (m *UserMutation) ClearTokenType() {
+	m.token_type = nil
+	m.clearedFields[user.FieldTokenType] = struct{}{}
+}
+
+// TokenTypeCleared returns if the "token_type" field was cleared in this mutation.
+func (m *UserMutation) TokenTypeCleared() bool {
+	_, ok := m.clearedFields[user.FieldTokenType]
+	return ok
+}
+
+// ResetTokenType resets all changes to the "token_type" field.
+func (m *UserMutation) ResetTokenType() {
+	m.token_type = nil
+	delete(m.clearedFields, user.FieldTokenType)
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (m *UserMutation) SetTokenExpiry(i int) {
+	m.token_expiry = &i
+	m.addtoken_expiry = nil
+}
+
+// TokenExpiry returns the value of the "token_expiry" field in the mutation.
+func (m *UserMutation) TokenExpiry() (r int, exists bool) {
+	v := m.token_expiry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTokenExpiry returns the old "token_expiry" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTokenExpiry(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTokenExpiry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTokenExpiry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTokenExpiry: %w", err)
+	}
+	return oldValue.TokenExpiry, nil
+}
+
+// AddTokenExpiry adds i to the "token_expiry" field.
+func (m *UserMutation) AddTokenExpiry(i int) {
+	if m.addtoken_expiry != nil {
+		*m.addtoken_expiry += i
+	} else {
+		m.addtoken_expiry = &i
+	}
+}
+
+// AddedTokenExpiry returns the value that was added to the "token_expiry" field in this mutation.
+func (m *UserMutation) AddedTokenExpiry() (r int, exists bool) {
+	v := m.addtoken_expiry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (m *UserMutation) ClearTokenExpiry() {
+	m.token_expiry = nil
+	m.addtoken_expiry = nil
+	m.clearedFields[user.FieldTokenExpiry] = struct{}{}
+}
+
+// TokenExpiryCleared returns if the "token_expiry" field was cleared in this mutation.
+func (m *UserMutation) TokenExpiryCleared() bool {
+	_, ok := m.clearedFields[user.FieldTokenExpiry]
+	return ok
+}
+
+// ResetTokenExpiry resets all changes to the "token_expiry" field.
+func (m *UserMutation) ResetTokenExpiry() {
+	m.token_expiry = nil
+	m.addtoken_expiry = nil
+	delete(m.clearedFields, user.FieldTokenExpiry)
 }
 
 // AddSessionIDs adds the "sessions" edge to the Sessions entity by ids.
@@ -33867,7 +34039,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 15)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -33901,8 +34073,17 @@ func (m *UserMutation) Fields() []string {
 	if m.modified != nil {
 		fields = append(fields, user.FieldModified)
 	}
+	if m.access_token != nil {
+		fields = append(fields, user.FieldAccessToken)
+	}
 	if m.refresh_token != nil {
 		fields = append(fields, user.FieldRefreshToken)
+	}
+	if m.token_type != nil {
+		fields = append(fields, user.FieldTokenType)
+	}
+	if m.token_expiry != nil {
+		fields = append(fields, user.FieldTokenExpiry)
 	}
 	return fields
 }
@@ -33934,8 +34115,14 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Created()
 	case user.FieldModified:
 		return m.Modified()
+	case user.FieldAccessToken:
+		return m.AccessToken()
 	case user.FieldRefreshToken:
 		return m.RefreshToken()
+	case user.FieldTokenType:
+		return m.TokenType()
+	case user.FieldTokenExpiry:
+		return m.TokenExpiry()
 	}
 	return nil, false
 }
@@ -33967,8 +34154,14 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreated(ctx)
 	case user.FieldModified:
 		return m.OldModified(ctx)
+	case user.FieldAccessToken:
+		return m.OldAccessToken(ctx)
 	case user.FieldRefreshToken:
 		return m.OldRefreshToken(ctx)
+	case user.FieldTokenType:
+		return m.OldTokenType(ctx)
+	case user.FieldTokenExpiry:
+		return m.OldTokenExpiry(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -34055,12 +34248,33 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetModified(v)
 		return nil
+	case user.FieldAccessToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccessToken(v)
+		return nil
 	case user.FieldRefreshToken:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRefreshToken(v)
+		return nil
+	case user.FieldTokenType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTokenType(v)
+		return nil
+	case user.FieldTokenExpiry:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTokenExpiry(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -34069,13 +34283,21 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *UserMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addtoken_expiry != nil {
+		fields = append(fields, user.FieldTokenExpiry)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldTokenExpiry:
+		return m.AddedTokenExpiry()
+	}
 	return nil, false
 }
 
@@ -34084,6 +34306,13 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *UserMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case user.FieldTokenExpiry:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTokenExpiry(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
 }
@@ -34116,8 +34345,17 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldModified) {
 		fields = append(fields, user.FieldModified)
 	}
+	if m.FieldCleared(user.FieldAccessToken) {
+		fields = append(fields, user.FieldAccessToken)
+	}
 	if m.FieldCleared(user.FieldRefreshToken) {
 		fields = append(fields, user.FieldRefreshToken)
+	}
+	if m.FieldCleared(user.FieldTokenType) {
+		fields = append(fields, user.FieldTokenType)
+	}
+	if m.FieldCleared(user.FieldTokenExpiry) {
+		fields = append(fields, user.FieldTokenExpiry)
 	}
 	return fields
 }
@@ -34157,8 +34395,17 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldModified:
 		m.ClearModified()
 		return nil
+	case user.FieldAccessToken:
+		m.ClearAccessToken()
+		return nil
 	case user.FieldRefreshToken:
 		m.ClearRefreshToken()
+		return nil
+	case user.FieldTokenType:
+		m.ClearTokenType()
+		return nil
+	case user.FieldTokenExpiry:
+		m.ClearTokenExpiry()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -34201,8 +34448,17 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldModified:
 		m.ResetModified()
 		return nil
+	case user.FieldAccessToken:
+		m.ResetAccessToken()
+		return nil
 	case user.FieldRefreshToken:
 		m.ResetRefreshToken()
+		return nil
+	case user.FieldTokenType:
+		m.ResetTokenType()
+		return nil
+	case user.FieldTokenExpiry:
+		m.ResetTokenExpiry()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

@@ -36,8 +36,14 @@ const (
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
 	FieldModified = "modified"
+	// FieldAccessToken holds the string denoting the access_token field in the database.
+	FieldAccessToken = "access_token"
 	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
 	FieldRefreshToken = "refresh_token"
+	// FieldTokenType holds the string denoting the token_type field in the database.
+	FieldTokenType = "token_type"
+	// FieldTokenExpiry holds the string denoting the token_expiry field in the database.
+	FieldTokenExpiry = "token_expiry"
 	// EdgeSessions holds the string denoting the sessions edge name in mutations.
 	EdgeSessions = "sessions"
 	// SessionsFieldID holds the string denoting the ID field of the Sessions.
@@ -67,7 +73,10 @@ var Columns = []string{
 	FieldOpenid,
 	FieldCreated,
 	FieldModified,
+	FieldAccessToken,
 	FieldRefreshToken,
+	FieldTokenType,
+	FieldTokenExpiry,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -93,8 +102,14 @@ var (
 	DefaultModified func() time.Time
 	// UpdateDefaultModified holds the default value on update for the "modified" field.
 	UpdateDefaultModified func() time.Time
+	// DefaultAccessToken holds the default value on creation for the "access_token" field.
+	DefaultAccessToken string
 	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
 	DefaultRefreshToken string
+	// DefaultTokenType holds the default value on creation for the "token_type" field.
+	DefaultTokenType string
+	// DefaultTokenExpiry holds the default value on creation for the "token_expiry" field.
+	DefaultTokenExpiry int
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(string) error
 )
@@ -162,9 +177,24 @@ func ByModified(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldModified, opts...).ToFunc()
 }
 
+// ByAccessToken orders the results by the access_token field.
+func ByAccessToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessToken, opts...).ToFunc()
+}
+
 // ByRefreshToken orders the results by the refresh_token field.
 func ByRefreshToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRefreshToken, opts...).ToFunc()
+}
+
+// ByTokenType orders the results by the token_type field.
+func ByTokenType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenType, opts...).ToFunc()
+}
+
+// ByTokenExpiry orders the results by the token_expiry field.
+func ByTokenExpiry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenExpiry, opts...).ToFunc()
 }
 
 // BySessionsCount orders the results by sessions count.

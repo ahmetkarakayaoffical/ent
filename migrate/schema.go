@@ -891,7 +891,10 @@ var (
 		{Name: "openid", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
+		{Name: "access_token", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "refresh_token", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "token_type", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "token_expiry", Type: field.TypeInt, Nullable: true, Default: 0},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{

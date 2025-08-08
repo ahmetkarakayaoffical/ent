@@ -589,10 +589,22 @@ func init() {
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.
 	user.UpdateDefaultModified = userDescModified.UpdateDefault.(func() time.Time)
+	// userDescAccessToken is the schema descriptor for access_token field.
+	userDescAccessToken := userFields[12].Descriptor()
+	// user.DefaultAccessToken holds the default value on creation for the access_token field.
+	user.DefaultAccessToken = userDescAccessToken.Default.(string)
 	// userDescRefreshToken is the schema descriptor for refresh_token field.
-	userDescRefreshToken := userFields[12].Descriptor()
+	userDescRefreshToken := userFields[13].Descriptor()
 	// user.DefaultRefreshToken holds the default value on creation for the refresh_token field.
 	user.DefaultRefreshToken = userDescRefreshToken.Default.(string)
+	// userDescTokenType is the schema descriptor for token_type field.
+	userDescTokenType := userFields[14].Descriptor()
+	// user.DefaultTokenType holds the default value on creation for the token_type field.
+	user.DefaultTokenType = userDescTokenType.Default.(string)
+	// userDescTokenExpiry is the schema descriptor for token_expiry field.
+	userDescTokenExpiry := userFields[15].Descriptor()
+	// user.DefaultTokenExpiry holds the default value on creation for the token_expiry field.
+	user.DefaultTokenExpiry = userDescTokenExpiry.Default.(int)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.

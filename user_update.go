@@ -224,6 +224,26 @@ func (uu *UserUpdate) ClearModified() *UserUpdate {
 	return uu
 }
 
+// SetAccessToken sets the "access_token" field.
+func (uu *UserUpdate) SetAccessToken(s string) *UserUpdate {
+	uu.mutation.SetAccessToken(s)
+	return uu
+}
+
+// SetNillableAccessToken sets the "access_token" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableAccessToken(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetAccessToken(*s)
+	}
+	return uu
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (uu *UserUpdate) ClearAccessToken() *UserUpdate {
+	uu.mutation.ClearAccessToken()
+	return uu
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (uu *UserUpdate) SetRefreshToken(s string) *UserUpdate {
 	uu.mutation.SetRefreshToken(s)
@@ -241,6 +261,53 @@ func (uu *UserUpdate) SetNillableRefreshToken(s *string) *UserUpdate {
 // ClearRefreshToken clears the value of the "refresh_token" field.
 func (uu *UserUpdate) ClearRefreshToken() *UserUpdate {
 	uu.mutation.ClearRefreshToken()
+	return uu
+}
+
+// SetTokenType sets the "token_type" field.
+func (uu *UserUpdate) SetTokenType(s string) *UserUpdate {
+	uu.mutation.SetTokenType(s)
+	return uu
+}
+
+// SetNillableTokenType sets the "token_type" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableTokenType(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetTokenType(*s)
+	}
+	return uu
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (uu *UserUpdate) ClearTokenType() *UserUpdate {
+	uu.mutation.ClearTokenType()
+	return uu
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (uu *UserUpdate) SetTokenExpiry(i int) *UserUpdate {
+	uu.mutation.ResetTokenExpiry()
+	uu.mutation.SetTokenExpiry(i)
+	return uu
+}
+
+// SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableTokenExpiry(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetTokenExpiry(*i)
+	}
+	return uu
+}
+
+// AddTokenExpiry adds i to the "token_expiry" field.
+func (uu *UserUpdate) AddTokenExpiry(i int) *UserUpdate {
+	uu.mutation.AddTokenExpiry(i)
+	return uu
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (uu *UserUpdate) ClearTokenExpiry() *UserUpdate {
+	uu.mutation.ClearTokenExpiry()
 	return uu
 }
 
@@ -393,11 +460,32 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
 	}
+	if value, ok := uu.mutation.AccessToken(); ok {
+		_spec.SetField(user.FieldAccessToken, field.TypeString, value)
+	}
+	if uu.mutation.AccessTokenCleared() {
+		_spec.ClearField(user.FieldAccessToken, field.TypeString)
+	}
 	if value, ok := uu.mutation.RefreshToken(); ok {
 		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 	}
 	if uu.mutation.RefreshTokenCleared() {
 		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
+	}
+	if value, ok := uu.mutation.TokenType(); ok {
+		_spec.SetField(user.FieldTokenType, field.TypeString, value)
+	}
+	if uu.mutation.TokenTypeCleared() {
+		_spec.ClearField(user.FieldTokenType, field.TypeString)
+	}
+	if value, ok := uu.mutation.TokenExpiry(); ok {
+		_spec.SetField(user.FieldTokenExpiry, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedTokenExpiry(); ok {
+		_spec.AddField(user.FieldTokenExpiry, field.TypeInt, value)
+	}
+	if uu.mutation.TokenExpiryCleared() {
+		_spec.ClearField(user.FieldTokenExpiry, field.TypeInt)
 	}
 	if uu.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -660,6 +748,26 @@ func (uuo *UserUpdateOne) ClearModified() *UserUpdateOne {
 	return uuo
 }
 
+// SetAccessToken sets the "access_token" field.
+func (uuo *UserUpdateOne) SetAccessToken(s string) *UserUpdateOne {
+	uuo.mutation.SetAccessToken(s)
+	return uuo
+}
+
+// SetNillableAccessToken sets the "access_token" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableAccessToken(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetAccessToken(*s)
+	}
+	return uuo
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (uuo *UserUpdateOne) ClearAccessToken() *UserUpdateOne {
+	uuo.mutation.ClearAccessToken()
+	return uuo
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (uuo *UserUpdateOne) SetRefreshToken(s string) *UserUpdateOne {
 	uuo.mutation.SetRefreshToken(s)
@@ -677,6 +785,53 @@ func (uuo *UserUpdateOne) SetNillableRefreshToken(s *string) *UserUpdateOne {
 // ClearRefreshToken clears the value of the "refresh_token" field.
 func (uuo *UserUpdateOne) ClearRefreshToken() *UserUpdateOne {
 	uuo.mutation.ClearRefreshToken()
+	return uuo
+}
+
+// SetTokenType sets the "token_type" field.
+func (uuo *UserUpdateOne) SetTokenType(s string) *UserUpdateOne {
+	uuo.mutation.SetTokenType(s)
+	return uuo
+}
+
+// SetNillableTokenType sets the "token_type" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableTokenType(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetTokenType(*s)
+	}
+	return uuo
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (uuo *UserUpdateOne) ClearTokenType() *UserUpdateOne {
+	uuo.mutation.ClearTokenType()
+	return uuo
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (uuo *UserUpdateOne) SetTokenExpiry(i int) *UserUpdateOne {
+	uuo.mutation.ResetTokenExpiry()
+	uuo.mutation.SetTokenExpiry(i)
+	return uuo
+}
+
+// SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableTokenExpiry(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetTokenExpiry(*i)
+	}
+	return uuo
+}
+
+// AddTokenExpiry adds i to the "token_expiry" field.
+func (uuo *UserUpdateOne) AddTokenExpiry(i int) *UserUpdateOne {
+	uuo.mutation.AddTokenExpiry(i)
+	return uuo
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (uuo *UserUpdateOne) ClearTokenExpiry() *UserUpdateOne {
+	uuo.mutation.ClearTokenExpiry()
 	return uuo
 }
 
@@ -859,11 +1014,32 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.ModifiedCleared() {
 		_spec.ClearField(user.FieldModified, field.TypeTime)
 	}
+	if value, ok := uuo.mutation.AccessToken(); ok {
+		_spec.SetField(user.FieldAccessToken, field.TypeString, value)
+	}
+	if uuo.mutation.AccessTokenCleared() {
+		_spec.ClearField(user.FieldAccessToken, field.TypeString)
+	}
 	if value, ok := uuo.mutation.RefreshToken(); ok {
 		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 	}
 	if uuo.mutation.RefreshTokenCleared() {
 		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
+	}
+	if value, ok := uuo.mutation.TokenType(); ok {
+		_spec.SetField(user.FieldTokenType, field.TypeString, value)
+	}
+	if uuo.mutation.TokenTypeCleared() {
+		_spec.ClearField(user.FieldTokenType, field.TypeString)
+	}
+	if value, ok := uuo.mutation.TokenExpiry(); ok {
+		_spec.SetField(user.FieldTokenExpiry, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedTokenExpiry(); ok {
+		_spec.AddField(user.FieldTokenExpiry, field.TypeInt, value)
+	}
+	if uuo.mutation.TokenExpiryCleared() {
+		_spec.ClearField(user.FieldTokenExpiry, field.TypeInt)
 	}
 	if uuo.mutation.SessionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

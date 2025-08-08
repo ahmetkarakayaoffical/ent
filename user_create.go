@@ -170,6 +170,20 @@ func (uc *UserCreate) SetNillableModified(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetAccessToken sets the "access_token" field.
+func (uc *UserCreate) SetAccessToken(s string) *UserCreate {
+	uc.mutation.SetAccessToken(s)
+	return uc
+}
+
+// SetNillableAccessToken sets the "access_token" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAccessToken(s *string) *UserCreate {
+	if s != nil {
+		uc.SetAccessToken(*s)
+	}
+	return uc
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (uc *UserCreate) SetRefreshToken(s string) *UserCreate {
 	uc.mutation.SetRefreshToken(s)
@@ -180,6 +194,34 @@ func (uc *UserCreate) SetRefreshToken(s string) *UserCreate {
 func (uc *UserCreate) SetNillableRefreshToken(s *string) *UserCreate {
 	if s != nil {
 		uc.SetRefreshToken(*s)
+	}
+	return uc
+}
+
+// SetTokenType sets the "token_type" field.
+func (uc *UserCreate) SetTokenType(s string) *UserCreate {
+	uc.mutation.SetTokenType(s)
+	return uc
+}
+
+// SetNillableTokenType sets the "token_type" field if the given value is not nil.
+func (uc *UserCreate) SetNillableTokenType(s *string) *UserCreate {
+	if s != nil {
+		uc.SetTokenType(*s)
+	}
+	return uc
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (uc *UserCreate) SetTokenExpiry(i int) *UserCreate {
+	uc.mutation.SetTokenExpiry(i)
+	return uc
+}
+
+// SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
+func (uc *UserCreate) SetNillableTokenExpiry(i *int) *UserCreate {
+	if i != nil {
+		uc.SetTokenExpiry(*i)
 	}
 	return uc
 }
@@ -260,9 +302,21 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultModified()
 		uc.mutation.SetModified(v)
 	}
+	if _, ok := uc.mutation.AccessToken(); !ok {
+		v := user.DefaultAccessToken
+		uc.mutation.SetAccessToken(v)
+	}
 	if _, ok := uc.mutation.RefreshToken(); !ok {
 		v := user.DefaultRefreshToken
 		uc.mutation.SetRefreshToken(v)
+	}
+	if _, ok := uc.mutation.TokenType(); !ok {
+		v := user.DefaultTokenType
+		uc.mutation.SetTokenType(v)
+	}
+	if _, ok := uc.mutation.TokenExpiry(); !ok {
+		v := user.DefaultTokenExpiry
+		uc.mutation.SetTokenExpiry(v)
 	}
 }
 
@@ -362,9 +416,21 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
+	if value, ok := uc.mutation.AccessToken(); ok {
+		_spec.SetField(user.FieldAccessToken, field.TypeString, value)
+		_node.AccessToken = value
+	}
 	if value, ok := uc.mutation.RefreshToken(); ok {
 		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 		_node.RefreshToken = value
+	}
+	if value, ok := uc.mutation.TokenType(); ok {
+		_spec.SetField(user.FieldTokenType, field.TypeString, value)
+		_node.TokenType = value
+	}
+	if value, ok := uc.mutation.TokenExpiry(); ok {
+		_spec.SetField(user.FieldTokenExpiry, field.TypeInt, value)
+		_node.TokenExpiry = value
 	}
 	if nodes := uc.mutation.SessionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -614,6 +680,24 @@ func (u *UserUpsert) ClearModified() *UserUpsert {
 	return u
 }
 
+// SetAccessToken sets the "access_token" field.
+func (u *UserUpsert) SetAccessToken(v string) *UserUpsert {
+	u.Set(user.FieldAccessToken, v)
+	return u
+}
+
+// UpdateAccessToken sets the "access_token" field to the value that was provided on create.
+func (u *UserUpsert) UpdateAccessToken() *UserUpsert {
+	u.SetExcluded(user.FieldAccessToken)
+	return u
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (u *UserUpsert) ClearAccessToken() *UserUpsert {
+	u.SetNull(user.FieldAccessToken)
+	return u
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (u *UserUpsert) SetRefreshToken(v string) *UserUpsert {
 	u.Set(user.FieldRefreshToken, v)
@@ -629,6 +713,48 @@ func (u *UserUpsert) UpdateRefreshToken() *UserUpsert {
 // ClearRefreshToken clears the value of the "refresh_token" field.
 func (u *UserUpsert) ClearRefreshToken() *UserUpsert {
 	u.SetNull(user.FieldRefreshToken)
+	return u
+}
+
+// SetTokenType sets the "token_type" field.
+func (u *UserUpsert) SetTokenType(v string) *UserUpsert {
+	u.Set(user.FieldTokenType, v)
+	return u
+}
+
+// UpdateTokenType sets the "token_type" field to the value that was provided on create.
+func (u *UserUpsert) UpdateTokenType() *UserUpsert {
+	u.SetExcluded(user.FieldTokenType)
+	return u
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (u *UserUpsert) ClearTokenType() *UserUpsert {
+	u.SetNull(user.FieldTokenType)
+	return u
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (u *UserUpsert) SetTokenExpiry(v int) *UserUpsert {
+	u.Set(user.FieldTokenExpiry, v)
+	return u
+}
+
+// UpdateTokenExpiry sets the "token_expiry" field to the value that was provided on create.
+func (u *UserUpsert) UpdateTokenExpiry() *UserUpsert {
+	u.SetExcluded(user.FieldTokenExpiry)
+	return u
+}
+
+// AddTokenExpiry adds v to the "token_expiry" field.
+func (u *UserUpsert) AddTokenExpiry(v int) *UserUpsert {
+	u.Add(user.FieldTokenExpiry, v)
+	return u
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (u *UserUpsert) ClearTokenExpiry() *UserUpsert {
+	u.SetNull(user.FieldTokenExpiry)
 	return u
 }
 
@@ -890,6 +1016,27 @@ func (u *UserUpsertOne) ClearModified() *UserUpsertOne {
 	})
 }
 
+// SetAccessToken sets the "access_token" field.
+func (u *UserUpsertOne) SetAccessToken(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetAccessToken(v)
+	})
+}
+
+// UpdateAccessToken sets the "access_token" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateAccessToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateAccessToken()
+	})
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (u *UserUpsertOne) ClearAccessToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearAccessToken()
+	})
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (u *UserUpsertOne) SetRefreshToken(v string) *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
@@ -908,6 +1055,55 @@ func (u *UserUpsertOne) UpdateRefreshToken() *UserUpsertOne {
 func (u *UserUpsertOne) ClearRefreshToken() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearRefreshToken()
+	})
+}
+
+// SetTokenType sets the "token_type" field.
+func (u *UserUpsertOne) SetTokenType(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetTokenType(v)
+	})
+}
+
+// UpdateTokenType sets the "token_type" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateTokenType() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateTokenType()
+	})
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (u *UserUpsertOne) ClearTokenType() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearTokenType()
+	})
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (u *UserUpsertOne) SetTokenExpiry(v int) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetTokenExpiry(v)
+	})
+}
+
+// AddTokenExpiry adds v to the "token_expiry" field.
+func (u *UserUpsertOne) AddTokenExpiry(v int) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.AddTokenExpiry(v)
+	})
+}
+
+// UpdateTokenExpiry sets the "token_expiry" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateTokenExpiry() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateTokenExpiry()
+	})
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (u *UserUpsertOne) ClearTokenExpiry() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearTokenExpiry()
 	})
 }
 
@@ -1336,6 +1532,27 @@ func (u *UserUpsertBulk) ClearModified() *UserUpsertBulk {
 	})
 }
 
+// SetAccessToken sets the "access_token" field.
+func (u *UserUpsertBulk) SetAccessToken(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetAccessToken(v)
+	})
+}
+
+// UpdateAccessToken sets the "access_token" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateAccessToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateAccessToken()
+	})
+}
+
+// ClearAccessToken clears the value of the "access_token" field.
+func (u *UserUpsertBulk) ClearAccessToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearAccessToken()
+	})
+}
+
 // SetRefreshToken sets the "refresh_token" field.
 func (u *UserUpsertBulk) SetRefreshToken(v string) *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
@@ -1354,6 +1571,55 @@ func (u *UserUpsertBulk) UpdateRefreshToken() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearRefreshToken() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearRefreshToken()
+	})
+}
+
+// SetTokenType sets the "token_type" field.
+func (u *UserUpsertBulk) SetTokenType(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetTokenType(v)
+	})
+}
+
+// UpdateTokenType sets the "token_type" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateTokenType() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateTokenType()
+	})
+}
+
+// ClearTokenType clears the value of the "token_type" field.
+func (u *UserUpsertBulk) ClearTokenType() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearTokenType()
+	})
+}
+
+// SetTokenExpiry sets the "token_expiry" field.
+func (u *UserUpsertBulk) SetTokenExpiry(v int) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetTokenExpiry(v)
+	})
+}
+
+// AddTokenExpiry adds v to the "token_expiry" field.
+func (u *UserUpsertBulk) AddTokenExpiry(v int) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.AddTokenExpiry(v)
+	})
+}
+
+// UpdateTokenExpiry sets the "token_expiry" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateTokenExpiry() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateTokenExpiry()
+	})
+}
+
+// ClearTokenExpiry clears the value of the "token_expiry" field.
+func (u *UserUpsertBulk) ClearTokenExpiry() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearTokenExpiry()
 	})
 }
 

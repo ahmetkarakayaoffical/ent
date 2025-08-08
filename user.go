@@ -39,8 +39,14 @@ type User struct {
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
 	Modified time.Time `json:"modified,omitempty"`
+	// AccessToken holds the value of the "access_token" field.
+	AccessToken string `json:"access_token,omitempty"`
 	// RefreshToken holds the value of the "refresh_token" field.
 	RefreshToken string `json:"refresh_token,omitempty"`
+	// TokenType holds the value of the "token_type" field.
+	TokenType string `json:"token_type,omitempty"`
+	// TokenExpiry holds the value of the "token_expiry" field.
+	TokenExpiry int `json:"token_expiry,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges        UserEdges `json:"edges"`
@@ -72,7 +78,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldEmailVerified, user.FieldOpenid:
 			values[i] = new(sql.NullBool)
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword, user.FieldRefreshToken:
+		case user.FieldTokenExpiry:
+			values[i] = new(sql.NullInt64)
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword, user.FieldAccessToken, user.FieldRefreshToken, user.FieldTokenType:
 			values[i] = new(sql.NullString)
 		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -163,11 +171,29 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Modified = value.Time
 			}
+		case user.FieldAccessToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field access_token", values[i])
+			} else if value.Valid {
+				u.AccessToken = value.String
+			}
 		case user.FieldRefreshToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
 			} else if value.Valid {
 				u.RefreshToken = value.String
+			}
+		case user.FieldTokenType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token_type", values[i])
+			} else if value.Valid {
+				u.TokenType = value.String
+			}
+		case user.FieldTokenExpiry:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field token_expiry", values[i])
+			} else if value.Valid {
+				u.TokenExpiry = int(value.Int64)
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -243,8 +269,17 @@ func (u *User) String() string {
 	builder.WriteString("modified=")
 	builder.WriteString(u.Modified.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("access_token=")
+	builder.WriteString(u.AccessToken)
+	builder.WriteString(", ")
 	builder.WriteString("refresh_token=")
 	builder.WriteString(u.RefreshToken)
+	builder.WriteString(", ")
+	builder.WriteString("token_type=")
+	builder.WriteString(u.TokenType)
+	builder.WriteString(", ")
+	builder.WriteString("token_expiry=")
+	builder.WriteString(fmt.Sprintf("%v", u.TokenExpiry))
 	builder.WriteByte(')')
 	return builder.String()
 }
