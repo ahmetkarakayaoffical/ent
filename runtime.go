@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/open-uem/ent/agent"
+	"github.com/open-uem/ent/authentication"
 	"github.com/open-uem/ent/deployment"
 	"github.com/open-uem/ent/logicaldisk"
 	"github.com/open-uem/ent/orgmetadata"
@@ -118,6 +119,52 @@ func init() {
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	agent.IDValidator = agentDescID.Validators[0].(func(string) error)
+	authenticationFields := schema.Authentication{}.Fields()
+	_ = authenticationFields
+	// authenticationDescUseCertificates is the schema descriptor for use_certificates field.
+	authenticationDescUseCertificates := authenticationFields[0].Descriptor()
+	// authentication.DefaultUseCertificates holds the default value on creation for the use_certificates field.
+	authentication.DefaultUseCertificates = authenticationDescUseCertificates.Default.(bool)
+	// authenticationDescAllowRegister is the schema descriptor for allow_register field.
+	authenticationDescAllowRegister := authenticationFields[1].Descriptor()
+	// authentication.DefaultAllowRegister holds the default value on creation for the allow_register field.
+	authentication.DefaultAllowRegister = authenticationDescAllowRegister.Default.(bool)
+	// authenticationDescUseOIDC is the schema descriptor for use_OIDC field.
+	authenticationDescUseOIDC := authenticationFields[2].Descriptor()
+	// authentication.DefaultUseOIDC holds the default value on creation for the use_OIDC field.
+	authentication.DefaultUseOIDC = authenticationDescUseOIDC.Default.(bool)
+	// authenticationDescOIDCProvider is the schema descriptor for OIDC_provider field.
+	authenticationDescOIDCProvider := authenticationFields[3].Descriptor()
+	// authentication.DefaultOIDCProvider holds the default value on creation for the OIDC_provider field.
+	authentication.DefaultOIDCProvider = authenticationDescOIDCProvider.Default.(string)
+	// authenticationDescOIDCIssuerURL is the schema descriptor for OIDC_issuer_url field.
+	authenticationDescOIDCIssuerURL := authenticationFields[4].Descriptor()
+	// authentication.DefaultOIDCIssuerURL holds the default value on creation for the OIDC_issuer_url field.
+	authentication.DefaultOIDCIssuerURL = authenticationDescOIDCIssuerURL.Default.(string)
+	// authenticationDescOIDCClientID is the schema descriptor for OIDC_client_id field.
+	authenticationDescOIDCClientID := authenticationFields[5].Descriptor()
+	// authentication.DefaultOIDCClientID holds the default value on creation for the OIDC_client_id field.
+	authentication.DefaultOIDCClientID = authenticationDescOIDCClientID.Default.(string)
+	// authenticationDescOIDCRole is the schema descriptor for OIDC_role field.
+	authenticationDescOIDCRole := authenticationFields[6].Descriptor()
+	// authentication.DefaultOIDCRole holds the default value on creation for the OIDC_role field.
+	authentication.DefaultOIDCRole = authenticationDescOIDCRole.Default.(string)
+	// authenticationDescOIDCCookieEncriptionKey is the schema descriptor for OIDC_cookie_encription_key field.
+	authenticationDescOIDCCookieEncriptionKey := authenticationFields[7].Descriptor()
+	// authentication.DefaultOIDCCookieEncriptionKey holds the default value on creation for the OIDC_cookie_encription_key field.
+	authentication.DefaultOIDCCookieEncriptionKey = authenticationDescOIDCCookieEncriptionKey.Default.(string)
+	// authenticationDescOIDCKeycloakPublicKey is the schema descriptor for OIDC_keycloak_public_key field.
+	authenticationDescOIDCKeycloakPublicKey := authenticationFields[8].Descriptor()
+	// authentication.DefaultOIDCKeycloakPublicKey holds the default value on creation for the OIDC_keycloak_public_key field.
+	authentication.DefaultOIDCKeycloakPublicKey = authenticationDescOIDCKeycloakPublicKey.Default.(string)
+	// authenticationDescOIDCAutoCreateAccount is the schema descriptor for OIDC_auto_create_account field.
+	authenticationDescOIDCAutoCreateAccount := authenticationFields[9].Descriptor()
+	// authentication.DefaultOIDCAutoCreateAccount holds the default value on creation for the OIDC_auto_create_account field.
+	authentication.DefaultOIDCAutoCreateAccount = authenticationDescOIDCAutoCreateAccount.Default.(bool)
+	// authenticationDescOIDCAutoApprove is the schema descriptor for OIDC_auto_approve field.
+	authenticationDescOIDCAutoApprove := authenticationFields[10].Descriptor()
+	// authentication.DefaultOIDCAutoApprove holds the default value on creation for the OIDC_auto_approve field.
+	authentication.DefaultOIDCAutoApprove = authenticationDescOIDCAutoApprove.Default.(bool)
 	deploymentFields := schema.Deployment{}.Fields()
 	_ = deploymentFields
 	// deploymentDescInstalled is the schema descriptor for installed field.
@@ -542,6 +589,26 @@ func init() {
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.
 	user.UpdateDefaultModified = userDescModified.UpdateDefault.(func() time.Time)
+	// userDescAccessToken is the schema descriptor for access_token field.
+	userDescAccessToken := userFields[12].Descriptor()
+	// user.DefaultAccessToken holds the default value on creation for the access_token field.
+	user.DefaultAccessToken = userDescAccessToken.Default.(string)
+	// userDescRefreshToken is the schema descriptor for refresh_token field.
+	userDescRefreshToken := userFields[13].Descriptor()
+	// user.DefaultRefreshToken holds the default value on creation for the refresh_token field.
+	user.DefaultRefreshToken = userDescRefreshToken.Default.(string)
+	// userDescIDToken is the schema descriptor for id_token field.
+	userDescIDToken := userFields[14].Descriptor()
+	// user.DefaultIDToken holds the default value on creation for the id_token field.
+	user.DefaultIDToken = userDescIDToken.Default.(string)
+	// userDescTokenType is the schema descriptor for token_type field.
+	userDescTokenType := userFields[15].Descriptor()
+	// user.DefaultTokenType holds the default value on creation for the token_type field.
+	user.DefaultTokenType = userDescTokenType.Default.(string)
+	// userDescTokenExpiry is the schema descriptor for token_expiry field.
+	userDescTokenExpiry := userFields[16].Descriptor()
+	// user.DefaultTokenExpiry holds the default value on creation for the token_expiry field.
+	user.DefaultTokenExpiry = userDescTokenExpiry.Default.(int)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.IDValidator is a validator for the "id" field. It is called by the builders before save.

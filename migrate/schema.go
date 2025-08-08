@@ -106,6 +106,27 @@ var (
 			},
 		},
 	}
+	// AuthenticationsColumns holds the columns for the "authentications" table.
+	AuthenticationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "use_certificates", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "allow_register", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "use_oidc", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "oidc_provider", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_issuer_url", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_client_id", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_role", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_cookie_encription_key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_keycloak_public_key", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "oidc_auto_create_account", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "oidc_auto_approve", Type: field.TypeBool, Nullable: true, Default: true},
+	}
+	// AuthenticationsTable holds the schema information for the "authentications" table.
+	AuthenticationsTable = &schema.Table{
+		Name:       "authentications",
+		Columns:    AuthenticationsColumns,
+		PrimaryKey: []*schema.Column{AuthenticationsColumns[0]},
+	}
 	// CertificatesColumns holds the columns for the "certificates" table.
 	CertificatesColumns = []*schema.Column{
 		{Name: "serial", Type: field.TypeInt64, Increment: true},
@@ -870,6 +891,11 @@ var (
 		{Name: "openid", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "created", Type: field.TypeTime, Nullable: true},
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
+		{Name: "access_token", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "refresh_token", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "id_token", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "token_type", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "token_expiry", Type: field.TypeInt, Nullable: true, Default: 0},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -985,6 +1011,7 @@ var (
 		AgentsTable,
 		AntiviriTable,
 		AppsTable,
+		AuthenticationsTable,
 		CertificatesTable,
 		ComputersTable,
 		DeploymentsTable,
