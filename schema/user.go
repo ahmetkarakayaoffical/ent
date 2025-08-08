@@ -32,6 +32,7 @@ func (User) Fields() []ent.Field {
 		field.Time("modified").Optional().Default(time.Now).UpdateDefault(time.Now),
 		field.String("access_token").Optional().Default(""),
 		field.String("refresh_token").Optional().Default(""),
+		field.String("id_token").Optional().Default(""),
 		field.String("token_type").Optional().Default(""),
 		field.Int("token_expiry").Optional().Default(0),
 	}

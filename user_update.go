@@ -264,6 +264,26 @@ func (uu *UserUpdate) ClearRefreshToken() *UserUpdate {
 	return uu
 }
 
+// SetIDToken sets the "id_token" field.
+func (uu *UserUpdate) SetIDToken(s string) *UserUpdate {
+	uu.mutation.SetIDToken(s)
+	return uu
+}
+
+// SetNillableIDToken sets the "id_token" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableIDToken(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetIDToken(*s)
+	}
+	return uu
+}
+
+// ClearIDToken clears the value of the "id_token" field.
+func (uu *UserUpdate) ClearIDToken() *UserUpdate {
+	uu.mutation.ClearIDToken()
+	return uu
+}
+
 // SetTokenType sets the "token_type" field.
 func (uu *UserUpdate) SetTokenType(s string) *UserUpdate {
 	uu.mutation.SetTokenType(s)
@@ -471,6 +491,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.RefreshTokenCleared() {
 		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
+	}
+	if value, ok := uu.mutation.IDToken(); ok {
+		_spec.SetField(user.FieldIDToken, field.TypeString, value)
+	}
+	if uu.mutation.IDTokenCleared() {
+		_spec.ClearField(user.FieldIDToken, field.TypeString)
 	}
 	if value, ok := uu.mutation.TokenType(); ok {
 		_spec.SetField(user.FieldTokenType, field.TypeString, value)
@@ -788,6 +814,26 @@ func (uuo *UserUpdateOne) ClearRefreshToken() *UserUpdateOne {
 	return uuo
 }
 
+// SetIDToken sets the "id_token" field.
+func (uuo *UserUpdateOne) SetIDToken(s string) *UserUpdateOne {
+	uuo.mutation.SetIDToken(s)
+	return uuo
+}
+
+// SetNillableIDToken sets the "id_token" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableIDToken(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetIDToken(*s)
+	}
+	return uuo
+}
+
+// ClearIDToken clears the value of the "id_token" field.
+func (uuo *UserUpdateOne) ClearIDToken() *UserUpdateOne {
+	uuo.mutation.ClearIDToken()
+	return uuo
+}
+
 // SetTokenType sets the "token_type" field.
 func (uuo *UserUpdateOne) SetTokenType(s string) *UserUpdateOne {
 	uuo.mutation.SetTokenType(s)
@@ -1025,6 +1071,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.RefreshTokenCleared() {
 		_spec.ClearField(user.FieldRefreshToken, field.TypeString)
+	}
+	if value, ok := uuo.mutation.IDToken(); ok {
+		_spec.SetField(user.FieldIDToken, field.TypeString, value)
+	}
+	if uuo.mutation.IDTokenCleared() {
+		_spec.ClearField(user.FieldIDToken, field.TypeString)
 	}
 	if value, ok := uuo.mutation.TokenType(); ok {
 		_spec.SetField(user.FieldTokenType, field.TypeString, value)

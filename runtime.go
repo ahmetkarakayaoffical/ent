@@ -597,12 +597,16 @@ func init() {
 	userDescRefreshToken := userFields[13].Descriptor()
 	// user.DefaultRefreshToken holds the default value on creation for the refresh_token field.
 	user.DefaultRefreshToken = userDescRefreshToken.Default.(string)
+	// userDescIDToken is the schema descriptor for id_token field.
+	userDescIDToken := userFields[14].Descriptor()
+	// user.DefaultIDToken holds the default value on creation for the id_token field.
+	user.DefaultIDToken = userDescIDToken.Default.(string)
 	// userDescTokenType is the schema descriptor for token_type field.
-	userDescTokenType := userFields[14].Descriptor()
+	userDescTokenType := userFields[15].Descriptor()
 	// user.DefaultTokenType holds the default value on creation for the token_type field.
 	user.DefaultTokenType = userDescTokenType.Default.(string)
 	// userDescTokenExpiry is the schema descriptor for token_expiry field.
-	userDescTokenExpiry := userFields[15].Descriptor()
+	userDescTokenExpiry := userFields[16].Descriptor()
 	// user.DefaultTokenExpiry holds the default value on creation for the token_expiry field.
 	user.DefaultTokenExpiry = userDescTokenExpiry.Default.(int)
 	// userDescID is the schema descriptor for id field.

@@ -893,6 +893,7 @@ var (
 		{Name: "modified", Type: field.TypeTime, Nullable: true},
 		{Name: "access_token", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "refresh_token", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "id_token", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "token_type", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "token_expiry", Type: field.TypeInt, Nullable: true, Default: 0},
 	}

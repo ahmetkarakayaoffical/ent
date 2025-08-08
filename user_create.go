@@ -198,6 +198,20 @@ func (uc *UserCreate) SetNillableRefreshToken(s *string) *UserCreate {
 	return uc
 }
 
+// SetIDToken sets the "id_token" field.
+func (uc *UserCreate) SetIDToken(s string) *UserCreate {
+	uc.mutation.SetIDToken(s)
+	return uc
+}
+
+// SetNillableIDToken sets the "id_token" field if the given value is not nil.
+func (uc *UserCreate) SetNillableIDToken(s *string) *UserCreate {
+	if s != nil {
+		uc.SetIDToken(*s)
+	}
+	return uc
+}
+
 // SetTokenType sets the "token_type" field.
 func (uc *UserCreate) SetTokenType(s string) *UserCreate {
 	uc.mutation.SetTokenType(s)
@@ -309,6 +323,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.RefreshToken(); !ok {
 		v := user.DefaultRefreshToken
 		uc.mutation.SetRefreshToken(v)
+	}
+	if _, ok := uc.mutation.IDToken(); !ok {
+		v := user.DefaultIDToken
+		uc.mutation.SetIDToken(v)
 	}
 	if _, ok := uc.mutation.TokenType(); !ok {
 		v := user.DefaultTokenType
@@ -423,6 +441,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.RefreshToken(); ok {
 		_spec.SetField(user.FieldRefreshToken, field.TypeString, value)
 		_node.RefreshToken = value
+	}
+	if value, ok := uc.mutation.IDToken(); ok {
+		_spec.SetField(user.FieldIDToken, field.TypeString, value)
+		_node.IDToken = value
 	}
 	if value, ok := uc.mutation.TokenType(); ok {
 		_spec.SetField(user.FieldTokenType, field.TypeString, value)
@@ -713,6 +735,24 @@ func (u *UserUpsert) UpdateRefreshToken() *UserUpsert {
 // ClearRefreshToken clears the value of the "refresh_token" field.
 func (u *UserUpsert) ClearRefreshToken() *UserUpsert {
 	u.SetNull(user.FieldRefreshToken)
+	return u
+}
+
+// SetIDToken sets the "id_token" field.
+func (u *UserUpsert) SetIDToken(v string) *UserUpsert {
+	u.Set(user.FieldIDToken, v)
+	return u
+}
+
+// UpdateIDToken sets the "id_token" field to the value that was provided on create.
+func (u *UserUpsert) UpdateIDToken() *UserUpsert {
+	u.SetExcluded(user.FieldIDToken)
+	return u
+}
+
+// ClearIDToken clears the value of the "id_token" field.
+func (u *UserUpsert) ClearIDToken() *UserUpsert {
+	u.SetNull(user.FieldIDToken)
 	return u
 }
 
@@ -1055,6 +1095,27 @@ func (u *UserUpsertOne) UpdateRefreshToken() *UserUpsertOne {
 func (u *UserUpsertOne) ClearRefreshToken() *UserUpsertOne {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearRefreshToken()
+	})
+}
+
+// SetIDToken sets the "id_token" field.
+func (u *UserUpsertOne) SetIDToken(v string) *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.SetIDToken(v)
+	})
+}
+
+// UpdateIDToken sets the "id_token" field to the value that was provided on create.
+func (u *UserUpsertOne) UpdateIDToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateIDToken()
+	})
+}
+
+// ClearIDToken clears the value of the "id_token" field.
+func (u *UserUpsertOne) ClearIDToken() *UserUpsertOne {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearIDToken()
 	})
 }
 
@@ -1571,6 +1632,27 @@ func (u *UserUpsertBulk) UpdateRefreshToken() *UserUpsertBulk {
 func (u *UserUpsertBulk) ClearRefreshToken() *UserUpsertBulk {
 	return u.Update(func(s *UserUpsert) {
 		s.ClearRefreshToken()
+	})
+}
+
+// SetIDToken sets the "id_token" field.
+func (u *UserUpsertBulk) SetIDToken(v string) *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.SetIDToken(v)
+	})
+}
+
+// UpdateIDToken sets the "id_token" field to the value that was provided on create.
+func (u *UserUpsertBulk) UpdateIDToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.UpdateIDToken()
+	})
+}
+
+// ClearIDToken clears the value of the "id_token" field.
+func (u *UserUpsertBulk) ClearIDToken() *UserUpsertBulk {
+	return u.Update(func(s *UserUpsert) {
+		s.ClearIDToken()
 	})
 }
 

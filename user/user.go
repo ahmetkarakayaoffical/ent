@@ -40,6 +40,8 @@ const (
 	FieldAccessToken = "access_token"
 	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
 	FieldRefreshToken = "refresh_token"
+	// FieldIDToken holds the string denoting the id_token field in the database.
+	FieldIDToken = "id_token"
 	// FieldTokenType holds the string denoting the token_type field in the database.
 	FieldTokenType = "token_type"
 	// FieldTokenExpiry holds the string denoting the token_expiry field in the database.
@@ -75,6 +77,7 @@ var Columns = []string{
 	FieldModified,
 	FieldAccessToken,
 	FieldRefreshToken,
+	FieldIDToken,
 	FieldTokenType,
 	FieldTokenExpiry,
 }
@@ -106,6 +109,8 @@ var (
 	DefaultAccessToken string
 	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
 	DefaultRefreshToken string
+	// DefaultIDToken holds the default value on creation for the "id_token" field.
+	DefaultIDToken string
 	// DefaultTokenType holds the default value on creation for the "token_type" field.
 	DefaultTokenType string
 	// DefaultTokenExpiry holds the default value on creation for the "token_expiry" field.
@@ -185,6 +190,11 @@ func ByAccessToken(opts ...sql.OrderTermOption) OrderOption {
 // ByRefreshToken orders the results by the refresh_token field.
 func ByRefreshToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRefreshToken, opts...).ToFunc()
+}
+
+// ByIDToken orders the results by the id_token field.
+func ByIDToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIDToken, opts...).ToFunc()
 }
 
 // ByTokenType orders the results by the token_type field.

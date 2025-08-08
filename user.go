@@ -43,6 +43,8 @@ type User struct {
 	AccessToken string `json:"access_token,omitempty"`
 	// RefreshToken holds the value of the "refresh_token" field.
 	RefreshToken string `json:"refresh_token,omitempty"`
+	// IDToken holds the value of the "id_token" field.
+	IDToken string `json:"id_token,omitempty"`
 	// TokenType holds the value of the "token_type" field.
 	TokenType string `json:"token_type,omitempty"`
 	// TokenExpiry holds the value of the "token_expiry" field.
@@ -80,7 +82,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case user.FieldTokenExpiry:
 			values[i] = new(sql.NullInt64)
-		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword, user.FieldAccessToken, user.FieldRefreshToken, user.FieldTokenType:
+		case user.FieldID, user.FieldName, user.FieldEmail, user.FieldPhone, user.FieldCountry, user.FieldRegister, user.FieldCertClearPassword, user.FieldAccessToken, user.FieldRefreshToken, user.FieldIDToken, user.FieldTokenType:
 			values[i] = new(sql.NullString)
 		case user.FieldExpiry, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -183,6 +185,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.RefreshToken = value.String
 			}
+		case user.FieldIDToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field id_token", values[i])
+			} else if value.Valid {
+				u.IDToken = value.String
+			}
 		case user.FieldTokenType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token_type", values[i])
@@ -274,6 +282,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("refresh_token=")
 	builder.WriteString(u.RefreshToken)
+	builder.WriteString(", ")
+	builder.WriteString("id_token=")
+	builder.WriteString(u.IDToken)
 	builder.WriteString(", ")
 	builder.WriteString("token_type=")
 	builder.WriteString(u.TokenType)
