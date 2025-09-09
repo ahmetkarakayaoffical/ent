@@ -395,6 +395,56 @@ func PackageVersion(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldPackageVersion, v))
 }
 
+// AptAllowDowngrade applies equality check predicate on the "apt_allow_downgrade" field. It's identical to AptAllowDowngradeEQ.
+func AptAllowDowngrade(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptAllowDowngrade, v))
+}
+
+// AptDeb applies equality check predicate on the "apt_deb" field. It's identical to AptDebEQ.
+func AptDeb(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptDeb, v))
+}
+
+// AptDpkgOptions applies equality check predicate on the "apt_dpkg_options" field. It's identical to AptDpkgOptionsEQ.
+func AptDpkgOptions(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptDpkgOptions, v))
+}
+
+// AptFailOnAutoremove applies equality check predicate on the "apt_fail_on_autoremove" field. It's identical to AptFailOnAutoremoveEQ.
+func AptFailOnAutoremove(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptFailOnAutoremove, v))
+}
+
+// AptForce applies equality check predicate on the "apt_force" field. It's identical to AptForceEQ.
+func AptForce(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptForce, v))
+}
+
+// AptInstallRecommends applies equality check predicate on the "apt_install_recommends" field. It's identical to AptInstallRecommendsEQ.
+func AptInstallRecommends(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptInstallRecommends, v))
+}
+
+// AptName applies equality check predicate on the "apt_name" field. It's identical to AptNameEQ.
+func AptName(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptName, v))
+}
+
+// AptOnlyUpgrade applies equality check predicate on the "apt_only_upgrade" field. It's identical to AptOnlyUpgradeEQ.
+func AptOnlyUpgrade(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptOnlyUpgrade, v))
+}
+
+// AptPurge applies equality check predicate on the "apt_purge" field. It's identical to AptPurgeEQ.
+func AptPurge(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptPurge, v))
+}
+
+// AptUpdateCache applies equality check predicate on the "apt_update_cache" field. It's identical to AptUpdateCacheEQ.
+func AptUpdateCache(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptUpdateCache, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldName, v))
@@ -4498,6 +4548,401 @@ func PackageVersionEqualFold(v string) predicate.Task {
 // PackageVersionContainsFold applies the ContainsFold predicate on the "package_version" field.
 func PackageVersionContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldPackageVersion, v))
+}
+
+// AptAllowDowngradeEQ applies the EQ predicate on the "apt_allow_downgrade" field.
+func AptAllowDowngradeEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptAllowDowngrade, v))
+}
+
+// AptAllowDowngradeNEQ applies the NEQ predicate on the "apt_allow_downgrade" field.
+func AptAllowDowngradeNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptAllowDowngrade, v))
+}
+
+// AptAllowDowngradeIsNil applies the IsNil predicate on the "apt_allow_downgrade" field.
+func AptAllowDowngradeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptAllowDowngrade))
+}
+
+// AptAllowDowngradeNotNil applies the NotNil predicate on the "apt_allow_downgrade" field.
+func AptAllowDowngradeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptAllowDowngrade))
+}
+
+// AptDebEQ applies the EQ predicate on the "apt_deb" field.
+func AptDebEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptDeb, v))
+}
+
+// AptDebNEQ applies the NEQ predicate on the "apt_deb" field.
+func AptDebNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptDeb, v))
+}
+
+// AptDebIn applies the In predicate on the "apt_deb" field.
+func AptDebIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAptDeb, vs...))
+}
+
+// AptDebNotIn applies the NotIn predicate on the "apt_deb" field.
+func AptDebNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAptDeb, vs...))
+}
+
+// AptDebGT applies the GT predicate on the "apt_deb" field.
+func AptDebGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldAptDeb, v))
+}
+
+// AptDebGTE applies the GTE predicate on the "apt_deb" field.
+func AptDebGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldAptDeb, v))
+}
+
+// AptDebLT applies the LT predicate on the "apt_deb" field.
+func AptDebLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldAptDeb, v))
+}
+
+// AptDebLTE applies the LTE predicate on the "apt_deb" field.
+func AptDebLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldAptDeb, v))
+}
+
+// AptDebContains applies the Contains predicate on the "apt_deb" field.
+func AptDebContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldAptDeb, v))
+}
+
+// AptDebHasPrefix applies the HasPrefix predicate on the "apt_deb" field.
+func AptDebHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldAptDeb, v))
+}
+
+// AptDebHasSuffix applies the HasSuffix predicate on the "apt_deb" field.
+func AptDebHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldAptDeb, v))
+}
+
+// AptDebIsNil applies the IsNil predicate on the "apt_deb" field.
+func AptDebIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptDeb))
+}
+
+// AptDebNotNil applies the NotNil predicate on the "apt_deb" field.
+func AptDebNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptDeb))
+}
+
+// AptDebEqualFold applies the EqualFold predicate on the "apt_deb" field.
+func AptDebEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldAptDeb, v))
+}
+
+// AptDebContainsFold applies the ContainsFold predicate on the "apt_deb" field.
+func AptDebContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldAptDeb, v))
+}
+
+// AptDpkgOptionsEQ applies the EQ predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsNEQ applies the NEQ predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsIn applies the In predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAptDpkgOptions, vs...))
+}
+
+// AptDpkgOptionsNotIn applies the NotIn predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAptDpkgOptions, vs...))
+}
+
+// AptDpkgOptionsGT applies the GT predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsGTE applies the GTE predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsLT applies the LT predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsLTE applies the LTE predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsContains applies the Contains predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsHasPrefix applies the HasPrefix predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsHasSuffix applies the HasSuffix predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsIsNil applies the IsNil predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptDpkgOptions))
+}
+
+// AptDpkgOptionsNotNil applies the NotNil predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptDpkgOptions))
+}
+
+// AptDpkgOptionsEqualFold applies the EqualFold predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldAptDpkgOptions, v))
+}
+
+// AptDpkgOptionsContainsFold applies the ContainsFold predicate on the "apt_dpkg_options" field.
+func AptDpkgOptionsContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldAptDpkgOptions, v))
+}
+
+// AptFailOnAutoremoveEQ applies the EQ predicate on the "apt_fail_on_autoremove" field.
+func AptFailOnAutoremoveEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptFailOnAutoremove, v))
+}
+
+// AptFailOnAutoremoveNEQ applies the NEQ predicate on the "apt_fail_on_autoremove" field.
+func AptFailOnAutoremoveNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptFailOnAutoremove, v))
+}
+
+// AptFailOnAutoremoveIsNil applies the IsNil predicate on the "apt_fail_on_autoremove" field.
+func AptFailOnAutoremoveIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptFailOnAutoremove))
+}
+
+// AptFailOnAutoremoveNotNil applies the NotNil predicate on the "apt_fail_on_autoremove" field.
+func AptFailOnAutoremoveNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptFailOnAutoremove))
+}
+
+// AptForceEQ applies the EQ predicate on the "apt_force" field.
+func AptForceEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptForce, v))
+}
+
+// AptForceNEQ applies the NEQ predicate on the "apt_force" field.
+func AptForceNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptForce, v))
+}
+
+// AptForceIsNil applies the IsNil predicate on the "apt_force" field.
+func AptForceIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptForce))
+}
+
+// AptForceNotNil applies the NotNil predicate on the "apt_force" field.
+func AptForceNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptForce))
+}
+
+// AptInstallRecommendsEQ applies the EQ predicate on the "apt_install_recommends" field.
+func AptInstallRecommendsEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptInstallRecommends, v))
+}
+
+// AptInstallRecommendsNEQ applies the NEQ predicate on the "apt_install_recommends" field.
+func AptInstallRecommendsNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptInstallRecommends, v))
+}
+
+// AptInstallRecommendsIsNil applies the IsNil predicate on the "apt_install_recommends" field.
+func AptInstallRecommendsIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptInstallRecommends))
+}
+
+// AptInstallRecommendsNotNil applies the NotNil predicate on the "apt_install_recommends" field.
+func AptInstallRecommendsNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptInstallRecommends))
+}
+
+// AptNameEQ applies the EQ predicate on the "apt_name" field.
+func AptNameEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptName, v))
+}
+
+// AptNameNEQ applies the NEQ predicate on the "apt_name" field.
+func AptNameNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptName, v))
+}
+
+// AptNameIn applies the In predicate on the "apt_name" field.
+func AptNameIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAptName, vs...))
+}
+
+// AptNameNotIn applies the NotIn predicate on the "apt_name" field.
+func AptNameNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAptName, vs...))
+}
+
+// AptNameGT applies the GT predicate on the "apt_name" field.
+func AptNameGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldAptName, v))
+}
+
+// AptNameGTE applies the GTE predicate on the "apt_name" field.
+func AptNameGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldAptName, v))
+}
+
+// AptNameLT applies the LT predicate on the "apt_name" field.
+func AptNameLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldAptName, v))
+}
+
+// AptNameLTE applies the LTE predicate on the "apt_name" field.
+func AptNameLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldAptName, v))
+}
+
+// AptNameContains applies the Contains predicate on the "apt_name" field.
+func AptNameContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldAptName, v))
+}
+
+// AptNameHasPrefix applies the HasPrefix predicate on the "apt_name" field.
+func AptNameHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldAptName, v))
+}
+
+// AptNameHasSuffix applies the HasSuffix predicate on the "apt_name" field.
+func AptNameHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldAptName, v))
+}
+
+// AptNameIsNil applies the IsNil predicate on the "apt_name" field.
+func AptNameIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptName))
+}
+
+// AptNameNotNil applies the NotNil predicate on the "apt_name" field.
+func AptNameNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptName))
+}
+
+// AptNameEqualFold applies the EqualFold predicate on the "apt_name" field.
+func AptNameEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldAptName, v))
+}
+
+// AptNameContainsFold applies the ContainsFold predicate on the "apt_name" field.
+func AptNameContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldAptName, v))
+}
+
+// AptOnlyUpgradeEQ applies the EQ predicate on the "apt_only_upgrade" field.
+func AptOnlyUpgradeEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptOnlyUpgrade, v))
+}
+
+// AptOnlyUpgradeNEQ applies the NEQ predicate on the "apt_only_upgrade" field.
+func AptOnlyUpgradeNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptOnlyUpgrade, v))
+}
+
+// AptOnlyUpgradeIsNil applies the IsNil predicate on the "apt_only_upgrade" field.
+func AptOnlyUpgradeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptOnlyUpgrade))
+}
+
+// AptOnlyUpgradeNotNil applies the NotNil predicate on the "apt_only_upgrade" field.
+func AptOnlyUpgradeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptOnlyUpgrade))
+}
+
+// AptPurgeEQ applies the EQ predicate on the "apt_purge" field.
+func AptPurgeEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptPurge, v))
+}
+
+// AptPurgeNEQ applies the NEQ predicate on the "apt_purge" field.
+func AptPurgeNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptPurge, v))
+}
+
+// AptPurgeIsNil applies the IsNil predicate on the "apt_purge" field.
+func AptPurgeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptPurge))
+}
+
+// AptPurgeNotNil applies the NotNil predicate on the "apt_purge" field.
+func AptPurgeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptPurge))
+}
+
+// AptUpdateCacheEQ applies the EQ predicate on the "apt_update_cache" field.
+func AptUpdateCacheEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptUpdateCache, v))
+}
+
+// AptUpdateCacheNEQ applies the NEQ predicate on the "apt_update_cache" field.
+func AptUpdateCacheNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptUpdateCache, v))
+}
+
+// AptUpdateCacheIsNil applies the IsNil predicate on the "apt_update_cache" field.
+func AptUpdateCacheIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptUpdateCache))
+}
+
+// AptUpdateCacheNotNil applies the NotNil predicate on the "apt_update_cache" field.
+func AptUpdateCacheNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptUpdateCache))
+}
+
+// AptUpgradeTypeEQ applies the EQ predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeEQ(v AptUpgradeType) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAptUpgradeType, v))
+}
+
+// AptUpgradeTypeNEQ applies the NEQ predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeNEQ(v AptUpgradeType) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAptUpgradeType, v))
+}
+
+// AptUpgradeTypeIn applies the In predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeIn(vs ...AptUpgradeType) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAptUpgradeType, vs...))
+}
+
+// AptUpgradeTypeNotIn applies the NotIn predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeNotIn(vs ...AptUpgradeType) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAptUpgradeType, vs...))
+}
+
+// AptUpgradeTypeIsNil applies the IsNil predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAptUpgradeType))
+}
+
+// AptUpgradeTypeNotNil applies the NotNil predicate on the "apt_upgrade_type" field.
+func AptUpgradeTypeNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAptUpgradeType))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.

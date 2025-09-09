@@ -25969,6 +25969,17 @@ type TaskMutation struct {
 	brew_install_options                       *string
 	brew_greedy                                *bool
 	package_version                            *string
+	apt_allow_downgrade                        *bool
+	apt_deb                                    *string
+	apt_dpkg_options                           *string
+	apt_fail_on_autoremove                     *bool
+	apt_force                                  *bool
+	apt_install_recommends                     *bool
+	apt_name                                   *string
+	apt_only_upgrade                           *bool
+	apt_purge                                  *bool
+	apt_update_cache                           *bool
+	apt_upgrade_type                           *task.AptUpgradeType
 	clearedFields                              map[string]struct{}
 	tags                                       map[int]struct{}
 	removedtags                                map[int]struct{}
@@ -29629,6 +29640,545 @@ func (m *TaskMutation) ResetPackageVersion() {
 	delete(m.clearedFields, task.FieldPackageVersion)
 }
 
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (m *TaskMutation) SetAptAllowDowngrade(b bool) {
+	m.apt_allow_downgrade = &b
+}
+
+// AptAllowDowngrade returns the value of the "apt_allow_downgrade" field in the mutation.
+func (m *TaskMutation) AptAllowDowngrade() (r bool, exists bool) {
+	v := m.apt_allow_downgrade
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptAllowDowngrade returns the old "apt_allow_downgrade" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptAllowDowngrade(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptAllowDowngrade is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptAllowDowngrade requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptAllowDowngrade: %w", err)
+	}
+	return oldValue.AptAllowDowngrade, nil
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (m *TaskMutation) ClearAptAllowDowngrade() {
+	m.apt_allow_downgrade = nil
+	m.clearedFields[task.FieldAptAllowDowngrade] = struct{}{}
+}
+
+// AptAllowDowngradeCleared returns if the "apt_allow_downgrade" field was cleared in this mutation.
+func (m *TaskMutation) AptAllowDowngradeCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptAllowDowngrade]
+	return ok
+}
+
+// ResetAptAllowDowngrade resets all changes to the "apt_allow_downgrade" field.
+func (m *TaskMutation) ResetAptAllowDowngrade() {
+	m.apt_allow_downgrade = nil
+	delete(m.clearedFields, task.FieldAptAllowDowngrade)
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (m *TaskMutation) SetAptDeb(s string) {
+	m.apt_deb = &s
+}
+
+// AptDeb returns the value of the "apt_deb" field in the mutation.
+func (m *TaskMutation) AptDeb() (r string, exists bool) {
+	v := m.apt_deb
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptDeb returns the old "apt_deb" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptDeb(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptDeb is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptDeb requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptDeb: %w", err)
+	}
+	return oldValue.AptDeb, nil
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (m *TaskMutation) ClearAptDeb() {
+	m.apt_deb = nil
+	m.clearedFields[task.FieldAptDeb] = struct{}{}
+}
+
+// AptDebCleared returns if the "apt_deb" field was cleared in this mutation.
+func (m *TaskMutation) AptDebCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptDeb]
+	return ok
+}
+
+// ResetAptDeb resets all changes to the "apt_deb" field.
+func (m *TaskMutation) ResetAptDeb() {
+	m.apt_deb = nil
+	delete(m.clearedFields, task.FieldAptDeb)
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (m *TaskMutation) SetAptDpkgOptions(s string) {
+	m.apt_dpkg_options = &s
+}
+
+// AptDpkgOptions returns the value of the "apt_dpkg_options" field in the mutation.
+func (m *TaskMutation) AptDpkgOptions() (r string, exists bool) {
+	v := m.apt_dpkg_options
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptDpkgOptions returns the old "apt_dpkg_options" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptDpkgOptions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptDpkgOptions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptDpkgOptions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptDpkgOptions: %w", err)
+	}
+	return oldValue.AptDpkgOptions, nil
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (m *TaskMutation) ClearAptDpkgOptions() {
+	m.apt_dpkg_options = nil
+	m.clearedFields[task.FieldAptDpkgOptions] = struct{}{}
+}
+
+// AptDpkgOptionsCleared returns if the "apt_dpkg_options" field was cleared in this mutation.
+func (m *TaskMutation) AptDpkgOptionsCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptDpkgOptions]
+	return ok
+}
+
+// ResetAptDpkgOptions resets all changes to the "apt_dpkg_options" field.
+func (m *TaskMutation) ResetAptDpkgOptions() {
+	m.apt_dpkg_options = nil
+	delete(m.clearedFields, task.FieldAptDpkgOptions)
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (m *TaskMutation) SetAptFailOnAutoremove(b bool) {
+	m.apt_fail_on_autoremove = &b
+}
+
+// AptFailOnAutoremove returns the value of the "apt_fail_on_autoremove" field in the mutation.
+func (m *TaskMutation) AptFailOnAutoremove() (r bool, exists bool) {
+	v := m.apt_fail_on_autoremove
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptFailOnAutoremove returns the old "apt_fail_on_autoremove" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptFailOnAutoremove(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptFailOnAutoremove is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptFailOnAutoremove requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptFailOnAutoremove: %w", err)
+	}
+	return oldValue.AptFailOnAutoremove, nil
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (m *TaskMutation) ClearAptFailOnAutoremove() {
+	m.apt_fail_on_autoremove = nil
+	m.clearedFields[task.FieldAptFailOnAutoremove] = struct{}{}
+}
+
+// AptFailOnAutoremoveCleared returns if the "apt_fail_on_autoremove" field was cleared in this mutation.
+func (m *TaskMutation) AptFailOnAutoremoveCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptFailOnAutoremove]
+	return ok
+}
+
+// ResetAptFailOnAutoremove resets all changes to the "apt_fail_on_autoremove" field.
+func (m *TaskMutation) ResetAptFailOnAutoremove() {
+	m.apt_fail_on_autoremove = nil
+	delete(m.clearedFields, task.FieldAptFailOnAutoremove)
+}
+
+// SetAptForce sets the "apt_force" field.
+func (m *TaskMutation) SetAptForce(b bool) {
+	m.apt_force = &b
+}
+
+// AptForce returns the value of the "apt_force" field in the mutation.
+func (m *TaskMutation) AptForce() (r bool, exists bool) {
+	v := m.apt_force
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptForce returns the old "apt_force" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptForce(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptForce is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptForce requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptForce: %w", err)
+	}
+	return oldValue.AptForce, nil
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (m *TaskMutation) ClearAptForce() {
+	m.apt_force = nil
+	m.clearedFields[task.FieldAptForce] = struct{}{}
+}
+
+// AptForceCleared returns if the "apt_force" field was cleared in this mutation.
+func (m *TaskMutation) AptForceCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptForce]
+	return ok
+}
+
+// ResetAptForce resets all changes to the "apt_force" field.
+func (m *TaskMutation) ResetAptForce() {
+	m.apt_force = nil
+	delete(m.clearedFields, task.FieldAptForce)
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (m *TaskMutation) SetAptInstallRecommends(b bool) {
+	m.apt_install_recommends = &b
+}
+
+// AptInstallRecommends returns the value of the "apt_install_recommends" field in the mutation.
+func (m *TaskMutation) AptInstallRecommends() (r bool, exists bool) {
+	v := m.apt_install_recommends
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptInstallRecommends returns the old "apt_install_recommends" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptInstallRecommends(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptInstallRecommends is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptInstallRecommends requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptInstallRecommends: %w", err)
+	}
+	return oldValue.AptInstallRecommends, nil
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (m *TaskMutation) ClearAptInstallRecommends() {
+	m.apt_install_recommends = nil
+	m.clearedFields[task.FieldAptInstallRecommends] = struct{}{}
+}
+
+// AptInstallRecommendsCleared returns if the "apt_install_recommends" field was cleared in this mutation.
+func (m *TaskMutation) AptInstallRecommendsCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptInstallRecommends]
+	return ok
+}
+
+// ResetAptInstallRecommends resets all changes to the "apt_install_recommends" field.
+func (m *TaskMutation) ResetAptInstallRecommends() {
+	m.apt_install_recommends = nil
+	delete(m.clearedFields, task.FieldAptInstallRecommends)
+}
+
+// SetAptName sets the "apt_name" field.
+func (m *TaskMutation) SetAptName(s string) {
+	m.apt_name = &s
+}
+
+// AptName returns the value of the "apt_name" field in the mutation.
+func (m *TaskMutation) AptName() (r string, exists bool) {
+	v := m.apt_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptName returns the old "apt_name" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptName: %w", err)
+	}
+	return oldValue.AptName, nil
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (m *TaskMutation) ClearAptName() {
+	m.apt_name = nil
+	m.clearedFields[task.FieldAptName] = struct{}{}
+}
+
+// AptNameCleared returns if the "apt_name" field was cleared in this mutation.
+func (m *TaskMutation) AptNameCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptName]
+	return ok
+}
+
+// ResetAptName resets all changes to the "apt_name" field.
+func (m *TaskMutation) ResetAptName() {
+	m.apt_name = nil
+	delete(m.clearedFields, task.FieldAptName)
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (m *TaskMutation) SetAptOnlyUpgrade(b bool) {
+	m.apt_only_upgrade = &b
+}
+
+// AptOnlyUpgrade returns the value of the "apt_only_upgrade" field in the mutation.
+func (m *TaskMutation) AptOnlyUpgrade() (r bool, exists bool) {
+	v := m.apt_only_upgrade
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptOnlyUpgrade returns the old "apt_only_upgrade" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptOnlyUpgrade(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptOnlyUpgrade is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptOnlyUpgrade requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptOnlyUpgrade: %w", err)
+	}
+	return oldValue.AptOnlyUpgrade, nil
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (m *TaskMutation) ClearAptOnlyUpgrade() {
+	m.apt_only_upgrade = nil
+	m.clearedFields[task.FieldAptOnlyUpgrade] = struct{}{}
+}
+
+// AptOnlyUpgradeCleared returns if the "apt_only_upgrade" field was cleared in this mutation.
+func (m *TaskMutation) AptOnlyUpgradeCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptOnlyUpgrade]
+	return ok
+}
+
+// ResetAptOnlyUpgrade resets all changes to the "apt_only_upgrade" field.
+func (m *TaskMutation) ResetAptOnlyUpgrade() {
+	m.apt_only_upgrade = nil
+	delete(m.clearedFields, task.FieldAptOnlyUpgrade)
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (m *TaskMutation) SetAptPurge(b bool) {
+	m.apt_purge = &b
+}
+
+// AptPurge returns the value of the "apt_purge" field in the mutation.
+func (m *TaskMutation) AptPurge() (r bool, exists bool) {
+	v := m.apt_purge
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptPurge returns the old "apt_purge" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptPurge(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptPurge is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptPurge requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptPurge: %w", err)
+	}
+	return oldValue.AptPurge, nil
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (m *TaskMutation) ClearAptPurge() {
+	m.apt_purge = nil
+	m.clearedFields[task.FieldAptPurge] = struct{}{}
+}
+
+// AptPurgeCleared returns if the "apt_purge" field was cleared in this mutation.
+func (m *TaskMutation) AptPurgeCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptPurge]
+	return ok
+}
+
+// ResetAptPurge resets all changes to the "apt_purge" field.
+func (m *TaskMutation) ResetAptPurge() {
+	m.apt_purge = nil
+	delete(m.clearedFields, task.FieldAptPurge)
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (m *TaskMutation) SetAptUpdateCache(b bool) {
+	m.apt_update_cache = &b
+}
+
+// AptUpdateCache returns the value of the "apt_update_cache" field in the mutation.
+func (m *TaskMutation) AptUpdateCache() (r bool, exists bool) {
+	v := m.apt_update_cache
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptUpdateCache returns the old "apt_update_cache" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptUpdateCache(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptUpdateCache is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptUpdateCache requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptUpdateCache: %w", err)
+	}
+	return oldValue.AptUpdateCache, nil
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (m *TaskMutation) ClearAptUpdateCache() {
+	m.apt_update_cache = nil
+	m.clearedFields[task.FieldAptUpdateCache] = struct{}{}
+}
+
+// AptUpdateCacheCleared returns if the "apt_update_cache" field was cleared in this mutation.
+func (m *TaskMutation) AptUpdateCacheCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptUpdateCache]
+	return ok
+}
+
+// ResetAptUpdateCache resets all changes to the "apt_update_cache" field.
+func (m *TaskMutation) ResetAptUpdateCache() {
+	m.apt_update_cache = nil
+	delete(m.clearedFields, task.FieldAptUpdateCache)
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (m *TaskMutation) SetAptUpgradeType(tut task.AptUpgradeType) {
+	m.apt_upgrade_type = &tut
+}
+
+// AptUpgradeType returns the value of the "apt_upgrade_type" field in the mutation.
+func (m *TaskMutation) AptUpgradeType() (r task.AptUpgradeType, exists bool) {
+	v := m.apt_upgrade_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAptUpgradeType returns the old "apt_upgrade_type" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldAptUpgradeType(ctx context.Context) (v task.AptUpgradeType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAptUpgradeType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAptUpgradeType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAptUpgradeType: %w", err)
+	}
+	return oldValue.AptUpgradeType, nil
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (m *TaskMutation) ClearAptUpgradeType() {
+	m.apt_upgrade_type = nil
+	m.clearedFields[task.FieldAptUpgradeType] = struct{}{}
+}
+
+// AptUpgradeTypeCleared returns if the "apt_upgrade_type" field was cleared in this mutation.
+func (m *TaskMutation) AptUpgradeTypeCleared() bool {
+	_, ok := m.clearedFields[task.FieldAptUpgradeType]
+	return ok
+}
+
+// ResetAptUpgradeType resets all changes to the "apt_upgrade_type" field.
+func (m *TaskMutation) ResetAptUpgradeType() {
+	m.apt_upgrade_type = nil
+	delete(m.clearedFields, task.FieldAptUpgradeType)
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
 func (m *TaskMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
@@ -29756,7 +30306,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 73)
+	fields := make([]string, 0, 84)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -29976,6 +30526,39 @@ func (m *TaskMutation) Fields() []string {
 	if m.package_version != nil {
 		fields = append(fields, task.FieldPackageVersion)
 	}
+	if m.apt_allow_downgrade != nil {
+		fields = append(fields, task.FieldAptAllowDowngrade)
+	}
+	if m.apt_deb != nil {
+		fields = append(fields, task.FieldAptDeb)
+	}
+	if m.apt_dpkg_options != nil {
+		fields = append(fields, task.FieldAptDpkgOptions)
+	}
+	if m.apt_fail_on_autoremove != nil {
+		fields = append(fields, task.FieldAptFailOnAutoremove)
+	}
+	if m.apt_force != nil {
+		fields = append(fields, task.FieldAptForce)
+	}
+	if m.apt_install_recommends != nil {
+		fields = append(fields, task.FieldAptInstallRecommends)
+	}
+	if m.apt_name != nil {
+		fields = append(fields, task.FieldAptName)
+	}
+	if m.apt_only_upgrade != nil {
+		fields = append(fields, task.FieldAptOnlyUpgrade)
+	}
+	if m.apt_purge != nil {
+		fields = append(fields, task.FieldAptPurge)
+	}
+	if m.apt_update_cache != nil {
+		fields = append(fields, task.FieldAptUpdateCache)
+	}
+	if m.apt_upgrade_type != nil {
+		fields = append(fields, task.FieldAptUpgradeType)
+	}
 	return fields
 }
 
@@ -30130,6 +30713,28 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.BrewGreedy()
 	case task.FieldPackageVersion:
 		return m.PackageVersion()
+	case task.FieldAptAllowDowngrade:
+		return m.AptAllowDowngrade()
+	case task.FieldAptDeb:
+		return m.AptDeb()
+	case task.FieldAptDpkgOptions:
+		return m.AptDpkgOptions()
+	case task.FieldAptFailOnAutoremove:
+		return m.AptFailOnAutoremove()
+	case task.FieldAptForce:
+		return m.AptForce()
+	case task.FieldAptInstallRecommends:
+		return m.AptInstallRecommends()
+	case task.FieldAptName:
+		return m.AptName()
+	case task.FieldAptOnlyUpgrade:
+		return m.AptOnlyUpgrade()
+	case task.FieldAptPurge:
+		return m.AptPurge()
+	case task.FieldAptUpdateCache:
+		return m.AptUpdateCache()
+	case task.FieldAptUpgradeType:
+		return m.AptUpgradeType()
 	}
 	return nil, false
 }
@@ -30285,6 +30890,28 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldBrewGreedy(ctx)
 	case task.FieldPackageVersion:
 		return m.OldPackageVersion(ctx)
+	case task.FieldAptAllowDowngrade:
+		return m.OldAptAllowDowngrade(ctx)
+	case task.FieldAptDeb:
+		return m.OldAptDeb(ctx)
+	case task.FieldAptDpkgOptions:
+		return m.OldAptDpkgOptions(ctx)
+	case task.FieldAptFailOnAutoremove:
+		return m.OldAptFailOnAutoremove(ctx)
+	case task.FieldAptForce:
+		return m.OldAptForce(ctx)
+	case task.FieldAptInstallRecommends:
+		return m.OldAptInstallRecommends(ctx)
+	case task.FieldAptName:
+		return m.OldAptName(ctx)
+	case task.FieldAptOnlyUpgrade:
+		return m.OldAptOnlyUpgrade(ctx)
+	case task.FieldAptPurge:
+		return m.OldAptPurge(ctx)
+	case task.FieldAptUpdateCache:
+		return m.OldAptUpdateCache(ctx)
+	case task.FieldAptUpgradeType:
+		return m.OldAptUpgradeType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Task field %s", name)
 }
@@ -30805,6 +31432,83 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPackageVersion(v)
 		return nil
+	case task.FieldAptAllowDowngrade:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptAllowDowngrade(v)
+		return nil
+	case task.FieldAptDeb:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptDeb(v)
+		return nil
+	case task.FieldAptDpkgOptions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptDpkgOptions(v)
+		return nil
+	case task.FieldAptFailOnAutoremove:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptFailOnAutoremove(v)
+		return nil
+	case task.FieldAptForce:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptForce(v)
+		return nil
+	case task.FieldAptInstallRecommends:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptInstallRecommends(v)
+		return nil
+	case task.FieldAptName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptName(v)
+		return nil
+	case task.FieldAptOnlyUpgrade:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptOnlyUpgrade(v)
+		return nil
+	case task.FieldAptPurge:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptPurge(v)
+		return nil
+	case task.FieldAptUpdateCache:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptUpdateCache(v)
+		return nil
+	case task.FieldAptUpgradeType:
+		v, ok := value.(task.AptUpgradeType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAptUpgradeType(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)
 }
@@ -31048,6 +31752,39 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldPackageVersion) {
 		fields = append(fields, task.FieldPackageVersion)
 	}
+	if m.FieldCleared(task.FieldAptAllowDowngrade) {
+		fields = append(fields, task.FieldAptAllowDowngrade)
+	}
+	if m.FieldCleared(task.FieldAptDeb) {
+		fields = append(fields, task.FieldAptDeb)
+	}
+	if m.FieldCleared(task.FieldAptDpkgOptions) {
+		fields = append(fields, task.FieldAptDpkgOptions)
+	}
+	if m.FieldCleared(task.FieldAptFailOnAutoremove) {
+		fields = append(fields, task.FieldAptFailOnAutoremove)
+	}
+	if m.FieldCleared(task.FieldAptForce) {
+		fields = append(fields, task.FieldAptForce)
+	}
+	if m.FieldCleared(task.FieldAptInstallRecommends) {
+		fields = append(fields, task.FieldAptInstallRecommends)
+	}
+	if m.FieldCleared(task.FieldAptName) {
+		fields = append(fields, task.FieldAptName)
+	}
+	if m.FieldCleared(task.FieldAptOnlyUpgrade) {
+		fields = append(fields, task.FieldAptOnlyUpgrade)
+	}
+	if m.FieldCleared(task.FieldAptPurge) {
+		fields = append(fields, task.FieldAptPurge)
+	}
+	if m.FieldCleared(task.FieldAptUpdateCache) {
+		fields = append(fields, task.FieldAptUpdateCache)
+	}
+	if m.FieldCleared(task.FieldAptUpgradeType) {
+		fields = append(fields, task.FieldAptUpgradeType)
+	}
 	return fields
 }
 
@@ -31275,6 +32012,39 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldPackageVersion:
 		m.ClearPackageVersion()
 		return nil
+	case task.FieldAptAllowDowngrade:
+		m.ClearAptAllowDowngrade()
+		return nil
+	case task.FieldAptDeb:
+		m.ClearAptDeb()
+		return nil
+	case task.FieldAptDpkgOptions:
+		m.ClearAptDpkgOptions()
+		return nil
+	case task.FieldAptFailOnAutoremove:
+		m.ClearAptFailOnAutoremove()
+		return nil
+	case task.FieldAptForce:
+		m.ClearAptForce()
+		return nil
+	case task.FieldAptInstallRecommends:
+		m.ClearAptInstallRecommends()
+		return nil
+	case task.FieldAptName:
+		m.ClearAptName()
+		return nil
+	case task.FieldAptOnlyUpgrade:
+		m.ClearAptOnlyUpgrade()
+		return nil
+	case task.FieldAptPurge:
+		m.ClearAptPurge()
+		return nil
+	case task.FieldAptUpdateCache:
+		m.ClearAptUpdateCache()
+		return nil
+	case task.FieldAptUpgradeType:
+		m.ClearAptUpgradeType()
+		return nil
 	}
 	return fmt.Errorf("unknown Task nullable field %s", name)
 }
@@ -31501,6 +32271,39 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldPackageVersion:
 		m.ResetPackageVersion()
+		return nil
+	case task.FieldAptAllowDowngrade:
+		m.ResetAptAllowDowngrade()
+		return nil
+	case task.FieldAptDeb:
+		m.ResetAptDeb()
+		return nil
+	case task.FieldAptDpkgOptions:
+		m.ResetAptDpkgOptions()
+		return nil
+	case task.FieldAptFailOnAutoremove:
+		m.ResetAptFailOnAutoremove()
+		return nil
+	case task.FieldAptForce:
+		m.ResetAptForce()
+		return nil
+	case task.FieldAptInstallRecommends:
+		m.ResetAptInstallRecommends()
+		return nil
+	case task.FieldAptName:
+		m.ResetAptName()
+		return nil
+	case task.FieldAptOnlyUpgrade:
+		m.ResetAptOnlyUpgrade()
+		return nil
+	case task.FieldAptPurge:
+		m.ResetAptPurge()
+		return nil
+	case task.FieldAptUpdateCache:
+		m.ResetAptUpdateCache()
+		return nil
+	case task.FieldAptUpgradeType:
+		m.ResetAptUpgradeType()
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)

@@ -1479,6 +1479,226 @@ func (tu *TaskUpdate) ClearPackageVersion() *TaskUpdate {
 	return tu
 }
 
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (tu *TaskUpdate) SetAptAllowDowngrade(b bool) *TaskUpdate {
+	tu.mutation.SetAptAllowDowngrade(b)
+	return tu
+}
+
+// SetNillableAptAllowDowngrade sets the "apt_allow_downgrade" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptAllowDowngrade(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptAllowDowngrade(*b)
+	}
+	return tu
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (tu *TaskUpdate) ClearAptAllowDowngrade() *TaskUpdate {
+	tu.mutation.ClearAptAllowDowngrade()
+	return tu
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (tu *TaskUpdate) SetAptDeb(s string) *TaskUpdate {
+	tu.mutation.SetAptDeb(s)
+	return tu
+}
+
+// SetNillableAptDeb sets the "apt_deb" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptDeb(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetAptDeb(*s)
+	}
+	return tu
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (tu *TaskUpdate) ClearAptDeb() *TaskUpdate {
+	tu.mutation.ClearAptDeb()
+	return tu
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (tu *TaskUpdate) SetAptDpkgOptions(s string) *TaskUpdate {
+	tu.mutation.SetAptDpkgOptions(s)
+	return tu
+}
+
+// SetNillableAptDpkgOptions sets the "apt_dpkg_options" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptDpkgOptions(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetAptDpkgOptions(*s)
+	}
+	return tu
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (tu *TaskUpdate) ClearAptDpkgOptions() *TaskUpdate {
+	tu.mutation.ClearAptDpkgOptions()
+	return tu
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (tu *TaskUpdate) SetAptFailOnAutoremove(b bool) *TaskUpdate {
+	tu.mutation.SetAptFailOnAutoremove(b)
+	return tu
+}
+
+// SetNillableAptFailOnAutoremove sets the "apt_fail_on_autoremove" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptFailOnAutoremove(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptFailOnAutoremove(*b)
+	}
+	return tu
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (tu *TaskUpdate) ClearAptFailOnAutoremove() *TaskUpdate {
+	tu.mutation.ClearAptFailOnAutoremove()
+	return tu
+}
+
+// SetAptForce sets the "apt_force" field.
+func (tu *TaskUpdate) SetAptForce(b bool) *TaskUpdate {
+	tu.mutation.SetAptForce(b)
+	return tu
+}
+
+// SetNillableAptForce sets the "apt_force" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptForce(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptForce(*b)
+	}
+	return tu
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (tu *TaskUpdate) ClearAptForce() *TaskUpdate {
+	tu.mutation.ClearAptForce()
+	return tu
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (tu *TaskUpdate) SetAptInstallRecommends(b bool) *TaskUpdate {
+	tu.mutation.SetAptInstallRecommends(b)
+	return tu
+}
+
+// SetNillableAptInstallRecommends sets the "apt_install_recommends" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptInstallRecommends(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptInstallRecommends(*b)
+	}
+	return tu
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (tu *TaskUpdate) ClearAptInstallRecommends() *TaskUpdate {
+	tu.mutation.ClearAptInstallRecommends()
+	return tu
+}
+
+// SetAptName sets the "apt_name" field.
+func (tu *TaskUpdate) SetAptName(s string) *TaskUpdate {
+	tu.mutation.SetAptName(s)
+	return tu
+}
+
+// SetNillableAptName sets the "apt_name" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptName(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetAptName(*s)
+	}
+	return tu
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (tu *TaskUpdate) ClearAptName() *TaskUpdate {
+	tu.mutation.ClearAptName()
+	return tu
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (tu *TaskUpdate) SetAptOnlyUpgrade(b bool) *TaskUpdate {
+	tu.mutation.SetAptOnlyUpgrade(b)
+	return tu
+}
+
+// SetNillableAptOnlyUpgrade sets the "apt_only_upgrade" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptOnlyUpgrade(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptOnlyUpgrade(*b)
+	}
+	return tu
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (tu *TaskUpdate) ClearAptOnlyUpgrade() *TaskUpdate {
+	tu.mutation.ClearAptOnlyUpgrade()
+	return tu
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (tu *TaskUpdate) SetAptPurge(b bool) *TaskUpdate {
+	tu.mutation.SetAptPurge(b)
+	return tu
+}
+
+// SetNillableAptPurge sets the "apt_purge" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptPurge(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptPurge(*b)
+	}
+	return tu
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (tu *TaskUpdate) ClearAptPurge() *TaskUpdate {
+	tu.mutation.ClearAptPurge()
+	return tu
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (tu *TaskUpdate) SetAptUpdateCache(b bool) *TaskUpdate {
+	tu.mutation.SetAptUpdateCache(b)
+	return tu
+}
+
+// SetNillableAptUpdateCache sets the "apt_update_cache" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptUpdateCache(b *bool) *TaskUpdate {
+	if b != nil {
+		tu.SetAptUpdateCache(*b)
+	}
+	return tu
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (tu *TaskUpdate) ClearAptUpdateCache() *TaskUpdate {
+	tu.mutation.ClearAptUpdateCache()
+	return tu
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (tu *TaskUpdate) SetAptUpgradeType(tut task.AptUpgradeType) *TaskUpdate {
+	tu.mutation.SetAptUpgradeType(tut)
+	return tu
+}
+
+// SetNillableAptUpgradeType sets the "apt_upgrade_type" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAptUpgradeType(tut *task.AptUpgradeType) *TaskUpdate {
+	if tut != nil {
+		tu.SetAptUpgradeType(*tut)
+	}
+	return tu
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (tu *TaskUpdate) ClearAptUpgradeType() *TaskUpdate {
+	tu.mutation.ClearAptUpgradeType()
+	return tu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tu *TaskUpdate) AddTagIDs(ids ...int) *TaskUpdate {
 	tu.mutation.AddTagIDs(ids...)
@@ -1602,6 +1822,11 @@ func (tu *TaskUpdate) check() error {
 	if v, ok := tu.mutation.AgentType(); ok {
 		if err := task.AgentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.AptUpgradeType(); ok {
+		if err := task.AptUpgradeTypeValidator(v); err != nil {
+			return &ValidationError{Name: "apt_upgrade_type", err: fmt.Errorf(`ent: validator failed for field "Task.apt_upgrade_type": %w`, err)}
 		}
 	}
 	return nil
@@ -2056,6 +2281,72 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.PackageVersionCleared() {
 		_spec.ClearField(task.FieldPackageVersion, field.TypeString)
+	}
+	if value, ok := tu.mutation.AptAllowDowngrade(); ok {
+		_spec.SetField(task.FieldAptAllowDowngrade, field.TypeBool, value)
+	}
+	if tu.mutation.AptAllowDowngradeCleared() {
+		_spec.ClearField(task.FieldAptAllowDowngrade, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptDeb(); ok {
+		_spec.SetField(task.FieldAptDeb, field.TypeString, value)
+	}
+	if tu.mutation.AptDebCleared() {
+		_spec.ClearField(task.FieldAptDeb, field.TypeString)
+	}
+	if value, ok := tu.mutation.AptDpkgOptions(); ok {
+		_spec.SetField(task.FieldAptDpkgOptions, field.TypeString, value)
+	}
+	if tu.mutation.AptDpkgOptionsCleared() {
+		_spec.ClearField(task.FieldAptDpkgOptions, field.TypeString)
+	}
+	if value, ok := tu.mutation.AptFailOnAutoremove(); ok {
+		_spec.SetField(task.FieldAptFailOnAutoremove, field.TypeBool, value)
+	}
+	if tu.mutation.AptFailOnAutoremoveCleared() {
+		_spec.ClearField(task.FieldAptFailOnAutoremove, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptForce(); ok {
+		_spec.SetField(task.FieldAptForce, field.TypeBool, value)
+	}
+	if tu.mutation.AptForceCleared() {
+		_spec.ClearField(task.FieldAptForce, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptInstallRecommends(); ok {
+		_spec.SetField(task.FieldAptInstallRecommends, field.TypeBool, value)
+	}
+	if tu.mutation.AptInstallRecommendsCleared() {
+		_spec.ClearField(task.FieldAptInstallRecommends, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptName(); ok {
+		_spec.SetField(task.FieldAptName, field.TypeString, value)
+	}
+	if tu.mutation.AptNameCleared() {
+		_spec.ClearField(task.FieldAptName, field.TypeString)
+	}
+	if value, ok := tu.mutation.AptOnlyUpgrade(); ok {
+		_spec.SetField(task.FieldAptOnlyUpgrade, field.TypeBool, value)
+	}
+	if tu.mutation.AptOnlyUpgradeCleared() {
+		_spec.ClearField(task.FieldAptOnlyUpgrade, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptPurge(); ok {
+		_spec.SetField(task.FieldAptPurge, field.TypeBool, value)
+	}
+	if tu.mutation.AptPurgeCleared() {
+		_spec.ClearField(task.FieldAptPurge, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptUpdateCache(); ok {
+		_spec.SetField(task.FieldAptUpdateCache, field.TypeBool, value)
+	}
+	if tu.mutation.AptUpdateCacheCleared() {
+		_spec.ClearField(task.FieldAptUpdateCache, field.TypeBool)
+	}
+	if value, ok := tu.mutation.AptUpgradeType(); ok {
+		_spec.SetField(task.FieldAptUpgradeType, field.TypeEnum, value)
+	}
+	if tu.mutation.AptUpgradeTypeCleared() {
+		_spec.ClearField(task.FieldAptUpgradeType, field.TypeEnum)
 	}
 	if tu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3601,6 +3892,226 @@ func (tuo *TaskUpdateOne) ClearPackageVersion() *TaskUpdateOne {
 	return tuo
 }
 
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (tuo *TaskUpdateOne) SetAptAllowDowngrade(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptAllowDowngrade(b)
+	return tuo
+}
+
+// SetNillableAptAllowDowngrade sets the "apt_allow_downgrade" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptAllowDowngrade(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptAllowDowngrade(*b)
+	}
+	return tuo
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (tuo *TaskUpdateOne) ClearAptAllowDowngrade() *TaskUpdateOne {
+	tuo.mutation.ClearAptAllowDowngrade()
+	return tuo
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (tuo *TaskUpdateOne) SetAptDeb(s string) *TaskUpdateOne {
+	tuo.mutation.SetAptDeb(s)
+	return tuo
+}
+
+// SetNillableAptDeb sets the "apt_deb" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptDeb(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetAptDeb(*s)
+	}
+	return tuo
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (tuo *TaskUpdateOne) ClearAptDeb() *TaskUpdateOne {
+	tuo.mutation.ClearAptDeb()
+	return tuo
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (tuo *TaskUpdateOne) SetAptDpkgOptions(s string) *TaskUpdateOne {
+	tuo.mutation.SetAptDpkgOptions(s)
+	return tuo
+}
+
+// SetNillableAptDpkgOptions sets the "apt_dpkg_options" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptDpkgOptions(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetAptDpkgOptions(*s)
+	}
+	return tuo
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (tuo *TaskUpdateOne) ClearAptDpkgOptions() *TaskUpdateOne {
+	tuo.mutation.ClearAptDpkgOptions()
+	return tuo
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (tuo *TaskUpdateOne) SetAptFailOnAutoremove(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptFailOnAutoremove(b)
+	return tuo
+}
+
+// SetNillableAptFailOnAutoremove sets the "apt_fail_on_autoremove" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptFailOnAutoremove(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptFailOnAutoremove(*b)
+	}
+	return tuo
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (tuo *TaskUpdateOne) ClearAptFailOnAutoremove() *TaskUpdateOne {
+	tuo.mutation.ClearAptFailOnAutoremove()
+	return tuo
+}
+
+// SetAptForce sets the "apt_force" field.
+func (tuo *TaskUpdateOne) SetAptForce(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptForce(b)
+	return tuo
+}
+
+// SetNillableAptForce sets the "apt_force" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptForce(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptForce(*b)
+	}
+	return tuo
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (tuo *TaskUpdateOne) ClearAptForce() *TaskUpdateOne {
+	tuo.mutation.ClearAptForce()
+	return tuo
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (tuo *TaskUpdateOne) SetAptInstallRecommends(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptInstallRecommends(b)
+	return tuo
+}
+
+// SetNillableAptInstallRecommends sets the "apt_install_recommends" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptInstallRecommends(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptInstallRecommends(*b)
+	}
+	return tuo
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (tuo *TaskUpdateOne) ClearAptInstallRecommends() *TaskUpdateOne {
+	tuo.mutation.ClearAptInstallRecommends()
+	return tuo
+}
+
+// SetAptName sets the "apt_name" field.
+func (tuo *TaskUpdateOne) SetAptName(s string) *TaskUpdateOne {
+	tuo.mutation.SetAptName(s)
+	return tuo
+}
+
+// SetNillableAptName sets the "apt_name" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptName(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetAptName(*s)
+	}
+	return tuo
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (tuo *TaskUpdateOne) ClearAptName() *TaskUpdateOne {
+	tuo.mutation.ClearAptName()
+	return tuo
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (tuo *TaskUpdateOne) SetAptOnlyUpgrade(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptOnlyUpgrade(b)
+	return tuo
+}
+
+// SetNillableAptOnlyUpgrade sets the "apt_only_upgrade" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptOnlyUpgrade(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptOnlyUpgrade(*b)
+	}
+	return tuo
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (tuo *TaskUpdateOne) ClearAptOnlyUpgrade() *TaskUpdateOne {
+	tuo.mutation.ClearAptOnlyUpgrade()
+	return tuo
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (tuo *TaskUpdateOne) SetAptPurge(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptPurge(b)
+	return tuo
+}
+
+// SetNillableAptPurge sets the "apt_purge" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptPurge(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptPurge(*b)
+	}
+	return tuo
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (tuo *TaskUpdateOne) ClearAptPurge() *TaskUpdateOne {
+	tuo.mutation.ClearAptPurge()
+	return tuo
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (tuo *TaskUpdateOne) SetAptUpdateCache(b bool) *TaskUpdateOne {
+	tuo.mutation.SetAptUpdateCache(b)
+	return tuo
+}
+
+// SetNillableAptUpdateCache sets the "apt_update_cache" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptUpdateCache(b *bool) *TaskUpdateOne {
+	if b != nil {
+		tuo.SetAptUpdateCache(*b)
+	}
+	return tuo
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (tuo *TaskUpdateOne) ClearAptUpdateCache() *TaskUpdateOne {
+	tuo.mutation.ClearAptUpdateCache()
+	return tuo
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (tuo *TaskUpdateOne) SetAptUpgradeType(tut task.AptUpgradeType) *TaskUpdateOne {
+	tuo.mutation.SetAptUpgradeType(tut)
+	return tuo
+}
+
+// SetNillableAptUpgradeType sets the "apt_upgrade_type" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAptUpgradeType(tut *task.AptUpgradeType) *TaskUpdateOne {
+	if tut != nil {
+		tuo.SetAptUpgradeType(*tut)
+	}
+	return tuo
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (tuo *TaskUpdateOne) ClearAptUpgradeType() *TaskUpdateOne {
+	tuo.mutation.ClearAptUpgradeType()
+	return tuo
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tuo *TaskUpdateOne) AddTagIDs(ids ...int) *TaskUpdateOne {
 	tuo.mutation.AddTagIDs(ids...)
@@ -3737,6 +4248,11 @@ func (tuo *TaskUpdateOne) check() error {
 	if v, ok := tuo.mutation.AgentType(); ok {
 		if err := task.AgentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.AptUpgradeType(); ok {
+		if err := task.AptUpgradeTypeValidator(v); err != nil {
+			return &ValidationError{Name: "apt_upgrade_type", err: fmt.Errorf(`ent: validator failed for field "Task.apt_upgrade_type": %w`, err)}
 		}
 	}
 	return nil
@@ -4208,6 +4724,72 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.PackageVersionCleared() {
 		_spec.ClearField(task.FieldPackageVersion, field.TypeString)
+	}
+	if value, ok := tuo.mutation.AptAllowDowngrade(); ok {
+		_spec.SetField(task.FieldAptAllowDowngrade, field.TypeBool, value)
+	}
+	if tuo.mutation.AptAllowDowngradeCleared() {
+		_spec.ClearField(task.FieldAptAllowDowngrade, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptDeb(); ok {
+		_spec.SetField(task.FieldAptDeb, field.TypeString, value)
+	}
+	if tuo.mutation.AptDebCleared() {
+		_spec.ClearField(task.FieldAptDeb, field.TypeString)
+	}
+	if value, ok := tuo.mutation.AptDpkgOptions(); ok {
+		_spec.SetField(task.FieldAptDpkgOptions, field.TypeString, value)
+	}
+	if tuo.mutation.AptDpkgOptionsCleared() {
+		_spec.ClearField(task.FieldAptDpkgOptions, field.TypeString)
+	}
+	if value, ok := tuo.mutation.AptFailOnAutoremove(); ok {
+		_spec.SetField(task.FieldAptFailOnAutoremove, field.TypeBool, value)
+	}
+	if tuo.mutation.AptFailOnAutoremoveCleared() {
+		_spec.ClearField(task.FieldAptFailOnAutoremove, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptForce(); ok {
+		_spec.SetField(task.FieldAptForce, field.TypeBool, value)
+	}
+	if tuo.mutation.AptForceCleared() {
+		_spec.ClearField(task.FieldAptForce, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptInstallRecommends(); ok {
+		_spec.SetField(task.FieldAptInstallRecommends, field.TypeBool, value)
+	}
+	if tuo.mutation.AptInstallRecommendsCleared() {
+		_spec.ClearField(task.FieldAptInstallRecommends, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptName(); ok {
+		_spec.SetField(task.FieldAptName, field.TypeString, value)
+	}
+	if tuo.mutation.AptNameCleared() {
+		_spec.ClearField(task.FieldAptName, field.TypeString)
+	}
+	if value, ok := tuo.mutation.AptOnlyUpgrade(); ok {
+		_spec.SetField(task.FieldAptOnlyUpgrade, field.TypeBool, value)
+	}
+	if tuo.mutation.AptOnlyUpgradeCleared() {
+		_spec.ClearField(task.FieldAptOnlyUpgrade, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptPurge(); ok {
+		_spec.SetField(task.FieldAptPurge, field.TypeBool, value)
+	}
+	if tuo.mutation.AptPurgeCleared() {
+		_spec.ClearField(task.FieldAptPurge, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptUpdateCache(); ok {
+		_spec.SetField(task.FieldAptUpdateCache, field.TypeBool, value)
+	}
+	if tuo.mutation.AptUpdateCacheCleared() {
+		_spec.ClearField(task.FieldAptUpdateCache, field.TypeBool)
+	}
+	if value, ok := tuo.mutation.AptUpgradeType(); ok {
+		_spec.SetField(task.FieldAptUpgradeType, field.TypeEnum, value)
+	}
+	if tuo.mutation.AptUpgradeTypeCleared() {
+		_spec.ClearField(task.FieldAptUpgradeType, field.TypeEnum)
 	}
 	if tuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -160,6 +160,28 @@ const (
 	FieldBrewGreedy = "brew_greedy"
 	// FieldPackageVersion holds the string denoting the package_version field in the database.
 	FieldPackageVersion = "package_version"
+	// FieldAptAllowDowngrade holds the string denoting the apt_allow_downgrade field in the database.
+	FieldAptAllowDowngrade = "apt_allow_downgrade"
+	// FieldAptDeb holds the string denoting the apt_deb field in the database.
+	FieldAptDeb = "apt_deb"
+	// FieldAptDpkgOptions holds the string denoting the apt_dpkg_options field in the database.
+	FieldAptDpkgOptions = "apt_dpkg_options"
+	// FieldAptFailOnAutoremove holds the string denoting the apt_fail_on_autoremove field in the database.
+	FieldAptFailOnAutoremove = "apt_fail_on_autoremove"
+	// FieldAptForce holds the string denoting the apt_force field in the database.
+	FieldAptForce = "apt_force"
+	// FieldAptInstallRecommends holds the string denoting the apt_install_recommends field in the database.
+	FieldAptInstallRecommends = "apt_install_recommends"
+	// FieldAptName holds the string denoting the apt_name field in the database.
+	FieldAptName = "apt_name"
+	// FieldAptOnlyUpgrade holds the string denoting the apt_only_upgrade field in the database.
+	FieldAptOnlyUpgrade = "apt_only_upgrade"
+	// FieldAptPurge holds the string denoting the apt_purge field in the database.
+	FieldAptPurge = "apt_purge"
+	// FieldAptUpdateCache holds the string denoting the apt_update_cache field in the database.
+	FieldAptUpdateCache = "apt_update_cache"
+	// FieldAptUpgradeType holds the string denoting the apt_upgrade_type field in the database.
+	FieldAptUpgradeType = "apt_upgrade_type"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeProfile holds the string denoting the profile edge name in mutations.
@@ -258,6 +280,17 @@ var Columns = []string{
 	FieldBrewInstallOptions,
 	FieldBrewGreedy,
 	FieldPackageVersion,
+	FieldAptAllowDowngrade,
+	FieldAptDeb,
+	FieldAptDpkgOptions,
+	FieldAptFailOnAutoremove,
+	FieldAptForce,
+	FieldAptInstallRecommends,
+	FieldAptName,
+	FieldAptOnlyUpgrade,
+	FieldAptPurge,
+	FieldAptUpdateCache,
+	FieldAptUpgradeType,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -368,6 +401,22 @@ var (
 	DefaultScriptCreates string
 	// DefaultPackageVersion holds the default value on creation for the "package_version" field.
 	DefaultPackageVersion string
+	// DefaultAptAllowDowngrade holds the default value on creation for the "apt_allow_downgrade" field.
+	DefaultAptAllowDowngrade bool
+	// DefaultAptDeb holds the default value on creation for the "apt_deb" field.
+	DefaultAptDeb string
+	// DefaultAptFailOnAutoremove holds the default value on creation for the "apt_fail_on_autoremove" field.
+	DefaultAptFailOnAutoremove bool
+	// DefaultAptForce holds the default value on creation for the "apt_force" field.
+	DefaultAptForce bool
+	// DefaultAptName holds the default value on creation for the "apt_name" field.
+	DefaultAptName string
+	// DefaultAptOnlyUpgrade holds the default value on creation for the "apt_only_upgrade" field.
+	DefaultAptOnlyUpgrade bool
+	// DefaultAptPurge holds the default value on creation for the "apt_purge" field.
+	DefaultAptPurge bool
+	// DefaultAptUpdateCache holds the default value on creation for the "apt_update_cache" field.
+	DefaultAptUpdateCache bool
 )
 
 // Type defines the type for the "type" enum field.
@@ -525,6 +574,35 @@ func AgentTypeValidator(at AgentType) error {
 		return nil
 	default:
 		return fmt.Errorf("task: invalid enum value for agent_type field: %q", at)
+	}
+}
+
+// AptUpgradeType defines the type for the "apt_upgrade_type" enum field.
+type AptUpgradeType string
+
+// AptUpgradeTypeNo is the default value of the AptUpgradeType enum.
+const DefaultAptUpgradeType = AptUpgradeTypeNo
+
+// AptUpgradeType values.
+const (
+	AptUpgradeTypeDist AptUpgradeType = "dist"
+	AptUpgradeTypeFull AptUpgradeType = "full"
+	AptUpgradeTypeNo   AptUpgradeType = "no"
+	AptUpgradeTypeSafe AptUpgradeType = "safe"
+	AptUpgradeTypeYes  AptUpgradeType = "yes"
+)
+
+func (aut AptUpgradeType) String() string {
+	return string(aut)
+}
+
+// AptUpgradeTypeValidator is a validator for the "apt_upgrade_type" field enum values. It is called by the builders before save.
+func AptUpgradeTypeValidator(aut AptUpgradeType) error {
+	switch aut {
+	case AptUpgradeTypeDist, AptUpgradeTypeFull, AptUpgradeTypeNo, AptUpgradeTypeSafe, AptUpgradeTypeYes:
+		return nil
+	default:
+		return fmt.Errorf("task: invalid enum value for apt_upgrade_type field: %q", aut)
 	}
 }
 
@@ -899,6 +977,61 @@ func ByBrewGreedy(opts ...sql.OrderTermOption) OrderOption {
 // ByPackageVersion orders the results by the package_version field.
 func ByPackageVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPackageVersion, opts...).ToFunc()
+}
+
+// ByAptAllowDowngrade orders the results by the apt_allow_downgrade field.
+func ByAptAllowDowngrade(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptAllowDowngrade, opts...).ToFunc()
+}
+
+// ByAptDeb orders the results by the apt_deb field.
+func ByAptDeb(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptDeb, opts...).ToFunc()
+}
+
+// ByAptDpkgOptions orders the results by the apt_dpkg_options field.
+func ByAptDpkgOptions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptDpkgOptions, opts...).ToFunc()
+}
+
+// ByAptFailOnAutoremove orders the results by the apt_fail_on_autoremove field.
+func ByAptFailOnAutoremove(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptFailOnAutoremove, opts...).ToFunc()
+}
+
+// ByAptForce orders the results by the apt_force field.
+func ByAptForce(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptForce, opts...).ToFunc()
+}
+
+// ByAptInstallRecommends orders the results by the apt_install_recommends field.
+func ByAptInstallRecommends(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptInstallRecommends, opts...).ToFunc()
+}
+
+// ByAptName orders the results by the apt_name field.
+func ByAptName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptName, opts...).ToFunc()
+}
+
+// ByAptOnlyUpgrade orders the results by the apt_only_upgrade field.
+func ByAptOnlyUpgrade(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptOnlyUpgrade, opts...).ToFunc()
+}
+
+// ByAptPurge orders the results by the apt_purge field.
+func ByAptPurge(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptPurge, opts...).ToFunc()
+}
+
+// ByAptUpdateCache orders the results by the apt_update_cache field.
+func ByAptUpdateCache(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptUpdateCache, opts...).ToFunc()
+}
+
+// ByAptUpgradeType orders the results by the apt_upgrade_type field.
+func ByAptUpgradeType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAptUpgradeType, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.
