@@ -553,6 +553,38 @@ func init() {
 	taskDescPackageVersion := taskFields[72].Descriptor()
 	// task.DefaultPackageVersion holds the default value on creation for the package_version field.
 	task.DefaultPackageVersion = taskDescPackageVersion.Default.(string)
+	// taskDescAptAllowDowngrade is the schema descriptor for apt_allow_downgrade field.
+	taskDescAptAllowDowngrade := taskFields[73].Descriptor()
+	// task.DefaultAptAllowDowngrade holds the default value on creation for the apt_allow_downgrade field.
+	task.DefaultAptAllowDowngrade = taskDescAptAllowDowngrade.Default.(bool)
+	// taskDescAptDeb is the schema descriptor for apt_deb field.
+	taskDescAptDeb := taskFields[74].Descriptor()
+	// task.DefaultAptDeb holds the default value on creation for the apt_deb field.
+	task.DefaultAptDeb = taskDescAptDeb.Default.(string)
+	// taskDescAptFailOnAutoremove is the schema descriptor for apt_fail_on_autoremove field.
+	taskDescAptFailOnAutoremove := taskFields[76].Descriptor()
+	// task.DefaultAptFailOnAutoremove holds the default value on creation for the apt_fail_on_autoremove field.
+	task.DefaultAptFailOnAutoremove = taskDescAptFailOnAutoremove.Default.(bool)
+	// taskDescAptForce is the schema descriptor for apt_force field.
+	taskDescAptForce := taskFields[77].Descriptor()
+	// task.DefaultAptForce holds the default value on creation for the apt_force field.
+	task.DefaultAptForce = taskDescAptForce.Default.(bool)
+	// taskDescAptName is the schema descriptor for apt_name field.
+	taskDescAptName := taskFields[79].Descriptor()
+	// task.DefaultAptName holds the default value on creation for the apt_name field.
+	task.DefaultAptName = taskDescAptName.Default.(string)
+	// taskDescAptOnlyUpgrade is the schema descriptor for apt_only_upgrade field.
+	taskDescAptOnlyUpgrade := taskFields[80].Descriptor()
+	// task.DefaultAptOnlyUpgrade holds the default value on creation for the apt_only_upgrade field.
+	task.DefaultAptOnlyUpgrade = taskDescAptOnlyUpgrade.Default.(bool)
+	// taskDescAptPurge is the schema descriptor for apt_purge field.
+	taskDescAptPurge := taskFields[81].Descriptor()
+	// task.DefaultAptPurge holds the default value on creation for the apt_purge field.
+	task.DefaultAptPurge = taskDescAptPurge.Default.(bool)
+	// taskDescAptUpdateCache is the schema descriptor for apt_update_cache field.
+	taskDescAptUpdateCache := taskFields[82].Descriptor()
+	// task.DefaultAptUpdateCache holds the default value on creation for the apt_update_cache field.
+	task.DefaultAptUpdateCache = taskDescAptUpdateCache.Default.(bool)
 	tenantFields := schema.Tenant{}.Fields()
 	_ = tenantFields
 	// tenantDescCreated is the schema descriptor for created field.

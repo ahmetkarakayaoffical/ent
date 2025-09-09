@@ -120,6 +120,17 @@ func (Task) Fields() []ent.Field {
 		field.String("brew_install_options").Optional(),
 		field.Bool("brew_greedy").Optional(),
 		field.String("package_version").Optional().Default(""),
+		field.Bool("apt_allow_downgrade").Optional().Default(false),
+		field.String("apt_deb").Optional().Default(""),
+		field.String("apt_dpkg_options").Optional(),
+		field.Bool("apt_fail_on_autoremove").Optional().Default(false),
+		field.Bool("apt_force").Optional().Default(false),
+		field.Bool("apt_install_recommends").Optional(),
+		field.String("apt_name").Optional().Default(""),
+		field.Bool("apt_only_upgrade").Optional().Default(false),
+		field.Bool("apt_purge").Optional().Default(false),
+		field.Bool("apt_update_cache").Optional().Default(false),
+		field.Enum("apt_upgrade_type").Values("dist", "full", "no", "safe", "yes").Optional().Default("no"),
 	}
 }
 

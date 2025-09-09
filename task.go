@@ -164,6 +164,28 @@ type Task struct {
 	BrewGreedy bool `json:"brew_greedy,omitempty"`
 	// PackageVersion holds the value of the "package_version" field.
 	PackageVersion string `json:"package_version,omitempty"`
+	// AptAllowDowngrade holds the value of the "apt_allow_downgrade" field.
+	AptAllowDowngrade bool `json:"apt_allow_downgrade,omitempty"`
+	// AptDeb holds the value of the "apt_deb" field.
+	AptDeb string `json:"apt_deb,omitempty"`
+	// AptDpkgOptions holds the value of the "apt_dpkg_options" field.
+	AptDpkgOptions string `json:"apt_dpkg_options,omitempty"`
+	// AptFailOnAutoremove holds the value of the "apt_fail_on_autoremove" field.
+	AptFailOnAutoremove bool `json:"apt_fail_on_autoremove,omitempty"`
+	// AptForce holds the value of the "apt_force" field.
+	AptForce bool `json:"apt_force,omitempty"`
+	// AptInstallRecommends holds the value of the "apt_install_recommends" field.
+	AptInstallRecommends bool `json:"apt_install_recommends,omitempty"`
+	// AptName holds the value of the "apt_name" field.
+	AptName string `json:"apt_name,omitempty"`
+	// AptOnlyUpgrade holds the value of the "apt_only_upgrade" field.
+	AptOnlyUpgrade bool `json:"apt_only_upgrade,omitempty"`
+	// AptPurge holds the value of the "apt_purge" field.
+	AptPurge bool `json:"apt_purge,omitempty"`
+	// AptUpdateCache holds the value of the "apt_update_cache" field.
+	AptUpdateCache bool `json:"apt_update_cache,omitempty"`
+	// AptUpgradeType holds the value of the "apt_upgrade_type" field.
+	AptUpgradeType task.AptUpgradeType `json:"apt_upgrade_type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges         TaskEdges `json:"edges"`
@@ -207,11 +229,11 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldPackageLatest, task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce, task.FieldBrewUpdate, task.FieldBrewUpgradeAll, task.FieldBrewGreedy:
+		case task.FieldPackageLatest, task.FieldRegistryHex, task.FieldRegistryForce, task.FieldLocalUserDisable, task.FieldLocalUserPasswordChangeNotAllowed, task.FieldLocalUserPasswordChangeRequired, task.FieldLocalUserPasswordNeverExpires, task.FieldLocalUserAppend, task.FieldLocalUserCreateHome, task.FieldLocalUserForce, task.FieldLocalUserGenerateSSHKey, task.FieldLocalUserMoveHome, task.FieldLocalUserNonunique, task.FieldLocalUserPasswordLock, task.FieldLocalUserSystem, task.FieldLocalGroupSystem, task.FieldLocalGroupForce, task.FieldBrewUpdate, task.FieldBrewUpgradeAll, task.FieldBrewGreedy, task.FieldAptAllowDowngrade, task.FieldAptFailOnAutoremove, task.FieldAptForce, task.FieldAptInstallRecommends, task.FieldAptOnlyUpgrade, task.FieldAptPurge, task.FieldAptUpdateCache:
 			values[i] = new(sql.NullBool)
 		case task.FieldID:
 			values[i] = new(sql.NullInt64)
-		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptExecutable, task.FieldScriptCreates, task.FieldScriptRun, task.FieldAgentType, task.FieldBrewUpgradeOptions, task.FieldBrewInstallOptions, task.FieldPackageVersion:
+		case task.FieldName, task.FieldType, task.FieldPackageID, task.FieldPackageName, task.FieldRegistryKey, task.FieldRegistryKeyValueName, task.FieldRegistryKeyValueType, task.FieldRegistryKeyValueData, task.FieldLocalUserUsername, task.FieldLocalUserDescription, task.FieldLocalUserFullname, task.FieldLocalUserPassword, task.FieldLocalUserExpires, task.FieldLocalUserGroup, task.FieldLocalUserGroups, task.FieldLocalUserHome, task.FieldLocalUserPasswordExpireAccountDisable, task.FieldLocalUserPasswordExpireMax, task.FieldLocalUserPasswordExpireMin, task.FieldLocalUserPasswordExpireWarn, task.FieldLocalUserSeuser, task.FieldLocalUserShell, task.FieldLocalUserSkeleton, task.FieldLocalUserID, task.FieldLocalUserIDMax, task.FieldLocalUserIDMin, task.FieldLocalUserSSHKeyBits, task.FieldLocalUserSSHKeyComment, task.FieldLocalUserSSHKeyFile, task.FieldLocalUserSSHKeyPassphrase, task.FieldLocalUserSSHKeyType, task.FieldLocalUserUmask, task.FieldLocalGroupID, task.FieldLocalGroupName, task.FieldLocalGroupDescription, task.FieldLocalGroupMembers, task.FieldLocalGroupMembersToInclude, task.FieldLocalGroupMembersToExclude, task.FieldMsiProductid, task.FieldMsiPath, task.FieldMsiArguments, task.FieldMsiFileHash, task.FieldMsiFileHashAlg, task.FieldMsiLogPath, task.FieldScript, task.FieldScriptExecutable, task.FieldScriptCreates, task.FieldScriptRun, task.FieldAgentType, task.FieldBrewUpgradeOptions, task.FieldBrewInstallOptions, task.FieldPackageVersion, task.FieldAptDeb, task.FieldAptDpkgOptions, task.FieldAptName, task.FieldAptUpgradeType:
 			values[i] = new(sql.NullString)
 		case task.FieldWhen:
 			values[i] = new(sql.NullTime)
@@ -676,6 +698,72 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.PackageVersion = value.String
 			}
+		case task.FieldAptAllowDowngrade:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_allow_downgrade", values[i])
+			} else if value.Valid {
+				t.AptAllowDowngrade = value.Bool
+			}
+		case task.FieldAptDeb:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_deb", values[i])
+			} else if value.Valid {
+				t.AptDeb = value.String
+			}
+		case task.FieldAptDpkgOptions:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_dpkg_options", values[i])
+			} else if value.Valid {
+				t.AptDpkgOptions = value.String
+			}
+		case task.FieldAptFailOnAutoremove:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_fail_on_autoremove", values[i])
+			} else if value.Valid {
+				t.AptFailOnAutoremove = value.Bool
+			}
+		case task.FieldAptForce:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_force", values[i])
+			} else if value.Valid {
+				t.AptForce = value.Bool
+			}
+		case task.FieldAptInstallRecommends:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_install_recommends", values[i])
+			} else if value.Valid {
+				t.AptInstallRecommends = value.Bool
+			}
+		case task.FieldAptName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_name", values[i])
+			} else if value.Valid {
+				t.AptName = value.String
+			}
+		case task.FieldAptOnlyUpgrade:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_only_upgrade", values[i])
+			} else if value.Valid {
+				t.AptOnlyUpgrade = value.Bool
+			}
+		case task.FieldAptPurge:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_purge", values[i])
+			} else if value.Valid {
+				t.AptPurge = value.Bool
+			}
+		case task.FieldAptUpdateCache:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_update_cache", values[i])
+			} else if value.Valid {
+				t.AptUpdateCache = value.Bool
+			}
+		case task.FieldAptUpgradeType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field apt_upgrade_type", values[i])
+			} else if value.Valid {
+				t.AptUpgradeType = task.AptUpgradeType(value.String)
+			}
 		case task.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field profile_tasks", value)
@@ -947,6 +1035,39 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("package_version=")
 	builder.WriteString(t.PackageVersion)
+	builder.WriteString(", ")
+	builder.WriteString("apt_allow_downgrade=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptAllowDowngrade))
+	builder.WriteString(", ")
+	builder.WriteString("apt_deb=")
+	builder.WriteString(t.AptDeb)
+	builder.WriteString(", ")
+	builder.WriteString("apt_dpkg_options=")
+	builder.WriteString(t.AptDpkgOptions)
+	builder.WriteString(", ")
+	builder.WriteString("apt_fail_on_autoremove=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptFailOnAutoremove))
+	builder.WriteString(", ")
+	builder.WriteString("apt_force=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptForce))
+	builder.WriteString(", ")
+	builder.WriteString("apt_install_recommends=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptInstallRecommends))
+	builder.WriteString(", ")
+	builder.WriteString("apt_name=")
+	builder.WriteString(t.AptName)
+	builder.WriteString(", ")
+	builder.WriteString("apt_only_upgrade=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptOnlyUpgrade))
+	builder.WriteString(", ")
+	builder.WriteString("apt_purge=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptPurge))
+	builder.WriteString(", ")
+	builder.WriteString("apt_update_cache=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptUpdateCache))
+	builder.WriteString(", ")
+	builder.WriteString("apt_upgrade_type=")
+	builder.WriteString(fmt.Sprintf("%v", t.AptUpgradeType))
 	builder.WriteByte(')')
 	return builder.String()
 }

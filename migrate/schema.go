@@ -825,6 +825,17 @@ var (
 		{Name: "brew_install_options", Type: field.TypeString, Nullable: true},
 		{Name: "brew_greedy", Type: field.TypeBool, Nullable: true},
 		{Name: "package_version", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "apt_allow_downgrade", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_deb", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "apt_dpkg_options", Type: field.TypeString, Nullable: true},
+		{Name: "apt_fail_on_autoremove", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_force", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_install_recommends", Type: field.TypeBool, Nullable: true},
+		{Name: "apt_name", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "apt_only_upgrade", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_purge", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_update_cache", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "apt_upgrade_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"dist", "full", "no", "safe", "yes"}, Default: "no"},
 		{Name: "profile_tasks", Type: field.TypeInt, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
@@ -835,7 +846,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_profiles_tasks",
-				Columns:    []*schema.Column{TasksColumns[74]},
+				Columns:    []*schema.Column{TasksColumns[85]},
 				RefColumns: []*schema.Column{ProfilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -1030,6 +1030,160 @@ func (tc *TaskCreate) SetNillablePackageVersion(s *string) *TaskCreate {
 	return tc
 }
 
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (tc *TaskCreate) SetAptAllowDowngrade(b bool) *TaskCreate {
+	tc.mutation.SetAptAllowDowngrade(b)
+	return tc
+}
+
+// SetNillableAptAllowDowngrade sets the "apt_allow_downgrade" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptAllowDowngrade(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptAllowDowngrade(*b)
+	}
+	return tc
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (tc *TaskCreate) SetAptDeb(s string) *TaskCreate {
+	tc.mutation.SetAptDeb(s)
+	return tc
+}
+
+// SetNillableAptDeb sets the "apt_deb" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptDeb(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetAptDeb(*s)
+	}
+	return tc
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (tc *TaskCreate) SetAptDpkgOptions(s string) *TaskCreate {
+	tc.mutation.SetAptDpkgOptions(s)
+	return tc
+}
+
+// SetNillableAptDpkgOptions sets the "apt_dpkg_options" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptDpkgOptions(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetAptDpkgOptions(*s)
+	}
+	return tc
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (tc *TaskCreate) SetAptFailOnAutoremove(b bool) *TaskCreate {
+	tc.mutation.SetAptFailOnAutoremove(b)
+	return tc
+}
+
+// SetNillableAptFailOnAutoremove sets the "apt_fail_on_autoremove" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptFailOnAutoremove(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptFailOnAutoremove(*b)
+	}
+	return tc
+}
+
+// SetAptForce sets the "apt_force" field.
+func (tc *TaskCreate) SetAptForce(b bool) *TaskCreate {
+	tc.mutation.SetAptForce(b)
+	return tc
+}
+
+// SetNillableAptForce sets the "apt_force" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptForce(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptForce(*b)
+	}
+	return tc
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (tc *TaskCreate) SetAptInstallRecommends(b bool) *TaskCreate {
+	tc.mutation.SetAptInstallRecommends(b)
+	return tc
+}
+
+// SetNillableAptInstallRecommends sets the "apt_install_recommends" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptInstallRecommends(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptInstallRecommends(*b)
+	}
+	return tc
+}
+
+// SetAptName sets the "apt_name" field.
+func (tc *TaskCreate) SetAptName(s string) *TaskCreate {
+	tc.mutation.SetAptName(s)
+	return tc
+}
+
+// SetNillableAptName sets the "apt_name" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptName(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetAptName(*s)
+	}
+	return tc
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (tc *TaskCreate) SetAptOnlyUpgrade(b bool) *TaskCreate {
+	tc.mutation.SetAptOnlyUpgrade(b)
+	return tc
+}
+
+// SetNillableAptOnlyUpgrade sets the "apt_only_upgrade" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptOnlyUpgrade(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptOnlyUpgrade(*b)
+	}
+	return tc
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (tc *TaskCreate) SetAptPurge(b bool) *TaskCreate {
+	tc.mutation.SetAptPurge(b)
+	return tc
+}
+
+// SetNillableAptPurge sets the "apt_purge" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptPurge(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptPurge(*b)
+	}
+	return tc
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (tc *TaskCreate) SetAptUpdateCache(b bool) *TaskCreate {
+	tc.mutation.SetAptUpdateCache(b)
+	return tc
+}
+
+// SetNillableAptUpdateCache sets the "apt_update_cache" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptUpdateCache(b *bool) *TaskCreate {
+	if b != nil {
+		tc.SetAptUpdateCache(*b)
+	}
+	return tc
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (tc *TaskCreate) SetAptUpgradeType(tut task.AptUpgradeType) *TaskCreate {
+	tc.mutation.SetAptUpgradeType(tut)
+	return tc
+}
+
+// SetNillableAptUpgradeType sets the "apt_upgrade_type" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableAptUpgradeType(tut *task.AptUpgradeType) *TaskCreate {
+	if tut != nil {
+		tc.SetAptUpgradeType(*tut)
+	}
+	return tc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tc *TaskCreate) AddTagIDs(ids ...int) *TaskCreate {
 	tc.mutation.AddTagIDs(ids...)
@@ -1271,6 +1425,42 @@ func (tc *TaskCreate) defaults() {
 		v := task.DefaultPackageVersion
 		tc.mutation.SetPackageVersion(v)
 	}
+	if _, ok := tc.mutation.AptAllowDowngrade(); !ok {
+		v := task.DefaultAptAllowDowngrade
+		tc.mutation.SetAptAllowDowngrade(v)
+	}
+	if _, ok := tc.mutation.AptDeb(); !ok {
+		v := task.DefaultAptDeb
+		tc.mutation.SetAptDeb(v)
+	}
+	if _, ok := tc.mutation.AptFailOnAutoremove(); !ok {
+		v := task.DefaultAptFailOnAutoremove
+		tc.mutation.SetAptFailOnAutoremove(v)
+	}
+	if _, ok := tc.mutation.AptForce(); !ok {
+		v := task.DefaultAptForce
+		tc.mutation.SetAptForce(v)
+	}
+	if _, ok := tc.mutation.AptName(); !ok {
+		v := task.DefaultAptName
+		tc.mutation.SetAptName(v)
+	}
+	if _, ok := tc.mutation.AptOnlyUpgrade(); !ok {
+		v := task.DefaultAptOnlyUpgrade
+		tc.mutation.SetAptOnlyUpgrade(v)
+	}
+	if _, ok := tc.mutation.AptPurge(); !ok {
+		v := task.DefaultAptPurge
+		tc.mutation.SetAptPurge(v)
+	}
+	if _, ok := tc.mutation.AptUpdateCache(); !ok {
+		v := task.DefaultAptUpdateCache
+		tc.mutation.SetAptUpdateCache(v)
+	}
+	if _, ok := tc.mutation.AptUpgradeType(); !ok {
+		v := task.DefaultAptUpgradeType
+		tc.mutation.SetAptUpgradeType(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1309,6 +1499,11 @@ func (tc *TaskCreate) check() error {
 	if v, ok := tc.mutation.AgentType(); ok {
 		if err := task.AgentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "agent_type", err: fmt.Errorf(`ent: validator failed for field "Task.agent_type": %w`, err)}
+		}
+	}
+	if v, ok := tc.mutation.AptUpgradeType(); ok {
+		if err := task.AptUpgradeTypeValidator(v); err != nil {
+			return &ValidationError{Name: "apt_upgrade_type", err: fmt.Errorf(`ent: validator failed for field "Task.apt_upgrade_type": %w`, err)}
 		}
 	}
 	return nil
@@ -1629,6 +1824,50 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.PackageVersion(); ok {
 		_spec.SetField(task.FieldPackageVersion, field.TypeString, value)
 		_node.PackageVersion = value
+	}
+	if value, ok := tc.mutation.AptAllowDowngrade(); ok {
+		_spec.SetField(task.FieldAptAllowDowngrade, field.TypeBool, value)
+		_node.AptAllowDowngrade = value
+	}
+	if value, ok := tc.mutation.AptDeb(); ok {
+		_spec.SetField(task.FieldAptDeb, field.TypeString, value)
+		_node.AptDeb = value
+	}
+	if value, ok := tc.mutation.AptDpkgOptions(); ok {
+		_spec.SetField(task.FieldAptDpkgOptions, field.TypeString, value)
+		_node.AptDpkgOptions = value
+	}
+	if value, ok := tc.mutation.AptFailOnAutoremove(); ok {
+		_spec.SetField(task.FieldAptFailOnAutoremove, field.TypeBool, value)
+		_node.AptFailOnAutoremove = value
+	}
+	if value, ok := tc.mutation.AptForce(); ok {
+		_spec.SetField(task.FieldAptForce, field.TypeBool, value)
+		_node.AptForce = value
+	}
+	if value, ok := tc.mutation.AptInstallRecommends(); ok {
+		_spec.SetField(task.FieldAptInstallRecommends, field.TypeBool, value)
+		_node.AptInstallRecommends = value
+	}
+	if value, ok := tc.mutation.AptName(); ok {
+		_spec.SetField(task.FieldAptName, field.TypeString, value)
+		_node.AptName = value
+	}
+	if value, ok := tc.mutation.AptOnlyUpgrade(); ok {
+		_spec.SetField(task.FieldAptOnlyUpgrade, field.TypeBool, value)
+		_node.AptOnlyUpgrade = value
+	}
+	if value, ok := tc.mutation.AptPurge(); ok {
+		_spec.SetField(task.FieldAptPurge, field.TypeBool, value)
+		_node.AptPurge = value
+	}
+	if value, ok := tc.mutation.AptUpdateCache(); ok {
+		_spec.SetField(task.FieldAptUpdateCache, field.TypeBool, value)
+		_node.AptUpdateCache = value
+	}
+	if value, ok := tc.mutation.AptUpgradeType(); ok {
+		_spec.SetField(task.FieldAptUpgradeType, field.TypeEnum, value)
+		_node.AptUpgradeType = value
 	}
 	if nodes := tc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -3014,6 +3253,204 @@ func (u *TaskUpsert) UpdatePackageVersion() *TaskUpsert {
 // ClearPackageVersion clears the value of the "package_version" field.
 func (u *TaskUpsert) ClearPackageVersion() *TaskUpsert {
 	u.SetNull(task.FieldPackageVersion)
+	return u
+}
+
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (u *TaskUpsert) SetAptAllowDowngrade(v bool) *TaskUpsert {
+	u.Set(task.FieldAptAllowDowngrade, v)
+	return u
+}
+
+// UpdateAptAllowDowngrade sets the "apt_allow_downgrade" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptAllowDowngrade() *TaskUpsert {
+	u.SetExcluded(task.FieldAptAllowDowngrade)
+	return u
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (u *TaskUpsert) ClearAptAllowDowngrade() *TaskUpsert {
+	u.SetNull(task.FieldAptAllowDowngrade)
+	return u
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (u *TaskUpsert) SetAptDeb(v string) *TaskUpsert {
+	u.Set(task.FieldAptDeb, v)
+	return u
+}
+
+// UpdateAptDeb sets the "apt_deb" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptDeb() *TaskUpsert {
+	u.SetExcluded(task.FieldAptDeb)
+	return u
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (u *TaskUpsert) ClearAptDeb() *TaskUpsert {
+	u.SetNull(task.FieldAptDeb)
+	return u
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (u *TaskUpsert) SetAptDpkgOptions(v string) *TaskUpsert {
+	u.Set(task.FieldAptDpkgOptions, v)
+	return u
+}
+
+// UpdateAptDpkgOptions sets the "apt_dpkg_options" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptDpkgOptions() *TaskUpsert {
+	u.SetExcluded(task.FieldAptDpkgOptions)
+	return u
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (u *TaskUpsert) ClearAptDpkgOptions() *TaskUpsert {
+	u.SetNull(task.FieldAptDpkgOptions)
+	return u
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (u *TaskUpsert) SetAptFailOnAutoremove(v bool) *TaskUpsert {
+	u.Set(task.FieldAptFailOnAutoremove, v)
+	return u
+}
+
+// UpdateAptFailOnAutoremove sets the "apt_fail_on_autoremove" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptFailOnAutoremove() *TaskUpsert {
+	u.SetExcluded(task.FieldAptFailOnAutoremove)
+	return u
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (u *TaskUpsert) ClearAptFailOnAutoremove() *TaskUpsert {
+	u.SetNull(task.FieldAptFailOnAutoremove)
+	return u
+}
+
+// SetAptForce sets the "apt_force" field.
+func (u *TaskUpsert) SetAptForce(v bool) *TaskUpsert {
+	u.Set(task.FieldAptForce, v)
+	return u
+}
+
+// UpdateAptForce sets the "apt_force" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptForce() *TaskUpsert {
+	u.SetExcluded(task.FieldAptForce)
+	return u
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (u *TaskUpsert) ClearAptForce() *TaskUpsert {
+	u.SetNull(task.FieldAptForce)
+	return u
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (u *TaskUpsert) SetAptInstallRecommends(v bool) *TaskUpsert {
+	u.Set(task.FieldAptInstallRecommends, v)
+	return u
+}
+
+// UpdateAptInstallRecommends sets the "apt_install_recommends" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptInstallRecommends() *TaskUpsert {
+	u.SetExcluded(task.FieldAptInstallRecommends)
+	return u
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (u *TaskUpsert) ClearAptInstallRecommends() *TaskUpsert {
+	u.SetNull(task.FieldAptInstallRecommends)
+	return u
+}
+
+// SetAptName sets the "apt_name" field.
+func (u *TaskUpsert) SetAptName(v string) *TaskUpsert {
+	u.Set(task.FieldAptName, v)
+	return u
+}
+
+// UpdateAptName sets the "apt_name" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptName() *TaskUpsert {
+	u.SetExcluded(task.FieldAptName)
+	return u
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (u *TaskUpsert) ClearAptName() *TaskUpsert {
+	u.SetNull(task.FieldAptName)
+	return u
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (u *TaskUpsert) SetAptOnlyUpgrade(v bool) *TaskUpsert {
+	u.Set(task.FieldAptOnlyUpgrade, v)
+	return u
+}
+
+// UpdateAptOnlyUpgrade sets the "apt_only_upgrade" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptOnlyUpgrade() *TaskUpsert {
+	u.SetExcluded(task.FieldAptOnlyUpgrade)
+	return u
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (u *TaskUpsert) ClearAptOnlyUpgrade() *TaskUpsert {
+	u.SetNull(task.FieldAptOnlyUpgrade)
+	return u
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (u *TaskUpsert) SetAptPurge(v bool) *TaskUpsert {
+	u.Set(task.FieldAptPurge, v)
+	return u
+}
+
+// UpdateAptPurge sets the "apt_purge" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptPurge() *TaskUpsert {
+	u.SetExcluded(task.FieldAptPurge)
+	return u
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (u *TaskUpsert) ClearAptPurge() *TaskUpsert {
+	u.SetNull(task.FieldAptPurge)
+	return u
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (u *TaskUpsert) SetAptUpdateCache(v bool) *TaskUpsert {
+	u.Set(task.FieldAptUpdateCache, v)
+	return u
+}
+
+// UpdateAptUpdateCache sets the "apt_update_cache" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptUpdateCache() *TaskUpsert {
+	u.SetExcluded(task.FieldAptUpdateCache)
+	return u
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (u *TaskUpsert) ClearAptUpdateCache() *TaskUpsert {
+	u.SetNull(task.FieldAptUpdateCache)
+	return u
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (u *TaskUpsert) SetAptUpgradeType(v task.AptUpgradeType) *TaskUpsert {
+	u.Set(task.FieldAptUpgradeType, v)
+	return u
+}
+
+// UpdateAptUpgradeType sets the "apt_upgrade_type" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateAptUpgradeType() *TaskUpsert {
+	u.SetExcluded(task.FieldAptUpgradeType)
+	return u
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (u *TaskUpsert) ClearAptUpgradeType() *TaskUpsert {
+	u.SetNull(task.FieldAptUpgradeType)
 	return u
 }
 
@@ -4573,6 +5010,237 @@ func (u *TaskUpsertOne) UpdatePackageVersion() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearPackageVersion() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageVersion()
+	})
+}
+
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (u *TaskUpsertOne) SetAptAllowDowngrade(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptAllowDowngrade(v)
+	})
+}
+
+// UpdateAptAllowDowngrade sets the "apt_allow_downgrade" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptAllowDowngrade() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptAllowDowngrade()
+	})
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (u *TaskUpsertOne) ClearAptAllowDowngrade() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptAllowDowngrade()
+	})
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (u *TaskUpsertOne) SetAptDeb(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptDeb(v)
+	})
+}
+
+// UpdateAptDeb sets the "apt_deb" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptDeb() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptDeb()
+	})
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (u *TaskUpsertOne) ClearAptDeb() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptDeb()
+	})
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (u *TaskUpsertOne) SetAptDpkgOptions(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptDpkgOptions(v)
+	})
+}
+
+// UpdateAptDpkgOptions sets the "apt_dpkg_options" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptDpkgOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptDpkgOptions()
+	})
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (u *TaskUpsertOne) ClearAptDpkgOptions() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptDpkgOptions()
+	})
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (u *TaskUpsertOne) SetAptFailOnAutoremove(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptFailOnAutoremove(v)
+	})
+}
+
+// UpdateAptFailOnAutoremove sets the "apt_fail_on_autoremove" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptFailOnAutoremove() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptFailOnAutoremove()
+	})
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (u *TaskUpsertOne) ClearAptFailOnAutoremove() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptFailOnAutoremove()
+	})
+}
+
+// SetAptForce sets the "apt_force" field.
+func (u *TaskUpsertOne) SetAptForce(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptForce(v)
+	})
+}
+
+// UpdateAptForce sets the "apt_force" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptForce()
+	})
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (u *TaskUpsertOne) ClearAptForce() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptForce()
+	})
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (u *TaskUpsertOne) SetAptInstallRecommends(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptInstallRecommends(v)
+	})
+}
+
+// UpdateAptInstallRecommends sets the "apt_install_recommends" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptInstallRecommends() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptInstallRecommends()
+	})
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (u *TaskUpsertOne) ClearAptInstallRecommends() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptInstallRecommends()
+	})
+}
+
+// SetAptName sets the "apt_name" field.
+func (u *TaskUpsertOne) SetAptName(v string) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptName(v)
+	})
+}
+
+// UpdateAptName sets the "apt_name" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptName()
+	})
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (u *TaskUpsertOne) ClearAptName() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptName()
+	})
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (u *TaskUpsertOne) SetAptOnlyUpgrade(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptOnlyUpgrade(v)
+	})
+}
+
+// UpdateAptOnlyUpgrade sets the "apt_only_upgrade" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptOnlyUpgrade() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptOnlyUpgrade()
+	})
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (u *TaskUpsertOne) ClearAptOnlyUpgrade() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptOnlyUpgrade()
+	})
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (u *TaskUpsertOne) SetAptPurge(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptPurge(v)
+	})
+}
+
+// UpdateAptPurge sets the "apt_purge" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptPurge() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptPurge()
+	})
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (u *TaskUpsertOne) ClearAptPurge() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptPurge()
+	})
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (u *TaskUpsertOne) SetAptUpdateCache(v bool) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptUpdateCache(v)
+	})
+}
+
+// UpdateAptUpdateCache sets the "apt_update_cache" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptUpdateCache() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptUpdateCache()
+	})
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (u *TaskUpsertOne) ClearAptUpdateCache() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptUpdateCache()
+	})
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (u *TaskUpsertOne) SetAptUpgradeType(v task.AptUpgradeType) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptUpgradeType(v)
+	})
+}
+
+// UpdateAptUpgradeType sets the "apt_upgrade_type" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateAptUpgradeType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptUpgradeType()
+	})
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (u *TaskUpsertOne) ClearAptUpgradeType() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptUpgradeType()
 	})
 }
 
@@ -6296,6 +6964,237 @@ func (u *TaskUpsertBulk) UpdatePackageVersion() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearPackageVersion() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearPackageVersion()
+	})
+}
+
+// SetAptAllowDowngrade sets the "apt_allow_downgrade" field.
+func (u *TaskUpsertBulk) SetAptAllowDowngrade(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptAllowDowngrade(v)
+	})
+}
+
+// UpdateAptAllowDowngrade sets the "apt_allow_downgrade" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptAllowDowngrade() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptAllowDowngrade()
+	})
+}
+
+// ClearAptAllowDowngrade clears the value of the "apt_allow_downgrade" field.
+func (u *TaskUpsertBulk) ClearAptAllowDowngrade() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptAllowDowngrade()
+	})
+}
+
+// SetAptDeb sets the "apt_deb" field.
+func (u *TaskUpsertBulk) SetAptDeb(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptDeb(v)
+	})
+}
+
+// UpdateAptDeb sets the "apt_deb" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptDeb() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptDeb()
+	})
+}
+
+// ClearAptDeb clears the value of the "apt_deb" field.
+func (u *TaskUpsertBulk) ClearAptDeb() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptDeb()
+	})
+}
+
+// SetAptDpkgOptions sets the "apt_dpkg_options" field.
+func (u *TaskUpsertBulk) SetAptDpkgOptions(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptDpkgOptions(v)
+	})
+}
+
+// UpdateAptDpkgOptions sets the "apt_dpkg_options" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptDpkgOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptDpkgOptions()
+	})
+}
+
+// ClearAptDpkgOptions clears the value of the "apt_dpkg_options" field.
+func (u *TaskUpsertBulk) ClearAptDpkgOptions() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptDpkgOptions()
+	})
+}
+
+// SetAptFailOnAutoremove sets the "apt_fail_on_autoremove" field.
+func (u *TaskUpsertBulk) SetAptFailOnAutoremove(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptFailOnAutoremove(v)
+	})
+}
+
+// UpdateAptFailOnAutoremove sets the "apt_fail_on_autoremove" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptFailOnAutoremove() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptFailOnAutoremove()
+	})
+}
+
+// ClearAptFailOnAutoremove clears the value of the "apt_fail_on_autoremove" field.
+func (u *TaskUpsertBulk) ClearAptFailOnAutoremove() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptFailOnAutoremove()
+	})
+}
+
+// SetAptForce sets the "apt_force" field.
+func (u *TaskUpsertBulk) SetAptForce(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptForce(v)
+	})
+}
+
+// UpdateAptForce sets the "apt_force" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptForce()
+	})
+}
+
+// ClearAptForce clears the value of the "apt_force" field.
+func (u *TaskUpsertBulk) ClearAptForce() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptForce()
+	})
+}
+
+// SetAptInstallRecommends sets the "apt_install_recommends" field.
+func (u *TaskUpsertBulk) SetAptInstallRecommends(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptInstallRecommends(v)
+	})
+}
+
+// UpdateAptInstallRecommends sets the "apt_install_recommends" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptInstallRecommends() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptInstallRecommends()
+	})
+}
+
+// ClearAptInstallRecommends clears the value of the "apt_install_recommends" field.
+func (u *TaskUpsertBulk) ClearAptInstallRecommends() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptInstallRecommends()
+	})
+}
+
+// SetAptName sets the "apt_name" field.
+func (u *TaskUpsertBulk) SetAptName(v string) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptName(v)
+	})
+}
+
+// UpdateAptName sets the "apt_name" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptName()
+	})
+}
+
+// ClearAptName clears the value of the "apt_name" field.
+func (u *TaskUpsertBulk) ClearAptName() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptName()
+	})
+}
+
+// SetAptOnlyUpgrade sets the "apt_only_upgrade" field.
+func (u *TaskUpsertBulk) SetAptOnlyUpgrade(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptOnlyUpgrade(v)
+	})
+}
+
+// UpdateAptOnlyUpgrade sets the "apt_only_upgrade" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptOnlyUpgrade() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptOnlyUpgrade()
+	})
+}
+
+// ClearAptOnlyUpgrade clears the value of the "apt_only_upgrade" field.
+func (u *TaskUpsertBulk) ClearAptOnlyUpgrade() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptOnlyUpgrade()
+	})
+}
+
+// SetAptPurge sets the "apt_purge" field.
+func (u *TaskUpsertBulk) SetAptPurge(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptPurge(v)
+	})
+}
+
+// UpdateAptPurge sets the "apt_purge" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptPurge() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptPurge()
+	})
+}
+
+// ClearAptPurge clears the value of the "apt_purge" field.
+func (u *TaskUpsertBulk) ClearAptPurge() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptPurge()
+	})
+}
+
+// SetAptUpdateCache sets the "apt_update_cache" field.
+func (u *TaskUpsertBulk) SetAptUpdateCache(v bool) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptUpdateCache(v)
+	})
+}
+
+// UpdateAptUpdateCache sets the "apt_update_cache" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptUpdateCache() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptUpdateCache()
+	})
+}
+
+// ClearAptUpdateCache clears the value of the "apt_update_cache" field.
+func (u *TaskUpsertBulk) ClearAptUpdateCache() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptUpdateCache()
+	})
+}
+
+// SetAptUpgradeType sets the "apt_upgrade_type" field.
+func (u *TaskUpsertBulk) SetAptUpgradeType(v task.AptUpgradeType) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetAptUpgradeType(v)
+	})
+}
+
+// UpdateAptUpgradeType sets the "apt_upgrade_type" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateAptUpgradeType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateAptUpgradeType()
+	})
+}
+
+// ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
+func (u *TaskUpsertBulk) ClearAptUpgradeType() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearAptUpgradeType()
 	})
 }
 
