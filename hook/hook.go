@@ -177,6 +177,18 @@ func (f OrgMetadataFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrgMetadataMutation", m)
 }
 
+// The PhysicalDiskFunc type is an adapter to allow the use of ordinary
+// function as PhysicalDisk mutator.
+type PhysicalDiskFunc func(context.Context, *ent.PhysicalDiskMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PhysicalDiskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PhysicalDiskMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PhysicalDiskMutation", m)
+}
+
 // The PrinterFunc type is an adapter to allow the use of ordinary
 // function as Printer mutator.
 type PrinterFunc func(context.Context, *ent.PrinterMutation) (ent.Value, error)

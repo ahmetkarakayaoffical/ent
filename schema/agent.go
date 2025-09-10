@@ -71,6 +71,7 @@ func (Agent) Edges() []ent.Edge {
 		edge.From("release", Release.Type).Ref("agents").Unique(),
 		edge.From("profileissue", ProfileIssue.Type).Ref("agents"),
 		edge.From("site", Site.Type).Ref("agents"),
+		edge.To("physicaldisks", PhysicalDisk.Type).Annotations(entsql.Annotation{OnDelete: entsql.Cascade}),
 	}
 }
 

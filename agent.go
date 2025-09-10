@@ -123,9 +123,11 @@ type AgentEdges struct {
 	Profileissue []*ProfileIssue `json:"profileissue,omitempty"`
 	// Site holds the value of the site edge.
 	Site []*Site `json:"site,omitempty"`
+	// Physicaldisks holds the value of the physicaldisks edge.
+	Physicaldisks []*PhysicalDisk `json:"physicaldisks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 }
 
 // ComputerOrErr returns the Computer value or an error if the edge
@@ -307,6 +309,15 @@ func (e AgentEdges) SiteOrErr() ([]*Site, error) {
 		return e.Site, nil
 	}
 	return nil, &NotLoadedError{edge: "site"}
+}
+
+// PhysicaldisksOrErr returns the Physicaldisks value or an error if the edge
+// was not loaded in eager-loading.
+func (e AgentEdges) PhysicaldisksOrErr() ([]*PhysicalDisk, error) {
+	if e.loadedTypes[19] {
+		return e.Physicaldisks, nil
+	}
+	return nil, &NotLoadedError{edge: "physicaldisks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -618,6 +629,11 @@ func (a *Agent) QueryProfileissue() *ProfileIssueQuery {
 // QuerySite queries the "site" edge of the Agent entity.
 func (a *Agent) QuerySite() *SiteQuery {
 	return NewAgentClient(a.config).QuerySite(a)
+}
+
+// QueryPhysicaldisks queries the "physicaldisks" edge of the Agent entity.
+func (a *Agent) QueryPhysicaldisks() *PhysicalDiskQuery {
+	return NewAgentClient(a.config).QueryPhysicaldisks(a)
 }
 
 // Update returns a builder for updating this Agent.

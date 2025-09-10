@@ -22,6 +22,7 @@ import (
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
+	"github.com/open-uem/ent/physicaldisk"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profileissue"
@@ -869,6 +870,21 @@ func (au *AgentUpdate) AddSite(s ...*Site) *AgentUpdate {
 	return au.AddSiteIDs(ids...)
 }
 
+// AddPhysicaldiskIDs adds the "physicaldisks" edge to the PhysicalDisk entity by IDs.
+func (au *AgentUpdate) AddPhysicaldiskIDs(ids ...int) *AgentUpdate {
+	au.mutation.AddPhysicaldiskIDs(ids...)
+	return au
+}
+
+// AddPhysicaldisks adds the "physicaldisks" edges to the PhysicalDisk entity.
+func (au *AgentUpdate) AddPhysicaldisks(p ...*PhysicalDisk) *AgentUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.AddPhysicaldiskIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (au *AgentUpdate) Mutation() *AgentMutation {
 	return au.mutation
@@ -1196,6 +1212,27 @@ func (au *AgentUpdate) RemoveSite(s ...*Site) *AgentUpdate {
 		ids[i] = s[i].ID
 	}
 	return au.RemoveSiteIDs(ids...)
+}
+
+// ClearPhysicaldisks clears all "physicaldisks" edges to the PhysicalDisk entity.
+func (au *AgentUpdate) ClearPhysicaldisks() *AgentUpdate {
+	au.mutation.ClearPhysicaldisks()
+	return au
+}
+
+// RemovePhysicaldiskIDs removes the "physicaldisks" edge to PhysicalDisk entities by IDs.
+func (au *AgentUpdate) RemovePhysicaldiskIDs(ids ...int) *AgentUpdate {
+	au.mutation.RemovePhysicaldiskIDs(ids...)
+	return au
+}
+
+// RemovePhysicaldisks removes "physicaldisks" edges to PhysicalDisk entities.
+func (au *AgentUpdate) RemovePhysicaldisks(p ...*PhysicalDisk) *AgentUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.RemovePhysicaldiskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2193,6 +2230,51 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if au.mutation.PhysicaldisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedPhysicaldisksIDs(); len(nodes) > 0 && !au.mutation.PhysicaldisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.PhysicaldisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(au.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -3036,6 +3118,21 @@ func (auo *AgentUpdateOne) AddSite(s ...*Site) *AgentUpdateOne {
 	return auo.AddSiteIDs(ids...)
 }
 
+// AddPhysicaldiskIDs adds the "physicaldisks" edge to the PhysicalDisk entity by IDs.
+func (auo *AgentUpdateOne) AddPhysicaldiskIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.AddPhysicaldiskIDs(ids...)
+	return auo
+}
+
+// AddPhysicaldisks adds the "physicaldisks" edges to the PhysicalDisk entity.
+func (auo *AgentUpdateOne) AddPhysicaldisks(p ...*PhysicalDisk) *AgentUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.AddPhysicaldiskIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (auo *AgentUpdateOne) Mutation() *AgentMutation {
 	return auo.mutation
@@ -3363,6 +3460,27 @@ func (auo *AgentUpdateOne) RemoveSite(s ...*Site) *AgentUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return auo.RemoveSiteIDs(ids...)
+}
+
+// ClearPhysicaldisks clears all "physicaldisks" edges to the PhysicalDisk entity.
+func (auo *AgentUpdateOne) ClearPhysicaldisks() *AgentUpdateOne {
+	auo.mutation.ClearPhysicaldisks()
+	return auo
+}
+
+// RemovePhysicaldiskIDs removes the "physicaldisks" edge to PhysicalDisk entities by IDs.
+func (auo *AgentUpdateOne) RemovePhysicaldiskIDs(ids ...int) *AgentUpdateOne {
+	auo.mutation.RemovePhysicaldiskIDs(ids...)
+	return auo
+}
+
+// RemovePhysicaldisks removes "physicaldisks" edges to PhysicalDisk entities.
+func (auo *AgentUpdateOne) RemovePhysicaldisks(p ...*PhysicalDisk) *AgentUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.RemovePhysicaldiskIDs(ids...)
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
@@ -4383,6 +4501,51 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.PhysicaldisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedPhysicaldisksIDs(); len(nodes) > 0 && !auo.mutation.PhysicaldisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.PhysicaldisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

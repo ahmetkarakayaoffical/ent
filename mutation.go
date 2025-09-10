@@ -25,6 +25,7 @@ import (
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/physicaldisk"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profile"
@@ -69,6 +70,7 @@ const (
 	TypeNetworkAdapter        = "NetworkAdapter"
 	TypeOperatingSystem       = "OperatingSystem"
 	TypeOrgMetadata           = "OrgMetadata"
+	TypePhysicalDisk          = "PhysicalDisk"
 	TypePrinter               = "Printer"
 	TypeProfile               = "Profile"
 	TypeProfileIssue          = "ProfileIssue"
@@ -175,6 +177,9 @@ type AgentMutation struct {
 	site                       map[int]struct{}
 	removedsite                map[int]struct{}
 	clearedsite                bool
+	physicaldisks              map[int]struct{}
+	removedphysicaldisks       map[int]struct{}
+	clearedphysicaldisks       bool
 	done                       bool
 	oldValue                   func(context.Context) (*Agent, error)
 	predicates                 []predicate.Agent
@@ -2506,6 +2511,60 @@ func (m *AgentMutation) ResetSite() {
 	m.removedsite = nil
 }
 
+// AddPhysicaldiskIDs adds the "physicaldisks" edge to the PhysicalDisk entity by ids.
+func (m *AgentMutation) AddPhysicaldiskIDs(ids ...int) {
+	if m.physicaldisks == nil {
+		m.physicaldisks = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.physicaldisks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPhysicaldisks clears the "physicaldisks" edge to the PhysicalDisk entity.
+func (m *AgentMutation) ClearPhysicaldisks() {
+	m.clearedphysicaldisks = true
+}
+
+// PhysicaldisksCleared reports if the "physicaldisks" edge to the PhysicalDisk entity was cleared.
+func (m *AgentMutation) PhysicaldisksCleared() bool {
+	return m.clearedphysicaldisks
+}
+
+// RemovePhysicaldiskIDs removes the "physicaldisks" edge to the PhysicalDisk entity by IDs.
+func (m *AgentMutation) RemovePhysicaldiskIDs(ids ...int) {
+	if m.removedphysicaldisks == nil {
+		m.removedphysicaldisks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.physicaldisks, ids[i])
+		m.removedphysicaldisks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPhysicaldisks returns the removed IDs of the "physicaldisks" edge to the PhysicalDisk entity.
+func (m *AgentMutation) RemovedPhysicaldisksIDs() (ids []int) {
+	for id := range m.removedphysicaldisks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PhysicaldisksIDs returns the "physicaldisks" edge IDs in the mutation.
+func (m *AgentMutation) PhysicaldisksIDs() (ids []int) {
+	for id := range m.physicaldisks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPhysicaldisks resets all changes to the "physicaldisks" edge.
+func (m *AgentMutation) ResetPhysicaldisks() {
+	m.physicaldisks = nil
+	m.clearedphysicaldisks = false
+	m.removedphysicaldisks = nil
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -3222,7 +3281,7 @@ func (m *AgentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AgentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.computer != nil {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -3279,6 +3338,9 @@ func (m *AgentMutation) AddedEdges() []string {
 	}
 	if m.site != nil {
 		edges = append(edges, agent.EdgeSite)
+	}
+	if m.physicaldisks != nil {
+		edges = append(edges, agent.EdgePhysicaldisks)
 	}
 	return edges
 }
@@ -3391,13 +3453,19 @@ func (m *AgentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgePhysicaldisks:
+		ids := make([]ent.Value, 0, len(m.physicaldisks))
+		for id := range m.physicaldisks {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AgentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.removedlogicaldisks != nil {
 		edges = append(edges, agent.EdgeLogicaldisks)
 	}
@@ -3439,6 +3507,9 @@ func (m *AgentMutation) RemovedEdges() []string {
 	}
 	if m.removedsite != nil {
 		edges = append(edges, agent.EdgeSite)
+	}
+	if m.removedphysicaldisks != nil {
+		edges = append(edges, agent.EdgePhysicaldisks)
 	}
 	return edges
 }
@@ -3531,13 +3602,19 @@ func (m *AgentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case agent.EdgePhysicaldisks:
+		ids := make([]ent.Value, 0, len(m.removedphysicaldisks))
+		for id := range m.removedphysicaldisks {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AgentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.clearedcomputer {
 		edges = append(edges, agent.EdgeComputer)
 	}
@@ -3595,6 +3672,9 @@ func (m *AgentMutation) ClearedEdges() []string {
 	if m.clearedsite {
 		edges = append(edges, agent.EdgeSite)
 	}
+	if m.clearedphysicaldisks {
+		edges = append(edges, agent.EdgePhysicaldisks)
+	}
 	return edges
 }
 
@@ -3640,6 +3720,8 @@ func (m *AgentMutation) EdgeCleared(name string) bool {
 		return m.clearedprofileissue
 	case agent.EdgeSite:
 		return m.clearedsite
+	case agent.EdgePhysicaldisks:
+		return m.clearedphysicaldisks
 	}
 	return false
 }
@@ -3727,6 +3809,9 @@ func (m *AgentMutation) ResetEdge(name string) error {
 		return nil
 	case agent.EdgeSite:
 		m.ResetSite()
+		return nil
+	case agent.EdgePhysicaldisks:
+		m.ResetPhysicaldisks()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent edge %s", name)
@@ -13553,6 +13638,621 @@ func (m *OrgMetadataMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown OrgMetadata edge %s", name)
+}
+
+// PhysicalDiskMutation represents an operation that mutates the PhysicalDisk nodes in the graph.
+type PhysicalDiskMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	device_id     *string
+	model         *string
+	serial_number *string
+	size_in_units *string
+	clearedFields map[string]struct{}
+	owner         *string
+	clearedowner  bool
+	done          bool
+	oldValue      func(context.Context) (*PhysicalDisk, error)
+	predicates    []predicate.PhysicalDisk
+}
+
+var _ ent.Mutation = (*PhysicalDiskMutation)(nil)
+
+// physicaldiskOption allows management of the mutation configuration using functional options.
+type physicaldiskOption func(*PhysicalDiskMutation)
+
+// newPhysicalDiskMutation creates new mutation for the PhysicalDisk entity.
+func newPhysicalDiskMutation(c config, op Op, opts ...physicaldiskOption) *PhysicalDiskMutation {
+	m := &PhysicalDiskMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePhysicalDisk,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPhysicalDiskID sets the ID field of the mutation.
+func withPhysicalDiskID(id int) physicaldiskOption {
+	return func(m *PhysicalDiskMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PhysicalDisk
+		)
+		m.oldValue = func(ctx context.Context) (*PhysicalDisk, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PhysicalDisk.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPhysicalDisk sets the old PhysicalDisk of the mutation.
+func withPhysicalDisk(node *PhysicalDisk) physicaldiskOption {
+	return func(m *PhysicalDiskMutation) {
+		m.oldValue = func(context.Context) (*PhysicalDisk, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PhysicalDiskMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PhysicalDiskMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PhysicalDiskMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PhysicalDiskMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PhysicalDisk.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetDeviceID sets the "device_id" field.
+func (m *PhysicalDiskMutation) SetDeviceID(s string) {
+	m.device_id = &s
+}
+
+// DeviceID returns the value of the "device_id" field in the mutation.
+func (m *PhysicalDiskMutation) DeviceID() (r string, exists bool) {
+	v := m.device_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeviceID returns the old "device_id" field's value of the PhysicalDisk entity.
+// If the PhysicalDisk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhysicalDiskMutation) OldDeviceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeviceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeviceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeviceID: %w", err)
+	}
+	return oldValue.DeviceID, nil
+}
+
+// ResetDeviceID resets all changes to the "device_id" field.
+func (m *PhysicalDiskMutation) ResetDeviceID() {
+	m.device_id = nil
+}
+
+// SetModel sets the "model" field.
+func (m *PhysicalDiskMutation) SetModel(s string) {
+	m.model = &s
+}
+
+// Model returns the value of the "model" field in the mutation.
+func (m *PhysicalDiskMutation) Model() (r string, exists bool) {
+	v := m.model
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModel returns the old "model" field's value of the PhysicalDisk entity.
+// If the PhysicalDisk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhysicalDiskMutation) OldModel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModel: %w", err)
+	}
+	return oldValue.Model, nil
+}
+
+// ClearModel clears the value of the "model" field.
+func (m *PhysicalDiskMutation) ClearModel() {
+	m.model = nil
+	m.clearedFields[physicaldisk.FieldModel] = struct{}{}
+}
+
+// ModelCleared returns if the "model" field was cleared in this mutation.
+func (m *PhysicalDiskMutation) ModelCleared() bool {
+	_, ok := m.clearedFields[physicaldisk.FieldModel]
+	return ok
+}
+
+// ResetModel resets all changes to the "model" field.
+func (m *PhysicalDiskMutation) ResetModel() {
+	m.model = nil
+	delete(m.clearedFields, physicaldisk.FieldModel)
+}
+
+// SetSerialNumber sets the "serial_number" field.
+func (m *PhysicalDiskMutation) SetSerialNumber(s string) {
+	m.serial_number = &s
+}
+
+// SerialNumber returns the value of the "serial_number" field in the mutation.
+func (m *PhysicalDiskMutation) SerialNumber() (r string, exists bool) {
+	v := m.serial_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSerialNumber returns the old "serial_number" field's value of the PhysicalDisk entity.
+// If the PhysicalDisk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhysicalDiskMutation) OldSerialNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSerialNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSerialNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSerialNumber: %w", err)
+	}
+	return oldValue.SerialNumber, nil
+}
+
+// ClearSerialNumber clears the value of the "serial_number" field.
+func (m *PhysicalDiskMutation) ClearSerialNumber() {
+	m.serial_number = nil
+	m.clearedFields[physicaldisk.FieldSerialNumber] = struct{}{}
+}
+
+// SerialNumberCleared returns if the "serial_number" field was cleared in this mutation.
+func (m *PhysicalDiskMutation) SerialNumberCleared() bool {
+	_, ok := m.clearedFields[physicaldisk.FieldSerialNumber]
+	return ok
+}
+
+// ResetSerialNumber resets all changes to the "serial_number" field.
+func (m *PhysicalDiskMutation) ResetSerialNumber() {
+	m.serial_number = nil
+	delete(m.clearedFields, physicaldisk.FieldSerialNumber)
+}
+
+// SetSizeInUnits sets the "size_in_units" field.
+func (m *PhysicalDiskMutation) SetSizeInUnits(s string) {
+	m.size_in_units = &s
+}
+
+// SizeInUnits returns the value of the "size_in_units" field in the mutation.
+func (m *PhysicalDiskMutation) SizeInUnits() (r string, exists bool) {
+	v := m.size_in_units
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSizeInUnits returns the old "size_in_units" field's value of the PhysicalDisk entity.
+// If the PhysicalDisk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhysicalDiskMutation) OldSizeInUnits(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSizeInUnits is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSizeInUnits requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSizeInUnits: %w", err)
+	}
+	return oldValue.SizeInUnits, nil
+}
+
+// ClearSizeInUnits clears the value of the "size_in_units" field.
+func (m *PhysicalDiskMutation) ClearSizeInUnits() {
+	m.size_in_units = nil
+	m.clearedFields[physicaldisk.FieldSizeInUnits] = struct{}{}
+}
+
+// SizeInUnitsCleared returns if the "size_in_units" field was cleared in this mutation.
+func (m *PhysicalDiskMutation) SizeInUnitsCleared() bool {
+	_, ok := m.clearedFields[physicaldisk.FieldSizeInUnits]
+	return ok
+}
+
+// ResetSizeInUnits resets all changes to the "size_in_units" field.
+func (m *PhysicalDiskMutation) ResetSizeInUnits() {
+	m.size_in_units = nil
+	delete(m.clearedFields, physicaldisk.FieldSizeInUnits)
+}
+
+// SetOwnerID sets the "owner" edge to the Agent entity by id.
+func (m *PhysicalDiskMutation) SetOwnerID(id string) {
+	m.owner = &id
+}
+
+// ClearOwner clears the "owner" edge to the Agent entity.
+func (m *PhysicalDiskMutation) ClearOwner() {
+	m.clearedowner = true
+}
+
+// OwnerCleared reports if the "owner" edge to the Agent entity was cleared.
+func (m *PhysicalDiskMutation) OwnerCleared() bool {
+	return m.clearedowner
+}
+
+// OwnerID returns the "owner" edge ID in the mutation.
+func (m *PhysicalDiskMutation) OwnerID() (id string, exists bool) {
+	if m.owner != nil {
+		return *m.owner, true
+	}
+	return
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *PhysicalDiskMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *PhysicalDiskMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// Where appends a list predicates to the PhysicalDiskMutation builder.
+func (m *PhysicalDiskMutation) Where(ps ...predicate.PhysicalDisk) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PhysicalDiskMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PhysicalDiskMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PhysicalDisk, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PhysicalDiskMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PhysicalDiskMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PhysicalDisk).
+func (m *PhysicalDiskMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PhysicalDiskMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.device_id != nil {
+		fields = append(fields, physicaldisk.FieldDeviceID)
+	}
+	if m.model != nil {
+		fields = append(fields, physicaldisk.FieldModel)
+	}
+	if m.serial_number != nil {
+		fields = append(fields, physicaldisk.FieldSerialNumber)
+	}
+	if m.size_in_units != nil {
+		fields = append(fields, physicaldisk.FieldSizeInUnits)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PhysicalDiskMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case physicaldisk.FieldDeviceID:
+		return m.DeviceID()
+	case physicaldisk.FieldModel:
+		return m.Model()
+	case physicaldisk.FieldSerialNumber:
+		return m.SerialNumber()
+	case physicaldisk.FieldSizeInUnits:
+		return m.SizeInUnits()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PhysicalDiskMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case physicaldisk.FieldDeviceID:
+		return m.OldDeviceID(ctx)
+	case physicaldisk.FieldModel:
+		return m.OldModel(ctx)
+	case physicaldisk.FieldSerialNumber:
+		return m.OldSerialNumber(ctx)
+	case physicaldisk.FieldSizeInUnits:
+		return m.OldSizeInUnits(ctx)
+	}
+	return nil, fmt.Errorf("unknown PhysicalDisk field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhysicalDiskMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case physicaldisk.FieldDeviceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeviceID(v)
+		return nil
+	case physicaldisk.FieldModel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModel(v)
+		return nil
+	case physicaldisk.FieldSerialNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSerialNumber(v)
+		return nil
+	case physicaldisk.FieldSizeInUnits:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSizeInUnits(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PhysicalDisk field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PhysicalDiskMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PhysicalDiskMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhysicalDiskMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PhysicalDisk numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PhysicalDiskMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(physicaldisk.FieldModel) {
+		fields = append(fields, physicaldisk.FieldModel)
+	}
+	if m.FieldCleared(physicaldisk.FieldSerialNumber) {
+		fields = append(fields, physicaldisk.FieldSerialNumber)
+	}
+	if m.FieldCleared(physicaldisk.FieldSizeInUnits) {
+		fields = append(fields, physicaldisk.FieldSizeInUnits)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PhysicalDiskMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PhysicalDiskMutation) ClearField(name string) error {
+	switch name {
+	case physicaldisk.FieldModel:
+		m.ClearModel()
+		return nil
+	case physicaldisk.FieldSerialNumber:
+		m.ClearSerialNumber()
+		return nil
+	case physicaldisk.FieldSizeInUnits:
+		m.ClearSizeInUnits()
+		return nil
+	}
+	return fmt.Errorf("unknown PhysicalDisk nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PhysicalDiskMutation) ResetField(name string) error {
+	switch name {
+	case physicaldisk.FieldDeviceID:
+		m.ResetDeviceID()
+		return nil
+	case physicaldisk.FieldModel:
+		m.ResetModel()
+		return nil
+	case physicaldisk.FieldSerialNumber:
+		m.ResetSerialNumber()
+		return nil
+	case physicaldisk.FieldSizeInUnits:
+		m.ResetSizeInUnits()
+		return nil
+	}
+	return fmt.Errorf("unknown PhysicalDisk field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PhysicalDiskMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, physicaldisk.EdgeOwner)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PhysicalDiskMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case physicaldisk.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PhysicalDiskMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PhysicalDiskMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PhysicalDiskMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, physicaldisk.EdgeOwner)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PhysicalDiskMutation) EdgeCleared(name string) bool {
+	switch name {
+	case physicaldisk.EdgeOwner:
+		return m.clearedowner
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PhysicalDiskMutation) ClearEdge(name string) error {
+	switch name {
+	case physicaldisk.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown PhysicalDisk unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PhysicalDiskMutation) ResetEdge(name string) error {
+	switch name {
+	case physicaldisk.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown PhysicalDisk edge %s", name)
 }
 
 // PrinterMutation represents an operation that mutates the Printer nodes in the graph.

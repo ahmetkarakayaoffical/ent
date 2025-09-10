@@ -2037,6 +2037,29 @@ func HasSiteWith(preds ...predicate.Site) predicate.Agent {
 	})
 }
 
+// HasPhysicaldisks applies the HasEdge predicate on the "physicaldisks" edge.
+func HasPhysicaldisks() predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PhysicaldisksTable, PhysicaldisksColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPhysicaldisksWith applies the HasEdge predicate on the "physicaldisks" edge with a given conditions (other predicates).
+func HasPhysicaldisksWith(preds ...predicate.PhysicalDisk) predicate.Agent {
+	return predicate.Agent(func(s *sql.Selector) {
+		step := newPhysicaldisksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Agent) predicate.Agent {
 	return predicate.Agent(sql.AndPredicates(predicates...))

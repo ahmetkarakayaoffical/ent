@@ -29,6 +29,7 @@ import (
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
 	"github.com/open-uem/ent/orgmetadata"
+	"github.com/open-uem/ent/physicaldisk"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/profileissue"
@@ -82,6 +83,8 @@ type Client struct {
 	OperatingSystem *OperatingSystemClient
 	// OrgMetadata is the client for interacting with the OrgMetadata builders.
 	OrgMetadata *OrgMetadataClient
+	// PhysicalDisk is the client for interacting with the PhysicalDisk builders.
+	PhysicalDisk *PhysicalDiskClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
 	// Profile is the client for interacting with the Profile builders.
@@ -143,6 +146,7 @@ func (c *Client) init() {
 	c.NetworkAdapter = NewNetworkAdapterClient(c.config)
 	c.OperatingSystem = NewOperatingSystemClient(c.config)
 	c.OrgMetadata = NewOrgMetadataClient(c.config)
+	c.PhysicalDisk = NewPhysicalDiskClient(c.config)
 	c.Printer = NewPrinterClient(c.config)
 	c.Profile = NewProfileClient(c.config)
 	c.ProfileIssue = NewProfileIssueClient(c.config)
@@ -267,6 +271,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		NetworkAdapter:        NewNetworkAdapterClient(cfg),
 		OperatingSystem:       NewOperatingSystemClient(cfg),
 		OrgMetadata:           NewOrgMetadataClient(cfg),
+		PhysicalDisk:          NewPhysicalDiskClient(cfg),
 		Printer:               NewPrinterClient(cfg),
 		Profile:               NewProfileClient(cfg),
 		ProfileIssue:          NewProfileIssueClient(cfg),
@@ -318,6 +323,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		NetworkAdapter:        NewNetworkAdapterClient(cfg),
 		OperatingSystem:       NewOperatingSystemClient(cfg),
 		OrgMetadata:           NewOrgMetadataClient(cfg),
+		PhysicalDisk:          NewPhysicalDiskClient(cfg),
 		Printer:               NewPrinterClient(cfg),
 		Profile:               NewProfileClient(cfg),
 		ProfileIssue:          NewProfileIssueClient(cfg),
@@ -367,10 +373,10 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
 		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile,
-		c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions,
-		c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update,
-		c.User, c.WingetConfigExclusion,
+		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.PhysicalDisk, c.Printer,
+		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server,
+		c.Sessions, c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task,
+		c.Tenant, c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Use(hooks...)
 	}
@@ -382,10 +388,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
 		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
-		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.Printer, c.Profile,
-		c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server, c.Sessions,
-		c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task, c.Tenant, c.Update,
-		c.User, c.WingetConfigExclusion,
+		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.PhysicalDisk, c.Printer,
+		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server,
+		c.Sessions, c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task,
+		c.Tenant, c.Update, c.User, c.WingetConfigExclusion,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -422,6 +428,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OperatingSystem.mutate(ctx, m)
 	case *OrgMetadataMutation:
 		return c.OrgMetadata.mutate(ctx, m)
+	case *PhysicalDiskMutation:
+		return c.PhysicalDisk.mutate(ctx, m)
 	case *PrinterMutation:
 		return c.Printer.mutate(ctx, m)
 	case *ProfileMutation:
@@ -868,6 +876,22 @@ func (c *AgentClient) QuerySite(a *Agent) *SiteQuery {
 			sqlgraph.From(agent.Table, agent.FieldID, id),
 			sqlgraph.To(site.Table, site.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, agent.SiteTable, agent.SitePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPhysicaldisks queries the physicaldisks edge of a Agent.
+func (c *AgentClient) QueryPhysicaldisks(a *Agent) *PhysicalDiskQuery {
+	query := (&PhysicalDiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, id),
+			sqlgraph.To(physicaldisk.Table, physicaldisk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.PhysicaldisksTable, agent.PhysicaldisksColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2834,6 +2858,155 @@ func (c *OrgMetadataClient) mutate(ctx context.Context, m *OrgMetadataMutation) 
 		return (&OrgMetadataDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown OrgMetadata mutation op: %q", m.Op())
+	}
+}
+
+// PhysicalDiskClient is a client for the PhysicalDisk schema.
+type PhysicalDiskClient struct {
+	config
+}
+
+// NewPhysicalDiskClient returns a client for the PhysicalDisk from the given config.
+func NewPhysicalDiskClient(c config) *PhysicalDiskClient {
+	return &PhysicalDiskClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `physicaldisk.Hooks(f(g(h())))`.
+func (c *PhysicalDiskClient) Use(hooks ...Hook) {
+	c.hooks.PhysicalDisk = append(c.hooks.PhysicalDisk, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `physicaldisk.Intercept(f(g(h())))`.
+func (c *PhysicalDiskClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PhysicalDisk = append(c.inters.PhysicalDisk, interceptors...)
+}
+
+// Create returns a builder for creating a PhysicalDisk entity.
+func (c *PhysicalDiskClient) Create() *PhysicalDiskCreate {
+	mutation := newPhysicalDiskMutation(c.config, OpCreate)
+	return &PhysicalDiskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PhysicalDisk entities.
+func (c *PhysicalDiskClient) CreateBulk(builders ...*PhysicalDiskCreate) *PhysicalDiskCreateBulk {
+	return &PhysicalDiskCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PhysicalDiskClient) MapCreateBulk(slice any, setFunc func(*PhysicalDiskCreate, int)) *PhysicalDiskCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PhysicalDiskCreateBulk{err: fmt.Errorf("calling to PhysicalDiskClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PhysicalDiskCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PhysicalDiskCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PhysicalDisk.
+func (c *PhysicalDiskClient) Update() *PhysicalDiskUpdate {
+	mutation := newPhysicalDiskMutation(c.config, OpUpdate)
+	return &PhysicalDiskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PhysicalDiskClient) UpdateOne(pd *PhysicalDisk) *PhysicalDiskUpdateOne {
+	mutation := newPhysicalDiskMutation(c.config, OpUpdateOne, withPhysicalDisk(pd))
+	return &PhysicalDiskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PhysicalDiskClient) UpdateOneID(id int) *PhysicalDiskUpdateOne {
+	mutation := newPhysicalDiskMutation(c.config, OpUpdateOne, withPhysicalDiskID(id))
+	return &PhysicalDiskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PhysicalDisk.
+func (c *PhysicalDiskClient) Delete() *PhysicalDiskDelete {
+	mutation := newPhysicalDiskMutation(c.config, OpDelete)
+	return &PhysicalDiskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PhysicalDiskClient) DeleteOne(pd *PhysicalDisk) *PhysicalDiskDeleteOne {
+	return c.DeleteOneID(pd.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PhysicalDiskClient) DeleteOneID(id int) *PhysicalDiskDeleteOne {
+	builder := c.Delete().Where(physicaldisk.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PhysicalDiskDeleteOne{builder}
+}
+
+// Query returns a query builder for PhysicalDisk.
+func (c *PhysicalDiskClient) Query() *PhysicalDiskQuery {
+	return &PhysicalDiskQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePhysicalDisk},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PhysicalDisk entity by its id.
+func (c *PhysicalDiskClient) Get(ctx context.Context, id int) (*PhysicalDisk, error) {
+	return c.Query().Where(physicaldisk.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PhysicalDiskClient) GetX(ctx context.Context, id int) *PhysicalDisk {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a PhysicalDisk.
+func (c *PhysicalDiskClient) QueryOwner(pd *PhysicalDisk) *AgentQuery {
+	query := (&AgentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(physicaldisk.Table, physicaldisk.FieldID, id),
+			sqlgraph.To(agent.Table, agent.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, physicaldisk.OwnerTable, physicaldisk.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(pd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PhysicalDiskClient) Hooks() []Hook {
+	return c.hooks.PhysicalDisk
+}
+
+// Interceptors returns the client interceptors.
+func (c *PhysicalDiskClient) Interceptors() []Interceptor {
+	return c.inters.PhysicalDisk
+}
+
+func (c *PhysicalDiskClient) mutate(ctx context.Context, m *PhysicalDiskMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PhysicalDiskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PhysicalDiskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PhysicalDiskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PhysicalDiskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown PhysicalDisk mutation op: %q", m.Op())
 	}
 }
 
@@ -5748,15 +5921,15 @@ type (
 	hooks struct {
 		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
 		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
-		OrgMetadata, Printer, Profile, ProfileIssue, Release, Revocation, RustDesk,
-		Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant,
-		Update, User, WingetConfigExclusion []ent.Hook
+		OrgMetadata, PhysicalDisk, Printer, Profile, ProfileIssue, Release, Revocation,
+		RustDesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
+		Tenant, Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
 		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
-		OrgMetadata, Printer, Profile, ProfileIssue, Release, Revocation, RustDesk,
-		Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task, Tenant,
-		Update, User, WingetConfigExclusion []ent.Interceptor
+		OrgMetadata, PhysicalDisk, Printer, Profile, ProfileIssue, Release, Revocation,
+		RustDesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
+		Tenant, Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )
