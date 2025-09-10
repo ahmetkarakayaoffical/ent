@@ -40,6 +40,8 @@ type Tx struct {
 	OperatingSystem *OperatingSystemClient
 	// OrgMetadata is the client for interacting with the OrgMetadata builders.
 	OrgMetadata *OrgMetadataClient
+	// PhysicalDisk is the client for interacting with the PhysicalDisk builders.
+	PhysicalDisk *PhysicalDiskClient
 	// Printer is the client for interacting with the Printer builders.
 	Printer *PrinterClient
 	// Profile is the client for interacting with the Profile builders.
@@ -221,6 +223,7 @@ func (tx *Tx) init() {
 	tx.NetworkAdapter = NewNetworkAdapterClient(tx.config)
 	tx.OperatingSystem = NewOperatingSystemClient(tx.config)
 	tx.OrgMetadata = NewOrgMetadataClient(tx.config)
+	tx.PhysicalDisk = NewPhysicalDiskClient(tx.config)
 	tx.Printer = NewPrinterClient(tx.config)
 	tx.Profile = NewProfileClient(tx.config)
 	tx.ProfileIssue = NewProfileIssueClient(tx.config)

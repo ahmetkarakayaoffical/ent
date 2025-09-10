@@ -48,6 +48,9 @@ type OperatingSystem func(*sql.Selector)
 // OrgMetadata is the predicate function for orgmetadata builders.
 type OrgMetadata func(*sql.Selector)
 
+// PhysicalDisk is the predicate function for physicaldisk builders.
+type PhysicalDisk func(*sql.Selector)
+
 // Printer is the predicate function for printer builders.
 type Printer func(*sql.Selector)
 

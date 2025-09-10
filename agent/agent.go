@@ -107,6 +107,8 @@ const (
 	EdgeProfileissue = "profileissue"
 	// EdgeSite holds the string denoting the site edge name in mutations.
 	EdgeSite = "site"
+	// EdgePhysicaldisks holds the string denoting the physicaldisks edge name in mutations.
+	EdgePhysicaldisks = "physicaldisks"
 	// ComputerFieldID holds the string denoting the ID field of the Computer.
 	ComputerFieldID = "id"
 	// OperatingSystemFieldID holds the string denoting the ID field of the OperatingSystem.
@@ -145,6 +147,8 @@ const (
 	ProfileIssueFieldID = "id"
 	// SiteFieldID holds the string denoting the ID field of the Site.
 	SiteFieldID = "id"
+	// PhysicalDiskFieldID holds the string denoting the ID field of the PhysicalDisk.
+	PhysicalDiskFieldID = "id"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 	// ComputerTable is the table that holds the computer relation/edge.
@@ -276,6 +280,13 @@ const (
 	// SiteInverseTable is the table name for the Site entity.
 	// It exists in this package in order to avoid circular dependency with the "site" package.
 	SiteInverseTable = "sites"
+	// PhysicaldisksTable is the table that holds the physicaldisks relation/edge.
+	PhysicaldisksTable = "physical_disks"
+	// PhysicaldisksInverseTable is the table name for the PhysicalDisk entity.
+	// It exists in this package in order to avoid circular dependency with the "physicaldisk" package.
+	PhysicaldisksInverseTable = "physical_disks"
+	// PhysicaldisksColumn is the table column denoting the physicaldisks relation/edge.
+	PhysicaldisksColumn = "agent_physicaldisks"
 )
 
 // Columns holds all SQL columns for agent fields.
@@ -818,6 +829,20 @@ func BySite(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSiteStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPhysicaldisksCount orders the results by physicaldisks count.
+func ByPhysicaldisksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPhysicaldisksStep(), opts...)
+	}
+}
+
+// ByPhysicaldisks orders the results by physicaldisks terms.
+func ByPhysicaldisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPhysicaldisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newComputerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -949,5 +974,12 @@ func newSiteStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SiteInverseTable, SiteFieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SiteTable, SitePrimaryKey...),
+	)
+}
+func newPhysicaldisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PhysicaldisksInverseTable, PhysicalDiskFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PhysicaldisksTable, PhysicaldisksColumn),
 	)
 }

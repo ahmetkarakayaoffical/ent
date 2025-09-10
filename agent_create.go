@@ -23,6 +23,7 @@ import (
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
+	"github.com/open-uem/ent/physicaldisk"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profileissue"
 	"github.com/open-uem/ent/release"
@@ -715,6 +716,21 @@ func (ac *AgentCreate) AddSite(s ...*Site) *AgentCreate {
 	return ac.AddSiteIDs(ids...)
 }
 
+// AddPhysicaldiskIDs adds the "physicaldisks" edge to the PhysicalDisk entity by IDs.
+func (ac *AgentCreate) AddPhysicaldiskIDs(ids ...int) *AgentCreate {
+	ac.mutation.AddPhysicaldiskIDs(ids...)
+	return ac
+}
+
+// AddPhysicaldisks adds the "physicaldisks" edges to the PhysicalDisk entity.
+func (ac *AgentCreate) AddPhysicaldisks(p ...*PhysicalDisk) *AgentCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddPhysicaldiskIDs(ids...)
+}
+
 // Mutation returns the AgentMutation object of the builder.
 func (ac *AgentCreate) Mutation() *AgentMutation {
 	return ac.mutation
@@ -1317,6 +1333,22 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.PhysicaldisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   agent.PhysicaldisksTable,
+			Columns: []string{agent.PhysicaldisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(physicaldisk.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -381,6 +381,29 @@ var (
 			},
 		},
 	}
+	// PhysicalDisksColumns holds the columns for the "physical_disks" table.
+	PhysicalDisksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "device_id", Type: field.TypeString},
+		{Name: "model", Type: field.TypeString, Nullable: true},
+		{Name: "serial_number", Type: field.TypeString, Nullable: true},
+		{Name: "size_in_units", Type: field.TypeString, Nullable: true},
+		{Name: "agent_physicaldisks", Type: field.TypeString},
+	}
+	// PhysicalDisksTable holds the schema information for the "physical_disks" table.
+	PhysicalDisksTable = &schema.Table{
+		Name:       "physical_disks",
+		Columns:    PhysicalDisksColumns,
+		PrimaryKey: []*schema.Column{PhysicalDisksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "physical_disks_agents_physicaldisks",
+				Columns:    []*schema.Column{PhysicalDisksColumns[5]},
+				RefColumns: []*schema.Column{AgentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PrintersColumns holds the columns for the "printers" table.
 	PrintersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -1033,6 +1056,7 @@ var (
 		NetworkAdaptersTable,
 		OperatingSystemsTable,
 		OrgMetadataTable,
+		PhysicalDisksTable,
 		PrintersTable,
 		ProfilesTable,
 		ProfileIssuesTable,
@@ -1071,6 +1095,7 @@ func init() {
 	NetworkAdaptersTable.ForeignKeys[0].RefTable = AgentsTable
 	OperatingSystemsTable.ForeignKeys[0].RefTable = AgentsTable
 	OrgMetadataTable.ForeignKeys[0].RefTable = TenantsTable
+	PhysicalDisksTable.ForeignKeys[0].RefTable = AgentsTable
 	PrintersTable.ForeignKeys[0].RefTable = AgentsTable
 	ProfilesTable.ForeignKeys[0].RefTable = SitesTable
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable

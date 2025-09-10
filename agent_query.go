@@ -23,6 +23,7 @@ import (
 	"github.com/open-uem/ent/monitor"
 	"github.com/open-uem/ent/networkadapter"
 	"github.com/open-uem/ent/operatingsystem"
+	"github.com/open-uem/ent/physicaldisk"
 	"github.com/open-uem/ent/predicate"
 	"github.com/open-uem/ent/printer"
 	"github.com/open-uem/ent/profileissue"
@@ -61,6 +62,7 @@ type AgentQuery struct {
 	withRelease             *ReleaseQuery
 	withProfileissue        *ProfileIssueQuery
 	withSite                *SiteQuery
+	withPhysicaldisks       *PhysicalDiskQuery
 	withFKs                 bool
 	modifiers               []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -517,6 +519,28 @@ func (aq *AgentQuery) QuerySite() *SiteQuery {
 	return query
 }
 
+// QueryPhysicaldisks chains the current query on the "physicaldisks" edge.
+func (aq *AgentQuery) QueryPhysicaldisks() *PhysicalDiskQuery {
+	query := (&PhysicalDiskClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(agent.Table, agent.FieldID, selector),
+			sqlgraph.To(physicaldisk.Table, physicaldisk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, agent.PhysicaldisksTable, agent.PhysicaldisksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Agent entity from the query.
 // Returns a *NotFoundError when no Agent was found.
 func (aq *AgentQuery) First(ctx context.Context) (*Agent, error) {
@@ -728,6 +752,7 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 		withRelease:             aq.withRelease.Clone(),
 		withProfileissue:        aq.withProfileissue.Clone(),
 		withSite:                aq.withSite.Clone(),
+		withPhysicaldisks:       aq.withPhysicaldisks.Clone(),
 		// clone intermediate query.
 		sql:       aq.sql.Clone(),
 		path:      aq.path,
@@ -944,6 +969,17 @@ func (aq *AgentQuery) WithSite(opts ...func(*SiteQuery)) *AgentQuery {
 	return aq
 }
 
+// WithPhysicaldisks tells the query-builder to eager-load the nodes that are connected to
+// the "physicaldisks" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *AgentQuery) WithPhysicaldisks(opts ...func(*PhysicalDiskQuery)) *AgentQuery {
+	query := (&PhysicalDiskClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withPhysicaldisks = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1023,7 +1059,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		nodes       = []*Agent{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			aq.withComputer != nil,
 			aq.withOperatingsystem != nil,
 			aq.withSystemupdate != nil,
@@ -1043,6 +1079,7 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 			aq.withRelease != nil,
 			aq.withProfileissue != nil,
 			aq.withSite != nil,
+			aq.withPhysicaldisks != nil,
 		}
 	)
 	if aq.withRelease != nil {
@@ -1199,6 +1236,13 @@ func (aq *AgentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Agent,
 		if err := aq.loadSite(ctx, query, nodes,
 			func(n *Agent) { n.Edges.Site = []*Site{} },
 			func(n *Agent, e *Site) { n.Edges.Site = append(n.Edges.Site, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withPhysicaldisks; query != nil {
+		if err := aq.loadPhysicaldisks(ctx, query, nodes,
+			func(n *Agent) { n.Edges.Physicaldisks = []*PhysicalDisk{} },
+			func(n *Agent, e *PhysicalDisk) { n.Edges.Physicaldisks = append(n.Edges.Physicaldisks, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1840,6 +1884,37 @@ func (aq *AgentQuery) loadSite(ctx context.Context, query *SiteQuery, nodes []*A
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (aq *AgentQuery) loadPhysicaldisks(ctx context.Context, query *PhysicalDiskQuery, nodes []*Agent, init func(*Agent), assign func(*Agent, *PhysicalDisk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Agent)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.PhysicalDisk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(agent.PhysicaldisksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.agent_physicaldisks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "agent_physicaldisks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "agent_physicaldisks" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
