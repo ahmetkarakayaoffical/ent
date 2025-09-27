@@ -36,7 +36,7 @@ var (
 		{Name: "settings_modified", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "nickname", Type: field.TypeString, Nullable: true, Default: ""},
-		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other"}, Default: "Other"},
+		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "VM", "AllInOne", "Other"}, Default: "Other"},
 		{Name: "has_rustdesk", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}

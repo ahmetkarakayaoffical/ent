@@ -44,7 +44,7 @@ func (Agent) Fields() []ent.Field {
 		field.Time("settings_modified").Optional().Default(time.Now),
 		field.String("description").Optional().Default(""),
 		field.String("nickname").Optional().Default(""),
-		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "VM", "Other").Optional().Default("Other"),
+		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "VM", "AllInOne", "Other").Optional().Default("Other"),
 		field.Bool("has_rustdesk").Optional().Default(false),
 	}
 }
