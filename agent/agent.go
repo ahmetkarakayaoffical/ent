@@ -439,6 +439,7 @@ const (
 	EndpointTypeServer    EndpointType = "Server"
 	EndpointTypeTablet    EndpointType = "Tablet"
 	EndpointTypeVM        EndpointType = "VM"
+	EndpointTypeAllInOne  EndpointType = "AllInOne"
 	EndpointTypeOther     EndpointType = "Other"
 )
 
@@ -449,7 +450,7 @@ func (et EndpointType) String() string {
 // EndpointTypeValidator is a validator for the "endpoint_type" field enum values. It is called by the builders before save.
 func EndpointTypeValidator(et EndpointType) error {
 	switch et {
-	case EndpointTypeDesktopPC, EndpointTypeLaptop, EndpointTypeServer, EndpointTypeTablet, EndpointTypeVM, EndpointTypeOther:
+	case EndpointTypeDesktopPC, EndpointTypeLaptop, EndpointTypeServer, EndpointTypeTablet, EndpointTypeVM, EndpointTypeAllInOne, EndpointTypeOther:
 		return nil
 	default:
 		return fmt.Errorf("agent: invalid enum value for endpoint_type field: %q", et)
