@@ -190,6 +190,11 @@ func HasRustdesk(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldHasRustdesk, v))
 }
 
+// IsWayland applies equality check predicate on the "is_wayland" field. It's identical to IsWaylandEQ.
+func IsWayland(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsWayland, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1598,6 +1603,26 @@ func HasRustdeskIsNil() predicate.Agent {
 // HasRustdeskNotNil applies the NotNil predicate on the "has_rustdesk" field.
 func HasRustdeskNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldHasRustdesk))
+}
+
+// IsWaylandEQ applies the EQ predicate on the "is_wayland" field.
+func IsWaylandEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsWayland, v))
+}
+
+// IsWaylandNEQ applies the NEQ predicate on the "is_wayland" field.
+func IsWaylandNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldIsWayland, v))
+}
+
+// IsWaylandIsNil applies the IsNil predicate on the "is_wayland" field.
+func IsWaylandIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldIsWayland))
+}
+
+// IsWaylandNotNil applies the NotNil predicate on the "is_wayland" field.
+func IsWaylandNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldIsWayland))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

@@ -38,6 +38,7 @@ var (
 		{Name: "nickname", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "endpoint_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"DesktopPC", "Laptop", "Server", "Tablet", "VM", "AllInOne", "Other"}, Default: "Other"},
 		{Name: "has_rustdesk", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "is_wayland", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "release_agents", Type: field.TypeInt, Nullable: true},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
@@ -48,7 +49,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "agents_releases_agents",
-				Columns:    []*schema.Column{AgentsColumns[28]},
+				Columns:    []*schema.Column{AgentsColumns[29]},
 				RefColumns: []*schema.Column{ReleasesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

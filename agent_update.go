@@ -565,6 +565,26 @@ func (au *AgentUpdate) ClearHasRustdesk() *AgentUpdate {
 	return au
 }
 
+// SetIsWayland sets the "is_wayland" field.
+func (au *AgentUpdate) SetIsWayland(b bool) *AgentUpdate {
+	au.mutation.SetIsWayland(b)
+	return au
+}
+
+// SetNillableIsWayland sets the "is_wayland" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableIsWayland(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetIsWayland(*b)
+	}
+	return au
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (au *AgentUpdate) ClearIsWayland() *AgentUpdate {
+	au.mutation.ClearIsWayland()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1454,6 +1474,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.HasRustdeskCleared() {
 		_spec.ClearField(agent.FieldHasRustdesk, field.TypeBool)
+	}
+	if value, ok := au.mutation.IsWayland(); ok {
+		_spec.SetField(agent.FieldIsWayland, field.TypeBool, value)
+	}
+	if au.mutation.IsWaylandCleared() {
+		_spec.ClearField(agent.FieldIsWayland, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2813,6 +2839,26 @@ func (auo *AgentUpdateOne) ClearHasRustdesk() *AgentUpdateOne {
 	return auo
 }
 
+// SetIsWayland sets the "is_wayland" field.
+func (auo *AgentUpdateOne) SetIsWayland(b bool) *AgentUpdateOne {
+	auo.mutation.SetIsWayland(b)
+	return auo
+}
+
+// SetNillableIsWayland sets the "is_wayland" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableIsWayland(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetIsWayland(*b)
+	}
+	return auo
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (auo *AgentUpdateOne) ClearIsWayland() *AgentUpdateOne {
+	auo.mutation.ClearIsWayland()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3732,6 +3778,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.HasRustdeskCleared() {
 		_spec.ClearField(agent.FieldHasRustdesk, field.TypeBool)
+	}
+	if value, ok := auo.mutation.IsWayland(); ok {
+		_spec.SetField(agent.FieldIsWayland, field.TypeBool, value)
+	}
+	if auo.mutation.IsWaylandCleared() {
+		_spec.ClearField(agent.FieldIsWayland, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

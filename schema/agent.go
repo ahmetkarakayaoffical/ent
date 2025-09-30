@@ -46,6 +46,7 @@ func (Agent) Fields() []ent.Field {
 		field.String("nickname").Optional().Default(""),
 		field.Enum("endpoint_type").Values("DesktopPC", "Laptop", "Server", "Tablet", "VM", "AllInOne", "Other").Optional().Default("Other"),
 		field.Bool("has_rustdesk").Optional().Default(false),
+		field.Bool("is_wayland").Optional().Default(false),
 	}
 }
 

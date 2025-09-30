@@ -76,6 +76,8 @@ type Agent struct {
 	EndpointType agent.EndpointType `json:"endpoint_type,omitempty"`
 	// HasRustdesk holds the value of the "has_rustdesk" field.
 	HasRustdesk bool `json:"has_rustdesk,omitempty"`
+	// IsWayland holds the value of the "is_wayland" field.
+	IsWayland bool `json:"is_wayland,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AgentQuery when eager-loading is set.
 	Edges          AgentEdges `json:"edges"`
@@ -325,7 +327,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case agent.FieldCertificateReady, agent.FieldRestartRequired, agent.FieldIsRemote, agent.FieldDebugMode, agent.FieldSftpService, agent.FieldRemoteAssistance, agent.FieldHasRustdesk:
+		case agent.FieldCertificateReady, agent.FieldRestartRequired, agent.FieldIsRemote, agent.FieldDebugMode, agent.FieldSftpService, agent.FieldRemoteAssistance, agent.FieldHasRustdesk, agent.FieldIsWayland:
 			values[i] = new(sql.NullBool)
 		case agent.FieldID, agent.FieldOs, agent.FieldHostname, agent.FieldIP, agent.FieldMAC, agent.FieldVnc, agent.FieldNotes, agent.FieldUpdateTaskStatus, agent.FieldUpdateTaskDescription, agent.FieldUpdateTaskResult, agent.FieldUpdateTaskVersion, agent.FieldVncProxyPort, agent.FieldSftpPort, agent.FieldAgentStatus, agent.FieldDescription, agent.FieldNickname, agent.FieldEndpointType:
 			values[i] = new(sql.NullString)
@@ -515,6 +517,12 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field has_rustdesk", values[i])
 			} else if value.Valid {
 				a.HasRustdesk = value.Bool
+			}
+		case agent.FieldIsWayland:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_wayland", values[i])
+			} else if value.Valid {
+				a.IsWayland = value.Bool
 			}
 		case agent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -739,6 +747,9 @@ func (a *Agent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("has_rustdesk=")
 	builder.WriteString(fmt.Sprintf("%v", a.HasRustdesk))
+	builder.WriteString(", ")
+	builder.WriteString("is_wayland=")
+	builder.WriteString(fmt.Sprintf("%v", a.IsWayland))
 	builder.WriteByte(')')
 	return builder.String()
 }

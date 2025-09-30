@@ -124,6 +124,7 @@ type AgentMutation struct {
 	nickname                   *string
 	endpoint_type              *agent.EndpointType
 	has_rustdesk               *bool
+	is_wayland                 *bool
 	clearedFields              map[string]struct{}
 	computer                   *int
 	clearedcomputer            bool
@@ -1560,6 +1561,55 @@ func (m *AgentMutation) ResetHasRustdesk() {
 	delete(m.clearedFields, agent.FieldHasRustdesk)
 }
 
+// SetIsWayland sets the "is_wayland" field.
+func (m *AgentMutation) SetIsWayland(b bool) {
+	m.is_wayland = &b
+}
+
+// IsWayland returns the value of the "is_wayland" field in the mutation.
+func (m *AgentMutation) IsWayland() (r bool, exists bool) {
+	v := m.is_wayland
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsWayland returns the old "is_wayland" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldIsWayland(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsWayland is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsWayland requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsWayland: %w", err)
+	}
+	return oldValue.IsWayland, nil
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (m *AgentMutation) ClearIsWayland() {
+	m.is_wayland = nil
+	m.clearedFields[agent.FieldIsWayland] = struct{}{}
+}
+
+// IsWaylandCleared returns if the "is_wayland" field was cleared in this mutation.
+func (m *AgentMutation) IsWaylandCleared() bool {
+	_, ok := m.clearedFields[agent.FieldIsWayland]
+	return ok
+}
+
+// ResetIsWayland resets all changes to the "is_wayland" field.
+func (m *AgentMutation) ResetIsWayland() {
+	m.is_wayland = nil
+	delete(m.clearedFields, agent.FieldIsWayland)
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by id.
 func (m *AgentMutation) SetComputerID(id int) {
 	m.computer = &id
@@ -2599,7 +2649,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 28)
 	if m.os != nil {
 		fields = append(fields, agent.FieldOs)
 	}
@@ -2681,6 +2731,9 @@ func (m *AgentMutation) Fields() []string {
 	if m.has_rustdesk != nil {
 		fields = append(fields, agent.FieldHasRustdesk)
 	}
+	if m.is_wayland != nil {
+		fields = append(fields, agent.FieldIsWayland)
+	}
 	return fields
 }
 
@@ -2743,6 +2796,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.EndpointType()
 	case agent.FieldHasRustdesk:
 		return m.HasRustdesk()
+	case agent.FieldIsWayland:
+		return m.IsWayland()
 	}
 	return nil, false
 }
@@ -2806,6 +2861,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldEndpointType(ctx)
 	case agent.FieldHasRustdesk:
 		return m.OldHasRustdesk(ctx)
+	case agent.FieldIsWayland:
+		return m.OldIsWayland(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -3004,6 +3061,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetHasRustdesk(v)
 		return nil
+	case agent.FieldIsWayland:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsWayland(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -3103,6 +3167,9 @@ func (m *AgentMutation) ClearedFields() []string {
 	if m.FieldCleared(agent.FieldHasRustdesk) {
 		fields = append(fields, agent.FieldHasRustdesk)
 	}
+	if m.FieldCleared(agent.FieldIsWayland) {
+		fields = append(fields, agent.FieldIsWayland)
+	}
 	return fields
 }
 
@@ -3185,6 +3252,9 @@ func (m *AgentMutation) ClearField(name string) error {
 		return nil
 	case agent.FieldHasRustdesk:
 		m.ClearHasRustdesk()
+		return nil
+	case agent.FieldIsWayland:
+		m.ClearIsWayland()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent nullable field %s", name)
@@ -3274,6 +3344,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldHasRustdesk:
 		m.ResetHasRustdesk()
+		return nil
+	case agent.FieldIsWayland:
+		m.ResetIsWayland()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)

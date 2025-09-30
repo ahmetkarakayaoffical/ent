@@ -405,6 +405,20 @@ func (ac *AgentCreate) SetNillableHasRustdesk(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetIsWayland sets the "is_wayland" field.
+func (ac *AgentCreate) SetIsWayland(b bool) *AgentCreate {
+	ac.mutation.SetIsWayland(b)
+	return ac
+}
+
+// SetNillableIsWayland sets the "is_wayland" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableIsWayland(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetIsWayland(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -850,6 +864,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultHasRustdesk
 		ac.mutation.SetHasRustdesk(v)
 	}
+	if _, ok := ac.mutation.IsWayland(); !ok {
+		v := agent.DefaultIsWayland
+		ac.mutation.SetIsWayland(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1034,6 +1052,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.HasRustdesk(); ok {
 		_spec.SetField(agent.FieldHasRustdesk, field.TypeBool, value)
 		_node.HasRustdesk = value
+	}
+	if value, ok := ac.mutation.IsWayland(); ok {
+		_spec.SetField(agent.FieldIsWayland, field.TypeBool, value)
+		_node.IsWayland = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1870,6 +1892,24 @@ func (u *AgentUpsert) ClearHasRustdesk() *AgentUpsert {
 	return u
 }
 
+// SetIsWayland sets the "is_wayland" field.
+func (u *AgentUpsert) SetIsWayland(v bool) *AgentUpsert {
+	u.Set(agent.FieldIsWayland, v)
+	return u
+}
+
+// UpdateIsWayland sets the "is_wayland" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateIsWayland() *AgentUpsert {
+	u.SetExcluded(agent.FieldIsWayland)
+	return u
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (u *AgentUpsert) ClearIsWayland() *AgentUpsert {
+	u.SetNull(agent.FieldIsWayland)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -2454,6 +2494,27 @@ func (u *AgentUpsertOne) UpdateHasRustdesk() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearHasRustdesk() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearHasRustdesk()
+	})
+}
+
+// SetIsWayland sets the "is_wayland" field.
+func (u *AgentUpsertOne) SetIsWayland(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsWayland(v)
+	})
+}
+
+// UpdateIsWayland sets the "is_wayland" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateIsWayland() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsWayland()
+	})
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (u *AgentUpsertOne) ClearIsWayland() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsWayland()
 	})
 }
 
@@ -3208,6 +3269,27 @@ func (u *AgentUpsertBulk) UpdateHasRustdesk() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearHasRustdesk() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearHasRustdesk()
+	})
+}
+
+// SetIsWayland sets the "is_wayland" field.
+func (u *AgentUpsertBulk) SetIsWayland(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsWayland(v)
+	})
+}
+
+// UpdateIsWayland sets the "is_wayland" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateIsWayland() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsWayland()
+	})
+}
+
+// ClearIsWayland clears the value of the "is_wayland" field.
+func (u *AgentUpsertBulk) ClearIsWayland() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsWayland()
 	})
 }
 
