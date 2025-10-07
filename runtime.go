@@ -589,6 +589,10 @@ func init() {
 	taskDescAptUpdateCache := taskFields[82].Descriptor()
 	// task.DefaultAptUpdateCache holds the default value on creation for the apt_update_cache field.
 	task.DefaultAptUpdateCache = taskDescAptUpdateCache.Default.(bool)
+	// taskDescVersion is the schema descriptor for version field.
+	taskDescVersion := taskFields[84].Descriptor()
+	// task.DefaultVersion holds the default value on creation for the version field.
+	task.DefaultVersion = taskDescVersion.Default.(int)
 	tenantFields := schema.Tenant{}.Fields()
 	_ = tenantFields
 	// tenantDescCreated is the schema descriptor for created field.

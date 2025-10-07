@@ -445,6 +445,11 @@ func AptUpdateCache(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldAptUpdateCache, v))
 }
 
+// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
+func Version(v int) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldVersion, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldName, v))
@@ -4943,6 +4948,56 @@ func AptUpgradeTypeIsNil() predicate.Task {
 // AptUpgradeTypeNotNil applies the NotNil predicate on the "apt_upgrade_type" field.
 func AptUpgradeTypeNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldAptUpgradeType))
+}
+
+// VersionEQ applies the EQ predicate on the "version" field.
+func VersionEQ(v int) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldVersion, v))
+}
+
+// VersionNEQ applies the NEQ predicate on the "version" field.
+func VersionNEQ(v int) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldVersion, v))
+}
+
+// VersionIn applies the In predicate on the "version" field.
+func VersionIn(vs ...int) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldVersion, vs...))
+}
+
+// VersionNotIn applies the NotIn predicate on the "version" field.
+func VersionNotIn(vs ...int) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldVersion, vs...))
+}
+
+// VersionGT applies the GT predicate on the "version" field.
+func VersionGT(v int) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldVersion, v))
+}
+
+// VersionGTE applies the GTE predicate on the "version" field.
+func VersionGTE(v int) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldVersion, v))
+}
+
+// VersionLT applies the LT predicate on the "version" field.
+func VersionLT(v int) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldVersion, v))
+}
+
+// VersionLTE applies the LTE predicate on the "version" field.
+func VersionLTE(v int) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldVersion, v))
+}
+
+// VersionIsNil applies the IsNil predicate on the "version" field.
+func VersionIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldVersion))
+}
+
+// VersionNotNil applies the NotNil predicate on the "version" field.
+func VersionNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldVersion))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.

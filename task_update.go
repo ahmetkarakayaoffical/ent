@@ -1699,6 +1699,33 @@ func (tu *TaskUpdate) ClearAptUpgradeType() *TaskUpdate {
 	return tu
 }
 
+// SetVersion sets the "version" field.
+func (tu *TaskUpdate) SetVersion(i int) *TaskUpdate {
+	tu.mutation.ResetVersion()
+	tu.mutation.SetVersion(i)
+	return tu
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableVersion(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetVersion(*i)
+	}
+	return tu
+}
+
+// AddVersion adds i to the "version" field.
+func (tu *TaskUpdate) AddVersion(i int) *TaskUpdate {
+	tu.mutation.AddVersion(i)
+	return tu
+}
+
+// ClearVersion clears the value of the "version" field.
+func (tu *TaskUpdate) ClearVersion() *TaskUpdate {
+	tu.mutation.ClearVersion()
+	return tu
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tu *TaskUpdate) AddTagIDs(ids ...int) *TaskUpdate {
 	tu.mutation.AddTagIDs(ids...)
@@ -2347,6 +2374,15 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.AptUpgradeTypeCleared() {
 		_spec.ClearField(task.FieldAptUpgradeType, field.TypeEnum)
+	}
+	if value, ok := tu.mutation.Version(); ok {
+		_spec.SetField(task.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := tu.mutation.AddedVersion(); ok {
+		_spec.AddField(task.FieldVersion, field.TypeInt, value)
+	}
+	if tu.mutation.VersionCleared() {
+		_spec.ClearField(task.FieldVersion, field.TypeInt)
 	}
 	if tu.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4112,6 +4148,33 @@ func (tuo *TaskUpdateOne) ClearAptUpgradeType() *TaskUpdateOne {
 	return tuo
 }
 
+// SetVersion sets the "version" field.
+func (tuo *TaskUpdateOne) SetVersion(i int) *TaskUpdateOne {
+	tuo.mutation.ResetVersion()
+	tuo.mutation.SetVersion(i)
+	return tuo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableVersion(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetVersion(*i)
+	}
+	return tuo
+}
+
+// AddVersion adds i to the "version" field.
+func (tuo *TaskUpdateOne) AddVersion(i int) *TaskUpdateOne {
+	tuo.mutation.AddVersion(i)
+	return tuo
+}
+
+// ClearVersion clears the value of the "version" field.
+func (tuo *TaskUpdateOne) ClearVersion() *TaskUpdateOne {
+	tuo.mutation.ClearVersion()
+	return tuo
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tuo *TaskUpdateOne) AddTagIDs(ids ...int) *TaskUpdateOne {
 	tuo.mutation.AddTagIDs(ids...)
@@ -4790,6 +4853,15 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.AptUpgradeTypeCleared() {
 		_spec.ClearField(task.FieldAptUpgradeType, field.TypeEnum)
+	}
+	if value, ok := tuo.mutation.Version(); ok {
+		_spec.SetField(task.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := tuo.mutation.AddedVersion(); ok {
+		_spec.AddField(task.FieldVersion, field.TypeInt, value)
+	}
+	if tuo.mutation.VersionCleared() {
+		_spec.ClearField(task.FieldVersion, field.TypeInt)
 	}
 	if tuo.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

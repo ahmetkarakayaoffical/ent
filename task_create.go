@@ -1184,6 +1184,20 @@ func (tc *TaskCreate) SetNillableAptUpgradeType(tut *task.AptUpgradeType) *TaskC
 	return tc
 }
 
+// SetVersion sets the "version" field.
+func (tc *TaskCreate) SetVersion(i int) *TaskCreate {
+	tc.mutation.SetVersion(i)
+	return tc
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableVersion(i *int) *TaskCreate {
+	if i != nil {
+		tc.SetVersion(*i)
+	}
+	return tc
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
 func (tc *TaskCreate) AddTagIDs(ids ...int) *TaskCreate {
 	tc.mutation.AddTagIDs(ids...)
@@ -1460,6 +1474,10 @@ func (tc *TaskCreate) defaults() {
 	if _, ok := tc.mutation.AptUpgradeType(); !ok {
 		v := task.DefaultAptUpgradeType
 		tc.mutation.SetAptUpgradeType(v)
+	}
+	if _, ok := tc.mutation.Version(); !ok {
+		v := task.DefaultVersion
+		tc.mutation.SetVersion(v)
 	}
 }
 
@@ -1868,6 +1886,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.AptUpgradeType(); ok {
 		_spec.SetField(task.FieldAptUpgradeType, field.TypeEnum, value)
 		_node.AptUpgradeType = value
+	}
+	if value, ok := tc.mutation.Version(); ok {
+		_spec.SetField(task.FieldVersion, field.TypeInt, value)
+		_node.Version = value
 	}
 	if nodes := tc.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -3451,6 +3473,30 @@ func (u *TaskUpsert) UpdateAptUpgradeType() *TaskUpsert {
 // ClearAptUpgradeType clears the value of the "apt_upgrade_type" field.
 func (u *TaskUpsert) ClearAptUpgradeType() *TaskUpsert {
 	u.SetNull(task.FieldAptUpgradeType)
+	return u
+}
+
+// SetVersion sets the "version" field.
+func (u *TaskUpsert) SetVersion(v int) *TaskUpsert {
+	u.Set(task.FieldVersion, v)
+	return u
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *TaskUpsert) UpdateVersion() *TaskUpsert {
+	u.SetExcluded(task.FieldVersion)
+	return u
+}
+
+// AddVersion adds v to the "version" field.
+func (u *TaskUpsert) AddVersion(v int) *TaskUpsert {
+	u.Add(task.FieldVersion, v)
+	return u
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *TaskUpsert) ClearVersion() *TaskUpsert {
+	u.SetNull(task.FieldVersion)
 	return u
 }
 
@@ -5241,6 +5287,34 @@ func (u *TaskUpsertOne) UpdateAptUpgradeType() *TaskUpsertOne {
 func (u *TaskUpsertOne) ClearAptUpgradeType() *TaskUpsertOne {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearAptUpgradeType()
+	})
+}
+
+// SetVersion sets the "version" field.
+func (u *TaskUpsertOne) SetVersion(v int) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// AddVersion adds v to the "version" field.
+func (u *TaskUpsertOne) AddVersion(v int) *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.AddVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *TaskUpsertOne) UpdateVersion() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *TaskUpsertOne) ClearVersion() *TaskUpsertOne {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearVersion()
 	})
 }
 
@@ -7195,6 +7269,34 @@ func (u *TaskUpsertBulk) UpdateAptUpgradeType() *TaskUpsertBulk {
 func (u *TaskUpsertBulk) ClearAptUpgradeType() *TaskUpsertBulk {
 	return u.Update(func(s *TaskUpsert) {
 		s.ClearAptUpgradeType()
+	})
+}
+
+// SetVersion sets the "version" field.
+func (u *TaskUpsertBulk) SetVersion(v int) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.SetVersion(v)
+	})
+}
+
+// AddVersion adds v to the "version" field.
+func (u *TaskUpsertBulk) AddVersion(v int) *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.AddVersion(v)
+	})
+}
+
+// UpdateVersion sets the "version" field to the value that was provided on create.
+func (u *TaskUpsertBulk) UpdateVersion() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.UpdateVersion()
+	})
+}
+
+// ClearVersion clears the value of the "version" field.
+func (u *TaskUpsertBulk) ClearVersion() *TaskUpsertBulk {
+	return u.Update(func(s *TaskUpsert) {
+		s.ClearVersion()
 	})
 }
 

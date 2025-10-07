@@ -26753,6 +26753,8 @@ type TaskMutation struct {
 	apt_purge                                  *bool
 	apt_update_cache                           *bool
 	apt_upgrade_type                           *task.AptUpgradeType
+	version                                    *int
+	addversion                                 *int
 	clearedFields                              map[string]struct{}
 	tags                                       map[int]struct{}
 	removedtags                                map[int]struct{}
@@ -30952,6 +30954,76 @@ func (m *TaskMutation) ResetAptUpgradeType() {
 	delete(m.clearedFields, task.FieldAptUpgradeType)
 }
 
+// SetVersion sets the "version" field.
+func (m *TaskMutation) SetVersion(i int) {
+	m.version = &i
+	m.addversion = nil
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *TaskMutation) Version() (r int, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldVersion(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// AddVersion adds i to the "version" field.
+func (m *TaskMutation) AddVersion(i int) {
+	if m.addversion != nil {
+		*m.addversion += i
+	} else {
+		m.addversion = &i
+	}
+}
+
+// AddedVersion returns the value that was added to the "version" field in this mutation.
+func (m *TaskMutation) AddedVersion() (r int, exists bool) {
+	v := m.addversion
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearVersion clears the value of the "version" field.
+func (m *TaskMutation) ClearVersion() {
+	m.version = nil
+	m.addversion = nil
+	m.clearedFields[task.FieldVersion] = struct{}{}
+}
+
+// VersionCleared returns if the "version" field was cleared in this mutation.
+func (m *TaskMutation) VersionCleared() bool {
+	_, ok := m.clearedFields[task.FieldVersion]
+	return ok
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *TaskMutation) ResetVersion() {
+	m.version = nil
+	m.addversion = nil
+	delete(m.clearedFields, task.FieldVersion)
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
 func (m *TaskMutation) AddTagIDs(ids ...int) {
 	if m.tags == nil {
@@ -31079,7 +31151,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 84)
+	fields := make([]string, 0, 85)
 	if m.name != nil {
 		fields = append(fields, task.FieldName)
 	}
@@ -31332,6 +31404,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.apt_upgrade_type != nil {
 		fields = append(fields, task.FieldAptUpgradeType)
 	}
+	if m.version != nil {
+		fields = append(fields, task.FieldVersion)
+	}
 	return fields
 }
 
@@ -31508,6 +31583,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.AptUpdateCache()
 	case task.FieldAptUpgradeType:
 		return m.AptUpgradeType()
+	case task.FieldVersion:
+		return m.Version()
 	}
 	return nil, false
 }
@@ -31685,6 +31762,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAptUpdateCache(ctx)
 	case task.FieldAptUpgradeType:
 		return m.OldAptUpgradeType(ctx)
+	case task.FieldVersion:
+		return m.OldVersion(ctx)
 	}
 	return nil, fmt.Errorf("unknown Task field %s", name)
 }
@@ -32282,6 +32361,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAptUpgradeType(v)
 		return nil
+	case task.FieldVersion:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)
 }
@@ -32289,13 +32375,21 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *TaskMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addversion != nil {
+		fields = append(fields, task.FieldVersion)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case task.FieldVersion:
+		return m.AddedVersion()
+	}
 	return nil, false
 }
 
@@ -32304,6 +32398,13 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TaskMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case task.FieldVersion:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVersion(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Task numeric field %s", name)
 }
@@ -32557,6 +32658,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(task.FieldAptUpgradeType) {
 		fields = append(fields, task.FieldAptUpgradeType)
+	}
+	if m.FieldCleared(task.FieldVersion) {
+		fields = append(fields, task.FieldVersion)
 	}
 	return fields
 }
@@ -32818,6 +32922,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldAptUpgradeType:
 		m.ClearAptUpgradeType()
 		return nil
+	case task.FieldVersion:
+		m.ClearVersion()
+		return nil
 	}
 	return fmt.Errorf("unknown Task nullable field %s", name)
 }
@@ -33077,6 +33184,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldAptUpgradeType:
 		m.ResetAptUpgradeType()
+		return nil
+	case task.FieldVersion:
+		m.ResetVersion()
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)

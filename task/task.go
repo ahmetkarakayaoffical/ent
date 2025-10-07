@@ -182,6 +182,8 @@ const (
 	FieldAptUpdateCache = "apt_update_cache"
 	// FieldAptUpgradeType holds the string denoting the apt_upgrade_type field in the database.
 	FieldAptUpgradeType = "apt_upgrade_type"
+	// FieldVersion holds the string denoting the version field in the database.
+	FieldVersion = "version"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// EdgeProfile holds the string denoting the profile edge name in mutations.
@@ -291,6 +293,7 @@ var Columns = []string{
 	FieldAptPurge,
 	FieldAptUpdateCache,
 	FieldAptUpgradeType,
+	FieldVersion,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -417,6 +420,8 @@ var (
 	DefaultAptPurge bool
 	// DefaultAptUpdateCache holds the default value on creation for the "apt_update_cache" field.
 	DefaultAptUpdateCache bool
+	// DefaultVersion holds the default value on creation for the "version" field.
+	DefaultVersion int
 )
 
 // Type defines the type for the "type" enum field.
@@ -1037,6 +1042,11 @@ func ByAptUpdateCache(opts ...sql.OrderTermOption) OrderOption {
 // ByAptUpgradeType orders the results by the apt_upgrade_type field.
 func ByAptUpgradeType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAptUpgradeType, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
 // ByTagsCount orders the results by tags count.
