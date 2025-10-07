@@ -137,6 +137,7 @@ func (Task) Fields() []ent.Field {
 		field.Bool("apt_purge").Optional().Default(false),
 		field.Bool("apt_update_cache").Optional().Default(false),
 		field.Enum("apt_upgrade_type").Values("dist", "full", "no", "safe", "yes").Optional().Default("no"),
+		field.Int("version").Optional().Default(1),
 	}
 }
 
