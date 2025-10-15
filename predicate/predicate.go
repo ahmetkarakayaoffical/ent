@@ -66,8 +66,8 @@ type Release func(*sql.Selector)
 // Revocation is the predicate function for revocation builders.
 type Revocation func(*sql.Selector)
 
-// RustDesk is the predicate function for rustdesk builders.
-type RustDesk func(*sql.Selector)
+// Rustdesk is the predicate function for rustdesk builders.
+type Rustdesk func(*sql.Selector)
 
 // Server is the predicate function for server builders.
 type Server func(*sql.Selector)

@@ -52,8 +52,8 @@ type Tx struct {
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
-	// RustDesk is the client for interacting with the RustDesk builders.
-	RustDesk *RustDeskClient
+	// Rustdesk is the client for interacting with the Rustdesk builders.
+	Rustdesk *RustdeskClient
 	// Server is the client for interacting with the Server builders.
 	Server *ServerClient
 	// Sessions is the client for interacting with the Sessions builders.
@@ -229,7 +229,7 @@ func (tx *Tx) init() {
 	tx.ProfileIssue = NewProfileIssueClient(tx.config)
 	tx.Release = NewReleaseClient(tx.config)
 	tx.Revocation = NewRevocationClient(tx.config)
-	tx.RustDesk = NewRustDeskClient(tx.config)
+	tx.Rustdesk = NewRustdeskClient(tx.config)
 	tx.Server = NewServerClient(tx.config)
 	tx.Sessions = NewSessionsClient(tx.config)
 	tx.Settings = NewSettingsClient(tx.config)

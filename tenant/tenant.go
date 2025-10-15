@@ -63,10 +63,10 @@ const (
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "tenant_metadata"
 	// RustdeskTable is the table that holds the rustdesk relation/edge.
-	RustdeskTable = "rust_desks"
-	// RustdeskInverseTable is the table name for the RustDesk entity.
+	RustdeskTable = "rustdesks"
+	// RustdeskInverseTable is the table name for the Rustdesk entity.
 	// It exists in this package in order to avoid circular dependency with the "rustdesk" package.
-	RustdeskInverseTable = "rust_desks"
+	RustdeskInverseTable = "rustdesks"
 	// RustdeskColumn is the table column denoting the rustdesk relation/edge.
 	RustdeskColumn = "tenant_rustdesk"
 )

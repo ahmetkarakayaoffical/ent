@@ -12,8 +12,8 @@ import (
 	"github.com/open-uem/ent/tenant"
 )
 
-// RustDesk is the model entity for the RustDesk schema.
-type RustDesk struct {
+// Rustdesk is the model entity for the Rustdesk schema.
+type Rustdesk struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -32,14 +32,14 @@ type RustDesk struct {
 	// DirectIPAccess holds the value of the "direct_ip_access" field.
 	DirectIPAccess bool `json:"direct_ip_access,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the RustDeskQuery when eager-loading is set.
-	Edges           RustDeskEdges `json:"edges"`
+	// The values are being populated by the RustdeskQuery when eager-loading is set.
+	Edges           RustdeskEdges `json:"edges"`
 	tenant_rustdesk *int
 	selectValues    sql.SelectValues
 }
 
-// RustDeskEdges holds the relations/edges for other nodes in the graph.
-type RustDeskEdges struct {
+// RustdeskEdges holds the relations/edges for other nodes in the graph.
+type RustdeskEdges struct {
 	// Tenant holds the value of the tenant edge.
 	Tenant *Tenant `json:"tenant,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -49,7 +49,7 @@ type RustDeskEdges struct {
 
 // TenantOrErr returns the Tenant value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e RustDeskEdges) TenantOrErr() (*Tenant, error) {
+func (e RustdeskEdges) TenantOrErr() (*Tenant, error) {
 	if e.Tenant != nil {
 		return e.Tenant, nil
 	} else if e.loadedTypes[0] {
@@ -59,7 +59,7 @@ func (e RustDeskEdges) TenantOrErr() (*Tenant, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*RustDesk) scanValues(columns []string) ([]any, error) {
+func (*Rustdesk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
@@ -79,8 +79,8 @@ func (*RustDesk) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the RustDesk fields.
-func (rd *RustDesk) assignValues(columns []string, values []any) error {
+// to the Rustdesk fields.
+func (r *Rustdesk) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -91,120 +91,120 @@ func (rd *RustDesk) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			rd.ID = int(value.Int64)
+			r.ID = int(value.Int64)
 		case rustdesk.FieldCustomRendezvousServer:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field custom_rendezvous_server", values[i])
 			} else if value.Valid {
-				rd.CustomRendezvousServer = value.String
+				r.CustomRendezvousServer = value.String
 			}
 		case rustdesk.FieldRelayServer:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field relay_server", values[i])
 			} else if value.Valid {
-				rd.RelayServer = value.String
+				r.RelayServer = value.String
 			}
 		case rustdesk.FieldAPIServer:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field api_server", values[i])
 			} else if value.Valid {
-				rd.APIServer = value.String
+				r.APIServer = value.String
 			}
 		case rustdesk.FieldKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field key", values[i])
 			} else if value.Valid {
-				rd.Key = value.String
+				r.Key = value.String
 			}
 		case rustdesk.FieldUsePermanentPassword:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field use_permanent_password", values[i])
 			} else if value.Valid {
-				rd.UsePermanentPassword = value.Bool
+				r.UsePermanentPassword = value.Bool
 			}
 		case rustdesk.FieldWhitelist:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field whitelist", values[i])
 			} else if value.Valid {
-				rd.Whitelist = value.String
+				r.Whitelist = value.String
 			}
 		case rustdesk.FieldDirectIPAccess:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field direct_ip_access", values[i])
 			} else if value.Valid {
-				rd.DirectIPAccess = value.Bool
+				r.DirectIPAccess = value.Bool
 			}
 		case rustdesk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field tenant_rustdesk", value)
 			} else if value.Valid {
-				rd.tenant_rustdesk = new(int)
-				*rd.tenant_rustdesk = int(value.Int64)
+				r.tenant_rustdesk = new(int)
+				*r.tenant_rustdesk = int(value.Int64)
 			}
 		default:
-			rd.selectValues.Set(columns[i], values[i])
+			r.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the RustDesk.
+// Value returns the ent.Value that was dynamically selected and assigned to the Rustdesk.
 // This includes values selected through modifiers, order, etc.
-func (rd *RustDesk) Value(name string) (ent.Value, error) {
-	return rd.selectValues.Get(name)
+func (r *Rustdesk) Value(name string) (ent.Value, error) {
+	return r.selectValues.Get(name)
 }
 
-// QueryTenant queries the "tenant" edge of the RustDesk entity.
-func (rd *RustDesk) QueryTenant() *TenantQuery {
-	return NewRustDeskClient(rd.config).QueryTenant(rd)
+// QueryTenant queries the "tenant" edge of the Rustdesk entity.
+func (r *Rustdesk) QueryTenant() *TenantQuery {
+	return NewRustdeskClient(r.config).QueryTenant(r)
 }
 
-// Update returns a builder for updating this RustDesk.
-// Note that you need to call RustDesk.Unwrap() before calling this method if this RustDesk
+// Update returns a builder for updating this Rustdesk.
+// Note that you need to call Rustdesk.Unwrap() before calling this method if this Rustdesk
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (rd *RustDesk) Update() *RustDeskUpdateOne {
-	return NewRustDeskClient(rd.config).UpdateOne(rd)
+func (r *Rustdesk) Update() *RustdeskUpdateOne {
+	return NewRustdeskClient(r.config).UpdateOne(r)
 }
 
-// Unwrap unwraps the RustDesk entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the Rustdesk entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (rd *RustDesk) Unwrap() *RustDesk {
-	_tx, ok := rd.config.driver.(*txDriver)
+func (r *Rustdesk) Unwrap() *Rustdesk {
+	_tx, ok := r.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: RustDesk is not a transactional entity")
+		panic("ent: Rustdesk is not a transactional entity")
 	}
-	rd.config.driver = _tx.drv
-	return rd
+	r.config.driver = _tx.drv
+	return r
 }
 
 // String implements the fmt.Stringer.
-func (rd *RustDesk) String() string {
+func (r *Rustdesk) String() string {
 	var builder strings.Builder
-	builder.WriteString("RustDesk(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", rd.ID))
+	builder.WriteString("Rustdesk(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
 	builder.WriteString("custom_rendezvous_server=")
-	builder.WriteString(rd.CustomRendezvousServer)
+	builder.WriteString(r.CustomRendezvousServer)
 	builder.WriteString(", ")
 	builder.WriteString("relay_server=")
-	builder.WriteString(rd.RelayServer)
+	builder.WriteString(r.RelayServer)
 	builder.WriteString(", ")
 	builder.WriteString("api_server=")
-	builder.WriteString(rd.APIServer)
+	builder.WriteString(r.APIServer)
 	builder.WriteString(", ")
 	builder.WriteString("key=")
-	builder.WriteString(rd.Key)
+	builder.WriteString(r.Key)
 	builder.WriteString(", ")
 	builder.WriteString("use_permanent_password=")
-	builder.WriteString(fmt.Sprintf("%v", rd.UsePermanentPassword))
+	builder.WriteString(fmt.Sprintf("%v", r.UsePermanentPassword))
 	builder.WriteString(", ")
 	builder.WriteString("whitelist=")
-	builder.WriteString(rd.Whitelist)
+	builder.WriteString(r.Whitelist)
 	builder.WriteString(", ")
 	builder.WriteString("direct_ip_access=")
-	builder.WriteString(fmt.Sprintf("%v", rd.DirectIPAccess))
+	builder.WriteString(fmt.Sprintf("%v", r.DirectIPAccess))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// RustDesks is a parsable slice of RustDesk.
-type RustDesks []*RustDesk
+// Rustdesks is a parsable slice of Rustdesk.
+type Rustdesks []*Rustdesk

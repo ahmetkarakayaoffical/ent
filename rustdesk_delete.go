@@ -12,64 +12,64 @@ import (
 	"github.com/open-uem/ent/rustdesk"
 )
 
-// RustDeskDelete is the builder for deleting a RustDesk entity.
-type RustDeskDelete struct {
+// RustdeskDelete is the builder for deleting a Rustdesk entity.
+type RustdeskDelete struct {
 	config
 	hooks    []Hook
-	mutation *RustDeskMutation
+	mutation *RustdeskMutation
 }
 
-// Where appends a list predicates to the RustDeskDelete builder.
-func (rdd *RustDeskDelete) Where(ps ...predicate.RustDesk) *RustDeskDelete {
-	rdd.mutation.Where(ps...)
-	return rdd
+// Where appends a list predicates to the RustdeskDelete builder.
+func (rd *RustdeskDelete) Where(ps ...predicate.Rustdesk) *RustdeskDelete {
+	rd.mutation.Where(ps...)
+	return rd
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (rdd *RustDeskDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, rdd.sqlExec, rdd.mutation, rdd.hooks)
+func (rd *RustdeskDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, rd.sqlExec, rd.mutation, rd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rdd *RustDeskDelete) ExecX(ctx context.Context) int {
-	n, err := rdd.Exec(ctx)
+func (rd *RustdeskDelete) ExecX(ctx context.Context) int {
+	n, err := rd.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (rdd *RustDeskDelete) sqlExec(ctx context.Context) (int, error) {
+func (rd *RustdeskDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(rustdesk.Table, sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt))
-	if ps := rdd.mutation.predicates; len(ps) > 0 {
+	if ps := rd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, rdd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, rd.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	rdd.mutation.done = true
+	rd.mutation.done = true
 	return affected, err
 }
 
-// RustDeskDeleteOne is the builder for deleting a single RustDesk entity.
-type RustDeskDeleteOne struct {
-	rdd *RustDeskDelete
+// RustdeskDeleteOne is the builder for deleting a single Rustdesk entity.
+type RustdeskDeleteOne struct {
+	rd *RustdeskDelete
 }
 
-// Where appends a list predicates to the RustDeskDelete builder.
-func (rddo *RustDeskDeleteOne) Where(ps ...predicate.RustDesk) *RustDeskDeleteOne {
-	rddo.rdd.mutation.Where(ps...)
-	return rddo
+// Where appends a list predicates to the RustdeskDelete builder.
+func (rdo *RustdeskDeleteOne) Where(ps ...predicate.Rustdesk) *RustdeskDeleteOne {
+	rdo.rd.mutation.Where(ps...)
+	return rdo
 }
 
 // Exec executes the deletion query.
-func (rddo *RustDeskDeleteOne) Exec(ctx context.Context) error {
-	n, err := rddo.rdd.Exec(ctx)
+func (rdo *RustdeskDeleteOne) Exec(ctx context.Context) error {
+	n, err := rdo.rd.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (rddo *RustDeskDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rddo *RustDeskDeleteOne) ExecX(ctx context.Context) {
-	if err := rddo.Exec(ctx); err != nil {
+func (rdo *RustdeskDeleteOne) ExecX(ctx context.Context) {
+	if err := rdo.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

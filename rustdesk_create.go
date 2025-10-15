@@ -14,145 +14,145 @@ import (
 	"github.com/open-uem/ent/tenant"
 )
 
-// RustDeskCreate is the builder for creating a RustDesk entity.
-type RustDeskCreate struct {
+// RustdeskCreate is the builder for creating a Rustdesk entity.
+type RustdeskCreate struct {
 	config
-	mutation *RustDeskMutation
+	mutation *RustdeskMutation
 	hooks    []Hook
 	conflict []sql.ConflictOption
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (rdc *RustDeskCreate) SetCustomRendezvousServer(s string) *RustDeskCreate {
-	rdc.mutation.SetCustomRendezvousServer(s)
-	return rdc
+func (rc *RustdeskCreate) SetCustomRendezvousServer(s string) *RustdeskCreate {
+	rc.mutation.SetCustomRendezvousServer(s)
+	return rc
 }
 
 // SetNillableCustomRendezvousServer sets the "custom_rendezvous_server" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableCustomRendezvousServer(s *string) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableCustomRendezvousServer(s *string) *RustdeskCreate {
 	if s != nil {
-		rdc.SetCustomRendezvousServer(*s)
+		rc.SetCustomRendezvousServer(*s)
 	}
-	return rdc
+	return rc
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (rdc *RustDeskCreate) SetRelayServer(s string) *RustDeskCreate {
-	rdc.mutation.SetRelayServer(s)
-	return rdc
+func (rc *RustdeskCreate) SetRelayServer(s string) *RustdeskCreate {
+	rc.mutation.SetRelayServer(s)
+	return rc
 }
 
 // SetNillableRelayServer sets the "relay_server" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableRelayServer(s *string) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableRelayServer(s *string) *RustdeskCreate {
 	if s != nil {
-		rdc.SetRelayServer(*s)
+		rc.SetRelayServer(*s)
 	}
-	return rdc
+	return rc
 }
 
 // SetAPIServer sets the "api_server" field.
-func (rdc *RustDeskCreate) SetAPIServer(s string) *RustDeskCreate {
-	rdc.mutation.SetAPIServer(s)
-	return rdc
+func (rc *RustdeskCreate) SetAPIServer(s string) *RustdeskCreate {
+	rc.mutation.SetAPIServer(s)
+	return rc
 }
 
 // SetNillableAPIServer sets the "api_server" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableAPIServer(s *string) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableAPIServer(s *string) *RustdeskCreate {
 	if s != nil {
-		rdc.SetAPIServer(*s)
+		rc.SetAPIServer(*s)
 	}
-	return rdc
+	return rc
 }
 
 // SetKey sets the "key" field.
-func (rdc *RustDeskCreate) SetKey(s string) *RustDeskCreate {
-	rdc.mutation.SetKey(s)
-	return rdc
+func (rc *RustdeskCreate) SetKey(s string) *RustdeskCreate {
+	rc.mutation.SetKey(s)
+	return rc
 }
 
 // SetNillableKey sets the "key" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableKey(s *string) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableKey(s *string) *RustdeskCreate {
 	if s != nil {
-		rdc.SetKey(*s)
+		rc.SetKey(*s)
 	}
-	return rdc
+	return rc
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (rdc *RustDeskCreate) SetUsePermanentPassword(b bool) *RustDeskCreate {
-	rdc.mutation.SetUsePermanentPassword(b)
-	return rdc
+func (rc *RustdeskCreate) SetUsePermanentPassword(b bool) *RustdeskCreate {
+	rc.mutation.SetUsePermanentPassword(b)
+	return rc
 }
 
 // SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableUsePermanentPassword(b *bool) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableUsePermanentPassword(b *bool) *RustdeskCreate {
 	if b != nil {
-		rdc.SetUsePermanentPassword(*b)
+		rc.SetUsePermanentPassword(*b)
 	}
-	return rdc
+	return rc
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (rdc *RustDeskCreate) SetWhitelist(s string) *RustDeskCreate {
-	rdc.mutation.SetWhitelist(s)
-	return rdc
+func (rc *RustdeskCreate) SetWhitelist(s string) *RustdeskCreate {
+	rc.mutation.SetWhitelist(s)
+	return rc
 }
 
 // SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableWhitelist(s *string) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableWhitelist(s *string) *RustdeskCreate {
 	if s != nil {
-		rdc.SetWhitelist(*s)
+		rc.SetWhitelist(*s)
 	}
-	return rdc
+	return rc
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (rdc *RustDeskCreate) SetDirectIPAccess(b bool) *RustDeskCreate {
-	rdc.mutation.SetDirectIPAccess(b)
-	return rdc
+func (rc *RustdeskCreate) SetDirectIPAccess(b bool) *RustdeskCreate {
+	rc.mutation.SetDirectIPAccess(b)
+	return rc
 }
 
 // SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableDirectIPAccess(b *bool) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableDirectIPAccess(b *bool) *RustdeskCreate {
 	if b != nil {
-		rdc.SetDirectIPAccess(*b)
+		rc.SetDirectIPAccess(*b)
 	}
-	return rdc
+	return rc
 }
 
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (rdc *RustDeskCreate) SetTenantID(id int) *RustDeskCreate {
-	rdc.mutation.SetTenantID(id)
-	return rdc
+func (rc *RustdeskCreate) SetTenantID(id int) *RustdeskCreate {
+	rc.mutation.SetTenantID(id)
+	return rc
 }
 
 // SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (rdc *RustDeskCreate) SetNillableTenantID(id *int) *RustDeskCreate {
+func (rc *RustdeskCreate) SetNillableTenantID(id *int) *RustdeskCreate {
 	if id != nil {
-		rdc = rdc.SetTenantID(*id)
+		rc = rc.SetTenantID(*id)
 	}
-	return rdc
+	return rc
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (rdc *RustDeskCreate) SetTenant(t *Tenant) *RustDeskCreate {
-	return rdc.SetTenantID(t.ID)
+func (rc *RustdeskCreate) SetTenant(t *Tenant) *RustdeskCreate {
+	return rc.SetTenantID(t.ID)
 }
 
-// Mutation returns the RustDeskMutation object of the builder.
-func (rdc *RustDeskCreate) Mutation() *RustDeskMutation {
-	return rdc.mutation
+// Mutation returns the RustdeskMutation object of the builder.
+func (rc *RustdeskCreate) Mutation() *RustdeskMutation {
+	return rc.mutation
 }
 
-// Save creates the RustDesk in the database.
-func (rdc *RustDeskCreate) Save(ctx context.Context) (*RustDesk, error) {
-	rdc.defaults()
-	return withHooks(ctx, rdc.sqlSave, rdc.mutation, rdc.hooks)
+// Save creates the Rustdesk in the database.
+func (rc *RustdeskCreate) Save(ctx context.Context) (*Rustdesk, error) {
+	rc.defaults()
+	return withHooks(ctx, rc.sqlSave, rc.mutation, rc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (rdc *RustDeskCreate) SaveX(ctx context.Context) *RustDesk {
-	v, err := rdc.Save(ctx)
+func (rc *RustdeskCreate) SaveX(ctx context.Context) *Rustdesk {
+	v, err := rc.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,61 +160,61 @@ func (rdc *RustDeskCreate) SaveX(ctx context.Context) *RustDesk {
 }
 
 // Exec executes the query.
-func (rdc *RustDeskCreate) Exec(ctx context.Context) error {
-	_, err := rdc.Save(ctx)
+func (rc *RustdeskCreate) Exec(ctx context.Context) error {
+	_, err := rc.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rdc *RustDeskCreate) ExecX(ctx context.Context) {
-	if err := rdc.Exec(ctx); err != nil {
+func (rc *RustdeskCreate) ExecX(ctx context.Context) {
+	if err := rc.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rdc *RustDeskCreate) defaults() {
-	if _, ok := rdc.mutation.CustomRendezvousServer(); !ok {
+func (rc *RustdeskCreate) defaults() {
+	if _, ok := rc.mutation.CustomRendezvousServer(); !ok {
 		v := rustdesk.DefaultCustomRendezvousServer
-		rdc.mutation.SetCustomRendezvousServer(v)
+		rc.mutation.SetCustomRendezvousServer(v)
 	}
-	if _, ok := rdc.mutation.RelayServer(); !ok {
+	if _, ok := rc.mutation.RelayServer(); !ok {
 		v := rustdesk.DefaultRelayServer
-		rdc.mutation.SetRelayServer(v)
+		rc.mutation.SetRelayServer(v)
 	}
-	if _, ok := rdc.mutation.APIServer(); !ok {
+	if _, ok := rc.mutation.APIServer(); !ok {
 		v := rustdesk.DefaultAPIServer
-		rdc.mutation.SetAPIServer(v)
+		rc.mutation.SetAPIServer(v)
 	}
-	if _, ok := rdc.mutation.Key(); !ok {
+	if _, ok := rc.mutation.Key(); !ok {
 		v := rustdesk.DefaultKey
-		rdc.mutation.SetKey(v)
+		rc.mutation.SetKey(v)
 	}
-	if _, ok := rdc.mutation.UsePermanentPassword(); !ok {
+	if _, ok := rc.mutation.UsePermanentPassword(); !ok {
 		v := rustdesk.DefaultUsePermanentPassword
-		rdc.mutation.SetUsePermanentPassword(v)
+		rc.mutation.SetUsePermanentPassword(v)
 	}
-	if _, ok := rdc.mutation.Whitelist(); !ok {
+	if _, ok := rc.mutation.Whitelist(); !ok {
 		v := rustdesk.DefaultWhitelist
-		rdc.mutation.SetWhitelist(v)
+		rc.mutation.SetWhitelist(v)
 	}
-	if _, ok := rdc.mutation.DirectIPAccess(); !ok {
+	if _, ok := rc.mutation.DirectIPAccess(); !ok {
 		v := rustdesk.DefaultDirectIPAccess
-		rdc.mutation.SetDirectIPAccess(v)
+		rc.mutation.SetDirectIPAccess(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (rdc *RustDeskCreate) check() error {
+func (rc *RustdeskCreate) check() error {
 	return nil
 }
 
-func (rdc *RustDeskCreate) sqlSave(ctx context.Context) (*RustDesk, error) {
-	if err := rdc.check(); err != nil {
+func (rc *RustdeskCreate) sqlSave(ctx context.Context) (*Rustdesk, error) {
+	if err := rc.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := rdc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, rdc.driver, _spec); err != nil {
+	_node, _spec := rc.createSpec()
+	if err := sqlgraph.CreateNode(ctx, rc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -222,46 +222,46 @@ func (rdc *RustDeskCreate) sqlSave(ctx context.Context) (*RustDesk, error) {
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	rdc.mutation.id = &_node.ID
-	rdc.mutation.done = true
+	rc.mutation.id = &_node.ID
+	rc.mutation.done = true
 	return _node, nil
 }
 
-func (rdc *RustDeskCreate) createSpec() (*RustDesk, *sqlgraph.CreateSpec) {
+func (rc *RustdeskCreate) createSpec() (*Rustdesk, *sqlgraph.CreateSpec) {
 	var (
-		_node = &RustDesk{config: rdc.config}
+		_node = &Rustdesk{config: rc.config}
 		_spec = sqlgraph.NewCreateSpec(rustdesk.Table, sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt))
 	)
-	_spec.OnConflict = rdc.conflict
-	if value, ok := rdc.mutation.CustomRendezvousServer(); ok {
+	_spec.OnConflict = rc.conflict
+	if value, ok := rc.mutation.CustomRendezvousServer(); ok {
 		_spec.SetField(rustdesk.FieldCustomRendezvousServer, field.TypeString, value)
 		_node.CustomRendezvousServer = value
 	}
-	if value, ok := rdc.mutation.RelayServer(); ok {
+	if value, ok := rc.mutation.RelayServer(); ok {
 		_spec.SetField(rustdesk.FieldRelayServer, field.TypeString, value)
 		_node.RelayServer = value
 	}
-	if value, ok := rdc.mutation.APIServer(); ok {
+	if value, ok := rc.mutation.APIServer(); ok {
 		_spec.SetField(rustdesk.FieldAPIServer, field.TypeString, value)
 		_node.APIServer = value
 	}
-	if value, ok := rdc.mutation.Key(); ok {
+	if value, ok := rc.mutation.Key(); ok {
 		_spec.SetField(rustdesk.FieldKey, field.TypeString, value)
 		_node.Key = value
 	}
-	if value, ok := rdc.mutation.UsePermanentPassword(); ok {
+	if value, ok := rc.mutation.UsePermanentPassword(); ok {
 		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
 		_node.UsePermanentPassword = value
 	}
-	if value, ok := rdc.mutation.Whitelist(); ok {
+	if value, ok := rc.mutation.Whitelist(); ok {
 		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
 		_node.Whitelist = value
 	}
-	if value, ok := rdc.mutation.DirectIPAccess(); ok {
+	if value, ok := rc.mutation.DirectIPAccess(); ok {
 		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
 		_node.DirectIPAccess = value
 	}
-	if nodes := rdc.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := rc.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -284,7 +284,7 @@ func (rdc *RustDeskCreate) createSpec() (*RustDesk, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		SetCustomRendezvousServer(v).
 //		OnConflict(
 //			// Update the row with the new values
@@ -293,165 +293,165 @@ func (rdc *RustDeskCreate) createSpec() (*RustDesk, *sqlgraph.CreateSpec) {
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.RustDeskUpsert) {
+//		Update(func(u *ent.RustdeskUpsert) {
 //			SetCustomRendezvousServer(v+v).
 //		}).
 //		Exec(ctx)
-func (rdc *RustDeskCreate) OnConflict(opts ...sql.ConflictOption) *RustDeskUpsertOne {
-	rdc.conflict = opts
-	return &RustDeskUpsertOne{
-		create: rdc,
+func (rc *RustdeskCreate) OnConflict(opts ...sql.ConflictOption) *RustdeskUpsertOne {
+	rc.conflict = opts
+	return &RustdeskUpsertOne{
+		create: rc,
 	}
 }
 
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (rdc *RustDeskCreate) OnConflictColumns(columns ...string) *RustDeskUpsertOne {
-	rdc.conflict = append(rdc.conflict, sql.ConflictColumns(columns...))
-	return &RustDeskUpsertOne{
-		create: rdc,
+func (rc *RustdeskCreate) OnConflictColumns(columns ...string) *RustdeskUpsertOne {
+	rc.conflict = append(rc.conflict, sql.ConflictColumns(columns...))
+	return &RustdeskUpsertOne{
+		create: rc,
 	}
 }
 
 type (
-	// RustDeskUpsertOne is the builder for "upsert"-ing
-	//  one RustDesk node.
-	RustDeskUpsertOne struct {
-		create *RustDeskCreate
+	// RustdeskUpsertOne is the builder for "upsert"-ing
+	//  one Rustdesk node.
+	RustdeskUpsertOne struct {
+		create *RustdeskCreate
 	}
 
-	// RustDeskUpsert is the "OnConflict" setter.
-	RustDeskUpsert struct {
+	// RustdeskUpsert is the "OnConflict" setter.
+	RustdeskUpsert struct {
 		*sql.UpdateSet
 	}
 )
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (u *RustDeskUpsert) SetCustomRendezvousServer(v string) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetCustomRendezvousServer(v string) *RustdeskUpsert {
 	u.Set(rustdesk.FieldCustomRendezvousServer, v)
 	return u
 }
 
 // UpdateCustomRendezvousServer sets the "custom_rendezvous_server" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateCustomRendezvousServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateCustomRendezvousServer() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldCustomRendezvousServer)
 	return u
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (u *RustDeskUpsert) ClearCustomRendezvousServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearCustomRendezvousServer() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldCustomRendezvousServer)
 	return u
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (u *RustDeskUpsert) SetRelayServer(v string) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetRelayServer(v string) *RustdeskUpsert {
 	u.Set(rustdesk.FieldRelayServer, v)
 	return u
 }
 
 // UpdateRelayServer sets the "relay_server" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateRelayServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateRelayServer() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldRelayServer)
 	return u
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (u *RustDeskUpsert) ClearRelayServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearRelayServer() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldRelayServer)
 	return u
 }
 
 // SetAPIServer sets the "api_server" field.
-func (u *RustDeskUpsert) SetAPIServer(v string) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetAPIServer(v string) *RustdeskUpsert {
 	u.Set(rustdesk.FieldAPIServer, v)
 	return u
 }
 
 // UpdateAPIServer sets the "api_server" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateAPIServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateAPIServer() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldAPIServer)
 	return u
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (u *RustDeskUpsert) ClearAPIServer() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearAPIServer() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldAPIServer)
 	return u
 }
 
 // SetKey sets the "key" field.
-func (u *RustDeskUpsert) SetKey(v string) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetKey(v string) *RustdeskUpsert {
 	u.Set(rustdesk.FieldKey, v)
 	return u
 }
 
 // UpdateKey sets the "key" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateKey() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateKey() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldKey)
 	return u
 }
 
 // ClearKey clears the value of the "key" field.
-func (u *RustDeskUpsert) ClearKey() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearKey() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldKey)
 	return u
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (u *RustDeskUpsert) SetUsePermanentPassword(v bool) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetUsePermanentPassword(v bool) *RustdeskUpsert {
 	u.Set(rustdesk.FieldUsePermanentPassword, v)
 	return u
 }
 
 // UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateUsePermanentPassword() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateUsePermanentPassword() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldUsePermanentPassword)
 	return u
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (u *RustDeskUpsert) ClearUsePermanentPassword() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearUsePermanentPassword() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldUsePermanentPassword)
 	return u
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (u *RustDeskUpsert) SetWhitelist(v string) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetWhitelist(v string) *RustdeskUpsert {
 	u.Set(rustdesk.FieldWhitelist, v)
 	return u
 }
 
 // UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateWhitelist() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateWhitelist() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldWhitelist)
 	return u
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (u *RustDeskUpsert) ClearWhitelist() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearWhitelist() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldWhitelist)
 	return u
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (u *RustDeskUpsert) SetDirectIPAccess(v bool) *RustDeskUpsert {
+func (u *RustdeskUpsert) SetDirectIPAccess(v bool) *RustdeskUpsert {
 	u.Set(rustdesk.FieldDirectIPAccess, v)
 	return u
 }
 
 // UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
-func (u *RustDeskUpsert) UpdateDirectIPAccess() *RustDeskUpsert {
+func (u *RustdeskUpsert) UpdateDirectIPAccess() *RustdeskUpsert {
 	u.SetExcluded(rustdesk.FieldDirectIPAccess)
 	return u
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (u *RustDeskUpsert) ClearDirectIPAccess() *RustDeskUpsert {
+func (u *RustdeskUpsert) ClearDirectIPAccess() *RustdeskUpsert {
 	u.SetNull(rustdesk.FieldDirectIPAccess)
 	return u
 }
@@ -459,12 +459,12 @@ func (u *RustDeskUpsert) ClearDirectIPAccess() *RustDeskUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //		).
 //		Exec(ctx)
-func (u *RustDeskUpsertOne) UpdateNewValues() *RustDeskUpsertOne {
+func (u *RustdeskUpsertOne) UpdateNewValues() *RustdeskUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	return u
 }
@@ -472,194 +472,194 @@ func (u *RustDeskUpsertOne) UpdateNewValues() *RustDeskUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //	    OnConflict(sql.ResolveWithIgnore()).
 //	    Exec(ctx)
-func (u *RustDeskUpsertOne) Ignore() *RustDeskUpsertOne {
+func (u *RustdeskUpsertOne) Ignore() *RustdeskUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
 	return u
 }
 
 // DoNothing configures the conflict_action to `DO NOTHING`.
 // Supported only by SQLite and PostgreSQL.
-func (u *RustDeskUpsertOne) DoNothing() *RustDeskUpsertOne {
+func (u *RustdeskUpsertOne) DoNothing() *RustdeskUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.DoNothing())
 	return u
 }
 
-// Update allows overriding fields `UPDATE` values. See the RustDeskCreate.OnConflict
+// Update allows overriding fields `UPDATE` values. See the RustdeskCreate.OnConflict
 // documentation for more info.
-func (u *RustDeskUpsertOne) Update(set func(*RustDeskUpsert)) *RustDeskUpsertOne {
+func (u *RustdeskUpsertOne) Update(set func(*RustdeskUpsert)) *RustdeskUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
-		set(&RustDeskUpsert{UpdateSet: update})
+		set(&RustdeskUpsert{UpdateSet: update})
 	}))
 	return u
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (u *RustDeskUpsertOne) SetCustomRendezvousServer(v string) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetCustomRendezvousServer(v string) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetCustomRendezvousServer(v)
 	})
 }
 
 // UpdateCustomRendezvousServer sets the "custom_rendezvous_server" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateCustomRendezvousServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateCustomRendezvousServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateCustomRendezvousServer()
 	})
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (u *RustDeskUpsertOne) ClearCustomRendezvousServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearCustomRendezvousServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearCustomRendezvousServer()
 	})
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (u *RustDeskUpsertOne) SetRelayServer(v string) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetRelayServer(v string) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetRelayServer(v)
 	})
 }
 
 // UpdateRelayServer sets the "relay_server" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateRelayServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateRelayServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateRelayServer()
 	})
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (u *RustDeskUpsertOne) ClearRelayServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearRelayServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearRelayServer()
 	})
 }
 
 // SetAPIServer sets the "api_server" field.
-func (u *RustDeskUpsertOne) SetAPIServer(v string) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetAPIServer(v string) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetAPIServer(v)
 	})
 }
 
 // UpdateAPIServer sets the "api_server" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateAPIServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateAPIServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateAPIServer()
 	})
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (u *RustDeskUpsertOne) ClearAPIServer() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearAPIServer() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearAPIServer()
 	})
 }
 
 // SetKey sets the "key" field.
-func (u *RustDeskUpsertOne) SetKey(v string) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetKey(v string) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetKey(v)
 	})
 }
 
 // UpdateKey sets the "key" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateKey() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateKey() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateKey()
 	})
 }
 
 // ClearKey clears the value of the "key" field.
-func (u *RustDeskUpsertOne) ClearKey() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearKey() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearKey()
 	})
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (u *RustDeskUpsertOne) SetUsePermanentPassword(v bool) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetUsePermanentPassword(v bool) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetUsePermanentPassword(v)
 	})
 }
 
 // UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateUsePermanentPassword() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateUsePermanentPassword() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateUsePermanentPassword()
 	})
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (u *RustDeskUpsertOne) ClearUsePermanentPassword() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearUsePermanentPassword() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearUsePermanentPassword()
 	})
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (u *RustDeskUpsertOne) SetWhitelist(v string) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetWhitelist(v string) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetWhitelist(v)
 	})
 }
 
 // UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateWhitelist() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateWhitelist() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateWhitelist()
 	})
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (u *RustDeskUpsertOne) ClearWhitelist() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearWhitelist() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearWhitelist()
 	})
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (u *RustDeskUpsertOne) SetDirectIPAccess(v bool) *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) SetDirectIPAccess(v bool) *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetDirectIPAccess(v)
 	})
 }
 
 // UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
-func (u *RustDeskUpsertOne) UpdateDirectIPAccess() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) UpdateDirectIPAccess() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateDirectIPAccess()
 	})
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (u *RustDeskUpsertOne) ClearDirectIPAccess() *RustDeskUpsertOne {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertOne) ClearDirectIPAccess() *RustdeskUpsertOne {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearDirectIPAccess()
 	})
 }
 
 // Exec executes the query.
-func (u *RustDeskUpsertOne) Exec(ctx context.Context) error {
+func (u *RustdeskUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
-		return errors.New("ent: missing options for RustDeskCreate.OnConflict")
+		return errors.New("ent: missing options for RustdeskCreate.OnConflict")
 	}
 	return u.create.Exec(ctx)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (u *RustDeskUpsertOne) ExecX(ctx context.Context) {
+func (u *RustdeskUpsertOne) ExecX(ctx context.Context) {
 	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Exec executes the UPSERT query and returns the inserted/updated ID.
-func (u *RustDeskUpsertOne) ID(ctx context.Context) (id int, err error) {
+func (u *RustdeskUpsertOne) ID(ctx context.Context) (id int, err error) {
 	node, err := u.create.Save(ctx)
 	if err != nil {
 		return id, err
@@ -668,7 +668,7 @@ func (u *RustDeskUpsertOne) ID(ctx context.Context) (id int, err error) {
 }
 
 // IDX is like ID, but panics if an error occurs.
-func (u *RustDeskUpsertOne) IDX(ctx context.Context) int {
+func (u *RustdeskUpsertOne) IDX(ctx context.Context) int {
 	id, err := u.ID(ctx)
 	if err != nil {
 		panic(err)
@@ -676,28 +676,28 @@ func (u *RustDeskUpsertOne) IDX(ctx context.Context) int {
 	return id
 }
 
-// RustDeskCreateBulk is the builder for creating many RustDesk entities in bulk.
-type RustDeskCreateBulk struct {
+// RustdeskCreateBulk is the builder for creating many Rustdesk entities in bulk.
+type RustdeskCreateBulk struct {
 	config
 	err      error
-	builders []*RustDeskCreate
+	builders []*RustdeskCreate
 	conflict []sql.ConflictOption
 }
 
-// Save creates the RustDesk entities in the database.
-func (rdcb *RustDeskCreateBulk) Save(ctx context.Context) ([]*RustDesk, error) {
-	if rdcb.err != nil {
-		return nil, rdcb.err
+// Save creates the Rustdesk entities in the database.
+func (rcb *RustdeskCreateBulk) Save(ctx context.Context) ([]*Rustdesk, error) {
+	if rcb.err != nil {
+		return nil, rcb.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(rdcb.builders))
-	nodes := make([]*RustDesk, len(rdcb.builders))
-	mutators := make([]Mutator, len(rdcb.builders))
-	for i := range rdcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(rcb.builders))
+	nodes := make([]*Rustdesk, len(rcb.builders))
+	mutators := make([]Mutator, len(rcb.builders))
+	for i := range rcb.builders {
 		func(i int, root context.Context) {
-			builder := rdcb.builders[i]
+			builder := rcb.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-				mutation, ok := m.(*RustDeskMutation)
+				mutation, ok := m.(*RustdeskMutation)
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
 				}
@@ -708,12 +708,12 @@ func (rdcb *RustDeskCreateBulk) Save(ctx context.Context) ([]*RustDesk, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, rdcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, rcb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = rdcb.conflict
+					spec.OnConflict = rcb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, rdcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, rcb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -737,7 +737,7 @@ func (rdcb *RustDeskCreateBulk) Save(ctx context.Context) ([]*RustDesk, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, rdcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, rcb.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -745,8 +745,8 @@ func (rdcb *RustDeskCreateBulk) Save(ctx context.Context) ([]*RustDesk, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rdcb *RustDeskCreateBulk) SaveX(ctx context.Context) []*RustDesk {
-	v, err := rdcb.Save(ctx)
+func (rcb *RustdeskCreateBulk) SaveX(ctx context.Context) []*Rustdesk {
+	v, err := rcb.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -754,14 +754,14 @@ func (rdcb *RustDeskCreateBulk) SaveX(ctx context.Context) []*RustDesk {
 }
 
 // Exec executes the query.
-func (rdcb *RustDeskCreateBulk) Exec(ctx context.Context) error {
-	_, err := rdcb.Save(ctx)
+func (rcb *RustdeskCreateBulk) Exec(ctx context.Context) error {
+	_, err := rcb.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rdcb *RustDeskCreateBulk) ExecX(ctx context.Context) {
-	if err := rdcb.Exec(ctx); err != nil {
+func (rcb *RustdeskCreateBulk) ExecX(ctx context.Context) {
+	if err := rcb.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -769,7 +769,7 @@ func (rdcb *RustDeskCreateBulk) ExecX(ctx context.Context) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.RustDesk.CreateBulk(builders...).
+//	client.Rustdesk.CreateBulk(builders...).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -777,45 +777,45 @@ func (rdcb *RustDeskCreateBulk) ExecX(ctx context.Context) {
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.RustDeskUpsert) {
+//		Update(func(u *ent.RustdeskUpsert) {
 //			SetCustomRendezvousServer(v+v).
 //		}).
 //		Exec(ctx)
-func (rdcb *RustDeskCreateBulk) OnConflict(opts ...sql.ConflictOption) *RustDeskUpsertBulk {
-	rdcb.conflict = opts
-	return &RustDeskUpsertBulk{
-		create: rdcb,
+func (rcb *RustdeskCreateBulk) OnConflict(opts ...sql.ConflictOption) *RustdeskUpsertBulk {
+	rcb.conflict = opts
+	return &RustdeskUpsertBulk{
+		create: rcb,
 	}
 }
 
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (rdcb *RustDeskCreateBulk) OnConflictColumns(columns ...string) *RustDeskUpsertBulk {
-	rdcb.conflict = append(rdcb.conflict, sql.ConflictColumns(columns...))
-	return &RustDeskUpsertBulk{
-		create: rdcb,
+func (rcb *RustdeskCreateBulk) OnConflictColumns(columns ...string) *RustdeskUpsertBulk {
+	rcb.conflict = append(rcb.conflict, sql.ConflictColumns(columns...))
+	return &RustdeskUpsertBulk{
+		create: rcb,
 	}
 }
 
-// RustDeskUpsertBulk is the builder for "upsert"-ing
-// a bulk of RustDesk nodes.
-type RustDeskUpsertBulk struct {
-	create *RustDeskCreateBulk
+// RustdeskUpsertBulk is the builder for "upsert"-ing
+// a bulk of Rustdesk nodes.
+type RustdeskUpsertBulk struct {
+	create *RustdeskCreateBulk
 }
 
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //		).
 //		Exec(ctx)
-func (u *RustDeskUpsertBulk) UpdateNewValues() *RustDeskUpsertBulk {
+func (u *RustdeskUpsertBulk) UpdateNewValues() *RustdeskUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	return u
 }
@@ -823,195 +823,195 @@ func (u *RustDeskUpsertBulk) UpdateNewValues() *RustDeskUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.RustDesk.Create().
+//	client.Rustdesk.Create().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
-func (u *RustDeskUpsertBulk) Ignore() *RustDeskUpsertBulk {
+func (u *RustdeskUpsertBulk) Ignore() *RustdeskUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
 	return u
 }
 
 // DoNothing configures the conflict_action to `DO NOTHING`.
 // Supported only by SQLite and PostgreSQL.
-func (u *RustDeskUpsertBulk) DoNothing() *RustDeskUpsertBulk {
+func (u *RustdeskUpsertBulk) DoNothing() *RustdeskUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.DoNothing())
 	return u
 }
 
-// Update allows overriding fields `UPDATE` values. See the RustDeskCreateBulk.OnConflict
+// Update allows overriding fields `UPDATE` values. See the RustdeskCreateBulk.OnConflict
 // documentation for more info.
-func (u *RustDeskUpsertBulk) Update(set func(*RustDeskUpsert)) *RustDeskUpsertBulk {
+func (u *RustdeskUpsertBulk) Update(set func(*RustdeskUpsert)) *RustdeskUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
-		set(&RustDeskUpsert{UpdateSet: update})
+		set(&RustdeskUpsert{UpdateSet: update})
 	}))
 	return u
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (u *RustDeskUpsertBulk) SetCustomRendezvousServer(v string) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetCustomRendezvousServer(v string) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetCustomRendezvousServer(v)
 	})
 }
 
 // UpdateCustomRendezvousServer sets the "custom_rendezvous_server" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateCustomRendezvousServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateCustomRendezvousServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateCustomRendezvousServer()
 	})
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (u *RustDeskUpsertBulk) ClearCustomRendezvousServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearCustomRendezvousServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearCustomRendezvousServer()
 	})
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (u *RustDeskUpsertBulk) SetRelayServer(v string) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetRelayServer(v string) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetRelayServer(v)
 	})
 }
 
 // UpdateRelayServer sets the "relay_server" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateRelayServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateRelayServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateRelayServer()
 	})
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (u *RustDeskUpsertBulk) ClearRelayServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearRelayServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearRelayServer()
 	})
 }
 
 // SetAPIServer sets the "api_server" field.
-func (u *RustDeskUpsertBulk) SetAPIServer(v string) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetAPIServer(v string) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetAPIServer(v)
 	})
 }
 
 // UpdateAPIServer sets the "api_server" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateAPIServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateAPIServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateAPIServer()
 	})
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (u *RustDeskUpsertBulk) ClearAPIServer() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearAPIServer() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearAPIServer()
 	})
 }
 
 // SetKey sets the "key" field.
-func (u *RustDeskUpsertBulk) SetKey(v string) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetKey(v string) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetKey(v)
 	})
 }
 
 // UpdateKey sets the "key" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateKey() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateKey() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateKey()
 	})
 }
 
 // ClearKey clears the value of the "key" field.
-func (u *RustDeskUpsertBulk) ClearKey() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearKey() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearKey()
 	})
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (u *RustDeskUpsertBulk) SetUsePermanentPassword(v bool) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetUsePermanentPassword(v bool) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetUsePermanentPassword(v)
 	})
 }
 
 // UpdateUsePermanentPassword sets the "use_permanent_password" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateUsePermanentPassword() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateUsePermanentPassword() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateUsePermanentPassword()
 	})
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (u *RustDeskUpsertBulk) ClearUsePermanentPassword() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearUsePermanentPassword() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearUsePermanentPassword()
 	})
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (u *RustDeskUpsertBulk) SetWhitelist(v string) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetWhitelist(v string) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetWhitelist(v)
 	})
 }
 
 // UpdateWhitelist sets the "whitelist" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateWhitelist() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateWhitelist() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateWhitelist()
 	})
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (u *RustDeskUpsertBulk) ClearWhitelist() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearWhitelist() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearWhitelist()
 	})
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (u *RustDeskUpsertBulk) SetDirectIPAccess(v bool) *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) SetDirectIPAccess(v bool) *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.SetDirectIPAccess(v)
 	})
 }
 
 // UpdateDirectIPAccess sets the "direct_ip_access" field to the value that was provided on create.
-func (u *RustDeskUpsertBulk) UpdateDirectIPAccess() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) UpdateDirectIPAccess() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.UpdateDirectIPAccess()
 	})
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (u *RustDeskUpsertBulk) ClearDirectIPAccess() *RustDeskUpsertBulk {
-	return u.Update(func(s *RustDeskUpsert) {
+func (u *RustdeskUpsertBulk) ClearDirectIPAccess() *RustdeskUpsertBulk {
+	return u.Update(func(s *RustdeskUpsert) {
 		s.ClearDirectIPAccess()
 	})
 }
 
 // Exec executes the query.
-func (u *RustDeskUpsertBulk) Exec(ctx context.Context) error {
+func (u *RustdeskUpsertBulk) Exec(ctx context.Context) error {
 	if u.create.err != nil {
 		return u.create.err
 	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
-			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the RustDeskCreateBulk instead", i)
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the RustdeskCreateBulk instead", i)
 		}
 	}
 	if len(u.create.conflict) == 0 {
-		return errors.New("ent: missing options for RustDeskCreateBulk.OnConflict")
+		return errors.New("ent: missing options for RustdeskCreateBulk.OnConflict")
 	}
 	return u.create.Exec(ctx)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (u *RustDeskUpsertBulk) ExecX(ctx context.Context) {
+func (u *RustdeskUpsertBulk) ExecX(ctx context.Context) {
 	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}

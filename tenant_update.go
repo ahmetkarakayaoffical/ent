@@ -170,14 +170,14 @@ func (tu *TenantUpdate) AddMetadata(o ...*OrgMetadata) *TenantUpdate {
 	return tu.AddMetadatumIDs(ids...)
 }
 
-// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+// AddRustdeskIDs adds the "rustdesk" edge to the Rustdesk entity by IDs.
 func (tu *TenantUpdate) AddRustdeskIDs(ids ...int) *TenantUpdate {
 	tu.mutation.AddRustdeskIDs(ids...)
 	return tu
 }
 
-// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
-func (tu *TenantUpdate) AddRustdesk(r ...*RustDesk) *TenantUpdate {
+// AddRustdesk adds the "rustdesk" edges to the Rustdesk entity.
+func (tu *TenantUpdate) AddRustdesk(r ...*Rustdesk) *TenantUpdate {
 	ids := make([]int, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -259,20 +259,20 @@ func (tu *TenantUpdate) RemoveMetadata(o ...*OrgMetadata) *TenantUpdate {
 	return tu.RemoveMetadatumIDs(ids...)
 }
 
-// ClearRustdesk clears all "rustdesk" edges to the RustDesk entity.
+// ClearRustdesk clears all "rustdesk" edges to the Rustdesk entity.
 func (tu *TenantUpdate) ClearRustdesk() *TenantUpdate {
 	tu.mutation.ClearRustdesk()
 	return tu
 }
 
-// RemoveRustdeskIDs removes the "rustdesk" edge to RustDesk entities by IDs.
+// RemoveRustdeskIDs removes the "rustdesk" edge to Rustdesk entities by IDs.
 func (tu *TenantUpdate) RemoveRustdeskIDs(ids ...int) *TenantUpdate {
 	tu.mutation.RemoveRustdeskIDs(ids...)
 	return tu
 }
 
-// RemoveRustdesk removes "rustdesk" edges to RustDesk entities.
-func (tu *TenantUpdate) RemoveRustdesk(r ...*RustDesk) *TenantUpdate {
+// RemoveRustdesk removes "rustdesk" edges to Rustdesk entities.
+func (tu *TenantUpdate) RemoveRustdesk(r ...*Rustdesk) *TenantUpdate {
 	ids := make([]int, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -722,14 +722,14 @@ func (tuo *TenantUpdateOne) AddMetadata(o ...*OrgMetadata) *TenantUpdateOne {
 	return tuo.AddMetadatumIDs(ids...)
 }
 
-// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+// AddRustdeskIDs adds the "rustdesk" edge to the Rustdesk entity by IDs.
 func (tuo *TenantUpdateOne) AddRustdeskIDs(ids ...int) *TenantUpdateOne {
 	tuo.mutation.AddRustdeskIDs(ids...)
 	return tuo
 }
 
-// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
-func (tuo *TenantUpdateOne) AddRustdesk(r ...*RustDesk) *TenantUpdateOne {
+// AddRustdesk adds the "rustdesk" edges to the Rustdesk entity.
+func (tuo *TenantUpdateOne) AddRustdesk(r ...*Rustdesk) *TenantUpdateOne {
 	ids := make([]int, len(r))
 	for i := range r {
 		ids[i] = r[i].ID
@@ -811,20 +811,20 @@ func (tuo *TenantUpdateOne) RemoveMetadata(o ...*OrgMetadata) *TenantUpdateOne {
 	return tuo.RemoveMetadatumIDs(ids...)
 }
 
-// ClearRustdesk clears all "rustdesk" edges to the RustDesk entity.
+// ClearRustdesk clears all "rustdesk" edges to the Rustdesk entity.
 func (tuo *TenantUpdateOne) ClearRustdesk() *TenantUpdateOne {
 	tuo.mutation.ClearRustdesk()
 	return tuo
 }
 
-// RemoveRustdeskIDs removes the "rustdesk" edge to RustDesk entities by IDs.
+// RemoveRustdeskIDs removes the "rustdesk" edge to Rustdesk entities by IDs.
 func (tuo *TenantUpdateOne) RemoveRustdeskIDs(ids ...int) *TenantUpdateOne {
 	tuo.mutation.RemoveRustdeskIDs(ids...)
 	return tuo
 }
 
-// RemoveRustdesk removes "rustdesk" edges to RustDesk entities.
-func (tuo *TenantUpdateOne) RemoveRustdesk(r ...*RustDesk) *TenantUpdateOne {
+// RemoveRustdesk removes "rustdesk" edges to Rustdesk entities.
+func (tuo *TenantUpdateOne) RemoveRustdesk(r ...*Rustdesk) *TenantUpdateOne {
 	ids := make([]int, len(r))
 	for i := range r {
 		ids[i] = r[i].ID

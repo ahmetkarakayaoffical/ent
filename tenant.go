@@ -43,7 +43,7 @@ type TenantEdges struct {
 	// Metadata holds the value of the metadata edge.
 	Metadata []*OrgMetadata `json:"metadata,omitempty"`
 	// Rustdesk holds the value of the rustdesk edge.
-	Rustdesk []*RustDesk `json:"rustdesk,omitempty"`
+	Rustdesk []*Rustdesk `json:"rustdesk,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [5]bool
@@ -89,7 +89,7 @@ func (e TenantEdges) MetadataOrErr() ([]*OrgMetadata, error) {
 
 // RustdeskOrErr returns the Rustdesk value or an error if the edge
 // was not loaded in eager-loading.
-func (e TenantEdges) RustdeskOrErr() ([]*RustDesk, error) {
+func (e TenantEdges) RustdeskOrErr() ([]*Rustdesk, error) {
 	if e.loadedTypes[4] {
 		return e.Rustdesk, nil
 	}
@@ -188,7 +188,7 @@ func (t *Tenant) QueryMetadata() *OrgMetadataQuery {
 }
 
 // QueryRustdesk queries the "rustdesk" edge of the Tenant entity.
-func (t *Tenant) QueryRustdesk() *RustDeskQuery {
+func (t *Tenant) QueryRustdesk() *RustdeskQuery {
 	return NewTenantClient(t.config).QueryRustdesk(t)
 }
 

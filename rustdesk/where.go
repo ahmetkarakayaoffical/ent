@@ -9,503 +9,503 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldID, id))
+func ID(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldID, id))
+func IDEQ(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldID, id))
+func IDNEQ(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldID, ids...))
+func IDIn(ids ...int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldID, ids...))
+func IDNotIn(ids ...int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldID, id))
+func IDGT(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldID, id))
+func IDGTE(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldID, id))
+func IDLT(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldID, id))
+func IDLTE(id int) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldID, id))
 }
 
 // CustomRendezvousServer applies equality check predicate on the "custom_rendezvous_server" field. It's identical to CustomRendezvousServerEQ.
-func CustomRendezvousServer(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldCustomRendezvousServer, v))
+func CustomRendezvousServer(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldCustomRendezvousServer, v))
 }
 
 // RelayServer applies equality check predicate on the "relay_server" field. It's identical to RelayServerEQ.
-func RelayServer(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldRelayServer, v))
+func RelayServer(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldRelayServer, v))
 }
 
 // APIServer applies equality check predicate on the "api_server" field. It's identical to APIServerEQ.
-func APIServer(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldAPIServer, v))
+func APIServer(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldAPIServer, v))
 }
 
 // Key applies equality check predicate on the "key" field. It's identical to KeyEQ.
-func Key(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldKey, v))
+func Key(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldKey, v))
 }
 
 // UsePermanentPassword applies equality check predicate on the "use_permanent_password" field. It's identical to UsePermanentPasswordEQ.
-func UsePermanentPassword(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldUsePermanentPassword, v))
+func UsePermanentPassword(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldUsePermanentPassword, v))
 }
 
 // Whitelist applies equality check predicate on the "whitelist" field. It's identical to WhitelistEQ.
-func Whitelist(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldWhitelist, v))
+func Whitelist(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldWhitelist, v))
 }
 
 // DirectIPAccess applies equality check predicate on the "direct_ip_access" field. It's identical to DirectIPAccessEQ.
-func DirectIPAccess(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldDirectIPAccess, v))
+func DirectIPAccess(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldDirectIPAccess, v))
 }
 
 // CustomRendezvousServerEQ applies the EQ predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerNEQ applies the NEQ predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerNEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerNEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerIn applies the In predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldCustomRendezvousServer, vs...))
+func CustomRendezvousServerIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldCustomRendezvousServer, vs...))
 }
 
 // CustomRendezvousServerNotIn applies the NotIn predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerNotIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldCustomRendezvousServer, vs...))
+func CustomRendezvousServerNotIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldCustomRendezvousServer, vs...))
 }
 
 // CustomRendezvousServerGT applies the GT predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerGT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerGT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerGTE applies the GTE predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerGTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerGTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerLT applies the LT predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerLT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerLT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerLTE applies the LTE predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerLTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerLTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerContains applies the Contains predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerContains(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContains(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerContains(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContains(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerHasPrefix applies the HasPrefix predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerHasPrefix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasPrefix(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerHasPrefix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasPrefix(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerHasSuffix applies the HasSuffix predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerHasSuffix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasSuffix(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerHasSuffix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasSuffix(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerIsNil applies the IsNil predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldCustomRendezvousServer))
+func CustomRendezvousServerIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldCustomRendezvousServer))
 }
 
 // CustomRendezvousServerNotNil applies the NotNil predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldCustomRendezvousServer))
+func CustomRendezvousServerNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldCustomRendezvousServer))
 }
 
 // CustomRendezvousServerEqualFold applies the EqualFold predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerEqualFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEqualFold(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerEqualFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEqualFold(FieldCustomRendezvousServer, v))
 }
 
 // CustomRendezvousServerContainsFold applies the ContainsFold predicate on the "custom_rendezvous_server" field.
-func CustomRendezvousServerContainsFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContainsFold(FieldCustomRendezvousServer, v))
+func CustomRendezvousServerContainsFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContainsFold(FieldCustomRendezvousServer, v))
 }
 
 // RelayServerEQ applies the EQ predicate on the "relay_server" field.
-func RelayServerEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldRelayServer, v))
+func RelayServerEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldRelayServer, v))
 }
 
 // RelayServerNEQ applies the NEQ predicate on the "relay_server" field.
-func RelayServerNEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldRelayServer, v))
+func RelayServerNEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldRelayServer, v))
 }
 
 // RelayServerIn applies the In predicate on the "relay_server" field.
-func RelayServerIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldRelayServer, vs...))
+func RelayServerIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldRelayServer, vs...))
 }
 
 // RelayServerNotIn applies the NotIn predicate on the "relay_server" field.
-func RelayServerNotIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldRelayServer, vs...))
+func RelayServerNotIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldRelayServer, vs...))
 }
 
 // RelayServerGT applies the GT predicate on the "relay_server" field.
-func RelayServerGT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldRelayServer, v))
+func RelayServerGT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldRelayServer, v))
 }
 
 // RelayServerGTE applies the GTE predicate on the "relay_server" field.
-func RelayServerGTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldRelayServer, v))
+func RelayServerGTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldRelayServer, v))
 }
 
 // RelayServerLT applies the LT predicate on the "relay_server" field.
-func RelayServerLT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldRelayServer, v))
+func RelayServerLT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldRelayServer, v))
 }
 
 // RelayServerLTE applies the LTE predicate on the "relay_server" field.
-func RelayServerLTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldRelayServer, v))
+func RelayServerLTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldRelayServer, v))
 }
 
 // RelayServerContains applies the Contains predicate on the "relay_server" field.
-func RelayServerContains(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContains(FieldRelayServer, v))
+func RelayServerContains(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContains(FieldRelayServer, v))
 }
 
 // RelayServerHasPrefix applies the HasPrefix predicate on the "relay_server" field.
-func RelayServerHasPrefix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasPrefix(FieldRelayServer, v))
+func RelayServerHasPrefix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasPrefix(FieldRelayServer, v))
 }
 
 // RelayServerHasSuffix applies the HasSuffix predicate on the "relay_server" field.
-func RelayServerHasSuffix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasSuffix(FieldRelayServer, v))
+func RelayServerHasSuffix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasSuffix(FieldRelayServer, v))
 }
 
 // RelayServerIsNil applies the IsNil predicate on the "relay_server" field.
-func RelayServerIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldRelayServer))
+func RelayServerIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldRelayServer))
 }
 
 // RelayServerNotNil applies the NotNil predicate on the "relay_server" field.
-func RelayServerNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldRelayServer))
+func RelayServerNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldRelayServer))
 }
 
 // RelayServerEqualFold applies the EqualFold predicate on the "relay_server" field.
-func RelayServerEqualFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEqualFold(FieldRelayServer, v))
+func RelayServerEqualFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEqualFold(FieldRelayServer, v))
 }
 
 // RelayServerContainsFold applies the ContainsFold predicate on the "relay_server" field.
-func RelayServerContainsFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContainsFold(FieldRelayServer, v))
+func RelayServerContainsFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContainsFold(FieldRelayServer, v))
 }
 
 // APIServerEQ applies the EQ predicate on the "api_server" field.
-func APIServerEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldAPIServer, v))
+func APIServerEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldAPIServer, v))
 }
 
 // APIServerNEQ applies the NEQ predicate on the "api_server" field.
-func APIServerNEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldAPIServer, v))
+func APIServerNEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldAPIServer, v))
 }
 
 // APIServerIn applies the In predicate on the "api_server" field.
-func APIServerIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldAPIServer, vs...))
+func APIServerIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldAPIServer, vs...))
 }
 
 // APIServerNotIn applies the NotIn predicate on the "api_server" field.
-func APIServerNotIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldAPIServer, vs...))
+func APIServerNotIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldAPIServer, vs...))
 }
 
 // APIServerGT applies the GT predicate on the "api_server" field.
-func APIServerGT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldAPIServer, v))
+func APIServerGT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldAPIServer, v))
 }
 
 // APIServerGTE applies the GTE predicate on the "api_server" field.
-func APIServerGTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldAPIServer, v))
+func APIServerGTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldAPIServer, v))
 }
 
 // APIServerLT applies the LT predicate on the "api_server" field.
-func APIServerLT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldAPIServer, v))
+func APIServerLT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldAPIServer, v))
 }
 
 // APIServerLTE applies the LTE predicate on the "api_server" field.
-func APIServerLTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldAPIServer, v))
+func APIServerLTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldAPIServer, v))
 }
 
 // APIServerContains applies the Contains predicate on the "api_server" field.
-func APIServerContains(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContains(FieldAPIServer, v))
+func APIServerContains(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContains(FieldAPIServer, v))
 }
 
 // APIServerHasPrefix applies the HasPrefix predicate on the "api_server" field.
-func APIServerHasPrefix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasPrefix(FieldAPIServer, v))
+func APIServerHasPrefix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasPrefix(FieldAPIServer, v))
 }
 
 // APIServerHasSuffix applies the HasSuffix predicate on the "api_server" field.
-func APIServerHasSuffix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasSuffix(FieldAPIServer, v))
+func APIServerHasSuffix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasSuffix(FieldAPIServer, v))
 }
 
 // APIServerIsNil applies the IsNil predicate on the "api_server" field.
-func APIServerIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldAPIServer))
+func APIServerIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldAPIServer))
 }
 
 // APIServerNotNil applies the NotNil predicate on the "api_server" field.
-func APIServerNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldAPIServer))
+func APIServerNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldAPIServer))
 }
 
 // APIServerEqualFold applies the EqualFold predicate on the "api_server" field.
-func APIServerEqualFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEqualFold(FieldAPIServer, v))
+func APIServerEqualFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEqualFold(FieldAPIServer, v))
 }
 
 // APIServerContainsFold applies the ContainsFold predicate on the "api_server" field.
-func APIServerContainsFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContainsFold(FieldAPIServer, v))
+func APIServerContainsFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContainsFold(FieldAPIServer, v))
 }
 
 // KeyEQ applies the EQ predicate on the "key" field.
-func KeyEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldKey, v))
+func KeyEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldKey, v))
 }
 
 // KeyNEQ applies the NEQ predicate on the "key" field.
-func KeyNEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldKey, v))
+func KeyNEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldKey, v))
 }
 
 // KeyIn applies the In predicate on the "key" field.
-func KeyIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldKey, vs...))
+func KeyIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldKey, vs...))
 }
 
 // KeyNotIn applies the NotIn predicate on the "key" field.
-func KeyNotIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldKey, vs...))
+func KeyNotIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldKey, vs...))
 }
 
 // KeyGT applies the GT predicate on the "key" field.
-func KeyGT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldKey, v))
+func KeyGT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldKey, v))
 }
 
 // KeyGTE applies the GTE predicate on the "key" field.
-func KeyGTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldKey, v))
+func KeyGTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldKey, v))
 }
 
 // KeyLT applies the LT predicate on the "key" field.
-func KeyLT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldKey, v))
+func KeyLT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldKey, v))
 }
 
 // KeyLTE applies the LTE predicate on the "key" field.
-func KeyLTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldKey, v))
+func KeyLTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldKey, v))
 }
 
 // KeyContains applies the Contains predicate on the "key" field.
-func KeyContains(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContains(FieldKey, v))
+func KeyContains(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContains(FieldKey, v))
 }
 
 // KeyHasPrefix applies the HasPrefix predicate on the "key" field.
-func KeyHasPrefix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasPrefix(FieldKey, v))
+func KeyHasPrefix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasPrefix(FieldKey, v))
 }
 
 // KeyHasSuffix applies the HasSuffix predicate on the "key" field.
-func KeyHasSuffix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasSuffix(FieldKey, v))
+func KeyHasSuffix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasSuffix(FieldKey, v))
 }
 
 // KeyIsNil applies the IsNil predicate on the "key" field.
-func KeyIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldKey))
+func KeyIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldKey))
 }
 
 // KeyNotNil applies the NotNil predicate on the "key" field.
-func KeyNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldKey))
+func KeyNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldKey))
 }
 
 // KeyEqualFold applies the EqualFold predicate on the "key" field.
-func KeyEqualFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEqualFold(FieldKey, v))
+func KeyEqualFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEqualFold(FieldKey, v))
 }
 
 // KeyContainsFold applies the ContainsFold predicate on the "key" field.
-func KeyContainsFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContainsFold(FieldKey, v))
+func KeyContainsFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContainsFold(FieldKey, v))
 }
 
 // UsePermanentPasswordEQ applies the EQ predicate on the "use_permanent_password" field.
-func UsePermanentPasswordEQ(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldUsePermanentPassword, v))
+func UsePermanentPasswordEQ(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldUsePermanentPassword, v))
 }
 
 // UsePermanentPasswordNEQ applies the NEQ predicate on the "use_permanent_password" field.
-func UsePermanentPasswordNEQ(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldUsePermanentPassword, v))
+func UsePermanentPasswordNEQ(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldUsePermanentPassword, v))
 }
 
 // UsePermanentPasswordIsNil applies the IsNil predicate on the "use_permanent_password" field.
-func UsePermanentPasswordIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldUsePermanentPassword))
+func UsePermanentPasswordIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldUsePermanentPassword))
 }
 
 // UsePermanentPasswordNotNil applies the NotNil predicate on the "use_permanent_password" field.
-func UsePermanentPasswordNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldUsePermanentPassword))
+func UsePermanentPasswordNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldUsePermanentPassword))
 }
 
 // WhitelistEQ applies the EQ predicate on the "whitelist" field.
-func WhitelistEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldWhitelist, v))
+func WhitelistEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldWhitelist, v))
 }
 
 // WhitelistNEQ applies the NEQ predicate on the "whitelist" field.
-func WhitelistNEQ(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldWhitelist, v))
+func WhitelistNEQ(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldWhitelist, v))
 }
 
 // WhitelistIn applies the In predicate on the "whitelist" field.
-func WhitelistIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIn(FieldWhitelist, vs...))
+func WhitelistIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIn(FieldWhitelist, vs...))
 }
 
 // WhitelistNotIn applies the NotIn predicate on the "whitelist" field.
-func WhitelistNotIn(vs ...string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotIn(FieldWhitelist, vs...))
+func WhitelistNotIn(vs ...string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotIn(FieldWhitelist, vs...))
 }
 
 // WhitelistGT applies the GT predicate on the "whitelist" field.
-func WhitelistGT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGT(FieldWhitelist, v))
+func WhitelistGT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGT(FieldWhitelist, v))
 }
 
 // WhitelistGTE applies the GTE predicate on the "whitelist" field.
-func WhitelistGTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldGTE(FieldWhitelist, v))
+func WhitelistGTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldGTE(FieldWhitelist, v))
 }
 
 // WhitelistLT applies the LT predicate on the "whitelist" field.
-func WhitelistLT(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLT(FieldWhitelist, v))
+func WhitelistLT(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLT(FieldWhitelist, v))
 }
 
 // WhitelistLTE applies the LTE predicate on the "whitelist" field.
-func WhitelistLTE(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldLTE(FieldWhitelist, v))
+func WhitelistLTE(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldLTE(FieldWhitelist, v))
 }
 
 // WhitelistContains applies the Contains predicate on the "whitelist" field.
-func WhitelistContains(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContains(FieldWhitelist, v))
+func WhitelistContains(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContains(FieldWhitelist, v))
 }
 
 // WhitelistHasPrefix applies the HasPrefix predicate on the "whitelist" field.
-func WhitelistHasPrefix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasPrefix(FieldWhitelist, v))
+func WhitelistHasPrefix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasPrefix(FieldWhitelist, v))
 }
 
 // WhitelistHasSuffix applies the HasSuffix predicate on the "whitelist" field.
-func WhitelistHasSuffix(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldHasSuffix(FieldWhitelist, v))
+func WhitelistHasSuffix(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldHasSuffix(FieldWhitelist, v))
 }
 
 // WhitelistIsNil applies the IsNil predicate on the "whitelist" field.
-func WhitelistIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldWhitelist))
+func WhitelistIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldWhitelist))
 }
 
 // WhitelistNotNil applies the NotNil predicate on the "whitelist" field.
-func WhitelistNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldWhitelist))
+func WhitelistNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldWhitelist))
 }
 
 // WhitelistEqualFold applies the EqualFold predicate on the "whitelist" field.
-func WhitelistEqualFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEqualFold(FieldWhitelist, v))
+func WhitelistEqualFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEqualFold(FieldWhitelist, v))
 }
 
 // WhitelistContainsFold applies the ContainsFold predicate on the "whitelist" field.
-func WhitelistContainsFold(v string) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldContainsFold(FieldWhitelist, v))
+func WhitelistContainsFold(v string) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldContainsFold(FieldWhitelist, v))
 }
 
 // DirectIPAccessEQ applies the EQ predicate on the "direct_ip_access" field.
-func DirectIPAccessEQ(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldEQ(FieldDirectIPAccess, v))
+func DirectIPAccessEQ(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldEQ(FieldDirectIPAccess, v))
 }
 
 // DirectIPAccessNEQ applies the NEQ predicate on the "direct_ip_access" field.
-func DirectIPAccessNEQ(v bool) predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNEQ(FieldDirectIPAccess, v))
+func DirectIPAccessNEQ(v bool) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNEQ(FieldDirectIPAccess, v))
 }
 
 // DirectIPAccessIsNil applies the IsNil predicate on the "direct_ip_access" field.
-func DirectIPAccessIsNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldIsNull(FieldDirectIPAccess))
+func DirectIPAccessIsNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldIsNull(FieldDirectIPAccess))
 }
 
 // DirectIPAccessNotNil applies the NotNil predicate on the "direct_ip_access" field.
-func DirectIPAccessNotNil() predicate.RustDesk {
-	return predicate.RustDesk(sql.FieldNotNull(FieldDirectIPAccess))
+func DirectIPAccessNotNil() predicate.Rustdesk {
+	return predicate.Rustdesk(sql.FieldNotNull(FieldDirectIPAccess))
 }
 
 // HasTenant applies the HasEdge predicate on the "tenant" edge.
-func HasTenant() predicate.RustDesk {
-	return predicate.RustDesk(func(s *sql.Selector) {
+func HasTenant() predicate.Rustdesk {
+	return predicate.Rustdesk(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TenantTable, TenantColumn),
@@ -515,8 +515,8 @@ func HasTenant() predicate.RustDesk {
 }
 
 // HasTenantWith applies the HasEdge predicate on the "tenant" edge with a given conditions (other predicates).
-func HasTenantWith(preds ...predicate.Tenant) predicate.RustDesk {
-	return predicate.RustDesk(func(s *sql.Selector) {
+func HasTenantWith(preds ...predicate.Tenant) predicate.Rustdesk {
+	return predicate.Rustdesk(func(s *sql.Selector) {
 		step := newTenantStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -527,16 +527,16 @@ func HasTenantWith(preds ...predicate.Tenant) predicate.RustDesk {
 }
 
 // And groups predicates with the AND operator between them.
-func And(predicates ...predicate.RustDesk) predicate.RustDesk {
-	return predicate.RustDesk(sql.AndPredicates(predicates...))
+func And(predicates ...predicate.Rustdesk) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
-func Or(predicates ...predicate.RustDesk) predicate.RustDesk {
-	return predicate.RustDesk(sql.OrPredicates(predicates...))
+func Or(predicates ...predicate.Rustdesk) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
-func Not(p predicate.RustDesk) predicate.RustDesk {
-	return predicate.RustDesk(sql.NotPredicates(p))
+func Not(p predicate.Rustdesk) predicate.Rustdesk {
+	return predicate.Rustdesk(sql.NotPredicates(p))
 }

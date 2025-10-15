@@ -374,7 +374,7 @@ func HasRustdesk() predicate.Tenant {
 }
 
 // HasRustdeskWith applies the HasEdge predicate on the "rustdesk" edge with a given conditions (other predicates).
-func HasRustdeskWith(preds ...predicate.RustDesk) predicate.Tenant {
+func HasRustdeskWith(preds ...predicate.Rustdesk) predicate.Tenant {
 	return predicate.Tenant(func(s *sql.Selector) {
 		step := newRustdeskStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {

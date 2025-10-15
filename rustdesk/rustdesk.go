@@ -9,7 +9,7 @@ import (
 
 const (
 	// Label holds the string label denoting the rustdesk type in the database.
-	Label = "rust_desk"
+	Label = "rustdesk"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
 	// FieldCustomRendezvousServer holds the string denoting the custom_rendezvous_server field in the database.
@@ -29,9 +29,9 @@ const (
 	// EdgeTenant holds the string denoting the tenant edge name in mutations.
 	EdgeTenant = "tenant"
 	// Table holds the table name of the rustdesk in the database.
-	Table = "rust_desks"
+	Table = "rustdesks"
 	// TenantTable is the table that holds the tenant relation/edge.
-	TenantTable = "rust_desks"
+	TenantTable = "rustdesks"
 	// TenantInverseTable is the table name for the Tenant entity.
 	// It exists in this package in order to avoid circular dependency with the "tenant" package.
 	TenantInverseTable = "tenants"
@@ -51,7 +51,7 @@ var Columns = []string{
 	FieldDirectIPAccess,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "rust_desks"
+// ForeignKeys holds the SQL foreign-keys that are owned by the "rustdesks"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"tenant_rustdesk",
@@ -89,7 +89,7 @@ var (
 	DefaultDirectIPAccess bool
 )
 
-// OrderOption defines the ordering options for the RustDesk queries.
+// OrderOption defines the ordering options for the Rustdesk queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.

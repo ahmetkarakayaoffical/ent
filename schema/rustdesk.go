@@ -6,13 +6,13 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// RustDesk holds the schema definition for the RustDesk entity.
-type RustDesk struct {
+// Rustdesk holds the schema definition for the Rustdesk entity.
+type Rustdesk struct {
 	ent.Schema
 }
 
-// Fields of the RustDesk.
-func (RustDesk) Fields() []ent.Field {
+// Fields of the Rustdesk.
+func (Rustdesk) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("custom_rendezvous_server").Optional().Default(""),
 		field.String("relay_server").Optional().Default(""),
@@ -24,8 +24,8 @@ func (RustDesk) Fields() []ent.Field {
 	}
 }
 
-// Edges of the RustDesk.
-func (RustDesk) Edges() []ent.Edge {
+// Edges of the Rustdesk.
+func (Rustdesk) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("tenant", Tenant.Type).Unique().Ref("rustdesk"),
 	}

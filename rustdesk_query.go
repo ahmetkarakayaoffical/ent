@@ -16,13 +16,13 @@ import (
 	"github.com/open-uem/ent/tenant"
 )
 
-// RustDeskQuery is the builder for querying RustDesk entities.
-type RustDeskQuery struct {
+// RustdeskQuery is the builder for querying Rustdesk entities.
+type RustdeskQuery struct {
 	config
 	ctx        *QueryContext
 	order      []rustdesk.OrderOption
 	inters     []Interceptor
-	predicates []predicate.RustDesk
+	predicates []predicate.Rustdesk
 	withTenant *TenantQuery
 	withFKs    bool
 	modifiers  []func(*sql.Selector)
@@ -31,45 +31,45 @@ type RustDeskQuery struct {
 	path func(context.Context) (*sql.Selector, error)
 }
 
-// Where adds a new predicate for the RustDeskQuery builder.
-func (rdq *RustDeskQuery) Where(ps ...predicate.RustDesk) *RustDeskQuery {
-	rdq.predicates = append(rdq.predicates, ps...)
-	return rdq
+// Where adds a new predicate for the RustdeskQuery builder.
+func (rq *RustdeskQuery) Where(ps ...predicate.Rustdesk) *RustdeskQuery {
+	rq.predicates = append(rq.predicates, ps...)
+	return rq
 }
 
 // Limit the number of records to be returned by this query.
-func (rdq *RustDeskQuery) Limit(limit int) *RustDeskQuery {
-	rdq.ctx.Limit = &limit
-	return rdq
+func (rq *RustdeskQuery) Limit(limit int) *RustdeskQuery {
+	rq.ctx.Limit = &limit
+	return rq
 }
 
 // Offset to start from.
-func (rdq *RustDeskQuery) Offset(offset int) *RustDeskQuery {
-	rdq.ctx.Offset = &offset
-	return rdq
+func (rq *RustdeskQuery) Offset(offset int) *RustdeskQuery {
+	rq.ctx.Offset = &offset
+	return rq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (rdq *RustDeskQuery) Unique(unique bool) *RustDeskQuery {
-	rdq.ctx.Unique = &unique
-	return rdq
+func (rq *RustdeskQuery) Unique(unique bool) *RustdeskQuery {
+	rq.ctx.Unique = &unique
+	return rq
 }
 
 // Order specifies how the records should be ordered.
-func (rdq *RustDeskQuery) Order(o ...rustdesk.OrderOption) *RustDeskQuery {
-	rdq.order = append(rdq.order, o...)
-	return rdq
+func (rq *RustdeskQuery) Order(o ...rustdesk.OrderOption) *RustdeskQuery {
+	rq.order = append(rq.order, o...)
+	return rq
 }
 
 // QueryTenant chains the current query on the "tenant" edge.
-func (rdq *RustDeskQuery) QueryTenant() *TenantQuery {
-	query := (&TenantClient{config: rdq.config}).Query()
+func (rq *RustdeskQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: rq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rdq.prepareQuery(ctx); err != nil {
+		if err := rq.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rdq.sqlQuery(ctx)
+		selector := rq.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -78,16 +78,16 @@ func (rdq *RustDeskQuery) QueryTenant() *TenantQuery {
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, rustdesk.TenantTable, rustdesk.TenantColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(rdq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
-// First returns the first RustDesk entity from the query.
-// Returns a *NotFoundError when no RustDesk was found.
-func (rdq *RustDeskQuery) First(ctx context.Context) (*RustDesk, error) {
-	nodes, err := rdq.Limit(1).All(setContextOp(ctx, rdq.ctx, ent.OpQueryFirst))
+// First returns the first Rustdesk entity from the query.
+// Returns a *NotFoundError when no Rustdesk was found.
+func (rq *RustdeskQuery) First(ctx context.Context) (*Rustdesk, error) {
+	nodes, err := rq.Limit(1).All(setContextOp(ctx, rq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -98,19 +98,19 @@ func (rdq *RustDeskQuery) First(ctx context.Context) (*RustDesk, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (rdq *RustDeskQuery) FirstX(ctx context.Context) *RustDesk {
-	node, err := rdq.First(ctx)
+func (rq *RustdeskQuery) FirstX(ctx context.Context) *Rustdesk {
+	node, err := rq.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
 	return node
 }
 
-// FirstID returns the first RustDesk ID from the query.
-// Returns a *NotFoundError when no RustDesk ID was found.
-func (rdq *RustDeskQuery) FirstID(ctx context.Context) (id int, err error) {
+// FirstID returns the first Rustdesk ID from the query.
+// Returns a *NotFoundError when no Rustdesk ID was found.
+func (rq *RustdeskQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rdq.Limit(1).IDs(setContextOp(ctx, rdq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -121,19 +121,19 @@ func (rdq *RustDeskQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rdq *RustDeskQuery) FirstIDX(ctx context.Context) int {
-	id, err := rdq.FirstID(ctx)
+func (rq *RustdeskQuery) FirstIDX(ctx context.Context) int {
+	id, err := rq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
 	return id
 }
 
-// Only returns a single RustDesk entity found by the query, ensuring it only returns one.
-// Returns a *NotSingularError when more than one RustDesk entity is found.
-// Returns a *NotFoundError when no RustDesk entities are found.
-func (rdq *RustDeskQuery) Only(ctx context.Context) (*RustDesk, error) {
-	nodes, err := rdq.Limit(2).All(setContextOp(ctx, rdq.ctx, ent.OpQueryOnly))
+// Only returns a single Rustdesk entity found by the query, ensuring it only returns one.
+// Returns a *NotSingularError when more than one Rustdesk entity is found.
+// Returns a *NotFoundError when no Rustdesk entities are found.
+func (rq *RustdeskQuery) Only(ctx context.Context) (*Rustdesk, error) {
+	nodes, err := rq.Limit(2).All(setContextOp(ctx, rq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -148,20 +148,20 @@ func (rdq *RustDeskQuery) Only(ctx context.Context) (*RustDesk, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (rdq *RustDeskQuery) OnlyX(ctx context.Context) *RustDesk {
-	node, err := rdq.Only(ctx)
+func (rq *RustdeskQuery) OnlyX(ctx context.Context) *Rustdesk {
+	node, err := rq.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return node
 }
 
-// OnlyID is like Only, but returns the only RustDesk ID in the query.
-// Returns a *NotSingularError when more than one RustDesk ID is found.
+// OnlyID is like Only, but returns the only Rustdesk ID in the query.
+// Returns a *NotSingularError when more than one Rustdesk ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rdq *RustDeskQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (rq *RustdeskQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rdq.Limit(2).IDs(setContextOp(ctx, rdq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -176,48 +176,48 @@ func (rdq *RustDeskQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rdq *RustDeskQuery) OnlyIDX(ctx context.Context) int {
-	id, err := rdq.OnlyID(ctx)
+func (rq *RustdeskQuery) OnlyIDX(ctx context.Context) int {
+	id, err := rq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return id
 }
 
-// All executes the query and returns a list of RustDesks.
-func (rdq *RustDeskQuery) All(ctx context.Context) ([]*RustDesk, error) {
-	ctx = setContextOp(ctx, rdq.ctx, ent.OpQueryAll)
-	if err := rdq.prepareQuery(ctx); err != nil {
+// All executes the query and returns a list of Rustdesks.
+func (rq *RustdeskQuery) All(ctx context.Context) ([]*Rustdesk, error) {
+	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryAll)
+	if err := rq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	qr := querierAll[[]*RustDesk, *RustDeskQuery]()
-	return withInterceptors[[]*RustDesk](ctx, rdq, qr, rdq.inters)
+	qr := querierAll[[]*Rustdesk, *RustdeskQuery]()
+	return withInterceptors[[]*Rustdesk](ctx, rq, qr, rq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (rdq *RustDeskQuery) AllX(ctx context.Context) []*RustDesk {
-	nodes, err := rdq.All(ctx)
+func (rq *RustdeskQuery) AllX(ctx context.Context) []*Rustdesk {
+	nodes, err := rq.All(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return nodes
 }
 
-// IDs executes the query and returns a list of RustDesk IDs.
-func (rdq *RustDeskQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if rdq.ctx.Unique == nil && rdq.path != nil {
-		rdq.Unique(true)
+// IDs executes the query and returns a list of Rustdesk IDs.
+func (rq *RustdeskQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if rq.ctx.Unique == nil && rq.path != nil {
+		rq.Unique(true)
 	}
-	ctx = setContextOp(ctx, rdq.ctx, ent.OpQueryIDs)
-	if err = rdq.Select(rustdesk.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
+	if err = rq.Select(rustdesk.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rdq *RustDeskQuery) IDsX(ctx context.Context) []int {
-	ids, err := rdq.IDs(ctx)
+func (rq *RustdeskQuery) IDsX(ctx context.Context) []int {
+	ids, err := rq.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -225,17 +225,17 @@ func (rdq *RustDeskQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (rdq *RustDeskQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rdq.ctx, ent.OpQueryCount)
-	if err := rdq.prepareQuery(ctx); err != nil {
+func (rq *RustdeskQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryCount)
+	if err := rq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, rdq, querierCount[*RustDeskQuery](), rdq.inters)
+	return withInterceptors[int](ctx, rq, querierCount[*RustdeskQuery](), rq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (rdq *RustDeskQuery) CountX(ctx context.Context) int {
-	count, err := rdq.Count(ctx)
+func (rq *RustdeskQuery) CountX(ctx context.Context) int {
+	count, err := rq.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -243,9 +243,9 @@ func (rdq *RustDeskQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (rdq *RustDeskQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rdq.ctx, ent.OpQueryExist)
-	switch _, err := rdq.FirstID(ctx); {
+func (rq *RustdeskQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryExist)
+	switch _, err := rq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -256,43 +256,43 @@ func (rdq *RustDeskQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (rdq *RustDeskQuery) ExistX(ctx context.Context) bool {
-	exist, err := rdq.Exist(ctx)
+func (rq *RustdeskQuery) ExistX(ctx context.Context) bool {
+	exist, err := rq.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return exist
 }
 
-// Clone returns a duplicate of the RustDeskQuery builder, including all associated steps. It can be
+// Clone returns a duplicate of the RustdeskQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (rdq *RustDeskQuery) Clone() *RustDeskQuery {
-	if rdq == nil {
+func (rq *RustdeskQuery) Clone() *RustdeskQuery {
+	if rq == nil {
 		return nil
 	}
-	return &RustDeskQuery{
-		config:     rdq.config,
-		ctx:        rdq.ctx.Clone(),
-		order:      append([]rustdesk.OrderOption{}, rdq.order...),
-		inters:     append([]Interceptor{}, rdq.inters...),
-		predicates: append([]predicate.RustDesk{}, rdq.predicates...),
-		withTenant: rdq.withTenant.Clone(),
+	return &RustdeskQuery{
+		config:     rq.config,
+		ctx:        rq.ctx.Clone(),
+		order:      append([]rustdesk.OrderOption{}, rq.order...),
+		inters:     append([]Interceptor{}, rq.inters...),
+		predicates: append([]predicate.Rustdesk{}, rq.predicates...),
+		withTenant: rq.withTenant.Clone(),
 		// clone intermediate query.
-		sql:       rdq.sql.Clone(),
-		path:      rdq.path,
-		modifiers: append([]func(*sql.Selector){}, rdq.modifiers...),
+		sql:       rq.sql.Clone(),
+		path:      rq.path,
+		modifiers: append([]func(*sql.Selector){}, rq.modifiers...),
 	}
 }
 
 // WithTenant tells the query-builder to eager-load the nodes that are connected to
 // the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
-func (rdq *RustDeskQuery) WithTenant(opts ...func(*TenantQuery)) *RustDeskQuery {
-	query := (&TenantClient{config: rdq.config}).Query()
+func (rq *RustdeskQuery) WithTenant(opts ...func(*TenantQuery)) *RustdeskQuery {
+	query := (&TenantClient{config: rq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rdq.withTenant = query
-	return rdq
+	rq.withTenant = query
+	return rq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -305,14 +305,14 @@ func (rdq *RustDeskQuery) WithTenant(opts ...func(*TenantQuery)) *RustDeskQuery 
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.RustDesk.Query().
+//	client.Rustdesk.Query().
 //		GroupBy(rustdesk.FieldCustomRendezvousServer).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (rdq *RustDeskQuery) GroupBy(field string, fields ...string) *RustDeskGroupBy {
-	rdq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &RustDeskGroupBy{build: rdq}
-	grbuild.flds = &rdq.ctx.Fields
+func (rq *RustdeskQuery) GroupBy(field string, fields ...string) *RustdeskGroupBy {
+	rq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &RustdeskGroupBy{build: rq}
+	grbuild.flds = &rq.ctx.Fields
 	grbuild.label = rustdesk.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -327,96 +327,96 @@ func (rdq *RustDeskQuery) GroupBy(field string, fields ...string) *RustDeskGroup
 //		CustomRendezvousServer string `json:"custom_rendezvous_server,omitempty"`
 //	}
 //
-//	client.RustDesk.Query().
+//	client.Rustdesk.Query().
 //		Select(rustdesk.FieldCustomRendezvousServer).
 //		Scan(ctx, &v)
-func (rdq *RustDeskQuery) Select(fields ...string) *RustDeskSelect {
-	rdq.ctx.Fields = append(rdq.ctx.Fields, fields...)
-	sbuild := &RustDeskSelect{RustDeskQuery: rdq}
+func (rq *RustdeskQuery) Select(fields ...string) *RustdeskSelect {
+	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
+	sbuild := &RustdeskSelect{RustdeskQuery: rq}
 	sbuild.label = rustdesk.Label
-	sbuild.flds, sbuild.scan = &rdq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &rq.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
-// Aggregate returns a RustDeskSelect configured with the given aggregations.
-func (rdq *RustDeskQuery) Aggregate(fns ...AggregateFunc) *RustDeskSelect {
-	return rdq.Select().Aggregate(fns...)
+// Aggregate returns a RustdeskSelect configured with the given aggregations.
+func (rq *RustdeskQuery) Aggregate(fns ...AggregateFunc) *RustdeskSelect {
+	return rq.Select().Aggregate(fns...)
 }
 
-func (rdq *RustDeskQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range rdq.inters {
+func (rq *RustdeskQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range rq.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, rdq); err != nil {
+			if err := trv.Traverse(ctx, rq); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range rdq.ctx.Fields {
+	for _, f := range rq.ctx.Fields {
 		if !rustdesk.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if rdq.path != nil {
-		prev, err := rdq.path(ctx)
+	if rq.path != nil {
+		prev, err := rq.path(ctx)
 		if err != nil {
 			return err
 		}
-		rdq.sql = prev
+		rq.sql = prev
 	}
 	return nil
 }
 
-func (rdq *RustDeskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*RustDesk, error) {
+func (rq *RustdeskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rustdesk, error) {
 	var (
-		nodes       = []*RustDesk{}
-		withFKs     = rdq.withFKs
-		_spec       = rdq.querySpec()
+		nodes       = []*Rustdesk{}
+		withFKs     = rq.withFKs
+		_spec       = rq.querySpec()
 		loadedTypes = [1]bool{
-			rdq.withTenant != nil,
+			rq.withTenant != nil,
 		}
 	)
-	if rdq.withTenant != nil {
+	if rq.withTenant != nil {
 		withFKs = true
 	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, rustdesk.ForeignKeys...)
 	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
-		return (*RustDesk).scanValues(nil, columns)
+		return (*Rustdesk).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &RustDesk{config: rdq.config}
+		node := &Rustdesk{config: rq.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(rdq.modifiers) > 0 {
-		_spec.Modifiers = rdq.modifiers
+	if len(rq.modifiers) > 0 {
+		_spec.Modifiers = rq.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, rdq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, rq.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := rdq.withTenant; query != nil {
-		if err := rdq.loadTenant(ctx, query, nodes, nil,
-			func(n *RustDesk, e *Tenant) { n.Edges.Tenant = e }); err != nil {
+	if query := rq.withTenant; query != nil {
+		if err := rq.loadTenant(ctx, query, nodes, nil,
+			func(n *Rustdesk, e *Tenant) { n.Edges.Tenant = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (rdq *RustDeskQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*RustDesk, init func(*RustDesk), assign func(*RustDesk, *Tenant)) error {
+func (rq *RustdeskQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*Rustdesk, init func(*Rustdesk), assign func(*Rustdesk, *Tenant)) error {
 	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*RustDesk)
+	nodeids := make(map[int][]*Rustdesk)
 	for i := range nodes {
 		if nodes[i].tenant_rustdesk == nil {
 			continue
@@ -447,27 +447,27 @@ func (rdq *RustDeskQuery) loadTenant(ctx context.Context, query *TenantQuery, no
 	return nil
 }
 
-func (rdq *RustDeskQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := rdq.querySpec()
-	if len(rdq.modifiers) > 0 {
-		_spec.Modifiers = rdq.modifiers
+func (rq *RustdeskQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := rq.querySpec()
+	if len(rq.modifiers) > 0 {
+		_spec.Modifiers = rq.modifiers
 	}
-	_spec.Node.Columns = rdq.ctx.Fields
-	if len(rdq.ctx.Fields) > 0 {
-		_spec.Unique = rdq.ctx.Unique != nil && *rdq.ctx.Unique
+	_spec.Node.Columns = rq.ctx.Fields
+	if len(rq.ctx.Fields) > 0 {
+		_spec.Unique = rq.ctx.Unique != nil && *rq.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, rdq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, rq.driver, _spec)
 }
 
-func (rdq *RustDeskQuery) querySpec() *sqlgraph.QuerySpec {
+func (rq *RustdeskQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(rustdesk.Table, rustdesk.Columns, sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt))
-	_spec.From = rdq.sql
-	if unique := rdq.ctx.Unique; unique != nil {
+	_spec.From = rq.sql
+	if unique := rq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if rdq.path != nil {
+	} else if rq.path != nil {
 		_spec.Unique = true
 	}
-	if fields := rdq.ctx.Fields; len(fields) > 0 {
+	if fields := rq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, rustdesk.FieldID)
 		for i := range fields {
@@ -476,20 +476,20 @@ func (rdq *RustDeskQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := rdq.predicates; len(ps) > 0 {
+	if ps := rq.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := rdq.ctx.Limit; limit != nil {
+	if limit := rq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := rdq.ctx.Offset; offset != nil {
+	if offset := rq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := rdq.order; len(ps) > 0 {
+	if ps := rq.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -499,123 +499,123 @@ func (rdq *RustDeskQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (rdq *RustDeskQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(rdq.driver.Dialect())
+func (rq *RustdeskQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(rq.driver.Dialect())
 	t1 := builder.Table(rustdesk.Table)
-	columns := rdq.ctx.Fields
+	columns := rq.ctx.Fields
 	if len(columns) == 0 {
 		columns = rustdesk.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if rdq.sql != nil {
-		selector = rdq.sql
+	if rq.sql != nil {
+		selector = rq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if rdq.ctx.Unique != nil && *rdq.ctx.Unique {
+	if rq.ctx.Unique != nil && *rq.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range rdq.modifiers {
+	for _, m := range rq.modifiers {
 		m(selector)
 	}
-	for _, p := range rdq.predicates {
+	for _, p := range rq.predicates {
 		p(selector)
 	}
-	for _, p := range rdq.order {
+	for _, p := range rq.order {
 		p(selector)
 	}
-	if offset := rdq.ctx.Offset; offset != nil {
+	if offset := rq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := rdq.ctx.Limit; limit != nil {
+	if limit := rq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rdq *RustDeskQuery) Modify(modifiers ...func(s *sql.Selector)) *RustDeskSelect {
-	rdq.modifiers = append(rdq.modifiers, modifiers...)
-	return rdq.Select()
+func (rq *RustdeskQuery) Modify(modifiers ...func(s *sql.Selector)) *RustdeskSelect {
+	rq.modifiers = append(rq.modifiers, modifiers...)
+	return rq.Select()
 }
 
-// RustDeskGroupBy is the group-by builder for RustDesk entities.
-type RustDeskGroupBy struct {
+// RustdeskGroupBy is the group-by builder for Rustdesk entities.
+type RustdeskGroupBy struct {
 	selector
-	build *RustDeskQuery
+	build *RustdeskQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (rdgb *RustDeskGroupBy) Aggregate(fns ...AggregateFunc) *RustDeskGroupBy {
-	rdgb.fns = append(rdgb.fns, fns...)
-	return rdgb
+func (rgb *RustdeskGroupBy) Aggregate(fns ...AggregateFunc) *RustdeskGroupBy {
+	rgb.fns = append(rgb.fns, fns...)
+	return rgb
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rdgb *RustDeskGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rdgb.build.ctx, ent.OpQueryGroupBy)
-	if err := rdgb.build.prepareQuery(ctx); err != nil {
+func (rgb *RustdeskGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, rgb.build.ctx, ent.OpQueryGroupBy)
+	if err := rgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RustDeskQuery, *RustDeskGroupBy](ctx, rdgb.build, rdgb, rdgb.build.inters, v)
+	return scanWithInterceptors[*RustdeskQuery, *RustdeskGroupBy](ctx, rgb.build, rgb, rgb.build.inters, v)
 }
 
-func (rdgb *RustDeskGroupBy) sqlScan(ctx context.Context, root *RustDeskQuery, v any) error {
+func (rgb *RustdeskGroupBy) sqlScan(ctx context.Context, root *RustdeskQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(rdgb.fns))
-	for _, fn := range rdgb.fns {
+	aggregation := make([]string, 0, len(rgb.fns))
+	for _, fn := range rgb.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*rdgb.flds)+len(rdgb.fns))
-		for _, f := range *rdgb.flds {
+		columns := make([]string, 0, len(*rgb.flds)+len(rgb.fns))
+		for _, f := range *rgb.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*rdgb.flds...)...)
+	selector.GroupBy(selector.Columns(*rgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rdgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := rgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-// RustDeskSelect is the builder for selecting fields of RustDesk entities.
-type RustDeskSelect struct {
-	*RustDeskQuery
+// RustdeskSelect is the builder for selecting fields of Rustdesk entities.
+type RustdeskSelect struct {
+	*RustdeskQuery
 	selector
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (rds *RustDeskSelect) Aggregate(fns ...AggregateFunc) *RustDeskSelect {
-	rds.fns = append(rds.fns, fns...)
-	return rds
+func (rs *RustdeskSelect) Aggregate(fns ...AggregateFunc) *RustdeskSelect {
+	rs.fns = append(rs.fns, fns...)
+	return rs
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rds *RustDeskSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rds.ctx, ent.OpQuerySelect)
-	if err := rds.prepareQuery(ctx); err != nil {
+func (rs *RustdeskSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, rs.ctx, ent.OpQuerySelect)
+	if err := rs.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RustDeskQuery, *RustDeskSelect](ctx, rds.RustDeskQuery, rds, rds.inters, v)
+	return scanWithInterceptors[*RustdeskQuery, *RustdeskSelect](ctx, rs.RustdeskQuery, rs, rs.inters, v)
 }
 
-func (rds *RustDeskSelect) sqlScan(ctx context.Context, root *RustDeskQuery, v any) error {
+func (rs *RustdeskSelect) sqlScan(ctx context.Context, root *RustdeskQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(rds.fns))
-	for _, fn := range rds.fns {
+	aggregation := make([]string, 0, len(rs.fns))
+	for _, fn := range rs.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*rds.selector.flds); {
+	switch n := len(*rs.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -623,7 +623,7 @@ func (rds *RustDeskSelect) sqlScan(ctx context.Context, root *RustDeskQuery, v a
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rds.driver.Query(ctx, query, args, rows); err != nil {
+	if err := rs.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -631,7 +631,7 @@ func (rds *RustDeskSelect) sqlScan(ctx context.Context, root *RustDeskQuery, v a
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rds *RustDeskSelect) Modify(modifiers ...func(s *sql.Selector)) *RustDeskSelect {
-	rds.modifiers = append(rds.modifiers, modifiers...)
-	return rds
+func (rs *RustdeskSelect) Modify(modifiers ...func(s *sql.Selector)) *RustdeskSelect {
+	rs.modifiers = append(rs.modifiers, modifiers...)
+	return rs
 }

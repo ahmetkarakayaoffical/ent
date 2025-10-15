@@ -147,14 +147,14 @@ func (tc *TenantCreate) AddMetadata(o ...*OrgMetadata) *TenantCreate {
 	return tc.AddMetadatumIDs(ids...)
 }
 
-// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by IDs.
+// AddRustdeskIDs adds the "rustdesk" edge to the Rustdesk entity by IDs.
 func (tc *TenantCreate) AddRustdeskIDs(ids ...int) *TenantCreate {
 	tc.mutation.AddRustdeskIDs(ids...)
 	return tc
 }
 
-// AddRustdesk adds the "rustdesk" edges to the RustDesk entity.
-func (tc *TenantCreate) AddRustdesk(r ...*RustDesk) *TenantCreate {
+// AddRustdesk adds the "rustdesk" edges to the Rustdesk entity.
+func (tc *TenantCreate) AddRustdesk(r ...*Rustdesk) *TenantCreate {
 	ids := make([]int, len(r))
 	for i := range r {
 		ids[i] = r[i].ID

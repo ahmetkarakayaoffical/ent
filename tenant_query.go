@@ -32,7 +32,7 @@ type TenantQuery struct {
 	withSettings *SettingsQuery
 	withTags     *TagQuery
 	withMetadata *OrgMetadataQuery
-	withRustdesk *RustDeskQuery
+	withRustdesk *RustdeskQuery
 	modifiers    []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -159,8 +159,8 @@ func (tq *TenantQuery) QueryMetadata() *OrgMetadataQuery {
 }
 
 // QueryRustdesk chains the current query on the "rustdesk" edge.
-func (tq *TenantQuery) QueryRustdesk() *RustDeskQuery {
-	query := (&RustDeskClient{config: tq.config}).Query()
+func (tq *TenantQuery) QueryRustdesk() *RustdeskQuery {
+	query := (&RustdeskClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -430,8 +430,8 @@ func (tq *TenantQuery) WithMetadata(opts ...func(*OrgMetadataQuery)) *TenantQuer
 
 // WithRustdesk tells the query-builder to eager-load the nodes that are connected to
 // the "rustdesk" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TenantQuery) WithRustdesk(opts ...func(*RustDeskQuery)) *TenantQuery {
-	query := (&RustDeskClient{config: tq.config}).Query()
+func (tq *TenantQuery) WithRustdesk(opts ...func(*RustdeskQuery)) *TenantQuery {
+	query := (&RustdeskClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -575,8 +575,8 @@ func (tq *TenantQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tenan
 	}
 	if query := tq.withRustdesk; query != nil {
 		if err := tq.loadRustdesk(ctx, query, nodes,
-			func(n *Tenant) { n.Edges.Rustdesk = []*RustDesk{} },
-			func(n *Tenant, e *RustDesk) { n.Edges.Rustdesk = append(n.Edges.Rustdesk, e) }); err != nil {
+			func(n *Tenant) { n.Edges.Rustdesk = []*Rustdesk{} },
+			func(n *Tenant, e *Rustdesk) { n.Edges.Rustdesk = append(n.Edges.Rustdesk, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -704,7 +704,7 @@ func (tq *TenantQuery) loadMetadata(ctx context.Context, query *OrgMetadataQuery
 	}
 	return nil
 }
-func (tq *TenantQuery) loadRustdesk(ctx context.Context, query *RustDeskQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *RustDesk)) error {
+func (tq *TenantQuery) loadRustdesk(ctx context.Context, query *RustdeskQuery, nodes []*Tenant, init func(*Tenant), assign func(*Tenant, *Rustdesk)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Tenant)
 	for i := range nodes {
@@ -715,7 +715,7 @@ func (tq *TenantQuery) loadRustdesk(ctx context.Context, query *RustDeskQuery, n
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.RustDesk(func(s *sql.Selector) {
+	query.Where(predicate.Rustdesk(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(tenant.RustdeskColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)

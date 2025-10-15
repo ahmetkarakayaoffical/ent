@@ -76,7 +76,7 @@ const (
 	TypeProfileIssue          = "ProfileIssue"
 	TypeRelease               = "Release"
 	TypeRevocation            = "Revocation"
-	TypeRustDesk              = "RustDesk"
+	TypeRustdesk              = "Rustdesk"
 	TypeServer                = "Server"
 	TypeSessions              = "Sessions"
 	TypeSettings              = "Settings"
@@ -18099,8 +18099,8 @@ func (m *RevocationMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Revocation edge %s", name)
 }
 
-// RustDeskMutation represents an operation that mutates the RustDesk nodes in the graph.
-type RustDeskMutation struct {
+// RustdeskMutation represents an operation that mutates the Rustdesk nodes in the graph.
+type RustdeskMutation struct {
 	config
 	op                       Op
 	typ                      string
@@ -18116,21 +18116,21 @@ type RustDeskMutation struct {
 	tenant                   *int
 	clearedtenant            bool
 	done                     bool
-	oldValue                 func(context.Context) (*RustDesk, error)
-	predicates               []predicate.RustDesk
+	oldValue                 func(context.Context) (*Rustdesk, error)
+	predicates               []predicate.Rustdesk
 }
 
-var _ ent.Mutation = (*RustDeskMutation)(nil)
+var _ ent.Mutation = (*RustdeskMutation)(nil)
 
 // rustdeskOption allows management of the mutation configuration using functional options.
-type rustdeskOption func(*RustDeskMutation)
+type rustdeskOption func(*RustdeskMutation)
 
-// newRustDeskMutation creates new mutation for the RustDesk entity.
-func newRustDeskMutation(c config, op Op, opts ...rustdeskOption) *RustDeskMutation {
-	m := &RustDeskMutation{
+// newRustdeskMutation creates new mutation for the Rustdesk entity.
+func newRustdeskMutation(c config, op Op, opts ...rustdeskOption) *RustdeskMutation {
+	m := &RustdeskMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeRustDesk,
+		typ:           TypeRustdesk,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -18139,20 +18139,20 @@ func newRustDeskMutation(c config, op Op, opts ...rustdeskOption) *RustDeskMutat
 	return m
 }
 
-// withRustDeskID sets the ID field of the mutation.
-func withRustDeskID(id int) rustdeskOption {
-	return func(m *RustDeskMutation) {
+// withRustdeskID sets the ID field of the mutation.
+func withRustdeskID(id int) rustdeskOption {
+	return func(m *RustdeskMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *RustDesk
+			value *Rustdesk
 		)
-		m.oldValue = func(ctx context.Context) (*RustDesk, error) {
+		m.oldValue = func(ctx context.Context) (*Rustdesk, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().RustDesk.Get(ctx, id)
+					value, err = m.Client().Rustdesk.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -18161,10 +18161,10 @@ func withRustDeskID(id int) rustdeskOption {
 	}
 }
 
-// withRustDesk sets the old RustDesk of the mutation.
-func withRustDesk(node *RustDesk) rustdeskOption {
-	return func(m *RustDeskMutation) {
-		m.oldValue = func(context.Context) (*RustDesk, error) {
+// withRustdesk sets the old Rustdesk of the mutation.
+func withRustdesk(node *Rustdesk) rustdeskOption {
+	return func(m *RustdeskMutation) {
+		m.oldValue = func(context.Context) (*Rustdesk, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -18173,7 +18173,7 @@ func withRustDesk(node *RustDesk) rustdeskOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m RustDeskMutation) Client() *Client {
+func (m RustdeskMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -18181,7 +18181,7 @@ func (m RustDeskMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m RustDeskMutation) Tx() (*Tx, error) {
+func (m RustdeskMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -18192,7 +18192,7 @@ func (m RustDeskMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RustDeskMutation) ID() (id int, exists bool) {
+func (m *RustdeskMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -18203,7 +18203,7 @@ func (m *RustDeskMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RustDeskMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *RustdeskMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -18212,19 +18212,19 @@ func (m *RustDeskMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().RustDesk.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().Rustdesk.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (m *RustDeskMutation) SetCustomRendezvousServer(s string) {
+func (m *RustdeskMutation) SetCustomRendezvousServer(s string) {
 	m.custom_rendezvous_server = &s
 }
 
 // CustomRendezvousServer returns the value of the "custom_rendezvous_server" field in the mutation.
-func (m *RustDeskMutation) CustomRendezvousServer() (r string, exists bool) {
+func (m *RustdeskMutation) CustomRendezvousServer() (r string, exists bool) {
 	v := m.custom_rendezvous_server
 	if v == nil {
 		return
@@ -18232,10 +18232,10 @@ func (m *RustDeskMutation) CustomRendezvousServer() (r string, exists bool) {
 	return *v, true
 }
 
-// OldCustomRendezvousServer returns the old "custom_rendezvous_server" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldCustomRendezvousServer returns the old "custom_rendezvous_server" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldCustomRendezvousServer(ctx context.Context) (v string, err error) {
+func (m *RustdeskMutation) OldCustomRendezvousServer(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCustomRendezvousServer is only allowed on UpdateOne operations")
 	}
@@ -18250,30 +18250,30 @@ func (m *RustDeskMutation) OldCustomRendezvousServer(ctx context.Context) (v str
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (m *RustDeskMutation) ClearCustomRendezvousServer() {
+func (m *RustdeskMutation) ClearCustomRendezvousServer() {
 	m.custom_rendezvous_server = nil
 	m.clearedFields[rustdesk.FieldCustomRendezvousServer] = struct{}{}
 }
 
 // CustomRendezvousServerCleared returns if the "custom_rendezvous_server" field was cleared in this mutation.
-func (m *RustDeskMutation) CustomRendezvousServerCleared() bool {
+func (m *RustdeskMutation) CustomRendezvousServerCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldCustomRendezvousServer]
 	return ok
 }
 
 // ResetCustomRendezvousServer resets all changes to the "custom_rendezvous_server" field.
-func (m *RustDeskMutation) ResetCustomRendezvousServer() {
+func (m *RustdeskMutation) ResetCustomRendezvousServer() {
 	m.custom_rendezvous_server = nil
 	delete(m.clearedFields, rustdesk.FieldCustomRendezvousServer)
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (m *RustDeskMutation) SetRelayServer(s string) {
+func (m *RustdeskMutation) SetRelayServer(s string) {
 	m.relay_server = &s
 }
 
 // RelayServer returns the value of the "relay_server" field in the mutation.
-func (m *RustDeskMutation) RelayServer() (r string, exists bool) {
+func (m *RustdeskMutation) RelayServer() (r string, exists bool) {
 	v := m.relay_server
 	if v == nil {
 		return
@@ -18281,10 +18281,10 @@ func (m *RustDeskMutation) RelayServer() (r string, exists bool) {
 	return *v, true
 }
 
-// OldRelayServer returns the old "relay_server" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldRelayServer returns the old "relay_server" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldRelayServer(ctx context.Context) (v string, err error) {
+func (m *RustdeskMutation) OldRelayServer(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRelayServer is only allowed on UpdateOne operations")
 	}
@@ -18299,30 +18299,30 @@ func (m *RustDeskMutation) OldRelayServer(ctx context.Context) (v string, err er
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (m *RustDeskMutation) ClearRelayServer() {
+func (m *RustdeskMutation) ClearRelayServer() {
 	m.relay_server = nil
 	m.clearedFields[rustdesk.FieldRelayServer] = struct{}{}
 }
 
 // RelayServerCleared returns if the "relay_server" field was cleared in this mutation.
-func (m *RustDeskMutation) RelayServerCleared() bool {
+func (m *RustdeskMutation) RelayServerCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldRelayServer]
 	return ok
 }
 
 // ResetRelayServer resets all changes to the "relay_server" field.
-func (m *RustDeskMutation) ResetRelayServer() {
+func (m *RustdeskMutation) ResetRelayServer() {
 	m.relay_server = nil
 	delete(m.clearedFields, rustdesk.FieldRelayServer)
 }
 
 // SetAPIServer sets the "api_server" field.
-func (m *RustDeskMutation) SetAPIServer(s string) {
+func (m *RustdeskMutation) SetAPIServer(s string) {
 	m.api_server = &s
 }
 
 // APIServer returns the value of the "api_server" field in the mutation.
-func (m *RustDeskMutation) APIServer() (r string, exists bool) {
+func (m *RustdeskMutation) APIServer() (r string, exists bool) {
 	v := m.api_server
 	if v == nil {
 		return
@@ -18330,10 +18330,10 @@ func (m *RustDeskMutation) APIServer() (r string, exists bool) {
 	return *v, true
 }
 
-// OldAPIServer returns the old "api_server" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldAPIServer returns the old "api_server" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldAPIServer(ctx context.Context) (v string, err error) {
+func (m *RustdeskMutation) OldAPIServer(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAPIServer is only allowed on UpdateOne operations")
 	}
@@ -18348,30 +18348,30 @@ func (m *RustDeskMutation) OldAPIServer(ctx context.Context) (v string, err erro
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (m *RustDeskMutation) ClearAPIServer() {
+func (m *RustdeskMutation) ClearAPIServer() {
 	m.api_server = nil
 	m.clearedFields[rustdesk.FieldAPIServer] = struct{}{}
 }
 
 // APIServerCleared returns if the "api_server" field was cleared in this mutation.
-func (m *RustDeskMutation) APIServerCleared() bool {
+func (m *RustdeskMutation) APIServerCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldAPIServer]
 	return ok
 }
 
 // ResetAPIServer resets all changes to the "api_server" field.
-func (m *RustDeskMutation) ResetAPIServer() {
+func (m *RustdeskMutation) ResetAPIServer() {
 	m.api_server = nil
 	delete(m.clearedFields, rustdesk.FieldAPIServer)
 }
 
 // SetKey sets the "key" field.
-func (m *RustDeskMutation) SetKey(s string) {
+func (m *RustdeskMutation) SetKey(s string) {
 	m.key = &s
 }
 
 // Key returns the value of the "key" field in the mutation.
-func (m *RustDeskMutation) Key() (r string, exists bool) {
+func (m *RustdeskMutation) Key() (r string, exists bool) {
 	v := m.key
 	if v == nil {
 		return
@@ -18379,10 +18379,10 @@ func (m *RustDeskMutation) Key() (r string, exists bool) {
 	return *v, true
 }
 
-// OldKey returns the old "key" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldKey returns the old "key" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldKey(ctx context.Context) (v string, err error) {
+func (m *RustdeskMutation) OldKey(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldKey is only allowed on UpdateOne operations")
 	}
@@ -18397,30 +18397,30 @@ func (m *RustDeskMutation) OldKey(ctx context.Context) (v string, err error) {
 }
 
 // ClearKey clears the value of the "key" field.
-func (m *RustDeskMutation) ClearKey() {
+func (m *RustdeskMutation) ClearKey() {
 	m.key = nil
 	m.clearedFields[rustdesk.FieldKey] = struct{}{}
 }
 
 // KeyCleared returns if the "key" field was cleared in this mutation.
-func (m *RustDeskMutation) KeyCleared() bool {
+func (m *RustdeskMutation) KeyCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldKey]
 	return ok
 }
 
 // ResetKey resets all changes to the "key" field.
-func (m *RustDeskMutation) ResetKey() {
+func (m *RustdeskMutation) ResetKey() {
 	m.key = nil
 	delete(m.clearedFields, rustdesk.FieldKey)
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (m *RustDeskMutation) SetUsePermanentPassword(b bool) {
+func (m *RustdeskMutation) SetUsePermanentPassword(b bool) {
 	m.use_permanent_password = &b
 }
 
 // UsePermanentPassword returns the value of the "use_permanent_password" field in the mutation.
-func (m *RustDeskMutation) UsePermanentPassword() (r bool, exists bool) {
+func (m *RustdeskMutation) UsePermanentPassword() (r bool, exists bool) {
 	v := m.use_permanent_password
 	if v == nil {
 		return
@@ -18428,10 +18428,10 @@ func (m *RustDeskMutation) UsePermanentPassword() (r bool, exists bool) {
 	return *v, true
 }
 
-// OldUsePermanentPassword returns the old "use_permanent_password" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldUsePermanentPassword returns the old "use_permanent_password" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldUsePermanentPassword(ctx context.Context) (v bool, err error) {
+func (m *RustdeskMutation) OldUsePermanentPassword(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUsePermanentPassword is only allowed on UpdateOne operations")
 	}
@@ -18446,30 +18446,30 @@ func (m *RustDeskMutation) OldUsePermanentPassword(ctx context.Context) (v bool,
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (m *RustDeskMutation) ClearUsePermanentPassword() {
+func (m *RustdeskMutation) ClearUsePermanentPassword() {
 	m.use_permanent_password = nil
 	m.clearedFields[rustdesk.FieldUsePermanentPassword] = struct{}{}
 }
 
 // UsePermanentPasswordCleared returns if the "use_permanent_password" field was cleared in this mutation.
-func (m *RustDeskMutation) UsePermanentPasswordCleared() bool {
+func (m *RustdeskMutation) UsePermanentPasswordCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldUsePermanentPassword]
 	return ok
 }
 
 // ResetUsePermanentPassword resets all changes to the "use_permanent_password" field.
-func (m *RustDeskMutation) ResetUsePermanentPassword() {
+func (m *RustdeskMutation) ResetUsePermanentPassword() {
 	m.use_permanent_password = nil
 	delete(m.clearedFields, rustdesk.FieldUsePermanentPassword)
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (m *RustDeskMutation) SetWhitelist(s string) {
+func (m *RustdeskMutation) SetWhitelist(s string) {
 	m.whitelist = &s
 }
 
 // Whitelist returns the value of the "whitelist" field in the mutation.
-func (m *RustDeskMutation) Whitelist() (r string, exists bool) {
+func (m *RustdeskMutation) Whitelist() (r string, exists bool) {
 	v := m.whitelist
 	if v == nil {
 		return
@@ -18477,10 +18477,10 @@ func (m *RustDeskMutation) Whitelist() (r string, exists bool) {
 	return *v, true
 }
 
-// OldWhitelist returns the old "whitelist" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldWhitelist returns the old "whitelist" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldWhitelist(ctx context.Context) (v string, err error) {
+func (m *RustdeskMutation) OldWhitelist(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldWhitelist is only allowed on UpdateOne operations")
 	}
@@ -18495,30 +18495,30 @@ func (m *RustDeskMutation) OldWhitelist(ctx context.Context) (v string, err erro
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (m *RustDeskMutation) ClearWhitelist() {
+func (m *RustdeskMutation) ClearWhitelist() {
 	m.whitelist = nil
 	m.clearedFields[rustdesk.FieldWhitelist] = struct{}{}
 }
 
 // WhitelistCleared returns if the "whitelist" field was cleared in this mutation.
-func (m *RustDeskMutation) WhitelistCleared() bool {
+func (m *RustdeskMutation) WhitelistCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldWhitelist]
 	return ok
 }
 
 // ResetWhitelist resets all changes to the "whitelist" field.
-func (m *RustDeskMutation) ResetWhitelist() {
+func (m *RustdeskMutation) ResetWhitelist() {
 	m.whitelist = nil
 	delete(m.clearedFields, rustdesk.FieldWhitelist)
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (m *RustDeskMutation) SetDirectIPAccess(b bool) {
+func (m *RustdeskMutation) SetDirectIPAccess(b bool) {
 	m.direct_ip_access = &b
 }
 
 // DirectIPAccess returns the value of the "direct_ip_access" field in the mutation.
-func (m *RustDeskMutation) DirectIPAccess() (r bool, exists bool) {
+func (m *RustdeskMutation) DirectIPAccess() (r bool, exists bool) {
 	v := m.direct_ip_access
 	if v == nil {
 		return
@@ -18526,10 +18526,10 @@ func (m *RustDeskMutation) DirectIPAccess() (r bool, exists bool) {
 	return *v, true
 }
 
-// OldDirectIPAccess returns the old "direct_ip_access" field's value of the RustDesk entity.
-// If the RustDesk object wasn't provided to the builder, the object is fetched from the database.
+// OldDirectIPAccess returns the old "direct_ip_access" field's value of the Rustdesk entity.
+// If the Rustdesk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RustDeskMutation) OldDirectIPAccess(ctx context.Context) (v bool, err error) {
+func (m *RustdeskMutation) OldDirectIPAccess(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDirectIPAccess is only allowed on UpdateOne operations")
 	}
@@ -18544,40 +18544,40 @@ func (m *RustDeskMutation) OldDirectIPAccess(ctx context.Context) (v bool, err e
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (m *RustDeskMutation) ClearDirectIPAccess() {
+func (m *RustdeskMutation) ClearDirectIPAccess() {
 	m.direct_ip_access = nil
 	m.clearedFields[rustdesk.FieldDirectIPAccess] = struct{}{}
 }
 
 // DirectIPAccessCleared returns if the "direct_ip_access" field was cleared in this mutation.
-func (m *RustDeskMutation) DirectIPAccessCleared() bool {
+func (m *RustdeskMutation) DirectIPAccessCleared() bool {
 	_, ok := m.clearedFields[rustdesk.FieldDirectIPAccess]
 	return ok
 }
 
 // ResetDirectIPAccess resets all changes to the "direct_ip_access" field.
-func (m *RustDeskMutation) ResetDirectIPAccess() {
+func (m *RustdeskMutation) ResetDirectIPAccess() {
 	m.direct_ip_access = nil
 	delete(m.clearedFields, rustdesk.FieldDirectIPAccess)
 }
 
 // SetTenantID sets the "tenant" edge to the Tenant entity by id.
-func (m *RustDeskMutation) SetTenantID(id int) {
+func (m *RustdeskMutation) SetTenantID(id int) {
 	m.tenant = &id
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
-func (m *RustDeskMutation) ClearTenant() {
+func (m *RustdeskMutation) ClearTenant() {
 	m.clearedtenant = true
 }
 
 // TenantCleared reports if the "tenant" edge to the Tenant entity was cleared.
-func (m *RustDeskMutation) TenantCleared() bool {
+func (m *RustdeskMutation) TenantCleared() bool {
 	return m.clearedtenant
 }
 
 // TenantID returns the "tenant" edge ID in the mutation.
-func (m *RustDeskMutation) TenantID() (id int, exists bool) {
+func (m *RustdeskMutation) TenantID() (id int, exists bool) {
 	if m.tenant != nil {
 		return *m.tenant, true
 	}
@@ -18587,7 +18587,7 @@ func (m *RustDeskMutation) TenantID() (id int, exists bool) {
 // TenantIDs returns the "tenant" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // TenantID instead. It exists only for internal usage by the builders.
-func (m *RustDeskMutation) TenantIDs() (ids []int) {
+func (m *RustdeskMutation) TenantIDs() (ids []int) {
 	if id := m.tenant; id != nil {
 		ids = append(ids, *id)
 	}
@@ -18595,20 +18595,20 @@ func (m *RustDeskMutation) TenantIDs() (ids []int) {
 }
 
 // ResetTenant resets all changes to the "tenant" edge.
-func (m *RustDeskMutation) ResetTenant() {
+func (m *RustdeskMutation) ResetTenant() {
 	m.tenant = nil
 	m.clearedtenant = false
 }
 
-// Where appends a list predicates to the RustDeskMutation builder.
-func (m *RustDeskMutation) Where(ps ...predicate.RustDesk) {
+// Where appends a list predicates to the RustdeskMutation builder.
+func (m *RustdeskMutation) Where(ps ...predicate.Rustdesk) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the RustDeskMutation builder. Using this method,
+// WhereP appends storage-level predicates to the RustdeskMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *RustDeskMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.RustDesk, len(ps))
+func (m *RustdeskMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Rustdesk, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -18616,24 +18616,24 @@ func (m *RustDeskMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *RustDeskMutation) Op() Op {
+func (m *RustdeskMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *RustDeskMutation) SetOp(op Op) {
+func (m *RustdeskMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (RustDesk).
-func (m *RustDeskMutation) Type() string {
+// Type returns the node type of this mutation (Rustdesk).
+func (m *RustdeskMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *RustDeskMutation) Fields() []string {
+func (m *RustdeskMutation) Fields() []string {
 	fields := make([]string, 0, 7)
 	if m.custom_rendezvous_server != nil {
 		fields = append(fields, rustdesk.FieldCustomRendezvousServer)
@@ -18662,7 +18662,7 @@ func (m *RustDeskMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *RustDeskMutation) Field(name string) (ent.Value, bool) {
+func (m *RustdeskMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case rustdesk.FieldCustomRendezvousServer:
 		return m.CustomRendezvousServer()
@@ -18685,7 +18685,7 @@ func (m *RustDeskMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *RustDeskMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *RustdeskMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
 	case rustdesk.FieldCustomRendezvousServer:
 		return m.OldCustomRendezvousServer(ctx)
@@ -18702,13 +18702,13 @@ func (m *RustDeskMutation) OldField(ctx context.Context, name string) (ent.Value
 	case rustdesk.FieldDirectIPAccess:
 		return m.OldDirectIPAccess(ctx)
 	}
-	return nil, fmt.Errorf("unknown RustDesk field %s", name)
+	return nil, fmt.Errorf("unknown Rustdesk field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *RustDeskMutation) SetField(name string, value ent.Value) error {
+func (m *RustdeskMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case rustdesk.FieldCustomRendezvousServer:
 		v, ok := value.(string)
@@ -18760,34 +18760,34 @@ func (m *RustDeskMutation) SetField(name string, value ent.Value) error {
 		m.SetDirectIPAccess(v)
 		return nil
 	}
-	return fmt.Errorf("unknown RustDesk field %s", name)
+	return fmt.Errorf("unknown Rustdesk field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *RustDeskMutation) AddedFields() []string {
+func (m *RustdeskMutation) AddedFields() []string {
 	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *RustDeskMutation) AddedField(name string) (ent.Value, bool) {
+func (m *RustdeskMutation) AddedField(name string) (ent.Value, bool) {
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *RustDeskMutation) AddField(name string, value ent.Value) error {
+func (m *RustdeskMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown RustDesk numeric field %s", name)
+	return fmt.Errorf("unknown Rustdesk numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *RustDeskMutation) ClearedFields() []string {
+func (m *RustdeskMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(rustdesk.FieldCustomRendezvousServer) {
 		fields = append(fields, rustdesk.FieldCustomRendezvousServer)
@@ -18815,14 +18815,14 @@ func (m *RustDeskMutation) ClearedFields() []string {
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *RustDeskMutation) FieldCleared(name string) bool {
+func (m *RustdeskMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *RustDeskMutation) ClearField(name string) error {
+func (m *RustdeskMutation) ClearField(name string) error {
 	switch name {
 	case rustdesk.FieldCustomRendezvousServer:
 		m.ClearCustomRendezvousServer()
@@ -18846,12 +18846,12 @@ func (m *RustDeskMutation) ClearField(name string) error {
 		m.ClearDirectIPAccess()
 		return nil
 	}
-	return fmt.Errorf("unknown RustDesk nullable field %s", name)
+	return fmt.Errorf("unknown Rustdesk nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *RustDeskMutation) ResetField(name string) error {
+func (m *RustdeskMutation) ResetField(name string) error {
 	switch name {
 	case rustdesk.FieldCustomRendezvousServer:
 		m.ResetCustomRendezvousServer()
@@ -18875,11 +18875,11 @@ func (m *RustDeskMutation) ResetField(name string) error {
 		m.ResetDirectIPAccess()
 		return nil
 	}
-	return fmt.Errorf("unknown RustDesk field %s", name)
+	return fmt.Errorf("unknown Rustdesk field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *RustDeskMutation) AddedEdges() []string {
+func (m *RustdeskMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.tenant != nil {
 		edges = append(edges, rustdesk.EdgeTenant)
@@ -18889,7 +18889,7 @@ func (m *RustDeskMutation) AddedEdges() []string {
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *RustDeskMutation) AddedIDs(name string) []ent.Value {
+func (m *RustdeskMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case rustdesk.EdgeTenant:
 		if id := m.tenant; id != nil {
@@ -18900,19 +18900,19 @@ func (m *RustDeskMutation) AddedIDs(name string) []ent.Value {
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *RustDeskMutation) RemovedEdges() []string {
+func (m *RustdeskMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *RustDeskMutation) RemovedIDs(name string) []ent.Value {
+func (m *RustdeskMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *RustDeskMutation) ClearedEdges() []string {
+func (m *RustdeskMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedtenant {
 		edges = append(edges, rustdesk.EdgeTenant)
@@ -18922,7 +18922,7 @@ func (m *RustDeskMutation) ClearedEdges() []string {
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *RustDeskMutation) EdgeCleared(name string) bool {
+func (m *RustdeskMutation) EdgeCleared(name string) bool {
 	switch name {
 	case rustdesk.EdgeTenant:
 		return m.clearedtenant
@@ -18932,24 +18932,24 @@ func (m *RustDeskMutation) EdgeCleared(name string) bool {
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *RustDeskMutation) ClearEdge(name string) error {
+func (m *RustdeskMutation) ClearEdge(name string) error {
 	switch name {
 	case rustdesk.EdgeTenant:
 		m.ClearTenant()
 		return nil
 	}
-	return fmt.Errorf("unknown RustDesk unique edge %s", name)
+	return fmt.Errorf("unknown Rustdesk unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *RustDeskMutation) ResetEdge(name string) error {
+func (m *RustdeskMutation) ResetEdge(name string) error {
 	switch name {
 	case rustdesk.EdgeTenant:
 		m.ResetTenant()
 		return nil
 	}
-	return fmt.Errorf("unknown RustDesk edge %s", name)
+	return fmt.Errorf("unknown Rustdesk edge %s", name)
 }
 
 // ServerMutation represents an operation that mutates the Server nodes in the graph.
@@ -33819,7 +33819,7 @@ func (m *TenantMutation) ResetMetadata() {
 	m.removedmetadata = nil
 }
 
-// AddRustdeskIDs adds the "rustdesk" edge to the RustDesk entity by ids.
+// AddRustdeskIDs adds the "rustdesk" edge to the Rustdesk entity by ids.
 func (m *TenantMutation) AddRustdeskIDs(ids ...int) {
 	if m.rustdesk == nil {
 		m.rustdesk = make(map[int]struct{})
@@ -33829,17 +33829,17 @@ func (m *TenantMutation) AddRustdeskIDs(ids ...int) {
 	}
 }
 
-// ClearRustdesk clears the "rustdesk" edge to the RustDesk entity.
+// ClearRustdesk clears the "rustdesk" edge to the Rustdesk entity.
 func (m *TenantMutation) ClearRustdesk() {
 	m.clearedrustdesk = true
 }
 
-// RustdeskCleared reports if the "rustdesk" edge to the RustDesk entity was cleared.
+// RustdeskCleared reports if the "rustdesk" edge to the Rustdesk entity was cleared.
 func (m *TenantMutation) RustdeskCleared() bool {
 	return m.clearedrustdesk
 }
 
-// RemoveRustdeskIDs removes the "rustdesk" edge to the RustDesk entity by IDs.
+// RemoveRustdeskIDs removes the "rustdesk" edge to the Rustdesk entity by IDs.
 func (m *TenantMutation) RemoveRustdeskIDs(ids ...int) {
 	if m.removedrustdesk == nil {
 		m.removedrustdesk = make(map[int]struct{})
@@ -33850,7 +33850,7 @@ func (m *TenantMutation) RemoveRustdeskIDs(ids ...int) {
 	}
 }
 
-// RemovedRustdesk returns the removed IDs of the "rustdesk" edge to the RustDesk entity.
+// RemovedRustdesk returns the removed IDs of the "rustdesk" edge to the Rustdesk entity.
 func (m *TenantMutation) RemovedRustdeskIDs() (ids []int) {
 	for id := range m.removedrustdesk {
 		ids = append(ids, id)

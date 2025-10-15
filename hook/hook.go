@@ -249,16 +249,16 @@ func (f RevocationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RevocationMutation", m)
 }
 
-// The RustDeskFunc type is an adapter to allow the use of ordinary
-// function as RustDesk mutator.
-type RustDeskFunc func(context.Context, *ent.RustDeskMutation) (ent.Value, error)
+// The RustdeskFunc type is an adapter to allow the use of ordinary
+// function as Rustdesk mutator.
+type RustdeskFunc func(context.Context, *ent.RustdeskMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f RustDeskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.RustDeskMutation); ok {
+func (f RustdeskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RustdeskMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RustDeskMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RustdeskMutation", m)
 }
 
 // The ServerFunc type is an adapter to allow the use of ordinary

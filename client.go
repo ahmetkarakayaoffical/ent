@@ -95,8 +95,8 @@ type Client struct {
 	Release *ReleaseClient
 	// Revocation is the client for interacting with the Revocation builders.
 	Revocation *RevocationClient
-	// RustDesk is the client for interacting with the RustDesk builders.
-	RustDesk *RustDeskClient
+	// Rustdesk is the client for interacting with the Rustdesk builders.
+	Rustdesk *RustdeskClient
 	// Server is the client for interacting with the Server builders.
 	Server *ServerClient
 	// Sessions is the client for interacting with the Sessions builders.
@@ -152,7 +152,7 @@ func (c *Client) init() {
 	c.ProfileIssue = NewProfileIssueClient(c.config)
 	c.Release = NewReleaseClient(c.config)
 	c.Revocation = NewRevocationClient(c.config)
-	c.RustDesk = NewRustDeskClient(c.config)
+	c.Rustdesk = NewRustdeskClient(c.config)
 	c.Server = NewServerClient(c.config)
 	c.Sessions = NewSessionsClient(c.config)
 	c.Settings = NewSettingsClient(c.config)
@@ -277,7 +277,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProfileIssue:          NewProfileIssueClient(cfg),
 		Release:               NewReleaseClient(cfg),
 		Revocation:            NewRevocationClient(cfg),
-		RustDesk:              NewRustDeskClient(cfg),
+		Rustdesk:              NewRustdeskClient(cfg),
 		Server:                NewServerClient(cfg),
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
@@ -329,7 +329,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProfileIssue:          NewProfileIssueClient(cfg),
 		Release:               NewReleaseClient(cfg),
 		Revocation:            NewRevocationClient(cfg),
-		RustDesk:              NewRustDeskClient(cfg),
+		Rustdesk:              NewRustdeskClient(cfg),
 		Server:                NewServerClient(cfg),
 		Sessions:              NewSessionsClient(cfg),
 		Settings:              NewSettingsClient(cfg),
@@ -374,7 +374,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
 		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
 		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.PhysicalDisk, c.Printer,
-		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server,
+		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.Rustdesk, c.Server,
 		c.Sessions, c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task,
 		c.Tenant, c.Update, c.User, c.WingetConfigExclusion,
 	} {
@@ -389,7 +389,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Agent, c.Antivirus, c.App, c.Authentication, c.Certificate, c.Computer,
 		c.Deployment, c.LogicalDisk, c.MemorySlot, c.Metadata, c.Monitor,
 		c.NetworkAdapter, c.OperatingSystem, c.OrgMetadata, c.PhysicalDisk, c.Printer,
-		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.RustDesk, c.Server,
+		c.Profile, c.ProfileIssue, c.Release, c.Revocation, c.Rustdesk, c.Server,
 		c.Sessions, c.Settings, c.Share, c.Site, c.SystemUpdate, c.Tag, c.Task,
 		c.Tenant, c.Update, c.User, c.WingetConfigExclusion,
 	} {
@@ -440,8 +440,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Release.mutate(ctx, m)
 	case *RevocationMutation:
 		return c.Revocation.mutate(ctx, m)
-	case *RustDeskMutation:
-		return c.RustDesk.mutate(ctx, m)
+	case *RustdeskMutation:
+		return c.Rustdesk.mutate(ctx, m)
 	case *ServerMutation:
 		return c.Server.mutate(ctx, m)
 	case *SessionsMutation:
@@ -3803,107 +3803,107 @@ func (c *RevocationClient) mutate(ctx context.Context, m *RevocationMutation) (V
 	}
 }
 
-// RustDeskClient is a client for the RustDesk schema.
-type RustDeskClient struct {
+// RustdeskClient is a client for the Rustdesk schema.
+type RustdeskClient struct {
 	config
 }
 
-// NewRustDeskClient returns a client for the RustDesk from the given config.
-func NewRustDeskClient(c config) *RustDeskClient {
-	return &RustDeskClient{config: c}
+// NewRustdeskClient returns a client for the Rustdesk from the given config.
+func NewRustdeskClient(c config) *RustdeskClient {
+	return &RustdeskClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
 // A call to `Use(f, g, h)` equals to `rustdesk.Hooks(f(g(h())))`.
-func (c *RustDeskClient) Use(hooks ...Hook) {
-	c.hooks.RustDesk = append(c.hooks.RustDesk, hooks...)
+func (c *RustdeskClient) Use(hooks ...Hook) {
+	c.hooks.Rustdesk = append(c.hooks.Rustdesk, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `rustdesk.Intercept(f(g(h())))`.
-func (c *RustDeskClient) Intercept(interceptors ...Interceptor) {
-	c.inters.RustDesk = append(c.inters.RustDesk, interceptors...)
+func (c *RustdeskClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Rustdesk = append(c.inters.Rustdesk, interceptors...)
 }
 
-// Create returns a builder for creating a RustDesk entity.
-func (c *RustDeskClient) Create() *RustDeskCreate {
-	mutation := newRustDeskMutation(c.config, OpCreate)
-	return &RustDeskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a Rustdesk entity.
+func (c *RustdeskClient) Create() *RustdeskCreate {
+	mutation := newRustdeskMutation(c.config, OpCreate)
+	return &RustdeskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of RustDesk entities.
-func (c *RustDeskClient) CreateBulk(builders ...*RustDeskCreate) *RustDeskCreateBulk {
-	return &RustDeskCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Rustdesk entities.
+func (c *RustdeskClient) CreateBulk(builders ...*RustdeskCreate) *RustdeskCreateBulk {
+	return &RustdeskCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *RustDeskClient) MapCreateBulk(slice any, setFunc func(*RustDeskCreate, int)) *RustDeskCreateBulk {
+func (c *RustdeskClient) MapCreateBulk(slice any, setFunc func(*RustdeskCreate, int)) *RustdeskCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &RustDeskCreateBulk{err: fmt.Errorf("calling to RustDeskClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &RustdeskCreateBulk{err: fmt.Errorf("calling to RustdeskClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*RustDeskCreate, rv.Len())
+	builders := make([]*RustdeskCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &RustDeskCreateBulk{config: c.config, builders: builders}
+	return &RustdeskCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for RustDesk.
-func (c *RustDeskClient) Update() *RustDeskUpdate {
-	mutation := newRustDeskMutation(c.config, OpUpdate)
-	return &RustDeskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Rustdesk.
+func (c *RustdeskClient) Update() *RustdeskUpdate {
+	mutation := newRustdeskMutation(c.config, OpUpdate)
+	return &RustdeskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *RustDeskClient) UpdateOne(rd *RustDesk) *RustDeskUpdateOne {
-	mutation := newRustDeskMutation(c.config, OpUpdateOne, withRustDesk(rd))
-	return &RustDeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RustdeskClient) UpdateOne(r *Rustdesk) *RustdeskUpdateOne {
+	mutation := newRustdeskMutation(c.config, OpUpdateOne, withRustdesk(r))
+	return &RustdeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *RustDeskClient) UpdateOneID(id int) *RustDeskUpdateOne {
-	mutation := newRustDeskMutation(c.config, OpUpdateOne, withRustDeskID(id))
-	return &RustDeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RustdeskClient) UpdateOneID(id int) *RustdeskUpdateOne {
+	mutation := newRustdeskMutation(c.config, OpUpdateOne, withRustdeskID(id))
+	return &RustdeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for RustDesk.
-func (c *RustDeskClient) Delete() *RustDeskDelete {
-	mutation := newRustDeskMutation(c.config, OpDelete)
-	return &RustDeskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Rustdesk.
+func (c *RustdeskClient) Delete() *RustdeskDelete {
+	mutation := newRustdeskMutation(c.config, OpDelete)
+	return &RustdeskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *RustDeskClient) DeleteOne(rd *RustDesk) *RustDeskDeleteOne {
-	return c.DeleteOneID(rd.ID)
+func (c *RustdeskClient) DeleteOne(r *Rustdesk) *RustdeskDeleteOne {
+	return c.DeleteOneID(r.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *RustDeskClient) DeleteOneID(id int) *RustDeskDeleteOne {
+func (c *RustdeskClient) DeleteOneID(id int) *RustdeskDeleteOne {
 	builder := c.Delete().Where(rustdesk.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &RustDeskDeleteOne{builder}
+	return &RustdeskDeleteOne{builder}
 }
 
-// Query returns a query builder for RustDesk.
-func (c *RustDeskClient) Query() *RustDeskQuery {
-	return &RustDeskQuery{
+// Query returns a query builder for Rustdesk.
+func (c *RustdeskClient) Query() *RustdeskQuery {
+	return &RustdeskQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeRustDesk},
+		ctx:    &QueryContext{Type: TypeRustdesk},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a RustDesk entity by its id.
-func (c *RustDeskClient) Get(ctx context.Context, id int) (*RustDesk, error) {
+// Get returns a Rustdesk entity by its id.
+func (c *RustdeskClient) Get(ctx context.Context, id int) (*Rustdesk, error) {
 	return c.Query().Where(rustdesk.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *RustDeskClient) GetX(ctx context.Context, id int) *RustDesk {
+func (c *RustdeskClient) GetX(ctx context.Context, id int) *Rustdesk {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -3911,44 +3911,44 @@ func (c *RustDeskClient) GetX(ctx context.Context, id int) *RustDesk {
 	return obj
 }
 
-// QueryTenant queries the tenant edge of a RustDesk.
-func (c *RustDeskClient) QueryTenant(rd *RustDesk) *TenantQuery {
+// QueryTenant queries the tenant edge of a Rustdesk.
+func (c *RustdeskClient) QueryTenant(r *Rustdesk) *TenantQuery {
 	query := (&TenantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := rd.ID
+		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(rustdesk.Table, rustdesk.FieldID, id),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, rustdesk.TenantTable, rustdesk.TenantColumn),
 		)
-		fromV = sqlgraph.Neighbors(rd.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *RustDeskClient) Hooks() []Hook {
-	return c.hooks.RustDesk
+func (c *RustdeskClient) Hooks() []Hook {
+	return c.hooks.Rustdesk
 }
 
 // Interceptors returns the client interceptors.
-func (c *RustDeskClient) Interceptors() []Interceptor {
-	return c.inters.RustDesk
+func (c *RustdeskClient) Interceptors() []Interceptor {
+	return c.inters.Rustdesk
 }
 
-func (c *RustDeskClient) mutate(ctx context.Context, m *RustDeskMutation) (Value, error) {
+func (c *RustdeskClient) mutate(ctx context.Context, m *RustdeskMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&RustDeskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&RustdeskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&RustDeskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&RustdeskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&RustDeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&RustdeskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&RustDeskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&RustdeskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown RustDesk mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown Rustdesk mutation op: %q", m.Op())
 	}
 }
 
@@ -5429,8 +5429,8 @@ func (c *TenantClient) QueryMetadata(t *Tenant) *OrgMetadataQuery {
 }
 
 // QueryRustdesk queries the rustdesk edge of a Tenant.
-func (c *TenantClient) QueryRustdesk(t *Tenant) *RustDeskQuery {
-	query := (&RustDeskClient{config: c.config}).Query()
+func (c *TenantClient) QueryRustdesk(t *Tenant) *RustdeskQuery {
+	query := (&RustdeskClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
@@ -5922,14 +5922,14 @@ type (
 		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
 		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
 		OrgMetadata, PhysicalDisk, Printer, Profile, ProfileIssue, Release, Revocation,
-		RustDesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
+		Rustdesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
 		Tenant, Update, User, WingetConfigExclusion []ent.Hook
 	}
 	inters struct {
 		Agent, Antivirus, App, Authentication, Certificate, Computer, Deployment,
 		LogicalDisk, MemorySlot, Metadata, Monitor, NetworkAdapter, OperatingSystem,
 		OrgMetadata, PhysicalDisk, Printer, Profile, ProfileIssue, Release, Revocation,
-		RustDesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
+		Rustdesk, Server, Sessions, Settings, Share, Site, SystemUpdate, Tag, Task,
 		Tenant, Update, User, WingetConfigExclusion []ent.Interceptor
 	}
 )

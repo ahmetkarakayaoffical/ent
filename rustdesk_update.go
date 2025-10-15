@@ -15,198 +15,198 @@ import (
 	"github.com/open-uem/ent/tenant"
 )
 
-// RustDeskUpdate is the builder for updating RustDesk entities.
-type RustDeskUpdate struct {
+// RustdeskUpdate is the builder for updating Rustdesk entities.
+type RustdeskUpdate struct {
 	config
 	hooks     []Hook
-	mutation  *RustDeskMutation
+	mutation  *RustdeskMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
-// Where appends a list predicates to the RustDeskUpdate builder.
-func (rdu *RustDeskUpdate) Where(ps ...predicate.RustDesk) *RustDeskUpdate {
-	rdu.mutation.Where(ps...)
-	return rdu
+// Where appends a list predicates to the RustdeskUpdate builder.
+func (ru *RustdeskUpdate) Where(ps ...predicate.Rustdesk) *RustdeskUpdate {
+	ru.mutation.Where(ps...)
+	return ru
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (rdu *RustDeskUpdate) SetCustomRendezvousServer(s string) *RustDeskUpdate {
-	rdu.mutation.SetCustomRendezvousServer(s)
-	return rdu
+func (ru *RustdeskUpdate) SetCustomRendezvousServer(s string) *RustdeskUpdate {
+	ru.mutation.SetCustomRendezvousServer(s)
+	return ru
 }
 
 // SetNillableCustomRendezvousServer sets the "custom_rendezvous_server" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableCustomRendezvousServer(s *string) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableCustomRendezvousServer(s *string) *RustdeskUpdate {
 	if s != nil {
-		rdu.SetCustomRendezvousServer(*s)
+		ru.SetCustomRendezvousServer(*s)
 	}
-	return rdu
+	return ru
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (rdu *RustDeskUpdate) ClearCustomRendezvousServer() *RustDeskUpdate {
-	rdu.mutation.ClearCustomRendezvousServer()
-	return rdu
+func (ru *RustdeskUpdate) ClearCustomRendezvousServer() *RustdeskUpdate {
+	ru.mutation.ClearCustomRendezvousServer()
+	return ru
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (rdu *RustDeskUpdate) SetRelayServer(s string) *RustDeskUpdate {
-	rdu.mutation.SetRelayServer(s)
-	return rdu
+func (ru *RustdeskUpdate) SetRelayServer(s string) *RustdeskUpdate {
+	ru.mutation.SetRelayServer(s)
+	return ru
 }
 
 // SetNillableRelayServer sets the "relay_server" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableRelayServer(s *string) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableRelayServer(s *string) *RustdeskUpdate {
 	if s != nil {
-		rdu.SetRelayServer(*s)
+		ru.SetRelayServer(*s)
 	}
-	return rdu
+	return ru
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (rdu *RustDeskUpdate) ClearRelayServer() *RustDeskUpdate {
-	rdu.mutation.ClearRelayServer()
-	return rdu
+func (ru *RustdeskUpdate) ClearRelayServer() *RustdeskUpdate {
+	ru.mutation.ClearRelayServer()
+	return ru
 }
 
 // SetAPIServer sets the "api_server" field.
-func (rdu *RustDeskUpdate) SetAPIServer(s string) *RustDeskUpdate {
-	rdu.mutation.SetAPIServer(s)
-	return rdu
+func (ru *RustdeskUpdate) SetAPIServer(s string) *RustdeskUpdate {
+	ru.mutation.SetAPIServer(s)
+	return ru
 }
 
 // SetNillableAPIServer sets the "api_server" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableAPIServer(s *string) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableAPIServer(s *string) *RustdeskUpdate {
 	if s != nil {
-		rdu.SetAPIServer(*s)
+		ru.SetAPIServer(*s)
 	}
-	return rdu
+	return ru
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (rdu *RustDeskUpdate) ClearAPIServer() *RustDeskUpdate {
-	rdu.mutation.ClearAPIServer()
-	return rdu
+func (ru *RustdeskUpdate) ClearAPIServer() *RustdeskUpdate {
+	ru.mutation.ClearAPIServer()
+	return ru
 }
 
 // SetKey sets the "key" field.
-func (rdu *RustDeskUpdate) SetKey(s string) *RustDeskUpdate {
-	rdu.mutation.SetKey(s)
-	return rdu
+func (ru *RustdeskUpdate) SetKey(s string) *RustdeskUpdate {
+	ru.mutation.SetKey(s)
+	return ru
 }
 
 // SetNillableKey sets the "key" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableKey(s *string) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableKey(s *string) *RustdeskUpdate {
 	if s != nil {
-		rdu.SetKey(*s)
+		ru.SetKey(*s)
 	}
-	return rdu
+	return ru
 }
 
 // ClearKey clears the value of the "key" field.
-func (rdu *RustDeskUpdate) ClearKey() *RustDeskUpdate {
-	rdu.mutation.ClearKey()
-	return rdu
+func (ru *RustdeskUpdate) ClearKey() *RustdeskUpdate {
+	ru.mutation.ClearKey()
+	return ru
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (rdu *RustDeskUpdate) SetUsePermanentPassword(b bool) *RustDeskUpdate {
-	rdu.mutation.SetUsePermanentPassword(b)
-	return rdu
+func (ru *RustdeskUpdate) SetUsePermanentPassword(b bool) *RustdeskUpdate {
+	ru.mutation.SetUsePermanentPassword(b)
+	return ru
 }
 
 // SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableUsePermanentPassword(b *bool) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableUsePermanentPassword(b *bool) *RustdeskUpdate {
 	if b != nil {
-		rdu.SetUsePermanentPassword(*b)
+		ru.SetUsePermanentPassword(*b)
 	}
-	return rdu
+	return ru
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (rdu *RustDeskUpdate) ClearUsePermanentPassword() *RustDeskUpdate {
-	rdu.mutation.ClearUsePermanentPassword()
-	return rdu
+func (ru *RustdeskUpdate) ClearUsePermanentPassword() *RustdeskUpdate {
+	ru.mutation.ClearUsePermanentPassword()
+	return ru
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (rdu *RustDeskUpdate) SetWhitelist(s string) *RustDeskUpdate {
-	rdu.mutation.SetWhitelist(s)
-	return rdu
+func (ru *RustdeskUpdate) SetWhitelist(s string) *RustdeskUpdate {
+	ru.mutation.SetWhitelist(s)
+	return ru
 }
 
 // SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableWhitelist(s *string) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableWhitelist(s *string) *RustdeskUpdate {
 	if s != nil {
-		rdu.SetWhitelist(*s)
+		ru.SetWhitelist(*s)
 	}
-	return rdu
+	return ru
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (rdu *RustDeskUpdate) ClearWhitelist() *RustDeskUpdate {
-	rdu.mutation.ClearWhitelist()
-	return rdu
+func (ru *RustdeskUpdate) ClearWhitelist() *RustdeskUpdate {
+	ru.mutation.ClearWhitelist()
+	return ru
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (rdu *RustDeskUpdate) SetDirectIPAccess(b bool) *RustDeskUpdate {
-	rdu.mutation.SetDirectIPAccess(b)
-	return rdu
+func (ru *RustdeskUpdate) SetDirectIPAccess(b bool) *RustdeskUpdate {
+	ru.mutation.SetDirectIPAccess(b)
+	return ru
 }
 
 // SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableDirectIPAccess(b *bool) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableDirectIPAccess(b *bool) *RustdeskUpdate {
 	if b != nil {
-		rdu.SetDirectIPAccess(*b)
+		ru.SetDirectIPAccess(*b)
 	}
-	return rdu
+	return ru
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (rdu *RustDeskUpdate) ClearDirectIPAccess() *RustDeskUpdate {
-	rdu.mutation.ClearDirectIPAccess()
-	return rdu
+func (ru *RustdeskUpdate) ClearDirectIPAccess() *RustdeskUpdate {
+	ru.mutation.ClearDirectIPAccess()
+	return ru
 }
 
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (rdu *RustDeskUpdate) SetTenantID(id int) *RustDeskUpdate {
-	rdu.mutation.SetTenantID(id)
-	return rdu
+func (ru *RustdeskUpdate) SetTenantID(id int) *RustdeskUpdate {
+	ru.mutation.SetTenantID(id)
+	return ru
 }
 
 // SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (rdu *RustDeskUpdate) SetNillableTenantID(id *int) *RustDeskUpdate {
+func (ru *RustdeskUpdate) SetNillableTenantID(id *int) *RustdeskUpdate {
 	if id != nil {
-		rdu = rdu.SetTenantID(*id)
+		ru = ru.SetTenantID(*id)
 	}
-	return rdu
+	return ru
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (rdu *RustDeskUpdate) SetTenant(t *Tenant) *RustDeskUpdate {
-	return rdu.SetTenantID(t.ID)
+func (ru *RustdeskUpdate) SetTenant(t *Tenant) *RustdeskUpdate {
+	return ru.SetTenantID(t.ID)
 }
 
-// Mutation returns the RustDeskMutation object of the builder.
-func (rdu *RustDeskUpdate) Mutation() *RustDeskMutation {
-	return rdu.mutation
+// Mutation returns the RustdeskMutation object of the builder.
+func (ru *RustdeskUpdate) Mutation() *RustdeskMutation {
+	return ru.mutation
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
-func (rdu *RustDeskUpdate) ClearTenant() *RustDeskUpdate {
-	rdu.mutation.ClearTenant()
-	return rdu
+func (ru *RustdeskUpdate) ClearTenant() *RustdeskUpdate {
+	ru.mutation.ClearTenant()
+	return ru
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (rdu *RustDeskUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, rdu.sqlSave, rdu.mutation, rdu.hooks)
+func (ru *RustdeskUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rdu *RustDeskUpdate) SaveX(ctx context.Context) int {
-	affected, err := rdu.Save(ctx)
+func (ru *RustdeskUpdate) SaveX(ctx context.Context) int {
+	affected, err := ru.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -214,76 +214,76 @@ func (rdu *RustDeskUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (rdu *RustDeskUpdate) Exec(ctx context.Context) error {
-	_, err := rdu.Save(ctx)
+func (ru *RustdeskUpdate) Exec(ctx context.Context) error {
+	_, err := ru.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rdu *RustDeskUpdate) ExecX(ctx context.Context) {
-	if err := rdu.Exec(ctx); err != nil {
+func (ru *RustdeskUpdate) ExecX(ctx context.Context) {
+	if err := ru.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (rdu *RustDeskUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RustDeskUpdate {
-	rdu.modifiers = append(rdu.modifiers, modifiers...)
-	return rdu
+func (ru *RustdeskUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RustdeskUpdate {
+	ru.modifiers = append(ru.modifiers, modifiers...)
+	return ru
 }
 
-func (rdu *RustDeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (ru *RustdeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(rustdesk.Table, rustdesk.Columns, sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt))
-	if ps := rdu.mutation.predicates; len(ps) > 0 {
+	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := rdu.mutation.CustomRendezvousServer(); ok {
+	if value, ok := ru.mutation.CustomRendezvousServer(); ok {
 		_spec.SetField(rustdesk.FieldCustomRendezvousServer, field.TypeString, value)
 	}
-	if rdu.mutation.CustomRendezvousServerCleared() {
+	if ru.mutation.CustomRendezvousServerCleared() {
 		_spec.ClearField(rustdesk.FieldCustomRendezvousServer, field.TypeString)
 	}
-	if value, ok := rdu.mutation.RelayServer(); ok {
+	if value, ok := ru.mutation.RelayServer(); ok {
 		_spec.SetField(rustdesk.FieldRelayServer, field.TypeString, value)
 	}
-	if rdu.mutation.RelayServerCleared() {
+	if ru.mutation.RelayServerCleared() {
 		_spec.ClearField(rustdesk.FieldRelayServer, field.TypeString)
 	}
-	if value, ok := rdu.mutation.APIServer(); ok {
+	if value, ok := ru.mutation.APIServer(); ok {
 		_spec.SetField(rustdesk.FieldAPIServer, field.TypeString, value)
 	}
-	if rdu.mutation.APIServerCleared() {
+	if ru.mutation.APIServerCleared() {
 		_spec.ClearField(rustdesk.FieldAPIServer, field.TypeString)
 	}
-	if value, ok := rdu.mutation.Key(); ok {
+	if value, ok := ru.mutation.Key(); ok {
 		_spec.SetField(rustdesk.FieldKey, field.TypeString, value)
 	}
-	if rdu.mutation.KeyCleared() {
+	if ru.mutation.KeyCleared() {
 		_spec.ClearField(rustdesk.FieldKey, field.TypeString)
 	}
-	if value, ok := rdu.mutation.UsePermanentPassword(); ok {
+	if value, ok := ru.mutation.UsePermanentPassword(); ok {
 		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
 	}
-	if rdu.mutation.UsePermanentPasswordCleared() {
+	if ru.mutation.UsePermanentPasswordCleared() {
 		_spec.ClearField(rustdesk.FieldUsePermanentPassword, field.TypeBool)
 	}
-	if value, ok := rdu.mutation.Whitelist(); ok {
+	if value, ok := ru.mutation.Whitelist(); ok {
 		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
 	}
-	if rdu.mutation.WhitelistCleared() {
+	if ru.mutation.WhitelistCleared() {
 		_spec.ClearField(rustdesk.FieldWhitelist, field.TypeString)
 	}
-	if value, ok := rdu.mutation.DirectIPAccess(); ok {
+	if value, ok := ru.mutation.DirectIPAccess(); ok {
 		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
 	}
-	if rdu.mutation.DirectIPAccessCleared() {
+	if ru.mutation.DirectIPAccessCleared() {
 		_spec.ClearField(rustdesk.FieldDirectIPAccess, field.TypeBool)
 	}
-	if rdu.mutation.TenantCleared() {
+	if ru.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -296,7 +296,7 @@ func (rdu *RustDeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := rdu.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := ru.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -312,8 +312,8 @@ func (rdu *RustDeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(rdu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, rdu.driver, _spec); err != nil {
+	_spec.AddModifiers(ru.modifiers...)
+	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{rustdesk.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -321,210 +321,210 @@ func (rdu *RustDeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	rdu.mutation.done = true
+	ru.mutation.done = true
 	return n, nil
 }
 
-// RustDeskUpdateOne is the builder for updating a single RustDesk entity.
-type RustDeskUpdateOne struct {
+// RustdeskUpdateOne is the builder for updating a single Rustdesk entity.
+type RustdeskUpdateOne struct {
 	config
 	fields    []string
 	hooks     []Hook
-	mutation  *RustDeskMutation
+	mutation  *RustdeskMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetCustomRendezvousServer sets the "custom_rendezvous_server" field.
-func (rduo *RustDeskUpdateOne) SetCustomRendezvousServer(s string) *RustDeskUpdateOne {
-	rduo.mutation.SetCustomRendezvousServer(s)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetCustomRendezvousServer(s string) *RustdeskUpdateOne {
+	ruo.mutation.SetCustomRendezvousServer(s)
+	return ruo
 }
 
 // SetNillableCustomRendezvousServer sets the "custom_rendezvous_server" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableCustomRendezvousServer(s *string) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableCustomRendezvousServer(s *string) *RustdeskUpdateOne {
 	if s != nil {
-		rduo.SetCustomRendezvousServer(*s)
+		ruo.SetCustomRendezvousServer(*s)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearCustomRendezvousServer clears the value of the "custom_rendezvous_server" field.
-func (rduo *RustDeskUpdateOne) ClearCustomRendezvousServer() *RustDeskUpdateOne {
-	rduo.mutation.ClearCustomRendezvousServer()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearCustomRendezvousServer() *RustdeskUpdateOne {
+	ruo.mutation.ClearCustomRendezvousServer()
+	return ruo
 }
 
 // SetRelayServer sets the "relay_server" field.
-func (rduo *RustDeskUpdateOne) SetRelayServer(s string) *RustDeskUpdateOne {
-	rduo.mutation.SetRelayServer(s)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetRelayServer(s string) *RustdeskUpdateOne {
+	ruo.mutation.SetRelayServer(s)
+	return ruo
 }
 
 // SetNillableRelayServer sets the "relay_server" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableRelayServer(s *string) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableRelayServer(s *string) *RustdeskUpdateOne {
 	if s != nil {
-		rduo.SetRelayServer(*s)
+		ruo.SetRelayServer(*s)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearRelayServer clears the value of the "relay_server" field.
-func (rduo *RustDeskUpdateOne) ClearRelayServer() *RustDeskUpdateOne {
-	rduo.mutation.ClearRelayServer()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearRelayServer() *RustdeskUpdateOne {
+	ruo.mutation.ClearRelayServer()
+	return ruo
 }
 
 // SetAPIServer sets the "api_server" field.
-func (rduo *RustDeskUpdateOne) SetAPIServer(s string) *RustDeskUpdateOne {
-	rduo.mutation.SetAPIServer(s)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetAPIServer(s string) *RustdeskUpdateOne {
+	ruo.mutation.SetAPIServer(s)
+	return ruo
 }
 
 // SetNillableAPIServer sets the "api_server" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableAPIServer(s *string) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableAPIServer(s *string) *RustdeskUpdateOne {
 	if s != nil {
-		rduo.SetAPIServer(*s)
+		ruo.SetAPIServer(*s)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearAPIServer clears the value of the "api_server" field.
-func (rduo *RustDeskUpdateOne) ClearAPIServer() *RustDeskUpdateOne {
-	rduo.mutation.ClearAPIServer()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearAPIServer() *RustdeskUpdateOne {
+	ruo.mutation.ClearAPIServer()
+	return ruo
 }
 
 // SetKey sets the "key" field.
-func (rduo *RustDeskUpdateOne) SetKey(s string) *RustDeskUpdateOne {
-	rduo.mutation.SetKey(s)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetKey(s string) *RustdeskUpdateOne {
+	ruo.mutation.SetKey(s)
+	return ruo
 }
 
 // SetNillableKey sets the "key" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableKey(s *string) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableKey(s *string) *RustdeskUpdateOne {
 	if s != nil {
-		rduo.SetKey(*s)
+		ruo.SetKey(*s)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearKey clears the value of the "key" field.
-func (rduo *RustDeskUpdateOne) ClearKey() *RustDeskUpdateOne {
-	rduo.mutation.ClearKey()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearKey() *RustdeskUpdateOne {
+	ruo.mutation.ClearKey()
+	return ruo
 }
 
 // SetUsePermanentPassword sets the "use_permanent_password" field.
-func (rduo *RustDeskUpdateOne) SetUsePermanentPassword(b bool) *RustDeskUpdateOne {
-	rduo.mutation.SetUsePermanentPassword(b)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetUsePermanentPassword(b bool) *RustdeskUpdateOne {
+	ruo.mutation.SetUsePermanentPassword(b)
+	return ruo
 }
 
 // SetNillableUsePermanentPassword sets the "use_permanent_password" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableUsePermanentPassword(b *bool) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableUsePermanentPassword(b *bool) *RustdeskUpdateOne {
 	if b != nil {
-		rduo.SetUsePermanentPassword(*b)
+		ruo.SetUsePermanentPassword(*b)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearUsePermanentPassword clears the value of the "use_permanent_password" field.
-func (rduo *RustDeskUpdateOne) ClearUsePermanentPassword() *RustDeskUpdateOne {
-	rduo.mutation.ClearUsePermanentPassword()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearUsePermanentPassword() *RustdeskUpdateOne {
+	ruo.mutation.ClearUsePermanentPassword()
+	return ruo
 }
 
 // SetWhitelist sets the "whitelist" field.
-func (rduo *RustDeskUpdateOne) SetWhitelist(s string) *RustDeskUpdateOne {
-	rduo.mutation.SetWhitelist(s)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetWhitelist(s string) *RustdeskUpdateOne {
+	ruo.mutation.SetWhitelist(s)
+	return ruo
 }
 
 // SetNillableWhitelist sets the "whitelist" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableWhitelist(s *string) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableWhitelist(s *string) *RustdeskUpdateOne {
 	if s != nil {
-		rduo.SetWhitelist(*s)
+		ruo.SetWhitelist(*s)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearWhitelist clears the value of the "whitelist" field.
-func (rduo *RustDeskUpdateOne) ClearWhitelist() *RustDeskUpdateOne {
-	rduo.mutation.ClearWhitelist()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearWhitelist() *RustdeskUpdateOne {
+	ruo.mutation.ClearWhitelist()
+	return ruo
 }
 
 // SetDirectIPAccess sets the "direct_ip_access" field.
-func (rduo *RustDeskUpdateOne) SetDirectIPAccess(b bool) *RustDeskUpdateOne {
-	rduo.mutation.SetDirectIPAccess(b)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetDirectIPAccess(b bool) *RustdeskUpdateOne {
+	ruo.mutation.SetDirectIPAccess(b)
+	return ruo
 }
 
 // SetNillableDirectIPAccess sets the "direct_ip_access" field if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableDirectIPAccess(b *bool) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableDirectIPAccess(b *bool) *RustdeskUpdateOne {
 	if b != nil {
-		rduo.SetDirectIPAccess(*b)
+		ruo.SetDirectIPAccess(*b)
 	}
-	return rduo
+	return ruo
 }
 
 // ClearDirectIPAccess clears the value of the "direct_ip_access" field.
-func (rduo *RustDeskUpdateOne) ClearDirectIPAccess() *RustDeskUpdateOne {
-	rduo.mutation.ClearDirectIPAccess()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearDirectIPAccess() *RustdeskUpdateOne {
+	ruo.mutation.ClearDirectIPAccess()
+	return ruo
 }
 
 // SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (rduo *RustDeskUpdateOne) SetTenantID(id int) *RustDeskUpdateOne {
-	rduo.mutation.SetTenantID(id)
-	return rduo
+func (ruo *RustdeskUpdateOne) SetTenantID(id int) *RustdeskUpdateOne {
+	ruo.mutation.SetTenantID(id)
+	return ruo
 }
 
 // SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (rduo *RustDeskUpdateOne) SetNillableTenantID(id *int) *RustDeskUpdateOne {
+func (ruo *RustdeskUpdateOne) SetNillableTenantID(id *int) *RustdeskUpdateOne {
 	if id != nil {
-		rduo = rduo.SetTenantID(*id)
+		ruo = ruo.SetTenantID(*id)
 	}
-	return rduo
+	return ruo
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (rduo *RustDeskUpdateOne) SetTenant(t *Tenant) *RustDeskUpdateOne {
-	return rduo.SetTenantID(t.ID)
+func (ruo *RustdeskUpdateOne) SetTenant(t *Tenant) *RustdeskUpdateOne {
+	return ruo.SetTenantID(t.ID)
 }
 
-// Mutation returns the RustDeskMutation object of the builder.
-func (rduo *RustDeskUpdateOne) Mutation() *RustDeskMutation {
-	return rduo.mutation
+// Mutation returns the RustdeskMutation object of the builder.
+func (ruo *RustdeskUpdateOne) Mutation() *RustdeskMutation {
+	return ruo.mutation
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
-func (rduo *RustDeskUpdateOne) ClearTenant() *RustDeskUpdateOne {
-	rduo.mutation.ClearTenant()
-	return rduo
+func (ruo *RustdeskUpdateOne) ClearTenant() *RustdeskUpdateOne {
+	ruo.mutation.ClearTenant()
+	return ruo
 }
 
-// Where appends a list predicates to the RustDeskUpdate builder.
-func (rduo *RustDeskUpdateOne) Where(ps ...predicate.RustDesk) *RustDeskUpdateOne {
-	rduo.mutation.Where(ps...)
-	return rduo
+// Where appends a list predicates to the RustdeskUpdate builder.
+func (ruo *RustdeskUpdateOne) Where(ps ...predicate.Rustdesk) *RustdeskUpdateOne {
+	ruo.mutation.Where(ps...)
+	return ruo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (rduo *RustDeskUpdateOne) Select(field string, fields ...string) *RustDeskUpdateOne {
-	rduo.fields = append([]string{field}, fields...)
-	return rduo
+func (ruo *RustdeskUpdateOne) Select(field string, fields ...string) *RustdeskUpdateOne {
+	ruo.fields = append([]string{field}, fields...)
+	return ruo
 }
 
-// Save executes the query and returns the updated RustDesk entity.
-func (rduo *RustDeskUpdateOne) Save(ctx context.Context) (*RustDesk, error) {
-	return withHooks(ctx, rduo.sqlSave, rduo.mutation, rduo.hooks)
+// Save executes the query and returns the updated Rustdesk entity.
+func (ruo *RustdeskUpdateOne) Save(ctx context.Context) (*Rustdesk, error) {
+	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rduo *RustDeskUpdateOne) SaveX(ctx context.Context) *RustDesk {
-	node, err := rduo.Save(ctx)
+func (ruo *RustdeskUpdateOne) SaveX(ctx context.Context) *Rustdesk {
+	node, err := ruo.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -532,32 +532,32 @@ func (rduo *RustDeskUpdateOne) SaveX(ctx context.Context) *RustDesk {
 }
 
 // Exec executes the query on the entity.
-func (rduo *RustDeskUpdateOne) Exec(ctx context.Context) error {
-	_, err := rduo.Save(ctx)
+func (ruo *RustdeskUpdateOne) Exec(ctx context.Context) error {
+	_, err := ruo.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rduo *RustDeskUpdateOne) ExecX(ctx context.Context) {
-	if err := rduo.Exec(ctx); err != nil {
+func (ruo *RustdeskUpdateOne) ExecX(ctx context.Context) {
+	if err := ruo.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (rduo *RustDeskUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RustDeskUpdateOne {
-	rduo.modifiers = append(rduo.modifiers, modifiers...)
-	return rduo
+func (ruo *RustdeskUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RustdeskUpdateOne {
+	ruo.modifiers = append(ruo.modifiers, modifiers...)
+	return ruo
 }
 
-func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, err error) {
+func (ruo *RustdeskUpdateOne) sqlSave(ctx context.Context) (_node *Rustdesk, err error) {
 	_spec := sqlgraph.NewUpdateSpec(rustdesk.Table, rustdesk.Columns, sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt))
-	id, ok := rduo.mutation.ID()
+	id, ok := ruo.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "RustDesk.id" for update`)}
+		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Rustdesk.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := rduo.fields; len(fields) > 0 {
+	if fields := ruo.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, rustdesk.FieldID)
 		for _, f := range fields {
@@ -569,56 +569,56 @@ func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, er
 			}
 		}
 	}
-	if ps := rduo.mutation.predicates; len(ps) > 0 {
+	if ps := ruo.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := rduo.mutation.CustomRendezvousServer(); ok {
+	if value, ok := ruo.mutation.CustomRendezvousServer(); ok {
 		_spec.SetField(rustdesk.FieldCustomRendezvousServer, field.TypeString, value)
 	}
-	if rduo.mutation.CustomRendezvousServerCleared() {
+	if ruo.mutation.CustomRendezvousServerCleared() {
 		_spec.ClearField(rustdesk.FieldCustomRendezvousServer, field.TypeString)
 	}
-	if value, ok := rduo.mutation.RelayServer(); ok {
+	if value, ok := ruo.mutation.RelayServer(); ok {
 		_spec.SetField(rustdesk.FieldRelayServer, field.TypeString, value)
 	}
-	if rduo.mutation.RelayServerCleared() {
+	if ruo.mutation.RelayServerCleared() {
 		_spec.ClearField(rustdesk.FieldRelayServer, field.TypeString)
 	}
-	if value, ok := rduo.mutation.APIServer(); ok {
+	if value, ok := ruo.mutation.APIServer(); ok {
 		_spec.SetField(rustdesk.FieldAPIServer, field.TypeString, value)
 	}
-	if rduo.mutation.APIServerCleared() {
+	if ruo.mutation.APIServerCleared() {
 		_spec.ClearField(rustdesk.FieldAPIServer, field.TypeString)
 	}
-	if value, ok := rduo.mutation.Key(); ok {
+	if value, ok := ruo.mutation.Key(); ok {
 		_spec.SetField(rustdesk.FieldKey, field.TypeString, value)
 	}
-	if rduo.mutation.KeyCleared() {
+	if ruo.mutation.KeyCleared() {
 		_spec.ClearField(rustdesk.FieldKey, field.TypeString)
 	}
-	if value, ok := rduo.mutation.UsePermanentPassword(); ok {
+	if value, ok := ruo.mutation.UsePermanentPassword(); ok {
 		_spec.SetField(rustdesk.FieldUsePermanentPassword, field.TypeBool, value)
 	}
-	if rduo.mutation.UsePermanentPasswordCleared() {
+	if ruo.mutation.UsePermanentPasswordCleared() {
 		_spec.ClearField(rustdesk.FieldUsePermanentPassword, field.TypeBool)
 	}
-	if value, ok := rduo.mutation.Whitelist(); ok {
+	if value, ok := ruo.mutation.Whitelist(); ok {
 		_spec.SetField(rustdesk.FieldWhitelist, field.TypeString, value)
 	}
-	if rduo.mutation.WhitelistCleared() {
+	if ruo.mutation.WhitelistCleared() {
 		_spec.ClearField(rustdesk.FieldWhitelist, field.TypeString)
 	}
-	if value, ok := rduo.mutation.DirectIPAccess(); ok {
+	if value, ok := ruo.mutation.DirectIPAccess(); ok {
 		_spec.SetField(rustdesk.FieldDirectIPAccess, field.TypeBool, value)
 	}
-	if rduo.mutation.DirectIPAccessCleared() {
+	if ruo.mutation.DirectIPAccessCleared() {
 		_spec.ClearField(rustdesk.FieldDirectIPAccess, field.TypeBool)
 	}
-	if rduo.mutation.TenantCleared() {
+	if ruo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -631,7 +631,7 @@ func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := rduo.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := ruo.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -647,11 +647,11 @@ func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(rduo.modifiers...)
-	_node = &RustDesk{config: rduo.config}
+	_spec.AddModifiers(ruo.modifiers...)
+	_node = &Rustdesk{config: ruo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, rduo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, ruo.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{rustdesk.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -659,6 +659,6 @@ func (rduo *RustDeskUpdateOne) sqlSave(ctx context.Context) (_node *RustDesk, er
 		}
 		return nil, err
 	}
-	rduo.mutation.done = true
+	ruo.mutation.done = true
 	return _node, nil
 }

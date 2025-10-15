@@ -229,7 +229,7 @@ func init() {
 	revocationDescRevoked := revocationFields[4].Descriptor()
 	// revocation.DefaultRevoked holds the default value on creation for the revoked field.
 	revocation.DefaultRevoked = revocationDescRevoked.Default.(func() time.Time)
-	rustdeskFields := schema.RustDesk{}.Fields()
+	rustdeskFields := schema.Rustdesk{}.Fields()
 	_ = rustdeskFields
 	// rustdeskDescCustomRendezvousServer is the schema descriptor for custom_rendezvous_server field.
 	rustdeskDescCustomRendezvousServer := rustdeskFields[0].Descriptor()
