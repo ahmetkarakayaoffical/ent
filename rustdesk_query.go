@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -24,7 +25,6 @@ type RustdeskQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Rustdesk
 	withTenant *TenantQuery
-	withFKs    bool
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -76,7 +76,7 @@ func (rq *RustdeskQuery) QueryTenant() *TenantQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(rustdesk.Table, rustdesk.FieldID, selector),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, rustdesk.TenantTable, rustdesk.TenantColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, rustdesk.TenantTable, rustdesk.TenantPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -372,18 +372,11 @@ func (rq *RustdeskQuery) prepareQuery(ctx context.Context) error {
 func (rq *RustdeskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rustdesk, error) {
 	var (
 		nodes       = []*Rustdesk{}
-		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
 		loadedTypes = [1]bool{
 			rq.withTenant != nil,
 		}
 	)
-	if rq.withTenant != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, rustdesk.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Rustdesk).scanValues(nil, columns)
 	}
@@ -406,8 +399,9 @@ func (rq *RustdeskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rus
 		return nodes, nil
 	}
 	if query := rq.withTenant; query != nil {
-		if err := rq.loadTenant(ctx, query, nodes, nil,
-			func(n *Rustdesk, e *Tenant) { n.Edges.Tenant = e }); err != nil {
+		if err := rq.loadTenant(ctx, query, nodes,
+			func(n *Rustdesk) { n.Edges.Tenant = []*Tenant{} },
+			func(n *Rustdesk, e *Tenant) { n.Edges.Tenant = append(n.Edges.Tenant, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -415,33 +409,62 @@ func (rq *RustdeskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rus
 }
 
 func (rq *RustdeskQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*Rustdesk, init func(*Rustdesk), assign func(*Rustdesk, *Tenant)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Rustdesk)
-	for i := range nodes {
-		if nodes[i].tenant_rustdesk == nil {
-			continue
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Rustdesk)
+	nids := make(map[int]map[*Rustdesk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].tenant_rustdesk
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(rustdesk.TenantTable)
+		s.Join(joinT).On(s.C(tenant.FieldID), joinT.C(rustdesk.TenantPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(rustdesk.TenantPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(rustdesk.TenantPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(tenant.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Rustdesk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Tenant](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "tenant_rustdesk" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "tenant" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil

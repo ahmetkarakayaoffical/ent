@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/open-uem/ent/rustdesk"
-	"github.com/open-uem/ent/tenant"
 )
 
 // Rustdesk is the model entity for the Rustdesk schema.
@@ -33,27 +32,24 @@ type Rustdesk struct {
 	DirectIPAccess bool `json:"direct_ip_access,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RustdeskQuery when eager-loading is set.
-	Edges           RustdeskEdges `json:"edges"`
-	tenant_rustdesk *int
-	selectValues    sql.SelectValues
+	Edges        RustdeskEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // RustdeskEdges holds the relations/edges for other nodes in the graph.
 type RustdeskEdges struct {
 	// Tenant holds the value of the tenant edge.
-	Tenant *Tenant `json:"tenant,omitempty"`
+	Tenant []*Tenant `json:"tenant,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
 // TenantOrErr returns the Tenant value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e RustdeskEdges) TenantOrErr() (*Tenant, error) {
-	if e.Tenant != nil {
+// was not loaded in eager-loading.
+func (e RustdeskEdges) TenantOrErr() ([]*Tenant, error) {
+	if e.loadedTypes[0] {
 		return e.Tenant, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: tenant.Label}
 	}
 	return nil, &NotLoadedError{edge: "tenant"}
 }
@@ -69,8 +65,6 @@ func (*Rustdesk) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case rustdesk.FieldCustomRendezvousServer, rustdesk.FieldRelayServer, rustdesk.FieldAPIServer, rustdesk.FieldKey, rustdesk.FieldWhitelist:
 			values[i] = new(sql.NullString)
-		case rustdesk.ForeignKeys[0]: // tenant_rustdesk
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -133,13 +127,6 @@ func (r *Rustdesk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field direct_ip_access", values[i])
 			} else if value.Valid {
 				r.DirectIPAccess = value.Bool
-			}
-		case rustdesk.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field tenant_rustdesk", value)
-			} else if value.Valid {
-				r.tenant_rustdesk = new(int)
-				*r.tenant_rustdesk = int(value.Int64)
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])

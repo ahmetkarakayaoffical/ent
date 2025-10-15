@@ -531,21 +531,12 @@ var (
 		{Name: "use_permanent_password", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "whitelist", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "direct_ip_access", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "tenant_rustdesk", Type: field.TypeInt, Nullable: true},
 	}
 	// RustdesksTable holds the schema information for the "rustdesks" table.
 	RustdesksTable = &schema.Table{
 		Name:       "rustdesks",
 		Columns:    RustdesksColumns,
 		PrimaryKey: []*schema.Column{RustdesksColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "rustdesks_tenants_rustdesk",
-				Columns:    []*schema.Column{RustdesksColumns[8]},
-				RefColumns: []*schema.Column{TenantsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
 	}
 	// ServersColumns holds the columns for the "servers" table.
 	ServersColumns = []*schema.Column{
@@ -1042,6 +1033,31 @@ var (
 			},
 		},
 	}
+	// TenantRustdeskColumns holds the columns for the "tenant_rustdesk" table.
+	TenantRustdeskColumns = []*schema.Column{
+		{Name: "tenant_id", Type: field.TypeInt},
+		{Name: "rustdesk_id", Type: field.TypeInt},
+	}
+	// TenantRustdeskTable holds the schema information for the "tenant_rustdesk" table.
+	TenantRustdeskTable = &schema.Table{
+		Name:       "tenant_rustdesk",
+		Columns:    TenantRustdeskColumns,
+		PrimaryKey: []*schema.Column{TenantRustdeskColumns[0], TenantRustdeskColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tenant_rustdesk_tenant_id",
+				Columns:    []*schema.Column{TenantRustdeskColumns[0]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "tenant_rustdesk_rustdesk_id",
+				Columns:    []*schema.Column{TenantRustdeskColumns[1]},
+				RefColumns: []*schema.Column{RustdesksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -1080,6 +1096,7 @@ var (
 		AgentTagsTable,
 		ProfileTagsTable,
 		SiteAgentsTable,
+		TenantRustdeskTable,
 	}
 )
 
@@ -1102,7 +1119,6 @@ func init() {
 	ProfilesTable.ForeignKeys[0].RefTable = SitesTable
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
-	RustdesksTable.ForeignKeys[0].RefTable = TenantsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SettingsTable.ForeignKeys[1].RefTable = TenantsTable
@@ -1121,4 +1137,6 @@ func init() {
 	ProfileTagsTable.ForeignKeys[1].RefTable = TagsTable
 	SiteAgentsTable.ForeignKeys[0].RefTable = SitesTable
 	SiteAgentsTable.ForeignKeys[1].RefTable = AgentsTable
+	TenantRustdeskTable.ForeignKeys[0].RefTable = TenantsTable
+	TenantRustdeskTable.ForeignKeys[1].RefTable = RustdesksTable
 }

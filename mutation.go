@@ -18113,7 +18113,8 @@ type RustdeskMutation struct {
 	whitelist                *string
 	direct_ip_access         *bool
 	clearedFields            map[string]struct{}
-	tenant                   *int
+	tenant                   map[int]struct{}
+	removedtenant            map[int]struct{}
 	clearedtenant            bool
 	done                     bool
 	oldValue                 func(context.Context) (*Rustdesk, error)
@@ -18561,9 +18562,14 @@ func (m *RustdeskMutation) ResetDirectIPAccess() {
 	delete(m.clearedFields, rustdesk.FieldDirectIPAccess)
 }
 
-// SetTenantID sets the "tenant" edge to the Tenant entity by id.
-func (m *RustdeskMutation) SetTenantID(id int) {
-	m.tenant = &id
+// AddTenantIDs adds the "tenant" edge to the Tenant entity by ids.
+func (m *RustdeskMutation) AddTenantIDs(ids ...int) {
+	if m.tenant == nil {
+		m.tenant = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.tenant[ids[i]] = struct{}{}
+	}
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
@@ -18576,20 +18582,29 @@ func (m *RustdeskMutation) TenantCleared() bool {
 	return m.clearedtenant
 }
 
-// TenantID returns the "tenant" edge ID in the mutation.
-func (m *RustdeskMutation) TenantID() (id int, exists bool) {
-	if m.tenant != nil {
-		return *m.tenant, true
+// RemoveTenantIDs removes the "tenant" edge to the Tenant entity by IDs.
+func (m *RustdeskMutation) RemoveTenantIDs(ids ...int) {
+	if m.removedtenant == nil {
+		m.removedtenant = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.tenant, ids[i])
+		m.removedtenant[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTenant returns the removed IDs of the "tenant" edge to the Tenant entity.
+func (m *RustdeskMutation) RemovedTenantIDs() (ids []int) {
+	for id := range m.removedtenant {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // TenantIDs returns the "tenant" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// TenantID instead. It exists only for internal usage by the builders.
 func (m *RustdeskMutation) TenantIDs() (ids []int) {
-	if id := m.tenant; id != nil {
-		ids = append(ids, *id)
+	for id := range m.tenant {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -18598,6 +18613,7 @@ func (m *RustdeskMutation) TenantIDs() (ids []int) {
 func (m *RustdeskMutation) ResetTenant() {
 	m.tenant = nil
 	m.clearedtenant = false
+	m.removedtenant = nil
 }
 
 // Where appends a list predicates to the RustdeskMutation builder.
@@ -18892,9 +18908,11 @@ func (m *RustdeskMutation) AddedEdges() []string {
 func (m *RustdeskMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case rustdesk.EdgeTenant:
-		if id := m.tenant; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.tenant))
+		for id := range m.tenant {
+			ids = append(ids, id)
 		}
+		return ids
 	}
 	return nil
 }
@@ -18902,12 +18920,23 @@ func (m *RustdeskMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RustdeskMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
+	if m.removedtenant != nil {
+		edges = append(edges, rustdesk.EdgeTenant)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *RustdeskMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case rustdesk.EdgeTenant:
+		ids := make([]ent.Value, 0, len(m.removedtenant))
+		for id := range m.removedtenant {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -18934,9 +18963,6 @@ func (m *RustdeskMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *RustdeskMutation) ClearEdge(name string) error {
 	switch name {
-	case rustdesk.EdgeTenant:
-		m.ClearTenant()
-		return nil
 	}
 	return fmt.Errorf("unknown Rustdesk unique edge %s", name)
 }

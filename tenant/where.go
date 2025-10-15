@@ -367,7 +367,7 @@ func HasRustdesk() predicate.Tenant {
 	return predicate.Tenant(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, RustdeskTable, RustdeskColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, RustdeskTable, RustdeskPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

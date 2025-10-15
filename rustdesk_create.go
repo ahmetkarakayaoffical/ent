@@ -120,23 +120,19 @@ func (rc *RustdeskCreate) SetNillableDirectIPAccess(b *bool) *RustdeskCreate {
 	return rc
 }
 
-// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (rc *RustdeskCreate) SetTenantID(id int) *RustdeskCreate {
-	rc.mutation.SetTenantID(id)
+// AddTenantIDs adds the "tenant" edge to the Tenant entity by IDs.
+func (rc *RustdeskCreate) AddTenantIDs(ids ...int) *RustdeskCreate {
+	rc.mutation.AddTenantIDs(ids...)
 	return rc
 }
 
-// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (rc *RustdeskCreate) SetNillableTenantID(id *int) *RustdeskCreate {
-	if id != nil {
-		rc = rc.SetTenantID(*id)
+// AddTenant adds the "tenant" edges to the Tenant entity.
+func (rc *RustdeskCreate) AddTenant(t ...*Tenant) *RustdeskCreate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return rc
-}
-
-// SetTenant sets the "tenant" edge to the Tenant entity.
-func (rc *RustdeskCreate) SetTenant(t *Tenant) *RustdeskCreate {
-	return rc.SetTenantID(t.ID)
+	return rc.AddTenantIDs(ids...)
 }
 
 // Mutation returns the RustdeskMutation object of the builder.
@@ -263,10 +259,10 @@ func (rc *RustdeskCreate) createSpec() (*Rustdesk, *sqlgraph.CreateSpec) {
 	}
 	if nodes := rc.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   rustdesk.TenantTable,
-			Columns: []string{rustdesk.TenantColumn},
+			Columns: rustdesk.TenantPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
@@ -275,7 +271,6 @@ func (rc *RustdeskCreate) createSpec() (*Rustdesk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.tenant_rustdesk = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

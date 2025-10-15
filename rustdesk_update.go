@@ -169,23 +169,19 @@ func (ru *RustdeskUpdate) ClearDirectIPAccess() *RustdeskUpdate {
 	return ru
 }
 
-// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (ru *RustdeskUpdate) SetTenantID(id int) *RustdeskUpdate {
-	ru.mutation.SetTenantID(id)
+// AddTenantIDs adds the "tenant" edge to the Tenant entity by IDs.
+func (ru *RustdeskUpdate) AddTenantIDs(ids ...int) *RustdeskUpdate {
+	ru.mutation.AddTenantIDs(ids...)
 	return ru
 }
 
-// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (ru *RustdeskUpdate) SetNillableTenantID(id *int) *RustdeskUpdate {
-	if id != nil {
-		ru = ru.SetTenantID(*id)
+// AddTenant adds the "tenant" edges to the Tenant entity.
+func (ru *RustdeskUpdate) AddTenant(t ...*Tenant) *RustdeskUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return ru
-}
-
-// SetTenant sets the "tenant" edge to the Tenant entity.
-func (ru *RustdeskUpdate) SetTenant(t *Tenant) *RustdeskUpdate {
-	return ru.SetTenantID(t.ID)
+	return ru.AddTenantIDs(ids...)
 }
 
 // Mutation returns the RustdeskMutation object of the builder.
@@ -193,10 +189,25 @@ func (ru *RustdeskUpdate) Mutation() *RustdeskMutation {
 	return ru.mutation
 }
 
-// ClearTenant clears the "tenant" edge to the Tenant entity.
+// ClearTenant clears all "tenant" edges to the Tenant entity.
 func (ru *RustdeskUpdate) ClearTenant() *RustdeskUpdate {
 	ru.mutation.ClearTenant()
 	return ru
+}
+
+// RemoveTenantIDs removes the "tenant" edge to Tenant entities by IDs.
+func (ru *RustdeskUpdate) RemoveTenantIDs(ids ...int) *RustdeskUpdate {
+	ru.mutation.RemoveTenantIDs(ids...)
+	return ru
+}
+
+// RemoveTenant removes "tenant" edges to Tenant entities.
+func (ru *RustdeskUpdate) RemoveTenant(t ...*Tenant) *RustdeskUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ru.RemoveTenantIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -285,10 +296,10 @@ func (ru *RustdeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   rustdesk.TenantTable,
-			Columns: []string{rustdesk.TenantColumn},
+			Columns: rustdesk.TenantPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
@@ -296,12 +307,28 @@ func (ru *RustdeskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := ru.mutation.RemovedTenantIDs(); len(nodes) > 0 && !ru.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   rustdesk.TenantTable,
-			Columns: []string{rustdesk.TenantColumn},
+			Columns: rustdesk.TenantPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   rustdesk.TenantTable,
+			Columns: rustdesk.TenantPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
@@ -474,23 +501,19 @@ func (ruo *RustdeskUpdateOne) ClearDirectIPAccess() *RustdeskUpdateOne {
 	return ruo
 }
 
-// SetTenantID sets the "tenant" edge to the Tenant entity by ID.
-func (ruo *RustdeskUpdateOne) SetTenantID(id int) *RustdeskUpdateOne {
-	ruo.mutation.SetTenantID(id)
+// AddTenantIDs adds the "tenant" edge to the Tenant entity by IDs.
+func (ruo *RustdeskUpdateOne) AddTenantIDs(ids ...int) *RustdeskUpdateOne {
+	ruo.mutation.AddTenantIDs(ids...)
 	return ruo
 }
 
-// SetNillableTenantID sets the "tenant" edge to the Tenant entity by ID if the given value is not nil.
-func (ruo *RustdeskUpdateOne) SetNillableTenantID(id *int) *RustdeskUpdateOne {
-	if id != nil {
-		ruo = ruo.SetTenantID(*id)
+// AddTenant adds the "tenant" edges to the Tenant entity.
+func (ruo *RustdeskUpdateOne) AddTenant(t ...*Tenant) *RustdeskUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return ruo
-}
-
-// SetTenant sets the "tenant" edge to the Tenant entity.
-func (ruo *RustdeskUpdateOne) SetTenant(t *Tenant) *RustdeskUpdateOne {
-	return ruo.SetTenantID(t.ID)
+	return ruo.AddTenantIDs(ids...)
 }
 
 // Mutation returns the RustdeskMutation object of the builder.
@@ -498,10 +521,25 @@ func (ruo *RustdeskUpdateOne) Mutation() *RustdeskMutation {
 	return ruo.mutation
 }
 
-// ClearTenant clears the "tenant" edge to the Tenant entity.
+// ClearTenant clears all "tenant" edges to the Tenant entity.
 func (ruo *RustdeskUpdateOne) ClearTenant() *RustdeskUpdateOne {
 	ruo.mutation.ClearTenant()
 	return ruo
+}
+
+// RemoveTenantIDs removes the "tenant" edge to Tenant entities by IDs.
+func (ruo *RustdeskUpdateOne) RemoveTenantIDs(ids ...int) *RustdeskUpdateOne {
+	ruo.mutation.RemoveTenantIDs(ids...)
+	return ruo
+}
+
+// RemoveTenant removes "tenant" edges to Tenant entities.
+func (ruo *RustdeskUpdateOne) RemoveTenant(t ...*Tenant) *RustdeskUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ruo.RemoveTenantIDs(ids...)
 }
 
 // Where appends a list predicates to the RustdeskUpdate builder.
@@ -620,10 +658,10 @@ func (ruo *RustdeskUpdateOne) sqlSave(ctx context.Context) (_node *Rustdesk, err
 	}
 	if ruo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   rustdesk.TenantTable,
-			Columns: []string{rustdesk.TenantColumn},
+			Columns: rustdesk.TenantPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
@@ -631,12 +669,28 @@ func (ruo *RustdeskUpdateOne) sqlSave(ctx context.Context) (_node *Rustdesk, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := ruo.mutation.RemovedTenantIDs(); len(nodes) > 0 && !ruo.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   rustdesk.TenantTable,
-			Columns: []string{rustdesk.TenantColumn},
+			Columns: rustdesk.TenantPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.TenantIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   rustdesk.TenantTable,
+			Columns: rustdesk.TenantPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt),

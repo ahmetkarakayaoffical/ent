@@ -62,13 +62,11 @@ const (
 	MetadataInverseTable = "org_metadata"
 	// MetadataColumn is the table column denoting the metadata relation/edge.
 	MetadataColumn = "tenant_metadata"
-	// RustdeskTable is the table that holds the rustdesk relation/edge.
-	RustdeskTable = "rustdesks"
+	// RustdeskTable is the table that holds the rustdesk relation/edge. The primary key declared below.
+	RustdeskTable = "tenant_rustdesk"
 	// RustdeskInverseTable is the table name for the Rustdesk entity.
 	// It exists in this package in order to avoid circular dependency with the "rustdesk" package.
 	RustdeskInverseTable = "rustdesks"
-	// RustdeskColumn is the table column denoting the rustdesk relation/edge.
-	RustdeskColumn = "tenant_rustdesk"
 )
 
 // Columns holds all SQL columns for tenant fields.
@@ -79,6 +77,12 @@ var Columns = []string{
 	FieldCreated,
 	FieldModified,
 }
+
+var (
+	// RustdeskPrimaryKey and RustdeskColumn2 are the table columns denoting the
+	// primary key for the rustdesk relation (M2M).
+	RustdeskPrimaryKey = []string{"tenant_id", "rustdesk_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -221,6 +225,6 @@ func newRustdeskStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RustdeskInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RustdeskTable, RustdeskColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RustdeskTable, RustdeskPrimaryKey...),
 	)
 }

@@ -3919,7 +3919,7 @@ func (c *RustdeskClient) QueryTenant(r *Rustdesk) *TenantQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(rustdesk.Table, rustdesk.FieldID, id),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, rustdesk.TenantTable, rustdesk.TenantColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, rustdesk.TenantTable, rustdesk.TenantPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -5436,7 +5436,7 @@ func (c *TenantClient) QueryRustdesk(t *Tenant) *RustdeskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(rustdesk.Table, rustdesk.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, tenant.RustdeskTable, tenant.RustdeskColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, tenant.RustdeskTable, tenant.RustdeskPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil

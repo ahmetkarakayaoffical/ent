@@ -27,6 +27,6 @@ func (Rustdesk) Fields() []ent.Field {
 // Edges of the Rustdesk.
 func (Rustdesk) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("tenant", Tenant.Type).Unique().Ref("rustdesk"),
+		edge.From("tenant", Tenant.Type).Ref("rustdesk"),
 	}
 }

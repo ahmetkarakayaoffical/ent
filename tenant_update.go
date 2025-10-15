@@ -521,10 +521,10 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.RustdeskCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
@@ -534,10 +534,10 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := tu.mutation.RemovedRustdeskIDs(); len(nodes) > 0 && !tu.mutation.RustdeskCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
@@ -550,10 +550,10 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := tu.mutation.RustdeskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
@@ -1103,10 +1103,10 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 	}
 	if tuo.mutation.RustdeskCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
@@ -1116,10 +1116,10 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 	}
 	if nodes := tuo.mutation.RemovedRustdeskIDs(); len(nodes) > 0 && !tuo.mutation.RustdeskCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
@@ -1132,10 +1132,10 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 	}
 	if nodes := tuo.mutation.RustdeskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),

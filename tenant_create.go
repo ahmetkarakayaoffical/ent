@@ -318,10 +318,10 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	}
 	if nodes := tc.mutation.RustdeskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   tenant.RustdeskTable,
-			Columns: []string{tenant.RustdeskColumn},
+			Columns: tenant.RustdeskPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(rustdesk.FieldID, field.TypeInt),
