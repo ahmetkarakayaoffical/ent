@@ -119,6 +119,10 @@ func init() {
 	agentDescIsWayland := agentFields[28].Descriptor()
 	// agent.DefaultIsWayland holds the default value on creation for the is_wayland field.
 	agent.DefaultIsWayland = agentDescIsWayland.Default.(bool)
+	// agentDescIsFlatpakRustdesk is the schema descriptor for is_flatpak_rustdesk field.
+	agentDescIsFlatpakRustdesk := agentFields[29].Descriptor()
+	// agent.DefaultIsFlatpakRustdesk holds the default value on creation for the is_flatpak_rustdesk field.
+	agent.DefaultIsFlatpakRustdesk = agentDescIsFlatpakRustdesk.Default.(bool)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.IDValidator is a validator for the "id" field. It is called by the builders before save.

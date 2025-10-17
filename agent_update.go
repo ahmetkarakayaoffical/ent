@@ -585,6 +585,26 @@ func (au *AgentUpdate) ClearIsWayland() *AgentUpdate {
 	return au
 }
 
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (au *AgentUpdate) SetIsFlatpakRustdesk(b bool) *AgentUpdate {
+	au.mutation.SetIsFlatpakRustdesk(b)
+	return au
+}
+
+// SetNillableIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableIsFlatpakRustdesk(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetIsFlatpakRustdesk(*b)
+	}
+	return au
+}
+
+// ClearIsFlatpakRustdesk clears the value of the "is_flatpak_rustdesk" field.
+func (au *AgentUpdate) ClearIsFlatpakRustdesk() *AgentUpdate {
+	au.mutation.ClearIsFlatpakRustdesk()
+	return au
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (au *AgentUpdate) SetComputerID(id int) *AgentUpdate {
 	au.mutation.SetComputerID(id)
@@ -1480,6 +1500,12 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.IsWaylandCleared() {
 		_spec.ClearField(agent.FieldIsWayland, field.TypeBool)
+	}
+	if value, ok := au.mutation.IsFlatpakRustdesk(); ok {
+		_spec.SetField(agent.FieldIsFlatpakRustdesk, field.TypeBool, value)
+	}
+	if au.mutation.IsFlatpakRustdeskCleared() {
+		_spec.ClearField(agent.FieldIsFlatpakRustdesk, field.TypeBool)
 	}
 	if au.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2859,6 +2885,26 @@ func (auo *AgentUpdateOne) ClearIsWayland() *AgentUpdateOne {
 	return auo
 }
 
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (auo *AgentUpdateOne) SetIsFlatpakRustdesk(b bool) *AgentUpdateOne {
+	auo.mutation.SetIsFlatpakRustdesk(b)
+	return auo
+}
+
+// SetNillableIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableIsFlatpakRustdesk(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetIsFlatpakRustdesk(*b)
+	}
+	return auo
+}
+
+// ClearIsFlatpakRustdesk clears the value of the "is_flatpak_rustdesk" field.
+func (auo *AgentUpdateOne) ClearIsFlatpakRustdesk() *AgentUpdateOne {
+	auo.mutation.ClearIsFlatpakRustdesk()
+	return auo
+}
+
 // SetComputerID sets the "computer" edge to the Computer entity by ID.
 func (auo *AgentUpdateOne) SetComputerID(id int) *AgentUpdateOne {
 	auo.mutation.SetComputerID(id)
@@ -3784,6 +3830,12 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 	}
 	if auo.mutation.IsWaylandCleared() {
 		_spec.ClearField(agent.FieldIsWayland, field.TypeBool)
+	}
+	if value, ok := auo.mutation.IsFlatpakRustdesk(); ok {
+		_spec.SetField(agent.FieldIsFlatpakRustdesk, field.TypeBool, value)
+	}
+	if auo.mutation.IsFlatpakRustdeskCleared() {
+		_spec.ClearField(agent.FieldIsFlatpakRustdesk, field.TypeBool)
 	}
 	if auo.mutation.ComputerCleared() {
 		edge := &sqlgraph.EdgeSpec{

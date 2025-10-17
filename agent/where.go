@@ -195,6 +195,11 @@ func IsWayland(v bool) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldIsWayland, v))
 }
 
+// IsFlatpakRustdesk applies equality check predicate on the "is_flatpak_rustdesk" field. It's identical to IsFlatpakRustdeskEQ.
+func IsFlatpakRustdesk(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsFlatpakRustdesk, v))
+}
+
 // OsEQ applies the EQ predicate on the "os" field.
 func OsEQ(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldOs, v))
@@ -1623,6 +1628,26 @@ func IsWaylandIsNil() predicate.Agent {
 // IsWaylandNotNil applies the NotNil predicate on the "is_wayland" field.
 func IsWaylandNotNil() predicate.Agent {
 	return predicate.Agent(sql.FieldNotNull(FieldIsWayland))
+}
+
+// IsFlatpakRustdeskEQ applies the EQ predicate on the "is_flatpak_rustdesk" field.
+func IsFlatpakRustdeskEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldIsFlatpakRustdesk, v))
+}
+
+// IsFlatpakRustdeskNEQ applies the NEQ predicate on the "is_flatpak_rustdesk" field.
+func IsFlatpakRustdeskNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldIsFlatpakRustdesk, v))
+}
+
+// IsFlatpakRustdeskIsNil applies the IsNil predicate on the "is_flatpak_rustdesk" field.
+func IsFlatpakRustdeskIsNil() predicate.Agent {
+	return predicate.Agent(sql.FieldIsNull(FieldIsFlatpakRustdesk))
+}
+
+// IsFlatpakRustdeskNotNil applies the NotNil predicate on the "is_flatpak_rustdesk" field.
+func IsFlatpakRustdeskNotNil() predicate.Agent {
+	return predicate.Agent(sql.FieldNotNull(FieldIsFlatpakRustdesk))
 }
 
 // HasComputer applies the HasEdge predicate on the "computer" edge.

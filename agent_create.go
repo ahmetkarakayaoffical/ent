@@ -419,6 +419,20 @@ func (ac *AgentCreate) SetNillableIsWayland(b *bool) *AgentCreate {
 	return ac
 }
 
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (ac *AgentCreate) SetIsFlatpakRustdesk(b bool) *AgentCreate {
+	ac.mutation.SetIsFlatpakRustdesk(b)
+	return ac
+}
+
+// SetNillableIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableIsFlatpakRustdesk(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetIsFlatpakRustdesk(*b)
+	}
+	return ac
+}
+
 // SetID sets the "id" field.
 func (ac *AgentCreate) SetID(s string) *AgentCreate {
 	ac.mutation.SetID(s)
@@ -868,6 +882,10 @@ func (ac *AgentCreate) defaults() {
 		v := agent.DefaultIsWayland
 		ac.mutation.SetIsWayland(v)
 	}
+	if _, ok := ac.mutation.IsFlatpakRustdesk(); !ok {
+		v := agent.DefaultIsFlatpakRustdesk
+		ac.mutation.SetIsFlatpakRustdesk(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1056,6 +1074,10 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.IsWayland(); ok {
 		_spec.SetField(agent.FieldIsWayland, field.TypeBool, value)
 		_node.IsWayland = value
+	}
+	if value, ok := ac.mutation.IsFlatpakRustdesk(); ok {
+		_spec.SetField(agent.FieldIsFlatpakRustdesk, field.TypeBool, value)
+		_node.IsFlatpakRustdesk = value
 	}
 	if nodes := ac.mutation.ComputerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1910,6 +1932,24 @@ func (u *AgentUpsert) ClearIsWayland() *AgentUpsert {
 	return u
 }
 
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (u *AgentUpsert) SetIsFlatpakRustdesk(v bool) *AgentUpsert {
+	u.Set(agent.FieldIsFlatpakRustdesk, v)
+	return u
+}
+
+// UpdateIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsert) UpdateIsFlatpakRustdesk() *AgentUpsert {
+	u.SetExcluded(agent.FieldIsFlatpakRustdesk)
+	return u
+}
+
+// ClearIsFlatpakRustdesk clears the value of the "is_flatpak_rustdesk" field.
+func (u *AgentUpsert) ClearIsFlatpakRustdesk() *AgentUpsert {
+	u.SetNull(agent.FieldIsFlatpakRustdesk)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -2515,6 +2555,27 @@ func (u *AgentUpsertOne) UpdateIsWayland() *AgentUpsertOne {
 func (u *AgentUpsertOne) ClearIsWayland() *AgentUpsertOne {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearIsWayland()
+	})
+}
+
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (u *AgentUpsertOne) SetIsFlatpakRustdesk(v bool) *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsFlatpakRustdesk(v)
+	})
+}
+
+// UpdateIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsertOne) UpdateIsFlatpakRustdesk() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsFlatpakRustdesk()
+	})
+}
+
+// ClearIsFlatpakRustdesk clears the value of the "is_flatpak_rustdesk" field.
+func (u *AgentUpsertOne) ClearIsFlatpakRustdesk() *AgentUpsertOne {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsFlatpakRustdesk()
 	})
 }
 
@@ -3290,6 +3351,27 @@ func (u *AgentUpsertBulk) UpdateIsWayland() *AgentUpsertBulk {
 func (u *AgentUpsertBulk) ClearIsWayland() *AgentUpsertBulk {
 	return u.Update(func(s *AgentUpsert) {
 		s.ClearIsWayland()
+	})
+}
+
+// SetIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field.
+func (u *AgentUpsertBulk) SetIsFlatpakRustdesk(v bool) *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.SetIsFlatpakRustdesk(v)
+	})
+}
+
+// UpdateIsFlatpakRustdesk sets the "is_flatpak_rustdesk" field to the value that was provided on create.
+func (u *AgentUpsertBulk) UpdateIsFlatpakRustdesk() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.UpdateIsFlatpakRustdesk()
+	})
+}
+
+// ClearIsFlatpakRustdesk clears the value of the "is_flatpak_rustdesk" field.
+func (u *AgentUpsertBulk) ClearIsFlatpakRustdesk() *AgentUpsertBulk {
+	return u.Update(func(s *AgentUpsert) {
+		s.ClearIsFlatpakRustdesk()
 	})
 }
 
