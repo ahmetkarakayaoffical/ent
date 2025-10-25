@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/metadata"
-	"github.com/open-uem/ent/orgmetadata"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/metadata"
+	"github.com/ahmetkarakayaoffical/ent/orgmetadata"
 )
 
 // MetadataCreate is the builder for creating a Metadata entity.

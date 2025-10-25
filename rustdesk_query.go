@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/predicate"
-	"github.com/open-uem/ent/rustdesk"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/rustdesk"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // RustdeskQuery is the builder for querying Rustdesk entities.

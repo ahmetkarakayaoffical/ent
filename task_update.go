@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/predicate"
-	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/tag"
-	"github.com/open-uem/ent/task"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/profile"
+	"github.com/ahmetkarakayaoffical/ent/tag"
+	"github.com/ahmetkarakayaoffical/ent/task"
 )
 
 // TaskUpdate is the builder for updating Task entities.

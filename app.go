@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/app"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/app"
 )
 
 // App is the model entity for the App schema.

@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/sessions"
-	"github.com/open-uem/ent/user"
+	"github.com/ahmetkarakayaoffical/ent/sessions"
+	"github.com/ahmetkarakayaoffical/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.

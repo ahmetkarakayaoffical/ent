@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/systemupdate"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/systemupdate"
 )
 
 // SystemUpdate is the model entity for the SystemUpdate schema.

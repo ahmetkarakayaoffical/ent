@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/operatingsystem"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/operatingsystem"
 )
 
 // OperatingSystemCreate is the builder for creating a OperatingSystem entity.

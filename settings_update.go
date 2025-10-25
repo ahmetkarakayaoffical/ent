@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/predicate"
-	"github.com/open-uem/ent/settings"
-	"github.com/open-uem/ent/tag"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/settings"
+	"github.com/ahmetkarakayaoffical/ent/tag"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // SettingsUpdate is the builder for updating Settings entities.

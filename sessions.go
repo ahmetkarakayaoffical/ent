@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/sessions"
-	"github.com/open-uem/ent/user"
+	"github.com/ahmetkarakayaoffical/ent/sessions"
+	"github.com/ahmetkarakayaoffical/ent/user"
 )
 
 // Sessions is the model entity for the Sessions schema.

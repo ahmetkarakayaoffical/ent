@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/deployment"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/deployment"
 )
 
 // Deployment is the model entity for the Deployment schema.

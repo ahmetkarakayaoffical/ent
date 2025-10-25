@@ -11,13 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/orgmetadata"
-	"github.com/open-uem/ent/predicate"
-	"github.com/open-uem/ent/rustdesk"
-	"github.com/open-uem/ent/settings"
-	"github.com/open-uem/ent/site"
-	"github.com/open-uem/ent/tag"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/orgmetadata"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/rustdesk"
+	"github.com/ahmetkarakayaoffical/ent/settings"
+	"github.com/ahmetkarakayaoffical/ent/site"
+	"github.com/ahmetkarakayaoffical/ent/tag"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // TenantUpdate is the builder for updating Tenant entities.

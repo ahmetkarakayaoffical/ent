@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/settings"
-	"github.com/open-uem/ent/tag"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/settings"
+	"github.com/ahmetkarakayaoffical/ent/tag"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // Settings is the model entity for the Settings schema.

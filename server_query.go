@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/predicate"
-	"github.com/open-uem/ent/server"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/server"
 )
 
 // ServerQuery is the builder for querying Server entities.

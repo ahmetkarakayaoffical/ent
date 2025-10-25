@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/orgmetadata"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/orgmetadata"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // OrgMetadata is the model entity for the OrgMetadata schema.

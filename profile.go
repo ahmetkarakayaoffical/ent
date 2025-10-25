@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/site"
+	"github.com/ahmetkarakayaoffical/ent/profile"
+	"github.com/ahmetkarakayaoffical/ent/site"
 )
 
 // Profile is the model entity for the Profile schema.

@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/task"
+	"github.com/ahmetkarakayaoffical/ent/profile"
+	"github.com/ahmetkarakayaoffical/ent/task"
 )
 
 // Task is the model entity for the Task schema.

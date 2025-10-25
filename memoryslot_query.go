@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/memoryslot"
-	"github.com/open-uem/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/memoryslot"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
 )
 
 // MemorySlotQuery is the builder for querying MemorySlot entities.

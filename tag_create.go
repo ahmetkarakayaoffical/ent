@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/tag"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/profile"
+	"github.com/ahmetkarakayaoffical/ent/tag"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // TagCreate is the builder for creating a Tag entity.

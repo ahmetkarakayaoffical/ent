@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/app"
-	"github.com/open-uem/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/app"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
 )
 
 // AppQuery is the builder for querying App entities.

@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/metadata"
-	"github.com/open-uem/ent/orgmetadata"
-	"github.com/open-uem/ent/predicate"
+	"github.com/ahmetkarakayaoffical/ent/agent"
+	"github.com/ahmetkarakayaoffical/ent/metadata"
+	"github.com/ahmetkarakayaoffical/ent/orgmetadata"
+	"github.com/ahmetkarakayaoffical/ent/predicate"
 )
 
 // MetadataQuery is the builder for querying Metadata entities.

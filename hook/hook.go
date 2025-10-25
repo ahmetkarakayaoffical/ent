@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/open-uem/ent"
+	"github.com/ahmetkarakayaoffical/ent"
 )
 
 // The AgentFunc type is an adapter to allow the use of ordinary

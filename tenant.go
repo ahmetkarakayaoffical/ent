@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/open-uem/ent/settings"
-	"github.com/open-uem/ent/tenant"
+	"github.com/ahmetkarakayaoffical/ent/settings"
+	"github.com/ahmetkarakayaoffical/ent/tenant"
 )
 
 // Tenant is the model entity for the Tenant schema.
